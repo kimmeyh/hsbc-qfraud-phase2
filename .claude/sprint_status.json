@@ -4,18 +4,38 @@
     "name": "Phase 2 repository boundary and tooling cleanup, plus the F128 leaf-regularization sweep",
     "branch": "feature/20261008_Sprint_24",
     "status": "phase_4_execution",
-    "selected_cards": ["F131", "F136", "F132", "F134", "F133", "F135", "F128", "F137"],
+    "selected_cards": [
+      "F131",
+      "F136",
+      "F132",
+      "F134",
+      "F133",
+      "F135",
+      "F128",
+      "F137"
+    ],
     "plan_doc": "docs/sprints/SPRINT_24_PLAN.md",
     "pr": 2,
     "plan_approved": true,
-    "github_issues": [3, 4, 5, 6, 7, 8, 9, 10],
+    "github_issues": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
     "task_started": {
       "A": "2026-10-09T12:32:36-04:00",
-      "B": "2026-10-09T12:36:00-04:00"
+      "B": "2026-10-09T12:36:00-04:00",
+      "C": "2026-10-09T12:36:46-04:00"
     },
     "task_actuals": {
       "_note": "Wall-clock minutes at completion, per IMP-1. Recorded as each task finishes, never reconstructed at the retrospective.",
-      "A": 3
+      "A": 3,
+      "B": 1
     },
     "scope_additions": []
   },

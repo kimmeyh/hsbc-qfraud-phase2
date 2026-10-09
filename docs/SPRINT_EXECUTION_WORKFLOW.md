@@ -74,6 +74,7 @@ Consult this line at the START and END of every phase; state which steps were do
 
 ### Phase 4: Execution
 - Tasks in plan order; `pytest experiments/src -q` after each change; commit referencing the issue (`#N`).
+- **Each task's actual is measured, not judged (F136, Sprint 23 IMP-3).** When a task begins, run `scripts/update_sprint_status.py --start-task <letter>`. When it completes, run `--finish-task <letter>`, which computes `task_actuals` from the recorded start. A finish with no start is refused. (Sprint 23 Task A's "20 minutes" was written at completion with no start, so the velocity log carried an estimate of an actual.)
 - `git status --short` before every staging; account for every entry. Team-lead working files (`0*` at root) are EXPECTED to change and be committed with a neutral message; never read, paraphrase, or exclude them.
 - Never edit build/config inputs while a long-running background job depends on them.
 - Results discipline: every metric lands in results.json with its evidence tag before being cited anywhere.

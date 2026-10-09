@@ -2,7 +2,7 @@
 
 **Purpose**: Recorded estimate-vs-actual per task, feeding SPRINT_PLANNING.md estimation (Sprint 2 retro improvement 6). Record at task completion; recompute patterns at retro Category 3.
 **Audience**: Sprint planning sessions.
-**Last Updated**: 2026-10-08 (Sprint 23 row added; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
+**Last Updated**: 2026-10-09 (measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
 
 | Sprint | Task | Type | Estimate | Actual | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -60,6 +60,13 @@
 | 22 | UNPLANNED: second security review, 12 findings fixed | fix | 0m | 55m | n/a | evidence guard moved to the root conftest |
 | 22 | UNPLANNED: PR #159 code review, 15 findings fixed | fix | 0m | 85m | n/a | 1 critical: the confidentiality scan missed renamed files |
 | 23 | Task A (F127) restore dry run | tooling | 45m | 20m | 0.44 | actual judged at completion, no start time recorded (Sprint 23 IMP-3); Tasks C and D run after this row |
+
+**Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
+task's actual is computed from a recorded start
+(`update_sprint_status.py --start-task` / `--finish-task`), and its Note
+says **measured**. Every earlier row, and any later row whose Note does not
+say measured, is an actual judged at completion. A `~` before an actual
+marks a judged value that was also approximate.
 
 **Pattern, recomputed at the Sprint 22 retrospective.** Tooling cards land
 near their estimate (ratio 0.95-1.4 in Sprints 20-22; a wrong diagnosis
