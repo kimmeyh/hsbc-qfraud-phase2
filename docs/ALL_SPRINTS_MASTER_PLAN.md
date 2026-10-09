@@ -36,6 +36,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 20 | docs/sprints/SPRINT_20_SUMMARY.md | [OK] Complete | ~4 days (Sep 30 - Oct 4, 2026) |
 | 21 | docs/sprints/SPRINT_21_SUMMARY.md | [OK] Complete | ~3 days (Oct 4 - Oct 6, 2026) |
 | 22 | docs/sprints/SPRINT_22_SUMMARY.md | [OK] Complete | ~2 days (Oct 6 - Oct 7, 2026) |
+| 23 | docs/sprints/SPRINT_23_SUMMARY.md | [PARTIAL] Tasks C and D pending in the Phase 1 repository (D6) | ~1 day (Oct 8, 2026) |
 
 ## Last Completed Sprint
 
@@ -48,10 +49,9 @@ the `as-filed` tag) are PENDING in the Phase 1 repository** and run only
 after this repository's Sprint 24 merges to `develop` (team lead, D6). Its
 three improvements are carded here as F134, F135 and F136.
 
-(Pass 1 sweep, 2026-10-09: the Past Sprint Summary row for Sprint 23 is
-added when `SPRINT_23_SUMMARY.md` exists, at Sprint 24 Phase 3.2.1, per the
-maintenance guide. Its issues #168-171 live in the Phase 1 repository and
-are that session's to close; nothing here touches them.)
+Summary: `docs/sprints/SPRINT_23_SUMMARY.md` (written 2026-10-09, Sprint 24
+Phase 3.2.1). Its issues #168-171 live in the Phase 1 repository and are
+that session's to close; nothing here touches them.
 
 ### Sprint 22: Separate the Phases, Then Look for Better Numbers** (Oct 6 -
 Oct 7, 2026; PR #159, main PR #166). Delivered **F123, IMP-3, F124, F17, F20, F125**.
@@ -420,7 +420,7 @@ F123's layout is superseded by F127.)
 - This enables: every later sprint running scripts without reaching into the Phase 1 repository. This prevents: a write to a repository about to be archived as the filed record, made by a script no hook can see
 - Acceptance: a new guard test fails if any tracked file outside the approved exception list names the Phase 1 repository (path, `/mnt/d` form, backslash form or URL), proven red with `assert_can_fail`; the cross-repo hook blocks a Write and a shell write to the Phase 1 path and allows the same to this repository, both proven; the four scripts run from this clone's root
 - Depends on: nothing
-- **Selected for Sprint 24** (team lead, 2026-10-09, D1 option 1): F132, F134, F133, F131, F135, F136 and F128, about 5h, zero metered. D3: the GitHub default branch is now `develop`, matching the process docs (it was `main`)
+- **Selected for Sprint 24** (team lead, 2026-10-09, D1 option 1): F132, F134, F133, F131, F135, F136 and F128, about 5h, zero metered. D4: the GitHub default branch is now `develop`, matching the process docs (it was `main`). D5: F137 (pypdf) added from the Phase 2.6 dependency scan. Card estimates re-derived at plan verification; the plan reports the total
 
 **F134. The pre-commit hook blocks when its pattern file is missing (~30m, zero metered) Priority 12**
 - Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-1, Category 9, decided to this backlog by the team lead 2026-10-08). Sprints with F132
@@ -430,12 +430,13 @@ F123's layout is superseded by F127.)
 - Acceptance: a commit with no pattern file is BLOCKED with a message naming the file and how to restore it; the test proves it red against the current hook; no override flag
 - Depends on: nothing
 
-**F133. Every Phase 2 device row carries its job_id, enforced by `test_row_schema.py` (~30m, zero metered) Priority 14**
+**F133. Every Phase 2 device row carries its job_id, enforced by `test_row_schema.py` (~40m, zero metered) Priority 14**
 - Phase: Phase 2 repository (added 2026-10-09, Sprint 22 retrospective IMP-6, previously a bullet on F127)
 - Platform: local, CI
 - B2's samples were lost because its rows never stored a job id (QCi 404, 2026-10-07). `test_row_schema.py` has no Phase 2 store coverage at all today (verified 2026-10-09)
 - **Every current Phase 2 result file is proxy with zero metered seconds**, so the new check has nothing real to bite on. Acceptance therefore requires an injected `[HW]` row without `job_id` going red
 - Acceptance: any row in `experiments/phase2/results/` with a hardware evidence tag or nonzero metered seconds must carry a nonempty `job_id`; proven red with `assert_can_fail`; F129 is the first card it binds
+- **Corrected at Sprint 24 plan verification (2026-10-09): the premise above is wrong in one place.** `experiments/phase2/results/device_samples/*.json` (10 files) are recovered B4 device data. They are dict-shaped, with no `rows` and no `evidence_tag`, and each carries a top-level `job_id`. A check keyed only on row tags never reaches them. The test covers two shapes: rows in result files, and the top-level `job_id` of every `device_samples/` file. Both pass today, so the injection proof covers both. Re-estimated from 30m to 40m for the second shape
 - Depends on: nothing
 
 **F135. A decision option is complete enough to execute as answered (~10m, zero metered) Priority 18**
@@ -452,14 +453,23 @@ F123's layout is superseded by F127.)
 - Acceptance: `.claude/sprint_status.json` records a start timestamp when a task begins and the actual is computed from it at completion; the workflow's Phase 4 step names it; the velocity log notes which rows are measured
 - Depends on: nothing
 
-**F128. Leaf-regularization sweep on the proxy, three datasets (~1.5h [no-history], zero metered) Priority 22**
+**F128. Leaf-regularization sweep on the proxy, three datasets (~50m + ~35m runtime [no-history], zero metered) Priority 22**
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: F124 rank 1's "next proxy test", which had no card)
 - Platform: SPECTRA, classical proxy (`qubo_proxy.py`)
 - **Measured so far (F124, `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`)**: `min_samples_leaf=20` lifts energy_steel from 0.902 to 0.973 AUPRC over 5 seeds, parity with HGB (CI [-0.0063, +0.0256]); a 2-seed screen showed oilgas +0.004 and telecom -0.009. Only one value of the parameter was tried
 - The test: `min_samples_leaf` at 5, 10, 20 and 50 on energy_steel, oilgas and telecom, 5 seeds each, with HGB on the same splits; train-test gap and nonzero-weight count beside every AUPRC
 - This enables: choosing the value F129 would put on the device, from a sweep rather than one point. This prevents: spending device seconds on a value that a free sweep would have beaten
 - Acceptance: a dated Phase 2 result file with all 60 cells, the paired difference against HGB with its CI per dataset and value, and a stated best value per dataset; written in the Phase 2 store, no Phase 1 file touched
+- **Re-estimated at Sprint 24 plan verification (2026-10-09), from 1.5h to 50m of work plus about 35m of runtime.** `experiments/phase2/src/lever_screen.py confirm` already runs 5 seeds against HGB on the same splits; the sweep is a new part of that script with `min_samples_leaf` as its parameter (about 20m), then the analysis and write-up (about 30m). Per `SPRINT_PLANNING.md`, a `[no-history]` card sizes the first decisive measurement. Runtime from F124's measured `elapsed_s`: about 40s per cell on energy_steel and oilgas and about 3.5s on telecom, so 60 cells take about 28m. Padded to 35m, because `min_samples_leaf=5` grows larger trees. It runs in the background
 - Depends on: nothing outstanding. (Corrected 2026-10-09, Pass 1: the F127 dependency meant "the work lands in the Phase 2 repository", and it now does)
+
+**F137. pypdf 6.17.0 has seven known vulnerabilities: bump the lock to 6.20.0 (~20m, zero metered) Priority 26**
+- Phase: Phase 2 repository, dependencies (added 2026-10-09, Sprint 24 Phase 2.6 dependency scan; selected into Sprint 24 by the team lead the same day, D5)
+- Platform: local, CI
+- `pip-audit -r experiments/requirements-lock.txt` reports PYSEC-2026-4153 to 4157, 4159 and 4160 against pypdf 6.17.0. Every one is fixed by 6.19.0; the latest is 6.20.0. The advisories were not read one by one. pypdf only reads this repository's own PDFs, in tests and checks, so the practical exposure is low
+- `experiments/requirements.txt` says `pypdf>=4.0`, which already allows the bump; only `requirements-lock.txt:40` changes. No PDF is rendered or rewritten, so the submitted-artifact rule is not engaged
+- Acceptance: the lock file pins `pypdf==6.20.0`; the venv is reinstalled from it; `pip-audit` reports no pypdf finding; the full suite passes
+- Depends on: F131, so the full suite run does not rewrite `scripts/check_ci_status.py`
 
 **F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 24**
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). Sprints with F128
