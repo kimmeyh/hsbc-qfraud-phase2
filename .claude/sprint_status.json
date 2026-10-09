@@ -6,7 +6,7 @@
     "status": "phase_3_planning",
     "selected_cards": ["F131", "F136", "F132", "F134", "F133", "F135", "F128", "F137"],
     "plan_doc": "docs/sprints/SPRINT_24_PLAN.md",
-    "pr": null,
+    "pr": 2,
     "plan_approved": false,
     "github_issues": [],
     "task_actuals": {

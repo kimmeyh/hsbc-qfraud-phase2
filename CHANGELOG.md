@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-09
 
+- **chore**: Sprint 24 draft PR #2 recorded in the status file
 - **docs**: Sprint 24 plan drafted (`docs/sprints/SPRINT_24_PLAN.md`): F131, F136, F132, F134, F133, F135, F128 and F137, 290 minutes derived from the cards plus about 35 minutes of F128 runtime. `SPRINT_23_SUMMARY.md` written and linked in the master plan (Phase 3.2.1). F137 carded from the Phase 2.6 dependency scan (pypdf 6.17.0, seven advisories). Plan verification corrected F133 (the device-sample files are a second shape) and re-estimated F128
 - **docs**: Backlog refinement - Sprint 24 selected (team lead): F132, F134, F133, F131, F135, F136 and F128, about 5h, zero metered (D1). F132 exceptions decided: the submitted proposal and appendix, the B5/B4 launcher log and the four history records all stay (D2). GitHub default branch changed from `main` to `develop` (D4; commit 6871643 and its first CHANGELOG text called it D3, which the rename already holds). Rename sweep: no live reference to the old `hsbc-quantum-fraud-2026p2` name remains; the CHANGELOG, F127 and two sprint records keep it as history
 - **chore**: **Repository renamed** (team lead, Sprint 24 D3): `kimmeyh/hsbc-quantum-fraud-2026p2` is now `kimmeyh/hsbc-qfraud-phase2`, and the disk folder follows, so neither repository's name contains the other. Remote URL updated; `.venv` must be rebuilt after the folder move because it records its absolute path. F127 and F132 cards updated
