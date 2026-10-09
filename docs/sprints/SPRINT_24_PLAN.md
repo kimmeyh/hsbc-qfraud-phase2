@@ -1,7 +1,8 @@
 # Sprint 24 Plan: Close the Boundary, Fix the Tooling, Sweep the Lever
 
 **Sprint**: 24 | **Branch**: `feature/20261008_Sprint_24`
-**Planned**: 2026-10-09 | **Status**: DRAFT, awaiting approval
+**Planned**: 2026-10-09 | **Status**: APPROVED 2026-10-09 (D7: 1), with
+D6: 1. Issues #3-10 (Tasks A-H in order). Draft PR #2.
 **Repository**: `kimmeyh/hsbc-qfraud-phase2`. This is the first sprint in
 this repository (Sprint 23's D5: it starts at the Phase 1 repository's last
 sprint plus one).
@@ -140,7 +141,10 @@ the train-test gap and the nonzero-weight count. A short write-up goes in
 `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md` and names the best value per
 dataset. No Phase 1 file changes. Evidence tag `SIM`, zero metered seconds.
 
-## Decision needed at approval
+## Decision at approval
+
+**Answered 2026-10-09: D6 option 1** (the record files are allowed as a
+whole). **D7 option 1**: the plan is approved as written.
 
 **D6: what the F132 guard test allows to name the Phase 1 repository.**
 D2's three groups are in every option: `docs/paper/proposal.md` and
