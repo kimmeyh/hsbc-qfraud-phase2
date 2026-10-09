@@ -1,30 +1,29 @@
 {
   "current_sprint": {
-    "number": 23,
-    "name": "Restore the Repository as Filed",
-    "branch": "feature/20261007_Sprint_23",
-    "status": "phase_7_retrospective",
-    "plan_doc": "docs/sprints/SPRINT_23_PLAN.md",
-    "pr": 167,
-    "plan_approved": true,
-    "github_issues": [168, 169, 170, 171],
+    "number": 24,
+    "name": "TBD -- scope selected at Phase 1 backlog refinement",
+    "branch": "feature/20261008_Sprint_24",
+    "status": "phase_1_backlog_refinement",
+    "plan_doc": null,
+    "pr": null,
+    "plan_approved": false,
+    "github_issues": [],
     "task_actuals": {
-      "_note": "Wall-clock minutes at completion, per IMP-1. Recorded as each task finishes, never reconstructed at the retrospective.",
-      "A": 20,
-      "B": 30
+      "_note": "Wall-clock minutes at completion, per IMP-1. Recorded as each task finishes, never reconstructed at the retrospective."
     },
     "scope_additions": []
   },
   "last_completed_sprint": {
-    "number": 22,
-    "merged_pr": 159,
-    "main_merge_pr": 166,
-    "docs_triad_complete": true
+    "number": 23,
+    "merged_pr": null,
+    "main_merge_pr": null,
+    "docs_triad_complete": false,
+    "note": "Sprint 23 ran in the Phase 1 repository (PR #167 there, still draft). Its record is on this repository's feature/20261007_Sprint_23 at c3d9ec3. Its restore (Tasks C and D) is PENDING in the Phase 1 repository and runs only after this repository's Sprint 24 merges to develop (D6). SPRINT_23_SUMMARY.md is written here at Sprint 24 Phase 3.2.1."
   },
   "prereg": {
     "status": "FROZEN",
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-10-08"
+  "updated": "2026-10-09"
 }

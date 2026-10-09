@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-09
+
+- **docs**: Backlog refinement Pass 1 sweep, Sprint 24 opened in this repository: `feature/20261008_Sprint_24` cut from the Sprint 23 branch at c3d9ec3; status rolled to Sprint 24, phase 1, with Sprint 23's restore (Tasks C and D) recorded as pending in the Phase 1 repository; master plan Last Completed Sprint rolled to Sprint 23; F127 marks steps (2)-(4) done and moves its Phase 2 remainder to F132 and IMP-6 to F133; spent F127 dependencies on F128, F130 and F131 corrected; velocity log header corrected. Draft PR #1, opened only to prove CI, closed (team lead)
+
 ### 2026-10-08
 
 - **process**: D6 (team lead): the restore commit (Task C) waits until the Phase 2 repository completes Sprint 24, merged to its `develop`, as proof that the new repository works in a real sprint. PR #167 stays draft (PR #167)

@@ -39,7 +39,21 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 22: Separate the Phases, Then Look for Better Numbers** (Oct 6 -
+**Sprint 23: Restore the Repository as Filed** (Oct 8, 2026; ran in the
+Phase 1 repository, PR #167 there, still draft). Delivered F127's Task A
+(restore dry run) and Task B (the sprint record). Its record is on this
+repository's `feature/20261007_Sprint_23` at c3d9ec3: plan, validation and
+retrospective in `docs/sprints/`. **Tasks C and D (the restore commit and
+the `as-filed` tag) are PENDING in the Phase 1 repository** and run only
+after this repository's Sprint 24 merges to `develop` (team lead, D6). Its
+three improvements are carded here as F134, F135 and F136.
+
+(Pass 1 sweep, 2026-10-09: the Past Sprint Summary row for Sprint 23 is
+added when `SPRINT_23_SUMMARY.md` exists, at Sprint 24 Phase 3.2.1, per the
+maintenance guide. Its issues #168-171 live in the Phase 1 repository and
+are that session's to close; nothing here touches them.)
+
+### Sprint 22: Separate the Phases, Then Look for Better Numbers** (Oct 6 -
 Oct 7, 2026; PR #159, main PR #166). Delivered **F123, IMP-3, F124, F17, F20, F125**.
 256 minutes recorded against 980 estimated, zero metered seconds. The record
 is `docs/sprints/SPRINT_22_SUMMARY.md`, with the retrospective and
@@ -403,7 +417,7 @@ F123's layout is superseded by F127.)
 - The test: `min_samples_leaf` at 5, 10, 20 and 50 on energy_steel, oilgas and telecom, 5 seeds each, with HGB on the same splits; train-test gap and nonzero-weight count beside every AUPRC
 - This enables: choosing the value F129 would put on the device, from a sweep rather than one point. This prevents: spending device seconds on a value that a free sweep would have beaten
 - Acceptance: a dated Phase 2 result file with all 60 cells, the paired difference against HGB with its CI per dataset and value, and a stated best value per dataset; written in the Phase 2 store, no Phase 1 file touched
-- Depends on: F127 (the work lands in the Phase 2 repository)
+- Depends on: nothing outstanding. (Corrected 2026-10-09, Pass 1: the F127 dependency meant "the work lands in the Phase 2 repository", and it now does)
 
 **F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 12**
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). Sprints with F128
@@ -412,7 +426,7 @@ F123's layout is superseded by F127.)
 - Rank 5, phase-encode the cyclic columns and whiten, rebuild the pool, 5 seeds, three datasets. The source records are about angle-encoded QNNs, so the effect on CVQBoost is unverified
 - Rank 6, `weak_cls_pair_count` at 100, 200 and 400 on three datasets; a smaller pool is also cheaper per device fit
 - Acceptance: each lever reported against HGB on the same splits with the paired CI; a lever that does not move AUPRC is recorded as rejected, as F124 did for ensembling
-- Depends on: F127
+- Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
 **F131. `test_ci_status.py` rewrites the real `scripts/check_ci_status.py` (~30m [no-history], zero metered) Priority 14**
 - Phase: Phase 2 repository, test hygiene (added 2026-10-08, found while verifying F127's copy)
@@ -420,7 +434,7 @@ F123's layout is superseded by F127.)
 - `_hook_with_ci` overwrites the real script with a stub, then restores it. Two failures, both seen on 2026-10-07: a CI check run during the suite reads the stub and prints a fake red result ("CI (failure) http://x") while the real run is green; and the restore writes LF content back as CRLF on Windows, so `git status` shows the script modified with identical text
 - Same class as the `injection.py` byte-preservation fix (PR #159): use a hermetic copy of the script in a temporary directory, or restore exact bytes
 - Acceptance: the suite never writes to the tracked script (its bytes asserted before and after); the test still fails when the hook ignores CI status, proven with `assert_can_fail`
-- Depends on: F127
+- Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
 **F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 34**
 - Phase: Phase 2, first device run under F124's approved list (added 2026-10-07, Pass 2 of the Sprint 23 refinement)
@@ -598,6 +612,7 @@ not a sweep correction.
 - **Selected for Sprint 23** (team lead, 2026-10-08): F127 only, planned and recorded in THIS repository as usual. The restore commit then removes those records from the tree; they survive in history and in the Phase 2 repository. Claude sessions are split: this repository's session runs step (6) and the Sprint 23 record; the Phase 2 repository's session owns the rest of step (5) (its CLAUDE.md boundary update) and IMP-6, and takes F128 and F130 into its own first sprint
 - **Done 2026-10-07**: steps (2)-(4) and the CI half of (5). All 32 branches and 2 tags pushed, every tip matching; 195 ignored paths copied and hash-verified; a fresh venv from the lock file; CI green on the new repository's draft PR #1
 - **Found in Sprint 23 planning, 2026-10-08: the as-filed `.gitignore` does not ignore `docs/qci_package/`** (18 files of private QCi correspondence), `.claude/settings.local.json`, `.claude/scheduled_tasks.lock` or `experiments/results/b3_hardware.dryrun.json`. A plain restore leaves them unignored in a public repository. The Sprint 23 plan settles this before the restore runs
+- **Pass 1 sweep, 2026-10-09, in the Phase 2 repository**: steps (2)-(4) and the CI half of (5) are DONE. Draft PR #1 here, opened only to prove CI, was closed on the team lead's instruction. The Phase 2 half of step (5), this repository's boundary, is carded separately as **F132** because it grew: every live reference to the Phase 1 repository's path goes (team lead, 2026-10-09). IMP-6 is carded as **F133**. Steps (6) and (7) stay on this card and run in the Phase 1 repository after Sprint 24 merges here
 - Depends on: Sprint 22 merged
 
 **F126. Model of the device's sparsity, validated on held-out fits (~3h [no-history], zero metered) Priority 101**

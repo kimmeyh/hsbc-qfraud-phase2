@@ -2,7 +2,7 @@
 
 **Purpose**: Recorded estimate-vs-actual per task, feeding SPRINT_PLANNING.md estimation (Sprint 2 retro improvement 6). Record at task completion; recompute patterns at retro Category 3.
 **Audience**: Sprint planning sessions.
-**Last Updated**: 2026-10-07 (rows 15-22 added, IMP-7 Sprint 22 retrospective)
+**Last Updated**: 2026-10-08 (Sprint 23 row added; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
 
 | Sprint | Task | Type | Estimate | Actual | Ratio | Note |
 |---|---|---|---|---|---|---|
