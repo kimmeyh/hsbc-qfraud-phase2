@@ -1,9 +1,10 @@
 {
   "current_sprint": {
     "number": 24,
-    "name": "TBD -- scope selected at Phase 1 backlog refinement",
+    "name": "Phase 2 repository boundary and tooling cleanup, plus the F128 leaf-regularization sweep",
     "branch": "feature/20261008_Sprint_24",
-    "status": "phase_1_backlog_refinement",
+    "status": "phase_2_pre_kickoff",
+    "selected_cards": ["F132", "F134", "F133", "F131", "F135", "F136", "F128"],
     "plan_doc": null,
     "pr": null,
     "plan_approved": false,
