@@ -410,7 +410,48 @@ from candidates per convention. F124's approved ranked list,
 below: rank 1, leaf regularization, is tested first. F17's follow-up is F126;
 F123's layout is superseded by F127.)
 
-**F128. Leaf-regularization sweep on the proxy, three datasets (~1.5h [no-history], zero metered) Priority 10**
+**F132. This repository's boundary: no live reference to the Phase 1 repository (~1.5h, zero metered) Priority 10**
+- Phase: Phase 2 repository setup (added 2026-10-09, Sprint 24 Pass 2: the Phase 2 half of F127 step (5), widened by the team lead the same day: "nothing in this p2 repo should reference anything in the p1 repo ... update all references as needed in this sprint")
+- Platform: local, CI
+- **Why it goes first: a live script writes to the Phase 1 repository.** `scripts/us_english_fix.py` sets `ROOT` to the Phase 1 clone's absolute path, so running it from here rewrites the Phase 1 repository's tracked markdown. `block_cross_repo_write.py` cannot see this, because the path is inside the script, not the command, and its `FORBIDDEN` list does not name the Phase 1 repository at all. `wsl_build_pools.sh`, `wsl_hw.sh` and `wsl_tune_proxy.sh` `cd` into the Phase 1 clone the same way
+- **Measured 2026-10-09**: `git grep` finds 49 lines in 22 tracked files naming the Phase 1 repository without the `p2` suffix. Live code, config and process docs to change: the four scripts above (each derives its root from its own location); the guard's `FORBIDDEN` list and docstring; `test_cross_repo_write_guard.py:95`, which uses the Phase 1 path as an ALLOW case, and `test_hook_parity.py:230`; `CLAUDE.md` line 71 and its boundary rule; `SPRINT_PROCESS.md:19`; `SPRINT_EXECUTION_WORKFLOW.md:3`; four `README.md` clone lines; `PHASE_SEPARATION.md:173`; `confidentiality_scan.py` comments at 28 and 36 and the `test_confidentiality_scan.py:64` fixture
+- **The substring trap**: the Phase 1 repository's name is a prefix of this repository's name, so a plain substring rule blocks this repository too. Every pattern excludes the `p2` suffix, and a test proves both directions
+- **Exceptions, pending the team lead's decision at Sprint 24 selection**: the submitted `docs/paper/proposal.md` and `appendix.md` cite the public URL as filed (FROZEN, Class 4); `experiments/results/call_logs/b5_then_b4_launcher.log` is generated evidence (22 lines of interpreter paths); `SPRINT_1_SUMMARY.md`, `SPRINT_14_RETROSPECTIVE.md` (team lead's verbatim words), `SPRINT_16_RETROSPECTIVE.md` and `docs/reviews/f36-float-tables-outcome.md` are history. The guard and the boundary rule must name the Phase 1 repository in order to block it
+- This enables: every later sprint running scripts without reaching into the Phase 1 repository. This prevents: a write to a repository about to be archived as the filed record, made by a script no hook can see
+- Acceptance: a new guard test fails if any tracked file outside the approved exception list names the Phase 1 repository (path, `/mnt/d` form, backslash form or URL), proven red with `assert_can_fail`; the cross-repo hook blocks a Write and a shell write to the Phase 1 path and allows the same to this repository, both proven; the four scripts run from this clone's root
+- Depends on: nothing
+
+**F134. The pre-commit hook blocks when its pattern file is missing (~30m, zero metered) Priority 12**
+- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-1, Category 9, decided to this backlog by the team lead 2026-10-08). Sprints with F132
+- Platform: local
+- `.githooks/pre-commit` scans only inside `if [ -f .secrets-patterns.txt ]`. The pattern file is gitignored, so every fresh clone and worktree starts without it, and the confidentiality gate is silently off. Verified in this repository's hook 2026-10-09
+- Constraint: `test_pre_commit_hook.py` builds scratch repositories, so each case supplies a pattern file or asserts the new block. CI never commits, so the runner is unaffected
+- Acceptance: a commit with no pattern file is BLOCKED with a message naming the file and how to restore it; the test proves it red against the current hook; no override flag
+- Depends on: nothing
+
+**F133. Every Phase 2 device row carries its job_id, enforced by `test_row_schema.py` (~30m, zero metered) Priority 14**
+- Phase: Phase 2 repository (added 2026-10-09, Sprint 22 retrospective IMP-6, previously a bullet on F127)
+- Platform: local, CI
+- B2's samples were lost because its rows never stored a job id (QCi 404, 2026-10-07). `test_row_schema.py` has no Phase 2 store coverage at all today (verified 2026-10-09)
+- **Every current Phase 2 result file is proxy with zero metered seconds**, so the new check has nothing real to bite on. Acceptance therefore requires an injected `[HW]` row without `job_id` going red
+- Acceptance: any row in `experiments/phase2/results/` with a hardware evidence tag or nonzero metered seconds must carry a nonempty `job_id`; proven red with `assert_can_fail`; F129 is the first card it binds
+- Depends on: nothing
+
+**F135. A decision option is complete enough to execute as answered (~10m, zero metered) Priority 18**
+- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-2, Category 7)
+- Platform: docs
+- Sprint 23 D2 option 2 said "this repository's sprint is renumbered" and gave no number. It could not be executed as answered and cost a round (D5). Same class as Sprint 22 IMP-2
+- Acceptance: `CLAUDE.md`'s dependent-decision rule gains the sub-rule, with the Sprint 23 example: every option names its concrete values, so the answer is executable without a second question
+- Depends on: nothing
+
+**F136. Record each task's start time so actuals are measured (~20m, zero metered) Priority 20**
+- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-3, Category 3)
+- Platform: local
+- Sprint 23 Task A's "20 minutes" was judged at completion with no start time recorded, so the actual was an estimate of an actual. Extends `task_actuals` (Sprint 22 IMP-7)
+- Acceptance: `.claude/sprint_status.json` records a start timestamp when a task begins and the actual is computed from it at completion; the workflow's Phase 4 step names it; the velocity log notes which rows are measured
+- Depends on: nothing
+
+**F128. Leaf-regularization sweep on the proxy, three datasets (~1.5h [no-history], zero metered) Priority 22**
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: F124 rank 1's "next proxy test", which had no card)
 - Platform: SPECTRA, classical proxy (`qubo_proxy.py`)
 - **Measured so far (F124, `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`)**: `min_samples_leaf=20` lifts energy_steel from 0.902 to 0.973 AUPRC over 5 seeds, parity with HGB (CI [-0.0063, +0.0256]); a 2-seed screen showed oilgas +0.004 and telecom -0.009. Only one value of the parameter was tried
@@ -419,7 +460,7 @@ F123's layout is superseded by F127.)
 - Acceptance: a dated Phase 2 result file with all 60 cells, the paired difference against HGB with its CI per dataset and value, and a stated best value per dataset; written in the Phase 2 store, no Phase 1 file touched
 - Depends on: nothing outstanding. (Corrected 2026-10-09, Pass 1: the F127 dependency meant "the work lands in the Phase 2 repository", and it now does)
 
-**F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 12**
+**F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 24**
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). Sprints with F128
 - Platform: SPECTRA, ULB, classical proxy
 - Rank 3, KNN weak learners: 5 seeds on oilgas and telecom, and on ULB to test the EvidenceBasedDB record's 0.8108 AUC-PR claim directly (certainty low; a different setup, not a replication)
@@ -428,7 +469,7 @@ F123's layout is superseded by F127.)
 - Acceptance: each lever reported against HGB on the same splits with the paired CI; a lever that does not move AUPRC is recorded as rejected, as F124 did for ensembling
 - Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
-**F131. `test_ci_status.py` rewrites the real `scripts/check_ci_status.py` (~30m [no-history], zero metered) Priority 14**
+**F131. `test_ci_status.py` rewrites the real `scripts/check_ci_status.py` (~30m [no-history], zero metered) Priority 16**
 - Phase: Phase 2 repository, test hygiene (added 2026-10-08, found while verifying F127's copy)
 - Platform: local, CI
 - `_hook_with_ci` overwrites the real script with a stub, then restores it. Two failures, both seen on 2026-10-07: a CI check run during the suite reads the stub and prints a fake red result ("CI (failure) http://x") while the real run is green; and the restore writes LF content back as CRLF on Windows, so `git status` shows the script modified with identical text
@@ -443,6 +484,7 @@ F123's layout is superseded by F127.)
 - What it tests: whether the device reproduces the proxy on a sparse, better-scoring problem. energy_steel has never run on the device. It cannot be expected to beat the proxy, and the card says so up front
 - Every row carries its `job_id` and every returned sample (F127 IMP-6; B2's samples were lost because its rows did not)
 - Acceptance: `[HW]` rows with metered seconds from the response; device-versus-proxy AUPRC and nonzero-weight count per seed; stops after the 1-seed pilot to re-quote if the cost exceeds 110 s
+- **Sequencing note (Pass 2, 2026-10-09)**: F102 is open, so after F128 reports, F102 is the only card between the sweep and this first device run
 - Depends on: F128 (the value); F102 (reporting); per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
 
 **F102. Phase 2 preregistration framework (~3h [no-history], zero metered) Priority 30**

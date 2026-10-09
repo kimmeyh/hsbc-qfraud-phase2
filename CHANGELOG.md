@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-09
 
+- **docs**: Backlog refinement Pass 2: F132 carded (no live reference to the Phase 1 repository; `scripts/us_english_fix.py` and three WSL scripts point at the Phase 1 clone, and the cross-repo guard does not name it), F133 (IMP-6, Phase 2 device rows carry `job_id`), F134-F136 (Sprint 23 retrospective IMP-1 to IMP-3). Proposed re-scores: F128 to 22, F130 to 24, F131 to 16. F129 notes that F102 gates it
 - **docs**: Backlog refinement Pass 1 sweep, Sprint 24 opened in this repository: `feature/20261008_Sprint_24` cut from the Sprint 23 branch at c3d9ec3; status rolled to Sprint 24, phase 1, with Sprint 23's restore (Tasks C and D) recorded as pending in the Phase 1 repository; master plan Last Completed Sprint rolled to Sprint 23; F127 marks steps (2)-(4) done and moves its Phase 2 remainder to F132 and IMP-6 to F133; spent F127 dependencies on F128, F130 and F131 corrected; velocity log header corrected. Draft PR #1, opened only to prove CI, closed (team lead)
 
 ### 2026-10-08
