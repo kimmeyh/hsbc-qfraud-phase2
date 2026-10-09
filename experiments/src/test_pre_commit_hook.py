@@ -42,6 +42,10 @@ def repo(tmp_path: Path) -> Path:
     (hooks / "pre-commit").write_bytes(HOOK.read_bytes())
     (hooks / "pre-commit").chmod(0o755)
     _git(tmp_path, "config", "core.hooksPath", ".githooks")
+    # F134: the hook blocks without a pattern file, so every scratch
+    # repository gets one, as a real clone must. Local and untracked.
+    (tmp_path / ".secrets-patterns.txt").write_text(SECRET + "\n",
+                                                    encoding="utf-8")
     return tmp_path
 
 
@@ -113,9 +117,8 @@ BODY = "".join(f"plain line {i}\n" for i in range(20))
 
 @pytest.fixture
 def secret_repo(repo):
-    """The pattern file is local and untracked, as in a real clone."""
-    (repo / ".secrets-patterns.txt").write_text(SECRET + "\n",
-                                                encoding="utf-8")
+    """The pattern file is local and untracked, as in a real clone (the
+    `repo` fixture writes it)."""
     assert _commit(repo, {"notes.md": BODY}).returncode == 0
     return repo
 
@@ -149,3 +152,36 @@ def test_a_file_name_with_a_space_is_scanned(secret_repo):
 
 def test_clean_text_passes_the_secret_scan(secret_repo):
     assert _commit(secret_repo, {"more.md": "nothing here\n"}).returncode == 0
+
+
+# ---- F134: no pattern file means no scan, so the commit is blocked ---------
+
+MISSING_MSG = ".secrets-patterns.txt is missing or empty"
+
+
+def test_a_missing_pattern_file_blocks_the_commit(repo):
+    """The defect (Sprint 23 IMP-1): the scan ran only inside
+    `if [ -f .secrets-patterns.txt ]`, so a fresh clone or worktree, which
+    never has the gitignored file, committed with the gate silently off."""
+    (repo / ".secrets-patterns.txt").unlink()
+    r = _commit(repo, {"notes.md": SECRET + "\n"})
+    assert r.returncode != 0, "committed with no confidentiality scan"
+    out = r.stdout + r.stderr
+    assert MISSING_MSG in out
+    assert "cp <primary clone>/.secrets-patterns.txt" in out, (
+        "the message does not say how to restore the file")
+
+
+def test_an_empty_pattern_file_blocks_the_commit(repo):
+    """An empty file scans against nothing, which is the same silent pass."""
+    (repo / ".secrets-patterns.txt").write_text("\n  \n", encoding="utf-8")
+    r = _commit(repo, {"notes.md": "text\n"})
+    assert r.returncode != 0
+    assert MISSING_MSG in (r.stdout + r.stderr)
+
+
+def test_the_hook_has_no_override_for_the_missing_file():
+    """No escape hatch in the commit that creates the guard (CLAUDE.md)."""
+    text = HOOK.read_text(encoding="utf-8").lower()
+    for word in ("skip_secret", "no_scan", "allow_missing", "bypass"):
+        assert word not in text, f"override-shaped token {word!r} in the hook"

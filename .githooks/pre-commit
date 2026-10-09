@@ -23,19 +23,30 @@ fi
 # space through xargs, with 2>/dev/null hiding the miss (PR #159 review). An
 # added line starts with "+"; the "+++ b/<path>" file headers are dropped.
 # If git cannot produce the diff, the commit is blocked, not waved through.
-if [ -f .secrets-patterns.txt ]; then
-  if ! diff=$(git diff --cached --no-color --no-ext-diff --unified=0); then
-    echo "BLOCKED: git could not produce the staged diff, so it was NOT"
-    echo "scanned for confidential patterns. That is not a pass."
-    exit 1
-  fi
-  hits=$(printf '%s\n' "$diff" | grep '^+' | grep -vE '^\+\+\+ (b/|/dev/null)' \
-    | grep -nEf .secrets-patterns.txt)
-  if [ -n "$hits" ]; then
-    echo "BLOCKED: staged changes match confidential patterns in .secrets-patterns.txt:"
-    echo "$hits" | head -5
-    exit 1
-  fi
+#
+# A MISSING OR EMPTY PATTERN FILE BLOCKS (F134, Sprint 23 IMP-1). The file is
+# gitignored, so every fresh clone and worktree starts without it. The scan
+# used to run only `if [ -f .secrets-patterns.txt ]`, so the gate was silently
+# off exactly where nobody had copied the file by hand. No override flag.
+if ! grep -q '[^[:space:]]' .secrets-patterns.txt 2>/dev/null; then
+  echo "BLOCKED: .secrets-patterns.txt is missing or empty, so the staged"
+  echo "changes were NOT scanned for confidential patterns. That is not a pass."
+  echo "The file is gitignored and never committed. Copy it into this clone's"
+  echo "root from your primary clone, for example:"
+  echo "  cp <primary clone>/.secrets-patterns.txt ."
+  exit 1
+fi
+if ! diff=$(git diff --cached --no-color --no-ext-diff --unified=0); then
+  echo "BLOCKED: git could not produce the staged diff, so it was NOT"
+  echo "scanned for confidential patterns. That is not a pass."
+  exit 1
+fi
+hits=$(printf '%s\n' "$diff" | grep '^+' | grep -vE '^\+\+\+ (b/|/dev/null)' \
+  | grep -nEf .secrets-patterns.txt)
+if [ -n "$hits" ]; then
+  echo "BLOCKED: staged changes match confidential patterns in .secrets-patterns.txt:"
+  echo "$hits" | head -5
+  exit 1
 fi
 
 # Any Python file anywhere (the evidence guard is the ROOT conftest.py), plus
