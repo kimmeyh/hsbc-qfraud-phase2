@@ -102,6 +102,13 @@ only in memory.
     answer. (Sprint 22 Manual Validation: D2, D4 and D5 were asked beside D3
     although their options depended on it; D2 was answered on a premise that
     changed one round later. IMP-2, Sprint 22 retrospective.)
+  - **And don't write an option that needs a second question to execute.**
+    Every option names its concrete values: the number, the file, the name,
+    the scope. Test: could you carry out the option the moment the digit
+    arrives, with nothing left to choose? If not, the option is incomplete.
+    (Sprint 23 D2 option 2 said "this repository's sprint is renumbered" and
+    gave no number. It was answered, could not be executed as answered, and
+    cost a round, D5. F135, Sprint 23 IMP-2.)
 
 - **Don't hand over Manual Validation by pointing at a file. LIST THE ITEMS
   TO THE SCREEN as the last step before he starts.** The file
