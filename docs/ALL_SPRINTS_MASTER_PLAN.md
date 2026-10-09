@@ -496,6 +496,7 @@ F123's layout is superseded by F127.)
 - Every row carries its `job_id` and every returned sample (F127 IMP-6; B2's samples were lost because its rows did not)
 - Acceptance: `[HW]` rows with metered seconds from the response; device-versus-proxy AUPRC and nonzero-weight count per seed; stops after the 1-seed pilot to re-quote if the cost exceeds 110 s
 - **Sequencing note (Pass 2, 2026-10-09)**: F102 is open, so after F128 reports, F102 is the only card between the sweep and this first device run
+- **F128 reported (Sprint 24, 2026-10-09; `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md` section 6). Re-score at the next refinement.** The Sprint 24 premise falsifier fired: no `min_samples_leaf` value beats HGB with a CI excluding zero on any dataset. energy_steel is at parity for every value tried, and the values cannot be told apart, so 20 stays a reasonable choice. The card's own question (does the device reproduce the proxy on a sparse problem?) is unchanged; the case for it as a route to advantage is gone. The highest-scoring value was chosen on the test splits, so a device result must be confirmed on other splits
 - Depends on: F128 (the value); F102 (reporting); per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
 
 **F102. Phase 2 preregistration framework (~3h [no-history], zero metered) Priority 30**

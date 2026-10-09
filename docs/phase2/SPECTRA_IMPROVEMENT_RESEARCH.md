@@ -101,7 +101,9 @@ proxy test; device seconds if the proxy shows signal.
   comparison of CVQBoost against XGBoost. The figures here are against HGB,
   the F100 bar's strongest lane. XGBoost was not run as a separate lane.
 - **Next proxy test (zero cost)**: a `min_samples_leaf` sweep (5, 10, 20,
-  50) on all three datasets, 5 seeds, with HGB on the same splits.
+  50) on all three datasets, 5 seeds, with HGB on the same splits. **Done
+  in Sprint 24 (F128); see section 6.** It confirms parity on energy_steel
+  and finds no value that closes the gap on oilgas or telecom.
 - **Device test if approved**: B4's energy_steel cell with
   `weak_cls_params={"min_samples_leaf": 20}`, no other change. 816
   variables, 8 samples: **about 82 s per fit; 1-seed pilot about 82 s;
@@ -289,3 +291,52 @@ classification, fraud, finance, feature extraction, an SDK, or cloud access.
 
 The list in section 2, in order. No Dirac-3 fit runs from it without the
 per-block Criterion H approval, with call count and expected seconds stated.
+
+## 6. F128 follow-up: the leaf sweep (Sprint 24)
+
+Sprint 24, Task G (#9). Zero metered seconds; every figure is SIM, from
+`experiments/phase2/results/f128_leaf_sweep.json` (`summary`). Generator:
+`experiments/phase2/src/lever_screen.py sweep`. 60 cells:
+`min_samples_leaf` at 5, 10, 20 and 50, on energy_steel, oilgas and
+telecom, seeds 42-46, each against HGB on the same split. Same build as the
+F124 confirm run: frozen B4 configuration, hard votes, exact simplex QP. No
+cell failed.
+
+**Bottom line: parity on energy_steel at every value, and no value closes
+the gap anywhere else.** No value beats HGB with a CI that excludes zero on
+any dataset. This meets the Sprint 24 plan's premise falsifier: F129 is not
+justified by this lever as a route to beating the classical bar. What F129
+could still test is narrower: whether the device reproduces the proxy at
+parity on a sparse problem (the Rank 1 device-test paragraph above).
+
+| Dataset | HGB | Leaf 5 | Leaf 10 | Leaf 20 | Leaf 50 |
+|---|---|---|---|---|---|
+| energy_steel, AUPRC | 0.9649 | 0.9725 | 0.9745 | 0.9733 | 0.9699 |
+| energy_steel, delta vs HGB [CI] | | +0.0076 [-0.0100, +0.0287] | +0.0096 [-0.0069, +0.0300] | +0.0084 [-0.0063, +0.0255] | +0.0050 [-0.0097, +0.0224] |
+| oilgas, AUPRC | 0.8739 | 0.8446 | 0.8461 | 0.8409 | 0.8284 |
+| oilgas, delta vs HGB [CI] | | -0.0293 [-0.0313, -0.0277] | -0.0278 [-0.0297, -0.0265] | -0.0331 [-0.0375, -0.0301] | -0.0456 [-0.0494, -0.0430] |
+| telecom, AUPRC | 0.8669 | 0.7593 | 0.7405 | 0.7219 | 0.7075 |
+| telecom, delta vs HGB [CI] | | -0.1076 [-0.1187, -0.0958] | -0.1264 [-0.1325, -0.1155] | -0.1450 [-0.1506, -0.1406] | -0.1594 [-0.1724, -0.1389] |
+
+- **energy_steel**: every value sits level with HGB; each CI includes zero,
+  and each value beats HGB on 2 of 5 seeds. The values differ from each
+  other by at most 0.0046 AUPRC, about one seed SD (0.0026-0.0055), so the
+  sweep cannot tell them apart. 20, the value F124 tried, is as good as any.
+- **oilgas**: every value loses to HGB by 0.028-0.046, every CI excludes
+  zero. 10 loses least and 50 loses most.
+- **telecom**: every value loses by 0.11-0.16, every CI excludes zero.
+  Larger leaves lose more; 5 is the least bad.
+- **Larger leaves always narrow the train-test gap, and do not always help.**
+  The gap falls with leaf size on all three datasets (telecom 0.234 to
+  0.094; oilgas 0.153 to 0.036; energy_steel 0.027 to 0.013), while test
+  AUPRC falls on oilgas and telecom. The gap was not what held those two
+  back.
+- **Sparsity**: nonzero weights fall with leaf size on oilgas (364 to 245)
+  and telecom (269 to 174). On energy_steel they are 300-377 at every value.
+- **The highest-scoring value is chosen on the test splits it is reported
+  on** (`highest_test_auprc_leaf` in the file: 10, 10 and 5). It is the best
+  of four noisy estimates and biased upward. A device run that uses it must
+  confirm on other splits. On energy_steel the choice does not matter, as
+  above. The Sprint 24 code review found the first version of the summary
+  called it "best"; it was corrected before the file was committed, and the
+  rows were not re-run.
