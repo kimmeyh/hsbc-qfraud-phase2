@@ -102,8 +102,9 @@ proxy test; device seconds if the proxy shows signal.
   the F100 bar's strongest lane. XGBoost was not run as a separate lane.
 - **Next proxy test (zero cost)**: a `min_samples_leaf` sweep (5, 10, 20,
   50) on all three datasets, 5 seeds, with HGB on the same splits. **Done
-  in Sprint 24 (F128); see section 6.** It confirms parity on energy_steel
-  and finds no value that closes the gap on oilgas or telecom.
+  in Sprint 24 (F128); see section 6.** energy_steel is level with HGB on
+  average but loses on 3 of 5 seeds at every value; no value closes the gap
+  on oilgas or telecom.
 - **Device test if approved**: B4's energy_steel cell with
   `weak_cls_params={"min_samples_leaf": 20}`, no other change. 816
   variables, 8 samples: **about 82 s per fit; 1-seed pilot about 82 s;
@@ -298,13 +299,16 @@ Sprint 24, Task G (#9). Zero metered seconds; every figure is SIM, from
 `experiments/phase2/results/f128_leaf_sweep.json` (`summary`). Generator:
 `experiments/phase2/src/lever_screen.py sweep`. 60 cells:
 `min_samples_leaf` at 5, 10, 20 and 50, on energy_steel, oilgas and
-telecom, seeds 42-46, each against HGB on the same split. Same build as the
-F124 confirm run: frozen B4 configuration, hard votes, exact simplex QP. No
-cell failed.
+telecom, seeds 42-46, each against HGB on the same split. The build, per
+the generator's code (the file records the generator's SHA-256, not the
+configuration): the F124 confirm path, with the frozen B4 configuration,
+hard votes and the exact simplex QP. No cell failed. Each CI is a
+percentile bootstrap over the 5 per-seed differences, so it is narrow and
+describes these 5 splits only.
 
-**Bottom line: parity on energy_steel at every value, and no value closes
-the gap anywhere else.** No value beats HGB with a CI that excludes zero on
-any dataset. This meets the Sprint 24 plan's premise falsifier: F129 is not
+**Bottom line: no value closes the gap anywhere. energy_steel is level with
+HGB on average, but not seed by seed.** No value beats HGB with a CI that
+excludes zero on any dataset. This meets the Sprint 24 plan's premise falsifier: F129 is not
 justified by this lever as a route to beating the classical bar. What F129
 could still test is narrower: whether the device reproduces the proxy at
 parity on a sparse problem (the Rank 1 device-test paragraph above).
@@ -318,25 +322,44 @@ parity on a sparse problem (the Rank 1 device-test paragraph above).
 | telecom, AUPRC | 0.8669 | 0.7593 | 0.7405 | 0.7219 | 0.7075 |
 | telecom, delta vs HGB [CI] | | -0.1076 [-0.1187, -0.0958] | -0.1264 [-0.1325, -0.1155] | -0.1450 [-0.1506, -0.1406] | -0.1594 [-0.1724, -0.1389] |
 
-- **energy_steel**: every value sits level with HGB; each CI includes zero,
-  and each value beats HGB on 2 of 5 seeds. The values differ from each
-  other by at most 0.0046 AUPRC, about one seed SD (0.0026-0.0055), so the
-  sweep cannot tell them apart. 20, the value F124 tried, is as good as any.
+- **energy_steel: level on average, and the average hides the pattern.**
+  Each CI includes zero. But CVQBoost loses to HGB on seeds 42, 43 and 46 at
+  every value, by 0.0046-0.0113, and wins only on seeds 44 and 45, where HGB
+  itself scores low (0.9459 and 0.9296 against 0.98 on the other three).
+  HGB varies far more across seeds than CVQBoost does. The positive mean
+  difference comes from HGB's weak seeds, not from a consistent CVQBoost
+  gain. (F124's +0.0085 at leaf 20 had the same 2-of-5 shape.)
+- **energy_steel, between values**: 10 and 20 beat 50 on 5 of 5 seeds, so 50
+  is measurably worse. 5, 10 and 20 cannot be separated (10 beats 20 on 3 of
+  5 seeds; the means differ by 0.0012). 20, the value F124 tried, is as good
+  as any.
 - **oilgas**: every value loses to HGB by 0.028-0.046, every CI excludes
   zero. 10 loses least and 50 loses most.
 - **telecom**: every value loses by 0.11-0.16, every CI excludes zero.
   Larger leaves lose more; 5 is the least bad.
 - **Larger leaves always narrow the train-test gap, and do not always help.**
   The gap falls with leaf size on all three datasets (telecom 0.234 to
-  0.094; oilgas 0.153 to 0.036; energy_steel 0.027 to 0.013), while test
-  AUPRC falls on oilgas and telecom. The gap was not what held those two
-  back.
-- **Sparsity**: nonzero weights fall with leaf size on oilgas (364 to 245)
-  and telecom (269 to 174). On energy_steel they are 300-377 at every value.
+  0.094; oilgas 0.153 to 0.036; energy_steel 0.027 to 0.013). Test AUPRC
+  falls with it on telecom, and on oilgas beyond leaf 10. The gap narrows
+  largely because train AUPRC falls. So closing the gap with this one
+  regularizer did not recover test AUPRC on those two datasets; whether
+  another regularizer would is untested.
+- **Sparsity**: nonzero weights fall with leaf size on oilgas (364 to 245 of
+  560 learners) and telecom (269 to 174 of 816). On energy_steel (816
+  learners) leaf 5 keeps 377 and leaves 10-50 keep 300-323.
+- **In-pocket AUPRC is null on 8 telecom rows** (seeds 42 and 45, every
+  leaf value): those pockets hold fewer than 50 positives, so the metric is
+  not computed. Not a failure; the overall AUPRC is complete.
 - **The highest-scoring value is chosen on the test splits it is reported
   on** (`highest_test_auprc_leaf` in the file: 10, 10 and 5). It is the best
   of four noisy estimates and biased upward. A device run that uses it must
-  confirm on other splits. On energy_steel the choice does not matter, as
-  above. The Sprint 24 code review found the first version of the summary
-  called it "best"; it was corrected before the file was committed, and the
-  rows were not re-run.
+  confirm on other splits. On energy_steel the choice among 5, 10 and 20
+  does not matter, as above. The Sprint 24 code review found the first
+  version of the summary called it "best"; the summary was corrected and
+  rebuilt from the stored rows (`summary_regenerated` in the file) before
+  the file was committed. The rows were not re-run; their equality with the
+  as-run output was checked at the time, and the file cannot show it on its
+  own.
+- **Fresh-eyes review**: a fresh-context reviewer recomputed all 12 summary
+  cells from the rows and matched them. Its 8 findings were about reading,
+  not arithmetic; this section was revised for all of them.

@@ -3,7 +3,7 @@
     "number": 24,
     "name": "Phase 2 repository boundary and tooling cleanup, plus the F128 leaf-regularization sweep",
     "branch": "feature/20261008_Sprint_24",
-    "status": "phase_4_execution",
+    "status": "phase_5_3_manual_validation",
     "selected_cards": [
       "F131",
       "F136",
