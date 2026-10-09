@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-09
 
+- **test**: F131, Sprint 24 Task A: `test_ci_status.py` no longer writes `scripts/check_ci_status.py`. The stubbed checker is a copy in a temporary directory, loaded into `sys.modules` by a launcher before the hook runs, and the tracked script's bytes are asserted unchanged. Proven with `assert_can_fail`: the red-CI hook test fails when the hook ignores a failed check, and the new byte test fails when the helper writes the tracked script (Issue #3)
 - **process**: Sprint 24 plan approved (D7: 1) with D6: 1, so the F132 guard test allows `CHANGELOG.md`, the master plan and `docs/sprints/` as records. Issues #3-10, one per task. Status moves to Phase 4 execution, and Task A's start time is recorded
 - **chore**: Sprint 24 draft PR #2 recorded in the status file
 - **docs**: Sprint 24 plan drafted (`docs/sprints/SPRINT_24_PLAN.md`): F131, F136, F132, F134, F133, F135, F128 and F137, 290 minutes derived from the cards plus about 35 minutes of F128 runtime. `SPRINT_23_SUMMARY.md` written and linked in the master plan (Phase 3.2.1). F137 carded from the Phase 2.6 dependency scan (pypdf 6.17.0, seven advisories). Plan verification corrected F133 (the device-sample files are a second shape) and re-estimated F128

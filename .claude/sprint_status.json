@@ -10,10 +10,12 @@
     "plan_approved": true,
     "github_issues": [3, 4, 5, 6, 7, 8, 9, 10],
     "task_started": {
-      "A": "2026-10-09T12:32:36-04:00"
+      "A": "2026-10-09T12:32:36-04:00",
+      "B": "2026-10-09T12:36:00-04:00"
     },
     "task_actuals": {
-      "_note": "Wall-clock minutes at completion, per IMP-1. Recorded as each task finishes, never reconstructed at the retrospective."
+      "_note": "Wall-clock minutes at completion, per IMP-1. Recorded as each task finishes, never reconstructed at the retrospective.",
+      "A": 3
     },
     "scope_additions": []
   },

@@ -23,6 +23,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -153,29 +154,62 @@ def _claim() -> str:
     })
 
 
+# The hook runs in a subprocess, so a monkeypatch in this process cannot reach
+# it. This launcher loads the stubbed checker under the name the hook imports,
+# then runs the hook. `import check_ci_status` finds the module already in
+# sys.modules and never reads scripts/check_ci_status.py.
+_LAUNCHER = """\
+import importlib.util, runpy, sys
+stub, hook = sys.argv[1], sys.argv[2]
+spec = importlib.util.spec_from_file_location("check_ci_status", stub)
+mod = importlib.util.module_from_spec(spec)
+sys.modules["check_ci_status"] = mod
+spec.loader.exec_module(mod)
+assert getattr(mod, "STUBBED_BY_TEST", False), "the stub did not load"
+sys.argv = [hook]
+runpy.run_path(hook, run_name="__main__")
+"""
+
+
 def _hook_with_ci(monkeypatched_source: str) -> tuple[int, str]:
     """Run the hook with the CI checker stubbed to a fixed state.
 
-    Mutates the checker on disk and restores it, asserting the restore. The
-    hook runs in a subprocess and imports the checker by path, so a
-    monkeypatch in this process would not reach it.
+    HERMETIC (F131, Sprint 24). The first version wrote the stub over the
+    tracked script and restored it. Two failures followed, both seen on
+    2026-10-07: a CI check run during the suite read the stub and printed a
+    fake red result, and the text-mode restore wrote LF content back as CRLF
+    on Windows, so `git status` showed the script modified with identical
+    text. Now the stub is a copy in a temporary directory, and the tracked
+    script's bytes are asserted unchanged.
     """
-    orig = SCRIPT.read_text(encoding="utf-8")
+    before = SCRIPT.read_bytes()
+    orig = before.decode("utf-8")
     stub = orig.replace(
         '    """Workflow runs whose head commit is exactly this sha."""',
         '    """Workflow runs whose head commit is exactly this sha."""\n'
         + monkeypatched_source, 1)
     assert stub != orig, "the stub did not apply; this test would prove nothing"
-    SCRIPT.write_text(stub, encoding="utf-8")
-    try:
-        assert monkeypatched_source.strip() in SCRIPT.read_text(
-            encoding="utf-8"), "the mutation is not on disk"
-        r = subprocess.run([sys.executable, str(HOOK)], input=_claim(),
-                           capture_output=True, text=True, cwd=str(ROOT))
-        return r.returncode, r.stderr
-    finally:
-        SCRIPT.write_text(orig, encoding="utf-8")
-        assert SCRIPT.read_text(encoding="utf-8") == orig, "RESTORE FAILED"
+    # The checker derives ROOT from its own location and runs git there; the
+    # copy lives in a temporary directory, so point it back at this clone.
+    stub += f"\nROOT = Path({str(ROOT)!r})\nSTUBBED_BY_TEST = True\n"
+    with tempfile.TemporaryDirectory() as tmp:
+        stub_path = Path(tmp) / "check_ci_status.py"
+        stub_path.write_text(stub, encoding="utf-8")
+        r = subprocess.run(
+            [sys.executable, "-c", _LAUNCHER, str(stub_path), str(HOOK)],
+            input=_claim(), capture_output=True, text=True, cwd=str(ROOT))
+    assert "the stub did not load" not in r.stderr, r.stderr[-400:]
+    assert SCRIPT.read_bytes() == before, (
+        "the tracked scripts/check_ci_status.py changed during the test")
+    return r.returncode, r.stderr
+
+
+def test_the_hook_tests_never_write_the_tracked_checker():
+    """F131's acceptance, stated as its own test: the bytes of the tracked
+    script are identical before and after a stubbed hook run."""
+    before = SCRIPT.read_bytes()
+    _hook_with_ci('    raise Undetermined("simulated: gh unavailable")')
+    assert SCRIPT.read_bytes() == before
 
 
 def test_the_hook_blocks_a_closeout_claim_when_ci_is_red():
