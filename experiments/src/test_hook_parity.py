@@ -227,7 +227,7 @@ CASES: dict[str, list[tuple[str, int, dict]]] = {
         ("writing in THIS repo is fine", ALLOW,
          {"tool_name": "Write",
           "tool_input": {"file_path":
-                         "D:/Data/Harold/github/hsbc-quantum-fraud-2026/docs/x.md"}}),
+                         "D:/Data/Harold/github/hsbc-qfraud-phase2/docs/x.md"}}),
         # Fail-open is the deliberate default, and worth asserting so a future
         # change to strict-by-default is a visible decision rather than a drift.
         ("no tool_name exercises no branch", ALLOW,

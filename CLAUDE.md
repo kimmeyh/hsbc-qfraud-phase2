@@ -68,9 +68,13 @@ The one field filled from memory was the one that was wrong.)
   `experiments/PREREGISTRATION.md` are EXEMPT and must never be swept: they are
   documents of record for a filing made 2026-09-12. (Team lead, 2026-09-16.)
 - **This repository's sessions NEVER write to another repository.** Work in
-  `hsbc-quantum-fraud-2026` does not create, edit, commit or push files in
-  `spamfilter-multi` or `EvidenceBasedDB`. Reading them on request is fine.
-  (Team lead, 2026-09-15.)
+  `hsbc-qfraud-phase2` does not create, edit, commit or push files in
+  `spamfilter-multi`, `EvidenceBasedDB` or the Phase 1 repository,
+  `hsbc-quantum-fraud-2026`, which is restored as filed and archived (F127).
+  Reading them on request is fine. `block_cross_repo_write.py` enforces it.
+  (Team lead, 2026-09-15; the Phase 1 repository added 2026-10-09, F132.)
+  Its name appears in this repository only where the boundary must name it to
+  block it, and in the records that `test_phase1_boundary.py` allows.
 
 ## Things Claude Should NOT Do
 
@@ -122,8 +126,9 @@ only in memory.
   He later confirmed the correct answer had been "do not change proposal.md" and
   said plainly: "I was just testing you.")
 
-- **Don't write into another repository from this one.** `spamfilter-multi` and
-  `EvidenceBasedDB` are read-only from here, and only when asked. If work in this
+- **Don't write into another repository from this one.** `spamfilter-multi`,
+  `EvidenceBasedDB` and the Phase 1 repository are read-only from here, and only
+  when asked. If work in this
   repository implies a change over there, say so and hand it to a session running
   in that repository; do not make the edit yourself, however small or obviously
   correct it looks. (Team lead, 2026-09-15, after a session working this

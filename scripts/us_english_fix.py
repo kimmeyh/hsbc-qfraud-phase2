@@ -19,7 +19,10 @@ import re
 import subprocess
 from pathlib import Path
 
-ROOT = Path("D:/Data/Harold/github/hsbc-quantum-fraud-2026")
+# The repository this script lives in, never an absolute path (F132, Sprint
+# 24). The absolute path it held pointed at the Phase 1 clone, so running it
+# from here rewrote that repository's markdown, and no hook could see it.
+ROOT = Path(__file__).resolve().parents[1]
 if not (ROOT / ".git").exists():
     raise SystemExit(f"not a git repository: {ROOT}")
 

@@ -37,11 +37,14 @@ Every other rendered PDF is a build output and is not committed. Rebuild with
 
 ### Retrieving the repository exactly as submitted
 
-The submission was built from the state tagged below. To see what a judge sees:
+The submission was built from the state tagged below. This private Phase 2
+repository carries the full history, so the commands below work here. The
+public copy that the filed documents cite is the Phase 1 repository, restored
+there as filed (F127). To see what a judge sees:
 
 ```bash
-git clone https://github.com/kimmeyh/hsbc-quantum-fraud-2026.git
-cd hsbc-quantum-fraud-2026
+git clone https://github.com/kimmeyh/hsbc-qfraud-phase2.git
+cd hsbc-qfraud-phase2
 git log --oneline --until="2026-09-12"     # the submission commit and earlier
 ```
 
@@ -52,7 +55,8 @@ git show prereg-freeze          # tag
 git show 95751b9                # the freeze commit, cited by hash in Appendix B
 ```
 
-Both resolve anonymously. Appendix C's claim that every figure regenerates from
+Both resolve anonymously in the public Phase 1 repository, and for anyone
+with access here. Appendix C's claim that every figure regenerates from
 this repository depends on it, so **history is never rewritten and those
 references never move**; a hook refuses force-pushes and tag moves.
 
@@ -83,8 +87,8 @@ below are what that clone actually printed.
 ### 1. Clone and create an environment
 
 ```bash
-git clone https://github.com/kimmeyh/hsbc-quantum-fraud-2026.git
-cd hsbc-quantum-fraud-2026
+git clone https://github.com/kimmeyh/hsbc-qfraud-phase2.git
+cd hsbc-qfraud-phase2
 python -m venv .venv
 ```
 
