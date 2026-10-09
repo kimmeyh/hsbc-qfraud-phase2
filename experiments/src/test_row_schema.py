@@ -275,22 +275,36 @@ def _nonzero(v) -> bool:
 
 
 def phase2_rows_missing_job_id(results_dir: Path) -> list[str]:
+    """Every result file below results_dir except device_samples/.
+
+    A file whose shape this check cannot read is REPORTED, never skipped
+    (Sprint 24 review): a device file with its rows under another key, or a
+    top-level list, would otherwise iterate zero rows and pass, which is the
+    B2 loss again with a green test on top.
+    """
     bad = []
-    for f in sorted(results_dir.glob("*.json")):
+    for f in sorted(results_dir.rglob("*.json")):
+        rel = f.relative_to(results_dir).as_posix()
+        if rel.startswith("device_samples/"):
+            continue
         doc = json.loads(f.read_text(encoding="utf-8"))
         if not isinstance(doc, dict):
+            bad.append(f"{rel}: top level is not an object, so unreadable")
             continue
         file_tag = doc.get("evidence_tag")
         file_spend = _nonzero(doc.get("metered_seconds"))
         rows = doc.get("rows")
-        for i, r in enumerate(rows if isinstance(rows, list) else []):
-            if not isinstance(r, dict):
-                continue
+        if not (isinstance(rows, list) and rows
+                and all(isinstance(r, dict) for r in rows)):
+            if file_tag == "HW" or file_spend:
+                bad.append(f"{rel}: device file with no readable rows list")
+            continue
+        for i, r in enumerate(rows):
             tag = r.get("evidence_tag", file_tag)
             device = (tag == "HW" or file_spend
                       or _nonzero(r.get("metered_seconds")))
             if device and not str(r.get("job_id") or "").strip():
-                bad.append(f"{f.name} row {i}")
+                bad.append(f"{rel} row {i}")
     return bad
 
 
@@ -345,3 +359,26 @@ def test_the_job_id_checks_catch_an_injected_device_row(tmp_path):
         "hw.json row 1", "row_tag.json row 0"]
     assert phase2_samples_missing_job_id(tmp_path) == [
         "device_samples/b9_x_42.json"]
+
+
+def test_a_device_file_the_check_cannot_read_is_reported(tmp_path):
+    """Sprint 24 review: the first version skipped any file not shaped
+    {rows: [...]}, so a device file with its rows under another key, a
+    top-level list, or a file in a subdirectory passed with nothing read."""
+    (tmp_path / "f129").mkdir()
+    (tmp_path / "other_key.json").write_text(json.dumps({
+        "evidence_tag": "HW", "metered_seconds": 9.0,
+        "fits": [{"seed": 42}]}), encoding="utf-8")
+    (tmp_path / "top_list.json").write_text(json.dumps([{"seed": 42}]),
+                                            encoding="utf-8")
+    (tmp_path / "f129" / "nested.json").write_text(json.dumps({
+        "evidence_tag": "HW", "metered_seconds": 3.0,
+        "rows": [{"seed": 42}]}), encoding="utf-8")
+    (tmp_path / "sim_other_key.json").write_text(json.dumps({
+        "evidence_tag": "SIM", "metered_seconds": 0, "cells": []}),
+        encoding="utf-8")
+
+    assert phase2_rows_missing_job_id(tmp_path) == [
+        "f129/nested.json row 0",
+        "other_key.json: device file with no readable rows list",
+        "top_list.json: top level is not an object, so unreadable"]

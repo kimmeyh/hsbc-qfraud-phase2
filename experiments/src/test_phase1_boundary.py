@@ -61,20 +61,54 @@ def _allowed(path: str) -> bool:
     return path in ALLOWED_FILES or path.startswith(ALLOWED_PREFIXES)
 
 
-def test_no_tracked_file_outside_the_allowlist_names_the_phase1_repository():
-    offenders = []
-    for rel in _tracked():
+def offenders(root: Path, files: list[str]) -> list[str]:
+    """Files outside the allowlist whose bytes name the Phase 1 repository."""
+    found = []
+    for rel in files:
         if _allowed(rel):
             continue
-        p = ROOT / rel
-        if not p.is_file():
-            continue
-        if NAME in p.read_bytes().lower():
-            offenders.append(rel)
-    assert not offenders, (
+        p = root / rel
+        if p.is_file() and NAME in p.read_bytes().lower():
+            found.append(rel)
+    return found
+
+
+def test_no_tracked_file_outside_the_allowlist_names_the_phase1_repository():
+    offenders_here = offenders(ROOT, _tracked())
+    assert not offenders_here, (
         "these tracked files name the Phase 1 repository. Point them at this "
         "repository, say 'the Phase 1 repository', or (only with the team "
-        f"lead's approval) add them to the allowlist: {offenders}")
+        f"lead's approval) add them to the allowlist: {offenders_here}")
+
+
+def test_the_scan_reports_an_injected_offender_and_only_it(tmp_path):
+    """Sprint 24 review: the companion test below proves the scan reads this
+    repository, but CLAUDE.md is allowlisted, so it never proved the loop
+    DETECTS anything. A broken `_allowed` (an empty prefix matching every
+    path) would have left the guard green while checking nothing."""
+    name = NAME.decode()
+    (tmp_path / "docs" / "sprints").mkdir(parents=True)
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts" / "tool.py").write_text(
+        f'ROOT = "/mnt/d/Data/Harold/github/{name.upper()}"\n',
+        encoding="utf-8")
+    (tmp_path / "docs" / "sprints" / "SPRINT_99_PLAN.md").write_text(
+        f"history naming {name}\n", encoding="utf-8")
+    (tmp_path / "CHANGELOG.md").write_text(f"- moved from {name}\n",
+                                           encoding="utf-8")
+    (tmp_path / "README.md").write_text("clone hsbc-qfraud-phase2\n",
+                                        encoding="utf-8")
+    files = ["scripts/tool.py", "docs/sprints/SPRINT_99_PLAN.md",
+             "CHANGELOG.md", "README.md"]
+    assert offenders(tmp_path, files) == ["scripts/tool.py"]
+
+
+def test_every_allowlisted_file_still_names_the_repository():
+    """An entry whose file no longer names the repository is a stale hole in
+    the allowlist; remove it."""
+    stale = sorted(f for f in ALLOWED_FILES
+                   if NAME not in (ROOT / f).read_bytes().lower())
+    assert not stale, f"allowlisted but no longer naming it: {stale}"
 
 
 def test_every_allowlisted_file_still_exists():
