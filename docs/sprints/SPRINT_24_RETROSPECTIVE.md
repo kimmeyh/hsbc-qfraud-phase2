@@ -195,7 +195,7 @@ feedback, recorded verbatim under each of the three roles.
 - **Claude Code Development Team**: two, asked at the improvement decision:
   the source of the added 7,500 s, and where the balance is recorded
 
-## Improvements proposed (awaiting the team lead's decision)
+## Improvements proposed (decided 2026-10-10, below)
 
 | # | Title | Source | Type | Effort | Recommendation |
 |---|---|---|---|---|---|
@@ -215,13 +215,14 @@ happen again. imp-1 and imp4 implement now | D2 2".
 |---|---|---|
 | IMP-1 | **now** | `check_allocation.py --record` writes `experiments/results/allocation_reads.json`; the six live statements cite it (D2 option 2); `test_allocation_single_source.py` fails on a restated balance and on a live consumer that stops citing the owner, both proven red with `assert_can_fail` |
 | IMP-2 | **skip** | not valuable (team lead) |
-| IMP-3 | **pending** | the team lead asked what it states; answered at the close-out decision |
+| IMP-3 | **skip** | team lead, 2026-10-10, "IMP-3 1", after the answer: yes, a venv reinstall runs before or after any job using the venv, never during it; it happened once (Task H waited on G) and is not expected again |
 | IMP-4 | **now** | `docs/TROUBLESHOOTING.md`, Hooks; widened to the `cp` case met on 2026-10-10 |
 
 **The source of the added seconds (D3).** QCi's notice of 2026-10-09: "We've
 loaded your account up with 8,522 seconds", and "Dirac-3S is available"
-(`docs/QPU_RECONCILIATION.md`, grants). The copy goes to
-`docs/qci_package/`, gitignored.
+(`docs/QPU_RECONCILIATION.md`, grants). The team lead copied it to
+`docs/qci_package/2026-10-09_qci_dirac3s_and_seconds.pdf`, gitignored.
+F138 then F139 lead Sprint 25 (team lead confirmed, 2026-10-10).
 
 **Added at the retrospective**: F139 (team lead), every Dirac-3 run reviewed
 for a Dirac-3S re-run and the plan updated for what the new hardware allows,
