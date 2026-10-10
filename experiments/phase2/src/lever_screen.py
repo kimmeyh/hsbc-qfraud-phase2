@@ -22,6 +22,9 @@ Run:  <venv python> experiments/phase2/src/lever_screen.py
             (soft votes on the min_leaf_20 pool: one lever or two?)
       <venv python> experiments/phase2/src/lever_screen.py confirm
             (energy_steel winners, 5 seeds, against HGB on the same splits)
+      <venv python> experiments/phase2/src/lever_screen.py sweep
+            (F128, Sprint 24: min_samples_leaf 5/10/20/50, three datasets,
+             5 seeds, against HGB; f128_leaf_sweep.json)
 """
 from __future__ import annotations
 
@@ -218,24 +221,185 @@ def run_stack() -> dict:
         "seeds_soft_better": int(sum(x > 0 for x in d))}}
 
 
+SWEEP_LEAF_VALUES = (5, 10, 20, 50)
+SWEEP_DATASETS = ("energy_steel", "oilgas_gasturbine", "telecom_churn")
+
+
+def run_sweep() -> dict:
+    """F128 (Sprint 24): `min_samples_leaf` at 5, 10, 20 and 50 on the three
+    SPECTRA datasets, 5 seeds each, against HGB on the same splits, paired.
+
+    F124 tried one value (20), on energy_steel only at 5 seeds. This chooses
+    the value a device run (F129) would use from a sweep, not from one point.
+    Same build as `run_confirm`: frozen B4 configuration, sequential pairs,
+    hard votes, exact simplex QP. Zero metered seconds.
+    """
+    from sklearn.ensemble import HistGradientBoostingClassifier
+
+    rows = []
+    for name in SWEEP_DATASETS:
+        for seed in sv.SEEDS:
+            c, Xtr, Xte, ytr01, yte, pocket = sv._prep(name, seed)
+            y_pm1 = np.where(ytr01 == 1, 1, -1)
+            cfg = c["config"]
+            lam = cfg["lambda_coef_alpha"] * len(y_pm1)
+            hgb = HistGradientBoostingClassifier(random_state=seed).fit(
+                Xtr, ytr01)
+            p_hgb = hgb.predict_proba(Xte)[:, 1]
+            hgb_ap = sv._ap(yte, p_hgb)
+            for leaf in SWEEP_LEAF_VALUES:
+                t0 = time.perf_counter()
+                row = {"dataset": f"spectra_{name}", "seed": seed,
+                       "min_samples_leaf": leaf, "hgb_test_auprc": hgb_ap}
+                try:
+                    clf = qp.build_pool(Xtr, y_pm1, cfg["weak_cls_schedule"],
+                                        weak_type="dct",
+                                        pair_build="sequential",
+                                        weak_params={"min_samples_leaf": leaf},
+                                        lambda_coef=lam)
+                    H_tr, H_te = qp.h_matrix(clf, Xtr), qp.h_matrix(clf, Xte)
+                    w = qp.solve_simplex_qp(H_tr, y_pm1, lam)
+                    p_te, p_tr = sv._score(w, H_te), sv._score(w, H_tr)
+                    row.update(test_auprc=sv._ap(yte, p_te),
+                               train_auprc=sv._ap(ytr01, p_tr),
+                               in_pocket_auprc=sv._in_pocket_ap(yte, p_te,
+                                                                pocket),
+                               n_learners=int(H_tr.shape[0]),
+                               n_nonzero_weights=int((w > 1e-6).sum()))
+                    row["delta_vs_hgb"] = row["test_auprc"] - hgb_ap
+                except Exception as e:                  # noqa: BLE001
+                    row["error"] = f"{type(e).__name__}: {str(e)[:300]}"
+                row["elapsed_s"] = round(time.perf_counter() - t0, 1)
+                rows.append(row)
+                print(f"  {name:18s} s{seed} leaf {leaf:3d} "
+                      f"{row.get('test_auprc', float('nan')):.4f} "
+                      f"hgb {hgb_ap:.4f} {row['elapsed_s']:.0f}s "
+                      f"{row.get('error', '')}", flush=True)
+    return {"rows": rows, "summary": _summarize_sweep(rows)}
+
+
+def _summarize_sweep(rows):
+    """Per dataset and leaf value, with HGB on the same splits.
+
+    Two corrections from the Sprint 24 code review, made before the result
+    was committed:
+      - The leaf value with the highest mean is chosen ON THE TEST SPLITS it
+        is then reported on, so its figure is the best of four noisy
+        estimates and biased upward. It is named `highest_test_auprc_leaf`,
+        not "best", and carries that caveat. A device run that uses it must
+        not reuse these splits as its confirmation.
+      - Values are ranked only when every one completed on every seed, so
+        no mean over a different seed subset can win. A spread or CI from
+        fewer than two seeds is null, not NaN or a zero-width interval.
+    """
+    full = len(sv.SEEDS)
+    out = {}
+    for ds in sorted({r["dataset"] for r in rows}):
+        out[ds] = {}
+        for leaf in SWEEP_LEAF_VALUES:
+            sub = [r for r in rows if r["dataset"] == ds
+                   and r["min_samples_leaf"] == leaf and "test_auprc" in r]
+            if not sub:
+                out[ds][str(leaf)] = {"status": "failed on every seed",
+                                      "n_seeds": 0}
+                continue
+            d = [r["delta_vs_hgb"] for r in sub]
+            two = len(sub) >= 2
+            out[ds][str(leaf)] = {
+                "mean_test_auprc": round(float(np.mean(
+                    [r["test_auprc"] for r in sub])), 4),
+                "seed_sd": (round(float(np.std(
+                    [r["test_auprc"] for r in sub], ddof=1)), 4)
+                    if two else None),
+                "mean_train_test_gap": round(float(np.mean(
+                    [r["train_auprc"] - r["test_auprc"] for r in sub])), 4),
+                "mean_n_nonzero_weights": round(float(np.mean(
+                    [r["n_nonzero_weights"] for r in sub])), 1),
+                "mean_delta_vs_hgb": round(float(np.mean(d)), 4),
+                "delta_vs_hgb_ci95": sv._bootstrap_ci(d) if two else None,
+                "seeds_beating_hgb": int(sum(x > 0 for x in d)),
+                "n_seeds": len(sub)}
+        hgb = {r["seed"]: r["hgb_test_auprc"] for r in rows
+               if r["dataset"] == ds}
+        out[ds]["hgb_mean_test_auprc"] = round(float(np.mean(
+            list(hgb.values()))), 4)
+        cells = {k: v for k, v in out[ds].items() if isinstance(v, dict)}
+        if all(v["n_seeds"] == full for v in cells.values()):
+            scored = {k: v["mean_test_auprc"] for k, v in cells.items()}
+            out[ds]["highest_test_auprc_leaf"] = int(max(scored,
+                                                         key=scored.get))
+            out[ds]["highest_test_auprc_leaf_note"] = (
+                "selected on the test splits it is reported on (seeds "
+                f"{sv.SEEDS[0]}-{sv.SEEDS[-1]}); biased upward; confirm on "
+                "other splits before relying on it")
+        else:
+            out[ds]["highest_test_auprc_leaf"] = None
+            out[ds]["highest_test_auprc_leaf_note"] = (
+                "not ranked: at least one value did not complete on every "
+                "seed")
+    return out
+
+
+def resummarize_sweep() -> dict:
+    """Rebuild the sweep summary from the stored rows, without re-running.
+
+    The rows come from `run_sweep`, which this does not touch; only the
+    summary is recomputed. Used once, after the Sprint 24 review corrected
+    `_summarize_sweep` while the run's rows were already on disk.
+    """
+    path = sv.OUT_DIR / OUTPUTS["sweep"]
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    doc["summary"] = _summarize_sweep(doc["rows"])
+    doc.pop("best_min_samples_leaf", None)
+    doc["summary_regenerated"] = time.strftime("%Y-%m-%d")
+    doc["generator_sha256"] = _generator_sha256()
+    return doc
+
+
+def _generator_sha256() -> str:
+    """The bytes of this file at write time (Sprint 24 review): a result file
+    should say which generator produced it."""
+    import hashlib
+    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+
 OUTPUTS = {"screen": "f124_lever_screen.json",
            "confirm": "f124_lever_confirm_energy_steel.json",
-           "stack": "f124_lever_stack_energy_steel.json"}
+           "stack": "f124_lever_stack_energy_steel.json",
+           "sweep": "f128_leaf_sweep.json"}
+# The card and sprint each part was written for. The F124 parts keep the
+# values their committed result files already carry.
+PROVENANCE = {"screen": ("F124", 22), "confirm": ("F124", 22),
+              "stack": ("F124", 22), "sweep": ("F128", 24)}
 
 
 def main() -> int:
     part = sys.argv[1] if len(sys.argv) > 1 else "screen"
+    if part == "sweep-summary":
+        doc = resummarize_sweep()
+        out = sv.OUT_DIR / OUTPUTS["sweep"]
+        out.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+        print(json.dumps(doc["summary"], indent=1))
+        return 0
     if part not in OUTPUTS:
         raise SystemExit(f"unknown part {part!r}; one of {sorted(OUTPUTS)}")
     confirm = part != "screen"
-    res = {"screen": run, "confirm": run_confirm, "stack": run_stack}[part]()
+    res = {"screen": run, "confirm": run_confirm, "stack": run_stack,
+           "sweep": run_sweep}[part]()
     out = sv.OUT_DIR / OUTPUTS[part]
-    out.write_text(json.dumps({
-        "generator": "experiments/phase2/src/lever_screen.py", "card": "F124",
-        "sprint": 22, "phase": 2, "evidence_tag": "SIM", "metered_seconds": 0,
-        "eqc_models_version": sv._eqc_version(),
-        "seeds": list(sv.SEEDS if confirm else SEEDS),
-        **res}, indent=2), encoding="utf-8")
+    card, sprint = PROVENANCE[part]
+    header = {
+        "generator": "experiments/phase2/src/lever_screen.py", "card": card,
+        "sprint": sprint, "phase": 2, "evidence_tag": "SIM",
+        "metered_seconds": 0, "eqc_models_version": sv._eqc_version(),
+        "seeds": list(sv.SEEDS if confirm else SEEDS)}
+    if part == "sweep":
+        # Dated (F128 acceptance). The F124 parts are left byte-compatible
+        # with their committed files.
+        header["date"] = time.strftime("%Y-%m-%d")
+        header["min_samples_leaf_values"] = list(SWEEP_LEAF_VALUES)
+        header["generator_sha256"] = _generator_sha256()
+    out.write_text(json.dumps({**header, **res}, indent=2), encoding="utf-8")
     print(json.dumps(res["summary"], indent=1))
     return 0
 

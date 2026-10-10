@@ -245,3 +245,140 @@ def test_ieee_fold_builders_deduplicate():
         f"IEEE fold builders loading without deduplication: {offenders}. "
         "Route through ieee_loader.dedupe_ieee and report the count."
     )
+
+
+# ---- F133 (Sprint 24): every Phase 2 device row carries its job id ---------
+#
+# B2's device samples were lost because its rows never stored a job id: when
+# they were needed, QCi returned 404 for all 11 jobs and nothing could recover
+# them (2026-10-07, Sprint 22 IMP-6). A job id is the only handle on a device
+# run after the fact.
+#
+# Two shapes live in experiments/phase2/results/:
+#   - result files: a dict with file-level `evidence_tag` and
+#     `metered_seconds`, and `rows`. A row is a DEVICE row if its own tag is
+#     HW, or it has no tag and its file's tag is HW, or either level reports
+#     nonzero metered seconds.
+#   - device_samples/*.json: recovered device output, one job per file, with
+#     a top-level `job_id`. Every one is device data by definition.
+# Every current result file is SIM with zero metered seconds, so the first
+# check has nothing real to bite on yet; F129 is the first card it binds.
+
+PHASE2_RESULTS = Path(__file__).resolve().parents[1] / "phase2" / "results"
+
+
+def _nonzero(v) -> bool:
+    try:
+        return float(v or 0) > 0
+    except (TypeError, ValueError):
+        return True   # an unreadable spend is treated as a spend
+
+
+def phase2_rows_missing_job_id(results_dir: Path) -> list[str]:
+    """Every result file below results_dir except device_samples/.
+
+    A file whose shape this check cannot read is REPORTED, never skipped
+    (Sprint 24 review): a device file with its rows under another key, or a
+    top-level list, would otherwise iterate zero rows and pass, which is the
+    B2 loss again with a green test on top.
+    """
+    bad = []
+    for f in sorted(results_dir.rglob("*.json")):
+        rel = f.relative_to(results_dir).as_posix()
+        if rel.startswith("device_samples/"):
+            continue
+        doc = json.loads(f.read_text(encoding="utf-8"))
+        if not isinstance(doc, dict):
+            bad.append(f"{rel}: top level is not an object, so unreadable")
+            continue
+        file_tag = doc.get("evidence_tag")
+        file_spend = _nonzero(doc.get("metered_seconds"))
+        rows = doc.get("rows")
+        if not (isinstance(rows, list) and rows
+                and all(isinstance(r, dict) for r in rows)):
+            if file_tag == "HW" or file_spend:
+                bad.append(f"{rel}: device file with no readable rows list")
+            continue
+        for i, r in enumerate(rows):
+            tag = r.get("evidence_tag", file_tag)
+            device = (tag == "HW" or file_spend
+                      or _nonzero(r.get("metered_seconds")))
+            if device and not str(r.get("job_id") or "").strip():
+                bad.append(f"{rel} row {i}")
+    return bad
+
+
+def phase2_samples_missing_job_id(results_dir: Path) -> list[str]:
+    bad = []
+    for f in sorted((results_dir / "device_samples").glob("*.json")):
+        doc = json.loads(f.read_text(encoding="utf-8"))
+        if not (isinstance(doc, dict) and str(doc.get("job_id") or "").strip()):
+            bad.append(f"device_samples/{f.name}")
+    return bad
+
+
+def test_phase2_device_rows_carry_a_job_id():
+    if not PHASE2_RESULTS.exists():
+        pytest.skip("experiments/phase2/results not present")
+    bad = phase2_rows_missing_job_id(PHASE2_RESULTS)
+    assert not bad, (
+        f"Phase 2 device rows with no job_id: {bad[:10]}. Without it the "
+        "device output cannot be recovered later (B2, 2026-10-07).")
+
+
+def test_phase2_device_samples_carry_a_job_id():
+    if not (PHASE2_RESULTS / "device_samples").exists():
+        pytest.skip("experiments/phase2/results/device_samples not present")
+    files = list((PHASE2_RESULTS / "device_samples").glob("*.json"))
+    assert files, "device_samples is empty; this check would read nothing"
+    bad = phase2_samples_missing_job_id(PHASE2_RESULTS)
+    assert not bad, f"device-sample files with no job_id: {bad}"
+
+
+def test_the_job_id_checks_catch_an_injected_device_row(tmp_path):
+    """Every real file passes today, so the checks are proven on injected
+    files: a green result on real data alone could mean they read nothing."""
+    (tmp_path / "device_samples").mkdir()
+    (tmp_path / "hw.json").write_text(json.dumps({
+        "evidence_tag": "HW", "metered_seconds": 4.5,
+        "rows": [{"seed": 42, "job_id": "abc"}, {"seed": 43}]}),
+        encoding="utf-8")
+    (tmp_path / "row_tag.json").write_text(json.dumps({
+        "evidence_tag": "SIM", "metered_seconds": 0,
+        "rows": [{"seed": 1, "evidence_tag": "HW", "job_id": "  "}]}),
+        encoding="utf-8")
+    (tmp_path / "sim.json").write_text(json.dumps({
+        "evidence_tag": "SIM", "metered_seconds": 0,
+        "rows": [{"seed": 1}]}), encoding="utf-8")
+    (tmp_path / "device_samples" / "b9_x_42.json").write_text(
+        json.dumps({"block": "B9", "solutions": []}), encoding="utf-8")
+    (tmp_path / "device_samples" / "b9_x_43.json").write_text(
+        json.dumps({"block": "B9", "job_id": "def"}), encoding="utf-8")
+
+    assert phase2_rows_missing_job_id(tmp_path) == [
+        "hw.json row 1", "row_tag.json row 0"]
+    assert phase2_samples_missing_job_id(tmp_path) == [
+        "device_samples/b9_x_42.json"]
+
+
+def test_a_device_file_the_check_cannot_read_is_reported(tmp_path):
+    """Sprint 24 review: the first version skipped any file not shaped
+    {rows: [...]}, so a device file with its rows under another key, a
+    top-level list, or a file in a subdirectory passed with nothing read."""
+    (tmp_path / "f129").mkdir()
+    (tmp_path / "other_key.json").write_text(json.dumps({
+        "evidence_tag": "HW", "metered_seconds": 9.0,
+        "fits": [{"seed": 42}]}), encoding="utf-8")
+    (tmp_path / "top_list.json").write_text(json.dumps([{"seed": 42}]),
+                                            encoding="utf-8")
+    (tmp_path / "f129" / "nested.json").write_text(json.dumps({
+        "evidence_tag": "HW", "metered_seconds": 3.0,
+        "rows": [{"seed": 42}]}), encoding="utf-8")
+    (tmp_path / "sim_other_key.json").write_text(json.dumps({
+        "evidence_tag": "SIM", "metered_seconds": 0, "cells": []}),
+        encoding="utf-8")
+
+    assert phase2_rows_missing_job_id(tmp_path) == [
+        "f129/nested.json row 0",
+        "other_key.json: device file with no readable rows list",
+        "top_list.json: top level is not an object, so unreadable"]

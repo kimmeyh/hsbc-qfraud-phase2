@@ -38,7 +38,9 @@ git config core.hooksPath .githooks
 `.secrets-patterns.txt`, and a commit that changes code without changing
 `CHANGELOG.md`. Git does not run a tracked hook until this is set
 (IMP-3, Sprint 22 retrospective). `.secrets-patterns.txt` is gitignored and is
-copied by hand to each clone.
+copied by hand to each clone and worktree. Without it, or with it empty, every
+commit is blocked, because an unscanned commit is not a clean one (F134,
+Sprint 24).
 
 The lock file pins all 18 dependencies. That is deliberate and load-bearing:
 amendment A29(h) records that drift in the comparator stack is material to the

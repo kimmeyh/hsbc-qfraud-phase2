@@ -41,6 +41,10 @@ HOOK = ROOT / ".claude" / "hooks" / "block_cross_repo_write.py"
 # a shell heredoc, which is how this test was first blocked.
 SIBLING = "Evidence" + "BasedDB"
 OTHER = "spamfilter" + "-multi"
+# F132 (Sprint 24): the Phase 1 repository is forbidden too. Assembled for the
+# same reason, and so this file needs no place on the boundary allowlist.
+PHASE1 = "hsbc-quantum-fraud" + "-2026"
+THIS = "hsbc-qfraud-phase2"
 HERE = "D:/Data/Harold/github"
 
 BLOCK, ALLOW = 2, 0
@@ -69,6 +73,32 @@ CASES = [
      {"tool_name": "Bash",
       "tool_input": {"command": f"sed -i s/a/b/ {HERE}/{SIBLING}/README.md"}}),
 
+    # --- F132: the Phase 1 repository, in both directions --------------------
+    ("Write tool into the Phase 1 repository", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{PHASE1}/docs/x.md"}}),
+    ("shell redirect into the Phase 1 repository", BLOCK,
+     {"tool_name": "Bash",
+      "tool_input": {"command": f"echo hi > {HERE}/{PHASE1}/README.md"}}),
+    ("shell write into the Phase 1 repository by its WSL path", BLOCK,
+     {"tool_name": "Bash",
+      "tool_input": {"command": f"cp x.md /mnt/d/Data/Harold/github/{PHASE1}/x.md"}}),
+    ("git push after cd into the Phase 1 repository", BLOCK,
+     {"tool_name": "Bash",
+      "tool_input": {"command": f"cd {HERE}/{PHASE1} && git " + "push origin HEAD"}}),
+    ("Write tool into this repository by its full path", ALLOW,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{THIS}/docs/x.md"}}),
+    ("shell redirect into this repository by its full path", ALLOW,
+     {"tool_name": "Bash",
+      "tool_input": {"command": f"echo hi > {HERE}/{THIS}/docs/x.md"}}),
+    ("git commit after cd into this repository", ALLOW,
+     {"tool_name": "Bash",
+      "tool_input": {"command": f"cd {HERE}/{THIS} && git commit -m x"}}),
+    ("reading the Phase 1 repository", ALLOW,
+     {"tool_name": "Bash",
+      "tool_input": {"command": f"git -C {HERE}/{PHASE1} log --oneline -5"}}),
+
     # --- must ALLOW: reading a sibling --------------------------------------
     ("cat a sibling file", ALLOW,
      {"tool_name": "Bash",
@@ -92,7 +122,7 @@ CASES = [
      {"tool_name": "Bash",
       "tool_input": {"command":
                      f"echo 'never write to {OTHER} or {SIBLING}' > "
-                     f"{HERE}/hsbc-quantum-fraud-2026/docs/rule.md"}}),
+                     f"{HERE}/{THIS}/docs/rule.md"}}),
 
     # --- must ALLOW: ordinary work in this repository -----------------------
     ("Write tool in this repository", ALLOW,

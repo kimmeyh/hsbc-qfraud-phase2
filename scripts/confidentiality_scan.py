@@ -24,8 +24,8 @@ import re
 import sys
 from pathlib import Path
 
-# RETIRED 2026-09-11 (F37): a 'Private repo URL' rule matching
-# `hsbc-quantum-fraud-2026`. It was correct while the repository was private,
+# RETIRED 2026-09-11 (F37): a 'Private repo URL' rule matching the Phase 1
+# repository's name. It was correct while that repository was private,
 # because citing a URL a reader cannot open is a defect. The repository is now
 # public, so the citation is REQUIRED -- Appendix C's "every figure regenerates
 # from the public repository" depends on it. Leaving the rule in place blocked a
@@ -33,7 +33,9 @@ from pathlib import Path
 #
 # If visibility is ever reverted, restore it here AND re-check every document
 # that cites the URL:
-#     ("Private repo URL", r"(?i)hsbc-quantum-fraud-2026"),
+#     ("Private repo URL", r"(?i)<the Phase 1 repository's name>"),
+# (The name is not written here: F132 keeps it out of live code. CLAUDE.md's
+# boundary rule names it.)
 
 HIGH = [
     ("Employer name", r"(?i)progressive"),

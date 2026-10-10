@@ -61,7 +61,9 @@ CASES = [
     # Appendix C rather than forbidden. Re-adding the rule would block every
     # correct document.
     ("public repo URL is allowed", CLEAN,
-     "The repository is at github.com/kimmeyh/hsbc-quantum-fraud-2026 and is public."),
+     # Assembled, so this file does not name the Phase 1 repository (F132).
+     "The repository is at github.com/kimmeyh/hsbc-quantum-fraud" + "-2026"
+     " and is public."),
 ]
 
 

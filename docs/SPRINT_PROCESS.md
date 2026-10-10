@@ -16,7 +16,7 @@ feature/YYYYMMDD_Sprint_N   (one branch per sprint; DRAFT PR from creation; read
 
 **Carry-forward (workflow 6.6):** on PR-merge notification, create the next sprint branch FROM the just-merged branch's head, never from develop; commit post-merge work there; never stash; recovery is cherry-pick. Sprint branches are never deleted.
 
-Remote: private (kimmeyh/hsbc-quantum-fraud-2026) until the Stage 7 confidentiality scan; the public reproducibility package publishes separately.
+Remote: `kimmeyh/hsbc-qfraud-phase2`, private. The public record of the filing is the Phase 1 repository, restored as filed and archived (F127); this repository never writes to it.
 
 ## The window and the override
 

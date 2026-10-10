@@ -15,6 +15,14 @@ Usage:
     python scripts/update_sprint_status.py --new-sprint 17 \\
         --name "The Next Thing" --branch feature/20260918_Sprint_17 \\
         --plan-doc docs/sprints/SPRINT_17_PLAN.md
+    python scripts/update_sprint_status.py --start-task C
+    python scripts/update_sprint_status.py --finish-task C
+
+`--start-task` stamps the task's start time in `task_started`. `--finish-task`
+computes the actual from that stamp and writes it to `task_actuals` in whole
+minutes, rounded up. A finish with no recorded start is refused (F136, Sprint
+23 IMP-3): Sprint 23 Task A's "20 minutes" was judged at completion with no
+start time, so the actual was an estimate of an actual.
 
 Values are typed: `true`/`false` become booleans, `null` becomes null, digits
 become integers, everything else stays a string. A bare key targets
@@ -24,8 +32,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 STATUS = Path(__file__).resolve().parents[1] / ".claude" / "sprint_status.json"
@@ -81,7 +90,43 @@ def apply_set(doc: dict, assignment: str) -> str:
     return f"  {section_name}.{key}: {before!r} -> {section[key]!r}"
 
 
-def main(argv: list[str] | None = None) -> int:
+def start_task(doc: dict, task: str, now: datetime) -> str:
+    """Stamp the start. A second start is refused: silently moving the stamp
+    would shorten the measured actual."""
+    cur = doc["current_sprint"]
+    started = cur.setdefault("task_started", {})
+    if task in started:
+        raise SystemExit(
+            f"Task {task} already started at {started[task]}. A second start "
+            "would move the stamp and shorten the actual.")
+    started[task] = now.isoformat(timespec="seconds")
+    return f"  current_sprint.task_started.{task}: {started[task]}"
+
+
+def finish_task(doc: dict, task: str, now: datetime) -> str:
+    """Compute the actual from the recorded start, in whole minutes."""
+    cur = doc["current_sprint"]
+    stamp = cur.get("task_started", {}).get(task)
+    if not stamp:
+        raise SystemExit(
+            f"Task {task} has no recorded start in task_started. An actual "
+            "judged at completion is an estimate of an actual (Sprint 23 "
+            "IMP-3); record the start with --start-task when the task begins.")
+    actuals = cur.setdefault("task_actuals", {})
+    if task in actuals:
+        raise SystemExit(f"Task {task} already has an actual: {actuals[task]}")
+    elapsed = (now - datetime.fromisoformat(stamp)).total_seconds()
+    if elapsed < 0:
+        raise SystemExit(f"Task {task} finishes before it started ({stamp}).")
+    actuals[task] = max(1, math.ceil(elapsed / 60))
+    return (f"  current_sprint.task_actuals.{task}: {actuals[task]} min "
+            f"(from {stamp})")
+
+
+def main(argv: list[str] | None = None,
+         now: datetime | None = None) -> int:
+    # `now` is a parameter for tests, not a command-line flag: a flag that
+    # sets the clock would let an actual be typed in after all.
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
@@ -91,6 +136,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--name", default="")
     ap.add_argument("--branch", default="")
     ap.add_argument("--plan-doc", default="")
+    ap.add_argument("--start-task", default="", metavar="TASK",
+                    help="record the task's start time")
+    ap.add_argument("--finish-task", default="", metavar="TASK",
+                    help="compute the task's actual from its start time")
     ap.add_argument("--path", default=str(STATUS),
                     help="status file (tests override this)")
     args = ap.parse_args(argv)
@@ -129,12 +178,20 @@ def main(argv: list[str] | None = None) -> int:
             # omission is visible in the status file rather than discovered at
             # the retrospective. {"A": 90, "B": 25, ...} in minutes.
             "task_actuals": {},
+            # F136 (Sprint 23 IMP-3): the start stamps the actuals come from.
+            "task_started": {},
         }
         changes.append(f"  rolled to sprint {args.new_sprint} "
                        f"(previous: {doc['last_completed_sprint']['number']})")
 
     for assignment in args.set:
         changes.append(apply_set(doc, assignment))
+
+    clock = now or datetime.now().astimezone()
+    if args.start_task:
+        changes.append(start_task(doc, args.start_task, clock))
+    if args.finish_task:
+        changes.append(finish_task(doc, args.finish_task, clock))
 
     if not changes:
         print("nothing to do; pass --set or --new-sprint")

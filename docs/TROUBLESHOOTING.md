@@ -118,6 +118,16 @@ the reverse.**
 before reaching any check.
 → Supply `branch_override` in the payload. `test_phase3_artifacts.py` does.
 
+**Symptom: "BLOCKED: cross-repository write" on a command that only edits
+this repository, or only reads from another.**
+`block_cross_repo_write.py` matches a forbidden repository's name anywhere in
+a write command, not only in its destination. A `sed -i` whose expression
+mentions the Phase 1 repository is blocked (Sprint 24), and so is a `cp`
+whose SOURCE is a folder with that name (2026-10-10). Deliberate, and not to
+be worked around by hiding the name.
+→ Edit text with the Edit tool. For a copy from such a folder, ask the team
+lead to run it (`! cp ...`). Sprint 24 IMP-4 left the hook unchanged.
+
 ---
 
 ## Hardware and cost
@@ -161,6 +171,11 @@ rediscovered that at the cost of most of a task.
 **Symptom: the allocation balance does not reconcile.**
 Free-tier seconds before the grant, and a withdrawn run, both complicate it.
 → `docs/QPU_RECONCILIATION.md`.
+
+**Symptom: two documents state different Dirac-3 balances.**
+Both are stale. The balance has one owner.
+→ `experiments/results/allocation_reads.json` (last read); refresh with
+`check_allocation.py --record`. Enforced by `test_allocation_single_source.py`.
 
 ---
 
