@@ -6,6 +6,9 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-10
 
+- **feat**: Sprint 24 IMP-1: the Dirac-3 balance has one owner, `experiments/results/allocation_reads.json`, appended by `check_allocation.py --record` (a GET, zero metered seconds). Six live statements of an older balance now cite it (master plan F129 and F25, two `CHECKLIST-Phase2.md` items, `SPECTRA_IMPROVEMENT_RESEARCH.md`, `QPU_RECONCILIATION.md`), and three history lines read as past tense. `test_allocation_single_source.py` fails on a present-tense balance claim outside the record files and on a consumer that stops citing the owner; both proven red with `assert_can_fail`. `QPU_RECONCILIATION.md` records the 2026-10-09 grant from QCi's notice (PR #2)
+- **docs**: Sprint 24 IMP-4: `TROUBLESHOOTING.md` entry for the cross-repo hook blocking a `sed -i` or `cp` that only names the Phase 1 repository; hook unchanged. F139 carded (team lead): review every Dirac-3 run for a Dirac-3S re-run, right after F138. Velocity log rows for Sprint 24; master plan Last Completed Sprint (PR #2)
+
 - **docs**: Sprint 24 Manual Validation approved; retrospective recorded (`docs/sprints/SPRINT_24_RETROSPECTIVE.md`), improvements awaiting decision. Dirac-3 balance read at zero metered seconds: 8,522 s (`experiments/results/call_logs/allocation_read_20261010.log`), up from 1,022 s. New card F138 (Dirac-3S research, priority 5, target Sprint 25), added by the team lead at Manual Validation; F129, F95, F25 and F30 now depend on it, so no further Dirac-3 seconds are spent before it reports (PR #2)
 
 ### 2026-10-09

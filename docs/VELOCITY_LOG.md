@@ -2,7 +2,7 @@
 
 **Purpose**: Recorded estimate-vs-actual per task, feeding SPRINT_PLANNING.md estimation (Sprint 2 retro improvement 6). Record at task completion; recompute patterns at retro Category 3.
 **Audience**: Sprint planning sessions.
-**Last Updated**: 2026-10-09 (measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
+**Last Updated**: 2026-10-10 (Sprint 24 rows; measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
 
 | Sprint | Task | Type | Estimate | Actual | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -60,6 +60,15 @@
 | 22 | UNPLANNED: second security review, 12 findings fixed | fix | 0m | 55m | n/a | evidence guard moved to the root conftest |
 | 22 | UNPLANNED: PR #159 code review, 15 findings fixed | fix | 0m | 85m | n/a | 1 critical: the confidentiality scan missed renamed files |
 | 23 | Task A (F127) restore dry run | tooling | 45m | 20m | 0.44 | actual judged at completion, no start time recorded (Sprint 23 IMP-3); Tasks C and D run after this row |
+| 24 | Task A (F131) hermetic CI-status test | tooling | 30m | 3m | 0.10 | start taken from the clock by hand |
+| 24 | Task B (F136) task start times | tooling | 20m | 1m | 0.05 | start typed by hand before the tool existed; not fully measured |
+| 24 | Task C (F132) Phase 1 boundary | tooling | 90m | 12m | 0.13 | measured |
+| 24 | Task D (F134) pre-commit blocks without patterns | tooling | 30m | 2m | 0.07 | measured |
+| 24 | Task E (F133) job_id on device rows | tooling | 40m | 2m | 0.05 | measured |
+| 24 | Task F (F135) complete decision options | process | 10m | 1m | 0.1 | measured |
+| 24 | Task G (F128) leaf sweep | research+code | 50m | 29m | 0.58 | measured; includes the 26m run; `[no-history]` |
+| 24 | Task H (F137) pypdf bump | tooling | 20m | 34m | 1.7 | measured; waited for G's run, which used the same venv |
+| 24 | UNPLANNED: code review (6 findings) and fresh-eyes review (8) | fix+docs | 0m | not timed | n/a | review time was not task-timed; IMP-2 to time it was declined |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

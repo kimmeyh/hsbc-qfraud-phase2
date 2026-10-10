@@ -206,4 +206,23 @@ feedback, recorded verbatim under each of the three roles.
 
 ## Improvement Decisions
 
-Pending.
+Team lead, 2026-10-10: "IMP-2 not valuable and therefore not needed. imp-3
+is this stating that any venv reinstalls need to run before any tasks that
+depend on venv? noting this has only happened once and not expected to
+happen again. imp-1 and imp4 implement now | D2 2".
+
+| # | Decision | Where |
+|---|---|---|
+| IMP-1 | **now** | `check_allocation.py --record` writes `experiments/results/allocation_reads.json`; the six live statements cite it (D2 option 2); `test_allocation_single_source.py` fails on a restated balance and on a live consumer that stops citing the owner, both proven red with `assert_can_fail` |
+| IMP-2 | **skip** | not valuable (team lead) |
+| IMP-3 | **pending** | the team lead asked what it states; answered at the close-out decision |
+| IMP-4 | **now** | `docs/TROUBLESHOOTING.md`, Hooks; widened to the `cp` case met on 2026-10-10 |
+
+**The source of the added seconds (D3).** QCi's notice of 2026-10-09: "We've
+loaded your account up with 8,522 seconds", and "Dirac-3S is available"
+(`docs/QPU_RECONCILIATION.md`, grants). The copy goes to
+`docs/qci_package/`, gitignored.
+
+**Added at the retrospective**: F139 (team lead), every Dirac-3 run reviewed
+for a Dirac-3S re-run and the plan updated for what the new hardware allows,
+immediately after F138 in Sprint 25.

@@ -1,5 +1,25 @@
 # QPU cost reconciliation (Sprint 17, Task A)
 
+## The current balance: one owner
+
+**The Dirac-3 balance lives in `experiments/results/allocation_reads.json`,
+and nowhere else.** Its last read is the balance. Refresh it with
+`check_allocation.py --record` (a GET; zero metered seconds). No document
+restates the figure, and `test_allocation_single_source.py` fails on one
+that does (Sprint 24 IMP-1, team lead, 2026-10-10).
+
+Grants, from QCi's correspondence (kept in `docs/qci_package/`, gitignored):
+
+- **2026-09-09**: 3,000 seconds, "complimentary, full-access Dirac-3 compute
+  time". The API confirmed it the same day (`allocation_check.json`).
+- **2026-10-09**: "We've loaded your account up with 8,522 seconds", in
+  answer to the hardware plan's request for an additional 7,500. The balance
+  before it fell to 1,022 s after B5 and B4 (2026-10-06), and 1,022 + 7,500
+  is 8,522, so the grant is the 7,500 asked. The same notice says Dirac-3S is
+  available (F138).
+
+## The Phase 1 reconciliation
+
 Written 2026-09-19. Establishes, from committed artifacts only, the three
 figures the QCi memo states: total metered seconds, grant size, and seconds
 remaining.
@@ -13,7 +33,8 @@ like they should subtract and they do not.
 - **Campaign total, as submitted**: 1,141.0 metered seconds over 61 fits
 - **Grant**: 3,000 seconds
 - **Drawn against the grant**: 1,039 seconds
-- **Remaining**: **1,961 seconds**
+- **Left in the grant on 2026-09-19**: **1,961 seconds** (history; see the
+  current balance above)
 
 ## Why 3,000 - 1,141 is the wrong sum
 
@@ -79,9 +100,10 @@ Every figure above traces to a named artifact. The memo may state 1,141 metered
 seconds, 61 fits, and 1,961 seconds remaining. It should not state a remaining
 balance derived by subtracting the campaign total from the grant.
 
-**Currency**: the 1,961 figure was endpoint-confirmed during Sprint 12 and no
-metered run has occurred since. It remains correct unless a run has happened
-outside this repository's record.
+**Currency**: the 1,961 figure was endpoint-confirmed during Sprint 12. It
+was superseded by the 2026-09-23 integer probes and every later run. It is
+history; the current balance is in `allocation_reads.json` (top of this
+document).
 
 ---
 

@@ -57,8 +57,9 @@ gates F95, F110, F20, F25 and F30, decision 2026-10-06).
    All result files are in `experiments/phase2/results/`.
 4. Device seconds come from the F17 emulator's cost model
    (`docs/phase2/F17_EMULATOR.md`): 81.7 s per fit at 816 variables, 38.5 s
-   at 560, 8 samples, relaxation schedule 2. The model is FITTED; the
-   allocation balance is 1,022 s.
+   at 560, 8 samples, relaxation schedule 2. The model is FITTED, on
+   Dirac-3; F138 checks whether it holds on Dirac-3S. The allocation
+   balance is in `experiments/results/allocation_reads.json`.
 
 ## 1. What the repository already says
 
