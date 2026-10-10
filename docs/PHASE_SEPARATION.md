@@ -169,8 +169,8 @@ Phase 2 continues in a new, PRIVATE repository, started from this
 repository's `develop` with full history. This repository is then restored
 to its as-filed state and archived on GitHub (read-only).
 
-Why: the filed proposal and appendix cite
-`github.com/kimmeyh/hsbc-quantum-fraud-2026`, a public repository. A reader
+Why: the filed proposal and appendix cite the Phase 1 repository's GitHub
+URL, a public repository. A reader
 following that link should see what was filed, not the post-filing work.
 An archived repository refuses every push, which is a stronger guard than
 any hook. And a separate repository keeps every Phase 2 path unchanged.

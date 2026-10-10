@@ -1,0 +1,19 @@
+{
+  "allocations": {
+    "csample": {
+      "metered": true,
+      "seconds": 0,
+      "paid": false
+    },
+    "dirac": {
+      "metered": true,
+      "seconds": 8522,
+      "paid": true
+    }
+  }
+}
+
+numeric fields:
+  allocations.csample.seconds                      0
+  allocations.dirac.seconds                        8522
+2026-10-10T13:06:28Z

@@ -158,16 +158,17 @@ Nothing in this stage is time-bound. Schedule on value.
 - [ ] **H**: Confirm what compute the PoC sprint provides. T&C s1 promises
       "access to compute resources, tooling, and expert support" to finalists
       and s9 disclaims all warranties over it
-- [ ] **H**: Dirac-3 allocation for Phase 2. **1,681 of the 3,000 granted
-      seconds remain**: 1,039 drawn in the Phase 1 campaign and 280 by the
-      2026-09-23 integer probes. (Corrected 2026-10-03 from 1,961, which
-      predated the probes. `HARDWARE_PLAN_PHASE_2.md` owns the table.)
-      **2026-10-06**: the device read 1,675 s on 2026-10-05 before any
-      Sprint 21 call -- 6 s below 1,681, not yet explained -- and 1,022 s
-      after B5 and B4 (653 s).
-- [ ] **H**: The additional 7,500 s asked of QCi in the hardware plan.
-      **Experiment 3 depends on it**: after B5 and B4 the device balance is
-      1,022 s (read 2026-10-06), and Experiment 3 is sized at 3,070 s
+- [x] **H**: Dirac-3 allocation for Phase 2. **The current balance is in
+      `experiments/results/allocation_reads.json`** (Sprint 24 IMP-1; no
+      document restates it). History: of the 3,000 granted, 1,039 were
+      drawn in the Phase 1 campaign and 280 by the 2026-09-23 integer
+      probes (`HARDWARE_PLAN_PHASE_2.md` owns that table). The device read
+      1,675 s on 2026-10-05 before any Sprint 21 call -- 6 s below 1,681,
+      not yet explained -- and fell to 1,022 s after B5 and B4 (653 s).
+- [x] **H**: The additional 7,500 s asked of QCi in the hardware plan.
+      **Granted 2026-10-09** (`docs/QPU_RECONCILIATION.md`, grants).
+      Experiment 3, sized at 3,070 s, is no longer blocked by the
+      allocation; it waits for F138 and F139 (Dirac-3S)
 - [ ] **H+C**: Latency benchmark (p50/p95/p99) against the 100-300 ms envelope,
       which Phase 1 states as a target rather than a measurement (D10). F118
 - [ ] **H+C**: Calibration layer fitted, which Phase 1 specifies but does not

@@ -1,0 +1,25 @@
+{
+ "note": "The Dirac-3 allocation balance, one read per entry, oldest first. The LAST read is the current balance. Documents cite this file and do not restate the figure (Sprint 24 IMP-1).",
+ "generator": "experiments/src/check_allocation.py --record",
+ "evidence_tag": "HW",
+ "reads": [
+  {
+   "checked_utc": "2026-10-10T13:52:27.123495+00:00",
+   "dirac_seconds": 8522,
+   "dirac_paid": true,
+   "allocations": {
+    "csample": {
+     "metered": true,
+     "seconds": 0,
+     "paid": false
+    },
+    "dirac": {
+     "metered": true,
+     "seconds": 8522,
+     "paid": true
+    }
+   },
+   "metered_seconds": 0.0
+  }
+ ]
+}

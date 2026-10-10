@@ -2,8 +2,16 @@
 
 Converted from PowerShell 2026-09-17 (F78, Sprint 16). Written 2026-09-15.
 
-Team lead: work in hsbc-quantum-fraud-2026 never writes to spamfilter-multi or
-EvidenceBasedDB. Reading them on request is fine.
+Team lead: work in this repository never writes to spamfilter-multi,
+EvidenceBasedDB or the Phase 1 repository. Reading them on request is fine.
+
+THE PHASE 1 REPOSITORY IS FORBIDDEN TOO (F132, Sprint 24). Phase 2 work moved
+here, and the Phase 1 repository is about to be restored as filed and
+archived. A write there would change the filed record. Its name is a prefix
+of nothing in this repository's path since the 2026-10-09 rename, so a
+substring match cannot block this repository. It does also match the
+planning folder outside every repository whose name starts with the Phase 1
+name; blocking writes there is accepted (F132 card).
 
 The failure this guards: a Sprint 14 session reviewing PR #97 also examined
 EvidenceBasedDB, found real defects, and fixed, committed and pushed them there
@@ -35,7 +43,7 @@ import hooklib  # noqa: E402
 EDIT_TOOLS = {"Edit", "Write", "NotebookEdit"}
 SHELL_TOOLS = {"Bash", "PowerShell"}
 
-FORBIDDEN = ("spamfilter-multi", "EvidenceBasedDB")
+FORBIDDEN = ("spamfilter-multi", "EvidenceBasedDB", "hsbc-quantum-fraud-2026")
 
 GIT_WRITE = re.compile(
     r"git\s+(-C\s+\S*\s+)?(add|commit|push|mv|rm|checkout|switch|apply|restore|"
@@ -47,9 +55,9 @@ def message(what: str) -> str:
 
 {what}
 
-This repository's sessions never write to spamfilter-multi or EvidenceBasedDB
-(CLAUDE.md standing rules; SPRINT_EXECUTION_WORKFLOW.md invariant 9). Reading
-them on request is fine.
+This repository's sessions never write to spamfilter-multi, EvidenceBasedDB or
+the Phase 1 repository (CLAUDE.md standing rules; SPRINT_EXECUTION_WORKFLOW.md
+invariant 9). Reading them on request is fine.
 
 If a finding belongs to that repository, REPORT it -- file, line and fix -- and
 hand it to a session running there, so it lands through that repository's own
