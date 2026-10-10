@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-10
+
+- **docs**: Sprint 24 Manual Validation approved; retrospective recorded (`docs/sprints/SPRINT_24_RETROSPECTIVE.md`), improvements awaiting decision. Dirac-3 balance read at zero metered seconds: 8,522 s (`experiments/results/call_logs/allocation_read_20261010.log`), up from 1,022 s. New card F138 (Dirac-3S research, priority 5, target Sprint 25), added by the team lead at Manual Validation; F129, F95, F25 and F30 now depend on it, so no further Dirac-3 seconds are spent before it reports (PR #2)
+
 ### 2026-10-09
 
 - **docs**: F128 write-up revised after the Phase 5 fresh-eyes evidence review (8 findings, no arithmetic error; all 12 summary cells recomputed and matched). The energy_steel "parity at every value" in the Task G entry below overstated it: CVQBoost loses on seeds 42, 43 and 46 at every value and wins only where HGB is weak; and leaf 50 is measurably worse than 10 and 20. Also stated: how the CI is formed, pool sizes beside the sparsity counts, the 8 telecom rows with null in-pocket AUPRC, and what the file can and cannot show. F129 note and the validation file updated to match. `SPRINT_24_VALIDATION.md` written (Issue #9)

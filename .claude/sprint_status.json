@@ -3,7 +3,7 @@
     "number": 24,
     "name": "Phase 2 repository boundary and tooling cleanup, plus the F128 leaf-regularization sweep",
     "branch": "feature/20261008_Sprint_24",
-    "status": "phase_5_3_manual_validation",
+    "status": "phase_7_retrospective",
     "selected_cards": [
       "F131",
       "F136",
@@ -62,5 +62,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-10-09"
+  "updated": "2026-10-10"
 }
