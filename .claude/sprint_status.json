@@ -3,7 +3,7 @@
     "number": 24,
     "name": "Phase 2 repository boundary and tooling cleanup, plus the F128 leaf-regularization sweep",
     "branch": "feature/20261008_Sprint_24",
-    "status": "phase_7_retrospective",
+    "status": "phase_8_delivery_cycle",
     "selected_cards": [
       "F131",
       "F136",
@@ -51,11 +51,11 @@
     "scope_additions": []
   },
   "last_completed_sprint": {
-    "number": 23,
-    "merged_pr": null,
-    "main_merge_pr": null,
+    "number": 24,
+    "merged_pr": 2,
+    "main_merge_pr": 11,
     "docs_triad_complete": false,
-    "note": "Sprint 23 ran in the Phase 1 repository (PR #167 there, still draft). Its record is on this repository's feature/20261007_Sprint_23 at c3d9ec3. Its restore (Tasks C and D) is PENDING in the Phase 1 repository and runs only after this repository's Sprint 24 merges to develop (D6). SPRINT_23_SUMMARY.md is written here at Sprint 24 Phase 3.2.1."
+    "note": "Sprint 24 merged to develop by PR #2 and to main by PR #11 (2026-10-10). SPRINT_24_SUMMARY.md is written at Sprint 25 Phase 3.2.1. Sprint 23's restore (Tasks C and D) is the Phase 1 repository session's work, released by this merge (D6)."
   },
   "prereg": {
     "status": "FROZEN",

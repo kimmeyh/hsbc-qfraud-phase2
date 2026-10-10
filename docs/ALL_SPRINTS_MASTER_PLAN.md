@@ -458,82 +458,32 @@ F123's layout is superseded by F127.)
 - Acceptance: a table of every run with its recommendation, reason and estimated seconds; the total against the balance; the new cards listed with F numbers; the Phase 2 plan changes listed
 - Depends on: F138
 
-**F132. This repository's boundary: no live reference to the Phase 1 repository (~1.5h, zero metered) Priority 10**
-- Phase: Phase 2 repository setup (added 2026-10-09, Sprint 24 Pass 2: the Phase 2 half of F127 step (5), widened by the team lead the same day: "nothing in this p2 repo should reference anything in the p1 repo ... update all references as needed in this sprint")
-- Platform: local, CI
-- **Why it goes first: a live script writes to the Phase 1 repository.** `scripts/us_english_fix.py` sets `ROOT` to the Phase 1 clone's absolute path, so running it from here rewrites the Phase 1 repository's tracked markdown. `block_cross_repo_write.py` cannot see this, because the path is inside the script, not the command, and its `FORBIDDEN` list does not name the Phase 1 repository at all. `wsl_build_pools.sh`, `wsl_hw.sh` and `wsl_tune_proxy.sh` `cd` into the Phase 1 clone the same way
-- **Measured 2026-10-09**: `git grep` finds 49 lines in 22 tracked files naming the Phase 1 repository without the `p2` suffix. Live code, config and process docs to change: the four scripts above (each derives its root from its own location); the guard's `FORBIDDEN` list and docstring; `test_cross_repo_write_guard.py:95`, which uses the Phase 1 path as an ALLOW case, and `test_hook_parity.py:230`; `CLAUDE.md` line 71 and its boundary rule; `SPRINT_PROCESS.md:19`; `SPRINT_EXECUTION_WORKFLOW.md:3`; four `README.md` clone lines; `PHASE_SEPARATION.md:173`; `confidentiality_scan.py` comments at 28 and 36 and the `test_confidentiality_scan.py:64` fixture
-- **The substring trap, removed by a rename**: the Phase 1 repository's name was a prefix of this repository's first name, so a plain substring rule would have blocked this repository too. The team lead renamed this repository and its disk folder to `hsbc-qfraud-phase2` on 2026-10-09 (Sprint 24 D3), so neither name contains the other. A test still proves both directions: the guard blocks the Phase 1 path and allows this one. Also note `D:\Data\Harold\hsbc-quantum-fraud-2026-Phase-2-Planning`, outside every repository, contains the Phase 1 name; the guard blocking writes there is acceptable and the card states it
-- **Exceptions, decided at Sprint 24 selection (team lead, 2026-10-09, D2 option 1: keep all three groups)**: the submitted `docs/paper/proposal.md` and `appendix.md` cite the public URL as filed (FROZEN, Class 4); `experiments/results/call_logs/b5_then_b4_launcher.log` is generated evidence (22 lines of interpreter paths); `SPRINT_1_SUMMARY.md`, `SPRINT_14_RETROSPECTIVE.md` (team lead's verbatim words), `SPRINT_16_RETROSPECTIVE.md` and `docs/reviews/f36-float-tables-outcome.md` are history. The guard and the boundary rule must name the Phase 1 repository in order to block it
-- This enables: every later sprint running scripts without reaching into the Phase 1 repository. This prevents: a write to a repository about to be archived as the filed record, made by a script no hook can see
-- Acceptance: a new guard test fails if any tracked file outside the approved exception list names the Phase 1 repository (path, `/mnt/d` form, backslash form or URL), proven red with `assert_can_fail`; the cross-repo hook blocks a Write and a shell write to the Phase 1 path and allows the same to this repository, both proven; the four scripts run from this clone's root
+(F131 hermetic CI-status test, F136 task start times, F132 this repository's
+boundary, F134 pre-commit blocks without patterns, F133 job_id on device rows,
+F135 complete decision options, F128 the leaf-regularization sweep and F137
+the pypdf bump: COMPLETED in Sprint 24, merged via PR #2 (main PR #11). See
+SPRINT_24_PLAN.md, SPRINT_24_RETROSPECTIVE.md and CHANGELOG.md. Selected
+2026-10-09 (D1 option 1; D5 added F137). D4 made `develop` the GitHub
+default branch; it was briefly `main` on 2026-10-10 and is `develop` again.
+**F128 fired its premise falsifier**: no `min_samples_leaf` value beats HGB
+with a CI excluding zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`
+section 6). Removed from candidates per convention.)
+
+**F140. CI runs on release PRs into `main`, and sprint PRs name their base (~15m, zero metered) Priority 20**
+- Phase: Phase 2 repository, process (added 2026-10-10, Phase 8 Pass 2, from the develop-to-main release of Sprint 24)
+- Platform: CI, docs
+- `.github/workflows/ci.yml` triggers only on `pull_request` into `develop`, so the release PR into `main` (PR #11) ran no CI. It was safe only because `develop`'s tree matched a commit CI had already passed; nothing checks that
+- `SPRINT_EXECUTION_WORKFLOW.md` 3.3.1 does not name the PR base. `develop` is the default again (team lead, 2026-10-10: `develop` integrates, `main` is the release branch), so a bare `gh pr create` is right today; writing `--base develop` keeps it right if the default moves again, as it did for a few hours on 2026-10-10
+- Acceptance: `ci.yml` triggers on `pull_request` into `develop` and `main`; 3.3.1 names `--base develop` and 8.1 names the release PR `--base main --head develop`; a test reads the workflow's branch list and fails without `main`, proven red with `assert_can_fail`
 - Depends on: nothing
-- **Selected for Sprint 24** (team lead, 2026-10-09, D1 option 1): F132, F134, F133, F131, F135, F136 and F128, about 5h, zero metered. D4: the GitHub default branch is now `develop`, matching the process docs (it was `main`). D5: F137 (pypdf) added from the Phase 2.6 dependency scan. Card estimates re-derived at plan verification; the plan reports the total
-
-**F134. The pre-commit hook blocks when its pattern file is missing (~30m, zero metered) Priority 12**
-- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-1, Category 9, decided to this backlog by the team lead 2026-10-08). Sprints with F132
-- Platform: local
-- `.githooks/pre-commit` scans only inside `if [ -f .secrets-patterns.txt ]`. The pattern file is gitignored, so every fresh clone and worktree starts without it, and the confidentiality gate is silently off. Verified in this repository's hook 2026-10-09
-- Constraint: `test_pre_commit_hook.py` builds scratch repositories, so each case supplies a pattern file or asserts the new block. CI never commits, so the runner is unaffected
-- Acceptance: a commit with no pattern file is BLOCKED with a message naming the file and how to restore it; the test proves it red against the current hook; no override flag
-- Depends on: nothing
-
-**F133. Every Phase 2 device row carries its job_id, enforced by `test_row_schema.py` (~40m, zero metered) Priority 14**
-- Phase: Phase 2 repository (added 2026-10-09, Sprint 22 retrospective IMP-6, previously a bullet on F127)
-- Platform: local, CI
-- B2's samples were lost because its rows never stored a job id (QCi 404, 2026-10-07). `test_row_schema.py` has no Phase 2 store coverage at all today (verified 2026-10-09)
-- **Every current Phase 2 result file is proxy with zero metered seconds**, so the new check has nothing real to bite on. Acceptance therefore requires an injected `[HW]` row without `job_id` going red
-- Acceptance: any row in `experiments/phase2/results/` with a hardware evidence tag or nonzero metered seconds must carry a nonempty `job_id`; proven red with `assert_can_fail`; F129 is the first card it binds
-- **Corrected at Sprint 24 plan verification (2026-10-09): the premise above is wrong in one place.** `experiments/phase2/results/device_samples/*.json` (10 files) are recovered B4 device data. They are dict-shaped, with no `rows` and no `evidence_tag`, and each carries a top-level `job_id`. A check keyed only on row tags never reaches them. The test covers two shapes: rows in result files, and the top-level `job_id` of every `device_samples/` file. Both pass today, so the injection proof covers both. Re-estimated from 30m to 40m for the second shape
-- Depends on: nothing
-
-**F135. A decision option is complete enough to execute as answered (~10m, zero metered) Priority 18**
-- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-2, Category 7)
-- Platform: docs
-- Sprint 23 D2 option 2 said "this repository's sprint is renumbered" and gave no number. It could not be executed as answered and cost a round (D5). Same class as Sprint 22 IMP-2
-- Acceptance: `CLAUDE.md`'s dependent-decision rule gains the sub-rule, with the Sprint 23 example: every option names its concrete values, so the answer is executable without a second question
-- Depends on: nothing
-
-**F136. Record each task's start time so actuals are measured (~20m, zero metered) Priority 20**
-- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-3, Category 3)
-- Platform: local
-- Sprint 23 Task A's "20 minutes" was judged at completion with no start time recorded, so the actual was an estimate of an actual. Extends `task_actuals` (Sprint 22 IMP-7)
-- Acceptance: `.claude/sprint_status.json` records a start timestamp when a task begins and the actual is computed from it at completion; the workflow's Phase 4 step names it; the velocity log notes which rows are measured
-- Depends on: nothing
-
-**F128. Leaf-regularization sweep on the proxy, three datasets (~50m + ~35m runtime [no-history], zero metered) Priority 22**
-- Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: F124 rank 1's "next proxy test", which had no card)
-- Platform: SPECTRA, classical proxy (`qubo_proxy.py`)
-- **Measured so far (F124, `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`)**: `min_samples_leaf=20` lifts energy_steel from 0.902 to 0.973 AUPRC over 5 seeds, parity with HGB (CI [-0.0063, +0.0256]); a 2-seed screen showed oilgas +0.004 and telecom -0.009. Only one value of the parameter was tried
-- The test: `min_samples_leaf` at 5, 10, 20 and 50 on energy_steel, oilgas and telecom, 5 seeds each, with HGB on the same splits; train-test gap and nonzero-weight count beside every AUPRC
-- This enables: choosing the value F129 would put on the device, from a sweep rather than one point. This prevents: spending device seconds on a value that a free sweep would have beaten
-- Acceptance: a dated Phase 2 result file with all 60 cells, the paired difference against HGB with its CI per dataset and value, and a stated best value per dataset; written in the Phase 2 store, no Phase 1 file touched
-- **Re-estimated at Sprint 24 plan verification (2026-10-09), from 1.5h to 50m of work plus about 35m of runtime.** `experiments/phase2/src/lever_screen.py confirm` already runs 5 seeds against HGB on the same splits; the sweep is a new part of that script with `min_samples_leaf` as its parameter (about 20m), then the analysis and write-up (about 30m). Per `SPRINT_PLANNING.md`, a `[no-history]` card sizes the first decisive measurement. Runtime from F124's measured `elapsed_s`: about 40s per cell on energy_steel and oilgas and about 3.5s on telecom, so 60 cells take about 28m. Padded to 35m, because `min_samples_leaf=5` grows larger trees. It runs in the background
-- Depends on: nothing outstanding. (Corrected 2026-10-09, Pass 1: the F127 dependency meant "the work lands in the Phase 2 repository", and it now does)
-
-**F137. pypdf 6.17.0 has seven known vulnerabilities: bump the lock to 6.20.0 (~20m, zero metered) Priority 26**
-- Phase: Phase 2 repository, dependencies (added 2026-10-09, Sprint 24 Phase 2.6 dependency scan; selected into Sprint 24 by the team lead the same day, D5)
-- Platform: local, CI
-- `pip-audit -r experiments/requirements-lock.txt` reports PYSEC-2026-4153 to 4157, 4159 and 4160 against pypdf 6.17.0. Every one is fixed by 6.19.0; the latest is 6.20.0. The advisories were not read one by one. pypdf only reads this repository's own PDFs, in tests and checks, so the practical exposure is low
-- `experiments/requirements.txt` says `pypdf>=4.0`, which already allows the bump; only `requirements-lock.txt:40` changes. No PDF is rendered or rewritten, so the submitted-artifact rule is not engaged
-- Acceptance: the lock file pins `pypdf==6.20.0`; the venv is reinstalled from it; `pip-audit` reports no pypdf finding; the full suite passes
-- Depends on: F131, so the full suite run does not rewrite `scripts/check_ci_status.py`
 
 **F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 24**
-- Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). Sprints with F128
+- Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). It was to sprint with F128, which shipped in Sprint 24 without it (Pass 1, 2026-10-10)
 - Platform: SPECTRA, ULB, classical proxy
 - Rank 3, KNN weak learners: 5 seeds on oilgas and telecom, and on ULB to test the EvidenceBasedDB record's 0.8108 AUC-PR claim directly (certainty low; a different setup, not a replication)
 - Rank 5, phase-encode the cyclic columns and whiten, rebuild the pool, 5 seeds, three datasets. The source records are about angle-encoded QNNs, so the effect on CVQBoost is unverified
 - Rank 6, `weak_cls_pair_count` at 100, 200 and 400 on three datasets; a smaller pool is also cheaper per device fit
 - Acceptance: each lever reported against HGB on the same splits with the paired CI; a lever that does not move AUPRC is recorded as rejected, as F124 did for ensembling
-- Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
-
-**F131. `test_ci_status.py` rewrites the real `scripts/check_ci_status.py` (~30m [no-history], zero metered) Priority 16**
-- Phase: Phase 2 repository, test hygiene (added 2026-10-08, found while verifying F127's copy)
-- Platform: local, CI
-- `_hook_with_ci` overwrites the real script with a stub, then restores it. Two failures, both seen on 2026-10-07: a CI check run during the suite reads the stub and prints a fake red result ("CI (failure) http://x") while the real run is green; and the restore writes LF content back as CRLF on Windows, so `git status` shows the script modified with identical text
-- Same class as the `injection.py` byte-preservation fix (PR #159): use a hermetic copy of the script in a temporary directory, or restore exact bytes
-- Acceptance: the suite never writes to the tracked script (its bytes asserted before and after); the test still fails when the hook ignores CI status, proven with `assert_can_fail`
 - Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
 **F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 34**
@@ -715,6 +665,7 @@ not a sweep correction.
 - **Done 2026-10-07**: steps (2)-(4) and the CI half of (5). All 32 branches and 2 tags pushed, every tip matching; 195 ignored paths copied and hash-verified; a fresh venv from the lock file; CI green on the new repository's draft PR #1
 - **Found in Sprint 23 planning, 2026-10-08: the as-filed `.gitignore` does not ignore `docs/qci_package/`** (18 files of private QCi correspondence), `.claude/settings.local.json`, `.claude/scheduled_tasks.lock` or `experiments/results/b3_hardware.dryrun.json`. A plain restore leaves them unignored in a public repository. The Sprint 23 plan settles this before the restore runs
 - **Pass 1 sweep, 2026-10-09, in the Phase 2 repository**: steps (2)-(4) and the CI half of (5) are DONE. Draft PR #1 here, opened only to prove CI, was closed on the team lead's instruction. The Phase 2 half of step (5), this repository's boundary, is carded separately as **F132** because it grew: every live reference to the Phase 1 repository's path goes (team lead, 2026-10-09). IMP-6 is carded as **F133**. Steps (6) and (7) stay on this card and run in the Phase 1 repository after Sprint 24 merges here
+- **Pass 1 sweep, 2026-10-10**: Sprint 24 merged here (PR #2 to `develop`, PR #11 to `main`), so the D6 condition for steps (6) and (7) is met. They are the Phase 1 repository session's work; whether they have run is **unverified** from here
 - Depends on: Sprint 22 merged
 
 **F126. Model of the device's sparsity, validated on held-out fits (~3h [no-history], zero metered) Priority 101**
@@ -771,7 +722,7 @@ not a sweep correction.
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
-- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.**
+- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands.
 
 
 **F116. G2 entanglement ablation on the SV1 simulator (~3h [no-history]) Priority HOLD**
