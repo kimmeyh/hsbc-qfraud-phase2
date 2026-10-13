@@ -496,6 +496,28 @@ F123's layout is superseded by F127.)
 - Acceptance: the cause identified (for example an unseeded tree in the weak-learner build, or thread order); either the build made reproducible with a test proving two builds byte-identical, or the drift measured and recorded as a known limit in the Phase 2 draft
 - Depends on: nothing
 
+**F147. A read-only query tool over the evidence library, for research (~3h [no-history], zero metered) Priority 10**
+- Phase: Phase 2 preparation (added 2026-10-13 by the team lead during Sprint 25 Manual Validation, "for next sprint")
+- Platform: N/A (local). Reads `D:\Data\Harold\EvidenceBasedDB\store\evidence.db`, the path the team lead named. The EvidenceBasedDB code repository (`D:\Data\Harold\github\EvidenceBasedDB`) holds no database; its `store/` folder is code
+- What it is: a tool Claude uses during research and deep dives in this repository to find papers, assertions, acronyms and terms on ML, QML, QC and QCi's devices, with their provenance, certainty, evidence tag, date and relations. Shape on 2026-10-13: 95 assertions and 2,086 papers (33 read, 14 screened, 2,039 seen), 10 contexts including `ml`, `qml`, `qc`, `platform:dirac-3` and `platform:dirac-3s`. For facts its value is the assertion graph (`assertion_relations` supports and contradicts, `paper_yields`, `prerequisites`); for papers it is mostly a catalog
+- Existing reader: EvidenceBasedDB's `scripts/view.py` shows one context, paper or assertion by id. It has no text search and opens the store through that repository's `connect`. This tool has its own `sqlite3` reader (standard library, no new dependency) so this repository does not import code from another one
+- Scope: search by text across record values and paper titles, filtered by context, class, evidence tag, certainty and date; show one record with its relations, yields and the documents it cites; `--json` output; record ids printed so research notes can cite them as `EDB: <id>` (the convention `docs/phase2/DIRAC_UNDERSTANDINGS.md` started)
+- Further uses, one line each: cross-check this repository's `docs/` against the library's assertions for contradictions; flag a cited record whose `updated` date is older than a newer fact here; list what the library holds on a topic before a web search, so a search starts from what is already read
+- **Read-only by construction**: the connection is opened with a `mode=ro` URI, and a test proves a write through it fails (proven red with `assert_can_fail` on a read-write connection). `block_cross_repo_write.py` is the backstop, not the design
+- **Proposed corrections never go into the library.** They go into `docs/phase2/EDB_PROPOSALS.md` in this repository, for a session in EvidenceBasedDB to review. That file was started 2026-10-13 with three proposals (a stale allocation record, two records missing QCi's requested framing, and six Sprint 25 findings with no record)
+- A guard defect to fix inside this card: `block_cross_repo_write.py` matches the forbidden repository names as a substring of ANY path, so it blocked a file in this repository whose name contained "EvidenceBasedDB" (2026-10-13; the file was renamed `EDB_PROPOSALS.md`). Match a path component under the parent folders instead, with a test for both cases
+- Acceptance: the tool answers a text query and an id lookup on the live database; the read-only test is proven red; one research note in this repository cites records it found; `EDB_PROPOSALS.md` updated with anything found while building it
+- Depends on: nothing
+
+**F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
+- Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
+- Platform: N/A (document)
+- The living document is `docs/phase2/DIRAC_UNDERSTANDINGS.md`. First draft 2026-10-13: what we understand about each device, each item labeled Measured, QCi states, Independent, Inferred or Unverified; nine suggested improvements for Dirac-3S; two questions pending since 2026-09-25 and twelve not yet sent. It owns the QCi question list
+- **Permanent. It never closes.** It re-opens for an update when any of these happens: QCi answers a question or sends new material; QCi publishes a new guide, client release or benchmark; F141 bumps the clients; F142's first Dirac-3S fit returns; a sprint finds a fact that changes an item. Each update adds a revision-log row
+- Sending anything to QCi is the team lead's action; anything sent is filed in the gitignored `docs/qci_package/`
+- Acceptance per update: the triggering fact placed under the right label with its source; the revision log updated
+- Depends on: the triggers above
+
 **F143. telecom_churn with all 18 features (987 variables) on Dirac-3S (~1h + at least 450 metered s, unmeasured at 987) Priority HOLD**
 - Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
 - Platform: SPECTRA, Dirac-3S

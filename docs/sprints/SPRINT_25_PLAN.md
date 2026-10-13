@@ -220,7 +220,13 @@ is set.
 
 ## Deviations from the process
 
-None.
+- **Task G added during Manual Validation** (team lead, 2026-10-13, "do
+  now"; issue #19). A first draft of `docs/phase2/DIRAC_UNDERSTANDINGS.md`
+  (Dirac-3 and Dirac-3S understandings, suggested Dirac-3S improvements,
+  QCi questions), kept current by the new permanent HOLD card F146; the
+  next-sprint card F147 (a read-only query tool over the evidence library);
+  and `docs/phase2/EDB_PROPOSALS.md`. Documents only, zero metered seconds.
+  Not task-timed: no start was stamped before the work began.
 
 ## Risks
 

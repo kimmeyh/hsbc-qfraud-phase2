@@ -302,3 +302,6 @@ its other findings are as recorded there, not re-fetched.
   (e) whether this account may use the `dirac-3s` "special queues", and
   their hours; (f) whether Dirac-3S's effective resolution is the same
   about 200:1 as Dirac-3's, or only its stated maximum.
+- **The question list now lives in `docs/phase2/DIRAC_UNDERSTANDINGS.md`**
+  (F146), where (a) to (f) are A1 to A6 beside the newer questions and
+  their send status. Update it there, not here.

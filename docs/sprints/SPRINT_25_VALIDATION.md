@@ -2,8 +2,9 @@
 
 **Sprint**: 25, Learn the New Device, Then Build What Runs on Any Device
 **Branch**: `feature/20261010_Sprint_25` | **PR**: #12 (draft)
-**Scope**: F138 (A), F139 (B), F102 (C), F113 (D), F29 (E), F94 (F).
-Issues #13-18.
+**Scope**: F138 (A), F139 (B), F102 (C), F113 (D), F29 (E), F94 (F); Task G
+(F146, F147) added at Manual Validation.
+Issues #13-19.
 **Metered Dirac-3 seconds spent: 0.**
 
 This file is the durable copy. The same items are listed to the screen at
@@ -159,6 +160,31 @@ A separate fresh-eyes review of F94 is recorded in the next section.
   stated per instance; resolution stated as a coefficient limit; the
   generator comment's counts identified as an uncommitted check. No number
   in the result file was wrong; no re-run was needed.
+
+## V10. Task G (added at Manual Validation, #19): Dirac understandings and the evidence-library tool
+
+Read `docs/phase2/DIRAC_UNDERSTANDINGS.md` (F146, permanent HOLD).
+
+- **Understandings for both devices**, each item labeled Measured, QCi
+  states, Independent, Inferred or Unverified, with EvidenceBasedDB record
+  ids where the library holds the same item.
+- **QCi's request of 2026-09-25 is a standing constraint**: our device
+  interpretations are described as independent findings, not validated by
+  QCi.
+- **Nine suggested Dirac-3S improvements.** Two Phase 1 feedback items are
+  still open in `eqc-models` 0.22.1, checked against the wheel: no named
+  billed-seconds field, and `fork` still forced.
+- **Questions**: two pending since 2026-09-25 (the Hamiltonian reading and
+  the 200:1 reading, under QCi review) and twelve not yet sent (A1-A6 from
+  F138, A7-A12 new). Nothing was sent.
+- **F147** (next sprint, priority 10): a read-only query tool over the
+  evidence library. **`docs/phase2/EDB_PROPOSALS.md`** holds three
+  proposals for a session in EvidenceBasedDB: a stale allocation record,
+  two records missing QCi's requested framing, six Sprint 25 findings with
+  no record.
+- **Guard false positive found**: `block_cross_repo_write.py` blocked a
+  file in this repository because its name contained "EvidenceBasedDB".
+  Recorded on F147.
 
 ## Acceptance criteria, walked
 
