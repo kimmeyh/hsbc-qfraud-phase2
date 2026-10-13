@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-13
+
+- **docs**: Sprint 25 planning. Selected (team lead): F138, F139, F102 (first draft of a living document), F113, F29 and F94. F140 canceled. F129 re-scored from 34 to 100, with F139 deciding its device run; priority numbers otherwise unchanged. F94's exact solver is SCIP through PySCIPOpt (D4), proven by a spike against brute-force enumeration. F94's instance sizes corrected to 60 and 136 learners from real ULB pools. `SPRINT_24_SUMMARY.md` written; `SPRINT_25_PLAN.md` drafted
+
 ### 2026-10-10
 
 - **docs**: Backlog refinement, Phase 8 after Sprint 24. Sprint 24 merged to `develop` (PR #2) and released to `main` (PR #11; the team lead merges both). The GitHub default branch was set to `main` and returned to `develop` the same day (team lead: `develop` integrates features, `main` is the release branch), so D4 stands. Pass 1: the eight shipped cards pruned from the master plan, issues #3-10 closed, `last_completed_sprint` rolled to 24, F130, F121 and F127 corrected for what Sprint 24 changed. F140 carded (CI on release PRs into `main`). Sprint 25 branch `feature/20261010_Sprint_25` created from the Sprint 24 branch

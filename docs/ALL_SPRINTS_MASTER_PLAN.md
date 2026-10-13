@@ -37,6 +37,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 21 | docs/sprints/SPRINT_21_SUMMARY.md | [OK] Complete | ~3 days (Oct 4 - Oct 6, 2026) |
 | 22 | docs/sprints/SPRINT_22_SUMMARY.md | [OK] Complete | ~2 days (Oct 6 - Oct 7, 2026) |
 | 23 | docs/sprints/SPRINT_23_SUMMARY.md | [PARTIAL] Tasks C and D pending in the Phase 1 repository (D6) | ~1 day (Oct 8, 2026) |
+| 24 | docs/sprints/SPRINT_24_SUMMARY.md | [OK] Complete | ~2 days (Oct 9-10, 2026) |
 
 ## Last Completed Sprint
 
@@ -49,8 +50,8 @@ its premise falsifier**: no leaf value beats HGB with a CI excluding zero
 on any dataset; F129 is re-scored at the next refinement. QCi loaded the
 account on 2026-10-09 and announced Dirac-3S: F138 and F139 lead Sprint 25
 and gate every Dirac-3 card. Records: `SPRINT_24_PLAN.md`,
-`SPRINT_24_VALIDATION.md`, `SPRINT_24_RETROSPECTIVE.md`; summary at Sprint
-25 planning.
+`SPRINT_24_VALIDATION.md`, `SPRINT_24_RETROSPECTIVE.md` and
+`SPRINT_24_SUMMARY.md` (written 2026-10-13, Sprint 25 Phase 3.2.1).
 
 ### Sprint 23: Restore the Repository as Filed** (Oct 8, 2026; ran in the
 Phase 1 repository, PR #167 there, still draft). Delivered F127's Task A
@@ -288,6 +289,7 @@ Three findings outlived their cards and are recorded there:
 - **What already exists and is reusable, measured in Sprints 18-19**: `integer_path.py` builds and validates the cardinality-constrained integer job (`num_levels = upper_bound + 1` per variable, device budget `sum(upper_bound + 1)` against the 949 ceiling); `qubo_proxy.py` solves the identical Hamiltonian (`J = HH^T + lambda*I`, `C = -2Hy`, sum constraint 1.0, `w >= 0`); and the two measured sizes are 60 and 150 variables, at 71 s and 165 s of device time
 - **Solver availability, now verified rather than unverified**: of `mip`, `pulp`, `cvxpy` and `gurobipy`, NONE is installed; only `scipy.optimize` is present. The commercial MIQP leg therefore needs a dependency decision, and `requirements.txt` plus `test_requirements_complete.py` must be updated with whatever is chosen. Exact enumeration needs no new dependency and is the honest floor
 - **Exact solver DECIDED 2026-10-13 (team lead, D4 option 1): SCIP through PySCIPOpt**, Apache 2.0 since SCIP 8.0.3, with no size or use limit; `pip install pyscipopt` ships Windows and Linux wheels. It sits behind a thin solver interface, so a commercial solver provided in Phase 2 can be swapped in and checked on the same instances. Pin a release at least two weeks old (6.3.0 was released 2026-10-11). Rejected: HiGHS ("cannot solve QP models where some of the variables must take integer values"); Gurobi's pip license (200 variables when quadratic terms are present; "non-production use only"); CBC (linear only). Unverified until the build: the quadratic objective enters SCIP as a constraint through an epigraph variable, and the 150-variable solve time. Exact enumeration verifies SCIP at a size where both run
+- **Corrected at Sprint 25 plan verification (2026-10-13)**: the 60 and 150 variable sizes above come from the integer probes, which used SYNTHETIC matrices (`run_integer_probe.build_job`). F94 uses real ULB proxy pools from the frozen `qubo_proxy` cells, built sequentially on Windows: 60 learners from `free` (78) and the whole `mid` pool (136). The acceptance sizes are therefore 60 and 136
 - Suggested order: exact enumeration at small n first, because it yields a certified optimum to measure the others against; then greedy; then simulated annealing; then the MIQP leg if a solver can be justified
 - This enables: Experiment 3 running the day allocation arrives, with its comparison already fixed. This prevents: a device result reported against no control, which the hardware plan itself tells QCi is not a result
 - Acceptance: each control returns a cardinality-feasible selection and objective value at both 60 and 150 variables with seeds recorded; the exact solve agrees with a brute-force check at a size where both run; results written as dated post-submission rows; no Phase 1 claim touched; any new dependency declared and covered by the requirements guard
@@ -445,6 +447,7 @@ F123's layout is superseded by F127.)
 - Acceptance: the note answers every question above with its source, or says the source does not answer it; each Dirac-3 card's cost and sizing is re-checked against it and corrected where it changed; the cards it changes are listed
 - Depends on: nothing
 - Followed immediately by F139 (team lead, 2026-10-10)
+- **Selected for Sprint 25** (team lead, 2026-10-13): F138, F139 (after F138), F102 (first draft), F113, F29 and F94. D2: F129 re-scored to 100. D3: priority numbers unchanged. D4: F94's exact solver is SCIP through PySCIPOpt. F140 canceled. The dependency scan found no known vulnerability; `eqc-models` 0.22.1 and `qci-client` 5.0.3 are newer than the pinned 0.21.0 and 5.0.2, which F138 checks for Dirac-3S support
 
 **F139. Every Dirac-3 run so far: which to re-run on Dirac-3S, and what new analysis the hardware allows (~3h [no-history], zero metered) Priority 6**
 - Phase: Phase 2 preparation (added 2026-10-10 by the team lead at the Sprint 24 retrospective: "immediately after F138"). **Target: Sprint 25, the task after F138.** It decides what the gated Dirac-3 cards run, so F129, F95, F25 and F30 wait for it too
@@ -470,13 +473,10 @@ default branch; it was briefly `main` on 2026-10-10 and is `develop` again.
 with a CI excluding zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`
 section 6). Removed from candidates per convention.)
 
-**F140. CI runs on release PRs into `main`, and sprint PRs name their base (~15m, zero metered) Priority 20**
-- Phase: Phase 2 repository, process (added 2026-10-10, Phase 8 Pass 2, from the develop-to-main release of Sprint 24)
-- Platform: CI, docs
-- `.github/workflows/ci.yml` triggers only on `pull_request` into `develop`, so the release PR into `main` (PR #11) ran no CI. It was safe only because `develop`'s tree matched a commit CI had already passed; nothing checks that
-- `SPRINT_EXECUTION_WORKFLOW.md` 3.3.1 does not name the PR base. `develop` is the default again (team lead, 2026-10-10: `develop` integrates, `main` is the release branch), so a bare `gh pr create` is right today; writing `--base develop` keeps it right if the default moves again, as it did for a few hours on 2026-10-10
-- Acceptance: `ci.yml` triggers on `pull_request` into `develop` and `main`; 3.3.1 names `--base develop` and 8.1 names the release PR `--base main --head develop`; a test reads the workflow's branch list and fails without `main`, proven red with `assert_can_fail`
-- Depends on: nothing
+(F140 CI on release PRs into `main`: CANCELED 2026-10-13 by the team lead
+at Sprint 25 selection. "None of the 100 PR's so far ... has never been a
+match", so CI on the release PR would duplicate the `develop` run for no
+value. Removed from candidates.)
 
 **F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 24**
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). It was to sprint with F128, which shipped in Sprint 24 without it (Pass 1, 2026-10-10)
@@ -487,7 +487,8 @@ section 6). Removed from candidates per convention.)
 - Acceptance: each lever reported against HGB on the same splits with the paired CI; a lever that does not move AUPRC is recorded as rejected, as F124 did for ensembling
 - Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
-**F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 34**
+**F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 100**
+- **Re-scored 2026-10-13 (team lead, Sprint 25 selection D2 option 1): from 34 to 100, and whether its device run happens is decided by F139.** F128's falsifier removed the case for it as a route to advantage; the question it still asks (does the device reproduce the proxy on a sparse problem) is one of the re-run questions F139 answers for every block
 - Phase: Phase 2, first device run under F124's approved list (added 2026-10-07, Pass 2 of the Sprint 23 refinement)
 - Platform: SPECTRA, Dirac-3
 - B4's energy_steel cell with `weak_cls_params={"min_samples_leaf": <F128's value>}`, no other change: 816 variables, 8 samples. **About 82 s per fit; 1-seed pilot about 82 s, 5 seeds about 410 s** (F124, from the F17 cost model fitted on B2's measured 82.4 s/fit). The balance: `experiments/results/allocation_reads.json`
@@ -507,6 +508,7 @@ section 6). Removed from candidates per convention.)
   - **Both sides then become random draws, so the comparison is REPEATED** (about 20 draws) and reported as a mean with its spread. Phase 1 draws the control once against a fixed segment, which cannot distinguish a real in-segment effect from one that depends on which rows were drawn. Repeating costs nothing: it is classical computation over device output already paid for.
   - **Why this is specification and not a retrofit.** `experiments/PREREGISTRATION.md` stays FROZEN and is NOT amended: section 11 forbids an amendment that changes a gate's pass/fail criterion, and H5(ii)'s control IS that criterion, so the change would be a reported DEVIATION. Phase 1 reports energy_steel `unscoreable` instead, which the gate table already has a column for. The design is motivated by a STRUCTURAL property of the dataset (the pocket's share of positives), not tuned against any result, and Phase 2's SPECTRA data does not exist yet. This paragraph exists so a reviewer sees the distinction was made deliberately rather than discovered later.
   - A Phase 2 preregistration binds only from its filing (a November date, to be set), so this file may be revised freely until then.
+- **A living draft (team lead, 2026-10-13, Sprint 25 selection)**: this card creates a DRAFT that is updated across several sprints until Phase 2 is approved and a filing date is set. Sprint 25 delivers the first draft, not the filed document
 - Acceptance: the template committed; each later experiment card names its preregistration file before it runs. `experiments/PREREGISTRATION.md` stays FROZEN; this is a new document. The downsized-matched-pair control and the repeated-draw reporting are both written into it, with the feasibility arithmetic and the reason it is not a Phase 1 amendment
 - Depends on: nothing
 
