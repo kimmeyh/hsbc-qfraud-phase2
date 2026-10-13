@@ -128,9 +128,23 @@ CASES = [
     ("Write tool into the evidence library's data folder", BLOCK,
      {"tool_name": "Write",
       "tool_input": {"file_path": f"D:/Data/Harold/{SIBLING}/store/x.db"}}),
+    # Under a root that does not exist, so `realpath` cannot restore the
+    # folder's true case on Windows and the case fold itself is what is tested.
     ("Write tool into a sibling spelled in lower case", BLOCK,
      {"tool_name": "Write",
-      "tool_input": {"file_path": f"{HERE}/{SIBLING.lower()}/x.md"}}),
+      "tool_input": {"file_path": f"Z:/no-such-root/{SIBLING.lower()}/x.md"}}),
+    # Windows opens "name.", "name " and "name:stream" as the folder "name";
+    # an exact match without canonicalizing would let each one through
+    # (security review of 2af9045).
+    ("Write tool into a sibling with a trailing dot", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{SIBLING}./x.md"}}),
+    ("Write tool into a sibling with a trailing space", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{SIBLING} /x.md"}}),
+    ("Write tool into a sibling through a stream suffix", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{SIBLING}::$INDEX_ALLOCATION/x.md"}}),
     ("Write tool in this repository, file named after a sibling", ALLOW,
      {"tool_name": "Write",
       "tool_input": {"file_path":
@@ -179,15 +193,20 @@ def test_the_folder_match_cases_can_fail():
     """Sprint 25 IMP-3: each new case must go red when the rule it pins breaks.
 
     Reverting to the old substring match must turn the file-name ALLOW cases
-    red; dropping the case fold must turn the lower-case BLOCK case red.
+    red; dropping the case fold must turn the lower-case BLOCK case red;
+    dropping the Windows canonicalization must turn the trailing-dot,
+    trailing-space and stream-suffix BLOCK cases red.
     """
     from injection import Mutation, assert_can_fail
 
     new_cases = [c for c in CASES if c[0] in {
         "Write tool into a sibling spelled in lower case",
+        "Write tool into a sibling with a trailing dot",
+        "Write tool into a sibling with a trailing space",
+        "Write tool into a sibling through a stream suffix",
         "Write tool in this repository, file named after a sibling",
         "Edit tool in this repository, file named after the Phase 1 repo"}]
-    assert len(new_cases) == 3
+    assert len(new_cases) == 6
 
     def run() -> bool:
         import tempfile
@@ -202,22 +221,37 @@ def test_the_folder_match_cases_can_fail():
                     return False
         return True
 
-    substring = Mutation(
-        HOOK,
-        "        if repo.lower() in folders:",
-        "        if re.search(re.escape(repo), hooklib.normalize(path), re.IGNORECASE):",
-        expect_occurrences=1)
-    assert_can_fail([substring], run, "substring match blocks file names")
+    # The pre-IMP-3 behavior: the forbidden name anywhere in the path.
+    substring = [
+        Mutation(HOOK, "            if folder in forbidden:",
+                 "            if any(k in candidate.lower() for k in forbidden):",
+                 expect_occurrences=1),
+    ]
+    assert_can_fail(substring, run, "substring match blocks file names")
 
     # Both sides of the comparison are folded, so both folds must go: removing
     # one alone still compares lower case with lower case and stays green.
     no_fold = [
-        Mutation(HOOK, "    folders = [part.lower() for part in",
-                 "    folders = [part for part in", expect_occurrences=1),
-        Mutation(HOOK, "        if repo.lower() in folders:",
-                 "        if repo in folders:", expect_occurrences=1),
+        Mutation(HOOK, '    return part.rstrip(". ").lower()',
+                 '    return part.rstrip(". ")', expect_occurrences=1),
+        Mutation(HOOK, "    forbidden = {repo.lower(): repo for",
+                 "    forbidden = {repo: repo for", expect_occurrences=1),
     ]
     assert_can_fail(no_fold, run, "case-sensitive match misses lower case")
+
+    # Exact match with no Windows canonicalization (the 2af9045 regression).
+    # On Windows `realpath` also strips trailing dots and spaces, so the two
+    # defenses cover each other there; both go, or the proof stays green.
+    # On Linux (CI) `_canonical_folder` is the only one that applies.
+    no_canon = [
+        Mutation(HOOK, "        candidates.append(os.path.realpath(path))",
+                 "        pass", expect_occurrences=1),
+        Mutation(HOOK, '    return part.rstrip(". ").lower()',
+                 "    return part.lower()", expect_occurrences=1),
+        Mutation(HOOK, '        part = part.split(":", 1)[0]',
+                 "        part = part", expect_occurrences=1),
+    ]
+    assert_can_fail(no_canon, run, "uncanonicalized names slip past")
 
 
 def test_the_guard_is_registered_and_its_path_resolves():

@@ -235,3 +235,15 @@ The first IMP-3 proof removed only one of the two case folds and stayed
 green: the comparison was still lower case on both sides. The proof caught
 the defect in the mutation, not in the guard; the mutation now removes
 both.
+
+**IMP-3 follow-up, from the automated security review of 2af9045.** The
+exact folder match was weaker than the substring match it replaced in one
+way: Windows opens `name.`, `name ` and `name:stream` as the folder `name`,
+and resolves 8.3 short names and junctions, so those spellings would have
+passed. Each folder is now canonicalized (trailing dots and spaces
+stripped, a stream suffix dropped, case folded), and the path is also
+checked after `os.path.realpath`. Three new BLOCK cases, proven red with
+both defenses removed (on Windows `realpath` alone also strips the dots
+and spaces, so removing one defense stays green; on Linux CI only the
+canonicalization applies). 8.3 names and junctions rely on `realpath` and
+have no test, because they need real folders of that kind on disk.

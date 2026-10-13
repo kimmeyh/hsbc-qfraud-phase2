@@ -33,6 +33,7 @@ Reads are deliberately NOT blocked: cat, grep, git log, git show, Read.
 """
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -70,11 +71,34 @@ def check_path(path: str) -> str | None:
     # before Sprint 25 IMP-3) also blocked files in THIS repository whose
     # names merely contained it, such as a proposals file named after the
     # evidence library. Case-insensitive, because Windows paths are.
-    folders = [part.lower() for part in hooklib.normalize(path).split("/")[:-1]]
-    for repo in FORBIDDEN:
-        if repo.lower() in folders:
-            return f"Tool targets a path inside '{repo}':\n  {path}"
+    #
+    # Each folder is canonicalized the way Windows resolves it, because an
+    # exact name match is otherwise easy to step around: Windows drops
+    # trailing dots and spaces ("name." and "name " open "name"), and a
+    # ":stream" suffix names a stream of the same folder. The path is also
+    # resolved, which expands 8.3 short names ("NAME~1") and follows
+    # junctions to the real folder. Both the written and the resolved forms
+    # are checked; either one matching blocks.
+    candidates = [path]
+    try:
+        candidates.append(os.path.realpath(path))
+    except (OSError, ValueError):
+        pass
+    forbidden = {repo.lower(): repo for repo in FORBIDDEN}
+    for candidate in candidates:
+        for part in hooklib.normalize(candidate).split("/")[:-1]:
+            folder = _canonical_folder(part)
+            if folder in forbidden:
+                return (f"Tool targets a path inside '{forbidden[folder]}':"
+                        f"\n  {path}")
     return None
+
+
+def _canonical_folder(part: str) -> str:
+    """A folder name as Windows would open it, lower-cased."""
+    if ":" in part and not re.fullmatch(r"[A-Za-z]:", part):
+        part = part.split(":", 1)[0]
+    return part.rstrip(". ").lower()
 
 
 def check_command(cmd: str) -> str | None:
