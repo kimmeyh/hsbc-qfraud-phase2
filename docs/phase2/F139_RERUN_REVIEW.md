@@ -107,7 +107,7 @@ problem (energy_steel with leaf regularization). F128 removed the case for
 it as a route to advantage. The B4 verify answers the fidelity question on
 Dirac-3S more cleanly, because it has a Dirac-3 twin on identical
 Hamiltonians. **Recommendation: close F129.** That is the team lead's call
-(Sprint 25 D2).
+(Sprint 25 D2). **Decided 2026-10-13 at Manual Validation: F129 closed.**
 
 **Closing F129 strands F121**, whose hold is "until F128 and F129 report".
 F121 then needs a new hold condition or a decision at the same refinement.

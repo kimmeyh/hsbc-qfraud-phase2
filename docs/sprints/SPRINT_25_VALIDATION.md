@@ -46,7 +46,9 @@ review**; its last section lists what changed.
   classical `deep` proxy reaches 0.7926 against B2's 0.7928. F144 (B2's own
   proxy twin, zero metered) comes before any B2 comparison.
 - **F129: recommend closing it.** B4's twin answers its question better.
-  Closing it leaves F121's hold condition unmeetable.
+  Closing it leaves F121's hold condition unmeetable. **Decided
+  2026-10-13 (team lead): closed.** F121's new condition is due at the
+  Sprint 26 refinement.
 - **New cards**: F141 (client support, gates F142), F142, F143
   (telecom_churn with all 18 features, HOLD on QCi's answer), F144, F145
   (pool-build drift). Priorities 7, 8, 9 and 11 follow the 5 and 6 you kept
