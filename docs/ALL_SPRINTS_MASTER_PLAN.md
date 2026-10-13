@@ -295,6 +295,7 @@ Three findings outlived their cards and are recorded there:
 - Acceptance: each control returns a cardinality-feasible selection and objective value at both 60 and 150 variables with seeds recorded; the exact solve agrees with a brute-force check at a size where both run; results written as dated post-submission rows; no Phase 1 claim touched; any new dependency declared and covered by the requirements guard
 - Depends on: nothing. Reporting a device-versus-control COMPARISON waits for a Phase 2 preregistration; the build does not
 **F95. Relaxation schedule 4 on the residual (~1h build + approval, metered, cost unmeasured) Priority 160**
+- **F138 re-check (2026-10-13, `docs/phase2/DIRAC_3S_RESEARCH.md`)**: the four schedules are unchanged on Dirac-3S. The Dirac-3S guide's 50-variable table puts schedule 4 at 3.04x schedule 2, inside this card's 2.3x-5.3x range, so the estimate below stands, but it was derived on Dirac-3 and the guide does not say its table was measured on Dirac-3S. Re-quote from F142's first measured Dirac-3S fit
 - **UNBLOCKED 2026-09-25**: the hold was "until the QCi memo is sent", and it
   was sent 2026-09-25 at 12:23 PM. The sent memo commits to this check, so it
   is now promised work rather than optional
@@ -462,6 +463,30 @@ F123's layout is superseded by F127.)
 - Acceptance: a table of every run with its recommendation, reason and estimated seconds; the total against the balance; the new cards listed with F numbers; the Phase 2 plan changes listed
 - Depends on: F138
 
+**F141. Dirac-3S client support: bump the QCi packages, name the device on every row (~1h [no-history], zero metered) Priority 7**
+- Phase: Phase 2 preparation (added 2026-10-13 by F139, Sprint 25). Gates every Dirac-3S run
+- Platform: N/A (local, CI)
+- F138 found the pinned `qci-client` 5.0.2 and `eqc-models` 0.21.0 cannot reach Dirac-3S. `qci-client` 5.0.3 adds `device_type="dirac-3s"`; `eqc-models` 0.22.1 replaces the solver's `generation` argument with `sampler_type="dirac-3s"` and requires `qci-client>=5.0.3`. Both were under two weeks old on 2026-10-13
+- Scope: both bumps in `requirements.txt` and the lock file; solvers constructed with `sampler_type` where a Dirac-3S run asks for it (the `cb.Dirac3CloudSolver` substitution point in `eqc_submit.py`, and `Dirac3IntegerCloudSolver` directly); a `device_type` field required on every Phase 2 hardware row, enforced beside F133's `job_id` rule; confirm `qubo_proxy.py`'s Hamiltonian is unchanged in 0.22.1 (it replicates "eqc-models 0.21.0 source"); job metrics read by the submitted device name, not a hardcoded "dirac-3"
+- Acceptance: an offline dry run reaches a request body naming `dirac-3s` with no device call; the row-schema test fails on a hardware row without `device_type`, proven red; the proxy-identity check passes on 0.22.1; the full suite passes
+- Depends on: nothing
+
+**F142. Dirac-3S verify block: B1 on 2 fits, then B2 on 3 fits (~1h + about 260 metered s, cap 460) Priority 8**
+- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
+- Platform: ULB, Dirac-3S
+- B1 `hw_b1_dct` seeds 42 and 43 first: the first Dirac-3S cost point at a size measured many times (4-5 s per fit on Dirac-3), plus fidelity against the exact proxy optimum. Stops after the first fit to re-quote everything after it. Then B2 seeds 42-44 at 833 variables, storing every sample and job id: tests whether the campaign's only positive result at scale (+0.0256 AUPRC on 10 of 10 seeds) reproduces on a device with the same 200:1 resolution
+- Cost at Dirac-3 rates: about 10 s for B1 (cap 60) and about 250 s for B2 (cap 400). Dirac-3S rates are unmeasured; the first fit sets them
+- A full B2 re-run (11 fits, about 906 s at Dirac-3 rates) only if all 3 verify seeds favor the larger configuration again
+- Reported as dated Phase 2 rows naming the device, never as Phase 1 gate cells
+- Depends on: F141; F102 (the comparison's preregistration entry); per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
+
+**F143. telecom_churn at 987 variables on Dirac-3S (~1h + about 450 metered s, unmeasured on Dirac-3S) Priority HOLD**
+- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
+- Platform: SPECTRA, Dirac-3S
+- The one sized case Dirac-3S's larger ceiling unlocks: B4's excluded cell, schedule 3, 987 variables, 5 seeds. About 450 s at Dirac-3's measured 84-90 s per fit at 816 variables
+- **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138)
+- Depends on: QCi's answer; F141; F142's measured rate; per-block approval (Criterion H)
+
 (F131 hermetic CI-status test, F136 task start times, F132 this repository's
 boundary, F134 pre-commit blocks without patterns, F133 job_id on device rows,
 F135 complete decision options, F128 the leaf-regularization sweep and F137
@@ -488,6 +513,7 @@ value. Removed from candidates.)
 - Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
 **F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 100**
+- **F139 recommends it does not run (2026-10-13, `docs/phase2/F139_RERUN_REVIEW.md`)**: B4 already showed the device within 0.0072 AUPRC of its proxy at 816 variables, and F142's B1 and B2 verify runs measure device-against-proxy fidelity on Dirac-3S directly. Close it, or hold it with no planned run: the team lead's call
 - **Re-scored 2026-10-13 (team lead, Sprint 25 selection D2 option 1): from 34 to 100, and whether its device run happens is decided by F139.** F128's falsifier removed the case for it as a route to advantage; the question it still asks (does the device reproduce the proxy on a sparse problem) is one of the re-run questions F139 answers for every block
 - Phase: Phase 2, first device run under F124's approved list (added 2026-10-07, Pass 2 of the Sprint 23 refinement)
 - Platform: SPECTRA, Dirac-3
@@ -526,6 +552,7 @@ value. Removed from candidates.)
 - Depends on: nothing. The SPECTRA author's construction details help
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
+- **F138 re-check (2026-10-13)**: the 200:1 (23 dB) resolution limit is unchanged on Dirac-3S. The screen applies as written to both devices
 - Phase: Phase 2 preparation, Experiment 3 (sprints with F94)
 - Platform: Dirac-3 planning
 - Before any metered call, test whether the job's coefficient range exceeds the device's 23 dB (200:1) resolution. It would have predicted B2: diagonal 510,705, off-diagonals at most 20.0, resolvable step 2,554 (Sprint 12, A31)
@@ -681,6 +708,7 @@ not a sweep correction.
 - Depends on: F17 (done, Sprint 22)
 
 **F25. Non-convex CVQBoost: cardinality-constrained weak-learner selection on Dirac-3 (~4h investigation + hardware) Priority HOLD**
+- **F138 and F139 re-check (2026-10-13)**: the Dirac-3S guide gives 16 or 17 integer levels per variable (it contradicts itself), and a total-levels limit with no number. The integer cost model was measured on Dirac-3; F139 recommends re-measuring it with 2 of the 2026-09-23 probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) as this card's first step. The quantum fluctuation coefficient and mean photon number, never set here, belong in this card's design: on a non-convex problem they may matter. F94 (Sprint 25) supplies the controls
 - Phase: Phase 2, **Experiment 3 device run** (team-lead approved 2026-09-03; the direct consequence of the Sprint 4 degeneracy finding)
 - **HOLD reason, restated 2026-10-03**: needs F102 (preregistration), F94 (controls) and the allocation. Sized at 3,070 s in the sent hardware plan; after F90 about 445 s of the 1,681 remain (**corrected 2026-10-06: F90 ran and the measured balance fell to 1,022 s**). **2026-10-10: QCi granted the 7,500 s on 2026-10-09, so the allocation no longer blocks this card**; the balance is in `experiments/results/allocation_reads.json`
 - Platform: Dirac-3 integer/qudit solver, local proxy for the relaxation only
@@ -690,6 +718,7 @@ not a sweep correction.
 - Depends on: **F138 then F139 (Dirac-3S research and the re-run review, before any further Dirac-3 seconds)**; **F124 reported 2026-10-07**: its approved ranked list gates any device run, rank 1 (leaf regularization) first; Phase 2 preregistration; QCi grant for meaningful hardware time; pairs with F17 (simulator) and F20 (soft votes)
 
 **F30. Concurrent Dirac-3 submission with bounded in-flight requests (~4h build + 1h dry run) Priority HOLD**
+- **F138 re-check (2026-10-13)**: `eqc-models` 0.22.1 describes Dirac-3S as "special queues", with no stated hours. The queue measurements below were taken on `dirac-3` and may not apply to `dirac-3s`
 - Phase: Phase 2 preparation / infrastructure (team-lead request 2026-09-04)
 - Platform: Dirac-3 (offline-testable; gated live vetting of 2-3 calls only)
 - Dirac-3 queues one job at a time, so a 4-5 QPU s fit cost ~85 s of wall clock in Sprint 4; nearly all elapsed time is queue wait. Multiple requests CAN be enqueued concurrently, via separate processes or async submission inside one program
