@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-13
 
+- **feat**: F29 sample-size insensitivity of the CVQBoost optimum (Sprint 25 Task E). On ULB with the frozen `free` pool, weights solved on 1/8 to 1/2 of the train fold have cosine at least 0.99999999999994 with the full-fold weights on 3 seeds; the 0.99 falsifier did not fire. The optimum is pinned: every solve is uniform to about one part in a million, because the ridge (lambda = 2 * n_train) dominates and scales with n. The card closes. `docs/phase2/F29_SAMPLE_SIZE.md` (#17)
 - **feat**: F113 oracle-gap test on the stored ULB predictions (Sprint 25 Task D). A perfect per-transaction choice between the best CVQBoost proxy and the best XGBoost (each chosen on validation AUPRC) gains 4.9 points of recall at the 0.5% budget over XGBoost (range 2.1-8.4 over 10 seeds). The 1-point falsifier did not fire: a router is not ruled out, and the gap is an upper bound only. `docs/phase2/F113_ORACLE_GAP.md` (#16)
 - **docs**: Sprint 25 planning. Selected (team lead): F138, F139, F102 (first draft of a living document), F113, F29 and F94. F140 canceled. F129 re-scored from 34 to 100, with F139 deciding its device run; priority numbers otherwise unchanged. F94's exact solver is SCIP through PySCIPOpt (D4), proven by a spike against brute-force enumeration. F94's instance sizes corrected to 60 and 136 learners from real ULB pools. `SPRINT_24_SUMMARY.md` written; `SPRINT_25_PLAN.md` drafted
 
