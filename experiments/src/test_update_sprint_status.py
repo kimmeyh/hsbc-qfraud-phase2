@@ -76,6 +76,54 @@ def test_a_new_sprint_starts_with_an_empty_start_record(status):
     assert _cur(status)["task_started"] == {}
 
 
+def _issues_behave(path: Path) -> bool:
+    """--add-issue appends once, keeps the list sorted, refuses nonsense."""
+    path.write_text(json.dumps({"current_sprint": {
+        "number": 99, "github_issues": [13, 18]}}), encoding="utf-8")
+    uss.main(["--path", str(path), "--add-issue", "19", "--add-issue", "15"])
+    uss.main(["--path", str(path), "--add-issue", "19"])
+    if _cur(path)["github_issues"] != [13, 15, 18, 19]:
+        return False
+    try:
+        uss.main(["--path", str(path), "--add-issue", "0"])
+    except SystemExit:
+        return _cur(path)["github_issues"] == [13, 15, 18, 19]
+    return False
+
+
+def test_add_issue_appends_once_sorted_and_refuses_nonsense(status):
+    """Sprint 25 IMP-4: `--set` cannot append, so #19 was never recorded."""
+    assert _issues_behave(status)
+
+
+def test_add_issue_guard_can_fail(tmp_path):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = ROOT / "scripts" / "update_sprint_status.py"
+    target = tmp_path / "s.json"
+
+    def run() -> bool:
+        # The mutation edits the source file; reload so the run sees it.
+        importlib.reload(uss)
+        return _issues_behave(target)
+
+    try:
+        assert_can_fail(
+            [Mutation(src, "    if number in issues:\n",
+                      "    if False:\n", expect_occurrences=1)],
+            run, "a duplicate issue is appended twice")
+        assert_can_fail(
+            [Mutation(src, "    issues.sort()\n", "", expect_occurrences=1)],
+            run, "the list is left unsorted")
+        assert_can_fail(
+            [Mutation(src, "    if number <= 0:\n", "    if False:\n",
+                      expect_occurrences=1)],
+            run, "a nonpositive issue number is accepted")
+    finally:
+        importlib.reload(uss)
+
+
 def test_the_clock_cannot_be_set_from_the_command_line():
     """`now` is for tests only. A flag that sets the clock would let an
     actual be typed in after all."""
