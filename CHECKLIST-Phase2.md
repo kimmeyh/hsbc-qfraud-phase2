@@ -75,6 +75,10 @@ Nothing in this stage is time-bound. Schedule on value.
       Sprint 22: `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`, approved by
       the team lead 2026-10-07; it gates every device run
 - [ ] **C**: F102 Phase 2 preregistration framework
+      - **Progress 2026-10-13**: first draft,
+        `experiments/phase2/PREREGISTRATION_DRAFT.md` (Sprint 25). A living
+        draft until Phase 2 is approved and a filing date is set; its
+        section 7 lists what remains
 - [ ] **C**: F103 SPECTRA Tier 1 known-answer check on the paper's own dataset
 - [ ] **C**: F6 gate-based arm analysis, then F106 (dequantization check) and
       F107 (Schmidt-rank threshold) if F6 recommends pursue
@@ -119,6 +123,12 @@ Nothing in this stage is time-bound. Schedule on value.
       - **Progress 2026-10-07**: F17's emulator was built (Sprint 22). It
         does not reproduce the device's sparsity, so it cannot size this
         experiment yet; follow-up F126
+      - **Progress 2026-10-13**: F94's controls built and run
+        (`docs/phase2/F94_EXP3_CONTROLS.md`): exact enumeration, greedy,
+        simulated annealing and SCIP (certified on small checks). On the
+        training fold every selection ties, so the experiment must build
+        its Hamiltonian on held-out predictions; on the validation fold,
+        greedy is the bar to beat
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours
@@ -148,6 +158,12 @@ Nothing in this stage is time-bound. Schedule on value.
       segments, against a matched random-segment control (proposal section 5,
       Metrics)
       - Backlog: F121 (HOLD)
+      - **Progress 2026-10-13**: F113's in-time bound
+        (`docs/phase2/F113_ORACLE_GAP.md`). The oracle beats XGBoost by
+        5.0 points, but two XGBoost configurations give 3.6, almost all of
+        the gap is the oracle using the label on legitimate rows, and
+        label-free combinations do worse than XGBoost. Nothing here
+        supports a router
 - [x] **H+C**: Hardware block B5 (QSVM sign-augmented, 12 fits, about 15 s).
       **Ran 2026-10-06**: 12 fits, 13 s (`docs/B4_B5_HARDWARE_RESULT.md`).
       Not one of the six; it runs first inside F90 because it is cheap and
@@ -168,7 +184,9 @@ Nothing in this stage is time-bound. Schedule on value.
 - [x] **H**: The additional 7,500 s asked of QCi in the hardware plan.
       **Granted 2026-10-09** (`docs/QPU_RECONCILIATION.md`, grants).
       Experiment 3, sized at 3,070 s, is no longer blocked by the
-      allocation; it waits for F138 and F139 (Dirac-3S)
+      allocation. F138 and F139 reported 2026-10-13: any Dirac-3S run
+      first needs F141 (client support) and F142's measured cost
+      (`docs/phase2/F139_RERUN_REVIEW.md`)
 - [ ] **H+C**: Latency benchmark (p50/p95/p99) against the 100-300 ms envelope,
       which Phase 1 states as a target rather than a measurement (D10). F118
 - [ ] **H+C**: Calibration layer fitted, which Phase 1 specifies but does not
