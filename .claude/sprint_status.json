@@ -3,7 +3,7 @@
     "number": 25,
     "name": "Learn the New Device, Then Build What Runs on Any Device",
     "branch": "feature/20261010_Sprint_25",
-    "status": "phase_7_retrospective",
+    "status": "phase_8_delivery_cycle",
     "plan_doc": "docs/sprints/SPRINT_25_PLAN.md",
     "selected_cards": [
       "F138",
@@ -42,10 +42,10 @@
     }
   },
   "last_completed_sprint": {
-    "number": 24,
-    "merged_pr": 2,
-    "main_merge_pr": 11,
-    "docs_triad_complete": true
+    "number": 25,
+    "merged_pr": 12,
+    "main_merge_pr": 20,
+    "docs_triad_complete": false
   },
   "prereg": {
     "status": "FROZEN",

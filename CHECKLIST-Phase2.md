@@ -98,7 +98,9 @@ Nothing in this stage is time-bound. Schedule on value.
 - [x] **H+C**: Decide where Phase 2 work lives. The public repository is a
       Phase 1 asset; Phase 2 may need a private one. **Decided 2026-10-07**
       (team lead, Sprint 22): a new private repository; this one is restored
-      as filed and archived (F127, `docs/PHASE_SEPARATION.md` section 9)
+      as filed and archived (F127, `docs/PHASE_SEPARATION.md` section 9).
+      **Done**: the Phase 1 repository's `as-filed` tag is at 4aa17d2 and the
+      repository is archived (verified read-only 2026-10-13)
 - [ ] **H+C**: If selected, start F13 (Phase 2 PoC sprint planning). If not
       selected, the repository stands as the public record of a null reported
       honestly

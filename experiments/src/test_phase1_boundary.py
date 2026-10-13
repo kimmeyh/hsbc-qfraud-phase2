@@ -17,7 +17,8 @@ The allowlist was approved at Sprint 24 planning:
     evidence) and four history records.
   - The files that must name the repository in order to block it: the
     cross-repo hook and CLAUDE.md's boundary rule.
-  - D6 option 1: the record files, CHANGELOG.md, the master plan and
+  - D6 option 1: the record files, CHANGELOG.md (the master plan until
+    2026-10-13) and
     everything under docs/sprints/, which record F127, the rename and
     Sprint 23 and cannot do so without the name.
 """
@@ -40,9 +41,10 @@ ALLOWED_FILES = {
     # The boundary must name the repository to block it
     ".claude/hooks/block_cross_repo_write.py",
     "CLAUDE.md",
-    # D6 option 1: records
+    # D6 option 1: records. The master plan left this list 2026-10-13
+    # (Sprint 26 Pass 1): pruning the completed F127 card removed its last
+    # mention, and an entry that no longer names the repository is a hole.
     "CHANGELOG.md",
-    "docs/ALL_SPRINTS_MASTER_PLAN.md",
 }
 # D6 option 1. D2's three history records under it (SPRINT_1_SUMMARY.md,
 # SPRINT_14_RETROSPECTIVE.md, SPRINT_16_RETROSPECTIVE.md) are covered here.
