@@ -62,6 +62,29 @@ def test_the_subsample_is_stratified_and_deterministic():
     assert np.array_equal(ss.stratified_rows(y, 1.0, seed=42), np.arange(1000))
 
 
+def test_the_centered_metrics_see_what_the_plain_cosine_hides():
+    # The code review's example: two weight vectors near uniform whose
+    # non-uniform parts are orthogonal. Plain cosine 0.990; centered 0.
+    n = 78
+    u = np.full(n, 1.0 / n)
+    d1 = np.zeros(n); d1[0], d1[1] = 1, -1
+    d2 = np.zeros(n); d2[2], d2[3] = 1, -1
+    scale = 0.1 * np.linalg.norm(u) / np.linalg.norm(d1)
+    wa, wb = u + scale * d1, u + scale * d2
+    assert ss.cosine(wa, wb) > 0.99
+    c = ss.centered(wa, wb)
+    assert c["centered_cosine"] == pytest.approx(0.0, abs=1e-12)
+    assert c["relative_distance"] == pytest.approx(np.sqrt(2.0))
+
+
+def test_pinned_is_reported_beside_the_verdict():
+    rows = _rows([0.999])
+    for r in rows:
+        r["cosine_to_uniform"] = 0.9999
+    s = ss.summarize(rows)
+    assert s["insensitive"] is True and s["pinned_at_uniform"] is True
+
+
 def test_cosine_of_a_zero_vector_is_refused():
     with pytest.raises(ValueError):
         ss.cosine(np.zeros(3), np.ones(3))

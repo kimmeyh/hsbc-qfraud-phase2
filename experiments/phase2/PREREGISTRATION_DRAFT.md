@@ -49,6 +49,14 @@ field does not run.
   the paired difference and its bootstrap interval reported beside the
   p-value.
 - **Multiplicity**: Bonferroni within each experiment's stated family.
+- **Seeds set from the test, not by habit.** An exact two-sided Wilcoxon
+  test on k paired seeds cannot give a p-value below 2 / 2^k: 0.0625 at 5
+  seeds, 0.031 at 6, 0.0156 at 7. So a Wilcoxon comparison needs at least 6
+  seeds at alpha 0.05, and at least 7 under Bonferroni with 3 tests. Where
+  only 5 seeds are affordable (the SPECTRA cells), the primary test is a
+  paired bootstrap over transactions within seeds, and the Wilcoxon result
+  is reported as secondary. Each section 6 entry states its seed count and
+  shows it can reach its alpha.
 - **Seed sensitivity**: every headline figure reported over at least 5 seeds
   as mean and spread, never a single run.
 - **Metrics**: AUPRC normalized by its floor, `(AUPRC - p) / (1 - p)`, where
@@ -81,9 +89,15 @@ They are different things, and every document states which it means:
   gate; under the frozen preregistration's section 11 that would be a
   deviation (F138, question 6).
 - **The resolution screen gates every metered block** (F104): before any
-  call, the job's coefficient range is tested against the device's 200:1
-  (23 dB) resolution, which is the same on both devices. A job that fails
-  the screen does not run.
+  call, the job's coefficient range is tested against the device's stated
+  200:1 (23 dB) resolution. QCi states the same figure for both devices;
+  Dirac-3S's effective resolution is unmeasured (F138). A job that fails
+  the screen does not run **as an accuracy experiment**.
+- **The one exception**: a run whose stated purpose is cost, queue time or
+  a twin of a Phase 1 Hamiltonian (F142's B1 and B2 fits) may run although
+  it fails the screen. Its entry says so before it runs, its result is
+  reported as cost or fidelity evidence only, and the failed screen is
+  reported beside it.
 - **Per-block approval** (Criterion H): call count and expected seconds
   stated first, the runner idempotent, retries per the frozen protocol.
 
@@ -110,9 +124,11 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
 - **Why this is a Phase 2 design and not a Phase 1 amendment.** The frozen
   preregistration forbids an amendment that changes a gate's pass/fail
   criterion, and H5(ii)'s control is that criterion. Phase 1 reports
-  energy_steel as `unscoreable`. This design is motivated by a structural
-  property of the dataset (the pocket's share of positives), not by any
-  result, and no Phase 2 SPECTRA result exists yet.
+  energy_steel as `unscoreable`. The design follows from a structural
+  property of the dataset: the positive counts in the complement. It was
+  written after Phase 1 SPECTRA results on these cells had been seen
+  (`docs/SPECTRA_CONTROL_FEASIBILITY.md`, `docs/B4_B5_HARDWARE_RESULT.md`),
+  and no Phase 2 SPECTRA result exists yet.
 
 ## 6. Experiments
 
@@ -127,7 +143,8 @@ on 2026-10-13:
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
-| - | Dirac-3S verify runs (B1, B2 twins) | F142 | Dirac-3S | To write before F142 runs |
+| - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | To write before F142 runs |
+| - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | To write before any B2 comparison |
 | - | Gate-based arm | F6, F106, F107 | Braket | To write if F6 recommends pursuing |
 
 ## 7. Open items before filing
@@ -136,9 +153,16 @@ on 2026-10-13:
 - Recompute section 5's downsized-pair figures from code, on all five
   seeds.
 - Fill one section 6 entry per experiment that will run.
-- Set the multiplicity families.
+- Set the multiplicity families, and each entry's seed count against them
+  (section 2).
+- Decide whether the pool build's run-to-run drift (F145) must be fixed or
+  only reported.
 - Confirm the filing date and the filing venue with the team lead.
 
 ## Revision log
 
 - 2026-10-13: first draft (Sprint 25, F102).
+- 2026-10-13: revised after the Sprint 25 fresh-eyes review: seed counts
+  set from the test's attainable p-value; the resolution-screen exception
+  for cost and twin runs; the section 5 wording on when the design was
+  written; F144 added.

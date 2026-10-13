@@ -471,19 +471,35 @@ F123's layout is superseded by F127.)
 - Acceptance: an offline dry run reaches a request body naming `dirac-3s` with no device call; the row-schema test fails on a hardware row without `device_type`, proven red; the proxy-identity check passes on 0.22.1; the full suite passes
 - Depends on: nothing
 
-**F142. Dirac-3S verify block: B1 on 2 fits, then B2 on 3 fits (~1h + about 260 metered s, cap 460) Priority 8**
-- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
-- Platform: ULB, Dirac-3S
-- B1 `hw_b1_dct` seeds 42 and 43 first: the first Dirac-3S cost point at a size measured many times (4-5 s per fit on Dirac-3), plus fidelity against the exact proxy optimum. Stops after the first fit to re-quote everything after it. Then B2 seeds 42-44 at 833 variables, storing every sample and job id: tests whether the campaign's only positive result at scale (+0.0256 AUPRC on 10 of 10 seeds) reproduces on a device with the same 200:1 resolution
-- Cost at Dirac-3 rates: about 10 s for B1 (cap 60) and about 250 s for B2 (cap 400). Dirac-3S rates are unmeasured; the first fit sets them
-- A full B2 re-run (11 fits, about 906 s at Dirac-3 rates) only if all 3 verify seeds favor the larger configuration again
+**F142. Dirac-3S verify block: B1 2 fits, B2 1 fit, B4 2 fits (~1.5h + about 172 metered s, cap 360) Priority 8**
+- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25; revised the same day after the fresh-eyes review)
+- Platform: ULB, SPECTRA, Dirac-3S
+- **B1** `hw_b1_dct` (91 variables, full pair), seeds 42 and 43, first: the first Dirac-3S cost and queue-wait point at a size measured many times (4-5 s per fit on Dirac-3). Stops after the first fit to re-quote everything after it. **Not a fidelity test**: on this pool the Hamiltonian is below the device's resolution, so agreement carries no fidelity information (A31)
+- **B2** seed 42, 833 variables, every sample and job id stored: the Dirac-3S cost at our largest size. **It does not test B2's gain**, which is a pool effect (F64; the classical `deep` proxy reaches 0.7926 against B2's 0.7928). Any device-against-proxy comparison at 833 waits for F144
+- **B4** oilgas_gasturbine (560 variables), seeds 42 and 43: the fidelity twin. B4's Hamiltonians are at 8.1-8.4 dB, inside the stated limit, so the device's answer depends on the problem; weight cosine, objective gap to the proxy optimum and in-pocket AUPRC against the Dirac-3 rows on record
+- Cost at Dirac-3 rates: about 10 s for B1 (cap 60), 82 s for B2 (cap 150), 80 s for B4 (cap 150). Dirac-3S rates are unmeasured; the first fit sets them
+- B1 and B2 fail the F104 resolution screen by design (their purpose is cost); `experiments/phase2/PREREGISTRATION_DRAFT.md` section 4 makes that exception explicit
 - Reported as dated Phase 2 rows naming the device, never as Phase 1 gate cells
-- Depends on: F141; F102 (the comparison's preregistration entry); per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
+- Depends on: F141; F102 (the entry for these runs); F104 or the draft's stated exception; per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
 
-**F143. telecom_churn at 987 variables on Dirac-3S (~1h + about 450 metered s, unmeasured on Dirac-3S) Priority HOLD**
+**F144. The proxy twin of B2's pool: k=17, order 3, full pair, 833 variables (~1.5h [no-history] + pool-build runtime, zero metered) Priority 9**
+- Phase: Phase 2 preparation (added 2026-10-13 by F139, after the Sprint 25 fresh-eyes review)
+- Platform: ULB, classical proxy (WSL, because the full-pair build needs fork)
+- B2's +0.0256 is measured against B1's arm, a different pool. `docs/F64_LADDER_DECOMPOSITION.md` attributes the gain to the pool, and notes that no proxy twin at k=17, order 3 exists. So whether the device's forced sparsity (A31) helps at 833 variables has never been measured
+- Acceptance: the exact proxy solve on B2's pool for the 10 stratified seeds, as dated Phase 2 rows; the paired difference against B2's device rows with its interval; stated whether the device beats its own proxy
+- Depends on: nothing. Comes before any B2 comparison run on Dirac-3S
+
+**F145. Why the pool build is not reproducible from its seed (~1h [no-history], zero metered) Priority 11**
+- Phase: Phase 2 preparation (added 2026-10-13, from F29 in Sprint 25)
+- Platform: ULB, classical proxy
+- F29 rebuilt the same seed's pool three times; seed 42's full-fold test AUPRC came out 0.8056, 0.8049 and 0.8043 (`docs/phase2/F29_SAMPLE_SIZE.md`). Every result that rebuilds a pool can drift by this much between runs, and no test catches it
+- Acceptance: the cause identified (for example an unseeded tree in the weak-learner build, or thread order); either the build made reproducible with a test proving two builds byte-identical, or the drift measured and recorded as a known limit in the Phase 2 draft
+- Depends on: nothing
+
+**F143. telecom_churn with all 18 features (987 variables) on Dirac-3S (~1h + at least 450 metered s, unmeasured at 987) Priority HOLD**
 - Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
 - Platform: SPECTRA, Dirac-3S
-- The one sized case Dirac-3S's larger ceiling unlocks: B4's excluded cell, schedule 3, 987 variables, 5 seeds. About 450 s at Dirac-3's measured 84-90 s per fit at 816 variables
+- The one sized case Dirac-3S's larger ceiling unlocks: telecom_churn at schedule 3 with all 18 features, 987 variables in the full-pair build, 5 seeds. B4 ran it on Dirac-3 at 816 variables with `age` dropped, and its in-segment edges were negative; this adds the dropped feature. At least 450 s: Dirac-3 cost 84-90 s per fit at 816 variables, and the rate at 987 is unmeasured
 - **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138)
 - Depends on: QCi's answer; F141; F142's measured rate; per-block approval (Criterion H)
 
@@ -513,7 +529,7 @@ value. Removed from candidates.)
 - Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
 **F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 100**
-- **F139 recommends it does not run (2026-10-13, `docs/phase2/F139_RERUN_REVIEW.md`)**: B4 already showed the device within 0.0072 AUPRC of its proxy at 816 variables, and F142's B1 and B2 verify runs measure device-against-proxy fidelity on Dirac-3S directly. Close it, or hold it with no planned run: the team lead's call
+- **F139 recommends closing it (2026-10-13, `docs/phase2/F139_RERUN_REVIEW.md`, revised after the fresh-eyes review)**: F142's B4 twin answers the fidelity question on Dirac-3S on a resolvable Hamiltonian, against Dirac-3 rows already on record. (The B1 and B2 fits cannot: their Hamiltonians are below the device's resolution, A31.) Closing F129 leaves F121's hold condition unmeetable; F121 then needs a new condition or a decision at the same refinement. The team lead's call
 - **Re-scored 2026-10-13 (team lead, Sprint 25 selection D2 option 1): from 34 to 100, and whether its device run happens is decided by F139.** F128's falsifier removed the case for it as a route to advantage; the question it still asks (does the device reproduce the proxy on a sparse problem) is one of the re-run questions F139 answers for every block
 - Phase: Phase 2, first device run under F124's approved list (added 2026-10-07, Pass 2 of the Sprint 23 refinement)
 - Platform: SPECTRA, Dirac-3
@@ -552,7 +568,7 @@ value. Removed from candidates.)
 - Depends on: nothing. The SPECTRA author's construction details help
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
-- **F138 re-check (2026-10-13)**: the 200:1 (23 dB) resolution limit is unchanged on Dirac-3S. The screen applies as written to both devices
+- **F138 re-check (2026-10-13)**: QCi states the same 23 dB maximum and the same about 200:1 effective limit for Dirac-3S; the effective Dirac-3S figure is unmeasured. The screen applies as written. The Phase 2 draft lets a cost or twin run proceed through a failed screen when its entry says so first (F142's B1 and B2 fits)
 - Phase: Phase 2 preparation, Experiment 3 (sprints with F94)
 - Platform: Dirac-3 planning
 - Before any metered call, test whether the job's coefficient range exceeds the device's 23 dB (200:1) resolution. It would have predicted B2: diagonal 510,705, off-diagonals at most 20.0, resolvable step 2,554 (Sprint 12, A31)
@@ -754,7 +770,7 @@ not a sweep correction.
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
-- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands.
+- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands. **2026-10-13 (Sprint 25)**: F139 recommends closing F129, which would leave this hold unmeetable; a new condition or a decision is needed at the same refinement. F113 found no CVQBoost-specific complementarity with XGBoost (`docs/phase2/F113_ORACLE_GAP.md`): evidence for that decision.
 
 
 **F116. G2 entanglement ablation on the SV1 simulator (~3h [no-history]) Priority HOLD**

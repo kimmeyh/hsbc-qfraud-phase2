@@ -12,21 +12,26 @@ what cost, and whether any past run should be repeated.
 - **Dirac-3S is opt-in, by name, and our code cannot reach it today.** The
   QCi client libraries released 2026-10-05 and 2026-10-07 add a device
   called `dirac-3s`. Our pinned versions (`qci-client` 5.0.2,
-  `eqc-models` 0.21.0) do not know it, and every job this repository has
-  sent named `dirac-3`. Reaching Dirac-3S needs both packages bumped and
-  one argument added to the solver.
+  `eqc-models` 0.21.0) do not know it. No job this repository has sent
+  named a device; each used the library's default, the `dirac-3` family
+  (question 1). Reaching Dirac-3S needs both packages bumped and one
+  argument added to the solver.
 - **The bigger device is the expansion configuration.** "Nearly 10,000
   variables" is QCi's figure for a base module plus one expansion module
   (9,980 at second order). The base module alone is 949, the same ceiling
   as Dirac-3. Which configuration serves the cloud `dirac-3s` queue is
   **not stated** in any source read. That one fact decides whether
-  telecom_churn (987 variables) can run.
+  telecom_churn with all 18 features (987 variables, full-pair build) can
+  run; B4 ran it on Dirac-3 at 816 with `age` dropped.
 - **Higher orders are not new.** Dirac-3's own guide already listed orders
   1 to 5 with the same base ceilings (135 variables at 3rd order, 39 at
   4th, 19 at 5th). Only the expansion module's ceilings are new (580, 145
   and 55).
-- **The resolution limit is unchanged**: about 200:1 (23 dB). B2's failure
-  mode (A31) applies to Dirac-3S exactly as it did to Dirac-3.
+- **The stated resolution is the same**: the Dirac-3S guide gives a maximum
+  dynamic range of 23 dB and repeats Dirac-3's sentence on the effective
+  limit (about 200:1). That is QCi's carried-forward text, not a new
+  measurement; whether Dirac-3S's effective resolution equals Dirac-3's is
+  **unmeasured**. If it does, B2's failure mode (A31) applies unchanged.
 - **Our cost model cannot be carried over.** The guide gives per-sample
   times only for a 50-variable problem. Pricing any Dirac-3S block needs
   one measured fit, which F139 should plan as the first step of any
@@ -66,8 +71,10 @@ EvidenceBasedDB was read only. Nothing was written there.
 - Our code never names a device. The classifiers inside `eqc-models`
   construct `Dirac3CloudSolver()` with no arguments (`eqc_submit.py:162`
   holds that class as its substitution point), and `run_integer_probe.py`
-  calls `Dirac3IntegerCloudSolver()` the same way. So every job this
-  repository has sent went to the default `dirac-3`.
+  calls `Dirac3IntegerCloudSolver()` the same way. Each job therefore used
+  the 0.21.0 solver's default sampler type, `"dirac-3"` (`Dirac3Mixin`),
+  which `qci-client` remaps to `dirac-3_normalized_qudit` (continuous) or
+  `dirac-3_qudit` (integer) before the job is sent.
 
 **Not stated in any source read**: whether the `dirac-3` queue itself now
 runs on upgraded hardware, and whether this account may use `dirac-3s`.
@@ -86,8 +93,9 @@ From the guide's Table 2 ("Dirac-3S Hardware Characteristics"):
 | 5th | 19 | 55 |
 
 - The base module's 949 equals the Dirac-3 ceiling in amendment A2. On the
-  base module, telecom_churn at schedule 3 (987 variables) still cannot
-  run.
+  base module, telecom_churn with all 18 features at schedule 3 (987
+  variables, full-pair) still cannot run. B4 ran it at 816 variables with
+  `age` dropped.
 - The continuous solver's sum constraint is R in [1, 10000]. The integer
   solver's levels are given as `{0, ..., 15}` in Table 1 and as
   `0 <= v_i <= 16` in section 5.1; the guide contradicts itself by one
@@ -253,14 +261,36 @@ The ones that change or extend the answers above:
   0.22.1 (2026-10-07). The user guide and the benchmark notebooks are dated
   2026-09-24 itself; whether they predate that day's scrape cannot be told.
 
-The full findings list is a working file of this sprint and is not
-committed. The source URLs are on the pages named above.
+**Every claim in this section is traceable** to
+`docs/phase2/DIRAC_3S_SITE_SWEEP.md`, which lists all 71 findings with the
+URL, a verbatim quote and the page date, and every page visited with its
+HTTP status. The main sources:
+
+- Client docs, `qci-client` 5.0.3 "dirac-3s" page:
+  https://quantumcomputinginc.com/learn/developer-resources/entropy-quantum-optimization/qci-client-software-package/v5.0.3/dirac-3s-dirac-3s
+- Product page: https://quantumcomputinginc.com/products/systems/dirac-3
+- Press release, 2026-10-01:
+  https://www.prnewswire.com/news-releases/quantum-computing-inc-announces-dirac-3s-scaling-to-nearly-10-000-variables-302895913.html
+- Technical reference module:
+  https://quantumcomputinginc.com/learn/module/dirac-3s-technical-reference
+- Benchmark report PDF (QCi-QMS-900-000004):
+  https://assets.ctfassets.net/i1dyhzbyi8ad/4RB85lp462hwxVlZeU8HAq/29abae2661809867dc42dbfaa6b6239b/Dirac_3S_Continuous_Solver_Benchmarking.pdf
+- Benchmark notebooks:
+  https://quantumcomputinginc.com/learn/benchmarking/planted/dirac-3s-planted-benchmarking
+- PyPI: https://pypi.org/project/qci-client/ ,
+  https://pypi.org/project/eqc-models/ , https://pypi.org/project/eqc-direct/
+
+The sweep was done by a background agent with no QCi API call; I checked
+its package findings against the wheels myself (questions 1 and 5), and
+its other findings are as recorded there, not re-fetched.
 
 ## What this changes in the backlog
 
 - **F129, F95, F25, F30**: each still waits for F139. Each card's cost was
   derived on Dirac-3 and must be re-quoted from one measured Dirac-3S fit.
-- **F104** (resolution screen): unchanged. The 200:1 limit is the same.
+- **F104** (resolution screen): unchanged as written. Its 200:1 figure is
+  the limit QCi states for both devices; the effective Dirac-3S figure is
+  unmeasured.
 - **A new card is needed** for the client bump in question 5 (both
   packages, `sampler_type`, a device field on rows, the proxy-identity
   re-check). Any Dirac-3S run depends on it. F139 numbers it.
@@ -270,4 +300,5 @@ committed. The source URLs are on the pages named above.
   whether Dirac-3S is billed differently; (d) whether the integer budget
   is still the sum of levels, and whether the limit is 16 or 17 levels;
   (e) whether this account may use the `dirac-3s` "special queues", and
-  their hours.
+  their hours; (f) whether Dirac-3S's effective resolution is the same
+  about 200:1 as Dirac-3's, or only its stated maximum.

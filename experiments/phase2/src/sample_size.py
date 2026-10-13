@@ -50,6 +50,19 @@ def cosine(a: np.ndarray, b: np.ndarray) -> float:
     return float(a @ b / (na * nb))
 
 
+def centered(w: np.ndarray, w_full: np.ndarray) -> dict:
+    """Compare the non-uniform parts of two weight vectors.
+
+    `centered_cosine` is the cosine of (w - 1/n) and (w_full - 1/n), None when
+    either part is exactly zero. `relative_distance` is |w - w_full| divided by
+    |w_full - 1/n|, None when the full-fold weights are exactly uniform."""
+    u = np.full(len(w), 1.0 / len(w))
+    a, b = w - u, w_full - u
+    na, nb = float(np.linalg.norm(a)), float(np.linalg.norm(b))
+    return {"centered_cosine": float(a @ b / (na * nb)) if na > 0 and nb > 0 else None,
+            "relative_distance": float(np.linalg.norm(w - w_full) / nb) if nb > 0 else None}
+
+
 def stratified_rows(y01: np.ndarray, fraction: float, seed: int) -> np.ndarray:
     """Row indices of a label-stratified subsample; all rows at fraction 1."""
     y01 = np.asarray(y01)
@@ -83,7 +96,13 @@ def summarize(rows: list[dict], threshold: float = COSINE_THRESHOLD) -> dict:
         }
     subs = [r["cosine_to_full"] for r in rows if r["fraction"] < 1.0]
     worst = float(min(subs)) if subs else float("nan")
+    cc = [r["centered_cosine"] for r in rows
+          if r["fraction"] < 1.0 and r.get("centered_cosine") is not None]
+    uni = [r["cosine_to_uniform"] for r in rows if "cosine_to_uniform" in r]
     return {"per_fraction": per_fraction, "worst_subsample_cosine": worst,
+            "worst_subsample_centered_cosine": float(min(cc)) if cc else None,
+            "min_cosine_to_uniform": float(min(uni)) if uni else None,
+            "pinned_at_uniform": bool(uni) and min(uni) >= threshold,
             "cosine_threshold": threshold,
             "insensitive": bool(subs) and worst >= threshold}
 
@@ -116,6 +135,10 @@ def run() -> dict:
                 # Sprint 4 found the optimum near-uniform under this ridge; if
                 # so, "insensitive" means "pinned", and this field shows it.
                 "cosine_to_uniform": cosine(w, np.ones_like(w)),
+                # Sprint 25 code review: near uniform, the plain cosine is
+                # dominated by the shared uniform part. These compare only
+                # the parts of the weights that are NOT uniform.
+                **centered(w, weights[1.0]),
                 "max_over_min_weight": float(w.max() / w.min()) if w.min() > 0 else None,
                 "nonzero_weights": int((w > 1e-9).sum()),
                 "test_auprc": float(average_precision_score(y_te, p_te)),
