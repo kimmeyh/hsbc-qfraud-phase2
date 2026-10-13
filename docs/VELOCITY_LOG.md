@@ -69,6 +69,14 @@
 | 24 | Task G (F128) leaf sweep | research+code | 50m | 29m | 0.58 | measured; includes the 26m run; `[no-history]` |
 | 24 | Task H (F137) pypdf bump | tooling | 20m | 34m | 1.7 | measured; waited for G's run, which used the same venv |
 | 24 | UNPLANNED: code review (6 findings) and fresh-eyes review (8) | fix+docs | 0m | not timed | n/a | review time was not task-timed; IMP-2 to time it was declined |
+| 25 | Task A (F138) Dirac-3S research | research | 120m | 16m | 0.13 | measured; the QCi site sweep ran in the background |
+| 25 | Task B (F139) Dirac-3 re-run review | research | 120m | 5m | 0.04 | measured; drew on A's sweep |
+| 25 | Task C (F102) Phase 2 preregistration, first draft | docs | 120m | 5m | 0.04 | measured; drew on A's sweep |
+| 25 | Task D (F113) oracle-gap test | research+code | 90m | 5m | 0.06 | measured |
+| 25 | Task E (F29) sample-size insensitivity | research+code | 60m | 12m | 0.2 | measured; run in the background |
+| 25 | Task F (F94) Experiment 3 controls with SCIP | research+code | 240m | 129m | 0.54 | measured; includes the run, stopped twice |
+| 25 | UNPLANNED: code review (10), fresh-eyes reviews (24 and 15) and their fixes | fix+docs | 0m | not timed | n/a | changed four committed conclusions |
+| 25 | UNPLANNED: Task G (F146 document, F147 card), added at Manual Validation | docs | 0m | not timed | n/a | no start stamped before the work began |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

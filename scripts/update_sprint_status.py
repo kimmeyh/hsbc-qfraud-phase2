@@ -17,6 +17,11 @@ Usage:
         --plan-doc docs/sprints/SPRINT_17_PLAN.md
     python scripts/update_sprint_status.py --start-task C
     python scripts/update_sprint_status.py --finish-task C
+    python scripts/update_sprint_status.py --add-issue 19
+
+`--add-issue` appends an issue number to `github_issues`, once, keeping the
+list sorted (Sprint 25 IMP-4: a task added at Manual Validation opened #19,
+and `--set` cannot append to a list, so the file fell out of step).
 
 `--start-task` stamps the task's start time in `task_started`. `--finish-task`
 computes the actual from that stamp and writes it to `task_actuals` in whole
@@ -90,6 +95,17 @@ def apply_set(doc: dict, assignment: str) -> str:
     return f"  {section_name}.{key}: {before!r} -> {section[key]!r}"
 
 
+def add_issue(doc: dict, number: int) -> str:
+    if number <= 0:
+        raise SystemExit(f"Issue number must be positive, got {number}.")
+    issues = doc.setdefault("current_sprint", {}).setdefault("github_issues", [])
+    if number in issues:
+        return f"  current_sprint.github_issues: #{number} already listed"
+    issues.append(number)
+    issues.sort()
+    return f"  current_sprint.github_issues: added #{number} -> {issues}"
+
+
 def start_task(doc: dict, task: str, now: datetime) -> str:
     """Stamp the start. A second start is refused: silently moving the stamp
     would shorten the measured actual."""
@@ -140,6 +156,8 @@ def main(argv: list[str] | None = None,
                     help="record the task's start time")
     ap.add_argument("--finish-task", default="", metavar="TASK",
                     help="compute the task's actual from its start time")
+    ap.add_argument("--add-issue", type=int, action="append", default=[],
+                    metavar="N", help="append an issue number; repeatable")
     ap.add_argument("--path", default=str(STATUS),
                     help="status file (tests override this)")
     args = ap.parse_args(argv)
@@ -186,6 +204,8 @@ def main(argv: list[str] | None = None,
 
     for assignment in args.set:
         changes.append(apply_set(doc, assignment))
+    for number in args.add_issue:
+        changes.append(add_issue(doc, number))
 
     clock = now or datetime.now().astimezone()
     if args.start_task:

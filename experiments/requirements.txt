@@ -19,3 +19,4 @@ pytest>=8.0
 statsmodels>=0.14   # Wilson interval cross-check + proportion CIs; H6 GAM twin
 scipy>=1.11         # spearmanr in score_gates, distributions in metrics
 pypdf>=4.0          # page-size and page-count verification of the rendered PDFs
+pyscipopt==6.2.1    # F94 exact control: SCIP 10.0, Apache 2.0 (Sprint 25 D4); requires numpy only

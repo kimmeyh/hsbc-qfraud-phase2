@@ -37,10 +37,25 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 21 | docs/sprints/SPRINT_21_SUMMARY.md | [OK] Complete | ~3 days (Oct 4 - Oct 6, 2026) |
 | 22 | docs/sprints/SPRINT_22_SUMMARY.md | [OK] Complete | ~2 days (Oct 6 - Oct 7, 2026) |
 | 23 | docs/sprints/SPRINT_23_SUMMARY.md | [PARTIAL] Tasks C and D pending in the Phase 1 repository (D6) | ~1 day (Oct 8, 2026) |
+| 24 | docs/sprints/SPRINT_24_SUMMARY.md | [OK] Complete | ~2 days (Oct 9-10, 2026) |
 
 ## Last Completed Sprint
 
-**Sprint 24: Close the Boundary, Fix the Tooling, Sweep the Lever** (Oct 9 -
+**Sprint 25: Learn the New Device, Then Build What Runs on Any Device**
+(Oct 10 - Oct 13, 2026; PR #12). Delivered **F138, F139, F102 (first
+draft; the card stays open), F113, F29, F94**, Task G added at Manual
+Validation (F146's document; F147 carded), and retrospective improvements
+IMP-1 to IMP-4. 172 measured minutes against 750 estimated, zero metered
+seconds. Dirac-3S needs a client bump to reach (F141) and a measured fit to
+price (F142). F113 found nothing that supports a router; F29 closes; F94
+found the training-fold Hamiltonian has many tied optima, so F25 must
+choose its ridge weight and build on held-out predictions. F129 closed by
+the team lead; F121 needs a new hold condition at Sprint 26 refinement.
+Records: `SPRINT_25_PLAN.md`, `SPRINT_25_VALIDATION.md`,
+`SPRINT_25_RETROSPECTIVE.md`; `SPRINT_25_SUMMARY.md` is written at Sprint
+26 planning.
+
+### Sprint 24: Close the Boundary, Fix the Tooling, Sweep the Lever (Oct 9 -
 Oct 10, 2026; PR #2, the first sprint in this repository). Delivered
 **F131, F136, F132, F134, F133, F135, F128, F137**, plus retrospective
 improvements IMP-1 (one owner for the Dirac-3 balance) and IMP-4. 84
@@ -49,8 +64,8 @@ its premise falsifier**: no leaf value beats HGB with a CI excluding zero
 on any dataset; F129 is re-scored at the next refinement. QCi loaded the
 account on 2026-10-09 and announced Dirac-3S: F138 and F139 lead Sprint 25
 and gate every Dirac-3 card. Records: `SPRINT_24_PLAN.md`,
-`SPRINT_24_VALIDATION.md`, `SPRINT_24_RETROSPECTIVE.md`; summary at Sprint
-25 planning.
+`SPRINT_24_VALIDATION.md`, `SPRINT_24_RETROSPECTIVE.md` and
+`SPRINT_24_SUMMARY.md` (written 2026-10-13, Sprint 25 Phase 3.2.1).
 
 ### Sprint 23: Restore the Repository as Filed** (Oct 8, 2026; ran in the
 Phase 1 repository, PR #167 there, still draft). Delivered F127's Task A
@@ -287,11 +302,14 @@ Three findings outlived their cards and are recorded there:
 - **What reporting still waits for**: any claim comparing device to control. The controls produce dated post-submission rows and touch no Phase 1 claim. If Phase 2 acceptance does not arrive, the work is a classical result on our own pools and is reported as exactly that
 - **What already exists and is reusable, measured in Sprints 18-19**: `integer_path.py` builds and validates the cardinality-constrained integer job (`num_levels = upper_bound + 1` per variable, device budget `sum(upper_bound + 1)` against the 949 ceiling); `qubo_proxy.py` solves the identical Hamiltonian (`J = HH^T + lambda*I`, `C = -2Hy`, sum constraint 1.0, `w >= 0`); and the two measured sizes are 60 and 150 variables, at 71 s and 165 s of device time
 - **Solver availability, now verified rather than unverified**: of `mip`, `pulp`, `cvxpy` and `gurobipy`, NONE is installed; only `scipy.optimize` is present. The commercial MIQP leg therefore needs a dependency decision, and `requirements.txt` plus `test_requirements_complete.py` must be updated with whatever is chosen. Exact enumeration needs no new dependency and is the honest floor
+- **Exact solver DECIDED 2026-10-13 (team lead, D4 option 1): SCIP through PySCIPOpt**, Apache 2.0 since SCIP 8.0.3, with no size or use limit; `pip install pyscipopt` ships Windows and Linux wheels. It sits behind a thin solver interface, so a commercial solver provided in Phase 2 can be swapped in and checked on the same instances. Pin a release at least two weeks old (6.3.0 was released 2026-10-11). Rejected: HiGHS ("cannot solve QP models where some of the variables must take integer values"); Gurobi's pip license (200 variables when quadratic terms are present; "non-production use only"); CBC (linear only). Unverified until the build: the quadratic objective enters SCIP as a constraint through an epigraph variable, and the 150-variable solve time. Exact enumeration verifies SCIP at a size where both run
+- **Corrected at Sprint 25 plan verification (2026-10-13)**: the 60 and 150 variable sizes above come from the integer probes, which used SYNTHETIC matrices (`run_integer_probe.build_job`). F94 uses real ULB proxy pools from the frozen `qubo_proxy` cells, built sequentially on Windows: 60 learners from `free` (78) and the whole `mid` pool (136). The acceptance sizes are therefore 60 and 136
 - Suggested order: exact enumeration at small n first, because it yields a certified optimum to measure the others against; then greedy; then simulated annealing; then the MIQP leg if a solver can be justified
 - This enables: Experiment 3 running the day allocation arrives, with its comparison already fixed. This prevents: a device result reported against no control, which the hardware plan itself tells QCi is not a result
 - Acceptance: each control returns a cardinality-feasible selection and objective value at both 60 and 150 variables with seeds recorded; the exact solve agrees with a brute-force check at a size where both run; results written as dated post-submission rows; no Phase 1 claim touched; any new dependency declared and covered by the requirements guard
 - Depends on: nothing. Reporting a device-versus-control COMPARISON waits for a Phase 2 preregistration; the build does not
 **F95. Relaxation schedule 4 on the residual (~1h build + approval, metered, cost unmeasured) Priority 160**
+- **F138 re-check (2026-10-13, `docs/phase2/DIRAC_3S_RESEARCH.md`)**: the four schedules are unchanged on Dirac-3S. The Dirac-3S guide's 50-variable table puts schedule 4 at 3.04x schedule 2, inside this card's 2.3x-5.3x range, so the estimate below stands, but it was derived on Dirac-3 and the guide does not say its table was measured on Dirac-3S. Re-quote from F142's first measured Dirac-3S fit
 - **UNBLOCKED 2026-09-25**: the hold was "until the QCi memo is sent", and it
   was sent 2026-09-25 at 12:23 PM. The sent memo commits to this check, so it
   is now promised work rather than optional
@@ -444,6 +462,7 @@ F123's layout is superseded by F127.)
 - Acceptance: the note answers every question above with its source, or says the source does not answer it; each Dirac-3 card's cost and sizing is re-checked against it and corrected where it changed; the cards it changes are listed
 - Depends on: nothing
 - Followed immediately by F139 (team lead, 2026-10-10)
+- **Selected for Sprint 25** (team lead, 2026-10-13): F138, F139 (after F138), F102 (first draft), F113, F29 and F94. D2: F129 re-scored to 100. D3: priority numbers unchanged. D4: F94's exact solver is SCIP through PySCIPOpt. F140 canceled. The dependency scan found no known vulnerability; `eqc-models` 0.22.1 and `qci-client` 5.0.3 are newer than the pinned 0.21.0 and 5.0.2, which F138 checks for Dirac-3S support
 
 **F139. Every Dirac-3 run so far: which to re-run on Dirac-3S, and what new analysis the hardware allows (~3h [no-history], zero metered) Priority 6**
 - Phase: Phase 2 preparation (added 2026-10-10 by the team lead at the Sprint 24 retrospective: "immediately after F138"). **Target: Sprint 25, the task after F138.** It decides what the gated Dirac-3 cards run, so F129, F95, F25 and F30 wait for it too
@@ -458,69 +477,85 @@ F123's layout is superseded by F127.)
 - Acceptance: a table of every run with its recommendation, reason and estimated seconds; the total against the balance; the new cards listed with F numbers; the Phase 2 plan changes listed
 - Depends on: F138
 
-**F132. This repository's boundary: no live reference to the Phase 1 repository (~1.5h, zero metered) Priority 10**
-- Phase: Phase 2 repository setup (added 2026-10-09, Sprint 24 Pass 2: the Phase 2 half of F127 step (5), widened by the team lead the same day: "nothing in this p2 repo should reference anything in the p1 repo ... update all references as needed in this sprint")
-- Platform: local, CI
-- **Why it goes first: a live script writes to the Phase 1 repository.** `scripts/us_english_fix.py` sets `ROOT` to the Phase 1 clone's absolute path, so running it from here rewrites the Phase 1 repository's tracked markdown. `block_cross_repo_write.py` cannot see this, because the path is inside the script, not the command, and its `FORBIDDEN` list does not name the Phase 1 repository at all. `wsl_build_pools.sh`, `wsl_hw.sh` and `wsl_tune_proxy.sh` `cd` into the Phase 1 clone the same way
-- **Measured 2026-10-09**: `git grep` finds 49 lines in 22 tracked files naming the Phase 1 repository without the `p2` suffix. Live code, config and process docs to change: the four scripts above (each derives its root from its own location); the guard's `FORBIDDEN` list and docstring; `test_cross_repo_write_guard.py:95`, which uses the Phase 1 path as an ALLOW case, and `test_hook_parity.py:230`; `CLAUDE.md` line 71 and its boundary rule; `SPRINT_PROCESS.md:19`; `SPRINT_EXECUTION_WORKFLOW.md:3`; four `README.md` clone lines; `PHASE_SEPARATION.md:173`; `confidentiality_scan.py` comments at 28 and 36 and the `test_confidentiality_scan.py:64` fixture
-- **The substring trap, removed by a rename**: the Phase 1 repository's name was a prefix of this repository's first name, so a plain substring rule would have blocked this repository too. The team lead renamed this repository and its disk folder to `hsbc-qfraud-phase2` on 2026-10-09 (Sprint 24 D3), so neither name contains the other. A test still proves both directions: the guard blocks the Phase 1 path and allows this one. Also note `D:\Data\Harold\hsbc-quantum-fraud-2026-Phase-2-Planning`, outside every repository, contains the Phase 1 name; the guard blocking writes there is acceptable and the card states it
-- **Exceptions, decided at Sprint 24 selection (team lead, 2026-10-09, D2 option 1: keep all three groups)**: the submitted `docs/paper/proposal.md` and `appendix.md` cite the public URL as filed (FROZEN, Class 4); `experiments/results/call_logs/b5_then_b4_launcher.log` is generated evidence (22 lines of interpreter paths); `SPRINT_1_SUMMARY.md`, `SPRINT_14_RETROSPECTIVE.md` (team lead's verbatim words), `SPRINT_16_RETROSPECTIVE.md` and `docs/reviews/f36-float-tables-outcome.md` are history. The guard and the boundary rule must name the Phase 1 repository in order to block it
-- This enables: every later sprint running scripts without reaching into the Phase 1 repository. This prevents: a write to a repository about to be archived as the filed record, made by a script no hook can see
-- Acceptance: a new guard test fails if any tracked file outside the approved exception list names the Phase 1 repository (path, `/mnt/d` form, backslash form or URL), proven red with `assert_can_fail`; the cross-repo hook blocks a Write and a shell write to the Phase 1 path and allows the same to this repository, both proven; the four scripts run from this clone's root
-- Depends on: nothing
-- **Selected for Sprint 24** (team lead, 2026-10-09, D1 option 1): F132, F134, F133, F131, F135, F136 and F128, about 5h, zero metered. D4: the GitHub default branch is now `develop`, matching the process docs (it was `main`). D5: F137 (pypdf) added from the Phase 2.6 dependency scan. Card estimates re-derived at plan verification; the plan reports the total
-
-**F134. The pre-commit hook blocks when its pattern file is missing (~30m, zero metered) Priority 12**
-- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-1, Category 9, decided to this backlog by the team lead 2026-10-08). Sprints with F132
-- Platform: local
-- `.githooks/pre-commit` scans only inside `if [ -f .secrets-patterns.txt ]`. The pattern file is gitignored, so every fresh clone and worktree starts without it, and the confidentiality gate is silently off. Verified in this repository's hook 2026-10-09
-- Constraint: `test_pre_commit_hook.py` builds scratch repositories, so each case supplies a pattern file or asserts the new block. CI never commits, so the runner is unaffected
-- Acceptance: a commit with no pattern file is BLOCKED with a message naming the file and how to restore it; the test proves it red against the current hook; no override flag
+**F141. Dirac-3S client support: bump the QCi packages, name the device on every row (~1h [no-history], zero metered) Priority 7**
+- Phase: Phase 2 preparation (added 2026-10-13 by F139, Sprint 25). Gates every Dirac-3S run
+- Platform: N/A (local, CI)
+- F138 found the pinned `qci-client` 5.0.2 and `eqc-models` 0.21.0 cannot reach Dirac-3S. `qci-client` 5.0.3 adds `device_type="dirac-3s"`; `eqc-models` 0.22.1 replaces the solver's `generation` argument with `sampler_type="dirac-3s"` and requires `qci-client>=5.0.3`. Both were under two weeks old on 2026-10-13
+- Scope: both bumps in `requirements.txt` and the lock file; solvers constructed with `sampler_type` where a Dirac-3S run asks for it (the `cb.Dirac3CloudSolver` substitution point in `eqc_submit.py`, and `Dirac3IntegerCloudSolver` directly); a `device_type` field required on every Phase 2 hardware row, enforced beside F133's `job_id` rule; confirm `qubo_proxy.py`'s Hamiltonian is unchanged in 0.22.1 (it replicates "eqc-models 0.21.0 source"); job metrics read by the submitted device name, not a hardcoded "dirac-3"
+- Acceptance: an offline dry run reaches a request body naming `dirac-3s` with no device call; the row-schema test fails on a hardware row without `device_type`, proven red; the proxy-identity check passes on 0.22.1; the full suite passes
 - Depends on: nothing
 
-**F133. Every Phase 2 device row carries its job_id, enforced by `test_row_schema.py` (~40m, zero metered) Priority 14**
-- Phase: Phase 2 repository (added 2026-10-09, Sprint 22 retrospective IMP-6, previously a bullet on F127)
-- Platform: local, CI
-- B2's samples were lost because its rows never stored a job id (QCi 404, 2026-10-07). `test_row_schema.py` has no Phase 2 store coverage at all today (verified 2026-10-09)
-- **Every current Phase 2 result file is proxy with zero metered seconds**, so the new check has nothing real to bite on. Acceptance therefore requires an injected `[HW]` row without `job_id` going red
-- Acceptance: any row in `experiments/phase2/results/` with a hardware evidence tag or nonzero metered seconds must carry a nonempty `job_id`; proven red with `assert_can_fail`; F129 is the first card it binds
-- **Corrected at Sprint 24 plan verification (2026-10-09): the premise above is wrong in one place.** `experiments/phase2/results/device_samples/*.json` (10 files) are recovered B4 device data. They are dict-shaped, with no `rows` and no `evidence_tag`, and each carries a top-level `job_id`. A check keyed only on row tags never reaches them. The test covers two shapes: rows in result files, and the top-level `job_id` of every `device_samples/` file. Both pass today, so the injection proof covers both. Re-estimated from 30m to 40m for the second shape
+**F142. Dirac-3S verify block: B1 2 fits, B2 1 fit, B4 2 fits (~1.5h + about 172 metered s, cap 360) Priority 8**
+- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25; revised the same day after the fresh-eyes review)
+- Platform: ULB, SPECTRA, Dirac-3S
+- **B1** `hw_b1_dct` (91 variables, full pair), seeds 42 and 43, first: the first Dirac-3S cost and queue-wait point at a size measured many times (4-5 s per fit on Dirac-3). Stops after the first fit to re-quote everything after it. **Not a fidelity test**: on this pool the Hamiltonian is below the device's resolution, so agreement carries no fidelity information (A31)
+- **B2** seed 42, 833 variables, every sample and job id stored: the Dirac-3S cost at our largest size. **It does not test B2's gain**, which is a pool effect (F64; the classical `deep` proxy reaches 0.7926 against B2's 0.7928). Any device-against-proxy comparison at 833 waits for F144
+- **B4** oilgas_gasturbine (560 variables), seeds 42 and 43: the fidelity twin. B4's Hamiltonians are at 8.1-8.4 dB, inside the stated limit, so the device's answer depends on the problem; weight cosine, objective gap to the proxy optimum and in-pocket AUPRC against the Dirac-3 rows on record
+- Cost at Dirac-3 rates: about 10 s for B1 (cap 60), 82 s for B2 (cap 150), 80 s for B4 (cap 150). Dirac-3S rates are unmeasured; the first fit sets them
+- B1 and B2 fail the F104 resolution screen by design (their purpose is cost); `experiments/phase2/PREREGISTRATION_DRAFT.md` section 4 makes that exception explicit
+- Reported as dated Phase 2 rows naming the device, never as Phase 1 gate cells
+- Depends on: F141; F102 (the entry for these runs); F104 or the draft's stated exception; per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
+
+**F144. The proxy twin of B2's pool: k=17, order 3, full pair, 833 variables (~1.5h [no-history] + pool-build runtime, zero metered) Priority 9**
+- Phase: Phase 2 preparation (added 2026-10-13 by F139, after the Sprint 25 fresh-eyes review)
+- Platform: ULB, classical proxy (WSL, because the full-pair build needs fork)
+- B2's +0.0256 is measured against B1's arm, a different pool. `docs/F64_LADDER_DECOMPOSITION.md` attributes the gain to the pool, and notes that no proxy twin at k=17, order 3 exists. So whether the device's forced sparsity (A31) helps at 833 variables has never been measured
+- Acceptance: the exact proxy solve on B2's pool for the 10 stratified seeds, as dated Phase 2 rows; the paired difference against B2's device rows with its interval; stated whether the device beats its own proxy
+- Depends on: nothing. Comes before any B2 comparison run on Dirac-3S
+
+**F145. Why the pool build is not reproducible from its seed (~1h [no-history], zero metered) Priority 11**
+- Phase: Phase 2 preparation (added 2026-10-13, from F29 in Sprint 25)
+- Platform: ULB, classical proxy
+- F29 rebuilt the same seed's pool three times; seed 42's full-fold test AUPRC came out 0.8056, 0.8049 and 0.8043 (`docs/phase2/F29_SAMPLE_SIZE.md`). Every result that rebuilds a pool can drift by this much between runs, and no test catches it
+- Acceptance: the cause identified (for example an unseeded tree in the weak-learner build, or thread order); either the build made reproducible with a test proving two builds byte-identical, or the drift measured and recorded as a known limit in the Phase 2 draft
 - Depends on: nothing
 
-**F135. A decision option is complete enough to execute as answered (~10m, zero metered) Priority 18**
-- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-2, Category 7)
-- Platform: docs
-- Sprint 23 D2 option 2 said "this repository's sprint is renumbered" and gave no number. It could not be executed as answered and cost a round (D5). Same class as Sprint 22 IMP-2
-- Acceptance: `CLAUDE.md`'s dependent-decision rule gains the sub-rule, with the Sprint 23 example: every option names its concrete values, so the answer is executable without a second question
+**F147. A read-only query tool over the evidence library, for research (~3h [no-history], zero metered) Priority 10**
+- Phase: Phase 2 preparation (added 2026-10-13 by the team lead during Sprint 25 Manual Validation, "for next sprint")
+- Platform: N/A (local). Reads `D:\Data\Harold\EvidenceBasedDB\store\evidence.db`, the path the team lead named. The EvidenceBasedDB code repository (`D:\Data\Harold\github\EvidenceBasedDB`) holds no database; its `store/` folder is code
+- What it is: a tool Claude uses during research and deep dives in this repository to find papers, assertions, acronyms and terms on ML, QML, QC and QCi's devices, with their provenance, certainty, evidence tag, date and relations. Shape on 2026-10-13: 95 assertions and 2,086 papers (33 read, 14 screened, 2,039 seen), 10 contexts including `ml`, `qml`, `qc`, `platform:dirac-3` and `platform:dirac-3s`. For facts its value is the assertion graph (`assertion_relations` supports and contradicts, `paper_yields`, `prerequisites`); for papers it is mostly a catalog
+- Existing reader: EvidenceBasedDB's `scripts/view.py` shows one context, paper or assertion by id. It has no text search and opens the store through that repository's `connect`. This tool has its own `sqlite3` reader (standard library, no new dependency) so this repository does not import code from another one
+- Scope: search by text across record values and paper titles, filtered by context, class, evidence tag, certainty and date; show one record with its relations, yields and the documents it cites; `--json` output; record ids printed so research notes can cite them as `EDB: <id>` (the convention `docs/phase2/DIRAC_UNDERSTANDINGS.md` started)
+- Further uses, one line each: cross-check this repository's `docs/` against the library's assertions for contradictions; flag a cited record whose `updated` date is older than a newer fact here; list what the library holds on a topic before a web search, so a search starts from what is already read
+- **Read-only by construction**: the connection is opened with a `mode=ro` URI, and a test proves a write through it fails (proven red with `assert_can_fail` on a read-write connection). `block_cross_repo_write.py` is the backstop, not the design
+- **Proposed corrections never go into the library.** They go into `docs/phase2/EDB_PROPOSALS.md` in this repository, for a session in EvidenceBasedDB to review. That file was started 2026-10-13 with three proposals (a stale allocation record, two records missing QCi's requested framing, and six Sprint 25 findings with no record)
+- Acceptance: the tool answers a text query and an id lookup on the live database; the read-only test is proven red; one research note in this repository cites records it found; `EDB_PROPOSALS.md` updated with anything found while building it
 - Depends on: nothing
 
-**F136. Record each task's start time so actuals are measured (~20m, zero metered) Priority 20**
-- Phase: Phase 2 repository, process (added 2026-10-09, Sprint 23 retrospective IMP-3, Category 3)
-- Platform: local
-- Sprint 23 Task A's "20 minutes" was judged at completion with no start time recorded, so the actual was an estimate of an actual. Extends `task_actuals` (Sprint 22 IMP-7)
-- Acceptance: `.claude/sprint_status.json` records a start timestamp when a task begins and the actual is computed from it at completion; the workflow's Phase 4 step names it; the velocity log notes which rows are measured
-- Depends on: nothing
+**F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
+- Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
+- Platform: N/A (document)
+- The living document is `docs/phase2/DIRAC_UNDERSTANDINGS.md`. First draft 2026-10-13: what we understand about each device, each item labeled Measured, QCi states, Independent, Inferred or Unverified; nine suggested improvements for Dirac-3S; two questions pending since 2026-09-25 and twelve not yet sent. It owns the QCi question list
+- **Permanent. It never closes.** It re-opens for an update when any of these happens: QCi answers a question or sends new material; QCi publishes a new guide, client release or benchmark; F141 bumps the clients; F142's first Dirac-3S fit returns; a sprint finds a fact that changes an item. Each update adds a revision-log row
+- Sending anything to QCi is the team lead's action; anything sent is filed in the gitignored `docs/qci_package/`
+- Acceptance per update: the triggering fact placed under the right label with its source; the revision log updated
+- Depends on: the triggers above
 
-**F128. Leaf-regularization sweep on the proxy, three datasets (~50m + ~35m runtime [no-history], zero metered) Priority 22**
-- Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: F124 rank 1's "next proxy test", which had no card)
-- Platform: SPECTRA, classical proxy (`qubo_proxy.py`)
-- **Measured so far (F124, `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`)**: `min_samples_leaf=20` lifts energy_steel from 0.902 to 0.973 AUPRC over 5 seeds, parity with HGB (CI [-0.0063, +0.0256]); a 2-seed screen showed oilgas +0.004 and telecom -0.009. Only one value of the parameter was tried
-- The test: `min_samples_leaf` at 5, 10, 20 and 50 on energy_steel, oilgas and telecom, 5 seeds each, with HGB on the same splits; train-test gap and nonzero-weight count beside every AUPRC
-- This enables: choosing the value F129 would put on the device, from a sweep rather than one point. This prevents: spending device seconds on a value that a free sweep would have beaten
-- Acceptance: a dated Phase 2 result file with all 60 cells, the paired difference against HGB with its CI per dataset and value, and a stated best value per dataset; written in the Phase 2 store, no Phase 1 file touched
-- **Re-estimated at Sprint 24 plan verification (2026-10-09), from 1.5h to 50m of work plus about 35m of runtime.** `experiments/phase2/src/lever_screen.py confirm` already runs 5 seeds against HGB on the same splits; the sweep is a new part of that script with `min_samples_leaf` as its parameter (about 20m), then the analysis and write-up (about 30m). Per `SPRINT_PLANNING.md`, a `[no-history]` card sizes the first decisive measurement. Runtime from F124's measured `elapsed_s`: about 40s per cell on energy_steel and oilgas and about 3.5s on telecom, so 60 cells take about 28m. Padded to 35m, because `min_samples_leaf=5` grows larger trees. It runs in the background
-- Depends on: nothing outstanding. (Corrected 2026-10-09, Pass 1: the F127 dependency meant "the work lands in the Phase 2 repository", and it now does)
+**F143. telecom_churn with all 18 features (987 variables) on Dirac-3S (~1h + at least 450 metered s, unmeasured at 987) Priority HOLD**
+- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
+- Platform: SPECTRA, Dirac-3S
+- The one sized case Dirac-3S's larger ceiling unlocks: telecom_churn at schedule 3 with all 18 features, 987 variables in the full-pair build, 5 seeds. B4 ran it on Dirac-3 at 816 variables with `age` dropped, and its in-segment edges were negative; this adds the dropped feature. At least 450 s: Dirac-3 cost 84-90 s per fit at 816 variables, and the rate at 987 is unmeasured
+- **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138)
+- Depends on: QCi's answer; F141; F142's measured rate; per-block approval (Criterion H)
 
-**F137. pypdf 6.17.0 has seven known vulnerabilities: bump the lock to 6.20.0 (~20m, zero metered) Priority 26**
-- Phase: Phase 2 repository, dependencies (added 2026-10-09, Sprint 24 Phase 2.6 dependency scan; selected into Sprint 24 by the team lead the same day, D5)
-- Platform: local, CI
-- `pip-audit -r experiments/requirements-lock.txt` reports PYSEC-2026-4153 to 4157, 4159 and 4160 against pypdf 6.17.0. Every one is fixed by 6.19.0; the latest is 6.20.0. The advisories were not read one by one. pypdf only reads this repository's own PDFs, in tests and checks, so the practical exposure is low
-- `experiments/requirements.txt` says `pypdf>=4.0`, which already allows the bump; only `requirements-lock.txt:40` changes. No PDF is rendered or rewritten, so the submitted-artifact rule is not engaged
-- Acceptance: the lock file pins `pypdf==6.20.0`; the venv is reinstalled from it; `pip-audit` reports no pypdf finding; the full suite passes
-- Depends on: F131, so the full suite run does not rewrite `scripts/check_ci_status.py`
+(F131 hermetic CI-status test, F136 task start times, F132 this repository's
+boundary, F134 pre-commit blocks without patterns, F133 job_id on device rows,
+F135 complete decision options, F128 the leaf-regularization sweep and F137
+the pypdf bump: COMPLETED in Sprint 24, merged via PR #2 (main PR #11). See
+SPRINT_24_PLAN.md, SPRINT_24_RETROSPECTIVE.md and CHANGELOG.md. Selected
+2026-10-09 (D1 option 1; D5 added F137). D4 made `develop` the GitHub
+default branch; it was briefly `main` on 2026-10-10 and is `develop` again.
+**F128 fired its premise falsifier**: no `min_samples_leaf` value beats HGB
+with a CI excluding zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`
+section 6). Removed from candidates per convention.)
+
+(F140 CI on release PRs into `main`: CANCELED 2026-10-13 by the team lead
+at Sprint 25 selection. "None of the 100 PR's so far ... has never been a
+match", so CI on the release PR would duplicate the `develop` run for no
+value. Removed from candidates.)
 
 **F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 24**
-- Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). Sprints with F128
+- Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). It was to sprint with F128, which shipped in Sprint 24 without it (Pass 1, 2026-10-10)
 - Platform: SPECTRA, ULB, classical proxy
 - Rank 3, KNN weak learners: 5 seeds on oilgas and telecom, and on ULB to test the EvidenceBasedDB record's 0.8108 AUC-PR claim directly (certainty low; a different setup, not a replication)
 - Rank 5, phase-encode the cyclic columns and whiten, rebuild the pool, 5 seeds, three datasets. The source records are about angle-encoded QNNs, so the effect on CVQBoost is unverified
@@ -528,24 +563,7 @@ F123's layout is superseded by F127.)
 - Acceptance: each lever reported against HGB on the same splits with the paired CI; a lever that does not move AUPRC is recorded as rejected, as F124 did for ensembling
 - Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
 
-**F131. `test_ci_status.py` rewrites the real `scripts/check_ci_status.py` (~30m [no-history], zero metered) Priority 16**
-- Phase: Phase 2 repository, test hygiene (added 2026-10-08, found while verifying F127's copy)
-- Platform: local, CI
-- `_hook_with_ci` overwrites the real script with a stub, then restores it. Two failures, both seen on 2026-10-07: a CI check run during the suite reads the stub and prints a fake red result ("CI (failure) http://x") while the real run is green; and the restore writes LF content back as CRLF on Windows, so `git status` shows the script modified with identical text
-- Same class as the `injection.py` byte-preservation fix (PR #159): use a hermetic copy of the script in a temporary directory, or restore exact bytes
-- Acceptance: the suite never writes to the tracked script (its bytes asserted before and after); the test still fails when the hook ignores CI status, proven with `assert_can_fail`
-- Depends on: nothing outstanding (F127 dependency spent 2026-10-09, Pass 1)
-
-**F129. Rank-1 device pilot: energy_steel with leaf regularization on Dirac-3 (~1h + ~82-410 metered s) Priority 34**
-- Phase: Phase 2, first device run under F124's approved list (added 2026-10-07, Pass 2 of the Sprint 23 refinement)
-- Platform: SPECTRA, Dirac-3
-- B4's energy_steel cell with `weak_cls_params={"min_samples_leaf": <F128's value>}`, no other change: 816 variables, 8 samples. **About 82 s per fit; 1-seed pilot about 82 s, 5 seeds about 410 s** (F124, from the F17 cost model fitted on B2's measured 82.4 s/fit). The balance: `experiments/results/allocation_reads.json`
-- What it tests: whether the device reproduces the proxy on a sparse, better-scoring problem. energy_steel has never run on the device. It cannot be expected to beat the proxy, and the card says so up front
-- Every row carries its `job_id` and every returned sample (F127 IMP-6; B2's samples were lost because its rows did not)
-- Acceptance: `[HW]` rows with metered seconds from the response; device-versus-proxy AUPRC and nonzero-weight count per seed; stops after the 1-seed pilot to re-quote if the cost exceeds 110 s
-- **Sequencing note (Pass 2, 2026-10-09)**: F102 is open, so after F128 reports, F102 is the only card between the sweep and this first device run
-- **F128 reported (Sprint 24, 2026-10-09; `docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md` section 6). Re-score at the next refinement.** The Sprint 24 premise falsifier fired: no `min_samples_leaf` value beats HGB with a CI excluding zero on any dataset. energy_steel is level with HGB on average but loses on seeds 42, 43 and 46 at every value; its wins are on the two seeds where HGB is weak. 5, 10 and 20 cannot be told apart and 50 is worse, so 20 stays a reasonable choice. The card's own question (does the device reproduce the proxy on a sparse problem?) is unchanged; the case for it as a route to advantage is gone. The highest-scoring value was chosen on the test splits, so a device result must be confirmed on other splits
-- Depends on: **F138 then F139 (Dirac-3S research and the re-run review, before any further Dirac-3 seconds)**; F128 (the value); F102 (reporting); per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
+(F129 rank-1 device pilot, energy_steel with leaf regularization on Dirac-3: CLOSED 2026-10-13 by the team lead at Sprint 25 Manual Validation, on F139's recommendation (`docs/phase2/F139_RERUN_REVIEW.md`). F142's B4 verify twin answers its fidelity question on Dirac-3S, on a resolvable Hamiltonian with Dirac-3 rows already on record. No metered seconds were spent on it. Removed from candidates; F121's hold condition, which waited for it, needs a new one at the next refinement.)
 
 **F102. Phase 2 preregistration framework (~3h [no-history], zero metered) Priority 30**
 - Phase: Phase 2 preparation (the checklist's Deliverable)
@@ -556,6 +574,7 @@ F123's layout is superseded by F127.)
   - **Both sides then become random draws, so the comparison is REPEATED** (about 20 draws) and reported as a mean with its spread. Phase 1 draws the control once against a fixed segment, which cannot distinguish a real in-segment effect from one that depends on which rows were drawn. Repeating costs nothing: it is classical computation over device output already paid for.
   - **Why this is specification and not a retrofit.** `experiments/PREREGISTRATION.md` stays FROZEN and is NOT amended: section 11 forbids an amendment that changes a gate's pass/fail criterion, and H5(ii)'s control IS that criterion, so the change would be a reported DEVIATION. Phase 1 reports energy_steel `unscoreable` instead, which the gate table already has a column for. The design is motivated by a STRUCTURAL property of the dataset (the pocket's share of positives), not tuned against any result, and Phase 2's SPECTRA data does not exist yet. This paragraph exists so a reviewer sees the distinction was made deliberately rather than discovered later.
   - A Phase 2 preregistration binds only from its filing (a November date, to be set), so this file may be revised freely until then.
+- **A living draft (team lead, 2026-10-13, Sprint 25 selection)**: this card creates a DRAFT that is updated across several sprints until Phase 2 is approved and a filing date is set. Sprint 25 delivers the first draft, not the filed document. **First draft committed 2026-10-13: `experiments/phase2/PREREGISTRATION_DRAFT.md`**; its section 7 lists what remains before filing. The card stays open
 - Acceptance: the template committed; each later experiment card names its preregistration file before it runs. `experiments/PREREGISTRATION.md` stays FROZEN; this is a new document. The downsized-matched-pair control and the repeated-draw reporting are both written into it, with the feasibility arithmetic and the reason it is not a Phase 1 amendment
 - Depends on: nothing
 
@@ -573,6 +592,7 @@ F123's layout is superseded by F127.)
 - Depends on: nothing. The SPECTRA author's construction details help
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
+- **F138 re-check (2026-10-13)**: QCi states the same 23 dB maximum and the same about 200:1 effective limit for Dirac-3S; the effective Dirac-3S figure is unmeasured. The screen applies as written. The Phase 2 draft lets a cost or twin run proceed through a failed screen when its entry says so first (F142's B1 and B2 fits)
 - Phase: Phase 2 preparation, Experiment 3 (sprints with F94)
 - Platform: Dirac-3 planning
 - Before any metered call, test whether the job's coefficient range exceeds the device's 23 dB (200:1) resolution. It would have predicted B2: diagonal 510,705, off-diagonals at most 20.0, resolvable step 2,554 (Sprint 12, A31)
@@ -715,6 +735,7 @@ not a sweep correction.
 - **Done 2026-10-07**: steps (2)-(4) and the CI half of (5). All 32 branches and 2 tags pushed, every tip matching; 195 ignored paths copied and hash-verified; a fresh venv from the lock file; CI green on the new repository's draft PR #1
 - **Found in Sprint 23 planning, 2026-10-08: the as-filed `.gitignore` does not ignore `docs/qci_package/`** (18 files of private QCi correspondence), `.claude/settings.local.json`, `.claude/scheduled_tasks.lock` or `experiments/results/b3_hardware.dryrun.json`. A plain restore leaves them unignored in a public repository. The Sprint 23 plan settles this before the restore runs
 - **Pass 1 sweep, 2026-10-09, in the Phase 2 repository**: steps (2)-(4) and the CI half of (5) are DONE. Draft PR #1 here, opened only to prove CI, was closed on the team lead's instruction. The Phase 2 half of step (5), this repository's boundary, is carded separately as **F132** because it grew: every live reference to the Phase 1 repository's path goes (team lead, 2026-10-09). IMP-6 is carded as **F133**. Steps (6) and (7) stay on this card and run in the Phase 1 repository after Sprint 24 merges here
+- **Pass 1 sweep, 2026-10-10**: Sprint 24 merged here (PR #2 to `develop`, PR #11 to `main`), so the D6 condition for steps (6) and (7) is met. They are the Phase 1 repository session's work; whether they have run is **unverified** from here
 - Depends on: Sprint 22 merged
 
 **F126. Model of the device's sparsity, validated on held-out fits (~3h [no-history], zero metered) Priority 101**
@@ -727,6 +748,8 @@ not a sweep correction.
 - Depends on: F17 (done, Sprint 22)
 
 **F25. Non-convex CVQBoost: cardinality-constrained weak-learner selection on Dirac-3 (~4h investigation + hardware) Priority HOLD**
+- **F138 and F139 re-check (2026-10-13)**: the Dirac-3S guide gives 16 or 17 integer levels per variable (it contradicts itself), and a total-levels limit with no number. The integer cost model was measured on Dirac-3; F139 recommends re-measuring it with 2 of the 2026-09-23 probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) as this card's first step. The quantum fluctuation coefficient and mean photon number, never set here, belong in this card's design: on a non-convex problem they may matter. F94 (Sprint 25) supplies the controls
+- **F94's findings bind this design (2026-10-13, `docs/phase2/F94_EXP3_CONTROLS.md`)**: (1) on the training fold the dct learners memorize the data, many selections reach the objective's floor `-1 + 2/m`, and no solver can be told from greedy, so build the Hamiltonian on held-out predictions; (2) with `lambda = 2 * rows` the data term is at most 0.33% of the objective and the best selection found is already within 0.0026 of the floor, so the ridge weight must be chosen so the fit to the labels matters; (3) the bar is greedy (equivalent to annealing, seconds per instance), reported against the floor; (4) run F104's screen on the chosen Hamiltonians before sizing
 - Phase: Phase 2, **Experiment 3 device run** (team-lead approved 2026-09-03; the direct consequence of the Sprint 4 degeneracy finding)
 - **HOLD reason, restated 2026-10-03**: needs F102 (preregistration), F94 (controls) and the allocation. Sized at 3,070 s in the sent hardware plan; after F90 about 445 s of the 1,681 remain (**corrected 2026-10-06: F90 ran and the measured balance fell to 1,022 s**). **2026-10-10: QCi granted the 7,500 s on 2026-10-09, so the allocation no longer blocks this card**; the balance is in `experiments/results/allocation_reads.json`
 - Platform: Dirac-3 integer/qudit solver, local proxy for the relaxation only
@@ -736,6 +759,7 @@ not a sweep correction.
 - Depends on: **F138 then F139 (Dirac-3S research and the re-run review, before any further Dirac-3 seconds)**; **F124 reported 2026-10-07**: its approved ranked list gates any device run, rank 1 (leaf regularization) first; Phase 2 preregistration; QCi grant for meaningful hardware time; pairs with F17 (simulator) and F20 (soft votes)
 
 **F30. Concurrent Dirac-3 submission with bounded in-flight requests (~4h build + 1h dry run) Priority HOLD**
+- **F138 re-check (2026-10-13)**: `eqc-models` 0.22.1 describes Dirac-3S as "special queues", with no stated hours. The queue measurements below were taken on `dirac-3` and may not apply to `dirac-3s`
 - Phase: Phase 2 preparation / infrastructure (team-lead request 2026-09-04)
 - Platform: Dirac-3 (offline-testable; gated live vetting of 2-3 calls only)
 - Dirac-3 queues one job at a time, so a 4-5 QPU s fit cost ~85 s of wall clock in Sprint 4; nearly all elapsed time is queue wait. Multiple requests CAN be enqueued concurrently, via separate processes or async submission inside one program
@@ -771,7 +795,7 @@ not a sweep correction.
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
-- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.**
+- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands. **2026-10-13 (Sprint 25)**: F139 recommends closing F129, which would leave this hold unmeetable; a new condition or a decision is needed at the same refinement. **F129 CLOSED 2026-10-13 (team lead, Sprint 25 Manual Validation), so this hold can no longer be met. A new condition, or a decision to close or run the transfer half, is due at the Sprint 26 refinement.** F113 found no CVQBoost-specific complementarity with XGBoost (`docs/phase2/F113_ORACLE_GAP.md`): evidence for that decision.
 
 
 **F116. G2 entanglement ablation on the SV1 simulator (~3h [no-history]) Priority HOLD**
