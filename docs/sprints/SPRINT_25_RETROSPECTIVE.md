@@ -222,4 +222,16 @@ exists.
 
 ## Improvement Decisions
 
-Awaiting the team lead.
+Team lead, 2026-10-13: "apply all now".
+
+| # | Decision | Where |
+|---|---|---|
+| IMP-1 | **now** | `experiments/phase2/PREREGISTRATION_DRAFT.md` section 2: every bottom-line claim labeled Measured, Inferred or Unverified; an inferred mechanism names the alternative it did not rule out |
+| IMP-2 | **now** | `docs/SPRINT_PLANNING.md` premise-falsifier rule and `SPRINT_EXECUTION_WORKFLOW.md` 3.2.2.1: each falsifier is run once on a reference comparison where it should not fire, and the result recorded in the plan |
+| IMP-3 | **now** | `block_cross_repo_write.py` `check_path` matches a folder name, case-insensitive, not a substring; four new cases in `test_cross_repo_write_guard.py`, and both the substring and the case-fold mutations proven red with `assert_can_fail`; removed from F147 |
+| IMP-4 | **now** | `update_sprint_status.py --add-issue N`; tests proven red under three mutations (duplicate, unsorted, nonpositive); #19 added to `github_issues` with it |
+
+The first IMP-3 proof removed only one of the two case folds and stayed
+green: the comparison was still lower case on both sides. The proof caught
+the defect in the mutation, not in the guard; the mutation now removes
+both.

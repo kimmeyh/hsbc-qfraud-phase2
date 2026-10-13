@@ -211,6 +211,25 @@ filled its text block, with zero free space anywhere.
 A check that cannot fail is not evidence. Write the falsifier first, and if the
 dry run cannot produce the failing observation, redesign the dry run.
 
+**Show it can fire, at plan verification (Sprint 25 IMP-2).** For every
+premise falsifier and acceptance threshold in the plan, 3.2.2.1 runs it once
+on a **reference comparison where the premise should NOT hold**, using data
+already on disk, and records the result in the plan's verification section:
+
+- a comparison inside one family (two configurations of the same model, two
+  seeds, the same arm twice), where any "effect" is noise; or
+- the instance the experiment will actually be built on, checked for the
+  property the falsifier needs (for an optimizer comparison: do the methods
+  differ on it at all?).
+
+If the reference also passes the threshold, the falsifier cannot separate the
+premise from noise: redesign it before approval. If no data exists yet, the
+plan says so and names the first run that will show it. Sprint 25 paid for
+both cases: F113's 1-point oracle-gap falsifier also passed between two
+XGBoost configurations (3.6 points), and F94's training-fold instances tied
+for every method, so neither could have failed. Both were checkable from
+files already on disk before approval.
+
 ### A verification sprint GENERATES work; budget for it (Sprint 13 improvement 2)
 
 A sprint whose tasks are "check that X is true" produces a second body of work

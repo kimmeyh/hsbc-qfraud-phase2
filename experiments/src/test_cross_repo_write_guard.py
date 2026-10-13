@@ -124,6 +124,21 @@ CASES = [
                      f"echo 'never write to {OTHER} or {SIBLING}' > "
                      f"{HERE}/{THIS}/docs/rule.md"}}),
 
+    # --- Sprint 25 IMP-3: a FOLDER named for a sibling, not a file name ------
+    ("Write tool into the evidence library's data folder", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"D:/Data/Harold/{SIBLING}/store/x.db"}}),
+    ("Write tool into a sibling spelled in lower case", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{SIBLING.lower()}/x.md"}}),
+    ("Write tool in this repository, file named after a sibling", ALLOW,
+     {"tool_name": "Write",
+      "tool_input": {"file_path":
+                     f"{HERE}/{THIS}/docs/phase2/{SIBLING.upper()}_PROPOSALS.md"}}),
+    ("Edit tool in this repository, file named after the Phase 1 repo", ALLOW,
+     {"tool_name": "Edit",
+      "tool_input": {"file_path": f"{HERE}/{THIS}/docs/{PHASE1}_notes.md"}}),
+
     # --- must ALLOW: ordinary work in this repository -----------------------
     ("Write tool in this repository", ALLOW,
      {"tool_name": "Write",
@@ -158,6 +173,51 @@ def test_guard_decides_correctly(name, expected, payload, tmp_path):
     assert r.returncode == expected, (
         f"expected the guard to {verb} ({expected}) for {name!r}, got "
         f"{r.returncode}. stderr: {r.stderr.decode(errors='replace')[:300]}")
+
+
+def test_the_folder_match_cases_can_fail():
+    """Sprint 25 IMP-3: each new case must go red when the rule it pins breaks.
+
+    Reverting to the old substring match must turn the file-name ALLOW cases
+    red; dropping the case fold must turn the lower-case BLOCK case red.
+    """
+    from injection import Mutation, assert_can_fail
+
+    new_cases = [c for c in CASES if c[0] in {
+        "Write tool into a sibling spelled in lower case",
+        "Write tool in this repository, file named after a sibling",
+        "Edit tool in this repository, file named after the Phase 1 repo"}]
+    assert len(new_cases) == 3
+
+    def run() -> bool:
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            for name, expected, payload in new_cases:
+                f = Path(d) / "payload.json"
+                f.write_text(json.dumps(payload), encoding="utf-8")
+                with f.open("rb") as stdin:
+                    r = subprocess.run([sys.executable, str(HOOK)],
+                                       stdin=stdin, capture_output=True)
+                if r.returncode != expected:
+                    return False
+        return True
+
+    substring = Mutation(
+        HOOK,
+        "        if repo.lower() in folders:",
+        "        if re.search(re.escape(repo), hooklib.normalize(path), re.IGNORECASE):",
+        expect_occurrences=1)
+    assert_can_fail([substring], run, "substring match blocks file names")
+
+    # Both sides of the comparison are folded, so both folds must go: removing
+    # one alone still compares lower case with lower case and stays green.
+    no_fold = [
+        Mutation(HOOK, "    folders = [part.lower() for part in",
+                 "    folders = [part for part in", expect_occurrences=1),
+        Mutation(HOOK, "        if repo.lower() in folders:",
+                 "        if repo in folders:", expect_occurrences=1),
+    ]
+    assert_can_fail(no_fold, run, "case-sensitive match misses lower case")
 
 
 def test_the_guard_is_registered_and_its_path_resolves():

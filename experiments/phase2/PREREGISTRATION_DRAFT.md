@@ -65,6 +65,16 @@ field does not run.
   operating point is claimed.
 - **Train-test gap** beside every win (Sprint 21: SPECTRA's wins came with
   large gaps).
+- **Every bottom-line claim carries a label** (Sprint 25 IMP-1), the same
+  labels `docs/phase2/DIRAC_UNDERSTANDINGS.md` uses: **Measured** (cites the
+  result file and the field), **Inferred** (says what it rests on), or
+  **Unverified** (says what would settle it). **An inferred mechanism names
+  the leading alternative it did not rule out**, and the evidence already on
+  record about that alternative. Applies to every Phase 2 write-up from its
+  first commit, not only to this document's experiments. (Sprint 25: F29's
+  first write-up said the ridge pinned the weights at uniform. Sprint 4 had
+  already found them uniform at lambda = 0, which rules that out; naming
+  the alternative would have surfaced it before the commit.)
 - **Source for the statistical standard**: arXiv:2604.18837, as cited on the
   F102 card. To be re-read against its text before filing.
 
@@ -166,3 +176,4 @@ on 2026-10-13:
   set from the test's attainable p-value; the resolution-screen exception
   for cost and twin runs; the section 5 wording on when the design was
   written; F144 added.
+- 2026-10-13: section 2 gains the claim-label rule (Sprint 25 IMP-1).

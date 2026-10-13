@@ -41,7 +41,21 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 24: Close the Boundary, Fix the Tooling, Sweep the Lever** (Oct 9 -
+**Sprint 25: Learn the New Device, Then Build What Runs on Any Device**
+(Oct 10 - Oct 13, 2026; PR #12). Delivered **F138, F139, F102 (first
+draft; the card stays open), F113, F29, F94**, Task G added at Manual
+Validation (F146's document; F147 carded), and retrospective improvements
+IMP-1 to IMP-4. 172 measured minutes against 750 estimated, zero metered
+seconds. Dirac-3S needs a client bump to reach (F141) and a measured fit to
+price (F142). F113 found nothing that supports a router; F29 closes; F94
+found the training-fold Hamiltonian has many tied optima, so F25 must
+choose its ridge weight and build on held-out predictions. F129 closed by
+the team lead; F121 needs a new hold condition at Sprint 26 refinement.
+Records: `SPRINT_25_PLAN.md`, `SPRINT_25_VALIDATION.md`,
+`SPRINT_25_RETROSPECTIVE.md`; `SPRINT_25_SUMMARY.md` is written at Sprint
+26 planning.
+
+### Sprint 24: Close the Boundary, Fix the Tooling, Sweep the Lever (Oct 9 -
 Oct 10, 2026; PR #2, the first sprint in this repository). Delivered
 **F131, F136, F132, F134, F133, F135, F128, F137**, plus retrospective
 improvements IMP-1 (one owner for the Dirac-3 balance) and IMP-4. 84
@@ -505,7 +519,6 @@ F123's layout is superseded by F127.)
 - Further uses, one line each: cross-check this repository's `docs/` against the library's assertions for contradictions; flag a cited record whose `updated` date is older than a newer fact here; list what the library holds on a topic before a web search, so a search starts from what is already read
 - **Read-only by construction**: the connection is opened with a `mode=ro` URI, and a test proves a write through it fails (proven red with `assert_can_fail` on a read-write connection). `block_cross_repo_write.py` is the backstop, not the design
 - **Proposed corrections never go into the library.** They go into `docs/phase2/EDB_PROPOSALS.md` in this repository, for a session in EvidenceBasedDB to review. That file was started 2026-10-13 with three proposals (a stale allocation record, two records missing QCi's requested framing, and six Sprint 25 findings with no record)
-- A guard defect to fix inside this card: `block_cross_repo_write.py` matches the forbidden repository names as a substring of ANY path, so it blocked a file in this repository whose name contained "EvidenceBasedDB" (2026-10-13; the file was renamed `EDB_PROPOSALS.md`). Match a path component under the parent folders instead, with a test for both cases
 - Acceptance: the tool answers a text query and an id lookup on the live database; the read-only test is proven red; one research note in this repository cites records it found; `EDB_PROPOSALS.md` updated with anything found while building it
 - Depends on: nothing
 

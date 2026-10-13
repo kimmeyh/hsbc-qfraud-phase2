@@ -65,9 +65,14 @@ review and tests."""
 
 
 def check_path(path: str) -> str | None:
-    norm = hooklib.normalize(path)
+    # A path is inside a forbidden repository when one of its FOLDERS is that
+    # repository's name. Matching the name anywhere in the path (the version
+    # before Sprint 25 IMP-3) also blocked files in THIS repository whose
+    # names merely contained it, such as a proposals file named after the
+    # evidence library. Case-insensitive, because Windows paths are.
+    folders = [part.lower() for part in hooklib.normalize(path).split("/")[:-1]]
     for repo in FORBIDDEN:
-        if re.search(re.escape(repo), norm, re.IGNORECASE):
+        if repo.lower() in folders:
             return f"Tool targets a path inside '{repo}':\n  {path}"
     return None
 
