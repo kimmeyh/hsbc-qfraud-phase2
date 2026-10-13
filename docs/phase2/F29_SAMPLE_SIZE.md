@@ -32,9 +32,9 @@ tests how the optimization depends on sample size, not the whole pipeline.
 ## Why the optimum is uniform
 
 The learners agree on almost every row. F94's diagnostics in this sprint
-measured it on the same pool: on the training fold, 69 of the 78 learners
-classify every row correctly, and every pair of learners agrees on at least
-99.99% of rows. So `HH^T/n` is close to a matrix of ones and `Hy/n` close
+measured it on the same cell (`experiments/phase2/results/f94_controls.json`):
+on the training fold, 51 to 53 of the first 60 learners classify every row
+correctly, and every pair of learners agrees on at least 99.989% of rows. So `HH^T/n` is close to a matrix of ones and `Hy/n` close
 to a vector of ones, and both are nearly flat on the simplex: every weighting
 gives almost the same data term.
 
