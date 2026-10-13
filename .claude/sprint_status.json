@@ -3,7 +3,7 @@
     "number": 25,
     "name": "Learn the New Device, Then Build What Runs on Any Device",
     "branch": "feature/20261010_Sprint_25",
-    "status": "phase_3_planning",
+    "status": "phase_4_execution",
     "plan_doc": "docs/sprints/SPRINT_25_PLAN.md",
     "selected_cards": [
       "F138",
@@ -14,8 +14,15 @@
       "F94"
     ],
     "pr": 12,
-    "plan_approved": false,
-    "github_issues": [],
+    "plan_approved": true,
+    "github_issues": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
     "task_actuals": {},
     "task_started": {}
   },

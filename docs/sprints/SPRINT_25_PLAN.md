@@ -1,7 +1,8 @@
 # Sprint 25 Plan: Learn the New Device, Then Build What Runs on Any Device
 
 **Sprint**: 25 | **Branch**: `feature/20261010_Sprint_25`
-**Planned**: 2026-10-13 | **Status**: DRAFT, awaiting approval
+**Planned**: 2026-10-13 | **Status**: APPROVED 2026-10-13 (option 1, as
+written). Issues #13-18 (Tasks A-F in order). Draft PR #12.
 **Scope**: F138, F139, F102, F113, F29 and F94 (team lead selection,
 2026-10-13)
 **Metered Dirac-3 seconds**: **0**. No task touches the device. A read of
