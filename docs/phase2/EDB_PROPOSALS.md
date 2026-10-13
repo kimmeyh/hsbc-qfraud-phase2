@@ -44,8 +44,15 @@ Status values: **open** (not yet reviewed there), **accepted**,
 
 ### P3. Findings from Sprint 25 with no record
 
-A search of record values for "Dirac" (2026-10-13) found none of these.
-Each is sourced in this repository:
+Searched 2026-10-13: assertion values and ids, case-insensitive substring,
+for "dirac-3s", "device_type", "sampler_type", "benchmark", "Table 6",
+"fork", "device_usage", "billed", "floor", "cardinality", "tied",
+"uniform", "sample size", "oracle", "router", "false positive", "XGBoost"
+and "CVQBoost". No assertion states any of the findings below. Two
+partial overlaps: `dirac3-fidelity-test-is-near-trivial-on-convex-formulation`
+records uniform weights at lambda = 0, not across sample sizes; and the
+"dirac-3s" hits are guide facts, none naming the selector. Each finding is
+sourced in this repository:
 
 - **Dirac-3S is chosen by name**: `device_type="dirac-3s"`, needing
   `qci-client` 5.0.3 and `eqc-models` 0.22.1; the earlier clients cannot

@@ -10,10 +10,10 @@ how well each item is established, (2) the improvements we would suggest
 for Dirac-3S, and (3) the questions for QCi. **This file owns the question
 list**; `docs/phase2/DIRAC_3S_RESEARCH.md` points here.
 
-**Standing constraint from QCi (2026-09-25).** QCi asked us to "continue to
-characterize the device-related interpretations as your independent
-findings rather than conclusions validated by QCi" until its review of our
-materials is complete. The team lead agreed the same day. Every item below
+**Standing constraint from QCi (2026-09-25).** Until its review of our
+materials is complete, QCi asked that we describe our interpretations of
+the device as our own independent findings, not as conclusions QCi has
+validated. The team lead agreed the same day. Every item below
 marked **Measured** or **Inferred** is our independent finding. None is
 validated by QCi. (Source: the correspondence in `docs/qci_package/`,
 gitignored.)
