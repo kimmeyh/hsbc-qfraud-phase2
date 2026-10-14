@@ -103,6 +103,18 @@ def build_pool(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
     return clf
 
 
+def seeded_weak_params(seed: int, weak_params: dict | None = None) -> dict:
+    """Weak-learner params that make a pool build repeatable from its seed.
+
+    OPT-IN (F145, Sprint 26). eqc-models builds each DecisionTreeClassifier
+    with no random_state, so ties between equally good splits are broken at
+    random: two builds agree on the training rows and differ elsewhere (61 of
+    78 learners on seed 42's `free` pool). Phase 1 builds never pass this, so
+    their behavior is unchanged; Phase 2 builds do.
+    """
+    return {**(weak_params or {}), "random_state": int(seed)}
+
+
 def h_matrix(clf, X: np.ndarray) -> np.ndarray:
     from eqc_models.ml.classifierqboost import _compute_h_matrix
     return _compute_h_matrix(clf.h_list, clf.ind_list, X)
@@ -236,8 +248,10 @@ def cmd_build(args) -> None:
     full-pair build only works where fork exists, i.e. WSL/Linux)."""
     t0 = time.strftime("%Y-%m-%dT%H:%M:%S")
     split, cols, Xtr, Xva, Xte, y_pm1 = _prep(args.seed, CONFIGS[args.config]["k"])
+    # F145: opt-in. Without --seeded-learners the build is Phase 1's.
+    weak_params = seeded_weak_params(args.seed) if args.seeded_learners else None
     clf = build_pool(Xtr, y_pm1, CONFIGS[args.config]["schedule"],
-                     args.weak_type, args.pair_build)
+                     args.weak_type, args.pair_build, weak_params=weak_params)
     H_tr, H_va, H_te = (h_matrix(clf, X) for X in (Xtr, Xva, Xte))
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -249,6 +263,8 @@ def cmd_build(args) -> None:
             "pair_build": args.pair_build, "features": cols,
             "n_pool": len(clf.h_list), "started": t0,
             "finished": time.strftime("%Y-%m-%dT%H:%M:%S")}
+    if args.seeded_learners:
+        meta["seeded_learners"] = True
     out.with_suffix(".meta.json").write_text(json.dumps(meta, indent=1))
     log.info("[BUILD] %s: pool=%d -> %s", meta, len(clf.h_list), out)
 
@@ -286,6 +302,9 @@ def main() -> int:
     p_build.add_argument("--pair-build", choices=["sequential", "full"],
                          default="sequential")
     p_build.add_argument("--out", required=True)
+    p_build.add_argument("--seeded-learners", action="store_true",
+                         help="F145: seed the weak learners from --seed so "
+                              "the build is repeatable (Phase 2 builds)")
     p_solve = sub.add_parser("solve")
     p_solve.add_argument("--npz", required=True)
     args = ap.parse_args()

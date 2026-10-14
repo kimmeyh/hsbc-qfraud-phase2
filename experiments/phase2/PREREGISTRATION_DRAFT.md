@@ -154,8 +154,53 @@ on 2026-10-13:
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | To write before F142 runs |
-| - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | To write before any B2 comparison |
+| - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
 | - | Gate-based arm | F6, F106, F107 | Braket | To write if F6 recommends pursuing |
+
+### F144: the proxy twin of B2's configuration
+
+Written 2026-10-14 (Sprint 26 Task C), before any twin pool was built or
+scored. Not filed; part of this draft.
+
+- **ID and card**: unnumbered verify entry; F144.
+- **Question**: does Dirac-3 beat an exact classical solve of its own
+  Hamiltonian on B2's configuration, by more than the pool build's own
+  run-to-run drift?
+- **Hypothesis and prediction**: none directional. B2's device rows are the
+  campaign's only positive result at scale; the twin says whether the
+  device or the configuration produced it. Either answer is reported.
+- **Falsifier**: "the device beats its proxy" is false if the test below
+  does not reject, or if the drift reference rejects (then no device
+  comparison is read).
+- **Data and splits**: ULB credit-card, Phase 1 stratified protocol, seeds
+  42-51, through `qubo_proxy._prep`, unchanged.
+- **Arms**:
+  1. **Device**: B2's 10 `hw_b2_full` rows in `experiments/results/
+     results.json` (Dirac-3, September 2026). Read, never written.
+  2. **Twin**: `full` config (k=17, weak-classifier schedule 3, full pair,
+     833 variables, `dct`), lambda = 2 x n_train, exact simplex solve
+     (`solve_simplex_qp`), with F145's seeded weak learners. It twins B2's
+     configuration, not its pools, which were never stored.
+  3. **Drift reference**: the 10 stored `h_*_free_dct_full` pools against
+     fresh unseeded rebuilds of the same configuration (91 variables), both
+     solved exactly. The true difference is zero by construction.
+- **Primary metric and test**: test-fold AUPRC, scored as Phase 1 scored
+  the proxy (`(w @ H_te + 1) / 2`, clipped). Exact two-sided Wilcoxon
+  signed-rank on the 10 per-seed paired differences, alpha 0.05 (10 seeds
+  reach p = 0.002). Reported beside it: the mean difference with a
+  bootstrap 95% interval over seeds, the Phase 1 t-interval
+  (`metrics.seed_mean_t_interval`), the floor-normalized AUPRC and AUROC.
+- **Order of reading**: the drift reference first. If it rejects at
+  alpha 0.05, the device comparison is reported as not readable, with the
+  reason.
+- **Multiplicity**: a family of two tests (reference, then device against
+  twin), read in that fixed order, so no correction: the second is read
+  only if the first does not reject.
+- **Device**: none. Zero metered seconds.
+- **Stopping rules**: none; 20 pool builds (10 twin, 10 reference) under
+  WSL, about 15 and 2 minutes.
+- **What is reported whatever the result**: every seed's three AUPRC
+  values, both tests, and the statement that B2's pools were not stored.
 
 ## 7. Open items before filing
 
@@ -165,8 +210,15 @@ on 2026-10-13:
 - Fill one section 6 entry per experiment that will run.
 - Set the multiplicity families, and each entry's seed count against them
   (section 2).
-- Decide whether the pool build's run-to-run drift (F145) must be fixed or
-  only reported.
+- **Pool build drift (F145): fixed for Phase 2 builds, a known limit for
+  Phase 1 pools.** Decided 2026-10-14 (Sprint 26 Task B). Phase 2 builds pass
+  `qubo_proxy.seeded_weak_params(seed)` (`build --seeded-learners`); two
+  such builds of seed 42's `free` full-pair pool are byte-identical on all
+  three folds. Phase 1 pools were built unseeded and stay so: two seed-42
+  `free` sequential builds share their training rows and differ on 61 of
+  78 learners, 327 of 4,426,188 test cells. Any Phase 2 comparison against
+  a Phase 1 pool or device row carries that drift, which F144 measures as
+  its reference arm.
 - Confirm the filing date and the filing venue with the team lead.
 
 ## Revision log
@@ -177,3 +229,7 @@ on 2026-10-13:
   for cost and twin runs; the section 5 wording on when the design was
   written; F144 added.
 - 2026-10-13: section 2 gains the claim-label rule (Sprint 25 IMP-1).
+- 2026-10-14: section 6 gains the F144 entry, before any twin result
+  (Sprint 26 Task C, Decision 1).
+- 2026-10-14: section 7's F145 item decided: seeded for Phase 2 builds,
+  reported for Phase 1 pools (Sprint 26 Task B).
