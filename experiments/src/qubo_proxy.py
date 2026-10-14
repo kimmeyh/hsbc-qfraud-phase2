@@ -119,13 +119,21 @@ def _project_simplex(v: np.ndarray) -> np.ndarray:
     return np.maximum(v - theta, 0.0)
 
 
+def hamiltonian(H: np.ndarray, y: np.ndarray, lam: float):
+    """J = HH^T + lam*I and C = -2Hy: the Hamiltonian eqc-models ships to the
+    device. `test_proxy_hamiltonian_is_the_one_eqc_models_sends` holds this
+    equal to the library's own on every client version (F141)."""
+    J = (H @ H.T).astype(np.float64) + lam * np.eye(H.shape[0])
+    C = (-2.0 * H @ y).astype(np.float64)
+    return J, C
+
+
 def solve_simplex_qp(H: np.ndarray, y: np.ndarray, lam: float,
                      max_iter: int = 5000, tol: float = 1e-10) -> np.ndarray:
     """Minimize w'Jw + C'w with J = HH^T + lam*I, C = -2Hy, on the simplex --
     the identical Hamiltonian eqc-models ships to Dirac-3, solved classically
     by accelerated projected gradient (FISTA)."""
-    J = (H @ H.T).astype(np.float64) + lam * np.eye(H.shape[0])
-    C = (-2.0 * H @ y).astype(np.float64)
+    J, C = hamiltonian(H, y, lam)
     L = float(np.linalg.eigvalsh(J)[-1]) * 2.0 + 1e-9   # Lipschitz of grad
     w = np.full(H.shape[0], 1.0 / H.shape[0])
     z, t = w.copy(), 1.0
