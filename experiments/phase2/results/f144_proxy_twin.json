@@ -1,0 +1,316 @@
+{
+ "generator": "experiments/phase2/src/f144_proxy_twin.py",
+ "card": "F144",
+ "sprint": 26,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F144",
+ "written": "2026-10-14T10:26:37",
+ "scoring_check_max_abs_diff_vs_phase1_rows": 0.0,
+ "drift_reference": {
+  "diffs": [
+   0.0020503034498635664,
+   -0.0026087133656405026,
+   -0.006679886729566209,
+   0.0009314572236410745,
+   0.0003176153292387962,
+   -0.002551822047392127,
+   -0.0013509993054187097,
+   0.0015553706528262934,
+   -0.00020621495133021917,
+   0.0015354011224960606
+  ],
+  "mean": -0.0007007488621281977,
+  "wilcoxon_p": 0.6953125,
+  "rejects": false,
+  "bootstrap_ci95": [
+   -0.0023956886377141775,
+   0.0007150010254797219
+  ],
+  "t_interval": {
+   "n_seeds": 10,
+   "mean": -0.0007007488621281977,
+   "se": 0.0008488172995744365,
+   "ci95": [
+    -0.002620906996267539,
+    0.0012194092720111435
+   ],
+   "excludes_zero": false
+  }
+ },
+ "device_vs_twin": {
+  "diffs": [
+   -0.001339399441815603,
+   -0.00075919827828963,
+   0.005371560068663017,
+   0.0008438040611553621,
+   0.0014904593663620513,
+   -0.0020420713230872023,
+   -0.0018742831916603864,
+   0.00011250529351303218,
+   -0.00020501804300709914,
+   0.0005424990919081774
+  ],
+  "mean": 0.00021408576037417192,
+  "wilcoxon_p": 0.921875,
+  "rejects": false,
+  "bootstrap_ci95": [
+   -0.0008955272088290247,
+   0.0015501901185461043
+  ],
+  "t_interval": {
+   "n_seeds": 10,
+   "mean": 0.00021408576037417192,
+   "se": 0.0006809402455841773,
+   "ci95": [
+    -0.0013263080936116434,
+    0.0017544796143599873
+   ],
+   "excludes_zero": false
+  }
+ },
+ "device_comparison_readable": true,
+ "note": "Twins B2's configuration, not its pools, which were never stored. Device AUPRC read from Phase 1 hw_b2_full rows; nothing in experiments/results/ is written.",
+ "rows": [
+  {
+   "seed": 42,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.8072915380038548,
+    "auprc_norm": 0.8069683785911412,
+    "auroc": 0.928288904641438,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.8093418414537183,
+    "auprc_norm": 0.8090221202650033,
+    "auroc": 0.9283049771964819,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.8244885273294417,
+    "auprc_norm": 0.8241942061364582,
+    "auroc": 0.9482944975189735,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.8231491278876261,
+   "stored_row_auprc": 0.8072915380038548
+  },
+  {
+   "seed": 43,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7644740060409198,
+    "auprc_norm": 0.7640790444440174,
+    "auroc": 0.9107404616818209,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7618652926752792,
+    "auprc_norm": 0.7614659564376868,
+    "auroc": 0.9055631479539079,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7828583622765716,
+    "auprc_norm": 0.7824942300355922,
+    "auroc": 0.9441935804542866,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7820991639982819,
+   "stored_row_auprc": 0.7644740060409198
+  },
+  {
+   "seed": 44,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7447843848453629,
+    "auprc_norm": 0.7443564050490717,
+    "auroc": 0.9384284571554923,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7381044981157967,
+    "auprc_norm": 0.7376653165889216,
+    "auroc": 0.9383971481898866,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7641023509792446,
+    "auprc_norm": 0.7637067661412547,
+    "auroc": 0.9412747858773339,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7694739110479076,
+   "stored_row_auprc": 0.7447843848453629
+  },
+  {
+   "seed": 45,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7812149230576372,
+    "auprc_norm": 0.7808480348772074,
+    "auroc": 0.9113392340359114,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7821463802812783,
+    "auprc_norm": 0.7817810540933331,
+    "auroc": 0.9116745279732137,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.8088636448875325,
+    "auprc_norm": 0.8085431217946359,
+    "auroc": 0.9451308055137225,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.8097074489486878,
+   "stored_row_auprc": 0.7812149230576372
+  },
+  {
+   "seed": 46,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.757999070634843,
+    "auprc_norm": 0.7575932509972427,
+    "auroc": 0.9221869080213198,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7583166859640817,
+    "auprc_norm": 0.7579113989464932,
+    "auroc": 0.9273837317871474,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7700855442587254,
+    "auprc_norm": 0.7696999928422381,
+    "auroc": 0.9410162314224957,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7715760036250875,
+   "stored_row_auprc": 0.757999070634843
+  },
+  {
+   "seed": 47,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7640312352451879,
+    "auprc_norm": 0.7636355311507905,
+    "auroc": 0.9164965732011977,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7614794131977958,
+    "auprc_norm": 0.7610794298657061,
+    "auroc": 0.9162764813925335,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7938988782869166,
+    "auprc_norm": 0.7935532602649445,
+    "auroc": 0.9395176747007765,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7918568069638294,
+   "stored_row_auprc": 0.7640312352451879
+  },
+  {
+   "seed": 48,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.8251258348938328,
+    "auprc_norm": 0.8248325824237073,
+    "auroc": 0.9447430202839362,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.8237748355884141,
+    "auprc_norm": 0.823479317581334,
+    "auroc": 0.9447335439798062,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.8567032803732263,
+    "auprc_norm": 0.8564629812017281,
+    "auroc": 0.9660589444697868,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.8548289971815659,
+   "stored_row_auprc": 0.8251258348938328
+  },
+  {
+   "seed": 49,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7765226511380334,
+    "auprc_norm": 0.7761478943262934,
+    "auroc": 0.9164713030568513,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7780780217908597,
+    "auprc_norm": 0.7777058732333785,
+    "auroc": 0.9164889549959168,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7976143512637923,
+    "auprc_norm": 0.797274963845566,
+    "auroc": 0.9547009436355005,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7977268565573054,
+   "stored_row_auprc": 0.7765226511380334
+  },
+  {
+   "seed": 50,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7385695751480436,
+    "auprc_norm": 0.7381311735247547,
+    "auroc": 0.9211254690538282,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7383633601967133,
+    "auprc_norm": 0.7379246127645177,
+    "auroc": 0.9211999788176731,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7647566997290689,
+    "auprc_norm": 0.7643622121908835,
+    "auroc": 0.9334879581258845,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7645516816860618,
+   "stored_row_auprc": 0.7385695751480436
+  },
+  {
+   "seed": 51,
+   "evidence_tag": "SIM",
+   "ref_stored": {
+    "auprc": 0.7214334512439528,
+    "auprc_norm": 0.7209663134682414,
+    "auroc": 0.9003458851007413,
+    "n_pool": 91
+   },
+   "ref_rebuilt": {
+    "auprc": 0.7229688523664488,
+    "auprc_norm": 0.7225042893574077,
+    "auroc": 0.9003488580588997,
+    "n_pool": 91
+   },
+   "twin": {
+    "auprc": 0.7620926011645519,
+    "auprc_norm": 0.7616936461083417,
+    "auroc": 0.9273066206849138,
+    "n_pool": 833
+   },
+   "b2_device_auprc": 0.7626351002564601,
+   "stored_row_auprc": 0.7214334512439528
+  }
+ ]
+}

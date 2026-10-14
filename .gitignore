@@ -17,6 +17,10 @@ experiments/results/pools/*
 # that claim shipped false. Scanned for account identifiers before committing:
 # zero findings, and the responses carry no org/account/token fields at all.
 !experiments/results/pools/hw_responses/
+# Phase 2 pools (F144, Sprint 26): rebuildable from their seed with
+# F145's seeded learners, so not version-controlled. Device responses live
+# in experiments/phase2/results/device_samples/, which stays tracked.
+experiments/phase2/results/pools/
 docs/source/*.pdf
 docs/papers/*.pdf
 .secrets-patterns.txt
