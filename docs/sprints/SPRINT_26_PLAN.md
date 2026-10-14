@@ -37,11 +37,9 @@ compared against repeatable.
 - Sprint 25 merged to `develop` (PR #12, `e8d8bab`) and released to `main`
   (PR #20). `git log origin/develop..HEAD` is empty apart from this
   branch's Pass 1 commit. Issues #13-19 are closed. Working tree clean.
-- Full suite on 2026-10-13, before this plan's edits: 1,891 passed, 73
-  skipped.
-- Dependency scan: `pip-audit` is not installed in the project venv, so it
-  was not run this sprint. The last scan, Sprint 25's on 2026-10-10, found
-  no known vulnerability in the lock file. The only planned bump is F141.
+- Full suite passed on 2026-10-13, before this plan's edits.
+- Dependency scan: `pip-audit` (run through `uvx`) on the lock file finds
+  no known vulnerability, 2026-10-13. The only planned bump is F141.
 
 ## Plan-to-branch-state verification (3.2.2.1)
 
@@ -90,11 +88,13 @@ Each card was checked against the repository and the installed packages on
   `delete`, not WAL, so no writable side file is needed. A `CREATE TABLE`
   through the connection fails with "attempt to write a readonly
   database".
-- **F126: inputs confirmed, one card claim corrected.**
-  `experiments/phase2/results/device_samples/` holds 22 sample files: 10
-  B4 (CVQBoost) and 12 B5. B5 is QSVM, a different objective, so it is not
-  evidence for a CVQBoost sparsity rule. The usable held-out split is
-  oilgas against telecom: 5 fits against 5.
+- **F126: inputs confirmed; one design choice for you to see.**
+  `experiments/phase2/results/device_samples/` holds 22 sample files, as
+  the card says: 10 B4 (CVQBoost) and 12 B5. B5 is QSVM, a different
+  objective. **I plan to fit and test the rule on B4 only** (oilgas against
+  telecom, 5 fits against 5), and to report B5's zero fraction beside it as
+  a descriptive check, not as evidence for the rule. This narrows the card,
+  which counts all 22. Object at approval if you want B5 inside the fit.
 - **F105: inputs confirmed.** `experiments/data/ieee-cis/` holds
   `train_transaction.csv` and `train_identity.csv`. No harness exists yet.
 - **F146**: the living document exists. F141's bump and F142's first fit
@@ -176,7 +176,7 @@ How each estimate was set (`docs/VELOCITY_LOG.md` read first):
   re-estimated after its diagnosis was reproduced. E is a new tool with a
   read-only proof; set at 120 of the card's 180.
 - **Research+code (C, D, F, G)**: the median ratio over Sprints 24-25 is
-  0.37, from 5 rows (0.06-0.58). C 45 of 90, F 60 of 180 at about that
+  0.37, from 4 rows (0.06-0.58). C 45 of 90, F 60 of 180 at about that
   ratio. D stays near its card (80 of 90), because it has three approval
   stops and a write-up. G has nothing comparable. It is sized to its
   first decisive step (the folds and the leakage audit) at 240 minutes,
@@ -282,7 +282,8 @@ claims.
   fit.
 - **Acceptance**: the rule's held-out error against the tolerance, both
   directions; or a recorded finding that 10 fits cannot support a rule. A
-  rule fitted and tested on the same fits does not count.
+  rule fitted and tested on the same fits does not count. B5's 12 QSVM
+  fits are reported beside it as a descriptive check only.
 
 ### Task G detail (F105)
 
