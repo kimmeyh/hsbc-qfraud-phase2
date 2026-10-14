@@ -318,6 +318,14 @@ claims.
   lock and adds a dated line to its header. Decision 4 (a separate Phase 2
   environment) was withdrawn.
 
+- **Correction to Decision 1's screen (2026-10-14, Task D dry run, before
+  any call).** Decision 1 named `get_dynamic_range` against 23 dB. That
+  ratio passes B1 at 4.8 dB, although A31 shows B1 is unresolvable, so it
+  is not the test the decision intended. F142's runner screens with A31's
+  spread test instead and records the dB figure beside it. B4 passes
+  either way (37 times the step; 8.3 dB). Recorded on F104 and in the
+  Phase 2 draft's sections 4 and 6.
+
 ## Decisions at approval (answered 2026-10-14: 1, 1, 1)
 
 Asked in order. Decision 2 does not depend on Decision 1. Decision 3's

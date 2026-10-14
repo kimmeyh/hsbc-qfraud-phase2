@@ -99,8 +99,11 @@ They are different things, and every document states which it means:
   gate; under the frozen preregistration's section 11 that would be a
   deviation (F138, question 6).
 - **The resolution screen gates every metered block** (F104): before any
-  call, the job's coefficient range is tested against the device's stated
-  200:1 (23 dB) resolution. QCi states the same figure for both devices;
+  call, the job's coefficient DIFFERENCES are tested against the device's
+  stated 200:1 (23 dB) resolution, as A31 tested them: each spread must
+  reach the largest coefficient divided by 200. A max-over-min ratio in dB
+  is not this test; a CVQBoost Hamiltonian can sit far under 23 dB and
+  still be unresolvable (F142's dry run, 2026-10-14). QCi states the same figure for both devices;
   Dirac-3S's effective resolution is unmeasured (F138). A job that fails
   the screen does not run **as an accuracy experiment**.
 - **The one exception**: a run whose stated purpose is cost, queue time or
@@ -153,9 +156,61 @@ on 2026-10-13:
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
-| - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | To write before F142 runs |
+| - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
 | - | Gate-based arm | F6, F106, F107 | Braket | To write if F6 recommends pursuing |
+
+### F142: the first Dirac-3S fits
+
+Written 2026-10-14 (Sprint 26 Task D), before any Dirac-3S call. Not
+filed; part of this draft.
+
+- **ID and card**: unnumbered verify entry; F142.
+- **Question**: what does a Dirac-3S fit cost and wait at our sizes, and
+  does Dirac-3S return the same weights as Dirac-3 on a Hamiltonian it can
+  resolve?
+- **Hypothesis and prediction**: none directional. QCi's "much better
+  results" has no published like-for-like basis
+  (`docs/phase2/DIRAC_UNDERSTANDINGS.md`).
+- **Falsifier**: "Dirac-3S behaves as Dirac-3 on B4" is contradicted if a
+  Dirac-3S oilgas fit's weight cosine against the exact solve falls
+  outside [0.883, 0.909]: Dirac-3's range over seeds 42-46 (0.892-0.901),
+  widened on each side by its own width, so that leave-one-out it fires on
+  none of Dirac-3's own seeds (`docs/sprints/SPRINT_26_PLAN.md`). With 2
+  fits this is descriptive, not a test.
+- **Data and splits**: B1 and B2 on ULB, B4 on oilgas_gasturbine; Phase 1
+  stratified splits, unchanged.
+- **Arms**: Dirac-3S fits through `eqc-models` 0.22.1 with
+  `sampler_type="dirac-3s"`, in Phase 1's configurations (B1 `free`, 91
+  variables; B2 `full`, 833; B4 frozen cell, 560), with F145's seeded
+  weak learners. Compared with: Dirac-3's rows for the same cell and seed,
+  read from `experiments/results/`; and the exact proxy solve of the same
+  Hamiltonian.
+- **Measures**: metered seconds (allocation balance before minus after),
+  wall time including queue, weight cosine against the exact solve,
+  objective gap to the exact optimum, exact-zero fraction, and test AUPRC
+  and in-pocket AUPRC (B4) as Phase 1 scored them. Every returned sample
+  is stored with the job id and device name.
+- **Resolution screen**: B4 jobs must pass A31's test, measured on the
+  Hamiltonian that is sent (seeded build, hash checked) before submission:
+  the off-diagonal and linear spreads must each reach the largest
+  coefficient divided by 200. The library's `get_dynamic_range` (largest
+  over smallest coefficient, in dB) is recorded but is not the test: it
+  passes B1 at 4.8 dB although no coefficient difference in B1 is
+  resolvable (corrected 2026-10-14, before any call, at the dry run).
+  B1 and B2 run under section 4's exception: their purpose is cost and
+  queue time, their screen result is reported beside them, and they are
+  never read as accuracy.
+- **Multiplicity**: none; no test is run on 5 fits.
+- **Device**: Dirac-3S. Three stops, each approved separately with its
+  call count and seconds: B1 seed 42 (1 call, cap 60 s); B1 seed 43 and
+  B2 seed 42 (2 calls, cap 150 s); B4 oilgas seeds 42 and 43 (2 calls, cap
+  150 s). Later stops are re-quoted from stop 1's measured cost.
+- **Stopping rules**: a stop ends at its cap; a B4 unit whose submitted
+  Hamiltonian differs from the screened one stops the block.
+- **What is reported whatever the result**: every fit's cost, wait,
+  device name and job id, failures included; the screen result beside
+  each; the statement that 5 fits support no test.
 
 ### F144: the proxy twin of B2's configuration
 
@@ -233,3 +288,7 @@ scored. Not filed; part of this draft.
   (Sprint 26 Task C, Decision 1).
 - 2026-10-14: section 7's F145 item decided: seeded for Phase 2 builds,
   reported for Phase 1 pools (Sprint 26 Task B).
+- 2026-10-14: section 6 gains the F142 entry, before any Dirac-3S call
+  (Sprint 26 Task D, Decision 1). Its screen, and section 4's, corrected
+  from a dB ratio to A31's spread test after the dry run showed the ratio
+  passes B1.

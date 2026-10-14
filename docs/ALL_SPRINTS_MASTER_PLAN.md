@@ -557,7 +557,8 @@ value. Removed from candidates.)
 - Depends on: nothing. The SPECTRA author's construction details help
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
-- **Sprint 26 (team lead, Decision 1 option 1, 2026-10-14)**: not selected. F142 screens each B4 job with `get_dynamic_range` against 23 dB before its submit; this card stays open for the screen as a tested gate
+- **Sprint 26 (team lead, Decision 1 option 1, 2026-10-14)**: not selected. F142 screens each B4 job before its submit; this card stays open for the screen as a tested gate
+- **Corrected 2026-10-14 (Sprint 26 Task D dry run): the screen must test coefficient DIFFERENCES, not a dB ratio.** `get_dynamic_range` is 10 log10(max / min coefficient); it passes B1 at 4.8 dB although A31 shows no coefficient difference in B1 is resolvable. The right test is A31's: each spread must reach max / 200 (`device_resolution._coefficient_spread`). F142's runner uses it (`run_dirac3s_verify.resolution_screen`, tested). B1 0.005 and B2 0.014 of the step fail; B4 oilgas 37 times the step passes. This card's acceptance ("flags the frozen B2 pools; passes a pool built to be resolvable") holds under that test
 - **F138 re-check (2026-10-13)**: QCi states the same 23 dB maximum and the same about 200:1 effective limit for Dirac-3S; the effective Dirac-3S figure is unmeasured. The screen applies as written. The Phase 2 draft lets a cost or twin run proceed through a failed screen when its entry says so first (F142's B1 and B2 fits)
 - Phase: Phase 2 preparation, Experiment 3 (was to sprint with F94, which shipped in Sprint 25 without it; F94's validation-fold Hamiltonians are inputs F25 asks this screen to check, corrected 2026-10-13, Pass 1)
 - Platform: Dirac-3 planning
