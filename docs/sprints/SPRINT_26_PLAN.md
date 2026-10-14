@@ -1,7 +1,7 @@
 # Sprint 26 Plan: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable
 
 **Sprint**: 26 | **Branch**: `feature/20261013_Sprint_26`
-**Planned**: 2026-10-13 | **Status**: DRAFT, awaiting approval
+**Planned**: 2026-10-13 | **Status**: DRAFT, awaiting approval. Draft PR #21.
 **Scope**: F141, F142, F144, F147, F145, F146, F105 and F126 (team lead
 selection, 2026-10-13)
 **Metered Dirac-3S seconds**: about 172, cap 360, all in F142. **Plan
