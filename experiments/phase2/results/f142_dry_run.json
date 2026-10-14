@@ -1,0 +1,94 @@
+{
+ "generator": "experiments/phase2/src/run_dirac3s_verify.py --dry-run",
+ "card": "F142",
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "note": "offline builds of the requests each stop would send; no device call",
+ "stops": {
+  "2": {
+   "written": "2026-10-14T11:03:32",
+   "units": [
+    {
+     "unit": "b1_43",
+     "n_variables": 91,
+     "exact_optimum_median_nonzero_weight": 0.010989011416155426,
+     "weight_step": 0.005,
+     "weights_resolvable": true,
+     "device_type": "dirac-3s",
+     "num_samples": 8,
+     "dynamic_range_db": 4.771518695607588,
+     "off_diagonal_spread_over_resolvable": 0.004699386142685112,
+     "linear_spread_over_resolvable": 0.004699386142685112,
+     "screen_pass": false,
+     "hamiltonian_sha256": "30d84a83cd1910aa6f19c2df419d1ca7ebc64c6ab0a47c0ffde8c3d473963327"
+    },
+    {
+     "unit": "b2_42",
+     "n_variables": 833,
+     "exact_optimum_median_nonzero_weight": 0.0012004801941450812,
+     "weight_step": 0.005,
+     "weights_resolvable": false,
+     "device_type": "dirac-3s",
+     "num_samples": 8,
+     "dynamic_range_db": 4.772131057181338,
+     "off_diagonal_spread_over_resolvable": 0.014098158428055335,
+     "linear_spread_over_resolvable": 0.01723108252317874,
+     "screen_pass": false,
+     "hamiltonian_sha256": "c121c8577628d9d2b93471a7be13183eb182f8888f946d588e77b766d6a75aaf"
+    }
+   ]
+  },
+  "3": {
+   "written": "2026-10-14T11:05:23",
+   "units": [
+    {
+     "unit": "b4_oilgas_42",
+     "n_variables": 560,
+     "exact_optimum_median_nonzero_weight": 0.0018267419471481997,
+     "weight_step": 0.005,
+     "weights_resolvable": false,
+     "device_type": "dirac-3s",
+     "num_samples": 8,
+     "dynamic_range_db": 8.317987737874036,
+     "off_diagonal_spread_over_resolvable": 37.206769817142344,
+     "linear_spread_over_resolvable": 74.41353963428469,
+     "screen_pass": true,
+     "hamiltonian_sha256": "8facc99bbb27b85e94efc82824c9fdf1402c2468a1acbbf5c5fbc334111a66f4"
+    },
+    {
+     "unit": "b4_oilgas_43",
+     "n_variables": 560,
+     "exact_optimum_median_nonzero_weight": 0.0018276762549878413,
+     "weight_step": 0.005,
+     "weights_resolvable": false,
+     "device_type": "dirac-3s",
+     "num_samples": 8,
+     "dynamic_range_db": 8.317987737874036,
+     "off_diagonal_spread_over_resolvable": 37.206769817142344,
+     "linear_spread_over_resolvable": 74.41353963428469,
+     "screen_pass": true,
+     "hamiltonian_sha256": "027fd2bed4c58a9c46d69831ac7ee90fdb4405c081b135885ba81eb48cc5a210"
+    }
+   ]
+  },
+  "1": {
+   "written": "2026-10-14T11:01:16",
+   "units": [
+    {
+     "unit": "b1_42",
+     "n_variables": 91,
+     "exact_optimum_median_nonzero_weight": 0.010989011477176295,
+     "weight_step": 0.005,
+     "weights_resolvable": true,
+     "device_type": "dirac-3s",
+     "num_samples": 8,
+     "dynamic_range_db": 4.771518695607588,
+     "off_diagonal_spread_over_resolvable": 0.004699386142685112,
+     "linear_spread_over_resolvable": 0.006265848190246816,
+     "screen_pass": false,
+     "hamiltonian_sha256": "b458527237a15f326b0ed8f6e10f5b86140a0f07a152e15fe0019d87ca7898e3"
+    }
+   ]
+  }
+ }
+}
