@@ -1,51 +1,21 @@
 {
   "current_sprint": {
-    "number": 25,
-    "name": "Learn the New Device, Then Build What Runs on Any Device",
-    "branch": "feature/20261010_Sprint_25",
-    "status": "phase_8_delivery_cycle",
-    "plan_doc": "docs/sprints/SPRINT_25_PLAN.md",
-    "selected_cards": [
-      "F138",
-      "F139",
-      "F102",
-      "F113",
-      "F29",
-      "F94"
-    ],
-    "pr": 12,
-    "plan_approved": true,
-    "github_issues": [
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19
-    ],
-    "task_actuals": {
-      "D": 5,
-      "E": 12,
-      "A": 16,
-      "B": 5,
-      "C": 5,
-      "F": 129
-    },
-    "task_started": {
-      "A": "2026-10-13T01:07:49-04:00",
-      "E": "2026-10-13T01:10:39-04:00",
-      "D": "2026-10-13T01:12:24-04:00",
-      "F": "2026-10-13T01:13:21-04:00",
-      "B": "2026-10-13T01:18:59-04:00",
-      "C": "2026-10-13T01:20:53-04:00"
-    }
+    "number": 26,
+    "name": "Reach Dirac-3S, Measure It, and Make the Proxy Repeatable",
+    "branch": "feature/20261013_Sprint_26",
+    "status": "phase_3_planning",
+    "plan_doc": "docs/sprints/SPRINT_26_PLAN.md",
+    "pr": null,
+    "plan_approved": false,
+    "github_issues": [],
+    "task_actuals": {},
+    "task_started": {}
   },
   "last_completed_sprint": {
     "number": 25,
     "merged_pr": 12,
     "main_merge_pr": 20,
-    "docs_triad_complete": false
+    "docs_triad_complete": true
   },
   "prereg": {
     "status": "FROZEN",

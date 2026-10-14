@@ -38,6 +38,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 22 | docs/sprints/SPRINT_22_SUMMARY.md | [OK] Complete | ~2 days (Oct 6 - Oct 7, 2026) |
 | 23 | docs/sprints/SPRINT_23_SUMMARY.md | [OK] Complete (Tasks C and D done in the Phase 1 repository: `as-filed` tag at 4aa17d2, repository archived; verified 2026-10-13) | ~1 day (Oct 8, 2026) |
 | 24 | docs/sprints/SPRINT_24_SUMMARY.md | [OK] Complete | ~2 days (Oct 9-10, 2026) |
+| 25 | docs/sprints/SPRINT_25_SUMMARY.md | [OK] Complete | ~4 days (Oct 10-13, 2026) |
 
 ## Last Completed Sprint
 
@@ -52,8 +53,7 @@ found the training-fold Hamiltonian has many tied optima, so F25 must
 choose its ridge weight and build on held-out predictions. F129 closed by
 the team lead; F121 needs a new hold condition at Sprint 26 refinement.
 Records: `SPRINT_25_PLAN.md`, `SPRINT_25_VALIDATION.md`,
-`SPRINT_25_RETROSPECTIVE.md`; `SPRINT_25_SUMMARY.md` is written at Sprint
-26 planning.
+`SPRINT_25_RETROSPECTIVE.md`, `SPRINT_25_SUMMARY.md`.
 
 ### Sprint 24: Close the Boundary, Fix the Tooling, Sweep the Lever (Oct 9 -
 Oct 10, 2026; PR #2, the first sprint in this repository). Delivered
@@ -429,7 +429,7 @@ F123's layout is superseded by F127.)
 **F141. Dirac-3S client support: bump the QCi packages, name the device on every row (~1h [no-history], zero metered) Priority 7**
 - Phase: Phase 2 preparation (added 2026-10-13 by F139, Sprint 25). Gates every Dirac-3S run
 - Platform: N/A (local, CI)
-- F138 found the pinned `qci-client` 5.0.2 and `eqc-models` 0.21.0 cannot reach Dirac-3S. `qci-client` 5.0.3 adds `device_type="dirac-3s"`; `eqc-models` 0.22.1 replaces the solver's `generation` argument with `sampler_type="dirac-3s"` and requires `qci-client>=5.0.3`. Both were under two weeks old on 2026-10-13
+- F138 found the pinned `qci-client` 5.0.2 and `eqc-models` 0.21.0 cannot reach Dirac-3S. `qci-client` 5.0.3 adds `device_type="dirac-3s"`; `eqc-models` 0.22.1 adds a `sampler_type="dirac-3s"` constructor argument to `QciClientSolver`, which `Dirac3CloudSolver` and `Dirac3IntegerCloudSolver` inherit, and requires `qci-client>=5.0.3` (corrected 2026-10-13 at Sprint 26 planning, from the 0.22.1 wheel: `generation` is not removed; it stays a class attribute, default `None`, and when set it is appended to the device name). Both were under two weeks old on 2026-10-13
 - Scope: both bumps in `requirements.txt` and the lock file; solvers constructed with `sampler_type` where a Dirac-3S run asks for it (the `cb.Dirac3CloudSolver` substitution point in `eqc_submit.py`, and `Dirac3IntegerCloudSolver` directly); a `device_type` field required on every Phase 2 hardware row, enforced beside F133's `job_id` rule; confirm `qubo_proxy.py`'s Hamiltonian is unchanged in 0.22.1 (it replicates "eqc-models 0.21.0 source"); job metrics read by the submitted device name, not a hardcoded "dirac-3"
 - Acceptance: an offline dry run reaches a request body naming `dirac-3s` with no device call; the row-schema test fails on a hardware row without `device_type`, proven red; the proxy-identity check passes on 0.22.1; the full suite passes
 - Depends on: nothing
