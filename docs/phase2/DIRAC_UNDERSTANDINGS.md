@@ -49,10 +49,18 @@ Where EvidenceBasedDB holds the same item, its record id is given as
   the same Hamiltonian was -0.0010 AUPRC (CI -0.0032 to +0.0012), weight
   cosine 0.975 to 0.999. (`docs/QCI_EQC_MODELS_FEEDBACK.md` section 5;
   EDB: `dirac3-matches-exact-optimum-on-convex-cvqboost`)
-- **That test was nearly trivial.** The formulation is strictly convex and
-  its optimum is uniform weights, even at lambda = 0, so any solver
-  reproduces it. (EDB: `dirac3-fidelity-test-is-near-trivial-on-convex-formulation`;
-  `docs/phase2/F29_SAMPLE_SIZE.md`)
+- **That test was nearly trivial, at small pool sizes.** The formulation
+  is strictly convex and, with the ridge, its optimum is near-uniform
+  weights. (Corrected 2026-10-14: this line said "even at lambda = 0";
+  amendment A27 withdrew that, since at lambda = 0 the optimum is a face of
+  the simplex and the ridge selects the near-uniform point.) The match holds
+  up to 91 variables (cosine 0.975-0.999). It does not hold at 560-833:
+  cosine 0.89-0.90 on B4 oilgas (560), 0.83-0.85 on B4 telecom (816) and
+  0.82-0.83 on B2 (833, ULB), falling with pool size across datasets, as
+  A31's weight-resolution limit predicts. **Measured** (`results.json`
+  `fidelity.weight_cosine`; `b4_hardware.json`). (EDB:
+  `dirac3-fidelity-test-is-near-trivial-on-convex-formulation`, which still
+  carries the withdrawn clause; `docs/phase2/EDB_PROPOSALS.md` P4)
 - **It never returned an answer better than the certified optimum.**
   Hardware objectives were 0.013% to 0.413% above the exact minimum.
   Within-fit energy spread: median 0.020%, maximum 0.343%, over 48 fits.
@@ -234,8 +242,12 @@ three network calls replaced. Tests: `test_response_serialization.py`,
 - **On the base module, nothing about our size limits.** Our ceilings are
   Dirac-3's. Only the expansion configuration lifts them.
 - **If the resolution is unchanged, A31 applies unchanged.** B1 and B2's
-  Hamiltonians stay below it; only B4's can test fidelity. Hence F142's
-  design.
+  coefficient spreads stay below it; only B4's pass (37 times the step,
+  `experiments/phase2/results/f142_dry_run.json`). B4's optimum weights
+  (about 0.0018) still sit below the weight resolution, A31's second half,
+  so F142's B4 fits compare the two devices on a sparsified problem, not
+  on a fully resolvable one. (Scoped 2026-10-14, Sprint 26 fresh-eyes
+  review.)
 - **The binding limit is our formulation, not the device** (section 1,
   F94). A Dirac-3S result on the current Hamiltonians cannot beat greedy by
   more than the 0.0016 to 0.0026 left to the floor.
@@ -350,3 +362,4 @@ Each update adds a row to the revision log and moves items between labels
 |---|---|---|
 | 2026-10-13 | 25 | First draft: understandings for both devices, nine suggested improvements, two pending and twelve unsent questions |
 | 2026-10-14 | 26 | F141 bump: clients pinned; new label "Checked offline"; five offline findings for Dirac-3S (request body, Hamiltonian identity, `generation` argument removed, `num_samples` source, metrics key); section 3 items 1 and 2 re-checked |
+| 2026-10-14 | 26 | Fresh-eyes review: the "nearly trivial" fidelity item drops the lambda = 0 clause (A27) and is scoped to small pools, with the cosine falling with pool size; the B4 item scoped to A31's weight-resolution half |

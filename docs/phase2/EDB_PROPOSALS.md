@@ -106,9 +106,18 @@ Found while building `scripts/edb_query.py` (F147, Sprint 26). Searched
   `eqc-models` 0.22.1's `sampler_type`. (`docs/phase2/
   DIRAC_UNDERSTANDINGS.md`, "Checked offline")
 - **Scope: `dirac3-matches-exact-optimum-on-convex-cvqboost`** states
-  cosines of 0.975-0.999 without naming the dataset. They are ULB's. B4's
-  SPECTRA cosines are lower (above), so the record reads as more general
-  than its evidence. Proposed: name ULB in the value.
+  cosines of 0.975-0.999 without naming the pool sizes. They are the
+  degree-2 arms at up to 91 variables (B1, G0b, the mixed arm). At 560-833 variables
+  the cosine is 0.82-0.90, B2 on ULB included (0.82-0.83), falling with
+  pool size (`results.json` `fidelity.weight_cosine`; `b4_hardware.json`).
+  Proposed: scope the record to pool sizes up to 91 variables.
+- **Withdrawn clause: `dirac3-fidelity-test-is-near-trivial-on-convex-formulation`**
+  says the weights are "uniform even at lambda = 0". Amendment A27
+  (`experiments/PREREGISTRATION.md`, 2026-09-10) withdrew that: at lambda
+  = 0 the optimum is a face of the simplex, and the ridge selects the
+  near-uniform point. "Any solver reproduces its optimum" also fails at
+  560-833 variables (item above). Proposed: drop the lambda = 0 clause,
+  cite A27, and scope the record to small pools.
 
 These are this project's independent findings, not validated by QCi (see
 P2).

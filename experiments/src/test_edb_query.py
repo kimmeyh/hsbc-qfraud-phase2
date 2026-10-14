@@ -76,6 +76,30 @@ def test_a_missing_store_is_an_error_not_an_empty_result(tmp_path):
         "opening a missing store must not create it")
 
 
+def test_a_hash_in_the_path_neither_drops_read_only_nor_creates_a_file(
+        tmp_path, store):
+    """Code review finding 10: a hand-built URI lost '?mode=ro' at a '#'
+    and SQLite created an empty file beside the store."""
+    import shutil
+    d = tmp_path / "store#1"
+    d.mkdir()
+    db = d / "evidence.db"
+    shutil.copy(store, db)
+    before = sorted(p.name for p in tmp_path.rglob("*"))
+    conn = edb_query.connect(db)
+    assert edb_query.search(conn, "guide")          # it opened the real store
+    with pytest.raises(sqlite3.OperationalError):
+        conn.execute("CREATE TABLE intruder (x)")
+    conn.close()
+    assert sorted(p.name for p in tmp_path.rglob("*")) == before
+
+
+def test_an_unknown_context_is_an_error_not_an_empty_result(store):
+    conn = edb_query.connect(store)
+    with pytest.raises(ValueError, match="unknown context"):
+        edb_query.search(conn, "", context="platform:dirac3s")
+
+
 def test_search_matches_text_case_insensitively_newest_first(store):
     conn = edb_query.connect(store)
     ids = [r["id"] for r in edb_query.search(conn, "resolution")]

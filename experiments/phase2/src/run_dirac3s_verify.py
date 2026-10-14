@@ -20,10 +20,28 @@ shows no coefficient difference in B1 is resolvable. Both are recorded.
 
 THE SCREEN READS THE HAMILTONIAN THAT IS SENT. Every pool here is built with
 F145's seeded weak learners, so the offline build that is screened and the
-metered build are byte-identical. The runner checks that: it
-hashes J and C from both builds and refuses to submit a B4 unit whose
-metered-run Hamiltonian differs from the one it screened. (Unseeded, the
-two builds drift, and the screen would be of a different matrix.)
+metered build are byte-identical. The runner enforces that BEFORE the
+network call: its solver subclass (`_guarded`) hashes J and C inside
+`solve`, before the library uploads anything, and raises
+`eqc_submit.NoRetry` if they differ from the screened hash, or if an
+`enforce` unit fails the screen. (Unseeded, the two builds drift, and the
+screen would be of a different matrix.)
+
+PAID CALLS ARE NEVER REPEATED BY THE RUNNER (Sprint 26 code review):
+- One attempt per unit (`max_attempts=1`): a fit can fail AFTER the device
+  billed it (the metrics read, the size check), and a retry would pay again.
+  So the call count approved for a stop is the most it can spend.
+- The raw response is saved in `makeResults`, before any post-processing,
+  under a name carrying the job id, and never overwritten.
+- A "submitted" row is written as soon as the fit returns, before scoring.
+- A unit with ANY row, or ANY Phase 2 ledger entry, is never submitted
+  again; a crash between the intent write and the outcome leaves a ledger
+  entry, and that unit was possibly billed. Clearing one is a human act.
+- A zero or negative balance change on a successful call is charged the
+  conservative estimate (Dirac-3S's billing source is unverified, question
+  A3), so the stop cap still counts it. The cap applies between units: a
+  running call cannot be stopped.
+- A lock file refuses a second concurrent run.
 
 PHASE 1 FILES ARE NEVER WRITTEN (CLAUDE.md, the Phase 1 boundary, rule 3).
 `metered_call` writes its ledger and call logs under `experiments/results/`;
@@ -54,6 +72,7 @@ import qubo_proxy as qp  # noqa: E402
 
 PHASE2_RESULTS = Path(__file__).resolve().parents[1] / "results"
 RESULT = PHASE2_RESULTS / "f142_dirac3s_verify.json"
+DRY_RUN = PHASE2_RESULTS / "f142_dry_run.json"
 LEDGER = PHASE2_RESULTS / "qpu_cost_ledger_phase2.json"
 LOG_DIR = PHASE2_RESULTS / "call_logs"
 RESP_DIR = PHASE2_RESULTS / "device_samples"
@@ -103,9 +122,82 @@ def _rows() -> list[dict]:
             "cannot read its own record cannot know what it has paid for.")
 
 
+def _ledger_units() -> set[str]:
+    """Units with any entry in the Phase 2 ledger, whatever its status."""
+    if not LEDGER.exists():
+        return set()
+    try:
+        calls = json.loads(LEDGER.read_text(encoding="utf-8"))["calls"]
+    except Exception as exc:                              # noqa: BLE001
+        raise SystemExit(
+            f"REFUSING: {LEDGER.name} is unreadable ({exc}). A runner that "
+            "cannot read its ledger cannot know what it has paid for.")
+    out = set()
+    for c in calls:
+        label = str(c.get("label") or "")
+        if label.startswith("f142_") and "_a" in label:
+            out.add(label[len("f142_"):label.rindex("_a")])
+    return out
+
+
 def _done() -> set[str]:
-    """Units already submitted and not failed: never submitted again."""
-    return {r["unit"] for r in _rows() if r.get("status") != "failed"}
+    """Units ever attempted: any row, any status, or any ledger entry. Never
+    submitted again by this runner (a failed unit may have been billed)."""
+    return {r["unit"] for r in _rows()} | _ledger_units()
+
+
+@contextmanager
+def _lock():
+    """One metered run at a time: a second one would see the same units as
+    not done and submit them too."""
+    lock = RESULT.with_suffix(".lock")
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        raise SystemExit(f"REFUSING: {lock.name} exists; another F142 run "
+                         "may be in progress. Remove it only if none is.")
+    try:
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+        yield
+    finally:
+        lock.unlink(missing_ok=True)
+
+
+def _guarded(unit: dict, screened: dict, saved: dict):
+    """A `wrap` for `eqc_submit.device`: the pre-submit check and the raw
+    response save, on the device's own solver class."""
+    def wrap(cls):
+        class Guarded(cls):
+            def solve(self, model, **kw):
+                if _hash(model) != screened["hamiltonian_sha256"]:
+                    raise eqc_submit.NoRetry(
+                        "pre-submit: Hamiltonian differs from the screened "
+                        "one; nothing sent")
+                if unit["screen"] == "enforce" and not resolution_screen(
+                        model._J, model._C)["pass"]:
+                    raise eqc_submit.NoRetry(
+                        "pre-submit: fails A31's resolution test; nothing "
+                        "sent")
+                return super().solve(model, **kw)
+
+            def makeResults(self, model, response):
+                job_id = str((response.get("job_info") or {}).get("job_id"))
+                RESP_DIR.mkdir(parents=True, exist_ok=True)
+                path = RESP_DIR / f"f142_{unit['unit']}_{job_id}.json"
+                if path.exists():
+                    path = path.with_name(
+                        f"{path.stem}_{time.strftime('%Y%m%dT%H%M%S')}.json")
+                path.write_text(json.dumps(
+                    {"job_id": job_id, "device_type": DEVICE, "card": "F142",
+                     "unit": unit["unit"],
+                     "response": eqc_submit.to_jsonable(response)},
+                    indent=1), encoding="utf-8")
+                saved["path"], saved["job_id"] = path, job_id
+                return super().makeResults(model, response)
+        return Guarded
+    return wrap
 
 
 def _data(u: dict):
@@ -187,7 +279,15 @@ def offline(u: dict) -> dict:
         clf.fit(Xtr, y_pm1)
     s = sent[0]
     scr = resolution_screen(clf._J, clf._C)
+    # A31's second half, REPORTED, not enforced: an optimum whose weights sit
+    # below about 1/200 of the sum constraint cannot be represented, so the
+    # device returns a sparser vector (fresh-eyes review, finding 13).
+    w = qp.solve_simplex_qp(qp.h_matrix(clf, Xtr), y_pm1, cfg["lambda_coef"])
+    nz = w[w > 0]
     return {"unit": u["unit"], "n_variables": s["n_variables"],
+            "exact_optimum_median_nonzero_weight": float(np.median(nz)),
+            "weight_step": 1.0 / 200.0,
+            "weights_resolvable": bool(np.median(nz) >= 1.0 / 200.0),
             "device_type": s["device_type"], "num_samples": s["num_samples"],
             "dynamic_range_db": s["dynamic_range_db"],
             "off_diagonal_spread_over_resolvable":
@@ -198,17 +298,18 @@ def offline(u: dict) -> dict:
             "hamiltonian_sha256": _hash(clf)}
 
 
-def metered(u: dict, screened: dict, client) -> dict:
-    """One metered Dirac-3S fit. Caller has checked the screen."""
+def metered(u: dict, screened: dict, client, on_submitted) -> dict:
+    """One metered Dirac-3S fit, ONE attempt. Caller has checked the screen;
+    the solver checks it again before the network call. `on_submitted(row)`
+    is called as soon as the fit returns, before scoring, so the paid call
+    is on disk even if scoring fails."""
     Xtr, Xva, Xte, y_pm1, y_va01, y_te01, cfg, extra = _data(u)
     api = dict(api_url=os.environ.get("QCI_API_URL"),
                api_token=os.environ.get("QCI_TOKEN"))
-    built: dict = {}
+    saved: dict = {}
 
     def make_clf():
-        clf = _make_clf(cfg, api)
-        built["clf"] = clf
-        return clf
+        return _make_clf(cfg, api)
 
     def make_record(attempt):
         return mc.CallRecord(label=f"f142_{u['unit']}_a{attempt + 1}",
@@ -218,41 +319,52 @@ def metered(u: dict, screened: dict, client) -> dict:
 
     t_submit = time.strftime("%Y-%m-%dT%H:%M:%S")
     t0 = time.perf_counter()
-    with _phase2_ledger(), eqc_submit.device(DEVICE):
+    with _phase2_ledger(), eqc_submit.device(
+            DEVICE, wrap=_guarded(u, screened, saved)):
         fit = eqc_submit.metered_fit(make_clf, Xtr, y_pm1, make_record,
-                                     client)
+                                     client, max_attempts=1,
+                                     zero_cost_is_unparsed=True)
     wall = round(time.perf_counter() - t0, 1)
 
     row = {"arm": ARM, "card": "F142", "unit": u["unit"], "stop": u["stop"],
            "seed": u["seed"], "device_type": DEVICE,
-           "evidence_tag": "HW", "job_id": fit["job_id"],
+           "evidence_tag": "HW",
+           "job_id": fit["job_id"] or saved.get("job_id"),
            "metered_seconds": fit["metered_seconds"],
            "metered_seconds_parsed": fit["parsed"],
-           "retry_count": max(0, fit["attempts"] - 1),
+           "attempts": fit["attempts"],
            "wall_seconds_including_queue": wall,
            "submitted": t_submit,
            "finished": time.strftime("%Y-%m-%dT%H:%M:%S"),
+           "all_samples": (f"device_samples/{saved['path'].name}"
+                           if saved.get("path") else None),
            "hw_config": {k: (dict(v) if isinstance(v, dict) else v)
                          for k, v in cfg.items()},
            "screen": {**{k: screened[k] for k in (
                "off_diagonal_spread_over_resolvable",
                "linear_spread_over_resolvable", "screen_pass",
-               "dynamic_range_db", "n_variables")},
+               "dynamic_range_db", "n_variables",
+               "exact_optimum_median_nonzero_weight", "weights_resolvable")},
                       "test": "A31: spreads >= max |coefficient| / 200",
                       "rule": u["screen"]},
            "features_used": list(extra["features"])}
     if fit["clf"] is None:
         row.update({"status": "failed", "error": fit["error"]})
+        on_submitted(row)
         return row
+    row["status"] = "submitted_scoring"
+    on_submitted(row)
+    try:
+        _score(row, u, fit, cfg, Xtr, Xva, Xte, y_pm1, y_va01, y_te01, extra)
+    except Exception as exc:                               # noqa: BLE001
+        row.update({"status": "ok_scoring_failed",
+                    "scoring_error": f"{type(exc).__name__}: {exc}"[:400]})
+    return row
 
+
+def _score(row, u, fit, cfg, Xtr, Xva, Xte, y_pm1, y_va01, y_te01, extra):
+    """Everything after the paid call. Updates `row` in place."""
     clf, resp = fit["clf"], fit["resp"]
-    RESP_DIR.mkdir(parents=True, exist_ok=True)
-    resp_file = RESP_DIR / f"f142_{u['unit']}.json"
-    resp_file.write_text(json.dumps(
-        {"job_id": fit["job_id"], "device_type": DEVICE, "card": "F142",
-         "unit": u["unit"], "response": eqc_submit.to_jsonable(resp)},
-        indent=1), encoding="utf-8")
-
     w_hw = np.asarray(clf.params, dtype=np.float64)
     H_tr = qp.h_matrix(clf, Xtr)
     w_px = qp.solve_simplex_qp(H_tr, y_pm1, cfg["lambda_coef"])
@@ -269,11 +381,8 @@ def metered(u: dict, screened: dict, client) -> dict:
     m = metrics.summarize(y_te01, y_va01, p_val, p_test, seed=u["seed"])
     row.update({
         "status": "ok" if fit["parsed"] else "ok_unmetered",
-        "hamiltonian_matches_screened": _hash(clf) == screened[
-            "hamiltonian_sha256"],
         "n_weak_classifiers": len(clf.h_list),
         "n_samples_returned": len(eqc_submit.samples_of(resp)),
-        "all_samples": f"device_samples/{resp_file.name}",
         "weight_cosine_vs_classical": (float(w_hw @ w_px / denom)
                                        if denom > 0 else None),
         "objective_device": obj(w_hw), "objective_proxy_optimum": obj(w_px),
@@ -285,11 +394,15 @@ def metered(u: dict, screened: dict, client) -> dict:
         row["in_segment"] = ss.evaluate_in_segment(
             y_te01, p_test, extra["in_pocket_test"], u["seed"],
             label="target")
-    return row
 
 
-def _write(rows: list[dict], complete: bool) -> None:
+def _write(rows: list[dict]) -> None:
+    """`complete` is true only when every unit of every stop has a scored
+    row; a stop ended by its cap or a failure is not complete."""
     spent = sum(float(r.get("metered_seconds") or 0) for r in rows)
+    scored = {r["unit"] for r in rows if r.get("status") in ("ok",
+                                                             "ok_unmetered")}
+    complete = all(u["unit"] in scored for u in UNITS)
     RESULT.parent.mkdir(parents=True, exist_ok=True)
     RESULT.write_text(json.dumps({
         "generator": "experiments/phase2/src/run_dirac3s_verify.py",
@@ -320,7 +433,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"F142 stop {args.stop} on {DEVICE}: units "
           f"{[u['unit'] for u in units]}; already done "
           f"{sorted(done & {u['unit'] for u in units})}")
-    print(f"  CALL COUNT now : {len(todo)}")
+    print(f"  CALL COUNT now : {len(todo)} (one attempt per unit, no retry)")
     print(f"  EXPECTED       : {EXPECTED[args.stop]}")
     print(f"  STOP CAP       : {STOP_CAP_S[args.stop]} s")
 
@@ -335,9 +448,27 @@ def main(argv: list[str] | None = None) -> int:
               f"{s['off_diagonal_spread_over_resolvable']:.3f} "
               f"linear/step={s['linear_spread_over_resolvable']:.3f} "
               f"(dB {s['dynamic_range_db']:.1f}) screen={verdict} "
+              f"median-weight={s['exact_optimum_median_nonzero_weight']:.4f}"
+              f"{'' if s['weights_resolvable'] else ' (below 0.005)'} "
               f"({u['screen']})")
     if args.dry_run:
-        print("Dry run: requests built offline; nothing submitted.")
+        # The figures a Criterion H statement quotes come from a file, not
+        # a console (fresh-eyes review, finding 14).
+        DRY_RUN.parent.mkdir(parents=True, exist_ok=True)
+        prior = (json.loads(DRY_RUN.read_text(encoding="utf-8"))["stops"]
+                 if DRY_RUN.exists() else {})
+        prior[str(args.stop)] = {
+            "written": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "units": list(screened.values())}
+        DRY_RUN.write_text(json.dumps({
+            "generator": "experiments/phase2/src/run_dirac3s_verify.py "
+                         "--dry-run",
+            "card": "F142", "evidence_tag": "SIM", "metered_seconds": 0,
+            "note": "offline builds of the requests each stop would send; "
+                    "no device call",
+            "stops": prior}, indent=1) + "\n", encoding="utf-8")
+        print(f"Dry run: requests built offline; nothing submitted. "
+              f"Written: {DRY_RUN.name}")
         return 0
     if not todo:
         print("Nothing to do: every unit of this stop is already done.")
@@ -359,26 +490,36 @@ def main(argv: list[str] | None = None) -> int:
               "of each call cannot be measured.")
         return 4
 
-    rows = _rows()
-    spent = 0.0
-    for u in todo:
-        if spent >= STOP_CAP_S[args.stop]:
-            print(f"  stop cap {STOP_CAP_S[args.stop]} s reached; stopping")
-            break
-        print(f"  [submit] {u['unit']} ...", flush=True)
-        row = metered(u, screened[u["unit"]], client)
-        rows.append(row)
-        spent += float(row.get("metered_seconds") or 0)
-        _write(rows, complete=False)
-        print(f"      {row['status']}  {row.get('metered_seconds')} s  "
-              f"wall {row.get('wall_seconds_including_queue')} s  "
-              f"job {row.get('job_id')}", flush=True)
-        if (u["screen"] == "enforce"
-                and not row.get("hamiltonian_matches_screened", True)):
-            print("STOPPING: the submitted Hamiltonian differs from the "
-                  "screened one.")
-            break
-    _write(rows, complete=True)
+    with _lock():
+        rows = _rows()
+        # Spend already recorded on this stop counts against its cap.
+        spent = sum(float(r.get("metered_seconds") or 0) for r in rows
+                    if r.get("stop") == args.stop)
+        for u in todo:
+            if spent >= STOP_CAP_S[args.stop]:
+                print(f"  stop cap {STOP_CAP_S[args.stop]} s reached "
+                      f"({spent:.1f} s); stopping")
+                break
+            if u["unit"] in _done():          # re-read: never pay twice
+                continue
+            print(f"  [submit] {u['unit']} ...", flush=True)
+
+            def on_submitted(row):
+                if row not in rows:
+                    rows.append(row)
+                _write(rows)
+
+            row = metered(u, screened[u["unit"]], client, on_submitted)
+            spent += float(row.get("metered_seconds") or 0)
+            _write(rows)
+            print(f"      {row['status']}  {row.get('metered_seconds')} s  "
+                  f"wall {row.get('wall_seconds_including_queue')} s  "
+                  f"job {row.get('job_id')}", flush=True)
+            if row["status"] == "failed":
+                print("STOPPING: a failed unit is not retried and ends the "
+                      "stop; it needs a human decision.")
+                break
+        _write(rows)
     return 1 if any(r["status"] == "failed" for r in rows) else 0
 
 

@@ -38,14 +38,25 @@ correctly, and every pair of learners agrees on at least 99.989% of rows. So `HH
 to a vector of ones, and both are nearly flat on the simplex: every weighting
 gives almost the same data term.
 
-Sprint 4 found the weights uniform **even at lambda = 0**
-(`docs/sprints/SPRINT_4_SUMMARY.md`; `docs/RESULTS_MEMO.md`), so the ridge
-is not the cause. Among weightings with an almost equal data term, the ridge
-(`lambda = 2 * n_train`) then picks the most even one, which may be what
-tightens uniformity to one part in a million. F29 held lambda's rule fixed,
-so it cannot separate the two effects. (The commit that first recorded this
-result, `066802a`, said "pinned at uniform by the ridge". That was wrong;
-the fresh-eyes review caught it.)
+> **Corrected 2026-10-14 (Sprint 26 fresh-eyes review).** The paragraph
+> below, as first written, said Sprint 4 found the weights uniform "even at
+> lambda = 0", so the ridge was not the cause. Amendment A27
+> (`experiments/PREREGISTRATION.md`, 2026-09-10) had already withdrawn that
+> claim: at lambda = 0 uniform is NOT the optimum, the minimizer set is a
+> face of the simplex (twenty random starts land a mean L1 of 0.90 apart),
+> and the penalty SELECTS a diffuse solution near uniform. The Sprint 4
+> figure came from solving FROM uniform. So the ridge is what makes the
+> answer near-uniform, and `066802a`'s "pinned at uniform by the ridge",
+> which this write-up called wrong, was closer to the record. F29's
+> measured result (cosine at least 0.99999999999994 across sample sizes)
+> is unaffected; only its mechanism paragraph changes.
+
+The data term is nearly flat on the simplex, so at lambda = 0 many
+weightings tie (A27). The ridge (`lambda = 2 * n_train`) picks the most
+even one among them, which pins the answer near uniform to about one part
+in a million. F29 held lambda's rule fixed, so it does not measure how
+uniformity changes with lambda; A27's `run_lambda0_spread.py` does at
+lambda = 0.
 
 ## Results
 

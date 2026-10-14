@@ -71,10 +71,13 @@ field does not run.
   **Unverified** (says what would settle it). **An inferred mechanism names
   the leading alternative it did not rule out**, and the evidence already on
   record about that alternative. Applies to every Phase 2 write-up from its
-  first commit, not only to this document's experiments. (Sprint 25: F29's
-  first write-up said the ridge pinned the weights at uniform. Sprint 4 had
-  already found them uniform at lambda = 0, which rules that out; naming
-  the alternative would have surfaced it before the commit.)
+  first commit, not only to this document's experiments. (Sprint 25's
+  example here, F29's "pinned by the ridge", was itself corrected the wrong
+  way: the "uniform at lambda = 0" finding it relied on had been withdrawn
+  by amendment A27, and the ridge is what selects the near-uniform answer.
+  Corrected 2026-10-14. The rule stands, and the example shows a second
+  lesson: check a cited finding against the amendment log before relying
+  on it.)
 - **Source for the statistical standard**: arXiv:2604.18837, as cited on the
   F102 card. To be re-read against its text before filing.
 
@@ -167,14 +170,18 @@ filed; part of this draft.
 
 - **ID and card**: unnumbered verify entry; F142.
 - **Question**: what does a Dirac-3S fit cost and wait at our sizes, and
-  does Dirac-3S return the same weights as Dirac-3 on a Hamiltonian it can
-  resolve?
+  does Dirac-3S return the same weights as Dirac-3 on a Hamiltonian whose
+  coefficient spreads pass A31's test? (B4 passes that test. Its exact
+  optimum's weights, about 0.0018, are below the about 0.005 weight
+  resolution, A31's second half, so both devices return a sparser vector
+  than the optimum, as on B2. The comparison is of the two devices in that
+  regime, not a fidelity test on a fully resolvable problem.)
 - **Hypothesis and prediction**: none directional. QCi's "much better
   results" has no published like-for-like basis
   (`docs/phase2/DIRAC_UNDERSTANDINGS.md`).
 - **Falsifier**: "Dirac-3S behaves as Dirac-3 on B4" is contradicted if a
   Dirac-3S oilgas fit's weight cosine against the exact solve falls
-  outside [0.883, 0.909]: Dirac-3's range over seeds 42-46 (0.892-0.901),
+  outside [0.8832, 0.9095]: Dirac-3's range over seeds 42-46 (0.8920-0.9007),
   widened on each side by its own width, so that leave-one-out it fires on
   none of Dirac-3's own seeds (`docs/sprints/SPRINT_26_PLAN.md`). With 2
   fits this is descriptive, not a test.
@@ -198,6 +205,10 @@ filed; part of this draft.
   over smallest coefficient, in dB) is recorded but is not the test: it
   passes B1 at 4.8 dB although no coefficient difference in B1 is
   resolvable (corrected 2026-10-14, before any call, at the dry run).
+  The spread test is necessary, not sufficient: a spread of 37 steps means
+  at most about 37 levels. The weight-resolution half of A31 (median exact
+  weight against 1/200 of the sum constraint) is reported beside it, not
+  enforced. Figures: `experiments/phase2/results/f142_dry_run.json`.
   B1 and B2 run under section 4's exception: their purpose is cost and
   queue time, their screen result is reported beside them, and they are
   never read as accuracy.
@@ -206,8 +217,14 @@ filed; part of this draft.
   call count and seconds: B1 seed 42 (1 call, cap 60 s); B1 seed 43 and
   B2 seed 42 (2 calls, cap 150 s); B4 oilgas seeds 42 and 43 (2 calls, cap
   150 s). Later stops are re-quoted from stop 1's measured cost.
-- **Stopping rules**: a stop ends at its cap; a B4 unit whose submitted
-  Hamiltonian differs from the screened one stops the block.
+- **Stopping rules**: one attempt per unit, never retried by the runner,
+  so a stop's approved call count is its ceiling. A stop ends at its cap
+  (checked between units; a running call cannot be stopped) or at a failed
+  unit. A Hamiltonian that differs from the screened one, or a B4 unit
+  that fails the screen, is refused before anything is sent. A unit with
+  any recorded attempt is never submitted again without a human decision.
+  A balance that does not fall on a successful call is charged 10 s
+  (Dirac-3S's billing source is unverified).
 - **What is reported whatever the result**: every fit's cost, wait,
   device name and job id, failures included; the screen result beside
   each; the statement that 5 fits support no test.
@@ -256,6 +273,21 @@ scored. Not filed; part of this draft.
   WSL, about 15 and 2 minutes.
 - **What is reported whatever the result**: every seed's three AUPRC
   values, both tests, and the statement that B2's pools were not stored.
+- **Corrections written AFTER the result (2026-10-14, Sprint 26 fresh-eyes
+  review). The text above is left as it stood before the run.**
+  1. "Its own Hamiltonian" in the question is wrong: the twin solves a
+     rebuilt pool of the same configuration.
+  2. The falsifier is one-directional and the test two-sided: only a
+     rejection with a positive mean would support "the device beats its
+     proxy".
+  3. The drift reference's true mean is zero by construction, so its
+     Wilcoxon detects a systematic bias, not the size of the drift. Its
+     per-seed spread (SD 0.0027) matches the device-twin spread (SD 0.0022).
+  4. The multiplicity sentence reasons the wrong way round. A device claim
+     needs the second test to reject and the first not to, so it is held
+     at alpha; but that is the reason, not the one stated.
+  The result is reported in `docs/phase2/F144_PROXY_TWIN.md` with these
+  limits, and with a same-pool comparison that needs no rebuild.
 
 ## 7. Open items before filing
 
@@ -270,10 +302,16 @@ scored. Not filed; part of this draft.
   `qubo_proxy.seeded_weak_params(seed)` (`build --seeded-learners`); two
   such builds of seed 42's `free` full-pair pool are byte-identical on all
   three folds. Phase 1 pools were built unseeded and stay so: two seed-42
-  `free` sequential builds share their training rows and differ on 61 of
-  78 learners, 327 of 4,426,188 test cells. Any Phase 2 comparison against
-  a Phase 1 pool or device row carries that drift, which F144 measures as
-  its reference arm.
+  `free` sequential builds share their training rows and differ on 64 of
+  78 learners, 347 of 4,426,188 test cells
+  (`experiments/phase2/results/f145_build_drift.json`; the counts vary from
+  run to run, because the drift is random tie-breaking; ULB only, no other
+  dataset is measured). Any Phase 2 comparison against a Phase 1 pool or
+  device row carries that drift; F144's reference arm measures it at 91
+  variables.
+- **Equivalence margins for verify entries.** A drift or twin reference
+  whose true difference is zero should be read on size against a margin
+  set before the run, not only on a test of bias (F144's lesson).
 - Confirm the filing date and the filing venue with the team lead.
 
 ## Revision log
@@ -292,3 +330,9 @@ scored. Not filed; part of this draft.
   (Sprint 26 Task D, Decision 1). Its screen, and section 4's, corrected
   from a dB ratio to A31's spread test after the dry run showed the ratio
   passes B1.
+- 2026-10-14: after the Sprint 26 code review and fresh-eyes review, before
+  any Dirac-3S call: F142's question scoped (B4 is in the weight-resolution
+  regime), its falsifier band given to four places, its stopping rules
+  tightened (one attempt per unit, pre-submit refusal); F144 gains a dated
+  post-result correction note below its unchanged entry; section 7's F145
+  figures cite a results file; equivalence margins added as an open item.

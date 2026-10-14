@@ -12,23 +12,24 @@ already holds that bears on how those fits will be read.
 
 ## Bottom line
 
-1. **The B4 fidelity twin cannot be read as a hard test of the device.**
-   The library records our own Phase 1 finding that CVQBoost's
-   formulation is strictly convex on the simplex and nearly degenerate, so
-   any solver reproduces its optimum (`EDB:
+1. **The B4 twin compares the two devices on a sparsified problem; it is
+   not a hard fidelity test.** The library records our Phase 1 finding
+   that CVQBoost's formulation is strictly convex and nearly degenerate,
+   so any solver reproduces its optimum (`EDB:
    dirac3-fidelity-test-is-near-trivial-on-convex-formulation`, PROJ,
-   high). A Dirac-3S weight cosine inside Dirac-3's range says the device
-   solved an easy problem the same way; it does not show the two devices
-   are equivalent on hard ones. **Inferred**, from that record and from
-   amendment A31 (no coefficient difference on the frozen ULB pools is
-   resolvable at 200:1), which the library does not yet hold. The
-   leading alternative, that B4's sequential schedule-3 SPECTRA pools are
-   harder than ULB's, is not ruled out: B4's recorded cosines on oilgas
-   (0.892-0.901, `experiments/results/b4_hardware.json`,
-   `weight_cosine_vs_classical`) sit well below the 0.975-0.999 the
-   library records for ULB (`EDB:
-   dirac3-matches-exact-optimum-on-convex-cvqboost`, HW). F142 reports
-   the cosine as descriptive, as its plan already says.
+   high). Two corrections to that record. Its "uniform weights even at
+   lambda = 0" clause was withdrawn by amendment A27 (2026-09-10). And the
+   project's own hardware rows show the match holds only at small pool
+   sizes: weight cosine against the exact solve is 0.975-0.999 at up to 91
+   variables, 0.89-0.90 at 560 (B4 oilgas), 0.83-0.85 at 816 (B4 telecom)
+   and 0.82-0.83 at 833 (B2, ULB). **Measured** (`results.json`
+   `fidelity.weight_cosine`; `b4_hardware.json`
+   `weight_cosine_vs_classical`). The fall follows pool size across
+   datasets, which is what A31's weight-resolution limit predicts: a
+   diffuse optimum's weights (1/n, about 0.0018 at 560) sit below the
+   about 0.005 the device can represent. **Inferred.** So a Dirac-3S
+   oilgas cosine inside Dirac-3's range says the two devices sparsify the
+   same problem the same way. F142 reports it as descriptive, as planned.
 2. **Read every returned sample, not only the best.** QCi's own Dirac-3S
    review warns that best-of-batch tables hide per-sample success rates
    as low as about one in ten (`EDB:

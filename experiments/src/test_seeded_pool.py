@@ -1,8 +1,10 @@
 """F145 (Sprint 26): a pool build is repeatable from its seed, when asked.
 
 Two seed-42 `free` builds of the same pool, with today's code, gave identical
-training rows and different validation and test rows: 61 of 78 learners and
-327 of 4,426,188 test cells differed. eqc-models builds each
+training rows and different validation and test rows (at planning: 61 of 78
+learners and 327 of 4,426,188 test cells; the tagged measurement is
+`experiments/phase2/results/f145_build_drift.json`, and the counts vary from
+run to run). eqc-models builds each
 `DecisionTreeClassifier` with no `random_state`, so ties between equally good
 splits are broken at random. The trees agree on the rows they were fitted to
 and disagree elsewhere.

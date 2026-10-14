@@ -57,6 +57,14 @@ def cmd_build(args) -> None:
     spec = ARMS[args.arm]
     out = pool_path(args.arm, args.seed)
     if out.exists():
+        # Reused only if it was built the same way (code review finding 15).
+        meta = json.loads(out.with_suffix(".meta.json").read_text())
+        same = (meta.get("arm"), meta.get("config"),
+                meta.get("seeded_learners")) == (args.arm, spec["config"],
+                                                 spec["seeded"])
+        if not same:
+            raise SystemExit(f"{out.name} exists but was built differently "
+                             f"({meta}); remove it to rebuild")
         print(f"[skip] {out.name} exists")
         return
     t0 = time.time()
@@ -144,8 +152,16 @@ def cmd_score(args) -> None:
                      "ref_stored": st, "ref_rebuilt": rb, "twin": tw,
                      "b2_device_auprc": b2[s],
                      "stored_row_auprc": stored_rows.get(s)})
+    missing_rows = [r["seed"] for r in rows if r["stored_row_auprc"] is None]
+    if missing_rows:
+        raise SystemExit(f"no Phase 1 free proxy row for seeds {missing_rows}")
     scoring_check = max(abs(r["ref_stored"]["auprc"] - r["stored_row_auprc"])
                         for r in rows)
+    # Enforced, not only reported (code review finding 9): if this script
+    # scored a pool differently from Phase 1, nothing below is comparable.
+    if scoring_check > 1e-9:
+        raise SystemExit(f"scoring differs from Phase 1's rows by "
+                         f"{scoring_check}; refusing to write a result")
     ref = paired(ref_rebuilt, ref_stored)
     dev = paired(device, twin)
     doc = {

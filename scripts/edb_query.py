@@ -46,7 +46,10 @@ def connect(db: Path = DEFAULT_DB) -> sqlite3.Connection:
     db = Path(db)
     if not db.is_file():
         raise FileNotFoundError(f"evidence store not found: {db}")
-    conn = sqlite3.connect(f"file:{db.as_posix()}?mode=ro", uri=True)
+    # as_uri() percent-encodes the path. Built by hand, a '#' in the path
+    # starts a URI fragment, '?mode=ro' is dropped, and SQLite creates a new
+    # file beside the store (Sprint 26 code review, finding 10).
+    conn = sqlite3.connect(db.resolve().as_uri() + "?mode=ro", uri=True)
     conn.execute("PRAGMA query_only = ON")
     conn.row_factory = sqlite3.Row
     return conn
@@ -57,7 +60,13 @@ def search(conn, text: str = "", cls: str | None = None,
            certainty: str | None = None, since: str | None = None,
            limit: int = 50) -> list[dict]:
     """Records whose id or value contains `text` (case-insensitive), newest
-    first. A paper's value is its title."""
+    first. A paper's value is its title. An unknown context raises: a
+    misspelled one would otherwise read as "no records"."""
+    if context and conn.execute("SELECT 1 FROM contexts WHERE id = ?",
+                                (context,)).fetchone() is None:
+        known = [r[0] for r in conn.execute(
+            "SELECT id FROM contexts ORDER BY id")]
+        raise ValueError(f"unknown context {context!r}; known: {known}")
     sql = ["SELECT r.id, r.class, r.value, r.evidence_tag, r.certainty,",
            "       r.updated FROM records r WHERE",
            "  (instr(lower(r.value), lower(?)) > 0",

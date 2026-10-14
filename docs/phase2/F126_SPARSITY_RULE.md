@@ -17,37 +17,47 @@
    passes 0.05). Fitted on telecom, it misses oilgas by 0.847. The test
    required both directions, so **R1 fails**. **Measured** (SIM):
    `primary_passes_both_directions`, `directions.*.R1_relative_threshold`.
+   The passing direction's 0.016 is no stronger than it looks: the
+   device's own zero fraction varies across the 8 samples of one fit by an
+   SD of 0.008-0.015 on oilgas and 0.015-0.033 on telecom
+   (`device_samples/b4_*`), and the target is one sample, the
+   lowest-energy one.
 2. **On oilgas the rule fits only on a knife edge.** About 79% of the
    nonzero exact weights sit at one tied value, 1.023-1.025 / n on the
    five seeds, and the rest lie just below it. Averaged over the five
-   seeds, R1's predicted zero fraction is 0.12 at tau 1.020, 0.14 at
-   1.022 and 0.67 at 1.024; the device's is 0.14-0.16. So a tau fits
-   oilgas only inside a window about 0.002 wide. **Measured** (SIM), from
-   the cached exact weights.
+   seeds, R1's predicted zero fraction is 0.12 at tau 1.020 and 0.14 at
+   1.022; at 1.024 it is 1.0 on three seeds and 0.17-0.19 on the other two
+   (each seed's tie sits at a slightly different value). The device's is
+   0.14-0.16. So a tau fits oilgas only inside a window about 0.002 wide.
+   **Measured** (SIM), from the cached exact weights.
 3. **On telecom the rule cannot locate that window.** Its predicted zero
    fraction is flat at 0.35 for every tau from 0.9 to 1.34, so the
    telecom fit is nearly indifferent across that range. The grid's
    minimum fell at 1.342, which predicts 1.0 on oilgas; a tau of 1.0,
-   equally good on telecom, predicts 0.07. Either way the transfer fails.
+   nearly as good on telecom (MAE 0.0157 against 0.0140), predicts 0.07.
+   Either way the transfer fails.
    **Measured** (SIM).
 4. **The one passing direction is a coincidence.** Oilgas's narrow
    window (tau about 1.022) happens to lie inside telecom's flat range.
    Nothing in the rule explains why the two datasets should agree there.
    **Inferred.**
 5. **What the device zeroes is not set by the exact weight's size.** On
-   oilgas about 95% of learners have exact weights tied or within 4% of
-   the tie (all five seeds, 0.946-0.950). The device zeroes 14-16%, so at
-   least two-thirds of its zeros must fall among learners the exact
-   solution weights almost equally. (Counting only: the rebuilt pool is not
-   the device's, so no zero is matched to a learner.) This fits A31:
+   oilgas about 94% of all learners have exact weights tied or within 4% of
+   the tie (0.943-0.945 by seed). The device zeroes 14-16%, so at least
+   about 60% of its zeros (0.61-0.65 by seed) must fall among learners the
+   exact solution weights almost equally. (Counting only: the rebuilt pool
+   is not the device's, so no zero is matched to a learner.) This fits A31:
    the device cannot resolve differences this small, so on a near-uniform
    optimum it returns a sparser vector whose support the exact solution
    does not determine (`experiments/PREREGISTRATION.md` amendments A31
    and A32). **Inferred.** The leading alternative is that the exact
    weights come from rebuilt pools, not the device's own, which were never
-   stored. It is not ruled out; F145 measured that drift on ULB's `free`
-   pool at 327 of 4,426,188 test cells, small beside a tie held by 79% of
-   the learners.
+   stored. **It is open.** No build drift has been measured on B4's
+   pools. On ULB's `free` pool, two unseeded builds differ on 64 of 78
+   learners, though on only 347 of 4,426,188 test cells
+   (`experiments/phase2/results/f145_build_drift.json`; ULB only), and
+   point 2 shows the tie is knife-edged, so a small perturbation could
+   move it.
 
 **Card outcome**: the acceptance's second branch, "a recorded finding
 that the fits cannot support one". The 10 B4 fits cannot support a

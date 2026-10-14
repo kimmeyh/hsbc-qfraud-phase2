@@ -116,7 +116,7 @@ fire, or the plan names the first run that will show it.
   seeds**: leave seed 45 out, and its 0.892 falls 0.003 below the other
   four. The rule is widened: outside the Dirac-3 range, extended on each
   side by the range's own width. Leave-one-out, that fires on none of the
-  five Dirac-3 seeds. For Dirac-3S it is outside [0.883, 0.909]. With 2
+  five Dirac-3 seeds. For Dirac-3S it is outside [0.8832, 0.9095]. With 2
   fits, the result is descriptive, not a test.
 - **F144, "the device beats its own proxy"**: the paired interval of
   (B2 device minus proxy twin) over 10 seeds must exclude zero. The noise

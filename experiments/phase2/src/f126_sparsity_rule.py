@@ -65,10 +65,18 @@ def device_best(name: str, seed: int) -> np.ndarray:
 
 def exact_weights(name: str, seed: int) -> np.ndarray:
     """The exact proxy optimum on a seeded rebuild of the B4 pool, cached."""
+    import importlib.metadata as md
     cache = POOLS / f"f126_{name}_{seed}_wexact.npy"
-    if cache.exists():
-        return np.load(cache)
     c = ss.frozen_cell_by_name(name)["config"]
+    # The cache is reused only for the configuration that produced it (code
+    # review finding 15); the sidecar records what that was.
+    key = {"cell_config": c, "seeded_learners": True,
+           "eqc_models": md.version("eqc-models")}
+    side = cache.with_suffix(".json")
+    if cache.exists() and side.exists() and json.loads(
+            side.read_text(encoding="utf-8")) == json.loads(
+            json.dumps(key, default=str)):
+        return np.load(cache)
     split, cols = ss._prep_spectra(name, seed)
     Xtr = ss.coerce_features_to_numeric(split.X_train[cols]).to_numpy(
         "float32")
@@ -82,6 +90,7 @@ def exact_weights(name: str, seed: int) -> np.ndarray:
     w = qp.solve_simplex_qp(qp.h_matrix(clf, Xtr), y_pm1, lam)
     POOLS.mkdir(parents=True, exist_ok=True)
     np.save(cache, w)
+    side.write_text(json.dumps(key, default=str), encoding="utf-8")
     return w
 
 
