@@ -30,6 +30,8 @@ updated here.
   Hamiltonian. Evidence tag `SIM`.
 - **QCi states**: in a QCi document, with the section. Not checked by us.
 - **Independent**: a source outside QCi and outside this project.
+- **Checked offline**: we ran the client code with no device call. True of
+  the request we send, not of the device. (Added 2026-10-14.)
 - **Inferred**: our reasoning from the items above. Says what it rests on.
 - **Unverified**: believed, not checked. Says what would settle it.
 
@@ -150,8 +152,8 @@ Full sources: `docs/phase2/DIRAC_3S_RESEARCH.md` and
 
 - **It is "QCi's second generation Dirac-3 device"**, chosen per job by
   `device_type="dirac-3s"`. It needs `qci-client` 5.0.3 and `eqc-models`
-  0.22.1 (`sampler_type="dirac-3s"`). Our pinned versions cannot reach it.
-  (Client docs; checked against the wheels.)
+  0.22.1 (`sampler_type="dirac-3s"`). Both are pinned from 2026-10-14
+  (F141). (Client docs; checked against the wheels.)
 - **Unknown job parameters are "dropped from the job body without
   warning".** A misspelled device name would run silently on the default.
   (Client docs, through the site sweep; not re-checked.)
@@ -176,6 +178,29 @@ Full sources: `docs/phase2/DIRAC_3S_RESEARCH.md` and
   `dirac3s-not-yet-ce-or-fcc-compliant`)
 - **"It should provide much better results"** (QCi's notice, 2026-10-09).
   A vendor claim. No source compares Dirac-3S with Dirac-3.
+
+### Checked offline (F141, 2026-10-14)
+
+Run in both venvs (Windows, and WSL `/root/eqc-venv`) with the client's
+three network calls replaced. Tests: `test_response_serialization.py`,
+`test_qubo_proxy.py`.
+
+- **The request names `dirac-3s` unchanged.** qci-client's own
+  `build_job_body` puts it in `device_config` as given. The `dirac-3` alias
+  is rewritten to `dirac-3_normalized_qudit`.
+- **The Hamiltonian is unchanged.** The `ml/` and `base/` sources of
+  `eqc-models` are identical in 0.21.0 and 0.22.1, and the J and C a
+  CVQBoost fit sends equal the proxy's exactly.
+- **0.22.1 removes the `generation` constructor argument.** The class
+  attribute remains; when set, it is appended to the device name as
+  `<sampler_type>.<generation>`. `sampler_type` accepts only `dirac-3s`,
+  and only on a Dirac-3 solver.
+- **The library sends the model's own `num_samples`**, not the argument to
+  `solve` (0.21.0 and 0.22.1 alike). A dry run records the value from the
+  request body for this reason.
+- **Job metrics are read by the device name in the request.** A Dirac-3S
+  result's timing is looked up under `dirac-3s`. Whether QCi's metrics use
+  that key is **unverified**; F142's first fit settles it.
 
 ### What QCi's own documents get wrong or leave open
 
@@ -226,7 +251,8 @@ been sent.** They follow the format of our Phase 1 feedback
 ### Still open from our Phase 1 feedback
 
 Checked on 2026-10-13 against the `eqc-models` 0.22.1 wheel (downloaded,
-not installed):
+not installed). Items 1 and 2 re-checked on 2026-10-14 against 0.22.1 as
+installed (F141): both still hold.
 
 1. **The billed seconds are still not a named field.**
    `eqc_models/base/results.py` is unchanged from 0.21.0 apart from line
@@ -323,3 +349,4 @@ Each update adds a row to the revision log and moves items between labels
 | Date | Sprint | Change |
 |---|---|---|
 | 2026-10-13 | 25 | First draft: understandings for both devices, nine suggested improvements, two pending and twelve unsent questions |
+| 2026-10-14 | 26 | F141 bump: clients pinned; new label "Checked offline"; five offline findings for Dirac-3S (request body, Hamiltonian identity, `generation` argument removed, `num_samples` source, metrics key); section 3 items 1 and 2 re-checked |
