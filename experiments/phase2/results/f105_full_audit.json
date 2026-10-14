@@ -1,0 +1,147 @@
+{
+ "generator": "experiments/phase2/src/ieee_harness.py",
+ "card": "F105",
+ "sprint": 26,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "fraction": 1.0,
+ "no_score_reported": "F105: no model score until F102 names the Experiment 2 preregistration entry",
+ "rows_after_dedupe_full": 590537,
+ "rows_used": 590537,
+ "exact_duplicates_removed": 3,
+ "load_s": 18.2,
+ "folds": [
+  {
+   "eval_month": 4,
+   "train_months": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_train": 410600,
+   "n_eval": 85302,
+   "timings_s": {
+    "features_s": 21.9,
+    "aggregate_audit_s": 45.1,
+    "controls_s": 261.4,
+    "fit_predict_s": 8.3
+   },
+   "audits": {
+    "entity_key_columns_found": [],
+    "aggregate_leakage": {
+     "aggregate_columns_checked": 22,
+     "moved": [],
+     "training_features_unchanged": true,
+     "frequency_columns_not_from_training_rows": [],
+     "graph_features": "none in this pipeline",
+     "passes": true
+    },
+    "random_halves_auc": 0.500346123236743,
+    "random_halves_passes": true,
+    "item4_controls": {
+     "adversarial_rounds": 20,
+     "adversarial_hit_round_cap": true,
+     "final_adversarial_auc": 0.9449592308213017,
+     "n_features_start": 231,
+     "n_after_time_consistency": 201,
+     "n_after_adversarial": 181,
+     "dropped_time_inconsistent": 30,
+     "dropped_adversarial": 20,
+     "controls": "section 4 item 4, both computed on training rows only"
+    }
+   },
+   "controls_selected_none": false,
+   "client_mean_changed_fraction": 0.6554711495627301
+  },
+  {
+   "eval_month": 5,
+   "train_months": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "n_train": 495902,
+   "n_eval": 86524,
+   "timings_s": {
+    "features_s": 23.6,
+    "aggregate_audit_s": 49.2,
+    "controls_s": 335.6,
+    "fit_predict_s": 10.5
+   },
+   "audits": {
+    "entity_key_columns_found": [],
+    "aggregate_leakage": {
+     "aggregate_columns_checked": 22,
+     "moved": [],
+     "training_features_unchanged": true,
+     "frequency_columns_not_from_training_rows": [],
+     "graph_features": "none in this pipeline",
+     "passes": true
+    },
+    "random_halves_auc": 0.49903623464097224,
+    "random_halves_passes": true,
+    "item4_controls": {
+     "adversarial_rounds": 20,
+     "adversarial_hit_round_cap": true,
+     "final_adversarial_auc": 0.8876508318180554,
+     "n_features_start": 228,
+     "n_after_time_consistency": 202,
+     "n_after_adversarial": 182,
+     "dropped_time_inconsistent": 26,
+     "dropped_adversarial": 20,
+     "controls": "section 4 item 4, both computed on training rows only"
+    }
+   },
+   "controls_selected_none": false,
+   "client_mean_changed_fraction": 0.6704267024178263
+  },
+  {
+   "eval_month": 6,
+   "train_months": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "n_train": 582426,
+   "n_eval": 8111,
+   "timings_s": {
+    "features_s": 24.4,
+    "aggregate_audit_s": 50.5,
+    "controls_s": 353.1,
+    "fit_predict_s": 10.1
+   },
+   "audits": {
+    "entity_key_columns_found": [],
+    "aggregate_leakage": {
+     "aggregate_columns_checked": 22,
+     "moved": [],
+     "training_features_unchanged": true,
+     "frequency_columns_not_from_training_rows": [],
+     "graph_features": "none in this pipeline",
+     "passes": true
+    },
+    "random_halves_auc": 0.4986703599883421,
+    "random_halves_passes": true,
+    "item4_controls": {
+     "adversarial_rounds": 20,
+     "adversarial_hit_round_cap": true,
+     "final_adversarial_auc": 0.8871007933960237,
+     "n_features_start": 227,
+     "n_after_time_consistency": 203,
+     "n_after_adversarial": 183,
+     "dropped_time_inconsistent": 24,
+     "dropped_adversarial": 20,
+     "controls": "section 4 item 4, both computed on training rows only"
+    }
+   },
+   "controls_selected_none": false,
+   "client_mean_changed_fraction": 0.4227592158796696
+  }
+ ]
+}
