@@ -1,7 +1,9 @@
 # Sprint 26 Plan: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable
 
 **Sprint**: 26 | **Branch**: `feature/20261013_Sprint_26`
-**Planned**: 2026-10-13 | **Status**: DRAFT, awaiting approval. Draft PR #21.
+**Planned**: 2026-10-13 | **Status**: APPROVED 2026-10-14 (team lead): Decision 1 option 1,
+Decision 2 option 1, Decision 3 option 1; 700 minutes. Draft PR #21.
+Issues: A #22, B #23, C #24, D #25, E #26, F #27, G #28, H #29.
 **Scope**: F141, F142, F144, F147, F145, F146, F105 and F126 (team lead
 selection, 2026-10-13)
 **Metered Dirac-3S seconds**: about 172, cap 360, all in F142. **Plan
@@ -305,7 +307,7 @@ claims.
   Measured, with the row and field cited.
 - Each update adds a revision-log row.
 
-## Decisions needed at approval
+## Decisions at approval (answered 2026-10-14: 1, 1, 1)
 
 Asked in order. Decision 2 does not depend on Decision 1. Decision 3's
 total depends on Decision 1, and each option names the total for each

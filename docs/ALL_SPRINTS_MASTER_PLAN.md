@@ -530,6 +530,7 @@ value. Removed from candidates.)
 (F129 rank-1 device pilot, energy_steel with leaf regularization on Dirac-3: CLOSED 2026-10-13 by the team lead at Sprint 25 Manual Validation, on F139's recommendation (`docs/phase2/F139_RERUN_REVIEW.md`). F142's B4 verify twin answers its fidelity question on Dirac-3S, on a resolvable Hamiltonian with Dirac-3 rows already on record. No metered seconds were spent on it. Removed from candidates; F121's hold condition, which waited for it, needs a new one at the next refinement.)
 
 **F102. Phase 2 preregistration framework (~3h [no-history], zero metered) Priority 30**
+- **Sprint 26 (team lead, Decision 1 option 1, 2026-10-14)**: not selected. F142 and F144 each write their own section 6 entry in the Phase 2 draft before their runs; this card stays open for the framework
 - Phase: Phase 2 preparation (the checklist's Deliverable)
 - Platform: docs
 - A per-experiment preregistration template and one reporting standard for every Phase 2 result: nested CV, Wilcoxon signed-rank, Bonferroni correction and multi-seed sensitivity (arXiv:2604.18837); AUPRC normalized by its closed-form floor with AUROC beside it; the F104 resolution screen as a gate before any metered block; and the two meanings of "order 3" stated (weak learners over feature triples in pool construction, against a QUBO that is quadratic on the device)
@@ -556,6 +557,7 @@ value. Removed from candidates.)
 - Depends on: nothing. The SPECTRA author's construction details help
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
+- **Sprint 26 (team lead, Decision 1 option 1, 2026-10-14)**: not selected. F142 screens each B4 job with `get_dynamic_range` against 23 dB before its submit; this card stays open for the screen as a tested gate
 - **F138 re-check (2026-10-13)**: QCi states the same 23 dB maximum and the same about 200:1 effective limit for Dirac-3S; the effective Dirac-3S figure is unmeasured. The screen applies as written. The Phase 2 draft lets a cost or twin run proceed through a failed screen when its entry says so first (F142's B1 and B2 fits)
 - Phase: Phase 2 preparation, Experiment 3 (was to sprint with F94, which shipped in Sprint 25 without it; F94's validation-fold Hamiltonians are inputs F25 asks this screen to check, corrected 2026-10-13, Pass 1)
 - Platform: Dirac-3 planning
@@ -564,6 +566,7 @@ value. Removed from candidates.)
 - Depends on: nothing
 
 **F105. Experiment 2 build: IEEE-CIS rolling-origin folds and the classical gap (~6h [no-history], zero metered) Priority 60**
+- **Selected for Sprint 26 (team lead, 2026-10-13) ahead of its priority: Task G, issue #28**
 - Phase: Phase 2 preparation, Experiment 2
 - Platform: IEEE-CIS
 - Rolling-origin folds; entity reconstruction `card1_addr1_(day - D1)` used ONLY to compute group aggregations, never as a feature; client-mean post-processing; time-consistency feature selection; adversarial validation; a temporal-leakage audit of any graph features
@@ -667,6 +670,7 @@ not a sweep correction.
 - Depends on: QCi grant; F2 approval pattern
 
 **F126. Model of the device's sparsity, validated on held-out fits (~3h [no-history], zero metered) Priority 101**
+- **Selected for Sprint 26 (team lead, 2026-10-13) ahead of its priority: Task F, issue #27. Fitted on B4 only; B5 reported as a descriptive check (the plan's stated choice, not objected to at approval)**
 - Phase: Phase 2 preparation, Experiment 3 (added 2026-10-07, team lead decision D9 at Sprint 22 Manual Validation: F17 follow-up)
 - Platform: local (`experiments/phase2/src/dirac3_emulator.py`)
 - **Measured (Sprint 22, `experiments/phase2/results/f17_emulator_sparsity.json`)**: F17's emulator fails the card's own acceptance test. Exact-zero fraction of the lowest-energy sample: device 0.14-0.16 (oilgas) and 0.35-0.38 (telecom); emulator 0.002-0.004 and 0.14-0.17. The device's smallest nonzero weights are about 0.00001, far below the ~0.005 step, so "weights below the step are zeroed" is not the mechanism. Its largest weights are about twice the exact proxy's
@@ -723,7 +727,7 @@ not a sweep correction.
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
-- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands. **2026-10-13 (Sprint 25)**: F139 recommends closing F129, which would leave this hold unmeetable; a new condition or a decision is needed at the same refinement. **F129 CLOSED 2026-10-13 (team lead, Sprint 25 Manual Validation), so this hold can no longer be met. A new condition, or a decision to close or run the transfer half, is due at the Sprint 26 refinement.** F113 found no CVQBoost-specific complementarity with XGBoost (`docs/phase2/F113_ORACLE_GAP.md`): evidence for that decision.
+- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands. **2026-10-13 (Sprint 25)**: F139 recommends closing F129, which would leave this hold unmeetable; a new condition or a decision is needed at the same refinement. **F129 CLOSED 2026-10-13 (team lead, Sprint 25 Manual Validation), so this hold can no longer be met. A new condition, or a decision to close or run the transfer half, is due at the Sprint 26 refinement.** **Decided 2026-10-14 (team lead, Sprint 26 Decision 2): stays on HOLD until a Phase 2 run, proxy or device, shows an in-segment edge over the matched control with an interval excluding zero.** F113 found no CVQBoost-specific complementarity with XGBoost (`docs/phase2/F113_ORACLE_GAP.md`): evidence for that decision.
 
 
 **F116. G2 entanglement ablation on the SV1 simulator (~3h [no-history]) Priority HOLD**
