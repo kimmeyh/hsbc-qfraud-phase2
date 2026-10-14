@@ -307,6 +307,17 @@ claims.
   Measured, with the row and field cited.
 - Each update adds a revision-log row.
 
+## Decisions during execution
+
+- **Decision 5 (2026-10-14, Task A): option 1.** The team lead asked that no
+  Phase 1 figure or document change, and proposed an in-repository archive of
+  Phase 1 files. The archived Phase 1 repository at tag `as-filed` already is
+  that archive, and `docs/PHASE_SEPARATION.md` section 9 had already replaced
+  the "never edit, wrap" rule. The five rules are now in CLAUDE.md ("The
+  Phase 1 boundary inside THIS repository"). Task A bumps this repository's
+  lock and adds a dated line to its header. Decision 4 (a separate Phase 2
+  environment) was withdrawn.
+
 ## Decisions at approval (answered 2026-10-14: 1, 1, 1)
 
 Asked in order. Decision 2 does not depend on Decision 1. Decision 3's
