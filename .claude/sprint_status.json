@@ -3,7 +3,7 @@
     "number": 26,
     "name": "Reach Dirac-3S, Measure It, and Make the Proxy Repeatable",
     "branch": "feature/20261013_Sprint_26",
-    "status": "phase_4_execution",
+    "status": "phase_5_validation",
     "plan_doc": "docs/sprints/SPRINT_26_PLAN.md",
     "pr": 21,
     "plan_approved": true,
@@ -23,7 +23,8 @@
       "E": 3,
       "F": 9,
       "C": 24,
-      "G": 66
+      "G": 66,
+      "D": 884
     },
     "task_started": {
       "A": "2026-10-14T08:44:50-04:00",
@@ -46,5 +47,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-10-14"
+  "updated": "2026-10-15"
 }

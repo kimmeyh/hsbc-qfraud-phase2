@@ -57,7 +57,12 @@ def cost(row: dict) -> dict:
         from datetime import datetime
         return datetime.fromisoformat(st[k].replace("Z", "+00:00"))
     rt = t.get("runtime_sum_s")
+    S = np.asarray(resp["results"]["solutions"], dtype=np.float64)
     return {
+        "max_spread_between_samples_per_weight": float(
+            (S.max(axis=0) - S.min(axis=0)).max()),
+        "all_values_on_1e-7_grid": bool(
+            np.abs(S * 1e7 - np.round(S * 1e7)).max() < 1e-6),
         "unit": row["unit"], "n_variables": row["screen"]["n_variables"],
         "n_samples": row["hw_config"]["num_samples"],
         "metered_seconds": row["metered_seconds"],
@@ -128,6 +133,103 @@ def b4(row: dict, d3_rows: dict) -> dict:
     }
 
 
+DRY_RUN = RES / "f142_dry_run.json"
+
+
+def _pool(seed: int) -> dict:
+    """Rebuild the seeded B4 pool F142 sent: J, C, the test-fold H and the
+    exact weights. Refuses unless its Hamiltonian hashes to the one the dry
+    run recorded for that unit (the runner sent only that hash)."""
+    import hashlib
+
+    import qubo_proxy as qp
+    import spectra_segment as ss
+    c = ss.frozen_cell_by_name(CELL)["config"]
+    split, cols = ss._prep_spectra(CELL, seed)
+
+    def X(df):
+        return ss.coerce_features_to_numeric(df[cols]).to_numpy("float32")
+    y = np.where(split.y_train.to_numpy() == 1, 1, -1)
+    lam = c["lambda_coef_alpha"] * len(y)
+    clf = qp.build_pool(X(split.X_train), y, c["weak_cls_schedule"], "dct",
+                        "sequential",
+                        weak_params=qp.seeded_weak_params(
+                            seed, c["weak_cls_params"]),
+                        lambda_coef=lam)
+    H_tr = qp.h_matrix(clf, X(split.X_train)).astype(np.float64)
+    J, C = qp.hamiltonian(H_tr, y, lam)
+    h = hashlib.sha256()
+    for a in (J, C):
+        h.update(np.ascontiguousarray(a, dtype=np.float64).tobytes())
+    sent = {u["unit"]: u["hamiltonian_sha256"] for u in json.loads(
+        DRY_RUN.read_text(encoding="utf-8"))["stops"]["3"]["units"]}
+    if h.hexdigest() != sent[f"b4_oilgas_{seed}"]:
+        raise SystemExit(f"REFUSING: seed {seed}: the rebuilt Hamiltonian "
+                         "is not the one F142 screened and sent")
+    return {"J": J, "C": C, "H_te": qp.h_matrix(clf, X(split.X_test)),
+            "y_te": split.y_test.to_numpy()}
+
+
+def structure(row: dict, pool: dict, w: np.ndarray) -> dict:
+    """The fresh-eyes review's checks (2026-10-15), all written after the
+    result: every sample, a baseline with the optimum's zeros, the error in
+    weight units, the returned values' grid, and the reference solve's
+    convergence."""
+    from sklearn.metrics import average_precision_score
+    J, C = pool["J"], pool["C"]
+    resp = _response(row)["results"]
+    S = np.asarray(resp["solutions"], dtype=np.float64)
+    n = w.size
+    u = np.full(n, 1.0 / n)
+    zero_ex = w <= 1e-12
+    u0 = np.where(zero_ex, 0.0, 1.0 / (n - zero_ex.sum()))
+
+    def obj(v):
+        return float(v @ J @ v + C @ v)
+
+    def auprc(v):
+        p = np.clip((v @ pool["H_te"] + 1.0) / 2.0, 0.0, 1.0)
+        return float(average_precision_score(pool["y_te"], p))
+    g = 2.0 * J @ w + C
+    support = w > 1e-12
+    grid = np.abs(S * 1e7 - np.round(S * 1e7)).max()
+    best = S[int(np.argmin(resp["energies"]))]
+    plateau_value, plateau_count = np.unique(np.round(w, 9),
+                                             return_counts=True)
+    return {
+        "seed": row["seed"],
+        "pool_hash_matches_dry_run": True,
+        "per_sample": [{
+            "reported_energy": float(e),
+            "objective_minus_reference": obj(s) - obj(w),
+            "cosine_vs_exact": cos(s, w),
+            "deviation_correlation_vs_exact": float(
+                np.corrcoef(s - u, w - u)[0, 1]),
+            "max_abs_error_vs_exact": float(np.abs(s - w).max()),
+            "zeros_shared_with_exact": int(((s == 0) & zero_ex).sum()),
+            "sum": float(s.sum())} for s, e in zip(S, resp["energies"])],
+        "max_abs_error_in_a31_steps": float(np.abs(S - w).max() / (1 / 200)),
+        "max_spread_between_samples_per_weight": float(
+            (S.max(axis=0) - S.min(axis=0)).max()),
+        "all_values_on_1e-7_grid": bool(grid < 1e-6),
+        "distinct_values_in_best_sample": int(np.unique(best).size),
+        "exact_largest_plateau": {
+            "value": float(plateau_value[np.argmax(plateau_count)]),
+            "count": int(plateau_count.max())},
+        "exact_weights_below_plateau": int(
+            (w < plateau_value[np.argmax(plateau_count)] - 1e-9).sum()),
+        "uniform_plus_exact_zeros": {
+            "cosine_vs_exact": cos(u0, w),
+            "deviation_correlation_vs_exact": float(
+                np.corrcoef(u0 - u, w - u)[0, 1])},
+        "reference_solve_kkt_gradient_spread_on_support": float(
+            g[support].max() - g[support].min()),
+        "test_auprc_scored_from_pool": {
+            "exact_reference": auprc(w), "device_best_sample": auprc(best),
+            "device_row_metrics": row["metrics"]["auprc"]},
+    }
+
+
 def main() -> int:
     rows = json.loads(ROWS.read_text(encoding="utf-8"))["rows"]
     d3 = {r["seed"]: r for r in json.loads(B4_D3.read_text(
@@ -148,6 +250,9 @@ def main() -> int:
     }
     out["falsifier_fires"] = any(not b["dirac3s"]["in_band"]
                                  for b in out["b4"])
+    out["b4_structure"] = [
+        structure(r, _pool(r["seed"]), f126.exact_weights(CELL, r["seed"]))
+        for r in ok if r["unit"].startswith("b4_")]
     OUT.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(json.dumps(out, indent=1))
     return 0

@@ -220,12 +220,15 @@ units `b1_43` and `b2_42`; responses under `device_samples/`.
   of a step). A device that cannot tell its coefficients apart sees a
   nearly symmetric problem, and a symmetric problem's answer is uniform.
   So the result shows Dirac-3S's output is far less noisy than Dirac-3's
-  on this problem. It does not show Dirac-3S resolves finer coefficients.
-  B4, whose coefficients pass the spread test, is the case that can tell
-  these apart. **Inferred; an independent finding, not validated by
+  on this problem. It says nothing about input resolution (telling
+  coefficients apart). It does bear on output resolution: weights of
+  0.0012, about a quarter of the 0.005 step, came back within 0.032%. B4,
+  whose coefficients pass the spread test, is the case that tests input
+  resolution. **Inferred; an independent finding, not validated by
   QCi.**
-- **Whether the returned values are raw is not known.** The response
-  holds `solutions` only, with no raw field, and QCi states "error
+- **Whether the returned values are raw is not known.** The response's
+  `results` holds `counts`, `energies` and `solutions`, with no raw-values
+  field, and QCi states "error
   correction" is a post-processing step. **Unverified**; question A6
   covers resolution.
 
@@ -241,20 +244,32 @@ and `6ad05b47358b23d0cb3727b4`, 2026-10-15. Write-up:
   equals the rounded-up sum of per-sample run times, now on 4 of 4 jobs
   where both were recorded. Per sample about 2.6 s at 560 variables.
   Queues 0.89 s and 0.19 s. **Measured** (`cost[*]`).
-- **Dirac-3S returned the exact optimum.** Weight cosine 0.99999 and 1.0,
-  against Dirac-3's 0.895 and 0.901; a plain uniform vector scores 0.993.
-  The device's departures from uniform correlate 0.9998 and above with
-  the optimum's, and it zeroes the same 3 learners the optimum zeroes,
-  where Dirac-3 zeroed 14-16%. F142's band falsifier fires. **Measured**
-  (`b4[*]`); 2 fits, descriptive.
-- **The structure reproduced is far below the 200:1 step.** The optimum's
-  median departure from uniform is about 0.00004, about 1/120 of 0.005.
-  So either the effective output resolution is much finer than QCi's
-  stated 200:1, or the returned values are post-processed toward the
-  optimum. **Inferred; unverified which.** QCi states raw values come back
-  too; this cloud response held `solutions` only.
-- **Accuracy did not change.** Test AUPRC 0.8522 and 0.8418 against
-  Dirac-3's 0.8526 and 0.8408; in-segment AUPRC within 0.002. **Measured.**
+- **Dirac-3S returned the reference optimum in every sample.** Weight
+  cosine 0.999993 and 0.9999999 in all 8 samples, against Dirac-3's 0.895
+  and 0.901 (unseeded pools of the same cell and seed). It is the
+  optimum's structure, not a near-uniform guess: a vector uniform except
+  at the optimum's 3 zeros scores 0.9957 and 0.9953, with departures that
+  correlate only 0.62 and 0.60 with the optimum's; the device's correlate
+  0.99976 and 0.99999. Every sample zeroes the optimum's 3 learners;
+  Dirac-3 zeroed 14-16%. F142's band falsifier fires. **Measured**
+  (`b4[*]`, `b4_structure[*]`); 2 fits, descriptive; baselines added after
+  the result.
+- **Output values far finer than the 200:1 step.** Every weight is
+  within 0.000094 and 0.0000062 of the reference, about 1/53 and 1/800 of
+  the 0.005 step. On all five jobs the 8 samples agree to 0.0000005 or
+  better, and every value is a multiple of 0.0000001. **Measured.** These
+  weigh toward post-processing (a normalization or projection onto the sum
+  constraint, or the stated "error correction") over an analog output
+  resolution of 1 part in 10 million repeated exactly across stochastic
+  samples. **Inferred; unverified which.** QCi states raw values come back
+  too; this cloud response has no raw-values field.
+- **Accuracy did not change.** On the same seeded pools the device and the
+  reference solve score the same test AUPRC (0.85225 and 0.85224; 0.84180
+  and 0.84180). **Measured.**
+- **The reference solve is beaten slightly on both seeds** (device
+  objective minus reference down to -0.0029 and -0.00036), and is less
+  converged on seed 42. Reported energies are single precision and cannot
+  rank the 8 samples. **Measured.**
 
 ### QCi states
 
@@ -335,9 +350,9 @@ three network calls replaced. Tests: `test_response_serialization.py`,
   variables, schedule 2 only (6.0, 21-22 and 31.0 s). Billing matched the
   Dirac-3 rule on four jobs; QCi's own statement is question A3.
 - **Effective resolution, and whether returned values are raw.** F142's
-  B4 twin shows structure far below the stated 200:1 step in the returned
-  values; only QCi can say whether that is the device or post-processing
-  (question A6).
+  returned values are far finer than the stated 200:1 step and agree
+  across samples to 0.0000005; only QCi can say whether that is the device
+  or post-processing (question A6).
 - **Queue hours for the "special queues".** Question A5; F142 records the
   waits.
 
@@ -353,9 +368,12 @@ three network calls replaced. Tests: `test_response_serialization.py`,
   on a fully resolvable one. (Scoped 2026-10-14, Sprint 26 fresh-eyes
   review.) Stop 2 qualifies this: on B2, whose optimum weights are just
   as far below the step, Dirac-3S returned no zero weight. Stop 3 showed
-  it does not sparsify B4 either: it returned the exact optimum. So A31's
-  second half held for Dirac-3 and does not describe Dirac-3S's returned
-  values. (2026-10-15.)
+  it does not sparsify B4 either: it returned the reference optimum. So
+  A31's second half (output resolution) held for Dirac-3 and does not
+  describe Dirac-3S's returned values, whether the device or
+  post-processing produces them. A31's first half (input resolution, the
+  spread screen) still decides which problems say anything about the
+  coefficients. (2026-10-15.)
 - **The binding limit is our formulation, not the device** (section 1,
   F94). A Dirac-3S result on the current Hamiltonians cannot beat greedy by
   more than the 0.0016 to 0.0026 left to the floor.
@@ -474,3 +492,4 @@ Each update adds a row to the revision log and moves items between labels
 | 2026-10-14 | 26 | F142 stop 1, the first Dirac-3S fit: section 2 gains "Measured" (cost 6.0 s, queue under 0.1 s, device name and metrics key confirmed, B1 not a fidelity result); the metrics-key item and the cost item updated |
 | 2026-10-15 | 26 | F142 stop 2: "Measured (F142 stop 2)" added (B2 cost 31.0 s, billing equals the rounded-up sum of per-sample run times, queue under 1 s, the uniform vector returned on B2 and what that does not show, raw values unverified); the cost item updated |
 | 2026-10-15 | 26 | F142 stop 3: "Measured (F142 stop 3, the B4 twin)" added (cost 21-22 s; the exact optimum returned, beyond a uniform baseline; structure below the 200:1 step; accuracy unchanged); the cost, resolution and A31 items updated |
+| 2026-10-15 | 26 | Fresh-eyes review of F142 (9 findings): the "1/120 of the step" figure replaced (it measured the plateau's renormalization offset) by the per-weight error (1/53 and 1/800 of the step); a uniform-plus-zeros baseline; every sample, not only the best; sample agreement and the 1e-7 grid, weighing toward post-processing; same-pool accuracy; the reference solve's convergence; input and output resolution named apart |

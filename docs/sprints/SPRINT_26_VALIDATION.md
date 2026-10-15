@@ -91,23 +91,32 @@ section 6.
   and 21.0 s** (Dirac-3: 34-46 per fit). Stop total 43 s against a
   re-quote of about 44 and a cap of 150. **F142 total: 86.0 s** against
   the plan's about 172 and cap 360.
-- **The main result: on B4, Dirac-3S returned the exact optimum.** Read
-  `docs/phase2/F142_DIRAC3S_VERIFY.md`.
-  - Weight cosine 0.99999 and 1.0, against Dirac-3's 0.895 and 0.901.
-    Both fall outside the band set before the call, so the falsifier
-    fires ("Dirac-3S behaves as Dirac-3 on B4" is contradicted; 2 fits,
-    descriptive).
-  - It is not just a uniform vector: uniform scores 0.993; the device's
-    departures from uniform correlate 0.9998 and above with the
-    optimum's; it zeroes the same 3 learners the optimum does (Dirac-3
-    zeroed 14-16%). The uniform baseline was added after the result, and
-    the draft says so.
-  - The reproduced structure is about 1/120 of the 200:1 step. Either the
-    effective resolution is much finer than QCi states, or the values are
-    post-processed. **Which one is unverified**; the response carries no
-    raw field although QCi says raw values come back.
-  - **Test AUPRC did not change** (0.8522 and 0.8418, against Dirac-3's
-    0.8526 and 0.8408).
+- **The main result: on B4, Dirac-3S returned the reference optimum, in
+  every sample.** Read `docs/phase2/F142_DIRAC3S_VERIFY.md`.
+  - Weight cosine 0.999993 and 0.9999999, against Dirac-3's 0.895 and
+    0.901 (Dirac-3's on different, unseeded pools). Both fall outside the
+    band set before the call, so the falsifier fires ("Dirac-3S behaves
+    as Dirac-3 on B4" is contradicted; 2 fits, descriptive).
+  - It is the optimum's structure, not a near-uniform guess: a vector
+    uniform except at the optimum's 3 zeros scores 0.9957 with a
+    deviation correlation of only 0.62 and 0.60; the device's is 0.99976
+    and 0.99999. It zeroes the same 3 learners (Dirac-3: 14-16%). Both
+    baselines were added after the result, and the draft says so.
+  - Every weight is within 1/53 and 1/800 of the 200:1 step of the
+    reference. The 8 samples agree to 0.0000005 and every value is a
+    multiple of 0.0000001, which weighs toward post-processing over a
+    finer analog resolution. **Which one is unverified**; the response
+    has no raw-values field although QCi says raw values come back.
+  - **Accuracy did not change**: on the same pools the device and the
+    reference score the same test AUPRC (0.85225 and 0.85224; 0.84180
+    and 0.84180).
+  - The reference QP solve is slightly beaten on both seeds and is less
+    converged on seed 42.
+- **Fresh-eyes review of F142: 9 findings, all addressed** before this
+  handover. The one that changed a claim: "1/120 of the step" measured the
+  optimum's plateau offset, not its structure; replaced by the per-weight
+  error. The readout now rebuilds each pool and refuses unless its
+  Hamiltonian matches the hash the runner sent.
 - **Billing**: on every job where both were recorded (4 of 5),
   `device_usage_s` equals the per-sample run times summed and rounded up.
 - New: `experiments/phase2/src/f142_readout.py` and its result file; it
@@ -217,5 +226,9 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
 ## Effort, measured
 
 From `.claude/sprint_status.json` `task_actuals` (minutes): A 75, B 3,
-C 24, E 3, F 9, G 66. B is understated: its test was written before its
-timer started. D and H are recorded at close.
+C 24, E 3, F 9, G 66, D 884. B is understated: its test was written
+before its timer started. **D's 884 is elapsed time, not work**: it runs
+from the runner's start on 2026-10-14 to stop 3's write-up after
+midnight, through the reviews, three approval waits and an evening gap
+before the metered stops. H had no start stamp; its three updates were
+made inside D's span.

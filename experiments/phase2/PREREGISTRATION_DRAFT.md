@@ -233,12 +233,19 @@ filed; part of this draft.
   1. The question's parenthesis predicted that both devices return a
      sparser vector than the optimum on B4. Dirac-3S did not: it zeroed
      the same 3 learners the optimum zeroes, against Dirac-3's 14-16%.
-  2. The band falsifier fires on both seeds (cosine 0.99999 and 1.0).
-     Because B4's optimum is near-uniform, a uniform vector already scores
-     0.993; a baseline added after the result shows the device's
-     departures from uniform track the optimum's (correlation 0.9998 and
-     above). A future twin entry should state the uniform baseline before
-     the run.
+  2. The band falsifier fires on both seeds (cosine 0.999993 and
+     0.9999999, in all 8 samples). Because B4's optimum is near-uniform,
+     a uniform vector already scores 0.993, and one uniform except at the
+     optimum's zeros scores 0.9957 and 0.9953 with a deviation correlation
+     of 0.62 and 0.60. The device's departures from uniform correlate
+     0.99976 and 0.99999. Both baselines were added after the result. A
+     future twin entry should state such baselines before the run.
+  3. "The exact solve" is a reference QP solve, not exact at this
+     precision: the device's objective is slightly lower on both seeds,
+     and the reference is less converged on seed 42 (gradient spread on
+     the support 16, against 1.1). Reported energies are single precision
+     and cannot rank the samples; the lowest-energy sample was read, and
+     every sample gives the same reading.
   Reported in `docs/phase2/F142_DIRAC3S_VERIFY.md`; figures in
   `experiments/phase2/results/f142_readout.json`.
 
@@ -350,4 +357,5 @@ scored. Not filed; part of this draft.
   post-result correction note below its unchanged entry; section 7's F145
   figures cite a results file; equivalence margins added as an open item.
 - 2026-10-15: F142 gains a dated post-result note below its unchanged
-  entry (Sprint 26 Task D, after stop 3).
+  entry (Sprint 26 Task D, after stop 3), revised after the F142
+  fresh-eyes review the same day.
