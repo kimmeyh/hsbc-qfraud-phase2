@@ -326,6 +326,13 @@ claims.
   either way (37 times the step; 8.3 dB). Recorded on F104 and in the
   Phase 2 draft's sections 4 and 6.
 
+- **Decision 10 (2026-10-15, at Manual Validation): option 1, unplanned
+  Task I, issue #30, estimate 30 minutes.** From a prompt the EvidenceBasedDB
+  session shared (its F79): `block_cross_repo_write.py` blocks Edit and Write
+  into a forbidden repository's Claude Code project directory, and the
+  wording says EvidenceBasedDB is read freely, its store read-only. Option 2
+  was a Sprint 27 card.
+
 ## Decisions at approval (answered 2026-10-14: 1, 1, 1)
 
 Asked in order. Decision 2 does not depend on Decision 1. Decision 3's

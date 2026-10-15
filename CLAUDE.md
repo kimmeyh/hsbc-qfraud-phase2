@@ -71,8 +71,16 @@ The one field filled from memory was the one that was wrong.)
   `hsbc-qfraud-phase2` does not create, edit, commit or push files in
   `spamfilter-multi`, `EvidenceBasedDB` or the Phase 1 repository,
   `hsbc-quantum-fraud-2026`, which is restored as filed and archived (F127).
-  Reading them on request is fine. `block_cross_repo_write.py` enforces it.
+  `block_cross_repo_write.py` enforces it, including each one's Claude Code
+  project directory (Sprint 26 Task I).
   (Team lead, 2026-09-15; the Phase 1 repository added 2026-10-09, F132.)
+  **EvidenceBasedDB is read freely, with no request needed:** its
+  repository, its docs and its store at
+  `D:\Data\Harold\EvidenceBasedDB\store\evidence.db`, the store opened
+  read-only (F147's query tool, `scripts/edb_query.py`).
+  A change wanted there goes as a prompt the team lead pastes into an
+  EvidenceBasedDB session. spamfilter-multi and the Phase 1 repository are
+  read on request. (Team lead, 2026-10-14; Sprint 26 Decision 10.)
   Its name appears in this repository only where the boundary must name it to
   block it, and in the records that `test_phase1_boundary.py` allows.
 - **The Phase 1 boundary inside THIS repository.** (Team lead, Sprint 26
@@ -154,8 +162,8 @@ only in memory.
   said plainly: "I was just testing you.")
 
 - **Don't write into another repository from this one.** `spamfilter-multi`,
-  `EvidenceBasedDB` and the Phase 1 repository are read-only from here, and only
-  when asked. If work in this
+  `EvidenceBasedDB` and the Phase 1 repository are read-only from here.
+  EvidenceBasedDB is read freely; the other two only when asked. If work in this
   repository implies a change over there, say so and hand it to a session running
   in that repository; do not make the edit yourself, however small or obviously
   correct it looks. (Team lead, 2026-09-15, after a session working this

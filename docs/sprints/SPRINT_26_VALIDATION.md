@@ -3,7 +3,8 @@
 **Sprint**: 26, Reach Dirac-3S, Measure It, and Make the Proxy Repeatable
 **Branch**: `feature/20261013_Sprint_26` | **PR**: #21 (draft)
 **Scope**: F141 (A), F145 (B), F144 (C), F142 (D), F147 (E), F126 (F),
-F105 (G), F146 (H). Issues #22-29.
+F105 (G), F146 (H). Issues #22-29. Unplanned Task I (Decision 10,
+2026-10-15), issue #30.
 **Metered Dirac-3S seconds**: 86.0 over 5 fits (file-level
 `metered_seconds`, `experiments/phase2/results/f142_dirac3s_verify.json`),
 against the plan's about 172 and cap 360.
@@ -173,6 +174,30 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
 - Added after stops 2 and 3, beyond the plan's two: a "Measured" part for
   each stop, and the A31, cost and resolution items updated.
 
+## V8a. Task I (unplanned, Decision 10): the cross-repo guard and EvidenceBasedDB reads
+
+Added at Manual Validation from a prompt the EvidenceBasedDB session
+shared (its F79). Decision 10, option 1, 2026-10-15.
+
+- **Gap closed.** Edit and Write into a forbidden repository's Claude Code
+  project directory (under `.claude/projects`, where its sessions keep
+  memory) were not blocked; shell writes were. The rule matches `-<name>`
+  at the end of the folder name or followed by `-`, so a session started in
+  a subfolder is covered too. This repository's own project directory stays
+  allowed, and so does a folder outside `.claude/projects` that ends in a
+  sibling's name.
+- **Proven.** The three new BLOCK cases failed against the old hook. Four
+  injections each turn the new cases red: no check, an end-only match, no
+  `.claude/projects` anchor, and blocking every project directory.
+- **Wording.** CLAUDE.md (two places), `SPRINT_EXECUTION_WORKFLOW.md`
+  invariant 9 and the hook's message: EvidenceBasedDB is read freely, with
+  no request needed; its store is opened read-only (`scripts/edb_query.py`);
+  a change wanted there goes as a prompt you paste into a session there.
+  spamfilter-multi and the Phase 1 repository stay "on request".
+- **Not changed.** A shell command that writes SQL into the store (for
+  example `sqlite3` with a `delete`) is not blocked: the hook matches file
+  writes, not database writes. The wording, not the hook, carries that.
+
 ## V9. What the reviews found
 
 - **Code review: 16 findings, all addressed** before any Dirac-3S call.
@@ -209,6 +234,10 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
 - **F105**: harness built and tested; random-halves AUC at most 0.55; no
   score reported. **Met.**
 - **F146**: two updates, each with a revision-log row. **Met.**
+- **Task I** (Decision 10): a test for the project-directory path, proven
+  red by injection; this repository's own project directory allowed, with
+  a test; EvidenceBasedDB wording changed, the other two unchanged.
+  **Met.**
 
 ## Metered decisions (Criterion H)
 
@@ -226,7 +255,7 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
 ## Effort, measured
 
 From `.claude/sprint_status.json` `task_actuals` (minutes): A 75, B 3,
-C 24, E 3, F 9, G 66, D 884. B is understated: its test was written
+C 24, E 3, F 9, G 66, D 884, I 18 (unplanned; estimate 30). B is understated: its test was written
 before its timer started. **D's 884 is elapsed time, not work**: it runs
 from the runner's start on 2026-10-14 to stop 3's write-up after
 midnight, through the reviews, three approval waits and an evening gap
