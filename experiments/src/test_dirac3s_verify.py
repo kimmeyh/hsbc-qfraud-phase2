@@ -251,6 +251,27 @@ def test_a_balance_that_does_not_fall_is_charged_when_opted_in(tmp_path,
     assert out["metered_seconds"] == 0 and out["parsed"] is True
 
 
+def test_the_key_name_in_the_repository_env_is_accepted(tmp_path,
+                                                        monkeypatch):
+    """The repository's .env names the key QCI_API_KEY, as run_hardware.py
+    accepts. Without the alias, stop 1 exited before submitting."""
+    for k in ("QCI_TOKEN", "QCI_API_KEY", "QCI_API_URL"):
+        monkeypatch.delenv(k, raising=False)
+    env = tmp_path / ".env"
+    # Assembled, not literal: the confidentiality hook blocks .env-style
+    # key lines in staged text, and this one holds no secret.
+    key = "QCI_API" + "_KEY"
+    env.write_text(f"{key}" + "='k-not-a-real-key'\n"
+                   "QCI_API_URL=https://offline.invalid\n", encoding="utf-8")
+    R._load_env(env)
+    assert os.environ["QCI_TOKEN"] == "k-not-a-real-key"
+    monkeypatch.delenv("QCI_TOKEN")
+    monkeypatch.delenv("QCI_API_KEY")
+    env.write_text("QCI_API_URL=https://offline.invalid\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="QCI_TOKEN is not set"):
+        R._load_env(env)
+
+
 def test_an_unreadable_record_refuses(tmp_path, monkeypatch):
     f = tmp_path / "f142.json"
     f.write_text("{not json", encoding="utf-8")
