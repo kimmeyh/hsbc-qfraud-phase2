@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-15
+
+- **feat**: F142 stop 2 (Sprint 26 Task D, approved as Decision 8): B1 seed 43 (6.0 s) and B2 seed 42 at 833 variables (31.0 s, against about 82 per fit on Dirac-3); 37 s against a re-quote of about 115 and a cap of 150. On both jobs `device_usage_s` equals the per-sample run times summed and rounded up. On B2, Dirac-3S returned every weight within 0.032% of 1/833 (cosine 1.0 to the exact solve; AUPRC 0.8246 against the twin's 0.8245); B2 fails A31's screen, so this shows lower output noise, not finer resolution. `DIRAC_UNDERSTANDINGS.md` gains "Measured (F142 stop 2)" (#25, #29)
+
 ### 2026-10-14
 
 - **feat**: F142 stop 1, the first Dirac-3S fit (Sprint 26 Task D, approved as Decision 7): one B1 fit (ULB `free`, seed 42, 91 variables, 8 samples), job `6ad04e0b358b23d0cb3727a5`, 6.0 metered seconds against an expected 5 and a cap of 60; the response's `device_usage_s` agrees; queued to running in 0.06 s. Cost and queue evidence only: B1 fails A31's screen and its optimum is uniform. Row, raw response, call log and the Phase 2 ledger in `experiments/phase2/results/`. The runner now stores the library's per-sample run times in each later row (`device_timing`; new test proven red). `DIRAC_UNDERSTANDINGS.md` second F146 update: section 2 gains "Measured" (#25, #29)

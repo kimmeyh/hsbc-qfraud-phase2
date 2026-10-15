@@ -4,9 +4,9 @@
 **Branch**: `feature/20261013_Sprint_26` | **PR**: #21 (draft)
 **Scope**: F141 (A), F145 (B), F144 (C), F142 (D), F147 (E), F126 (F),
 F105 (G), F146 (H). Issues #22-29.
-**Metered Dirac-3S seconds**: stop 1 spent 6.0 (row `metered_seconds`,
-`experiments/phase2/results/f142_dirac3s_verify.json`). Stops 2 and 3 are
-recorded in V4 as they were decided.
+**Metered Dirac-3S seconds**: 43.0 through stop 2 (file-level
+`metered_seconds`, `experiments/phase2/results/f142_dirac3s_verify.json`).
+Stop 3 is recorded in V4 as it is decided.
 
 This file is the durable copy. The same items are listed to the screen at
 handover: a pointer to a file is not a handover.
@@ -76,7 +76,18 @@ section 6.
   submit check of the Hamiltonian and the B4 screen, the raw response
   saved before post-processing, and no unit resubmitted once it has a row
   or a ledger entry.
-- Stops 2 and 3: see the decisions at the end of this file.
+- **Stop 2 (Decision 8, approved)**: B1 seed 43, **6.0 s**; B2 seed 42
+  at 833 variables, **31.0 s** (Dirac-3: about 82 per fit). Stop total 37
+  s against a re-quote of about 115 and a cap of 150. Queue under 1 s.
+- **Billing**: on both stop 2 jobs, `device_usage_s` equals the
+  per-sample run times summed and rounded up, the rule Phase 1 measured
+  on Dirac-3.
+- **On B2, Dirac-3S returned the uniform vector**: every weight within
+  0.032% of 1/833, cosine 1.0 to the exact solve, AUPRC 0.8246 against
+  the twin's 0.8245 (Dirac-3: cosine 0.82-0.83). B2 fails A31's screen,
+  so this shows lower output noise, not finer resolution. B4 is the
+  case that separates the two.
+- Stop 3: see the decisions at the end of this file.
 
 ## V5. Task E (F147): the evidence-library query tool
 
@@ -150,7 +161,8 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
   configuration, not B2's unstored pools. **Met.**
 - **F142**: rows are dated Phase 2 rows naming the device, never Phase 1
   gate cells; B1 reported as cost and queue only, with its failed screen
-  beside it. **Met for stop 1.** B2 and B4 depend on stops 2 and 3.
+  beside it. **Met for stops 1 and 2**: B1 and B2 reported as cost and
+  queue evidence, with the failed screen beside them. B4 depends on stop 3.
 - **F147**: a text query and an id lookup on the live library; a write
   through the tool fails, proven red; one note cites its records;
   `EDB_PROPOSALS.md` updated; nothing written to the library. **Met.**
@@ -164,7 +176,10 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
 
 - **Decision 7, stop 1** (1 call, about 5 s, cap 60): approved 2026-10-14,
   option 1. Spent 6.0 s.
-- **Decision 8, stop 2** (2 calls, re-quoted from stop 1): asked
+- **Decision 8, stop 2** (2 calls, B1 seed 43 and B2 seed 42; about 115
+  s, likely 88-129, from Dirac-3's per-fit costs times stop 1's ratio of
+  about 1.3; cap 150): approved 2026-10-15, option 1. Spent 37.0 s.
+- **Decision 9, stop 3** (2 calls, B4 oilgas seeds 42 and 43): asked
   2026-10-15. Recorded here when answered.
 
 ## Effort, measured
