@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-15
 
+- **feat**: F142 stop 3 and readout (Sprint 26 Task D, approved as Decision 9): B4 oilgas seeds 42 and 43 on Dirac-3S, 22.0 and 21.0 s; F142 total 86.0 s over 5 fits. Dirac-3S returned B4's exact optimum (cosine 0.99999 and 1.0, against Dirac-3's 0.895 and 0.901; a uniform vector scores 0.993; departures from uniform correlate 0.9998 and above; the same 3 zeros as the optimum), so the band falsifier fires; test AUPRC unchanged. The reproduced structure is about 1/120 of the 200:1 step; whether by resolution or post-processing is unverified. `experiments/phase2/src/f142_readout.py` (refuses unless F126's exact optimum is the pool sent; test proven red), `f142_readout.json`, `docs/phase2/F142_DIRAC3S_VERIFY.md`; a dated post-result note under the F142 entry; `DIRAC_UNDERSTANDINGS.md` gains stop 3; F142's card marked done (#25, #29)
 - **feat**: F142 stop 2 (Sprint 26 Task D, approved as Decision 8): B1 seed 43 (6.0 s) and B2 seed 42 at 833 variables (31.0 s, against about 82 per fit on Dirac-3); 37 s against a re-quote of about 115 and a cap of 150. On both jobs `device_usage_s` equals the per-sample run times summed and rounded up. On B2, Dirac-3S returned every weight within 0.032% of 1/833 (cosine 1.0 to the exact solve; AUPRC 0.8246 against the twin's 0.8245); B2 fails A31's screen, so this shows lower output noise, not finer resolution. `DIRAC_UNDERSTANDINGS.md` gains "Measured (F142 stop 2)" (#25, #29)
 
 ### 2026-10-14

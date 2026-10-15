@@ -228,6 +228,19 @@ filed; part of this draft.
 - **What is reported whatever the result**: every fit's cost, wait,
   device name and job id, failures included; the screen result beside
   each; the statement that 5 fits support no test.
+- **Notes written AFTER the result (2026-10-15, Sprint 26 Task D). The
+  text above is left as it stood before the first call.**
+  1. The question's parenthesis predicted that both devices return a
+     sparser vector than the optimum on B4. Dirac-3S did not: it zeroed
+     the same 3 learners the optimum zeroes, against Dirac-3's 14-16%.
+  2. The band falsifier fires on both seeds (cosine 0.99999 and 1.0).
+     Because B4's optimum is near-uniform, a uniform vector already scores
+     0.993; a baseline added after the result shows the device's
+     departures from uniform track the optimum's (correlation 0.9998 and
+     above). A future twin entry should state the uniform baseline before
+     the run.
+  Reported in `docs/phase2/F142_DIRAC3S_VERIFY.md`; figures in
+  `experiments/phase2/results/f142_readout.json`.
 
 ### F144: the proxy twin of B2's configuration
 
@@ -336,3 +349,5 @@ scored. Not filed; part of this draft.
   tightened (one attempt per unit, pre-submit refusal); F144 gains a dated
   post-result correction note below its unchanged entry; section 7's F145
   figures cite a results file; equivalence margins added as an open item.
+- 2026-10-15: F142 gains a dated post-result note below its unchanged
+  entry (Sprint 26 Task D, after stop 3).

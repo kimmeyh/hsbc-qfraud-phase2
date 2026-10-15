@@ -1,0 +1,133 @@
+{
+  "generator": "experiments/phase2/src/f142_readout.py",
+  "card": "F142",
+  "sprint": 26,
+  "evidence_tag": "HW (Dirac-3S samples) with SIM (exact solves)",
+  "metered_seconds": 0,
+  "falsifier_band": [
+    0.8832,
+    0.9095
+  ],
+  "falsifier_fixed": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F142, before any call",
+  "baseline_added_after_result": "uniform_vector_cosine_vs_exact",
+  "total_metered_seconds": 86.0,
+  "cost": [
+    {
+      "unit": "b1_42",
+      "n_variables": 91,
+      "n_samples": 8,
+      "metered_seconds": 6.0,
+      "device_usage_s": 6,
+      "runtime_sum_s": null,
+      "ceil_runtime_sum_s": null,
+      "per_sample_s": null,
+      "queued_to_running_s": 0.062,
+      "running_to_completed_s": 9.529
+    },
+    {
+      "unit": "b1_43",
+      "n_variables": 91,
+      "n_samples": 8,
+      "metered_seconds": 6.0,
+      "device_usage_s": 6,
+      "runtime_sum_s": 5.962853191,
+      "ceil_runtime_sum_s": 6,
+      "per_sample_s": 0.745356648875,
+      "queued_to_running_s": 0.217,
+      "running_to_completed_s": 8.448
+    },
+    {
+      "unit": "b2_42",
+      "n_variables": 833,
+      "n_samples": 8,
+      "metered_seconds": 31.0,
+      "device_usage_s": 31,
+      "runtime_sum_s": 30.6435647,
+      "ceil_runtime_sum_s": 31,
+      "per_sample_s": 3.8304455875,
+      "queued_to_running_s": 0.988,
+      "running_to_completed_s": 52.118
+    },
+    {
+      "unit": "b4_oilgas_42",
+      "n_variables": 560,
+      "n_samples": 8,
+      "metered_seconds": 22.0,
+      "device_usage_s": 22,
+      "runtime_sum_s": 21.031179904,
+      "ceil_runtime_sum_s": 22,
+      "per_sample_s": 2.628897488,
+      "queued_to_running_s": 0.894,
+      "running_to_completed_s": 35.365
+    },
+    {
+      "unit": "b4_oilgas_43",
+      "n_variables": 560,
+      "n_samples": 8,
+      "metered_seconds": 21.0,
+      "device_usage_s": 21,
+      "runtime_sum_s": 20.78327918,
+      "ceil_runtime_sum_s": 21,
+      "per_sample_s": 2.5979098975,
+      "queued_to_running_s": 0.189,
+      "running_to_completed_s": 35.313
+    }
+  ],
+  "b4": [
+    {
+      "seed": 42,
+      "dirac3s": {
+        "weight_cosine_vs_exact": 0.9999930236664565,
+        "in_band": false,
+        "deviation_correlation_vs_exact": 0.9997553761032633,
+        "zero_count": 3,
+        "zeros_shared_with_exact": 3,
+        "objective_device": -21958.450550393143,
+        "objective_exact": -21958.447976763746,
+        "test_auprc": 0.8522473860491636,
+        "in_segment_auprc": 0.7911997237395052,
+        "random_control_auprc": 0.973934357467271
+      },
+      "uniform_vector_cosine_vs_exact": 0.9930759107826841,
+      "exact_median_abs_departure_from_uniform": 4.102766143393487e-05,
+      "a31_weight_step": 0.005,
+      "exact_zero_count": 3,
+      "n_variables": 560,
+      "dirac3": {
+        "weight_cosine_vs_exact": 0.8947094438944325,
+        "zero_fraction_lowest_energy_sample": 0.1625,
+        "test_auprc": 0.852565280376637,
+        "in_segment_auprc": 0.7918470226581568,
+        "note": "Phase 1 row, an unseeded build of the same cell and seed: a different pool from the Dirac-3S fit's"
+      }
+    },
+    {
+      "seed": 43,
+      "dirac3s": {
+        "weight_cosine_vs_exact": 0.9999998898959428,
+        "in_band": false,
+        "deviation_correlation_vs_exact": 0.9999927039534121,
+        "zero_count": 3,
+        "zeros_shared_with_exact": 3,
+        "objective_device": -21958.431914971785,
+        "objective_exact": -21958.43195810875,
+        "test_auprc": 0.8418049874273019,
+        "in_segment_auprc": 0.7901283570814235,
+        "random_control_auprc": 0.9759637602136474
+      },
+      "uniform_vector_cosine_vs_exact": 0.9926726849144876,
+      "exact_median_abs_departure_from_uniform": 4.196196927356015e-05,
+      "a31_weight_step": 0.005,
+      "exact_zero_count": 3,
+      "n_variables": 560,
+      "dirac3": {
+        "weight_cosine_vs_exact": 0.900745044946253,
+        "zero_fraction_lowest_energy_sample": 0.14464285714285716,
+        "test_auprc": 0.8408476694925249,
+        "in_segment_auprc": 0.7888665263169071,
+        "note": "Phase 1 row, an unseeded build of the same cell and seed: a different pool from the Dirac-3S fit's"
+      }
+    }
+  ],
+  "falsifier_fires": true
+}

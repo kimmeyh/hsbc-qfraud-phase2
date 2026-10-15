@@ -444,6 +444,7 @@ F123's layout is superseded by F127.)
 - B1 and B2 fail the F104 resolution screen by design (their purpose is cost); `experiments/phase2/PREREGISTRATION_DRAFT.md` section 4 makes that exception explicit
 - Reported as dated Phase 2 rows naming the device, never as Phase 1 gate cells
 - Depends on: F141; F102 (the entry for these runs); F104 or the draft's stated exception; per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
+- **Done 2026-10-15 (Sprint 26 Task D), 86.0 metered s over 5 fits** (`docs/phase2/F142_DIRAC3S_VERIFY.md`, `experiments/phase2/results/f142_readout.json`). On B4, Dirac-3S returned the exact optimum (cosine 0.99999 and 1.0, against Dirac-3's 0.895 and 0.901; a uniform vector scores 0.993), so the band falsifier fires; test AUPRC unchanged. Cost per fit: 6 s at 91 variables, 21-22 at 560, 31 at 833, billed as the rounded-up sum of per-sample run times. Whether the returned values are raw or post-processed is unverified (QCi question A6)
 
 **F144. The proxy twin of B2's pool: k=17, order 3, full pair, 833 variables (~1.5h [no-history] + pool-build runtime, zero metered) Priority 9**
 - Phase: Phase 2 preparation (added 2026-10-13 by F139, after the Sprint 25 fresh-eyes review)

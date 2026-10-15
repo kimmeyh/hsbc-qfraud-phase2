@@ -4,9 +4,9 @@
 **Branch**: `feature/20261013_Sprint_26` | **PR**: #21 (draft)
 **Scope**: F141 (A), F145 (B), F144 (C), F142 (D), F147 (E), F126 (F),
 F105 (G), F146 (H). Issues #22-29.
-**Metered Dirac-3S seconds**: 43.0 through stop 2 (file-level
-`metered_seconds`, `experiments/phase2/results/f142_dirac3s_verify.json`).
-Stop 3 is recorded in V4 as it is decided.
+**Metered Dirac-3S seconds**: 86.0 over 5 fits (file-level
+`metered_seconds`, `experiments/phase2/results/f142_dirac3s_verify.json`),
+against the plan's about 172 and cap 360.
 
 This file is the durable copy. The same items are listed to the screen at
 handover: a pointer to a file is not a handover.
@@ -87,7 +87,33 @@ section 6.
   the twin's 0.8245 (Dirac-3: cosine 0.82-0.83). B2 fails A31's screen,
   so this shows lower output noise, not finer resolution. B4 is the
   case that separates the two.
-- Stop 3: see the decisions at the end of this file.
+- **Stop 3 (Decision 9, approved)**: B4 oilgas seeds 42 and 43, **22.0
+  and 21.0 s** (Dirac-3: 34-46 per fit). Stop total 43 s against a
+  re-quote of about 44 and a cap of 150. **F142 total: 86.0 s** against
+  the plan's about 172 and cap 360.
+- **The main result: on B4, Dirac-3S returned the exact optimum.** Read
+  `docs/phase2/F142_DIRAC3S_VERIFY.md`.
+  - Weight cosine 0.99999 and 1.0, against Dirac-3's 0.895 and 0.901.
+    Both fall outside the band set before the call, so the falsifier
+    fires ("Dirac-3S behaves as Dirac-3 on B4" is contradicted; 2 fits,
+    descriptive).
+  - It is not just a uniform vector: uniform scores 0.993; the device's
+    departures from uniform correlate 0.9998 and above with the
+    optimum's; it zeroes the same 3 learners the optimum does (Dirac-3
+    zeroed 14-16%). The uniform baseline was added after the result, and
+    the draft says so.
+  - The reproduced structure is about 1/120 of the 200:1 step. Either the
+    effective resolution is much finer than QCi states, or the values are
+    post-processed. **Which one is unverified**; the response carries no
+    raw field although QCi says raw values come back.
+  - **Test AUPRC did not change** (0.8522 and 0.8418, against Dirac-3's
+    0.8526 and 0.8408).
+- **Billing**: on every job where both were recorded (4 of 5),
+  `device_usage_s` equals the per-sample run times summed and rounded up.
+- New: `experiments/phase2/src/f142_readout.py` and its result file; it
+  refuses to run unless F126's exact optimum is the pool F142 sent. A
+  dated post-result note sits under the F142 entry in the draft; the
+  entry is unchanged.
 
 ## V5. Task E (F147): the evidence-library query tool
 
@@ -135,6 +161,8 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
   offline findings.
 - Second update after stop 1: section 2 gains "Measured" (cost, queue,
   device name and metrics key confirmed, B1 not a fidelity result).
+- Added after stops 2 and 3, beyond the plan's two: a "Measured" part for
+  each stop, and the A31, cost and resolution items updated.
 
 ## V9. What the reviews found
 
@@ -161,8 +189,9 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
   configuration, not B2's unstored pools. **Met.**
 - **F142**: rows are dated Phase 2 rows naming the device, never Phase 1
   gate cells; B1 reported as cost and queue only, with its failed screen
-  beside it. **Met for stops 1 and 2**: B1 and B2 reported as cost and
-  queue evidence, with the failed screen beside them. B4 depends on stop 3.
+  beside it; B4 reported as weight cosine, objective gap to the proxy
+  optimum and in-pocket AUPRC against the Dirac-3 rows, with the band.
+  **Met.**
 - **F147**: a text query and an id lookup on the live library; a write
   through the tool fails, proven red; one note cites its records;
   `EDB_PROPOSALS.md` updated; nothing written to the library. **Met.**
@@ -179,8 +208,11 @@ Read `docs/phase2/F105_IEEE_HARNESS.md`.
 - **Decision 8, stop 2** (2 calls, B1 seed 43 and B2 seed 42; about 115
   s, likely 88-129, from Dirac-3's per-fit costs times stop 1's ratio of
   about 1.3; cap 150): approved 2026-10-15, option 1. Spent 37.0 s.
-- **Decision 9, stop 3** (2 calls, B4 oilgas seeds 42 and 43): asked
-  2026-10-15. Recorded here when answered.
+- **Decision 9, stop 3** (2 calls, B4 oilgas seeds 42 and 43; about 44
+  s from the measured per-sample times; cap 150): approved 2026-10-15,
+  option 1. Spent 43.0 s. The team lead also approved in advance any
+  further Dirac-3S run in this sprint. None remained in the plan, so none
+  was made under it.
 
 ## Effort, measured
 
