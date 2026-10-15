@@ -362,6 +362,22 @@ def metered(u: dict, screened: dict, client, on_submitted) -> dict:
     return row
 
 
+def device_timing(resp) -> dict | None:
+    """Per-sample run times from the library's result, in seconds. eqc-models
+    reads them from the job metrics under the submitted device name, so their
+    presence shows the `dirac-3s` metrics key works. Stop 1's row predates
+    this field (its billed figure is the response's `device_usage_s`)."""
+    rt = list(getattr(resp, "run_time", None) or [])
+    unit = getattr(resp, "time_units", None)
+    if not rt or unit != "ns":
+        return None
+    pre = getattr(resp, "preprocessing_time", None)
+    return {"run_time_per_sample_s": [float(t) / 1e9 for t in rt],
+            "runtime_sum_s": float(sum(rt)) / 1e9,
+            "preprocessing_s": float(pre) / 1e9 if pre is not None else None,
+            "source": "eqc-models SolutionResults.run_time (ns)"}
+
+
 def _score(row, u, fit, cfg, Xtr, Xva, Xte, y_pm1, y_va01, y_te01, extra):
     """Everything after the paid call. Updates `row` in place."""
     clf, resp = fit["clf"], fit["resp"]
@@ -387,6 +403,7 @@ def _score(row, u, fit, cfg, Xtr, Xva, Xte, y_pm1, y_va01, y_te01, extra):
                                        if denom > 0 else None),
         "objective_device": obj(w_hw), "objective_proxy_optimum": obj(w_px),
         "exact_zero_fraction": float(np.mean(w_hw == 0.0)),
+        "device_timing": device_timing(resp),
         "metrics": m,
     })
     if u["kind"] == "spectra":

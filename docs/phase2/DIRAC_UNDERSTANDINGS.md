@@ -152,9 +152,41 @@ Where EvidenceBasedDB holds the same item, its record id is given as
 
 ## 2. Dirac-3S: what we understand
 
-Nothing in this section is measured. No job has run on Dirac-3S.
+One Dirac-3S job has run (F142 stop 1, 2026-10-14); its figures are
+under "Measured" below. Everything else in this section is unmeasured.
 Full sources: `docs/phase2/DIRAC_3S_RESEARCH.md` and
 `docs/phase2/DIRAC_3S_SITE_SWEEP.md`.
+
+### Measured (F142 stop 1, one fit)
+
+One B1 fit: ULB `free` configuration, seed 42, 91 variables, 8 samples,
+relaxation schedule 2, job `6ad04e0b358b23d0cb3727a5`, submitted at
+11:52 pm EDT on 2026-10-14. Row: `experiments/phase2/results/f142_dirac3s_verify.json`,
+unit `b1_42`. Response:
+`experiments/phase2/results/device_samples/f142_b1_42_6ad04e0b358b23d0cb3727a5.json`.
+
+- **Cost: 6.0 metered seconds** (row `metered_seconds`, allocation balance
+  before minus after). The response's own `job_result.device_usage_s` is
+  6, the same figure. Dirac-3's B1 fits cost about 4.5 s each (99 s over
+  22 fits, `docs/phase2/F139_RERUN_REVIEW.md`). One fit is not a rate:
+  the ratio of about 1.3 is **Inferred** from a single point and is not
+  known to hold at larger sizes.
+- **Queue: under 0.1 s.** The response's job status moved from queued to
+  running in 0.06 s and ran 9.5 s to completion (`job_status`
+  timestamps). Wall time including the client's build and polling was
+  20.9 s (row `wall_seconds_including_queue`). This was late evening; one
+  point says nothing about daytime queues.
+- **The request ran on the device it named.** The response's
+  `device_config` key is `dirac-3s`, and the library returned per-sample
+  run times read from job metrics under that name. So the metrics key
+  works. The run times were printed, not stored; later rows store them
+  (`device_timing`).
+- **Not a fidelity result.** B1 fails A31's spread test (0.005 of a
+  step). Its exact optimum is uniform (1/91 per weight), and the device
+  returned every weight within 0.007% of 1/91 in all 8 samples, so the row's
+  weight cosine of 1.0 says only that a uniform vector was returned for a
+  uniform optimum. B1 is cost and queue evidence only, as F142's entry
+  states.
 
 ### QCi states
 
@@ -207,8 +239,8 @@ three network calls replaced. Tests: `test_response_serialization.py`,
   `solve` (0.21.0 and 0.22.1 alike). A dry run records the value from the
   request body for this reason.
 - **Job metrics are read by the device name in the request.** A Dirac-3S
-  result's timing is looked up under `dirac-3s`. Whether QCi's metrics use
-  that key is **unverified**; F142's first fit settles it.
+  result's timing is looked up under `dirac-3s`. F142's first fit showed
+  QCi's metrics use that key (see "Measured" above).
 
 ### What QCi's own documents get wrong or leave open
 
@@ -231,8 +263,9 @@ three network calls replaced. Tests: `test_response_serialization.py`,
 
 - **Which configuration serves the cloud queue.** Only QCi can say
   (question A1). It decides whether F143 (987 variables) can run.
-- **Cost and billing at our sizes.** F142's first fit measures cost;
-  billing is question A3.
+- **Cost and billing at our sizes.** Measured at 91 variables only (6.0
+  s, one fit). The cost at 560 and 833 variables waits for F142's stops 2
+  and 3; billing is question A3.
 - **Effective resolution.** Question A6, and F142's B4 twin.
 - **Queue hours for the "special queues".** Question A5; F142 records the
   waits.
@@ -363,3 +396,4 @@ Each update adds a row to the revision log and moves items between labels
 | 2026-10-13 | 25 | First draft: understandings for both devices, nine suggested improvements, two pending and twelve unsent questions |
 | 2026-10-14 | 26 | F141 bump: clients pinned; new label "Checked offline"; five offline findings for Dirac-3S (request body, Hamiltonian identity, `generation` argument removed, `num_samples` source, metrics key); section 3 items 1 and 2 re-checked |
 | 2026-10-14 | 26 | Fresh-eyes review: the "nearly trivial" fidelity item drops the lambda = 0 clause (A27) and is scoped to small pools, with the cosine falling with pool size; the B4 item scoped to A31's weight-resolution half |
+| 2026-10-14 | 26 | F142 stop 1, the first Dirac-3S fit: section 2 gains "Measured" (cost 6.0 s, queue under 0.1 s, device name and metrics key confirmed, B1 not a fidelity result); the metrics-key item and the cost item updated |

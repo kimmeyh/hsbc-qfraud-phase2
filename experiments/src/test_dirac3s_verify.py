@@ -272,6 +272,22 @@ def test_the_key_name_in_the_repository_env_is_accepted(tmp_path,
         R._load_env(env)
 
 
+def test_device_timing_is_read_in_seconds():
+    class Res:
+        run_time = [656_000_000, 852_000_000]
+        time_units = "ns"
+        preprocessing_time = 7_500_000
+    t = R.device_timing(Res())
+    assert t["run_time_per_sample_s"] == [0.656, 0.852]
+    assert abs(t["runtime_sum_s"] - 1.508) < 1e-12
+    assert abs(t["preprocessing_s"] - 0.0075) < 1e-12
+
+    class Offline:                       # the offline stand-in returns none
+        run_time = []
+        time_units = "ns"
+    assert R.device_timing(Offline()) is None
+
+
 def test_an_unreadable_record_refuses(tmp_path, monkeypatch):
     f = tmp_path / "f142.json"
     f.write_text("{not json", encoding="utf-8")
