@@ -94,6 +94,11 @@ They are different things, and every document states which it means:
 
 ## 4. Device rules
 
+- **The default device is Dirac-3S** (team lead, Sprint 26 Decision 11,
+  2026-10-16, after F142). An entry that uses Dirac-3 says why, for
+  example a Dirac-3 against Dirac-3S comparison. In code, Phase 2 runners
+  pass `eqc_submit.PHASE2_DEVICE`, or name the device on a line marked
+  with the reason (`test_phase2_device_default.py`).
 - **Every hardware row names its device** (`dirac-3` or `dirac-3s`) and
   carries its `job_id` and every returned sample (F133; F141 adds the
   device field).

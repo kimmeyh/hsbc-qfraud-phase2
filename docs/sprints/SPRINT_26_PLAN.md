@@ -333,6 +333,11 @@ claims.
   wording says EvidenceBasedDB is read freely, its store read-only. Option 2
   was a Sprint 27 card.
 
+- **Decision 11 (2026-10-16, Manual Validation comment on V1): option 1.**
+  Dirac-3S is the default device for Phase 2 runs: `eqc_submit.PHASE2_DEVICE`
+  and `test_phase2_device_default.py`. The shared default stays Dirac-3
+  (boundary rule 4). Option 3, a global default, would have amended rule 4.
+
 ## Decisions at approval (answered 2026-10-14: 1, 1, 1)
 
 Asked in order. Decision 2 does not depend on Decision 1. Decision 3's

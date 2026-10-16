@@ -76,7 +76,7 @@ DRY_RUN = PHASE2_RESULTS / "f142_dry_run.json"
 LEDGER = PHASE2_RESULTS / "qpu_cost_ledger_phase2.json"
 LOG_DIR = PHASE2_RESULTS / "call_logs"
 RESP_DIR = PHASE2_RESULTS / "device_samples"
-DEVICE = eqc_submit.DIRAC_3S
+DEVICE = eqc_submit.DIRAC_3S  # device named: F142 verifies Dirac-3S itself
 ARM = "cvqboost_dirac3s"
 
 # B1 and B2 are qubo_proxy's `free` and `full` configs, as run_hardware.py

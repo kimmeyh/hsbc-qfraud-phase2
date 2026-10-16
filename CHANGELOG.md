@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-16
+
+- **feat**: Dirac-3S is the default device for Phase 2 runs (Sprint 26 Decision 11, a V1 validation fix, after F142). `eqc_submit.PHASE2_DEVICE = DIRAC_3S`; the shared default is unchanged, so a fit outside `eqc_submit.device()` still goes to Dirac-3, as Phase 1's runners do (CLAUDE.md boundary rule 4). New `test_phase2_device_default.py`: every module under `experiments/phase2/src/` that sends a fit does so inside `device()`, with `PHASE2_DEVICE` or a device named on a line marked `# device named:` with its reason; two injections. F142's runner keeps Dirac-3S by name, marked. The Phase 2 draft's section 4 states the default; `DIRAC_UNDERSTANDINGS.md` section 2 states it and its basis; F95, F25 and F30 gain dated notes that their seconds and queue figures are Dirac-3 measurements to re-price at refinement (#22)
+
 ### 2026-10-15
 
 - **fix**: Sprint 26 Task I (unplanned, Decision 10, from a prompt the evidence library's session shared, its F79). `block_cross_repo_write.py` now blocks Edit and Write into a forbidden repository's Claude Code project directory, where its sessions keep memory: a folder under `.claude/projects` whose name holds `-<name>` at the end or followed by `-` (a session started in a subfolder). An exact folder match missed it; shell writes were already blocked. This repository's own project directory stays allowed. Five new cases; the three BLOCK cases failed against the old hook, and four injections prove each part of the rule. Wording in CLAUDE.md, `SPRINT_EXECUTION_WORKFLOW.md` invariant 9 and the hook's message: EvidenceBasedDB is read freely, with no request needed (its repository, docs and store, the store opened read-only through `scripts/edb_query.py`); a change wanted there goes as a prompt the team lead pastes into a session there; spamfilter-multi and the Phase 1 repository stay read on request (#30)

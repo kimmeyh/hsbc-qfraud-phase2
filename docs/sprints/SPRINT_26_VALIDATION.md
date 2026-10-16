@@ -30,6 +30,15 @@ Read `CHANGELOG.md` (2026-10-14, F141) and the "Checked offline" part of
   and C a fit sends equal to the proxy's.
 - Phase 2 device rows must name `device_type` (row-schema test, proven
   red).
+- **Team lead's comment, 2026-10-16:** "we should make Dirac-3s the default
+  device for all future Dirac runs." **Decision 11, option 1, applied:**
+  `eqc_submit.PHASE2_DEVICE = DIRAC_3S`; every Phase 2 module that sends a
+  fit uses it or names its device with a marked reason
+  (`test_phase2_device_default.py`, two injections). The shared default
+  stays Dirac-3 (boundary rule 4). Draft section 4, `DIRAC_UNDERSTANDINGS.md`
+  and cards F95, F25 and F30 updated.
+
+**Manual Validation complete** (team lead, 2026-10-16).
 
 ## V2. Task B (F145): a pool build repeats from its seed, when asked
 

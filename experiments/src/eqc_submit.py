@@ -72,6 +72,13 @@ def samples_of(resp) -> list:
 DIRAC_3 = "dirac-3"
 DIRAC_3S = "dirac-3s"
 DEVICE_TYPES = (DIRAC_3, DIRAC_3S)
+# Phase 2's default device (team lead, Sprint 26 Decision 11, 2026-10-16,
+# after F142). Phase 2 runners pass it to `device()`; a runner that names a
+# device instead marks the line `# device named:` with its reason
+# (`test_phase2_device_default.py`). Nothing here changes the shared default:
+# a fit outside `device()` still goes to Dirac-3, as Phase 1's runners do
+# (CLAUDE.md, Phase 1 boundary rule 4).
+PHASE2_DEVICE = DIRAC_3S
 
 
 def _check_device_type(device_type: str) -> None:

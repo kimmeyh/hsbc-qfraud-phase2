@@ -157,6 +157,13 @@ Five Dirac-3S jobs have run (F142 stops 1 to 3, 2026-10-14 and
 Full sources: `docs/phase2/DIRAC_3S_RESEARCH.md` and
 `docs/phase2/DIRAC_3S_SITE_SWEEP.md`.
 
+**Dirac-3S is the default device for Phase 2 runs** (team lead, Sprint 26
+Decision 11, 2026-10-16). The basis is F142: on B4 it returned the
+reference optimum where Dirac-3 did not, and it cost less per fit at 560
+and 833 variables, though more at 91. A run that uses Dirac-3 says why in
+its entry. Open: A3 (billing) and A8 (whether `dirac-3` is retired or
+remapped).
+
 ### Measured (F142 stop 1, one fit)
 
 One B1 fit: ULB `free` configuration, seed 42, 91 variables, 8 samples,
@@ -493,3 +500,4 @@ Each update adds a row to the revision log and moves items between labels
 | 2026-10-15 | 26 | F142 stop 2: "Measured (F142 stop 2)" added (B2 cost 31.0 s, billing equals the rounded-up sum of per-sample run times, queue under 1 s, the uniform vector returned on B2 and what that does not show, raw values unverified); the cost item updated |
 | 2026-10-15 | 26 | F142 stop 3: "Measured (F142 stop 3, the B4 twin)" added (cost 21-22 s; the exact optimum returned, beyond a uniform baseline; structure below the 200:1 step; accuracy unchanged); the cost, resolution and A31 items updated |
 | 2026-10-15 | 26 | Fresh-eyes review of F142 (9 findings): the "1/120 of the step" figure replaced (it measured the plateau's renormalization offset) by the per-weight error (1/53 and 1/800 of the step); a uniform-plus-zeros baseline; every sample, not only the best; sample agreement and the 1e-7 grid, weighing toward post-processing; same-pool accuracy; the reference solve's convergence; input and output resolution named apart |
+| 2026-10-16 | 26 | Decision 11: Dirac-3S is the default device for Phase 2 runs; section 2 states it and its basis |
