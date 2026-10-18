@@ -541,6 +541,7 @@ value. Removed from candidates.)
 - Platform: ULB proxy
 - F64 and F91 measured the ladder; `docs/F64_LADDER_DECOMPOSITION.md` owns the figures. Remaining: the paired bootstrap interval reported as the Phase 2 result under F102. Diff `Proxy cell used:` before publishing, because a new full-pair cell can re-key the H1b confirmatory table through `score_gates.py`'s argmax
 - Depends on: F102
+- **Done in Sprint 27 Task D (2026-10-18)**: both predictions hold (Phase 2 draft section 6, Experiment 1 result note; `f112_intervals.json`). Order effect +0.0245 AUPRC, 97.5% paired bootstrap interval [+0.0184, +0.0304], Wilcoxon p = 0.00195; k effect equivalent to zero within ±0.005. No new full-pair cell was written, and `Proxy cell used:` is unchanged
 
 **F103. SPECTRA Tier 1 known-answer check on UCI Steel Industry Energy (~4h [no-history], zero metered) Priority 40**
 - Phase: Phase 2 preparation (cross-domain study, step 1)

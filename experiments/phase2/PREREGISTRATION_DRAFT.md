@@ -285,6 +285,22 @@ computed (Task D computes them).
   the Wilcoxon p-value, the per-seed table, and the `Proxy cell used:`
   line of `score_gates.py` before and after (F112's card; this experiment
   writes no Phase 1 row, so it must not change).
+- **Result, added 2026-10-18 after the run (Sprint 27 Task D;
+  `experiments/phase2/results/f112_intervals.json`, `f112_intervals.py`).**
+  All 10 seeds present, labels identical across arms on every seed.
+  - **P1 holds.** Order effect +0.0245 AUPRC, 97.5% interval [+0.0184,
+    +0.0304]; exact Wilcoxon p = 0.00195 (the floor), 10 of 10 seeds
+    positive. Floor-normalized AUPRC gives the same, AUROC +0.0145.
+  - **P2 holds.** k effect +0.0001 AUPRC, 97.5% interval [-0.0034,
+    +0.0037], inside [-0.005, +0.005]: equivalent to zero at the margin.
+  - **Secondary (Inferred).** Interaction against F144's twin, mean
+    -0.0001, seed SD 0.0043.
+  - **`Proxy cell used:`** reads `cvqboost_proxy/deep/dct/full` in
+    `experiments/results/gate_report.md` line 48, unchanged, and
+    `experiments/results/` has no change in git. It was read, not
+    regenerated: `score_gates.py` rewrites the report on any invocation.
+  - Consistent with the point estimates already seen; this is a
+    re-analysis, as stated above, and its evidence is precision.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
