@@ -11,9 +11,9 @@ the one-seed pilot is `f103_tier1_pilot.json`.
 **The gating check passes, so Task G (F109) runs.** The reimplemented
 trained-frequency GAM reaches 0.914 ROC-AUC on the real target (SD 0.002
 over five seeds), inside the paper's 0.94 with the entry's tolerance of
-0.03. The sparse pocket also reproduces. The dense substrate does not:
-our rebuild from the paper's text is easier for trees and for JOINT than
-the authors' construction. Those two values do not gate (entry), and
+0.03. The sparse pocket also reproduces. Both dense-substrate values
+miss; most plausibly our rebuild from the paper's text differs from the
+authors' construction (Inferred). Those two values do not gate (entry), and
 F150 repeats the check on the authors' construction once they send it.
 
 ## Results (Measured)
@@ -31,7 +31,7 @@ F150 repeats the check on the authors' construction once they send it.
   ± 0.05. **Outside.**
 - **Dense substrate, JOINT minus GA2M**: +0.227 (SD 0.043) against
   +0.00 ± 0.05. **Outside.**
-- **Run time**: 1,021 s for five seeds; JOINT is about 90% of it.
+- **Run time**: 1,021 s for five seeds; JOINT is about 96% of it.
 
 ## Reading
 
@@ -52,7 +52,8 @@ F150 repeats the check on the authors' construction once they send it.
   +0.309, outside its tolerance; the five-seed mean is inside. The
   entry's check is on the mean, as written.
 - **Release phases.** The released phase columns are the paper's recipe
-  plus zero-mean jitter (SD about 0.02 rad, reactive up to 0.69 rad), so
+  plus zero-mean jitter (SD about 0.02 rad on four phases and 0.17 rad
+  on the reactive phase, which departs by up to 0.69 rad), so
   phases are rebuilt from the raw fields (entry; `release_phase_jitter`
   in the results file).
 

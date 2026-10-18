@@ -8,42 +8,51 @@ one-seed pilot is `f108_ceiling_pilot.json`.
 
 ## BLUF
 
-**No ceiling method recovered the known ceiling, so none is validated
-for real data, and F114 has no method to run.** The generator is exact:
-on every seed the Bayes classifier's realized error matches the posterior's
-Bayes error to within 0.00002. Against that known value, the HGB plug-in
-and the learning-curve floor both overstate the Bayes error by about 10%
-(recovered on 2 and 1 of 5 seeds); the AUPRC floor understates the
-attainable AUPRC by about 0.04 and is unstable (0.87 and 0.98 on one
-seed against a true 0.30); the Cover-Hart interval contains the truth on
-3 of 5. The entry needs 4 of 5.
+**No ceiling method recovered the known ceiling on the main, no-noise
+arm, so none is validated for real data, and F114 has no method to
+run.** The generator is exact: on every seed the Bayes classifier's
+realized error matches the posterior's Bayes error to within 0.00002.
+On the main arm, the HGB plug-in overstates the Bayes error by 5-12%
+(recovered on 2 of 5 seeds; three misses are by 0.5-1.8 points past the
+10% margin, so the verdict turns on that margin) and the learning-curve
+floor by a similar amount (1 of 5); the AUPRC floor understates the
+attainable AUPRC by about 0.04 and is unstable; the Cover-Hart interval
+contains the truth on 3 of 5. The entry needs 4 of 5.
+
+**What "validated" means here was read after the run.** The entry
+states no rule combining the arms. Under the entry as written, the
+plug-in meets 4 of 5 on the noise arm (5 of 5) and on the reference arm
+(5 of 5). This document requires the main arm, for the reasons in
+"Reading"; the entry carries a dated note saying so.
 
 ## The world (Measured)
 
-- About 1.79 million transactions per seed; main-label fraud rate 0.83%
-  in the test window. The handbook's text states about 1.75 million.
+- 1.75-1.80 million transactions per seed (mean 1.77); main-label fraud
+  rate 0.83% in the test window. The handbook's text states about 1.75
+  million.
 - Known ceiling, main labels, no noise: Bayes error 0.0060-0.0063,
   Bayes AUPRC 0.296-0.318. Scenario 2 (a compromised terminal, with a
-  normal amount) is invisible in the features, which is what makes the
-  ceiling nonzero.
+  normal amount) is invisible in the features, which is chiefly what
+  makes the ceiling nonzero; scenario 3's multiplied amounts overlap
+  normal ones and add a little.
 - Generator check: realized Bayes-classifier error against the exact
   Bayes error, within 3 SDs on all five seeds (largest gap 0.00002).
 
 ## Results (Measured; recovered seeds of 5)
 
 - **Main, no noise**:
-  - plug-in 0.0064-0.0070 against 0.0060-0.0063: **2 of 5**.
+  - plug-in 0.0064-0.0070 against 0.0060-0.0063, ratios 1.053, 1.097,
+    1.105, 1.114 and 1.118: **2 of 5** within the 10% margin.
   - learning-curve floor on error 0.0064-0.0071: **1 of 5**.
   - learning-curve floor on AUPRC, ceiling 0.255-0.312 on four seeds
-    and 0.87 on one, against 0.296-0.318: **1 of 5**. The full-data HGB
+    and 0.87 on seed 43 (true 0.300), against 0.296-0.318: **1 of 5**. The full-data HGB
     reaches 0.250-0.268, so the floor mostly tracks the model, not the
     ceiling.
   - Cover-Hart interval: **3 of 5**; its lower bound sits just above the
     truth on the other two.
 - **Main, with label noise (0.05 and 0.0005)**: plug-in **5 of 5**
-  (noise raises the true Bayes error toward the model's error); floor on
-  error 3 of 5; floor on AUPRC 0 of 5 (0.98 on one seed); Cover-Hart 2
-  of 5.
+  (ratios 1.075-1.098); floor on error 3 of 5; floor on AUPRC 0 of 5
+  (0.98 on seed 43, true 0.272); Cover-Hart 2 of 5.
 - **Zero-ceiling reference (scenario 1, fraud iff amount > 220)**:
   plug-in 5 of 5, but only through the absolute margin (0.0003-0.0004
   against 0); floor on error 1 of 5; floor on AUPRC 0 of 5; Cover-Hart 0
@@ -64,15 +73,18 @@ seed against a true 0.30); the Cover-Hart interval contains the truth on
   ceiling cannot see that gap. This is the case F114 exists for:
   headroom that a better model could reach.
 - **The AUPRC floor is not usable as specified.** A three-parameter fit
-  to six points at extreme imbalance is ill-conditioned; one seed in five
-  returned an asymptote near 0.9.
-- **The noise arm passes for the wrong reason.** Label noise raises the
-  true Bayes error until it reaches the model's error, so plug-in agrees.
-  That is not evidence the plug-in measures the ceiling.
-- **The HGB finding matters beyond F108 (Inferred).** A default HGB can
-  miss a rare, sharp threshold entirely. HGB is the classical bar in
-  F103, F106 and F109; on those datasets the positives are not a single
-  tail threshold, so this does not transfer without a check.
+  to six points at extreme imbalance is ill-conditioned; on seed 43 it
+  returned a ceiling (1 - c) near 0.9 on both arms.
+- **The noise arm's pass is narrow (Inferred).** The plug-in overstates
+  the Bayes error by 8-10% with noise and 5-12% without. Noise raises the
+  true error, so the same model gap is a smaller fraction of it and falls
+  under the 10% margin. The named alternative: the plug-in genuinely
+  tracks noisy ceilings better. Five seeds cannot separate the two.
+- **The HGB finding may matter beyond F108 (Inferred).** A default HGB
+  can miss a rare, sharp threshold entirely. HGB is the classical bar in
+  F103, F106 and F109. Whether their positives contain such a threshold
+  is **Unverified**; it needs a check before this transfers or is ruled
+  out.
 
 ## What follows
 

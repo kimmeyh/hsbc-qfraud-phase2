@@ -577,12 +577,13 @@ value. Removed from candidates.)
 - If an RFF surrogate or an order-matched JOINT twin matches the circuit's accuracy on identical features, the circuit is dequantized and hardware would measure nothing. Stop and report that
 - Depends on: F6 recommends pursue
 
-**F107. G1 Schmidt-rank threshold on the SV1 simulator (~4h [no-history], zero metered) Priority 74**
+**F107. G1 Schmidt-rank threshold on the SV1 simulator (~4h [no-history], zero metered) Priority 74** (title superseded 2026-10-18: runs as the F106 circuit's shot budget on a NumPy statevector; see the Task J note below)
 - Phase: Phase 2 preparation, gate-based arm (sprints with F106)
-- Platform: Braket simulator
+- Platform: Braket simulator (superseded: NumPy statevector, Sprint 27 plan)
 - Prediction error against (effective Schmidt rank, shot count) for our feature count, with the critical rank at each shot budget. Predicts the gate-based outcome before any hardware spend
 - Depends on: F6 recommends pursue
 - **2026-10-18 (Sprint 27 Task H): F6 recommended pursue narrowly, meaning simulation only.** This card runs as Task J on a NumPy statevector with sampled shots. Its result is a prediction; it informs a hardware decision only if F106 finds the circuit is not dequantized
+- **2026-10-18 (Sprint 27 Task J): the source does not transfer.** The "G1 Schmidt-rank threshold" is Wang et al., arXiv:2306.03481 (evidence library `entangled-data-schmidt-rank-threshold`): the Schmidt rank of entangled quantum training data shared with a reference system, for learning a target unitary. A classical-input classifier has neither, so "the critical rank at each shot budget" is undefined here. Task J measures the F106 circuit's critical shot budget instead, with effective Schmidt rank beside it (Phase 2 draft, F107 entry); a rank curve needs F116, on HOLD
 
 **F108. Ceiling validation harness with hidden state (~6h [no-history], zero metered) Priority 80**
 - Phase: Phase 2 preparation (ceiling methodology)
@@ -590,7 +591,7 @@ value. Removed from candidates.)
 - Withhold compromised-terminal and targeted-customer state to induce a known, nonzero Bayes error; add FeeBee-style label-noise injection at known rates. A ceiling method that does not recover the known ceiling is not used on real data
 - This enables: F114. This prevents: an unvalidated ceiling estimate on extreme-imbalance data, where published Bayes-error estimators are validated only on balanced classes with few features
 - Depends on: nothing
-- **Done in Sprint 27 Task K (2026-10-18): no method validated** (`docs/phase2/F108_CEILING_VALIDATION.md`, `f108_ceiling.json`). The generator is exact against its posterior on all five seeds. Against the known Bayes error (about 0.006) and Bayes AUPRC (about 0.30), the HGB plug-in and the learning-curve floor overstate the error by about 10% (2 and 1 of 5 seeds), the AUPRC floor understates the ceiling by about 0.04 and is unstable, and Cover-Hart contains the truth on 3 of 5; the entry needed 4. Also found: default HGB reaches AUPRC 0.01-0.03 on the zero-ceiling reference, a single threshold on the top 0.05% of amounts (cause Inferred: binning)
+- **Done in Sprint 27 Task K (2026-10-18): no method validated on the main, no-noise arm** (the plug-in meets the 4-of-5 rule on the noise and reference arms; requiring the main arm is a reading added after the run, noted in the entry) (`docs/phase2/F108_CEILING_VALIDATION.md`, `f108_ceiling.json`). The generator is exact against its posterior on all five seeds. Against the known Bayes error (about 0.006) and Bayes AUPRC (about 0.30), the HGB plug-in and the learning-curve floor overstate the error by about 10% (2 and 1 of 5 seeds), the AUPRC floor understates the ceiling by about 0.04 and is unstable, and Cover-Hart contains the truth on 3 of 5; the entry needed 4. Also found: default HGB reaches AUPRC 0.01-0.03 on the zero-ceiling reference, a single threshold on the top 0.05% of amounts (cause Inferred: binning)
 
 **F109. SPECTRA domain ladder and aggregation experiments (~6h [no-history], zero metered) Priority 90**
 - Phase: Phase 2 preparation (cross-domain study, steps 2-3)
@@ -615,7 +616,7 @@ value. Removed from candidates.)
 - Platform: ULB, IEEE-CIS
 - Fit `a*N^(-b) + c` against N_positives within a fixed time window; confident learning with the diagonal-dominance condition tested and reported when it fails. Report intervals, not points
 - Depends on: F108
-- **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
+- **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods on its main arm, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
 
 **F115. Integer cost scaling stated correctly in a new document (~30m, zero metered) Priority 170**
 - Phase: QCi/External
@@ -716,7 +717,7 @@ not a sweep correction.
 - The team lead brings near-expert AWS and hands-on Braket experience, so platform learning is not the cost here
 - Acceptance: a written analysis with a recommendation (pursue, pursue narrowly, or decline with the reason); any pursue recommendation names the encoding, the diagnostic, the cost and the falsifier before any code is written
 - Depends on: nothing. Informs F13 (Phase 2 PoC planning)
-- **Done in Sprint 27 Task H (2026-10-18): pursue narrowly, meaning simulation only** (`docs/phase2/F6_GATE_BASED_ARM.md`). F106 and F107 run on a local NumPy statevector: F106 sets an 8-qubit sandwich encoding on rank-phased ULB features against the complete classical bar plus an RFF surrogate, margin 0.005 AUPRC; F107 predicts the critical Schmidt rank per shot budget. No Braket hardware time is planned: at affordable widths the circuit is exactly simulable, so hardware could test only inductive bias, which the simulator already answers
+- **Done in Sprint 27 Task H (2026-10-18): pursue narrowly, meaning simulation only** (`docs/phase2/F6_GATE_BASED_ARM.md`). F106 and F107 run on a local NumPy statevector: F106 sets an 8-qubit sandwich encoding on rank-phased ULB features against the complete classical bar plus an RFF surrogate, margin 0.005 AUPRC; F107 measures the circuit's critical shot budget (corrected in Task J: the critical Schmidt rank is undefined for classical inputs; see the F107 card). No Braket hardware time is planned: at affordable widths the circuit is exactly simulable, so hardware could test only inductive bias, which the simulator already answers
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control

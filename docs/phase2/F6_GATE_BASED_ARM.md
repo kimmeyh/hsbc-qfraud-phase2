@@ -19,7 +19,8 @@ this analysis; F116 and F117 stay on HOLD.
   exactly simulable on a laptop, so no hardware result can show a
   computational effect. Any value lies in the circuit's hypothesis class,
   and a classical simulation answers that question completely. Hardware
-  would add noise and cost, nothing else.
+  would add noise and cost, nothing else (Inferred, from the width
+  argument in section 3).
 - **The stated risk is real.** Phase 1's null came from a formulation in
   which the solver had nothing to win (a convex objective). A gate-based
   classifier moves the question from "can the device optimize better"
@@ -32,7 +33,7 @@ Each claim below carries a label: Measured, Inferred or Unverified
 
 ## 1. Which encodings are not provably classical
 
-- **Provably classical (a published theorem, not our measurement).** The Inverse Born Rule
+- **Provably classical (a cited theorem; not a claim of ours to label).** The Inverse Born Rule
   Equivalence (Zajac et al., arXiv:2602.21350v2, Theorem 1): any
   real-valued amplitude encoding, composed with a data-independent unitary
   and a basis measurement, yields exactly the classical quadratic forms
@@ -81,7 +82,8 @@ developer guide's device list (the pages carry no effective date):
 - **What that means for a classifier (Inferred, arithmetic).** Each
   scored row is a separate circuit, so a task per row. At 1,000 shots,
   one row costs $1.75 on IQM Garnet and $0.73 on Rigetti Cepheus; at
-  IonQ Forte's 2,500-shot minimum it costs $200.30. Scoring ULB's test fold (about 57,000 rows) once would
+  IonQ Forte's 2,500-shot minimum with error mitigation it costs
+  $200.30. Scoring ULB's test fold (about 57,000 rows) once would
   cost about $41,000 on Rigetti and $100,000 on Garnet, before any
   training. Even SV1's 3-second minimum is $0.00375 a row. Hardware
   scoring at Phase 1's scale is not affordable; at best a subsample of a
@@ -89,10 +91,13 @@ developer guide's device list (the pages carry no effective date):
 
 ## 3. Does a gate formulation fix what Phase 1 hit, or move it
 
-- **What Phase 1 hit (Measured).** CVQBoost's objective is a convex
-  quadratic on the simplex. The classical proxy solves it exactly, so the
-  device could at best match the proxy, and on resolvable pools it did
-  (F142 stop 3; F144: Dirac-3 does not beat its own proxy on B2).
+- **What Phase 1 hit.** Measured: on the resolvable B4 pools Dirac-3S
+  returned the exact solve's weights and the same test AUPRC (F142 stop
+  3, `f142_readout.json`), and Dirac-3 did not beat its own proxy on B2
+  (`f144_proxy_twin.json`). Inferred: CVQBoost's objective is a convex
+  quadratic on the simplex that the classical proxy solves exactly, so
+  a device has no better optimum to find; matching the optimum does not
+  by itself bound held-out AUPRC.
 - **What a gate classifier changes (Inferred).** Its training landscape is
   non-convex, but nothing in this repository asks the device to optimize
   it better. The only route to a win is the circuit's function class:
@@ -136,15 +141,20 @@ three hold, in this order (each is necessary):
 
 ## 5. The cheapest falsifiable first experiment
 
-**F106, simulation only, zero metered seconds.**
+**F106, simulation only, zero metered seconds.** This section is the
+sketch; the Phase 2 draft's F106 entry (section 6) fixes the
+architecture, the phase pipeline, the falsifier threshold and the seeds,
+and governs where the two differ.
 
 - **Encoding**: sandwich, `RY(phi_j / 2)` on each qubit, a ZZ ring with
-  one trainable `lambda`, `RY(phi_j / 2)` again; three re-upload layers
-  with trainable `Ry-Rz` rotations between them; readout `<Z_0>`.
+  a trainable `lambda` per layer, `RY(phi_j / 2)` again; three re-upload
+  layers with trainable `Ry-Rz` rotations between them; readout a
+  weighted sum of every qubit's `<Z_q>` plus a bias.
 - **Features**: the top 8 ULB features by Phase 1's selection
-  (`data.top_k_features`), rank-phased by the Fourier Wall recipe (F103's
-  `rank_phase`), so 8 qubits and a 256-amplitude statevector. The same
-  phases go to every classical twin.
+  (`data.top_k_features`), phased by the Fourier Wall recipe fit on
+  training rows only (rank phase, PCA-whiten, re-rank), so 8 qubits and
+  a 256-amplitude statevector. The same phases go to every classical
+  twin.
 - **Data**: a stratified ULB training subsample, with the test fold used
   whole; AUPRC primary, with ROC-AUC beside it. The seed count and every
   open choice are fixed in the Phase 2 draft's F106 entry (section 6),
@@ -153,15 +163,22 @@ three hold, in this order (each is necessary):
   AUPRC (section 2b). Dequantized if the best twin's paired interval
   against the circuit lies above -0.005.
 - **Falsifier**: the circuit is dequantized (stop; F116 stays on HOLD),
-  or C = 0 on the data (the encoding was built wrong).
+  or C < 0.01 on the data (the encoding was built wrong).
 - **Cost**: zero metered; a few hours of laptop time. Hardware is not
   part of this experiment.
 
-**F107 runs beside F106, also on the NumPy statevector.** Its output, the
-critical Schmidt rank at each shot budget, is a prediction of a hardware
-outcome, not a hardware result. It costs nothing, and it is the number a
-later hardware decision would need. It informs that decision only if a
-circuit survives F106.
+**F107 runs beside F106, also on the NumPy statevector.** Corrected
+2026-10-18 (Task J): the card's "critical Schmidt rank per shot budget"
+comes from Wang et al. (arXiv:2306.03481), whose rank is that of
+entangled quantum training data shared with a reference system; a
+classical-input classifier has neither, so that quantity is undefined
+here (Phase 2 draft, F107 entry). F107 instead measures the smallest
+shot budget at which the F106 circuit's AUPRC is within 0.005 of the
+exact statevector's, with the effective Schmidt rank across the 4|4 cut
+reported beside it. A rank curve would need circuits at several
+entanglement levels, which is F116's ablation, on HOLD. It is a
+prediction of a hardware cost, not a hardware result, and it informs a
+hardware decision only if a circuit survives F106.
 
 ## 6. What this does not settle
 

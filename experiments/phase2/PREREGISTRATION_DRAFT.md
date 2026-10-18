@@ -224,7 +224,10 @@ on 2026-10-18:
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
 | - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below |
-| - | Gate-based arm | F6, F106, F107 | Braket | To write if F6 recommends pursuing |
+| - | Gate-based arm: dequantization check (F6 recommended pursue narrowly) | F106 | none (NumPy statevector) | Written 2026-10-18, below |
+| - | Gate-based arm: the F106 circuit's shot budget | F107 | none (NumPy statevector) | Written 2026-10-18, below |
+| - | Ceiling validation on a simulator with hidden state (verification) | F108 | none | Written 2026-10-18, below |
+| - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -334,8 +337,8 @@ reimplementation, not a Phase 2 claim about fraud data.
      6.83). If it does not, JOINT is wrong and no JOINT value is reported
      as a check.
 - **Phases.** The SPECTRA release's phase columns are the paper's recipe
-  plus zero-mean jitter (SD about 0.02 rad; the reactive phase departs by
-  up to 0.69 rad), measured 2026-10-18 against the raw fields in the same
+  plus zero-mean jitter (SD about 0.02 rad on four phases and 0.17 rad
+  on the reactive phase, which departs by up to 0.69 rad), measured 2026-10-18 against the raw fields in the same
   file. So the phases are rebuilt from the raw fields by the paper's
   recipe: rank phase `2 pi (rank(v) - 1/2) / n - pi` of the log magnitude
   for active and lagging reactive power; time of day `2 pi NSM / 86400 -
@@ -397,8 +400,9 @@ reimplementation, not a Phase 2 claim about fraud data.
 
 Written 2026-10-18 (Sprint 27 Task I), before the module exists or any
 lane is fit. The design comes from `docs/phase2/F6_GATE_BASED_ARM.md`
-section 5; this entry fixes what that section leaves open, and supersedes
-its seed count (five there, eight here, from section 2a).
+section 5; this entry fixes the lambda count, the readout, the phase
+pipeline, the C threshold and the seed count (eight, from section 2a),
+and governs wherever the two differ.
 
 - **ID and card**: F106 (gate-based arm; F6 recommended pursue narrowly,
   simulation only).
@@ -483,8 +487,9 @@ shot is sampled.
   meaning here, and this entry does not construct one.
 - **What transfers (Inferred).** The paper's mechanism: information per
   measurement falls as entanglement rises. For a readout <Z_q>, the shot
-  variance is (1 - <Z_q>^2) / m, largest when qubit q's reduced state is
-  mixed, which entanglement across a cut produces.
+  variance is (1 - <Z_q>^2) / m, largest when <Z_q> is near 0. A mixed
+  reduced state, which entanglement across a cut produces, gives that;
+  so does a pure equatorial state, the named alternative.
 - **ID and card**: F107.
 - **Question**: how many shots per row does the F106 circuit need before
   its test AUPRC is within 0.005 of the exact statevector's?
@@ -581,6 +586,13 @@ transaction is generated.
   0.01; the Cover-Hart interval if it contains the true value.
 - **Primary metric**: per arm and method, recovered in at least 4 of 5
   seeds. No multiplicity correction: these are checks, not tests.
+- **Added after the run, 2026-10-18 (a reading, not part of the entry
+  as written).** The entry states no rule combining the arms. The
+  result document reads "validated" as recovered on the main no-noise
+  arm, because the noise arm moves the true ceiling toward the model and
+  the reference arm's ceiling is 0, where the absolute margin alone
+  decides. Under the entry as written, the plug-in meets the 4-of-5 rule
+  on the noise and reference arms and fails it on the main arm.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -598,9 +610,13 @@ before this module exists or any lane is fit here.
   candidate, and does the IEEE-CIS UID aggregation change any gate?
 - **Hypothesis and prediction**: the Fourier Wall spec predicts `refuse`
   for fraud. Tier 1 is permissive (F103), so the prediction here is
-  narrower: on ULB and IEEE-CIS, g3 (HGB - GAM > 0) passes with a large
-  margin and g4 (JOINT - GA2M) is small, under 0.02.
-- **Falsifier**: g4 >= 0.02 on ULB or IEEE-CIS in at least 3 of 5 seeds.
+  narrower: on ULB, IEEE-CIS before aggregation and IEEE-CIS after, g4
+  (JOINT - GA2M) is small, under 0.02. g3 is reported, with no
+  prediction. (Revised 2026-10-18 after the fresh-eyes review, while the
+  timing pilot ran and before any of its output was read: a "large
+  margin" on g3 had no threshold, and the IEEE-CIS set was unnamed.)
+- **Falsifier**: g4 >= 0.02 in at least 3 of 5 seeds on any one of the
+  three sets.
 - **Code**: F103's Tier 1 unchanged (`f103_tier1.run_target`: its 70/30
   stratified split, lanes, gates g1-g5), so these values are comparable
   with F103's.
@@ -849,3 +865,9 @@ scored. Not filed; part of this draft.
 - 2026-10-18: section 6 gains the F103 entry, before its first run
   (Sprint 27 Task F); Experiment 1 gains its dated result note (Task D);
   section 6 gains the F106 entry, before its module exists (Task I).
+- 2026-10-18: section 6 gains the F107 entry (Task J), the F108 entry
+  (Task K; its ceiling definition revised before any run, after the
+  generator test showed a closed-form check fails by design; a dated
+  post-run reading of its arms) and the F109 entry (Task G; its
+  prediction tightened after the fresh-eyes review, before any output was
+  read). The section 6 table gains rows for F106-F109.
