@@ -39,6 +39,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 23 | docs/sprints/SPRINT_23_SUMMARY.md | [OK] Complete (Tasks C and D done in the Phase 1 repository: `as-filed` tag at 4aa17d2, repository archived; verified 2026-10-13) | ~1 day (Oct 8, 2026) |
 | 24 | docs/sprints/SPRINT_24_SUMMARY.md | [OK] Complete | ~2 days (Oct 9-10, 2026) |
 | 25 | docs/sprints/SPRINT_25_SUMMARY.md | [OK] Complete | ~4 days (Oct 10-13, 2026) |
+| 26 | docs/sprints/SPRINT_26_SUMMARY.md | [OK] Complete | ~5 days (Oct 13-17, 2026) |
 
 ## Last Completed Sprint
 
@@ -54,7 +55,7 @@ unchanged. F144: Dirac-3 does not beat its own proxy on B2. F126's rule
 fails. F105's harness passes every leakage audit; no score. Open: QCi
 question A6 (output resolution), and F126 and F25 read against Dirac-3S.
 Records: `SPRINT_26_PLAN.md`, `SPRINT_26_VALIDATION.md`,
-`SPRINT_26_RETROSPECTIVE.md`; `SPRINT_26_SUMMARY.md` at Sprint 27 planning.
+`SPRINT_26_RETROSPECTIVE.md`, `SPRINT_26_SUMMARY.md`.
 
 ### Sprint 25: Learn the New Device, Then Build What Runs on Any Device
 (Oct 10 - Oct 13, 2026; PR #12, main PR #20). Delivered **F138, F139, F102 (first
