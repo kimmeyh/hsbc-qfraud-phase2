@@ -514,6 +514,80 @@ shot is sampled.
 - **What is reported whatever the result**: AUPRC per seed at every m,
   the critical budget, the effective Schmidt rank and |<Z_q>| summary.
 
+### F108: ceiling validation on a simulator with hidden state
+
+Written 2026-10-18 (Sprint 27 Task K), before the module exists or any
+transaction is generated.
+
+- **ID and card**: F108 (ceiling methodology; enables F114).
+- **Question**: on transactions whose Bayes error is known exactly, does
+  any ceiling method recover the ceiling?
+- **Generator** (clean room, from the Fraud Detection Handbook's prose,
+  Le Borgne et al., chapter 3 "Simulated dataset", CC BY-SA 4.0; its
+  GPL-3.0 code is not read or copied). 5,000 customers and 10,000
+  terminals on a 100 x 100 grid; customer mean amount U[5, 100], SD half
+  of it, daily rate U[0, 4]; available terminals within radius 5; 183
+  days; per customer-day a Poisson count; time N(43,200 s, 20,000 s),
+  outside the day discarded; amount N(mean, SD), a negative draw replaced
+  by U[0, 2 mean]; terminal uniform over the available ones. Amounts are
+  not rounded. Scenario 2: each day 2 distinct terminals are drawn; every
+  transaction on them that day and the next 27 is fraud. Scenario 3: each
+  day 3 distinct customers are drawn; for that day and the next 13, each
+  of their transactions is selected with probability 1/3 (a Bernoulli
+  draw, where the handbook selects a third; this keeps the posterior
+  exact), its amount multiplied by 5, and marked fraud.
+- **Two label sets.** Main: scenarios 2 and 3; the compromised-terminal
+  and compromised-customer state is withheld. Zero-ceiling reference:
+  scenario 1 alone (fraud iff amount > 220), deterministic in a visible
+  feature, so its Bayes error is 0.
+- **Observed features**: amount, the customer's mean amount, time of
+  day. Hidden: everything else.
+- **The known ceiling.** On days with both windows full (d >= 27), a
+  transaction's terminal is compromised with probability pi_T and it is
+  a scenario 3 selection with probability q. With g the amount density
+  (normal on [0, inf) plus the fallback's uniform mass), the posterior is
+  eta = 1 - (1 - pi_T)(1 - s), s = q g(a/5)/5 / (q g(a/5)/5 + (1 - q)
+  g(a)). pi_T and q are the **realized** rates on the test rows (the
+  fractions with the hidden scenario 2 and scenario 3 state), because the
+  schedule is drawn once per world and its rates scatter around the
+  closed-form priors, 1 - (1 - 2/10,000)^28 and (1 - (1 - 3/5,000)^14) /
+  3, far more than a row-level binomial allows. So the ceiling is that of
+  a row-wise classifier that knows the world's rates; the priors and the
+  training rows' rates are reported beside it. (Revised before any run,
+  after the generator test showed a closed-form check fails by design.) The Bayes error is the test mean of min(eta, 1 - eta); the
+  Bayes AUPRC is the test AUPRC of eta. **The generator is checked
+  against eta before any method is scored**: the Bayes classifier's
+  realized error must lie within 3 binomial SDs of the Bayes error, and
+  the mean of eta within 3 SDs of the fraud rate; otherwise the run stops
+  as a generator defect.
+- **Label noise** (FeeBee-style, Renggli et al. 2021), known rates: arms
+  none, and fraud-to-legitimate 0.05 with legitimate-to-fraud 0.0005,
+  applied to the main labels. The noisy posterior is (1 - 0.05) eta +
+  0.0005 (1 - eta), so its ceiling is known too.
+- **Splits**: train days 28-119, test days 120-182 (both windows full
+  throughout, so eta does not depend on the day). Seeds 42-46.
+- **Ceiling methods** (each scored on every arm):
+  - plug-in: test mean of min(p, 1 - p) with p HGB's probabilities
+    (default settings, `random_state` = seed);
+  - learning-curve floor: HGB on the first 1/32, 1/16, 1/8, 1/4, 1/2 and
+    all of the training rows (shuffled once by the seed); `a N^(-b) + c`
+    fit to test error rate against training positives, and separately to
+    1 - AUPRC; c is the floor (F114's method);
+  - Cover-Hart: the 1-NN test error e on standardized features (100,000
+    test rows from the seed) bounds the Bayes error to [(1 - sqrt(1 -
+    2e)) / 2, e].
+- **Margin, set here**: a Bayes-error estimate recovers the ceiling if
+  within max(0.0005, 10% of the true value); an AUPRC ceiling if within
+  0.01; the Cover-Hart interval if it contains the true value.
+- **Primary metric**: per arm and method, recovered in at least 4 of 5
+  seeds. No multiplicity correction: these are checks, not tests.
+- **Device**: none. Zero metered seconds.
+- **Stopping rules**: the generator check above. A method that does not
+  recover is recorded as failing and is not used on real data (F114).
+- **What is reported whatever the result**: per seed and arm, the fraud
+  rate, the Bayes error and AUPRC, every estimate, the fitted (a, b, c),
+  the generator check, and each method's recovered or failed.
+
 ### F142: the first Dirac-3S fits
 
 Written 2026-10-14 (Sprint 26 Task D), before any Dirac-3S call. Not
