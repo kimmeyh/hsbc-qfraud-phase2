@@ -598,7 +598,9 @@ value. Removed from candidates.)
 - Phase: Phase 2 preparation (cross-domain study, steps 2-3)
 - Platform: SPECTRA, IEEE-CIS, ULB
 - Tier 1 on the seven-dataset ladder with all five gate values recorded; the phase pipeline on classical models alone; gates before and after aggregation, including the IEEE-CIS UID aggregation
+- **Scope corrected (Sprint 27)**: six datasets, the ones on disk (Steel, ai4i, oilgas, telecom, ULB, IEEE-CIS); "seven" is superseded
 - Depends on: F103
+- **Done in Sprint 27 Task G (2026-10-18, #39)**: `docs/phase2/F109_TIER1_LADDER.md`, `f109_ladder.json`. The prediction (g4 under 0.02 on the three fraud sets) is not falsified: the falsifier fired on 0, 2 and 1 of 5 seeds on ULB, IEEE-CIS before and after aggregation. Tier 1 says `candidate` on 32 of 35 dataset-seeds, so it does not refuse fraud. The UID aggregation raises every IEEE-CIS lane (HGB 0.758 to 0.816) and lowers g4
 
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~3h [no-history]) Priority 110**
 - Phase: Phase 2 preparation, Experiment 6
