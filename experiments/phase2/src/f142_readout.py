@@ -136,10 +136,12 @@ def b4(row: dict, d3_rows: dict) -> dict:
 DRY_RUN = RES / "f142_dry_run.json"
 
 
-def _pool(seed: int) -> dict:
+def _pool(seed: int, row: dict | None = None) -> dict:
     """Rebuild the seeded B4 pool F142 sent: J, C, the test-fold H and the
-    exact weights. Refuses unless its Hamiltonian hashes to the one the dry
-    run recorded for that unit (the runner sent only that hash)."""
+    exact weights. Refuses unless its Hamiltonian hashes to the one the
+    runner sent: the row's own `screen.hamiltonian_sha256` when present,
+    else the hash the dry run recorded for that unit, else neither and it
+    refuses."""
     import hashlib
 
     import qubo_proxy as qp
@@ -161,9 +163,18 @@ def _pool(seed: int) -> dict:
     h = hashlib.sha256()
     for a in (J, C):
         h.update(np.ascontiguousarray(a, dtype=np.float64).tobytes())
-    sent = {u["unit"]: u["hamiltonian_sha256"] for u in json.loads(
-        DRY_RUN.read_text(encoding="utf-8"))["stops"]["3"]["units"]}
-    if h.hexdigest() != sent[f"b4_oilgas_{seed}"]:
+    # The row records what was sent from PR #21's review on; the five rows
+    # written before then carry it only in the dry-run file.
+    unit = f"b4_oilgas_{seed}"
+    want = (row or {}).get("screen", {}).get("hamiltonian_sha256")
+    if want is None:
+        sent = {u["unit"]: u.get("hamiltonian_sha256") for u in json.loads(
+            DRY_RUN.read_text(encoding="utf-8"))["stops"]["3"]["units"]}
+        want = sent.get(unit)
+    if want is None:
+        raise SystemExit(f"REFUSING: seed {seed}: no record of the "
+                         "Hamiltonian F142 sent for this unit")
+    if h.hexdigest() != want:
         raise SystemExit(f"REFUSING: seed {seed}: the rebuilt Hamiltonian "
                          "is not the one F142 screened and sent")
     return {"J": J, "C": C, "H_te": qp.h_matrix(clf, X(split.X_test)),
@@ -231,7 +242,8 @@ def structure(row: dict, pool: dict, w: np.ndarray) -> dict:
 
 
 def main() -> int:
-    rows = json.loads(ROWS.read_text(encoding="utf-8"))["rows"]
+    record = json.loads(ROWS.read_text(encoding="utf-8"))
+    rows = record["rows"]
     d3 = {r["seed"]: r for r in json.loads(B4_D3.read_text(
         encoding="utf-8"))["rows"] if CELL in r["dataset"]}
     ok = [r for r in rows if r["status"] == "ok"]
@@ -244,14 +256,18 @@ def main() -> int:
         "falsifier_fixed": "experiments/phase2/PREREGISTRATION_DRAFT.md "
                            "section 6, F142, before any call",
         "baseline_added_after_result": "uniform_vector_cosine_vs_exact",
-        "total_metered_seconds": sum(r["metered_seconds"] for r in ok),
+        # The runner's own total, over every row it wrote, so a billed row
+        # that is not "ok" is never dropped from spend (PR #21 review).
+        "total_metered_seconds": record["metered_seconds"],
+        "units_not_scored": [r["unit"] for r in rows
+                             if r["status"] != "ok"],
         "cost": [cost(r) for r in ok],
         "b4": [b4(r, d3) for r in ok if r["unit"].startswith("b4_")],
     }
     out["falsifier_fires"] = any(not b["dirac3s"]["in_band"]
                                  for b in out["b4"])
     out["b4_structure"] = [
-        structure(r, _pool(r["seed"]), f126.exact_weights(CELL, r["seed"]))
+        structure(r, _pool(r["seed"], r), f126.exact_weights(CELL, r["seed"]))
         for r in ok if r["unit"].startswith("b4_")]
     OUT.write_text(json.dumps(out, indent=2), encoding="utf-8")
     print(json.dumps(out, indent=1))

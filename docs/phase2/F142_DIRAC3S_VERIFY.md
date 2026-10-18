@@ -102,8 +102,9 @@ about output resolution.
 | 3 | `b4_oilgas_42` | 560 | passes (37 steps) | 22.0 | 0.99999 | the twin |
 | 3 | `b4_oilgas_43` | 560 | passes (37 steps) | 21.0 | 1.0 | the twin |
 
-The re-quotes held: stop 2 spent 37 s against about 115, stop 3 spent 43
-s against about 44. The first stop 1 attempt spent nothing: the runner did
+Neither re-quote was exceeded: stop 2 spent 37 s against about 115
+(re-quoted from stop 1's measured cost), stop 3 spent 43 s against about
+44 (re-quoted after stop 2); each stop's cap was 150. The first stop 1 attempt spent nothing: the runner did
 not read the `.env` key name and exited before any submit (fixed in
 `c39a0f4`).
 
@@ -136,5 +137,7 @@ not read the `.env` key name and exited before any submit (fixed in
 - Every queue time was taken late at night.
 - The reference optimum is F126's cached solve of the same seeded pool.
   The readout refuses unless the row's own cosine matches it, and rebuilds
-  each pool and refuses unless its Hamiltonian hashes to the one the dry
-  run recorded and the runner sent.
+  each pool and refuses unless its Hamiltonian hashes to the one the
+  runner sent. Rows written from PR #21's review on record that hash;
+  the five rows above predate it, so for them the readout reads the hash
+  the dry run recorded, and it refuses if neither is present.

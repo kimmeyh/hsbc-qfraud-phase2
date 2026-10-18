@@ -344,7 +344,10 @@ def metered(u: dict, screened: dict, client, on_submitted) -> dict:
                "off_diagonal_spread_over_resolvable",
                "linear_spread_over_resolvable", "screen_pass",
                "dynamic_range_db", "n_variables",
-               "exact_optimum_median_nonzero_weight", "weights_resolvable")},
+               "exact_optimum_median_nonzero_weight", "weights_resolvable",
+               # What was sent, on the row itself, so no later command can
+               # erase the record the readout checks against (PR #21 review).
+               "hamiltonian_sha256")},
                       "test": "A31: spreads >= max |coefficient| / 200",
                       "rule": u["screen"]},
            "features_used": list(extra["features"])}
@@ -357,9 +360,38 @@ def metered(u: dict, screened: dict, client, on_submitted) -> dict:
     try:
         _score(row, u, fit, cfg, Xtr, Xva, Xte, y_pm1, y_va01, y_te01, extra)
     except Exception as exc:                               # noqa: BLE001
+        import traceback
         row.update({"status": "ok_scoring_failed",
-                    "scoring_error": f"{type(exc).__name__}: {exc}"[:400]})
+                    "scoring_error": f"{type(exc).__name__}: {exc}"[:400],
+                    # The paid call is kept; the traceback says what to fix
+                    # before it is rescored (PR #21 review).
+                    "scoring_traceback": traceback.format_exc()[-4000:]})
     return row
+
+
+def _merge_dry_run(prior_stop: dict | None, screened: dict, units: list,
+                   now: str) -> dict:
+    """A stop's dry-run entry, per unit: the units rebuilt now replace their
+    old entries, and every other unit's entry is KEPT.
+
+    PR #21 review: the entry used to be replaced whole by the units still to
+    do, so a dry run of a finished stop wrote `units: []` and erased the
+    Hamiltonian hashes of calls already paid for, which the readout checks
+    its rebuilt pools against."""
+    kept = {u["unit"]: u for u in (prior_stop or {}).get("units", [])}
+    for name, s in screened.items():
+        kept[name] = {**s, "unit": name, "written": now}
+    order = [u["unit"] for u in units]
+    return {"written": now,
+            "units": sorted(kept.values(),
+                            key=lambda u: (order.index(u["unit"])
+                                           if u["unit"] in order
+                                           else len(order)))}
+
+
+# A paid unit that was not scored is not a success: the exit code says so
+# (PR #21 review: `ok_scoring_failed` exited 0).
+NONZERO_STATUSES = ("failed", "ok_scoring_failed")
 
 
 def device_timing(resp) -> dict | None:
@@ -474,9 +506,9 @@ def main(argv: list[str] | None = None) -> int:
         DRY_RUN.parent.mkdir(parents=True, exist_ok=True)
         prior = (json.loads(DRY_RUN.read_text(encoding="utf-8"))["stops"]
                  if DRY_RUN.exists() else {})
-        prior[str(args.stop)] = {
-            "written": time.strftime("%Y-%m-%dT%H:%M:%S"),
-            "units": list(screened.values())}
+        prior[str(args.stop)] = _merge_dry_run(
+            prior.get(str(args.stop)), screened, units,
+            time.strftime("%Y-%m-%dT%H:%M:%S"))
         DRY_RUN.write_text(json.dumps({
             "generator": "experiments/phase2/src/run_dirac3s_verify.py "
                          "--dry-run",
@@ -537,7 +569,7 @@ def main(argv: list[str] | None = None) -> int:
                       "stop; it needs a human decision.")
                 break
         _write(rows)
-    return 1 if any(r["status"] == "failed" for r in rows) else 0
+    return 1 if any(r["status"] in NONZERO_STATUSES for r in rows) else 0
 
 
 def _load_env(env: Path | None = None) -> None:

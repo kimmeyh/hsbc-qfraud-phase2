@@ -100,33 +100,68 @@ def test_dirac3s_quote_brackets_what_f142_spent():
     read from the rows, not restated here."""
     a = m.dirac3s_anchors()
     b4 = [x["metered_seconds"] for x in a if x["unit"].startswith("b4_")]
-    assert len(b4) == 2
+    assert len(b4) >= 2          # a live smoke check; later rows may add more
     q = m.quote(560, 8)
     assert q["known"] and q["device"] == "dirac-3s"
     assert all(q["low_s"] <= s <= q["high_s"] for s in b4), (q, b4)
 
 
-def test_dirac3s_quote_is_honest_off_its_anchors():
-    assert m.quote(3000, 8)["known"] is False             # beyond 2x
-    assert m.quote(560, 8, relaxation_schedule=4)["known"] is False
-    above = m.quote(987, 8)                                # F143's size
-    assert above["above_largest_anchor"] == max(
-        x["n_variables"] for x in m.dirac3s_anchors())
+def _fixture_rows(path: Path) -> Path:
+    """Fixed Dirac-3S rows, all at schedule 2, sizes 560 and 833, so the
+    tests below do not change when a later run adds rows (PR #21 review)."""
+    def row(unit, n, runtime, status="ok"):
+        return {"unit": unit, "status": status, "device_type": "dirac-3s",
+                "metered_seconds": math.ceil(runtime),
+                "hw_config": {"num_samples": 8, "relaxation_schedule": 2},
+                "screen": {"n_variables": n},
+                "device_timing": {"runtime_sum_s": runtime}}
+    path.write_text(json.dumps({"rows": [
+        row("x_560", 560, 20.8), row("y_833", 833, 30.6),
+        row("z_failed", 560, 99.0, status="failed")]}), encoding="utf-8")
+    return path
+
+
+def test_dirac3s_quote_is_honest_off_its_anchors(tmp_path):
+    rows = _fixture_rows(tmp_path / "rows.json")
+    assert [a["unit"] for a in m.dirac3s_anchors(rows)] == ["x_560", "y_833"]
+    assert m.quote(560, 8, rows_path=rows)["known"] is True
+    assert m.quote(3000, 8, rows_path=rows)["known"] is False   # beyond 2x
+    assert m.quote(560, 8, relaxation_schedule=4,
+                   rows_path=rows)["known"] is False
+    above = m.quote(987, 8, rows_path=rows)                     # F143's size
+    assert above["above_largest_anchor"] == 833
     assert "floor" in above["note"]
     with pytest.raises(ValueError):
         m.quote(560, 8, device="dirac-4")
 
 
-def test_the_quote_guards_can_fail():
+def test_an_anchor_beyond_2x_does_not_hide_the_warning(monkeypatch):
+    """PR #21 review: the in-range anchors (500, 600) are all smaller than
+    a 700-variable job, so the range's high end is a floor. A 2,000-variable
+    anchor, outside the range, must not suppress the flag."""
+    fake = [{"unit": u, "degree": 2, "n_variables": n,
+             "relaxation_schedule": 2, "per_sample_s": s,
+             "metered_seconds": 0}
+            for u, n, s in (("a", 500, 2.0), ("b", 600, 2.5),
+                            ("c", 2000, 9.0))]
+    monkeypatch.setattr(m, "dirac3s_anchors", lambda *a, **k: fake)
+    q = m.quote(700, 8)
+    assert q["known"] and q["above_largest_anchor"] == 600
+
+
+def test_the_quote_guards_can_fail(tmp_path):
     import importlib
 
     from injection import Mutation, assert_can_fail
     src = Path(m.__file__)
+    rows = _fixture_rows(tmp_path / "rows.json")
 
     def run() -> bool:
         mod = importlib.reload(m)
-        return (mod.quote(560, 8, relaxation_schedule=4)["known"] is False
-                and "above_largest_anchor" in mod.quote(987, 8))
+        return (mod.quote(560, 8, relaxation_schedule=4,
+                          rows_path=rows)["known"] is False
+                and "above_largest_anchor" in mod.quote(987, 8,
+                                                        rows_path=rows))
 
     try:
         assert_can_fail([Mutation(src, "               if a[\"relaxation_"

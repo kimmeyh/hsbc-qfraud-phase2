@@ -27,8 +27,11 @@ def test_the_runner_refuses_when_invoked_from_a_test():
     # subprocess fail closed instead of submitting (code review finding 6).
     # (A dict entry, not keyword form: the confidentiality hook matches the
     # .env-style keyword text, and an empty token is not a secret.)
+    # The alias is blanked too: the loader copies it into an empty token,
+    # so an empty token alone was no backstop (PR #21 review).
     env = dict(os.environ)
     env.update({"PYTEST_CURRENT_TEST": "guard::f142", "QCI_TOKEN": "",
+                "QCI_API" + "_KEY": "",
                 "QCI_API_URL": "https://offline.invalid"})
     r = subprocess.run([sys.executable, str(RUNNER), "--stop", "1"],
                        capture_output=True, text=True, cwd=str(ROOT),
@@ -251,6 +254,59 @@ def test_a_balance_that_does_not_fall_is_charged_when_opted_in(tmp_path,
     assert out["metered_seconds"] == 0 and out["parsed"] is True
 
 
+def _failed_fit_charges(tmp_path, monkeypatch) -> tuple:
+    """(charge for a failure after the device ran, charge for a NoRetry),
+    both with a balance that did not move and the opt-in set."""
+    import eqc_submit
+
+    def late():
+        raise RuntimeError("makeResults failed after billing")
+
+    def refuse():
+        raise eqc_submit.NoRetry("pre-submit")
+    a, _ = _run_metered_fit(tmp_path, monkeypatch, late, [100, 100],
+                            max_attempts=1, zero_cost_is_unparsed=True)
+    b, _ = _run_metered_fit(tmp_path, monkeypatch, refuse, [100, 100],
+                            max_attempts=1, zero_cost_is_unparsed=True)
+    return a["metered_seconds"], a["parsed"], b["metered_seconds"]
+
+
+def test_a_failed_call_with_no_balance_change_is_charged(tmp_path,
+                                                         monkeypatch):
+    """PR #21 review: a fit can fail after the device billed it; with the
+    balance unmoved it was recorded as a measured 0. A NoRetry, raised
+    before any upload, still costs nothing."""
+    import eqc_submit
+    assert _failed_fit_charges(tmp_path, monkeypatch) == (
+        eqc_submit.UNPARSEABLE_CALL_CHARGE_S, False, 0)
+
+
+def test_the_failed_call_charge_can_fail(tmp_path, monkeypatch):
+    import importlib
+
+    import eqc_submit
+    from injection import Mutation, assert_can_fail
+    src = Path(eqc_submit.__file__)
+
+    def run() -> bool:
+        importlib.reload(eqc_submit)
+        return _failed_fit_charges(tmp_path, monkeypatch) == (
+            eqc_submit.UNPARSEABLE_CALL_CHARGE_S, False, 0)
+
+    try:
+        assert_can_fail([Mutation(src, "            if (zero_cost_is_unparsed "
+                                  "and not no_retry\n",
+                                  "            if (zero_cost_is_unparsed and "
+                                  "rec.status == \"ok\"\n",
+                                  expect_occurrences=1)],
+                        run, "a failed call recorded as a measured zero")
+        assert_can_fail([Mutation(src, "and not no_retry\n", "\n",
+                                  expect_occurrences=1)],
+                        run, "a NoRetry charged")
+    finally:
+        importlib.reload(eqc_submit)
+
+
 def test_the_key_name_in_the_repository_env_is_accepted(tmp_path,
                                                         monkeypatch):
     """The repository's .env names the key QCI_API_KEY, as run_hardware.py
@@ -294,3 +350,90 @@ def test_an_unreadable_record_refuses(tmp_path, monkeypatch):
     monkeypatch.setattr(R, "RESULT", f)
     with pytest.raises(SystemExit, match="REFUSING"):
         R._done()
+
+
+def _merge_keeps_paid_hashes() -> bool:
+    """A dry run of a finished stop rebuilds nothing and must keep every
+    earlier unit's hash; a rebuilt unit replaces only its own entry."""
+    units = [u for u in R.UNITS if u["stop"] == 3]
+    prior = {"written": "t0", "units": [
+        {"unit": "b4_oilgas_42", "hamiltonian_sha256": "aa"},
+        {"unit": "b4_oilgas_43", "hamiltonian_sha256": "bb"}]}
+    nothing = R._merge_dry_run(prior, {}, units, "t1")
+    one = R._merge_dry_run(prior, {"b4_oilgas_43": {
+        "hamiltonian_sha256": "cc"}}, units, "t1")
+    first = R._merge_dry_run(None, {"b4_oilgas_42": {
+        "hamiltonian_sha256": "dd"}}, units, "t1")
+    h = lambda e: {u["unit"]: u["hamiltonian_sha256"]  # noqa: E731
+                   for u in e["units"]}
+    return (h(nothing) == {"b4_oilgas_42": "aa", "b4_oilgas_43": "bb"}
+            and h(one) == {"b4_oilgas_42": "aa", "b4_oilgas_43": "cc"}
+            and h(first) == {"b4_oilgas_42": "dd"})
+
+
+def test_a_dry_run_never_erases_a_paid_units_hash():
+    """PR #21 review: a dry run of a finished stop wrote `units: []`, erasing
+    the hashes the readout checks its rebuilt pools against."""
+    assert _merge_keeps_paid_hashes()
+
+
+def test_the_dry_run_merge_can_fail():
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = Path(R.__file__)
+
+    def run() -> bool:
+        importlib.reload(R)
+        return _merge_keeps_paid_hashes()
+
+    try:
+        assert_can_fail([Mutation(src, '    kept = {u["unit"]: u for u in '
+                                  '(prior_stop or {}).get("units", [])}',
+                                  "    kept = {}", expect_occurrences=1)],
+                        run, "the stop entry replaced whole")
+    finally:
+        importlib.reload(R)
+
+
+def test_the_row_records_the_hash_it_sent():
+    src = Path(R.__file__).read_text(encoding="utf-8")
+    i = src.index('"exact_optimum_median_nonzero_weight", "weights_resolvable",')
+    assert '"hamiltonian_sha256")}' in src[i:i + 400]
+
+
+def _exit_rule_holds() -> bool:
+    """A paid but unscored unit exits nonzero, as a failed one does.
+    Read from the source because main() refuses to run in a test process,
+    which is the guard that keeps tests off the device."""
+    src = Path(R.__file__).read_text(encoding="utf-8")
+    return ("ok_scoring_failed" in R.NONZERO_STATUSES
+            and "failed" in R.NONZERO_STATUSES
+            and "r[\"status\"] in NONZERO_STATUSES for r in rows" in src
+            and "\"scoring_traceback\": traceback.format_exc()" in src)
+
+
+def test_a_paid_unscored_unit_exits_nonzero():
+    """PR #21 review: `ok_scoring_failed` exited 0, so a wrapper trusting
+    the exit code read a paid, unscored unit as success."""
+    assert _exit_rule_holds()
+
+
+def test_the_exit_rule_can_fail():
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = Path(R.__file__)
+
+    def run() -> bool:
+        importlib.reload(R)
+        return _exit_rule_holds()
+
+    try:
+        assert_can_fail([Mutation(src, 'NONZERO_STATUSES = ("failed", '
+                                  '"ok_scoring_failed")',
+                                  'NONZERO_STATUSES = ("failed",)',
+                                  expect_occurrences=1)],
+                        run, "an unscored unit exits 0")
+    finally:
+        importlib.reload(R)

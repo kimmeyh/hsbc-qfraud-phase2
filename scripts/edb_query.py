@@ -19,7 +19,8 @@ Usage:
     python scripts/edb_query.py search "" --class paper --tag HW --limit 5
     python scripts/edb_query.py show dirac3s-analog-resolution-about-200-to-1
     python scripts/edb_query.py contexts
-    (any command takes --json; --db overrides the store path)
+    (--json and --db go before the command, for example
+    `edb_query.py --json search dirac-3s`; --db overrides the store path)
 
 Cite a record found here as `EDB: <id>`.
 """

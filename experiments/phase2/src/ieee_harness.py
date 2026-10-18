@@ -5,8 +5,9 @@ this experiment's preregistration entry (Phase 2 draft, section 6,
 Experiment 2). The pilot fits a model only to time it; it computes no
 metric and writes none.
 
-What it adds to Phase 1's IEEE-CIS pipeline (`run_ieee.py`, which this
-module imports and never edits):
+What it adds to Phase 1's IEEE-CIS pipeline (`run_ieee.py`'s modules
+`ieee_features`, `ieee_splits` and `ieee_controls`, which this module
+imports and never edits):
 
 - **Rolling-origin folds over TransactionDT** (`ieee_splits`, unchanged:
   the last three month buckets, each trained on every earlier month), with

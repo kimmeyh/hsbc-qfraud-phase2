@@ -50,7 +50,8 @@ section 6 entry.
    limit. **Inferred.**
 3. **A full run is cheap.** Load 18 s; per fold 22-24 s of features,
    45-51 s of aggregate audit, 4.4-5.9 minutes of controls and 8-11 s of
-   model fit. About 19 minutes for three folds. **Measured**: `timings_s`.
+   model fit. About 20 minutes for three folds (1,212 s including the
+   load). **Measured**: `timings_s` and `load_s`.
 
 ## What the harness does
 

@@ -283,3 +283,19 @@ def test_a_same_size_mutation_is_seen_by_a_reload_and_so_is_the_restore(
             assert importlib.reload(t).V == 2, "stale bytecode after restore"
     finally:
         sys.modules.pop("same_size_target", None)
+
+
+def test_a_cache_that_cannot_be_dropped_aborts_the_injection(tmp_path,
+                                                             monkeypatch):
+    """PR #21 review: swallowing the unlink error left the stale bytecode
+    in place, so the proof would mean nothing. It must abort instead."""
+    import injection as inj
+    f = tmp_path / "locked.py"
+    f.write_text("V = 2\n", encoding="utf-8")
+
+    def locked(self, missing_ok=False):
+        raise PermissionError("locked")
+    monkeypatch.setattr(Path, "unlink", locked)
+    with pytest.raises(InjectionError, match="could not drop cached bytecode"):
+        inj._drop_bytecode(f)
+    inj._drop_bytecode(tmp_path / "data.json")      # not a module: no-op

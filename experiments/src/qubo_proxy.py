@@ -108,8 +108,9 @@ def seeded_weak_params(seed: int, weak_params: dict | None = None) -> dict:
 
     OPT-IN (F145, Sprint 26). eqc-models builds each DecisionTreeClassifier
     with no random_state, so ties between equally good splits are broken at
-    random: two builds agree on the training rows and differ elsewhere (61 of
-    78 learners on seed 42's `free` pool). Phase 1 builds never pass this, so
+    random: two builds agree on the training rows and differ elsewhere (see
+    `experiments/phase2/results/f145_build_drift.json`; the count varies by
+    run). Phase 1 builds never pass this, so
     their behavior is unchanged; Phase 2 builds do.
     """
     return {**(weak_params or {}), "random_state": int(seed)}

@@ -169,17 +169,21 @@ def dirac3s_anchors(rows_path: pathlib.Path = F142_ROWS) -> list[dict]:
 
 
 def quote(n_variables: int, n_samples: int, device: str = "dirac-3s",
-          degree: int = 2, relaxation_schedule: int = 2) -> dict:
+          degree: int = 2, relaxation_schedule: int = 2,
+          rows_path: pathlib.Path = F142_ROWS) -> dict:
     """A Criterion H quote: a range from measured calls on THAT device.
 
-    Dirac-3S anchors come from `dirac3s_anchors` and must match the
-    relaxation schedule (schedule 4 costs about 3x schedule 2). Dirac-3
+    Dirac-3S anchors come from `dirac3s_anchors(rows_path)` and must match
+    the relaxation schedule (schedule 4 costs about 3x schedule 2: 3.04x in
+    the vendor guide's 50-variable table, `docs/phase2/DIRAC_3S_RESEARCH.md`
+    "Schedule 4 against schedule 2"). Dirac-3
     anchors come from the Phase 1 ledger, as `estimate_for` reads them.
     With no anchor within 2x of the size, it says so; a block is then bounded
-    by call count, never by a number nothing supports.
+    by call count, never by a number nothing supports. `rows_path` lets a
+    test use a fixed set of rows, so a later run cannot change its result.
     """
     if device == "dirac-3s":
-        obs = [a for a in dirac3s_anchors()
+        obs = [a for a in dirac3s_anchors(rows_path)
                if a["relaxation_schedule"] == relaxation_schedule]
         q = estimate_for(n_variables, degree, n_samples,
                          ledger={"calls": obs})
@@ -192,8 +196,12 @@ def quote(n_variables: int, n_samples: int, device: str = "dirac-3s",
     # Cost rises steeply with size, so anchors all SMALLER than the job give
     # a range whose high end can be exceeded (F143's 987 variables against
     # anchors at 560 and 833). Say so rather than let the range read as a cap.
+    # The same anchors estimate_for used (same degree, within 2x): an
+    # unrelated anchor far above the job must not hide the warning (PR #21
+    # review).
     sizes = [a["n_variables"] for a in obs
-             if a.get("degree") == degree and a.get("n_variables")]
+             if a.get("degree") == degree and a.get("n_variables")
+             and 0.5 <= a["n_variables"] / n_variables <= 2.0]
     if q["known"] and n_variables > max(sizes):
         q["above_largest_anchor"] = max(sizes)
         q["note"] = (f"{n_variables} variables is above the largest anchor "

@@ -487,6 +487,14 @@ F123's layout is superseded by F127.)
 - Acceptance: the tool answers a text query and an id lookup on the live database; the read-only test is proven red; one research note in this repository cites records it found; `EDB_PROPOSALS.md` updated with anything found while building it
 - Depends on: nothing
 
+**F149. F142 runner: test the pre-submit guard through the real library, and the stop loop (~2h [no-history], zero metered) Priority 12, target Sprint 27**
+- Phase: Phase 2 preparation (added 2026-10-17 from PR #21's test-coverage review, findings 1 and 2; F148 was reserved for Sprint 26 IMP-5, which was applied in-sprint instead and never carded)
+- Platform: N/A (local, CI)
+- **Finding 1**: the F142 pre-submit guard (the Hamiltonian hash and the B4 screen) is tested on its own and `device(wrap=)` is tested with a stub class, but no test drives a fit through `metered_fit` and the real `eqc_models` classifier with the guard installed, so a library change that bypasses the solver's submit method would go unnoticed. A full-library test with a fake client at the HTTP boundary (no device call) covers it. A cheap install test went in with PR #21 (`test_phase2_helpers.py`)
+- **Finding 2**: `run_dirac3s_verify.main()` runs each stop's loop inline: per-unit skip on an existing row or ledger entry, the guard, the save, scoring and the exit code. Extract it into `_run_stop` and test it with a stub fit, including the refusal return codes 4 and 6
+- Acceptance: both tests proven red with `assert_can_fail` (the guard removed from the wrap; a unit resubmitted despite a ledger entry); the F142 dry run's output unchanged by the extraction
+- Depends on: nothing. Comes before the next metered run of `run_dirac3s_verify.py`
+
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
 - Platform: N/A (document)

@@ -98,7 +98,8 @@ def check_path(path: str) -> str | None:
             # A forbidden repository's Claude Code project directory, where
             # that repository's sessions keep their memory. Claude Code names
             # it after the session's working directory with every separator
-            # turned into "-" ("D--Data-Harold-github-<name>"), so the name is
+            # turned into "-" ("D--Data-Harold-EvidenceBasedDB" or
+            # "D--Data-Harold-github-spamfilter-multi"), so the name is
             # a "-"-bounded part of it, at the end or, for a session started
             # in a subfolder, followed by "-". (Sprint 26 Task I, from
             # EvidenceBasedDB's F79: an exact folder match missed it.)

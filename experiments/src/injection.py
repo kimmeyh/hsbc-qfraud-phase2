@@ -72,10 +72,17 @@ def _drop_bytecode(path: Path) -> None:
         return
     import importlib.util
     try:
-        Path(importlib.util.cache_from_source(str(path))).unlink(
-            missing_ok=True)
-    except (NotImplementedError, ValueError, OSError):
-        pass
+        cached = Path(importlib.util.cache_from_source(str(path)))
+    except (NotImplementedError, ValueError):
+        return                          # no cache tag: nothing is cached
+    try:
+        cached.unlink(missing_ok=True)
+    except OSError as exc:
+        # A cache that cannot be removed (a locked file on Windows) leaves
+        # the defect this function exists for in place, so the injection's
+        # result would mean nothing (PR #21 review).
+        raise InjectionError(
+            f"could not drop cached bytecode for {path}: {exc}") from exc
 
 
 class InjectionError(RuntimeError):

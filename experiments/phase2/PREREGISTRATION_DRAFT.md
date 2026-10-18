@@ -325,8 +325,9 @@ scored. Not filed; part of this draft.
 - **Pool build drift (F145): fixed for Phase 2 builds, a known limit for
   Phase 1 pools.** Decided 2026-10-14 (Sprint 26 Task B). Phase 2 builds pass
   `qubo_proxy.seeded_weak_params(seed)` (`build --seeded-learners`); two
-  such builds of seed 42's `free` full-pair pool are byte-identical on all
-  three folds. Phase 1 pools were built unseeded and stay so: two seed-42
+  such builds of seed 42's `free` sequential pool are byte-identical on all
+  three folds (`f145_build_drift.json`, `seeded`; corrected 2026-10-17: this
+  said full-pair, and no seeded full-pair comparison is on record). Phase 1 pools were built unseeded and stay so: two seed-42
   `free` sequential builds share their training rows and differ on 64 of
   78 learners, 347 of 4,426,188 test cells
   (`experiments/phase2/results/f145_build_drift.json`; the counts vary from

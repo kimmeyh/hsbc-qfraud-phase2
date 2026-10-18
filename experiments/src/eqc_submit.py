@@ -105,7 +105,8 @@ def _device_solver_class(real, device_type: str):
 def device(device_type: str, wrap=None):
     """Point every classifier fit inside the block at `device_type`.
 
-    A no-op for Dirac-3, so Phase 1 and B4/B5 paths are unchanged. `wrap`, if
+    A no-op for Dirac-3 when no `wrap` is given, so Phase 1 and B4/B5 paths
+    are unchanged. `wrap`, if
     given, receives the device's solver class and returns a subclass to
     install instead (F142: a pre-submit check and a raw-response save).
     """
@@ -151,10 +152,12 @@ def metered_fit(make_clf, X, y, make_record, client,
     - `max_attempts=1` makes the approved call count the real ceiling (F142
       review: a fit can fail AFTER the device has billed it, in the metrics
       read or the size check, and a retry would pay again).
-    - `zero_cost_is_unparsed=True` treats a successful call that measures
-      0 s or less as unparsed and charges the conservative estimate, so a
-      balance that does not move (an unverified billing source) cannot hide
-      spend from a cap.
+    - `zero_cost_is_unparsed=True` treats a call that measures 0 s or less
+      as unparsed and charges the conservative estimate, so a balance that
+      does not move (an unverified billing source) cannot hide spend from a
+      cap. This covers a failed call too, since a fit can fail after the
+      device billed it; a `NoRetry` is raised before any upload and is not
+      charged.
     A `NoRetry` raised inside the fit always ends the loop.
 
     Returns {"clf", "resp", "attempts", "metered_seconds", "parsed", "error",
@@ -196,13 +199,19 @@ def metered_fit(make_clf, X, y, make_record, client,
                 rec.cost_source = ("estimated: balance unreadable, conservative "
                                    "charge applied")
                 parsed = False
-            if (zero_cost_is_unparsed and rec.status == "ok"
+            # A failure after the device ran (in makeResults, the metrics
+            # read or the size check) may also have been billed, so it is
+            # charged the same way. A NoRetry is raised before any upload and
+            # legitimately costs nothing (PR #21 review).
+            if (zero_cost_is_unparsed and not no_retry
                     and rec.measured_seconds <= 0):
-                rec.notes.append(f"balance moved {rec.measured_seconds} s on a "
-                                 "successful call; charged the estimate")
+                what = ("a successful call" if rec.status == "ok"
+                        else "a failed call")
+                rec.notes.append(f"balance moved {rec.measured_seconds} s on "
+                                 f"{what}; charged the estimate")
                 rec.measured_seconds = UNPARSEABLE_CALL_CHARGE_S
-                rec.cost_source = ("estimated: balance did not fall on a "
-                                   "successful call, conservative charge applied")
+                rec.cost_source = (f"estimated: balance did not fall on "
+                                   f"{what}, conservative charge applied")
                 parsed = False
             spent += rec.measured_seconds
             rec.finished_utc = mc._utc()
