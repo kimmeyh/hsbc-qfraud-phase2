@@ -512,6 +512,7 @@ match", so CI on the release PR would duplicate the `develop` run for no
 value. Removed from candidates.)
 
 **F130. Proxy screens for F124 ranks 3, 5 and 6: KNN learners, phase features, pool size (~2h [no-history], zero metered) Priority 24**
+- **Done in Sprint 27 Task E (2026-10-18, #37)**: `docs/phase2/F130_LEVER_SCREENS.md`, `f130_levers.json`. No lever beats HGB on SPECTRA. KNN moves AUPRC up on oilgas, telecom and ULB; the phase block on telecom and steel (with the `in_pocket` caveat); pair caps are rejected, and the cap-sized cells are identity controls that reproduce the baseline. Rank 6 ran 30, 60, 90 and 119 pairs, not 100-400, because the cap is d(d-3)/2 (team lead D3). ULB's "beats HGB" is void: the HGB comparator there is unstable under every setting tried (`f130_ulb_hgb_check.json`), cause unverified
 - Phase: Phase 2 preparation (added 2026-10-07, Pass 2 of the Sprint 23 refinement: the "next proxy test" of three ranked levers, none carded). It was to sprint with F128, which shipped in Sprint 24 without it (Pass 1, 2026-10-10)
 - Platform: SPECTRA, ULB, classical proxy
 - Rank 3, KNN weak learners: 5 seeds on oilgas and telecom, and on ULB to test the EvidenceBasedDB record's 0.8108 AUC-PR claim directly (certainty low; a different setup, not a replication)
