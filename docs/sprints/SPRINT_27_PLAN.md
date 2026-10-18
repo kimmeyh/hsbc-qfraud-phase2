@@ -1,7 +1,7 @@
 # Sprint 27 Plan: Gates Before Reporting, and the Screens That Need No Device
 
 **Sprint**: 27 | **Branch**: `feature/20261018_Sprint_27`
-**Planned**: 2026-10-18 | **Status**: DRAFT, awaiting approval
+**Planned**: 2026-10-18 | **Status**: DRAFT, awaiting approval. Draft PR #32.
 **Scope**: F149, F130, F102, F112, F103, F104, F6, F106, F107, F108 and
 F109 (team lead selection, 2026-10-18), plus an F146 update (D3 option 1:
 draft the unsent QCi questions for the team lead to send, presented with

@@ -5,7 +5,7 @@
     "branch": "feature/20261018_Sprint_27",
     "status": "phase_3_planning",
     "plan_doc": "docs/sprints/SPRINT_27_PLAN.md",
-    "pr": null,
+    "pr": 32,
     "plan_approved": false,
     "github_issues": [],
     "task_actuals": {},
