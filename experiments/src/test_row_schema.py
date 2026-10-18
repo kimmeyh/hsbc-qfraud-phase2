@@ -274,8 +274,16 @@ def _nonzero(v) -> bool:
         return True   # an unreadable spend is treated as a spend
 
 
-def phase2_rows_missing_job_id(results_dir: Path) -> list[str]:
+def _has_job_id(row: dict) -> bool:
+    return bool(str(row.get("job_id") or "").strip())
+
+
+def phase2_rows_missing_job_id(results_dir: Path,
+                               row_ok=_has_job_id) -> list[str]:
     """Every result file below results_dir except device_samples/.
+
+    `row_ok` is the per-row rule: the job id by default, and the device name
+    for F141 (`phase2_rows_missing_device_type`).
 
     A file whose shape this check cannot read is REPORTED, never skipped
     (Sprint 24 review): a device file with its rows under another key, or a
@@ -303,9 +311,27 @@ def phase2_rows_missing_job_id(results_dir: Path) -> list[str]:
             tag = r.get("evidence_tag", file_tag)
             device = (tag == "HW" or file_spend
                       or _nonzero(r.get("metered_seconds")))
-            if device and not str(r.get("job_id") or "").strip():
+            if device and not row_ok(r):
                 bad.append(f"{rel} row {i}")
     return bad
+
+
+# ---- F141 (Sprint 26): every Phase 2 device row names its device ----------
+#
+# From Sprint 26 a fit can run on Dirac-3 or Dirac-3S. A row that does not
+# say which cannot be compared with any other, and its job metrics are read
+# by the submitted device name. Same device-row detection as the job id rule
+# above; the value must be one eqc_submit can submit to.
+
+DEVICE_TYPES = ("dirac-3", "dirac-3s")
+
+
+def _names_its_device(row: dict) -> bool:
+    return row.get("device_type") in DEVICE_TYPES
+
+
+def phase2_rows_missing_device_type(results_dir: Path) -> list[str]:
+    return phase2_rows_missing_job_id(results_dir, _names_its_device)
 
 
 def phase2_samples_missing_job_id(results_dir: Path) -> list[str]:
@@ -382,3 +408,34 @@ def test_a_device_file_the_check_cannot_read_is_reported(tmp_path):
         "f129/nested.json row 0",
         "other_key.json: device file with no readable rows list",
         "top_list.json: top level is not an object, so unreadable"]
+
+
+def test_phase2_device_rows_name_their_device():
+    if not PHASE2_RESULTS.exists():
+        pytest.skip("experiments/phase2/results not present")
+    bad = phase2_rows_missing_device_type(PHASE2_RESULTS)
+    assert not bad, (
+        f"Phase 2 device rows with no valid device_type: {bad[:10]}. "
+        f"Each must name one of {DEVICE_TYPES} (F141).")
+
+
+def test_the_device_type_check_catches_an_injected_row(tmp_path):
+    """Every real Phase 2 file is SIM today, so the check is proven on
+    injected files, as the job id check is. The library's internal name
+    `dirac-3_normalized_qudit` is not a device a fit names."""
+    (tmp_path / "hw.json").write_text(json.dumps({
+        "evidence_tag": "HW", "metered_seconds": 5.0,
+        "rows": [{"job_id": "a", "device_type": "dirac-3s"},
+                 {"job_id": "b"},
+                 {"job_id": "c", "device_type": "dirac-3_normalized_qudit"}]}),
+        encoding="utf-8")
+    (tmp_path / "sim.json").write_text(json.dumps({
+        "evidence_tag": "SIM", "metered_seconds": 0, "rows": [{"seed": 1}]}),
+        encoding="utf-8")
+    assert phase2_rows_missing_device_type(tmp_path) == [
+        "hw.json row 1", "hw.json row 2"]
+
+
+def test_the_device_types_match_what_eqc_submit_submits():
+    import eqc_submit
+    assert DEVICE_TYPES == eqc_submit.DEVICE_TYPES

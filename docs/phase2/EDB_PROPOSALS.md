@@ -74,6 +74,54 @@ sourced in this repository:
 Whether each belongs in the library, and in which context, is that
 repository's decision.
 
+**Re-searched 2026-10-14** with `scripts/edb_query.py` (F147): the
+benchmark contradiction now has a record,
+`dirac3s-all-optimal-headline-contradicted-by-own-table` (updated
+2026-10-13). The other five findings still have none. This note does not
+change P3's status; only that repository does.
+
+### P4. This project's own device measurements, missing or unscoped
+
+Found while building `scripts/edb_query.py` (F147, Sprint 26). Searched
+2026-10-14, assertion values and ids, case-insensitive, for "b4",
+"spectra", "dynamic range", "per fit", "device_type" and "sampler_type".
+
+- **Missing: B4's device result on SPECTRA.** Dynamic range 8.1-8.4 dB
+  against the 23 dB limit; weight cosine against the exact solve
+  0.892-0.901 on oilgas_gasturbine, seeds 42-46.
+  (`experiments/results/b4_hardware.json`, fields `dynamic_range_db` and
+  `weight_cosine_vs_classical`; evidence tag HW)
+- **Missing: Dirac-3 continuous cost per fit at our sizes.** 4-5 s at 91
+  variables (B1, 11 fits), 71-92 s at 833 (B2, 11 fits).
+  (`experiments/results/results.json`, `hw_b1_dct` and `hw_b2_full` rows,
+  `metered_seconds`; HW)
+- **Missing: A31, the resolution finding.** On the ten frozen ULB pools,
+  no coefficient difference is resolvable at 200:1 (diagonal 510,705,
+  off-diagonals spanning at most 20.0, against a resolvable difference of
+  2,554), so hardware agreeing with the proxy there carries no fidelity
+  information. On B2, the diffuse optimum's weights (about 0.0012) fall
+  below the about 0.005 weight resolution, so the device returns a sparser
+  solution. (`experiments/PREREGISTRATION.md` amendments A31 and A32)
+- **Missing: Dirac-3S is selected by `device_type="dirac-3s"`**, through
+  `eqc-models` 0.22.1's `sampler_type`. (`docs/phase2/
+  DIRAC_UNDERSTANDINGS.md`, "Checked offline")
+- **Scope: `dirac3-matches-exact-optimum-on-convex-cvqboost`** states
+  cosines of 0.975-0.999 without naming the pool sizes. They are the
+  degree-2 arms at up to 91 variables (B1, G0b, the mixed arm). At 560-833 variables
+  the cosine is 0.82-0.90, B2 on ULB included (0.82-0.83), falling with
+  pool size (`results.json` `fidelity.weight_cosine`; `b4_hardware.json`).
+  Proposed: scope the record to pool sizes up to 91 variables.
+- **Withdrawn clause: `dirac3-fidelity-test-is-near-trivial-on-convex-formulation`**
+  says the weights are "uniform even at lambda = 0". Amendment A27
+  (`experiments/PREREGISTRATION.md`, 2026-09-10) withdrew that: at lambda
+  = 0 the optimum is a face of the simplex, and the ridge selects the
+  near-uniform point. "Any solver reproduces its optimum" also fails at
+  560-833 variables (item above). Proposed: drop the lambda = 0 clause,
+  cite A27, and scope the record to small pools.
+
+These are this project's independent findings, not validated by QCi (see
+P2).
+
 ## Reviewed
 
 None yet.

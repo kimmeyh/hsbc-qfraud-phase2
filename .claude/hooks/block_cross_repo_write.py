@@ -3,7 +3,8 @@
 Converted from PowerShell 2026-09-17 (F78, Sprint 16). Written 2026-09-15.
 
 Team lead: work in this repository never writes to spamfilter-multi,
-EvidenceBasedDB or the Phase 1 repository. Reading them on request is fine.
+EvidenceBasedDB or the Phase 1 repository. EvidenceBasedDB is read freely
+(team lead, 2026-10-14); the other two are read on request.
 
 THE PHASE 1 REPOSITORY IS FORBIDDEN TOO (F132, Sprint 24). Phase 2 work moved
 here, and the Phase 1 repository is about to be restored as filed and
@@ -58,7 +59,9 @@ def message(what: str) -> str:
 
 This repository's sessions never write to spamfilter-multi, EvidenceBasedDB or
 the Phase 1 repository (CLAUDE.md standing rules; SPRINT_EXECUTION_WORKFLOW.md
-invariant 9). Reading them on request is fine.
+invariant 9). EvidenceBasedDB is read freely, its store read-only; the
+other two are read on request. A change wanted in EvidenceBasedDB goes as a
+prompt the team lead pastes into a session there.
 
 If a finding belongs to that repository, REPORT it -- file, line and fix -- and
 hand it to a session running there, so it lands through that repository's own
@@ -86,11 +89,25 @@ def check_path(path: str) -> str | None:
         pass
     forbidden = {repo.lower(): repo for repo in FORBIDDEN}
     for candidate in candidates:
-        for part in hooklib.normalize(candidate).split("/")[:-1]:
-            folder = _canonical_folder(part)
+        folders = [_canonical_folder(p)
+                   for p in hooklib.normalize(candidate).split("/")[:-1]]
+        for i, folder in enumerate(folders):
             if folder in forbidden:
                 return (f"Tool targets a path inside '{forbidden[folder]}':"
                         f"\n  {path}")
+            # A forbidden repository's Claude Code project directory, where
+            # that repository's sessions keep their memory. Claude Code names
+            # it after the session's working directory with every separator
+            # turned into "-" ("D--Data-Harold-EvidenceBasedDB" or
+            # "D--Data-Harold-github-spamfilter-multi"), so the name is
+            # a "-"-bounded part of it, at the end or, for a session started
+            # in a subfolder, followed by "-". (Sprint 26 Task I, from
+            # EvidenceBasedDB's F79: an exact folder match missed it.)
+            if i >= 2 and folders[i - 2:i] == [".claude", "projects"]:
+                for key, repo in forbidden.items():
+                    if folder.endswith("-" + key) or f"-{key}-" in folder:
+                        return (f"Tool targets the Claude Code project "
+                                f"directory of '{repo}':\n  {path}")
     return None
 
 

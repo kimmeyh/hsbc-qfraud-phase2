@@ -1,0 +1,58 @@
+{
+ "generator": "experiments/phase2/src/ieee_harness.py",
+ "card": "F105",
+ "sprint": 26,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "fraction": 0.1,
+ "no_score_reported": "F105: no model score until F102 names the Experiment 2 preregistration entry",
+ "rows_after_dedupe_full": 590537,
+ "rows_used": 59054,
+ "exact_duplicates_removed": 3,
+ "load_s": 18.8,
+ "folds": [
+  {
+   "eval_month": 4,
+   "train_months": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_train": 41060,
+   "n_eval": 8531,
+   "timings_s": {
+    "features_s": 2.5,
+    "aggregate_audit_s": 5.3,
+    "controls_s": 46.4,
+    "fit_predict_s": 2.7
+   },
+   "audits": {
+    "entity_key_columns_found": [],
+    "aggregate_leakage": {
+     "aggregate_columns_checked": 22,
+     "moved": [],
+     "training_features_unchanged": true,
+     "frequency_columns_not_from_training_rows": [],
+     "graph_features": "none in this pipeline",
+     "passes": true
+    },
+    "random_halves_auc": 0.496302046743597,
+    "random_halves_passes": true,
+    "item4_controls": {
+     "adversarial_rounds": 20,
+     "adversarial_hit_round_cap": true,
+     "final_adversarial_auc": 0.9715180154732108,
+     "n_features_start": 232,
+     "n_after_time_consistency": 207,
+     "n_after_adversarial": 187,
+     "dropped_time_inconsistent": 25,
+     "dropped_adversarial": 20,
+     "controls": "section 4 item 4, both computed on training rows only"
+    }
+   },
+   "controls_selected_none": false,
+   "client_mean_changed_fraction": 0.2029070448950885
+  }
+ ]
+}

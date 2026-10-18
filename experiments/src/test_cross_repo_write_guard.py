@@ -1,7 +1,8 @@
 """The cross-repository write boundary must be enforced, not merely documented.
 
 Team lead, 2026-09-15: sessions in this repository never write to the sibling
-repositories. Reading them on request is fine.
+repositories. Reading is fine: the evidence library freely (team lead,
+2026-10-14), the others on request.
 
 Why a test and not only a CLAUDE.md line: in Sprint 14 a session reviewing
 PR #97 examined a sibling repository, found real defects, and fixed, committed
@@ -46,6 +47,7 @@ OTHER = "spamfilter" + "-multi"
 PHASE1 = "hsbc-quantum-fraud" + "-2026"
 THIS = "hsbc-qfraud-phase2"
 HERE = "D:/Data/Harold/github"
+PROJECTS = "C:/Users/kimme/.claude/projects"
 
 BLOCK, ALLOW = 2, 0
 
@@ -153,6 +155,29 @@ CASES = [
      {"tool_name": "Edit",
       "tool_input": {"file_path": f"{HERE}/{THIS}/docs/{PHASE1}_notes.md"}}),
 
+    # --- Sprint 26 Task I: a sibling's Claude Code project directory --------
+    ("Write tool into a sibling's Claude Code memory", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{PROJECTS}/D--Data-Harold-github-"
+                                  f"{SIBLING}/memory/x.md"}}),
+    ("Edit tool into the project directory of a session in a sibling's "
+     "subfolder", BLOCK,
+     {"tool_name": "Edit",
+      "tool_input": {"file_path": f"{PROJECTS}/D--Data-Harold-github-"
+                                  f"{OTHER}-docs/memory/x.md"}}),
+    ("Write tool into the Phase 1 repository's Claude Code memory", BLOCK,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{PROJECTS}/D--Data-Harold-github-"
+                                  f"{PHASE1}/memory/x.md"}}),
+    ("Write tool into this repository's own Claude Code memory", ALLOW,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{PROJECTS}/D--Data-Harold-github-"
+                                  f"{THIS}/memory/x.md"}}),
+    ("Write tool into a folder outside .claude/projects ending in a "
+     "sibling's name", ALLOW,
+     {"tool_name": "Write",
+      "tool_input": {"file_path": f"{HERE}/{THIS}/docs/notes-{SIBLING}/x.md"}}),
+
     # --- must ALLOW: ordinary work in this repository -----------------------
     ("Write tool in this repository", ALLOW,
      {"tool_name": "Write",
@@ -252,6 +277,57 @@ def test_the_folder_match_cases_can_fail():
                  "        part = part", expect_occurrences=1),
     ]
     assert_can_fail(no_canon, run, "uncanonicalized names slip past")
+
+
+def test_the_project_directory_cases_can_fail():
+    """Sprint 26 Task I: each project-directory case goes red when its rule
+    breaks. Without the check, the three BLOCK cases pass through; matching
+    only at the end misses the subfolder session; dropping the
+    `.claude/projects` anchor blocks the folder elsewhere; blocking every
+    project directory blocks this repository's own memory."""
+    from injection import Mutation, assert_can_fail
+
+    names = {
+        "Write tool into a sibling's Claude Code memory",
+        "Edit tool into the project directory of a session in a sibling's "
+        "subfolder",
+        "Write tool into the Phase 1 repository's Claude Code memory",
+        "Write tool into this repository's own Claude Code memory",
+        "Write tool into a folder outside .claude/projects ending in a "
+        "sibling's name"}
+    new_cases = [c for c in CASES if c[0] in names]
+    assert len(new_cases) == 5
+
+    def run() -> bool:
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            for name, expected, payload in new_cases:
+                f = Path(d) / "payload.json"
+                f.write_text(json.dumps(payload), encoding="utf-8")
+                with f.open("rb") as stdin:
+                    r = subprocess.run([sys.executable, str(HOOK)],
+                                       stdin=stdin, capture_output=True)
+                if r.returncode != expected:
+                    return False
+        return True
+
+    anchor = ('            if i >= 2 and folders[i - 2:i] == '
+              '[".claude", "projects"]:')
+    match = ('                    if folder.endswith("-" + key) or '
+             'f"-{key}-" in folder:')
+    assert_can_fail([Mutation(HOOK, anchor, "            if False:",
+                              expect_occurrences=1)],
+                    run, "no project-directory check")
+    assert_can_fail([Mutation(HOOK, match,
+                              '                    if folder.endswith('
+                              '"-" + key):', expect_occurrences=1)],
+                    run, "end-only match misses a subfolder session")
+    assert_can_fail([Mutation(HOOK, anchor, "            if True:",
+                              expect_occurrences=1)],
+                    run, "unanchored match blocks folders elsewhere")
+    assert_can_fail([Mutation(HOOK, match, "                    if True:",
+                              expect_occurrences=1)],
+                    run, "blocking every project directory")
 
 
 def test_the_guard_is_registered_and_its_path_resolves():

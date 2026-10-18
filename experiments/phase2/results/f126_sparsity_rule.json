@@ -1,0 +1,209 @@
+{
+ "generator": "experiments/phase2/src/f126_sparsity_rule.py",
+ "card": "F126",
+ "sprint": 26,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "tolerance": 0.05,
+ "primary_rule": "R1: zero iff exact weight < tau / n",
+ "primary_passes_both_directions": false,
+ "directions": {
+  "fit_oilgas_gasturbine_test_telecom_churn": {
+   "R1_relative_threshold": {
+    "param": 1.022,
+    "train_mae": 0.016785714285714275,
+    "test_mae": 0.01568627450980391,
+    "test_max_abs_error": 0.028186274509803932,
+    "test_errors": [
+     -0.004901960784313764,
+     -0.028186274509803932,
+     -0.013480392156862697,
+     -0.017156862745098034,
+     -0.014705882352941124
+    ],
+    "passes": true
+   },
+   "R2_absolute_threshold": {
+    "param": 0.00182,
+    "train_mae": 0.045000000000000005,
+    "test_mae": 0.5524509803921569,
+    "test_max_abs_error": 0.6458333333333333,
+    "test_errors": [
+     0.6458333333333333,
+     0.6213235294117647,
+     0.22794117647058826,
+     0.633578431372549,
+     0.633578431372549
+    ],
+    "passes": false
+   },
+   "R0_reference_other_mean": {
+    "test_mae": 0.21296218487394958,
+    "passes": false
+   }
+  },
+  "fit_telecom_churn_test_oilgas_gasturbine": {
+   "R1_relative_threshold": {
+    "param": 1.342,
+    "train_mae": 0.013970588235294113,
+    "test_mae": 0.8467857142857141,
+    "test_max_abs_error": 0.8553571428571428,
+    "test_errors": [
+     0.8375,
+     0.8553571428571428,
+     0.8464285714285714,
+     0.8410714285714286,
+     0.8535714285714285
+    ],
+    "passes": false
+   },
+   "R2_absolute_threshold": {
+    "param": 0.00165,
+    "train_mae": 0.013970588235294113,
+    "test_mae": 0.10821428571428571,
+    "test_max_abs_error": 0.11785714285714285,
+    "test_errors": [
+     -0.11785714285714285,
+     -0.1017857142857143,
+     -0.10714285714285715,
+     -0.11249999999999999,
+     -0.10178571428571428
+    ],
+    "passes": false
+   },
+   "R0_reference_other_mean": {
+    "test_mae": 0.21296218487394963,
+    "passes": false
+   }
+  }
+ },
+ "fits": {
+  "oilgas_gasturbine": [
+   {
+    "seed": 42,
+    "n": 560,
+    "device_zero_fraction": 0.1625,
+    "exact_zero_fraction": 0.0054
+   },
+   {
+    "seed": 43,
+    "n": 560,
+    "device_zero_fraction": 0.1446,
+    "exact_zero_fraction": 0.0054
+   },
+   {
+    "seed": 44,
+    "n": 560,
+    "device_zero_fraction": 0.1536,
+    "exact_zero_fraction": 0.0054
+   },
+   {
+    "seed": 45,
+    "n": 560,
+    "device_zero_fraction": 0.1589,
+    "exact_zero_fraction": 0.0054
+   },
+   {
+    "seed": 46,
+    "n": 560,
+    "device_zero_fraction": 0.1464,
+    "exact_zero_fraction": 0.0036
+   }
+  ],
+  "telecom_churn": [
+   {
+    "seed": 42,
+    "n": 816,
+    "device_zero_fraction": 0.3542,
+    "exact_zero_fraction": 0.1189
+   },
+   {
+    "seed": 43,
+    "n": 816,
+    "device_zero_fraction": 0.3787,
+    "exact_zero_fraction": 0.1287
+   },
+   {
+    "seed": 44,
+    "n": 816,
+    "device_zero_fraction": 0.3652,
+    "exact_zero_fraction": 0.1275
+   },
+   {
+    "seed": 45,
+    "n": 816,
+    "device_zero_fraction": 0.3664,
+    "exact_zero_fraction": 0.1213
+   },
+   {
+    "seed": 46,
+    "n": 816,
+    "device_zero_fraction": 0.3664,
+    "exact_zero_fraction": 0.1311
+   }
+  ]
+ },
+ "b5_descriptive_only": [
+  {
+   "file": "b5_ulb_stratified_42.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  },
+  {
+   "file": "b5_ulb_stratified_43.json",
+   "n": 27,
+   "zero_fraction": 0.8889
+  },
+  {
+   "file": "b5_ulb_stratified_44.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  },
+  {
+   "file": "b5_ulb_stratified_45.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  },
+  {
+   "file": "b5_ulb_stratified_46.json",
+   "n": 27,
+   "zero_fraction": 0.8889
+  },
+  {
+   "file": "b5_ulb_stratified_47.json",
+   "n": 27,
+   "zero_fraction": 0.8889
+  },
+  {
+   "file": "b5_ulb_stratified_48.json",
+   "n": 27,
+   "zero_fraction": 0.8889
+  },
+  {
+   "file": "b5_ulb_stratified_49.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  },
+  {
+   "file": "b5_ulb_stratified_50.json",
+   "n": 27,
+   "zero_fraction": 0.8148
+  },
+  {
+   "file": "b5_ulb_stratified_51.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  },
+  {
+   "file": "b5_ulb_stratified_repeat_42.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  },
+  {
+   "file": "b5_ulb_temporal_None.json",
+   "n": 27,
+   "zero_fraction": 0.9259
+  }
+ ],
+ "limitation": "exact weights are from seeded rebuilds of the B4 pools; the device's own pools were never stored"
+}

@@ -23,6 +23,11 @@ Usage:
 list sorted (Sprint 25 IMP-4: a task added at Manual Validation opened #19,
 and `--set` cannot append to a list, so the file fell out of step).
 
+`--pause-task X` and `--resume-task X` keep a wait, such as a metered stop
+awaiting approval, out of the actual. `--start-task` refuses while another
+task is being timed unless `--parallel` is passed, which is recorded in
+`task_parallel` (Sprint 26 IMP-2).
+
 `--start-task` stamps the task's start time in `task_started`. `--finish-task`
 computes the actual from that stamp and writes it to `task_actuals` in whole
 minutes, rounded up. A finish with no recorded start is refused (F136, Sprint
@@ -106,21 +111,75 @@ def add_issue(doc: dict, number: int) -> str:
     return f"  current_sprint.github_issues: added #{number} -> {issues}"
 
 
-def start_task(doc: dict, task: str, now: datetime) -> str:
+def open_tasks(cur: dict) -> list[str]:
+    """Tasks started, not finished and not paused: the ones being timed."""
+    return sorted(t for t in cur.get("task_started", {})
+                  if t not in cur.get("task_actuals", {})
+                  and t not in cur.get("task_paused", {}))
+
+
+def start_task(doc: dict, task: str, now: datetime,
+               parallel: bool = False) -> str:
     """Stamp the start. A second start is refused: silently moving the stamp
-    would shorten the measured actual."""
+    would shorten the measured actual.
+
+    A start while another task is still being timed is refused unless
+    `parallel` is passed, and then it is recorded in `task_parallel`
+    (Sprint 26 IMP-2: six tasks were started within 12 minutes and ran at
+    once, so their actuals measured stamp gaps, not work)."""
     cur = doc["current_sprint"]
     started = cur.setdefault("task_started", {})
     if task in started:
         raise SystemExit(
             f"Task {task} already started at {started[task]}. A second start "
             "would move the stamp and shorten the actual.")
+    running = open_tasks(cur)
+    if running and not parallel:
+        raise SystemExit(
+            f"Task(s) {', '.join(running)} are still being timed. Finish or "
+            f"--pause-task them first, or pass --parallel to time {task} "
+            "alongside them; a parallel start is recorded so the actuals "
+            "are read as overlapping.")
     started[task] = now.isoformat(timespec="seconds")
-    return f"  current_sprint.task_started.{task}: {started[task]}"
+    line = f"  current_sprint.task_started.{task}: {started[task]}"
+    if running:
+        cur.setdefault("task_parallel", {})[task] = running
+        line += f" (parallel with {', '.join(running)})"
+    return line
+
+
+def pause_task(doc: dict, task: str, now: datetime) -> str:
+    """Stop the clock, for example while a metered stop awaits approval."""
+    cur = doc["current_sprint"]
+    if task not in cur.get("task_started", {}):
+        raise SystemExit(f"Task {task} has not started.")
+    if task in cur.get("task_actuals", {}):
+        raise SystemExit(f"Task {task} is already finished.")
+    paused = cur.setdefault("task_paused", {})
+    if task in paused:
+        raise SystemExit(f"Task {task} is already paused since {paused[task]}.")
+    paused[task] = now.isoformat(timespec="seconds")
+    return f"  current_sprint.task_paused.{task}: {paused[task]}"
+
+
+def resume_task(doc: dict, task: str, now: datetime) -> str:
+    """Restart the clock; the paused time is kept out of the actual."""
+    cur = doc["current_sprint"]
+    paused = cur.get("task_paused", {})
+    if task not in paused:
+        raise SystemExit(f"Task {task} is not paused.")
+    gap = (now - datetime.fromisoformat(paused.pop(task))).total_seconds()
+    if gap < 0:
+        raise SystemExit(f"Task {task} resumes before it paused.")
+    total = cur.setdefault("task_paused_s", {})
+    total[task] = total.get(task, 0) + int(gap)
+    return (f"  current_sprint.task_paused_s.{task}: {total[task]} s paused "
+            "in all")
 
 
 def finish_task(doc: dict, task: str, now: datetime) -> str:
-    """Compute the actual from the recorded start, in whole minutes."""
+    """Compute the actual from the recorded start, in whole minutes, less
+    any time paused."""
     cur = doc["current_sprint"]
     stamp = cur.get("task_started", {}).get(task)
     if not stamp:
@@ -131,9 +190,13 @@ def finish_task(doc: dict, task: str, now: datetime) -> str:
     actuals = cur.setdefault("task_actuals", {})
     if task in actuals:
         raise SystemExit(f"Task {task} already has an actual: {actuals[task]}")
+    if task in cur.get("task_paused", {}):
+        raise SystemExit(f"Task {task} is paused; --resume-task it first, so "
+                         "the pause is measured rather than guessed.")
     elapsed = (now - datetime.fromisoformat(stamp)).total_seconds()
     if elapsed < 0:
         raise SystemExit(f"Task {task} finishes before it started ({stamp}).")
+    elapsed -= cur.get("task_paused_s", {}).get(task, 0)
     actuals[task] = max(1, math.ceil(elapsed / 60))
     return (f"  current_sprint.task_actuals.{task}: {actuals[task]} min "
             f"(from {stamp})")
@@ -156,6 +219,12 @@ def main(argv: list[str] | None = None,
                     help="record the task's start time")
     ap.add_argument("--finish-task", default="", metavar="TASK",
                     help="compute the task's actual from its start time")
+    ap.add_argument("--parallel", action="store_true",
+                    help="with --start-task: time it alongside open tasks")
+    ap.add_argument("--pause-task", default="", metavar="TASK",
+                    help="stop the task's clock (an approval wait)")
+    ap.add_argument("--resume-task", default="", metavar="TASK",
+                    help="restart a paused task's clock")
     ap.add_argument("--add-issue", type=int, action="append", default=[],
                     metavar="N", help="append an issue number; repeatable")
     ap.add_argument("--path", default=str(STATUS),
@@ -208,8 +277,12 @@ def main(argv: list[str] | None = None,
         changes.append(add_issue(doc, number))
 
     clock = now or datetime.now().astimezone()
+    if args.pause_task:
+        changes.append(pause_task(doc, args.pause_task, clock))
+    if args.resume_task:
+        changes.append(resume_task(doc, args.resume_task, clock))
     if args.start_task:
-        changes.append(start_task(doc, args.start_task, clock))
+        changes.append(start_task(doc, args.start_task, clock, args.parallel))
     if args.finish_task:
         changes.append(finish_task(doc, args.finish_task, clock))
 

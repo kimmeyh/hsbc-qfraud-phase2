@@ -54,6 +54,35 @@ def _read(path: Path) -> str:
 def _write(path: Path, text: str) -> None:
     with open(path, "w", encoding="utf-8", newline="") as fh:
         fh.write(text)
+    _drop_bytecode(path)
+
+
+def _drop_bytecode(path: Path) -> None:
+    """Remove a module's cached bytecode after every write.
+
+    Python reuses `__pycache__` when the source's mtime and size match the
+    cache. A mutation that keeps the size ("= 2" to "= 1") and a restore in
+    the same second both match, so a reload ran the MUTATED bytecode against
+    restored source. Measured in Sprint 26 IMP-4: after a passing proof, the
+    script on disk read 2 and the imported module read 1, and the next run's
+    baseline failed. Removing the cache makes every import read the bytes
+    on disk.
+    """
+    if path.suffix != ".py":
+        return
+    import importlib.util
+    try:
+        cached = Path(importlib.util.cache_from_source(str(path)))
+    except (NotImplementedError, ValueError):
+        return                          # no cache tag: nothing is cached
+    try:
+        cached.unlink(missing_ok=True)
+    except OSError as exc:
+        # A cache that cannot be removed (a locked file on Windows) leaves
+        # the defect this function exists for in place, so the injection's
+        # result would mean nothing (PR #21 review).
+        raise InjectionError(
+            f"could not drop cached bytecode for {path}: {exc}") from exc
 
 
 class InjectionError(RuntimeError):
