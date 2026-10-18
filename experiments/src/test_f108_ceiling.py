@@ -65,6 +65,41 @@ def test_generator_check_can_fail():
         importlib.reload(fc)
 
 
+def _rows(recovered: list[bool], n_stopped: int) -> list[dict]:
+    arm = {m: {"recovered": False} for m in fc.METHODS}
+    rows = [{"seed": i, "arms": {a: {**arm, "plugin": {"recovered": ok}}
+                                 for a in list(fc.NOISE) + ["reference"]}}
+            for i, ok in enumerate(recovered)]
+    return rows + [{"seed": 100 + i, "arms": {}, "stopped": "x"}
+                   for i in range(n_stopped)]
+
+
+def test_a_stopped_seed_counts_as_a_miss():
+    """3 of 4 live seeds, plus 1 stopped, is 3 of 5: not 4 of 5."""
+    assert fc.summarize(_rows([True] * 4, 1))["none"]["plugin"]["recovers"]
+    assert not fc.summarize(_rows([True] * 3 + [False], 1))[
+        "none"]["plugin"]["recovers"]
+    assert not fc.summarize(_rows([True] * 3, 2))["none"]["plugin"]["recovers"]
+
+
+def test_the_stopped_seed_rule_can_fail():
+    from injection import Mutation, assert_can_fail
+    src = Path(fc.__file__)
+
+    def run() -> bool:
+        importlib.reload(fc)
+        return not fc.summarize(_rows([True] * 3, 2))[
+            "none"]["plugin"]["recovers"]
+
+    try:
+        assert_can_fail([Mutation(
+            src, ">= min(PASS_SEEDS, len(rows)))}",
+            ">= min(PASS_SEEDS, len(live)))}",
+            expect_occurrences=1)], run, "a stopped seed shrinking the count")
+    finally:
+        importlib.reload(fc)
+
+
 def test_amount_density_integrates_to_one():
     a = np.linspace(0, 400, 400001)
     for mu in (5.0, 40.0, 100.0):

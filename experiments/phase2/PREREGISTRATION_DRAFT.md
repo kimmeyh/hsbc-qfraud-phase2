@@ -358,6 +358,10 @@ reimplementation, not a Phase 2 claim about fraud data.
     one biased by 0.05 at a non-integer frequency on a bounded interval);
     features cos and sin of that frequency; logistic regression (lbfgs,
     C = 1.0). Secondary only: 2 and 3 harmonics per phase.
+    (Noted 2026-10-18, after the run, from the Sprint 27 code review:
+    every logistic regression lane, here and in GA2M and JOINT, first
+    standardizes its basis on the training rows (`StandardScaler`). The
+    code did this in the entry's commit, `a05ae94`; the text omitted it.)
   - **GA2M**: the GAM basis plus all pairwise products of the per-feature
     cos and sin terms; logistic regression.
   - **HGB**: scikit-learn defaults, `random_state` = seed.
@@ -444,6 +448,12 @@ and governs wherever the two differ.
     terms); an RFF surrogate, `RBFSampler(n_components=1000)` on cos and
     sin of each phase, gamma from {0.05, 0.2, 0.8} by validation AUPRC,
     then logistic regression.
+  - (Noted 2026-10-18, before the eight-seed run, from the Sprint 27 code
+    review: the twins that reuse F103's `_lr` (logistic regression, GAM,
+    GA2M, JOINT) standardize their basis on training rows. The RFF twin
+    does not: its features feed `RBFSampler` and then an unscaled logistic
+    regression, as in the entry's commit, `de63c40`. Cos and sin are
+    bounded in [-1, 1], so this is recorded, not changed.)
 - **Primary metric and test**: test AUPRC. For each twin T, the paired
   stratified bootstrap interval on the across-seed mean of (T minus
   circuit), as in Experiment 1 (2,000 replicates, the same row indices for

@@ -271,6 +271,8 @@ def seed_run(seed: int) -> dict:
 
 
 def summarize(rows: list) -> dict:
+    # The pass count is out of every seed run, so a stopped seed counts as
+    # a miss rather than shrinking the denominator (Sprint 27 code review).
     out = {}
     for arm in list(NOISE) + ["reference"]:
         live = [r for r in rows if arm in r["arms"]]
@@ -279,7 +281,7 @@ def summarize(rows: list) -> dict:
                         "n_seeds": len(live),
                         "recovers": bool(len(live) > 0 and sum(
                             r["arms"][arm][m]["recovered"] for r in live)
-                            >= min(PASS_SEEDS, len(live)))}
+                            >= min(PASS_SEEDS, len(rows)))}
                     for m in METHODS}
     return out
 
@@ -307,6 +309,11 @@ def main(argv=None) -> int:
     (OUT_PILOT if mode == "pilot" else OUT).write_text(
         json.dumps(res, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(res["summary"], indent=1))
+    stopped = [r["seed"] for r in rows if "stopped" in r]
+    if stopped:
+        print(f"STOPPED: the generator check failed on seeds {stopped}; "
+              "the entry's stop applies", file=sys.stderr)
+        return 1
     return 0
 
 

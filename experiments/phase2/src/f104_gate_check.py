@@ -80,7 +80,10 @@ def main() -> int:
                 "max |coefficient| / 200)",
         "python": sys.version.split()[0], "rows": out}, indent=1) + "\n",
         encoding="utf-8")
-    return 0 if all(r["as_expected"] for r in out) else 1
+    # A row on a matrix other than the one sent answers a different
+    # question, so it fails the check (Sprint 27 code review).
+    return 0 if all(r["as_expected"] and r["same_matrix_as_sent"]
+                    for r in out) else 1
 
 
 if __name__ == "__main__":
