@@ -257,17 +257,13 @@ def resolution_screen(J, C) -> dict:
     so that ratio stays small (B1: 4.8 dB) while their DIFFERENCES fall
     below what the device resolves -- the failure A31 found on B1's pools.
     The screen asks A31's question: do the off-diagonal and linear spreads
-    reach max |coefficient| / 200 (`device_resolution._coefficient_spread`)?
+    reach max |coefficient| / 200? The test is F104's shared gate,
+    `device_resolution.resolution_gate` (Sprint 27).
     """
     import device_resolution as dres
-    s = dres._coefficient_spread(np.asarray(J, dtype=np.float64),
-                                 np.asarray(C, dtype=np.float64).reshape(-1))
-    return {"off_diagonal_spread_over_resolvable":
-                s["off_diagonal_spread_over_resolvable"],
-            "linear_spread_over_resolvable":
-                s["linear_spread_over_resolvable"],
-            "pass": bool(s["off_diagonal_resolvable"]
-                         and s["linear_resolvable"])}
+    g = dres.resolution_gate(J, C)
+    return {k: g[k] for k in ("off_diagonal_spread_over_resolvable",
+                              "linear_spread_over_resolvable", "pass")}
 
 
 def offline(u: dict) -> dict:
