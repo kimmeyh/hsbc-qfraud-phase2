@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-18
 
+- **docs**: Backlog refinement Pass 2, Sprint 27 selected by the team lead: F149, F130, F102, F112, F103, F104, F6, F106, F107, F108 and F109, zero metered, plus an F146 update that drafts the unsent QCi questions (A6 among them) for the team lead to send (D3 option 1). Issues #22-30 closed (D2: completed sprint issues are closed without asking). F95 gains a finding: F142's B1 fits on Dirac-3S, seeded rebuilds of F95's configuration, reached the reference optimum (Measured), so schedule 4 may have no residual to close there (Inferred); which device answers the memo's question is open on the card. Status rolled to Sprint 27, Phase 2 pre-kickoff
 - **docs**: Backlog refinement Pass 1 after Sprint 26. Sprint 26 merged to `develop` (PR #21) and released to `main` (PR #31). Shipped cards pruned: F141, F142, F144, F145, F147, F126, F105. Spent gates marked on F95 (still needs a schedule 4 Dirac-3S rate), F143, F110, F25 and F30. `CHECKLIST-Phase2.md` already current. `last_completed_sprint` rolled to 26. Sprint 27 branch `feature/20261018_Sprint_27` cut from the Sprint 26 branch. Issues #22-30 still to be closed (the close was not permitted from this session)
 
 ### 2026-10-17
