@@ -1,7 +1,9 @@
 # Sprint 27 Plan: Gates Before Reporting, and the Screens That Need No Device
 
 **Sprint**: 27 | **Branch**: `feature/20261018_Sprint_27`
-**Planned**: 2026-10-18 | **Status**: DRAFT, awaiting approval. Draft PR #32.
+**Planned**: 2026-10-18 | **Status**: DRAFT, awaiting approval. Draft PR #32. Answered 2026-10-18:
+Decision 1 option 2 (substrates added; F150 carded for the authors'
+construction), Decision 2 option 1.
 **Scope**: F149, F130, F102, F112, F103, F104, F6, F106, F107, F108 and
 F109 (team lead selection, 2026-10-18), plus an F146 update (D3 option 1:
 draft the unsent QCi questions for the team lead to send, presented with
@@ -230,7 +232,7 @@ is corrected in the same commit as the task that meets it.
 | C | F102 | Section 7 items: arXiv:2604.18837 re-read, section 5 recomputed from code on 5 seeds, multiplicity families, equivalence margins, F112's section 6 entry | 90 | ~2 | - |
 | D | F112 | Paired bootstrap interval (`paired_delta_ci`) on the k and order effects, 10 seeds, as a Phase 2 result | 45 | ~10 (BCa, 10 seeds) | C |
 | E | F130 | Rank 3 KNN 5 seeds on oilgas and telecom, ULB pilot; rank 5 cos/sin plus whitening on the phase columns; rank 6 per Decision 3 | 120 | ~50 (about 40 s per cell, 70 cells; KNN unmeasured: one-cell pilot first) + ULB pilot | - |
-| F | F103 | Tier 1 g1-g5 reimplemented, k-way JOINT new; known-answer check per Decision 1; 5 seeds | 180 | under 50 (estimate; one-seed pilot first) | - |
+| F | F103 | Tier 1 g1-g5 reimplemented, k-way JOINT new; known-answer check per Decision 1 (g2 on `target_real`, plus the sparse pocket and dense substrate rebuilt from the paper's description); 5 seeds | 300 | under 50 (estimate; one-seed pilot first) | - |
 | G | F109 | Tier 1 on the six datasets on disk; the phase pipeline on classical models alone; gates before and after the IEEE-CIS UID aggregation | 150 | `[unbounded]` on IEEE-CIS: 10% pilot first | F passes |
 | H | F6 | Written analysis and recommendation (pursue, pursue narrowly, decline); `references.md` line 7 corrected | 120 | - | - |
 | I | F106 | RFF surrogate and an order-matched JOINT twin against the circuit, NumPy statevector; margin set first | 120 | unsized until H names the qubit count: pilot first | H pursue |
@@ -238,9 +240,10 @@ is corrected in the same commit as the task that meets it.
 | K | F108 | Clean-room simulator; terminal and customer state withheld; label noise at known rates; one ceiling method checked against the known ceiling | 180 | ~25 (3-5 min per seed, 5 seeds; noise injection is cheap) | - |
 | L | F146 | QCi message draft: P1 and P2 follow-up, A1-A12 less any F142 answered; outward-readability check; filed in the gitignored `docs/qci_package/` | 45 | - | - |
 
-**Derived total: 1,350 minutes of work**, the sum of the 12 task
-estimates (120 + 60 + 90 + 45 + 120 + 180 + 150 + 120 + 120 + 120 + 180
-+ 45), with Decisions 1 and 3 at their recommended options. Each other
+**Derived total: 1,470 minutes of work**, the sum of the 12 task
+estimates (120 + 60 + 90 + 45 + 120 + 300 + 150 + 120 + 120 + 120 + 180
++ 45), with Decision 1 at option 2 (answered) and Decision 3 at its
+recommended option. Each other
 option's total is on the option. Two conditional reductions are not in
 the total: if F6 does not recommend pursue, I and J (240) do not run; if
 F103 fails its check, G (150) does not run.
@@ -260,7 +263,9 @@ over Sprints 24-26):
 - **Research+code (D, E, F, G, I, J, K)**: median ratio 0.28, from 7 rows
   (0.06-0.58). Each is sized to its first decisive measurement, not every
   branch: D 45 of 60; E 120 of 120, because it adds two code paths and a
-  ULB path; F 180 of 240 (the g2 check, plus g1, g3-g5 computed);
+  ULB path; F 300 (180 of the card's 240 for the g2 check with g1 and g3-g5
+  computed, plus 120 for the two substrates rebuilt and their four
+  values checked);
   G 150 of 360 (reuses F's code); I and J 120 each of 180 and 240 (the
   first step after H names the encoding); K 180 of 360 (the generator and
   one method against the known ceiling).
@@ -269,8 +274,8 @@ over Sprints 24-26):
   have no such sweep, so C is 90 of 180, H is 120 of the card's half day,
   and L is 45 at the card's rate of 30 per update plus the draft.
 
-**Allowances**: none carried. Writing (C, H, L) is 255 of 1,350 minutes
-and verification (F) is 180, so neither dominates the sprint.
+**Allowances**: none carried. Writing (C, H, L) is 255 of 1,470 minutes
+and verification (F) is 300, so neither dominates the sprint.
 
 ### Task order
 
@@ -351,6 +356,15 @@ and verification (F) is 180, so neither dominates the sprint.
   classifier), g3 (HGB minus an additive model), g4 (a k-way JOINT minus
   GA2M), g5 (qubit count). Every choice the paper leaves open is written
   in the module's docstring and the section 6 entry before the first run.
+- **Substrates (Decision 1 option 2).** The sparse pocket from Eq. 6
+  (w = 0.25, frequencies 3.7, 5.1 and 6.8, 1% noise) and the dense
+  substrate from the 7-site Heisenberg chain observable (n = 6,000), both
+  built from the paper's description. Every construction choice the paper
+  leaves open is recorded first. They are our rebuild, not the authors'
+  files; F150 repeats the check on the authors' construction when it
+  arrives.
+- **Decision 2 option 1.** The two `spectra-tier1-spec.md` files are read,
+  read-only, at the start of this task. Nothing there is written.
 - **Acceptance per Decision 1.** The permuted-label reference runs first.
   If the check fails, the cause is recorded and G does not run.
 
@@ -440,11 +454,11 @@ project's planning folders**
 **Decision 3. F130 rank 6 pair counts** (sequential build; the default
 is the maximum, 119 at 17 features and 90 at 15)
 
-1. 30, 60 and 90 on all three datasets. Total 1,350. (Recommended)
+1. 30, 60 and 90 on all three datasets. Total 1,470. (Recommended)
 2. 60, 90 and 119 on energy_steel and telecom; 45, 60 and 90 on oilgas.
-   Total 1,350.
+   Total 1,470.
 3. Drop rank 6 from this sprint; it stays on the F130 card with the cap
-   recorded. Total 1,330.
+   recorded. Total 1,450.
 
 **Decision 4. F106 and F107 if F6 does not recommend pursue**
 
@@ -461,7 +475,7 @@ is the maximum, 119 at 17 features and 90 at 15)
 
 ## Risks
 
-- **Size.** 1,350 minutes is nearly twice Sprint 26's 700.
+- **Size.** 1,470 minutes is about twice Sprint 26's 700.
   Research cards have run at 0.06-0.58 of estimate. Each `[no-history]`
   card is sized to its first decisive step, and two conditional gates (F6
   and F103) can remove 390 minutes.

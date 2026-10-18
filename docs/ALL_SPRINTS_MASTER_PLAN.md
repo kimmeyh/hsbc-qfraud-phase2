@@ -547,6 +547,14 @@ value. Removed from candidates.)
 - Run Tier 1 on the Fourier Wall paper's own dataset and reproduce its published gate values before the screen is trusted anywhere else
 - Acceptance: all five gate values within a stated tolerance of the paper's; if not, the cause is recorded and F109 stays blocked
 - Depends on: nothing. The SPECTRA author's construction details help
+- **Sprint 27 (team lead, Decision 1 option 2, 2026-10-18)**: the known answers are g2 = 0.94 on `target_real` and the four published substrate values, on a sparse pocket and dense substrate rebuilt from the paper's description. F150 repeats the substrate check on the authors' own construction
+
+**F150. SPECTRA substrates rebuilt to the authors' construction, and the F103 check repeated (~2h [no-history], zero metered) Priority 41, blocked**
+- Phase: Phase 2 preparation (cross-domain study; added 2026-10-18 by the team lead with Sprint 27 Decision 1)
+- Platform: SPECTRA
+- Sprint 27's F103 rebuilds the paper's sparse pocket and dense substrate from its description. This card builds the same two substrates as the authors construct them, as close a duplicate as their details allow, and repeats the four published values: JOINT minus GA2M +0.37 and +0.00, HGB minus GAM +0.15, joint ratio 9.9
+- Acceptance: each value against the paper's with F103's tolerances; each difference from F103's rebuild named and explained
+- Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
 - **Sprint 26 (team lead, Decision 1 option 1, 2026-10-14)**: not selected. F142 screens each B4 job before its submit; this card stays open for the screen as a tested gate
