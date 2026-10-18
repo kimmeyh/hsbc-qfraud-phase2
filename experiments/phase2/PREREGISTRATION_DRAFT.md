@@ -223,6 +223,7 @@ on 2026-10-18:
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
+| - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below |
 | - | Gate-based arm | F6, F106, F107 | Braket | To write if F6 recommends pursuing |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
@@ -284,6 +285,97 @@ computed (Task D computes them).
   the Wilcoxon p-value, the per-seed table, and the `Proxy cell used:`
   line of `score_gates.py` before and after (F112's card; this experiment
   writes no Phase 1 row, so it must not change).
+
+### F103: SPECTRA Tier 1 known-answer check on UCI Steel
+
+Written 2026-10-18 (Sprint 27 Task F, Decisions 1 option 2 and 2 option
+1), before the module's first run. It is a verification of our own
+reimplementation, not a Phase 2 claim about fraud data.
+
+- **ID and card**: F103 (cross-domain study, step 1); new card F150
+  repeats the substrate checks on the authors' construction.
+- **Question**: does our reimplementation of the Fourier Wall paper's
+  Tier 1 (arXiv:2607.15815, Algorithm 1) reproduce the values the paper
+  publishes on UCI Steel and its two substrates?
+- **Sources read**: the paper (sections 3-6, Algorithm 1, section 6.4's
+  construction) and the two `spectra-tier1-spec.md` files in the Phase 1
+  project's planning folders (identical, 238 lines, read-only). The spec
+  files add nothing beyond the paper's section 6.4 and Algorithm 1.
+  SPECTRA's code is proprietary; none of it is used.
+- **Known answers and tolerances** (ROC-AUC on held-out rows, mean over
+  seeds):
+  1. **Gating value**: real target, g2's Fourier classifier = 0.94,
+     tolerance 0.03. **Task G (F109) runs if and only if this holds.**
+  2. Reported, pass or fail, not gating: sparse pocket JOINT minus GA2M =
+     +0.37; dense substrate HGB minus GAM = +0.15 and JOINT minus GA2M =
+     +0.00; tolerance 0.05 each. A failure is carried to F150 with its
+     cause.
+  3. **Not checked**: the paper's "joint ratio 9.9" is not defined in its
+     text, so no ratio is computed against it (Unverified).
+  4. Implementation check, before any substrate AUC is read: on the sparse
+     pocket, JOINT's scan recovers the planted frequencies (3.7, 5.1, 6.8)
+     within 0.05 each, up to a global sign; the paper reports (3.67, 5.13,
+     6.83). If it does not, JOINT is wrong and no JOINT value is reported
+     as a check.
+- **Phases.** The SPECTRA release's phase columns are the paper's recipe
+  plus zero-mean jitter (SD about 0.02 rad; the reactive phase departs by
+  up to 0.69 rad), measured 2026-10-18 against the raw fields in the same
+  file. So the phases are rebuilt from the raw fields by the paper's
+  recipe: rank phase `2 pi (rank(v) - 1/2) / n - pi` of the log magnitude
+  for active and lagging reactive power; time of day `2 pi NSM / 86400 -
+  pi`; season `2 pi day_of_year / 365 - pi`; day of week `2 pi dow_num / 7
+  - pi`. Ranks use all rows, covariates only (the paper's construction).
+- **Real target.** `target_real` (base rate 0.2075, which matches the
+  paper's 0.21 for `Load_Type == Maximum`; the file has no `Load_Type`, so
+  this is Inferred). The five native phases above, all five in every lane.
+- **Splits and seeds.** Stratified 70/30 train/test per seed, seeds 42-46;
+  each value is the mean over the five seeds, with its SD.
+- **Lanes** (identical phases and splits in every lane):
+  - **GAM (g2's Fourier classifier)**: one trained frequency per phase,
+    chosen on training rows by the least-squares (Lomb-Scargle)
+    periodogram of the centered label (coarse grid 0.25-8.0 step 0.05,
+    then step 0.005 within 0.05 of the maximum; changed from the plain
+    periodogram before any run, because a synthetic test showed the plain
+    one biased by 0.05 at a non-integer frequency on a bounded interval);
+    features cos and sin of that frequency; logistic regression (lbfgs,
+    C = 1.0). Secondary only: 2 and 3 harmonics per phase.
+  - **GA2M**: the GAM basis plus all pairwise products of the per-feature
+    cos and sin terms; logistic regression.
+  - **HGB**: scikit-learn defaults, `random_state` = seed.
+  - **JOINT**: the GA2M basis plus up to 6 joint terms (the paper's default
+    budget), each `cos(u)` and `sin(u)` of `u = sum f_j phi_j` over a
+    3-way subset. Each term is chosen greedily on the training rows: the
+    subset and frequency vector maximizing the periodogram of the current
+    residual, on a coarse grid (0.5-8.0 step 0.5 on the first axis, plus
+    or minus the same on the others), then step 0.05 within 0.5 of the
+    coarse maximum; logistic regression refit after each term.
+- **Gates.** g1: the fraction of 1-D periodogram mass (each phase,
+  frequencies 0.05-8.0 step 0.05) farther than 0.1 from an integer;
+  exploratory (no published value), threshold 0.3. g2: GAM AUC > 0.5.
+  g3: HGB minus GAM > 0. g4: JOINT minus GA2M > 0. g5: d x q <= 14 with
+  q = 1 (q = 2 reported beside it).
+- **Sparse pocket** (section 6.4): the time-of-day, load and reactive
+  phases, PCA-whitened and each component re-ranked to a uniform phase;
+  z by Eq. 6 with w = 0.25, f = (3.7, 5.1, 6.8), the four offsets drawn
+  uniform on [0, 2 pi) from the seed; tau = median z; y ~ Bernoulli(
+  sigmoid(6 (z - tau))); 1% of labels flipped. All 35,040 rows (the paper
+  states no row count for this substrate).
+- **Dense substrate** (section 6.4): the seven fields that pass the > 50
+  distinct-value screen (NSM 96, log active power, log lagging reactive
+  power, day of year, leading reactive power 768, both power factors; CO2
+  has 8 and is dropped), rank-phased, PCA-whitened and re-ranked; 6,000
+  rows drawn without replacement from the seed. H(phi) = sum_k J_k (XX +
+  YY + ZZ)_{k,k+1} + sum_i phi_i Z_i, J_k ~ U[0.5, 1.5] from the seed;
+  |+>^7 evolved to t = 3 by three first-order Trotter steps (dt = 1; each
+  step applies the six bond terms in order k = 1..6, then the field term);
+  y = 1[<sum_i Z_i Z_{i+1}> > median]. Exact 128-dimensional statevector.
+- **Reference first**: the permuted-label run (labels shuffled, seed 42)
+  runs before the real target; every lane should sit near 0.5 and every
+  difference near 0.
+- **Device**: none. **Stopping rules**: a one-seed pilot times each lane
+  before the five-seed run. **Reported whatever the result**: every lane's
+  AUC per seed, every gate, the recovered frequencies, the pilot timing,
+  the phase-jitter finding, and each check's pass or fail.
 
 ### F142: the first Dirac-3S fits
 
