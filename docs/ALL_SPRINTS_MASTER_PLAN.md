@@ -42,7 +42,21 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 25: Learn the New Device, Then Build What Runs on Any Device**
+**Sprint 26: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable**
+(Oct 13 - Oct 16, 2026; PR #21). Delivered **F141, F145, F144, F142, F147,
+F126, F105** and two F146 updates (more than the two planned), Task I
+(Decision 10: the cross-repo guard covers sibling Claude Code project
+directories; EvidenceBasedDB is read freely), Decision 11 (Dirac-3S is the
+Phase 2 default device) and retrospective IMP-1 to IMP-5. F142 spent 86.0
+Dirac-3S seconds over 5 fits against about 172 planned: on B4 Dirac-3S
+returned the reference optimum where Dirac-3 did not, with test AUPRC
+unchanged. F144: Dirac-3 does not beat its own proxy on B2. F126's rule
+fails. F105's harness passes every leakage audit; no score. Open: QCi
+question A6 (output resolution), and F126 and F25 read against Dirac-3S.
+Records: `SPRINT_26_PLAN.md`, `SPRINT_26_VALIDATION.md`,
+`SPRINT_26_RETROSPECTIVE.md`; `SPRINT_26_SUMMARY.md` at Sprint 27 planning.
+
+### Sprint 25: Learn the New Device, Then Build What Runs on Any Device
 (Oct 10 - Oct 13, 2026; PR #12, main PR #20). Delivered **F138, F139, F102 (first
 draft; the card stays open), F113, F29, F94**, Task G added at Manual
 Validation (F146's document; F147 carded), and retrospective improvements
@@ -296,7 +310,7 @@ Three findings outlived their cards and are recorded there:
 
 **F95. Relaxation schedule 4 on the residual (~1h build + approval, metered, cost unmeasured) Priority 160**
 - **F138 re-check (2026-10-13, `docs/phase2/DIRAC_3S_RESEARCH.md`)**: the four schedules are unchanged on Dirac-3S. The Dirac-3S guide's 50-variable table puts schedule 4 at 3.04x schedule 2, inside this card's 2.3x-5.3x range, so the estimate below stands, but it was derived on Dirac-3 and the guide does not say its table was measured on Dirac-3S. Re-quote from F142's first measured Dirac-3S fit
-- **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** This card's run goes to Dirac-3S unless its entry says why not. Its seconds estimate is a Dirac-3 figure; re-price it at refinement from F142's measured Dirac-3S costs
+- **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** This card's run goes to Dirac-3S unless its entry says why not. Its seconds estimate is a Dirac-3 figure; re-price it at refinement from F142's measured Dirac-3S costs with `qpu_cost_model.quote(n_variables, n_samples, relaxation_schedule=4)` (Sprint 26 IMP-5); today it returns unknown, because no Dirac-3S call has run at schedule 4, so the block is bounded by call count
 - **UNBLOCKED 2026-09-25**: the hold was "until the QCi memo is sent", and it
   was sent 2026-09-25 at 12:23 PM. The sent memo commits to this check, so it
   is now promised work rather than optional
@@ -487,6 +501,7 @@ F123's layout is superseded by F127.)
 - Platform: SPECTRA, Dirac-3S
 - The one sized case Dirac-3S's larger ceiling unlocks: telecom_churn at schedule 3 with all 18 features, 987 variables in the full-pair build, 5 seeds. B4 ran it on Dirac-3 at 816 variables with `age` dropped, and its in-segment edges were negative; this adds the dropped feature. At least 450 s: Dirac-3 cost 84-90 s per fit at 816 variables, and the rate at 987 is unmeasured
 - **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138)
+- **Re-price at refinement (2026-10-16, Sprint 26 IMP-5)**: the "at least 450 s" is a Dirac-3 figure. `qpu_cost_model.quote(987, 8)` quotes from F142's Dirac-3S fits and flags 987 as above its largest anchor, so its high end is a floor, not a bound
 - Depends on: QCi's answer; F141; F142's measured rate; per-block approval (Criterion H)
 
 (F138 Dirac-3S research, F139 the re-run review, F113 the oracle-gap test,
@@ -688,7 +703,7 @@ not a sweep correction.
 - Phase: Phase 2, **Experiment 3 device run** (team-lead approved 2026-09-03; the direct consequence of the Sprint 4 degeneracy finding)
 - **HOLD reason, restated 2026-10-03**: needs F102 (preregistration), F94 (controls) and the allocation. **Corrected 2026-10-13 (Pass 1): F94 shipped in Sprint 25 and the allocation arrived 2026-10-09; F102 (a draft, not yet filed) is the hold reason left.** Sized at 3,070 s in the sent hardware plan; after F90 about 445 s of the 1,681 remain (**corrected 2026-10-06: F90 ran and the measured balance fell to 1,022 s**). **2026-10-10: QCi granted the 7,500 s on 2026-10-09, so the allocation no longer blocks this card**; the balance is in `experiments/results/allocation_reads.json`
 - Platform: Dirac-3 integer/qudit solver, local proxy for the relaxation only
-- **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** Experiment 3 already names Dirac-3S (draft section 6). The integer cost model and the 3,070 s sizing are Dirac-3 figures; F139's two re-measurement probes run on Dirac-3S and re-price this card
+- **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** Experiment 3 already names Dirac-3S (draft section 6). The integer cost model and the 3,070 s sizing are Dirac-3 figures; F139's two re-measurement probes run on Dirac-3S and re-price this card. `qpu_cost_model.quote()` (Sprint 26 IMP-5) covers the continuous solver only; integer-solver cost needs those probes
 - The Sprint 4 evidence: the continuous-weight formulation is strictly convex AND nearly degenerate, so an exact classical proxy matches the hardware at small pool sizes. **Corrected 2026-10-14 (Sprint 26 fresh-eyes review)**: this line said "uniform weights even at lambda = 0", which A27 withdrew (at lambda = 0 the optimum is a face of the simplex; the ridge selects the near-uniform point); and the match holds to 91 variables only, with weight cosine falling to 0.82-0.90 at 560-833 variables (B4, B2), as A31's weight resolution predicts. The formulation where that stops being true is combinatorial selection: choose the best subset of m weak learners from a pool of n (cardinality or L0 sparsity constraint), optionally with integer weights -- NP-hard, no exact classical proxy, and the native problem class for Dirac-3's integer solver (num_levels budget against the documented 949 device limit)
 - Design sketch: same H matrix and objective, plus a cardinality constraint; classical comparators become greedy/forward selection, L1-then-threshold, and a MIP solver at small n; the honest question is solution QUALITY at fixed wall-clock, not just feasibility
 - Expected value: this is the concrete "where quantum optimization is necessary rather than optional" program the Phase 1 paper points at, and the strongest technical item for the QCi conversation

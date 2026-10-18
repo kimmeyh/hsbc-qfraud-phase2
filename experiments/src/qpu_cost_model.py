@@ -137,6 +137,71 @@ def estimate_for(n_variables: int, degree: int, n_samples: int,
             "basis": f"{len(obs)} measured call(s), degree {degree}, within 2x size"}
 
 
+F142_ROWS = (RESULTS.parent / "phase2" / "results"
+             / "f142_dirac3s_verify.json")
+
+
+def dirac3s_anchors(rows_path: pathlib.Path = F142_ROWS) -> list[dict]:
+    """Measured Dirac-3S per-sample times, read from F142's rows.
+
+    Sprint 26 IMP-5. Stop 2 was quoted at about 115 s from Dirac-3's per-fit
+    costs scaled by one 91-variable Dirac-3S fit, and spent 37; stop 3,
+    quoted from measured per-sample times, was 44 against 43. Only rows that
+    carry the library's per-sample run times count (stop 1's predates the
+    field). CVQBoost's objective is quadratic, so each anchor is degree 2.
+    """
+    if not rows_path.exists():
+        return []
+    rows = json.loads(rows_path.read_text(encoding="utf-8"))["rows"]
+    out = []
+    for r in rows:
+        t = r.get("device_timing") or {}
+        n = (r.get("hw_config") or {}).get("num_samples")
+        if (r.get("status") == "ok" and r.get("device_type") == "dirac-3s"
+                and t.get("runtime_sum_s") and n):
+            out.append({"unit": r["unit"], "degree": 2,
+                        "n_variables": r["screen"]["n_variables"],
+                        "relaxation_schedule":
+                            r["hw_config"].get("relaxation_schedule"),
+                        "per_sample_s": t["runtime_sum_s"] / n,
+                        "metered_seconds": r["metered_seconds"]})
+    return out
+
+
+def quote(n_variables: int, n_samples: int, device: str = "dirac-3s",
+          degree: int = 2, relaxation_schedule: int = 2) -> dict:
+    """A Criterion H quote: a range from measured calls on THAT device.
+
+    Dirac-3S anchors come from `dirac3s_anchors` and must match the
+    relaxation schedule (schedule 4 costs about 3x schedule 2). Dirac-3
+    anchors come from the Phase 1 ledger, as `estimate_for` reads them.
+    With no anchor within 2x of the size, it says so; a block is then bounded
+    by call count, never by a number nothing supports.
+    """
+    if device == "dirac-3s":
+        obs = [a for a in dirac3s_anchors()
+               if a["relaxation_schedule"] == relaxation_schedule]
+        q = estimate_for(n_variables, degree, n_samples,
+                         ledger={"calls": obs})
+    elif device == "dirac-3":
+        obs = anchors()
+        q = estimate_for(n_variables, degree, n_samples)
+    else:
+        raise ValueError(f"unknown device {device!r}")
+    q["device"] = device
+    # Cost rises steeply with size, so anchors all SMALLER than the job give
+    # a range whose high end can be exceeded (F143's 987 variables against
+    # anchors at 560 and 833). Say so rather than let the range read as a cap.
+    sizes = [a["n_variables"] for a in obs
+             if a.get("degree") == degree and a.get("n_variables")]
+    if q["known"] and n_variables > max(sizes):
+        q["above_largest_anchor"] = max(sizes)
+        q["note"] = (f"{n_variables} variables is above the largest anchor "
+                     f"({max(sizes)}); high_s is a floor for the high end, "
+                     "not a bound")
+    return q
+
+
 def summarise(costs: list[JobCost]) -> dict:
     if not costs:
         return {}

@@ -94,6 +94,53 @@ def test_estimate_declines_to_guess_without_an_anchor(ledger):
         "must say so rather than extrapolate")
 
 
+def test_dirac3s_quote_brackets_what_f142_spent():
+    """Sprint 26 IMP-5: a quote from measured Dirac-3S per-sample times. At
+    B4's 560 variables the range must contain both B4 fits' billed seconds,
+    read from the rows, not restated here."""
+    a = m.dirac3s_anchors()
+    b4 = [x["metered_seconds"] for x in a if x["unit"].startswith("b4_")]
+    assert len(b4) == 2
+    q = m.quote(560, 8)
+    assert q["known"] and q["device"] == "dirac-3s"
+    assert all(q["low_s"] <= s <= q["high_s"] for s in b4), (q, b4)
+
+
+def test_dirac3s_quote_is_honest_off_its_anchors():
+    assert m.quote(3000, 8)["known"] is False             # beyond 2x
+    assert m.quote(560, 8, relaxation_schedule=4)["known"] is False
+    above = m.quote(987, 8)                                # F143's size
+    assert above["above_largest_anchor"] == max(
+        x["n_variables"] for x in m.dirac3s_anchors())
+    assert "floor" in above["note"]
+    with pytest.raises(ValueError):
+        m.quote(560, 8, device="dirac-4")
+
+
+def test_the_quote_guards_can_fail():
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = Path(m.__file__)
+
+    def run() -> bool:
+        mod = importlib.reload(m)
+        return (mod.quote(560, 8, relaxation_schedule=4)["known"] is False
+                and "above_largest_anchor" in mod.quote(987, 8))
+
+    try:
+        assert_can_fail([Mutation(src, "               if a[\"relaxation_"
+                                  "schedule\"] == relaxation_schedule]",
+                                  "               ]", expect_occurrences=1)],
+                        run, "schedule ignored")
+        assert_can_fail([Mutation(src, "    if q[\"known\"] and n_variables "
+                                  "> max(sizes):", "    if False:",
+                                  expect_occurrences=1)],
+                        run, "no flag above the largest anchor")
+    finally:
+        importlib.reload(m)
+
+
 def test_estimate_uses_an_anchor_when_one_exists(ledger):
     out = m.estimate_for(n_variables=100, degree=2, n_samples=8, ledger=ledger)
     assert out["known"] is True

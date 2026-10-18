@@ -116,6 +116,11 @@ Nothing in this stage is time-bound. Schedule on value.
       test ULB's two-day span cannot. No configuration is recommended for a
       production path until this is settled
       - Backlog: F105 (folds, entity reconstruction, leakage audit)
+      - **Progress 2026-10-14**: F105's harness built
+        (`docs/phase2/F105_IEEE_HARNESS.md`): every leakage audit passes on
+        all three folds; the adversarial control hits its round cap, and
+        month 6 is a partial bucket, which Experiment 2's entry must decide.
+        No score reported
 - [ ] **H+C**: 3. Cardinality-constrained selection on Dirac-3's integer solver,
       against a time-capped MIQP, greedy, and simulated annealing. **A win
       against a certified-optimal classical solve is a result; a win against no
@@ -131,6 +136,11 @@ Nothing in this stage is time-bound. Schedule on value.
         training fold every selection ties, so the experiment must build
         its Hamiltonian on held-out predictions; on the validation fold,
         greedy is the bar to beat
+      - **Progress 2026-10-15/16**: F126's sparsity rule fails; F142 found
+        Dirac-3S returns B4's optimum without Dirac-3's forced sparsity
+        (`docs/phase2/F142_DIRAC3S_VERIFY.md`). Dirac-3S is now the Phase 2
+        default device (Sprint 26 Decision 11); the experiment's sizing is
+        a Dirac-3 figure to re-price
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours
@@ -187,7 +197,9 @@ Nothing in this stage is time-bound. Schedule on value.
       **Granted 2026-10-09** (`docs/QPU_RECONCILIATION.md`, grants).
       Experiment 3, sized at 3,070 s, is no longer blocked by the
       allocation. F138 and F139 reported 2026-10-13: any Dirac-3S run
-      first needs F141 (client support) and F142's measured cost
+      first needs F141 (client support) and F142's measured cost.
+      **Both done in Sprint 26** (2026-10-15): F142 spent 86.0 s over 5
+      Dirac-3S fits
       (`docs/phase2/F139_RERUN_REVIEW.md`)
 - [ ] **H+C**: Latency benchmark (p50/p95/p99) against the 100-300 ms envelope,
       which Phase 1 states as a target rather than a measurement (D10). F118

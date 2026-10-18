@@ -24,7 +24,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 
 ## Phase 4: Execution (auto-advance window: no permission-asking)
 - [ ] Tasks in plan order; tests after each change; commits reference issue #N
-- [ ] ACTUAL minutes recorded in `sprint_status.json` `task_actuals` as each task completes (not reconstructed at the retrospective): `update_sprint_status.py --start-task X` when it begins, `--finish-task X` when it ends
+- [ ] ACTUAL minutes recorded in `sprint_status.json` `task_actuals` as each task completes (not reconstructed at the retrospective): `update_sprint_status.py --start-task X` when it begins, `--finish-task X` when it ends. `--pause-task X` / `--resume-task X` around an approval wait; `--parallel` only when tasks truly run at once. A task added mid-sprint (including at Manual Validation) starts its timer with the tool before its first file; the status file is never written by hand or by a one-off script (Sprint 26 IMP-2)
 - [ ] `git status --short` before every staging; every entry accounted for; 0* files committed neutrally, never read
 - [ ] Results only via frozen protocol; every metric -> results.json with evidence tag
 - [ ] HARDWARE: any metered run stops for approval (Criterion H), always

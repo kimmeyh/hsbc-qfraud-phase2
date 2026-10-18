@@ -541,21 +541,11 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _load_env(env: Path | None = None) -> None:
-    env = env or Path(__file__).resolve().parents[3] / ".env"
-    if env.exists():
-        for line in env.read_text(encoding="utf-8").splitlines():
-            if "=" in line and not line.strip().startswith("#"):
-                k, v = line.split("=", 1)
-                os.environ.setdefault(k.strip(),
-                                      v.strip().strip('"').strip("'"))
-    # run_hardware.py's convention: QCI_API_KEY is accepted as the token
-    # (never printed). The repository's .env uses that name; without the
-    # alias the first stop exited before submitting.
-    if not os.environ.get("QCI_TOKEN") and os.environ.get("QCI_API_KEY"):
-        os.environ["QCI_TOKEN"] = os.environ["QCI_API_KEY"]
-    for k in ("QCI_TOKEN", "QCI_API_URL"):
-        if not os.environ.get(k):
-            raise SystemExit(f"{k} is not set; F142 cannot submit.")
+    # The one `.env` reader (Sprint 26 IMP-1). It accepts the repository's
+    # key name as the token; this runner's own copy once did not, and the
+    # first stop exited before submitting.
+    import qci_env
+    qci_env.load(env)
 
 
 if __name__ == "__main__":

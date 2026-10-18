@@ -257,3 +257,29 @@ def test_a_partial_application_restores_the_mutations_that_landed(tmp_path):
 
     assert f.read_text(encoding="utf-8") == "A = 1\nB = 2\n", (
         "the first mutation leaked when the second failed to apply")
+
+
+def test_a_same_size_mutation_is_seen_by_a_reload_and_so_is_the_restore(
+        tmp_path, monkeypatch):
+    """Sprint 26 IMP-4: Python reuses cached bytecode when the source's mtime
+    and size match. "V = 2" -> "V = 1" keeps the size, and the write and the
+    restore land in the same second, so without dropping the cache a reload
+    ran the mutated module after the restore. Several cycles, because a
+    single one can straddle a second boundary and pass by luck."""
+    import importlib
+
+    mod = tmp_path / "same_size_target.py"
+    mod.write_text("V = 2\n", encoding="utf-8")
+    monkeypatch.syspath_prepend(str(tmp_path))
+    monkeypatch.delitem(sys.modules, "same_size_target", raising=False)
+    # By name, not an import statement: test_requirements_complete.py reads
+    # import statements, and this module exists only in tmp_path.
+    t = importlib.import_module("same_size_target")
+    try:
+        for _ in range(3):
+            with injected(Mutation(mod, "V = 2", "V = 1",
+                                   expect_occurrences=1)):
+                assert importlib.reload(t).V == 1, "mutation not seen"
+            assert importlib.reload(t).V == 2, "stale bytecode after restore"
+    finally:
+        sys.modules.pop("same_size_target", None)

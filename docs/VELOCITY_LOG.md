@@ -77,6 +77,16 @@
 | 25 | Task F (F94) Experiment 3 controls with SCIP | research+code | 240m | 129m | 0.54 | measured; includes the run, stopped twice |
 | 25 | UNPLANNED: code review (10), fresh-eyes reviews (24 and 15) and their fixes | fix+docs | 0m | not timed | n/a | changed four committed conclusions |
 | 25 | UNPLANNED: Task G (F146 document, F147 card), added at Manual Validation | docs | 0m | not timed | n/a | no start stamped before the work began |
+| 26 | Task A (F141) client bump, Dirac-3S selector | tooling | 45m | 75m | 1.67 | measured; two venvs and the lock |
+| 26 | Task B (F145) seeded weak learners | tooling | 30m | 3m | 0.1 | measured, understated: the test was written before the timer started |
+| 26 | Task C (F144) proxy twin of B2 | research+code | 45m | 24m | 0.53 | measured; overlapped E, F, G and D (IMP-2) |
+| 26 | Task D (F142) Dirac-3S verify, three metered stops | research+code | 80m | 884m | n/a | measured elapsed, not work: three approval waits and an evening gap (IMP-2) |
+| 26 | Task E (F147) evidence-library query tool | tooling | 120m | 3m | n/a | measured stamp gap; ran alongside F and G, so not a work time (IMP-2) |
+| 26 | Task F (F126) sparsity rule, held-out test | research+code | 60m | 9m | 0.15 | measured; overlapped G and D |
+| 26 | Task G (F105) IEEE-CIS harness | research+code | 240m | 66m | 0.28 | measured; audit run in the background |
+| 26 | Task H (F146) understandings updates | docs | 60m | not timed | n/a | no start stamped; the updates fell inside D's span |
+| 26 | UNPLANNED: Task I (Decision 10) cross-repo guard, EvidenceBasedDB reads | fix+docs | 30m | 18m | 0.6 | stamps written by hand, not through the tool (IMP-2) |
+| 26 | UNPLANNED: Decision 11 (Dirac-3S default) and retrospective IMP-1 to IMP-5 | fix+tooling | 0m | not timed | n/a | at Manual Validation and the retrospective |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

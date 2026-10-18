@@ -230,3 +230,27 @@ exists.
 | IMP-3 | A result's interpretation is reviewed before it is recorded | Cat 1, 8 | Prevention: extends Sprint 25 IMP-1 (claim labels) in `SPRINT_EXECUTION_WORKFLOW.md`: a metered result's fresh-eyes review runs before its CHANGELOG entry and commit; correction: a withdrawn claim's older CHANGELOG line gets an inline dated marker, as the master plan already does; applied to stop 3's entry | 15m | now |
 | IMP-4 | `check_ci_status.py` waits long enough for `gh` | Cat 9 | Prevention: the network calls get a 20-second limit and one retry; it still fails closed; test proven red | 15m | now |
 | IMP-5 | Quote Dirac-3S seconds from measured per-sample times | Cat 4 | Prevention: extends `qpu_cost_model.py` with F142's per-sample times by size and a `quote()` that F95, F25 and F30 use at refinement | 45m | backlog (F148, priority 12) |
+
+## Improvement Decisions
+
+Team lead, 2026-10-16: "apply all five now" (Decision 12, which Claude
+had recommended as option 1: IMP-5 to the backlog).
+
+| # | Decision | Where |
+|---|---|---|
+| IMP-1 | **now** | New `experiments/src/qci_env.py`, the one `.env` reader; it accepts `QCI_API_KEY` as the token and strips quotes. `check_allocation.py`, `job_query.py`, `recover_device_samples.py` and the F142 runner call it. The Phase 1 hardware runners keep their own readers, as code that produced filed evidence. `test_qci_env_single_loader.py` fails on any new reader; two injections. A separate module rather than `eqc_submit`, as proposed, so a small tool does not load eqc-models |
+| IMP-2 | **now** | `update_sprint_status.py --pause-task`, `--resume-task` and `--parallel`; a start while another task is timed is refused unless `--parallel`, which is recorded in `task_parallel`; a paused task cannot finish. Three injections. `SPRINT_CHECKLIST.md` Phase 4: a task added mid-sprint starts its timer with the tool, and the status file is never written by hand or by a one-off script |
+| IMP-3 | **now** | `SPRINT_EXECUTION_WORKFLOW.md`, under the fresh-eyes review: a metered result's rows are committed at once, and its interpretation, CHANGELOG entry and commit message wait for the review; a withdrawn claim's older CHANGELOG line gets an inline dated marker. The stop 3 entry is marked |
+| IMP-4 | **now** | `check_ci_status.py`: from the command line, 20 s per call and one retry; inside the Stop hook, 3 s and one attempt, so the hook budget is unchanged. Still fails closed. Tests for both paths; two injections |
+| IMP-5 | **now** | `qpu_cost_model.dirac3s_anchors()` reads F142's per-sample times from its rows; `quote()` gives a range from anchors on the same device and relaxation schedule, says unknown off its anchors, and flags a size above the largest anchor. Test: the 560-variable quote contains both B4 fits' billed seconds; two injections. F95, F25 and F143 point at it |
+
+**Found while applying IMP-4: stale bytecode after an injection.** The first
+proof swapped `CLI_ATTEMPTS = 2` for `= 1`, which keeps the file the same
+size. The mutation and its restore landed in the same second, so Python
+reused the cached mutated bytecode: the file on disk read 2, the imported
+module read 1, and the next run's baseline was already red. The guard was
+right and the verification was wrong, the Sprint 16 IMP-4 pattern again.
+`injection.py` now drops a module's cached bytecode on every write. A new
+test cycles a same-size mutation three times; with the fix removed it
+failed, and with it restored it passed. `docs/TROUBLESHOOTING.md` has the
+entry.
