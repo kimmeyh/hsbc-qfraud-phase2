@@ -519,6 +519,31 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Dry run: requests built offline; nothing submitted. "
               f"Written: {DRY_RUN.name}")
         return 0
+    return _run_stop(args.stop, todo, screened)
+
+
+def _client():
+    """The live QCi client, with the credentials from `.env`."""
+    _load_env()
+    from qci_client import QciClient
+    return QciClient(api_token=os.environ["QCI_TOKEN"],
+                     url=os.environ["QCI_API_URL"])
+
+
+def _run_stop(stop: int, todo: list[dict], screened: dict,
+              make_client=None, fit=None, balance=None) -> int:
+    """A metered stop after its offline builds: the refusals, then each
+    unit's one paid fit. Returns main()'s exit code.
+
+    F149 (Sprint 27): extracted from main() so the per-unit skip, the cap,
+    the save and the exit code can be tested with a stub `fit` (signature of
+    `metered`), a stub `make_client` and a stub `balance` reader. main()
+    passes none of them, so a real run uses `_client`, `metered` and
+    `eqc_submit._balance_or_none`.
+    """
+    make_client = make_client or _client
+    fit = fit or metered
+    balance = balance or eqc_submit._balance_or_none
     if not todo:
         print("Nothing to do: every unit of this stop is already done.")
         return 0
@@ -530,11 +555,8 @@ def main(argv: list[str] | None = None) -> int:
               "accuracy runs.")
         return 6
 
-    _load_env()
-    from qci_client import QciClient
-    client = QciClient(api_token=os.environ["QCI_TOKEN"],
-                       url=os.environ["QCI_API_URL"])
-    if eqc_submit._balance_or_none(client) is None:
+    client = make_client()
+    if balance(client) is None:
         print("REFUSING: the allocation balance cannot be read, so the cost "
               "of each call cannot be measured.")
         return 4
@@ -543,10 +565,10 @@ def main(argv: list[str] | None = None) -> int:
         rows = _rows()
         # Spend already recorded on this stop counts against its cap.
         spent = sum(float(r.get("metered_seconds") or 0) for r in rows
-                    if r.get("stop") == args.stop)
+                    if r.get("stop") == stop)
         for u in todo:
-            if spent >= STOP_CAP_S[args.stop]:
-                print(f"  stop cap {STOP_CAP_S[args.stop]} s reached "
+            if spent >= STOP_CAP_S[stop]:
+                print(f"  stop cap {STOP_CAP_S[stop]} s reached "
                       f"({spent:.1f} s); stopping")
                 break
             if u["unit"] in _done():          # re-read: never pay twice
@@ -558,7 +580,7 @@ def main(argv: list[str] | None = None) -> int:
                     rows.append(row)
                 _write(rows)
 
-            row = metered(u, screened[u["unit"]], client, on_submitted)
+            row = fit(u, screened[u["unit"]], client, on_submitted)
             spent += float(row.get("metered_seconds") or 0)
             _write(rows)
             print(f"      {row['status']}  {row.get('metered_seconds')} s  "
