@@ -579,6 +579,7 @@ value. Removed from candidates.)
 - Platform: Braket simulator
 - Prediction error against (effective Schmidt rank, shot count) for our feature count, with the critical rank at each shot budget. Predicts the gate-based outcome before any hardware spend
 - Depends on: F6 recommends pursue
+- **2026-10-18 (Sprint 27 Task H): F6 recommended pursue narrowly, meaning simulation only.** This card runs as Task J on a NumPy statevector with sampled shots. Its result is a prediction; it informs a hardware decision only if F106 finds the circuit is not dequantized
 
 **F108. Ceiling validation harness with hidden state (~6h [no-history], zero metered) Priority 80**
 - Phase: Phase 2 preparation (ceiling methodology)
@@ -710,6 +711,7 @@ not a sweep correction.
 - The team lead brings near-expert AWS and hands-on Braket experience, so platform learning is not the cost here
 - Acceptance: a written analysis with a recommendation (pursue, pursue narrowly, or decline with the reason); any pursue recommendation names the encoding, the diagnostic, the cost and the falsifier before any code is written
 - Depends on: nothing. Informs F13 (Phase 2 PoC planning)
+- **Done in Sprint 27 Task H (2026-10-18): pursue narrowly, meaning simulation only** (`docs/phase2/F6_GATE_BASED_ARM.md`). F106 and F107 run on a local NumPy statevector: F106 sets an 8-qubit sandwich encoding on rank-phased ULB features against the complete classical bar plus an RFF surrogate, margin 0.005 AUPRC; F107 predicts the critical Schmidt rank per shot budget. No Braket hardware time is planned: at affordable widths the circuit is exactly simulable, so hardware could test only inductive bias, which the simulator already answers
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
