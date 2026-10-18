@@ -393,6 +393,78 @@ reimplementation, not a Phase 2 claim about fraud data.
   AUC per seed, every gate, the recovered frequencies, the pilot timing,
   the phase-jitter finding, and each check's pass or fail.
 
+### F106: dequantization check of a sandwich-encoded circuit on ULB
+
+Written 2026-10-18 (Sprint 27 Task I), before the module exists or any
+lane is fit. The design comes from `docs/phase2/F6_GATE_BASED_ARM.md`
+section 5; this entry fixes what that section leaves open, and supersedes
+its seed count (five there, eight here, from section 2a).
+
+- **ID and card**: F106 (gate-based arm; F6 recommended pursue narrowly,
+  simulation only).
+- **Question**: on identical phase features, does any classical twin match
+  a phase-active encoded circuit's test AUPRC on ULB within the margin?
+- **Hypothesis and prediction**: dequantized. The Fourier Wall paper
+  predicts payments data refuses its gates, and ULB's HGB is strong; the
+  prediction is that HGB, the JOINT twin or both match or beat the
+  circuit.
+- **Falsifier**: every twin's interval lies wholly below zero (the circuit
+  beats the complete bar). Separately, the encoding is reported as built
+  wrong, and the circuit result does not count as a test of a phase-active
+  encoding, if its phase complexity C < 0.01.
+- **Data and splits**: ULB, `data.stratified_split` (60/20/20), seeds
+  42-49. Features: `data.top_k_features(X_train, y_train, 8, seed)`.
+  Training rows: every training positive plus 6,000 training negatives
+  drawn from the seed; every lane trains on exactly these rows. The
+  validation fold picks the RFF bandwidth only. The test fold is used
+  whole.
+- **Phases** (the Fourier Wall recipe, section 6.4, fit on training rows
+  only): each feature's rank phase 2 pi F(v) - pi, with F the training
+  rows' mid-rank empirical CDF, interpolated for other rows; the 8-phase
+  block PCA-whitened by the training rows' covariance, then rank-phased
+  again by the same rule. Every lane receives these 8 phases.
+- **Arms**:
+  - **Circuit**: 8 qubits, NumPy statevector, three layers. Each layer
+    applies RY(phi_q / 2) on every qubit, exp(-i lambda_l sum_q Z_q
+    Z_{q+1}) on the ring, RY(phi_q / 2) again, then trainable RY and RZ on
+    every qubit. Readout logit b + sum_q w_q <Z_q>. 60 parameters: three
+    lambda (start 0.5), 48 rotations and 8 weights (start uniform on
+    [-0.1, 0.1] from the seed), and b (start at the training base rate's
+    logit). Binary cross-entropy, Adam at learning rate 0.05, 1,500 steps
+    of 512-row minibatches drawn from the seed. Exact gradients by the
+    adjoint method, checked against finite differences in its test. No
+    early stopping and no tuning.
+  - **Twins** (F103's code where it exists): logistic regression on cos
+    and sin of each phase; F103's trained-frequency GAM and GA2M; HGB on
+    the phases (`random_state` = seed); F103's JOINT (six greedy 3-way
+    terms); an RFF surrogate, `RBFSampler(n_components=1000)` on cos and
+    sin of each phase, gamma from {0.05, 0.2, 0.8} by validation AUPRC,
+    then logistic regression.
+- **Primary metric and test**: test AUPRC. For each twin T, the paired
+  stratified bootstrap interval on the across-seed mean of (T minus
+  circuit), as in Experiment 1 (2,000 replicates, the same row indices for
+  both arms). **Dequantized** if any twin's interval lower bound exceeds
+  -0.005 (section 2b's default margin): that twin is no worse than the
+  circuit within the margin. **Circuit ahead** if every twin's upper bound
+  is below 0. Anything else is **inconclusive**.
+- **Multiplicity**: one family, m = 6 (one test per twin), Bonferroni:
+  alpha 0.05 / 6 each, so 99.17% intervals. Eight seeds meet section 2a's
+  Wilcoxon floor for m = 6; the exact Wilcoxon p-value per twin is
+  reported beside its interval.
+- **Secondary, uncorrected**: AUROC and floor-normalized AUPRC for every
+  lane; the encoding diagnostics of the IBR paper (section 6.4 there) on
+  the first layer alone at the trained lambda_1, over 100 training rows:
+  phase complexity C, Berry connection magnitude |A| (central finite
+  difference, step 1e-4) and the summed single-qubit von Neumann entropy;
+  the trained lambdas.
+- **Device**: none. Zero metered seconds; no Braket service is called.
+- **Stopping rules**: a one-seed pilot times every lane first. The
+  eight-seed run follows if it projects to 3 hours or less; otherwise the
+  step count is cut to fit and the cut is recorded here before the run.
+- **What is reported whatever the result**: every lane's AUPRC and AUROC
+  per seed, every interval and Wilcoxon p-value, the outcome word, C, |A|,
+  the entropy, the lambdas and the pilot timing.
+
 ### F142: the first Dirac-3S fits
 
 Written 2026-10-14 (Sprint 26 Task D), before any Dirac-3S call. Not
@@ -600,3 +672,6 @@ scored. Not filed; part of this draft.
   margins) added; section 5 recomputed by code; section 6 gains the
   Experiment 1 (F112) entry, before its intervals are computed; section 7
   items closed or dated.
+- 2026-10-18: section 6 gains the F103 entry, before its first run
+  (Sprint 27 Task F); Experiment 1 gains its dated result note (Task D);
+  section 6 gains the F106 entry, before its module exists (Task I).

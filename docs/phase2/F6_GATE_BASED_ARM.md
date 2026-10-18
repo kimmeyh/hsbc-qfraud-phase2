@@ -145,8 +145,10 @@ three hold, in this order (each is necessary):
   (`data.top_k_features`), rank-phased by the Fourier Wall recipe (F103's
   `rank_phase`), so 8 qubits and a 256-amplitude statevector. The same
   phases go to every classical twin.
-- **Data**: a stratified ULB subsample sized by a timing pilot; seeds
-  42-46; AUPRC primary, with ROC-AUC beside it.
+- **Data**: a stratified ULB training subsample, with the test fold used
+  whole; AUPRC primary, with ROC-AUC beside it. The seed count and every
+  open choice are fixed in the Phase 2 draft's F106 entry (section 6),
+  which uses eight seeds to meet its section 2a for six twins.
 - **Margin, set before the run**: the Phase 2 draft's default, 0.005
   AUPRC (section 2b). Dequantized if the best twin's paired interval
   against the circuit lies above -0.005.
