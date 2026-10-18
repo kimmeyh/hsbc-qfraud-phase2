@@ -78,8 +78,57 @@ field does not run.
   Corrected 2026-10-14. The rule stands, and the example shows a second
   lesson: check a cited finding against the amendment log before relying
   on it.)
-- **Source for the statistical standard**: arXiv:2604.18837, as cited on the
-  F102 card. To be re-read against its text before filing.
+- **Source for the statistical standard**: arXiv:2604.18837 (Kakavand,
+  Strohmeyer and Schlotter, "Benchmarking Quantum Kernel Support Vector
+  Machines Against Classical Baselines on Tabular Data", v1, 2026-04-20),
+  re-read against its text 2026-10-18 (Sprint 27 Task C). What this
+  section takes from it, and what it adds:
+  - **From the paper**: stratified nested cross-validation (5 outer, 3 or
+    5 inner folds); the two-sided Wilcoxon signed-rank test on paired
+    folds, and on paired seeds in its seed study (16 seeds); Bonferroni,
+    which it applies once, across its seven per-dataset seed comparisons;
+    the floor "p = 0.0625" for an exact Wilcoxon test on 5 pairs, which it
+    states itself; and its recommendations to "report confidence
+    intervals, not just point estimates" and to claim an advantage only if
+    it is significant, substantial, "consistent across seeds" and
+    "observed on multiple datasets".
+  - **Added here, not from the paper**: the bootstrap interval (the paper
+    reports none, and names bootstrap resampling "the ideal approach" in
+    its limitations); Bonferroni for every family (section 2a); the
+    floor-normalized AUPRC (its primary metric is balanced accuracy); and
+    the equivalence margin (section 2b). Its "substantial (>5 pp)" is a
+    balanced-accuracy threshold and is not carried over to AUPRC.
+
+## 2a. Multiplicity families
+
+- **One family per experiment.** Each section 6 entry lists its
+  **primary** tests; they form its family, corrected by Bonferroni at
+  alpha 0.05 / m for m primary tests. Every other test in the entry is
+  **secondary**: reported, labeled secondary, uncorrected, and never the
+  basis of a headline claim.
+- **No family spans experiments.** A claim that needs two experiments
+  (for example a device effect that needs a twin to match and a device to
+  differ) states its combination rule in the entry that makes the claim.
+- **Seed count against the family.** An exact two-sided Wilcoxon test on k
+  pairs reaches at best 2 / 2^k, so a family of m primary Wilcoxon tests
+  needs 2 / 2^k <= 0.05 / m: k = 6 for m = 1, k = 7 for m = 2 or 3, k = 8
+  for m = 4 to 6. Below that seed count the primary test is the paired
+  bootstrap over transactions within seeds (section 2), and the Wilcoxon
+  result is secondary.
+
+## 2b. Equivalence margins
+
+- **A "no difference" hypothesis is tested against a margin, not by a
+  failure to reject.** An entry whose hypothesis is that two arms agree
+  (a drift reference, a twin, a null main effect) states a margin delta
+  before its run. It claims equivalence only if the 95% interval on the
+  paired difference lies inside [-delta, +delta]. An interval that spans
+  zero but leaves the margin is reported as **inconclusive**, not as
+  agreement (F144's lesson: its drift reference's mean is zero by
+  construction, so a test of bias could not measure the drift's size).
+- **The default AUPRC margin is 0.005**, the smallest change the Sprint 27
+  plan counts as moving AUPRC (set 2026-10-18, before F130's runs). An
+  entry may set another margin, with its reason, before its run.
 
 ## 3. Two meanings of "order 3"
 
@@ -132,11 +181,19 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
   pocket holds 918-950 of the test fold's positives while the complement
   holds 832-864 (`docs/SPECTRA_CONTROL_FEASIBILITY.md`).
 - **The design.** Downsize **both** sides to what the complement supports,
-  keeping size and rate matched on each. On seed 42 that is 855 positives
-  plus 278 negatives per side, keeping 88-94% of the pocket's positives,
-  with the AUC interval about 4% wider. Feasible on all five seeds
-  (figures from the F102 card, 2026-10-05; to be recomputed by code before
-  filing).
+  keeping size and rate matched on each: positives per side are the
+  smaller of the segment's and the complement's, and negatives per side
+  keep the segment's own rate. On energy_steel seed 42 that is 855
+  positives plus 278 negatives per side. Across the five seeds it keeps
+  88-94% of the pocket's positives, and the AUC interval is 3-7% wider
+  (4% on seed 42; the Hanley-McNeil leading term, an approximation).
+  Feasible on all five seeds. telecom_churn and oilgas_gasturbine need no
+  downsizing on any seed: their complements already hold more positives
+  than their pockets. (Recomputed by code 2026-10-18, Sprint 27 Task C:
+  `experiments/phase2/src/f102_downsized_pair.py`,
+  `experiments/phase2/results/f102_downsized_pair.json`. The card's seed
+  42 figures reproduce exactly; its "about 4% wider" holds for seed 42
+  only.)
 - **Repeated draws.** Both sides are then random draws, so the comparison
   is repeated, about 20 times, and reported as a mean with its spread. A
   single draw cannot separate a real in-segment effect from one that
@@ -154,11 +211,11 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
 ## 6. Experiments
 
 Entries are filled in as each experiment's card reaches readiness. Status
-on 2026-10-13:
+on 2026-10-18:
 
 | # | Experiment | Card(s) | Device | Entry |
 |---|---|---|---|---|
-| 1 | Isolate the confound: the k=17 decomposition | F112 | none | To write |
+| 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below |
 | 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105 | none | To write |
 | 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F25 | Dirac-3S, after F141 and F142 | To write; F94's result informs it |
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
@@ -167,6 +224,66 @@ on 2026-10-13:
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
 | - | Gate-based arm | F6, F106, F107 | Braket | To write if F6 recommends pursuing |
+
+### Experiment 1 (F112): the k=17 decomposition, with paired intervals
+
+Written 2026-10-18 (Sprint 27 Task C), before any interval below is
+computed (Task D computes them).
+
+- **What was already seen.** F64 and F91 (2026-09-22 and 23) reported the
+  point estimates and seed-mean t-intervals this entry re-tests: the k
+  effect +0.0001 [-0.0024, +0.0026] and the order effect +0.0245
+  [+0.0187, +0.0302] (`docs/F64_LADDER_DECOMPOSITION.md`). So this is a
+  re-analysis with a known direction. What it adds is the interval method
+  section 2 requires, and an equivalence test the t-interval did not make.
+  Its result is evidence of precision, not of a new prediction.
+- **ID and card**: Experiment 1, F112.
+- **Question**: on the ULB proxy, does subset order (2 to 3) carry the
+  k=17 configuration's AUPRC gain, while feature count (13 to 17) adds
+  nothing measurable?
+- **Hypothesis and prediction**: (P1) the order effect at k=13 is
+  positive, about +0.025 AUPRC. (P2) the k effect at order 2 is equivalent
+  to zero within the default margin, 0.005 (section 2b).
+- **Falsifier**: P1 fails if its interval reaches zero or the Wilcoxon
+  test does not reject. P2 fails if its interval leaves [-0.005, +0.005]
+  on either side; an interval that spans zero but leaves the margin is
+  reported inconclusive, not as support.
+- **Data and splits**: ULB, stratified protocol, seeds 42-51 (10 paired
+  seeds), the stored Phase 1 proxy predictions in
+  `experiments/results/predictions/`: `free` (k=13, order 2, 91 variables,
+  config hash `640ed4cf9c46ea4b`), `mid` (k=17, order 2, 153,
+  `1e6bf03caab3676b`) and `deep` (k=13, order 3, 377, `47012b1404d5d4de`),
+  all `cvqboost_proxy`, full-pair builds. Read only; no pool is rebuilt and
+  no Phase 1 row is written.
+- **Arms**: the three corners above. Order effect = `deep` minus `free`;
+  k effect = `mid` minus `free`; same test rows, same seed.
+- **Primary metric and test**: test AUPRC. P1: the exact two-sided
+  Wilcoxon signed-rank test on the 10 per-seed deltas, and the paired
+  bootstrap interval on the across-seed mean delta (each replicate
+  resamples every seed's test rows, stratified by label, with the same
+  indices for both arms; 2,000 replicates; percentile). P2: the same
+  interval against the margin.
+- **Multiplicity**: one family, m = 2 (P1 and P2), Bonferroni: each at
+  alpha 0.025, so the intervals are 97.5%. Ten seeds reach that alpha (the
+  exact Wilcoxon floor at 10 pairs is 2 / 1,024, about 0.002; section 2a
+  asks for 7).
+- **Secondary, uncorrected**: each seed's paired BCa interval
+  (`metrics.paired_delta_ci`); the same deltas in floor-normalized AUPRC
+  and in AUROC; the train-test gap where the rows carry it. The
+  interaction against the fourth corner uses F144's twin (k=17, order 3,
+  833 variables): it is seed-level only (F144 stored AUPRC, not
+  predictions) and its pools were seeded while the three corners' were
+  not (section 7, F145), so it is labeled Inferred, with that drift as the
+  named alternative.
+- **Device**: none.
+- **Stopping rules**: none needed; all inputs exist. If a prediction file
+  is missing or its labels differ between arms on a seed, that seed is
+  reported and excluded, and the family's seed count is re-checked
+  against section 2a before any claim.
+- **What is reported whatever the result**: both primary intervals and
+  the Wilcoxon p-value, the per-seed table, and the `Proxy cell used:`
+  line of `score_gates.py` before and after (F112's card; this experiment
+  writes no Phase 1 row, so it must not change).
 
 ### F142: the first Dirac-3S fits
 
@@ -316,12 +433,17 @@ scored. Not filed; part of this draft.
 
 ## 7. Open items before filing
 
-- Re-read arXiv:2604.18837 and confirm section 2 matches it.
-- Recompute section 5's downsized-pair figures from code, on all five
-  seeds.
-- Fill one section 6 entry per experiment that will run.
-- Set the multiplicity families, and each entry's seed count against them
-  (section 2).
+- ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
+  2026-10-18 (Sprint 27 Task C): section 2's source bullet now separates
+  what is from the paper and what is added here.
+- ~~Recompute section 5's downsized-pair figures from code, on all five
+  seeds.~~ Closed 2026-10-18: section 5, `f102_downsized_pair.json`.
+- Fill one section 6 entry per experiment that will run. **Open
+  (2026-10-18)**: Experiment 1 is written; Experiments 2-6 wait on their
+  cards (F105's adversarial-control decision, F25, F111, F121 on HOLD,
+  F110), and each is written when its card is selected.
+- ~~Set the multiplicity families, and each entry's seed count against
+  them.~~ Closed 2026-10-18: section 2a. Each later entry applies it.
 - **Pool build drift (F145): fixed for Phase 2 builds, a known limit for
   Phase 1 pools.** Decided 2026-10-14 (Sprint 26 Task B). Phase 2 builds pass
   `qubo_proxy.seeded_weak_params(seed)` (`build --seeded-learners`); two
@@ -335,10 +457,10 @@ scored. Not filed; part of this draft.
   dataset is measured). Any Phase 2 comparison against a Phase 1 pool or
   device row carries that drift; F144's reference arm measures it at 91
   variables.
-- **Equivalence margins for verify entries.** A drift or twin reference
-  whose true difference is zero should be read on size against a margin
-  set before the run, not only on a test of bias (F144's lesson).
+- ~~**Equivalence margins for verify entries.**~~ Closed 2026-10-18:
+  section 2b (default AUPRC margin 0.005).
 - Confirm the filing date and the filing venue with the team lead.
+  **Open (2026-10-18)**: the team lead's decision; it is not taken here.
 
 ## Revision log
 
@@ -365,3 +487,8 @@ scored. Not filed; part of this draft.
 - 2026-10-15: F142 gains a dated post-result note below its unchanged
   entry (Sprint 26 Task D, after stop 3), revised after the F142
   fresh-eyes review the same day.
+- 2026-10-18 (Sprint 27 Task C, F102): section 2's source re-read and
+  attributed; sections 2a (multiplicity families) and 2b (equivalence
+  margins) added; section 5 recomputed by code; section 6 gains the
+  Experiment 1 (F112) entry, before its intervals are computed; section 7
+  items closed or dated.
