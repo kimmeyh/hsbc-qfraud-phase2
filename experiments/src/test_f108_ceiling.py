@@ -100,6 +100,13 @@ def test_floor_fit_recovers_a_planted_floor():
     assert f["fit"] and abs(f["c"] - 0.007) < 1e-4
 
 
+def test_floor_fit_survives_a_rising_curve():
+    """The pilot's reference arm: 1 - AUPRC that does not fall."""
+    n = np.array([10, 20, 40, 80, 160, 320])
+    f = fc.fit_floor(n, np.array([0.0, 0.001, 0.0, 0.002, 0.001, 0.003]))
+    assert f["fit"] and 0 <= f["c"] <= 0.003
+
+
 def test_recovered_margin():
     assert fc.recovered(0.0104, 0.0100)
     assert not fc.recovered(0.0120, 0.0100)

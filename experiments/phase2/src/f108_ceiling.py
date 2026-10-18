@@ -166,12 +166,15 @@ def fit_floor(n_pos: np.ndarray, err: np.ndarray) -> dict:
     def f(n, a, b, c):
         return a * n ** (-b) + c
     try:
-        (a, b, c), _ = curve_fit(f, n_pos.astype(float), err,
-                                 p0=(err[0] - err[-1] + 1e-6, 0.5, err[-1]),
+        # A curve that does not fall (the zero-ceiling reference can be flat
+        # or noisy) still needs a start inside the bounds.
+        p0 = (max(float(err[0] - err[-1]), 1e-6), 0.5,
+              float(np.clip(err.min(), 0, 1)))
+        (a, b, c), _ = curve_fit(f, n_pos.astype(float), err, p0=p0,
                                  bounds=([0, 0, 0], [np.inf, 5, 1]),
                                  maxfev=20000)
         return {"a": float(a), "b": float(b), "c": float(c), "fit": True}
-    except RuntimeError as e:
+    except (RuntimeError, ValueError) as e:
         return {"a": None, "b": None, "c": None, "fit": False,
                 "error": str(e)}
 

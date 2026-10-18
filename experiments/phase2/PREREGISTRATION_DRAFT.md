@@ -588,6 +588,57 @@ transaction is generated.
   rate, the Bayes error and AUPRC, every estimate, the fitted (a, b, c),
   the generator check, and each method's recovered or failed.
 
+### F109: Tier 1 across the six datasets on disk, and the IEEE-CIS aggregation
+
+Written 2026-10-18 (Sprint 27 Task G), after F103's check passed and
+before this module exists or any lane is fit here.
+
+- **ID and card**: F109 (cross-domain study, steps 2-3).
+- **Question**: which of the six datasets on disk does Tier 1 pass as a
+  candidate, and does the IEEE-CIS UID aggregation change any gate?
+- **Hypothesis and prediction**: the Fourier Wall spec predicts `refuse`
+  for fraud. Tier 1 is permissive (F103), so the prediction here is
+  narrower: on ULB and IEEE-CIS, g3 (HGB - GAM > 0) passes with a large
+  margin and g4 (JOINT - GA2M) is small, under 0.02.
+- **Falsifier**: g4 >= 0.02 on ULB or IEEE-CIS in at least 3 of 5 seeds.
+- **Code**: F103's Tier 1 unchanged (`f103_tier1.run_target`: its 70/30
+  stratified split, lanes, gates g1-g5), so these values are comparable
+  with F103's.
+- **Datasets and phases**:
+  - **UCI Steel** (`target_real`): F103's five rows, cited, not rerun.
+  - **ai4i, oilgas, telecom** (`target_real`): each release's `*_phase`
+    columns, PCA-whitened and re-ranked (`f103_tier1.whiten_rerank`).
+    F103 found the Steel release's phases carry small jitter; these are
+    used as released and the check is not repeated.
+  - **ULB** (`Class`) and **IEEE-CIS** (`isFraud`): a subsample of 30,000
+    rows from the seed, every positive up to 3,000 and the rest
+    negatives (ULB 492 + 29,508; IEEE-CIS 3,000 + 27,000; AUC does not
+    depend on the base rate). Features: the top 6 by mutual information
+    on the seed's training rows (6 keeps JOINT's 3-way search at 20
+    subsets). Missing values become -999 before ranking. Phases: the rank
+    phase on all rows (covariates only, the paper's recipe), whitened and
+    re-ranked.
+  - **IEEE-CIS before and after aggregation.** Before: the raw numeric
+    columns less `TransactionID` and `TransactionDT`. After: Phase 1's
+    `ieee_features.IEEEFeaturePipeline` (D-normalization, the UID
+    aggregates, frequency encodings, V-reduction), **fit on every
+    IEEE-CIS row except the subsample's test rows** and applied to the
+    subsample. Its features use no labels, so the extra unlabeled rows
+    are legitimate, and they keep the UID groups populated, which a fit
+    on 21,000 subsample rows would not; the test rows never contribute.
+    The UID key is not a feature. Each set takes its own top 6.
+- **Seeds**: 42-46.
+- **Primary metric**: every gate value per dataset and seed, and the
+  Tier 1 word. No test is made, so no correction.
+- **Device**: none. Zero metered seconds.
+- **Stopping rules**: a one-seed pilot on a 10% time-ordered sample of
+  IEEE-CIS (`ieee_harness.time_sample`) times the pipeline first. The
+  five-seed run follows if it projects to 3 hours or less; otherwise the
+  subsample shrinks to fit and the change is recorded here first.
+- **What is reported whatever the result**: each dataset's lane AUCs,
+  gates and word per seed; the chosen features per seed; the IEEE-CIS
+  before-and-after pair.
+
 ### F142: the first Dirac-3S fits
 
 Written 2026-10-14 (Sprint 26 Task D), before any Dirac-3S call. Not
