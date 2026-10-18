@@ -43,7 +43,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 ## Last Completed Sprint
 
 **Sprint 26: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable**
-(Oct 13 - Oct 16, 2026; PR #21). Delivered **F141, F145, F144, F142, F147,
+(Oct 13 - Oct 16, 2026; PR #21, main PR #31). Delivered **F141, F145, F144, F142, F147,
 F126, F105** and two F146 updates (more than the two planned), Task I
 (Decision 10: the cross-repo guard covers sibling Claude Code project
 directories; EvidenceBasedDB is read freely), Decision 11 (Dirac-3S is the
@@ -319,7 +319,7 @@ Three findings outlived their cards and are recorded there:
 - The feedback document's open question 1, "Would relaxation schedule 4 close the residual?", is still open: every Phase 1 fit ran schedule 2, frozen before the grant. The memo names it as a use of the remaining balance
 - **Four fits at 45-91 variables**, enumerated in the HELD note below. Schedule-2 cost there is 4-9 s per fit, measured; **schedule-4 cost is unmeasured**, so the block opens with one fit to establish the rate (the F87 pattern). (Corrected 2026-09-27: this bullet said "about five fits at 91-136 variables" while the note below enumerated four, one of them at 45 variables. IMP-4 directs future readers to trust this card's numbers rather than re-derive them, so a card contradicting itself undercuts the rule that cites it. Found by both PR #141 reviews.)
 - Acceptance: the runner is idempotent before its first approval (Criterion H); per-fit residual against the proxy optimum reported as `[HW]` rows beside their schedule-2 twins
-- Depends on: **F141 (client support) and F142's first measured Dirac-3S fit, to re-quote the rate** (corrected 2026-10-13, Pass 1: the F138-then-F139 gate is spent, both reported in Sprint 25; the F124 rank-1-first gate is spent too, because rank 1's device pilot, F129, was closed); per-block team-lead approval (Criterion H)
+- Depends on: a measured Dirac-3S rate at schedule 4 (corrected 2026-10-18, Pass 1: F141 and F142 are spent, both shipped in Sprint 26; F142 measured schedule 2 only, so `quote(..., relaxation_schedule=4)` still returns unknown and this block is bounded by call count) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate is spent, both reported in Sprint 25; the F124 rank-1-first gate is spent too, because rank 1's device pilot, F129, was closed); per-block team-lead approval (Criterion H)
 - **HELD until the QCi memo (F92) is sent** (team lead, 2026-09-23). Case and cost worked out at refinement, recorded so it is not re-derived: 4 fits on frozen pools that already have schedule-2 and exact-optimum twins (B1 dct seeds 42 and 43 at 91 variables; the G0b fit with the 0.413% gap; B1 lg seed 42 at 45 variables), stopping after fit 1 to re-quote if the rate exceeds 27 s. About 60 s, range 40-110 s, cap 120 s. Extrapolated, low confidence: measured schedule-2 cost of 4-5 s per fit times the 3.4x schedule-4 ratio (range 2.3x-5.3x) in QCi's portfolio example, a problem of unstated size. The per-fit data suggests the residual is a fixed offset (all 8 samples clustered well above the optimum), which predicts schedule 4 will NOT close it; that is inference, and the run is what settles it
 
 **F90. F2b at the configuration that can actually show an effect: B5, then B4 at schedule 3 -- CLOSED 2026-10-06 (Sprint 21: B5 and B4 ran; the H5 replication did not reproduce)**
@@ -441,51 +441,15 @@ from candidates per convention. F124's approved ranked list,
 below: rank 1, leaf regularization, is tested first. F17's follow-up is F126;
 F123's layout is superseded by F127.)
 
-**F141. Dirac-3S client support: bump the QCi packages, name the device on every row (~1h [no-history], zero metered) Priority 7**
-- Phase: Phase 2 preparation (added 2026-10-13 by F139, Sprint 25). Gates every Dirac-3S run
-- Platform: N/A (local, CI)
-- F138 found the pinned `qci-client` 5.0.2 and `eqc-models` 0.21.0 cannot reach Dirac-3S. `qci-client` 5.0.3 adds `device_type="dirac-3s"`; `eqc-models` 0.22.1 adds a `sampler_type="dirac-3s"` constructor argument to `QciClientSolver`, which `Dirac3CloudSolver` and `Dirac3IntegerCloudSolver` inherit, and requires `qci-client>=5.0.3` (corrected 2026-10-13 at Sprint 26 planning, from the 0.22.1 wheel: `generation` is not removed; it stays a class attribute, default `None`, and when set it is appended to the device name). Both were under two weeks old on 2026-10-13
-- Scope: both bumps in `requirements.txt` and the lock file; solvers constructed with `sampler_type` where a Dirac-3S run asks for it (the `cb.Dirac3CloudSolver` substitution point in `eqc_submit.py`, and `Dirac3IntegerCloudSolver` directly); a `device_type` field required on every Phase 2 hardware row, enforced beside F133's `job_id` rule; confirm `qubo_proxy.py`'s Hamiltonian is unchanged in 0.22.1 (it replicates "eqc-models 0.21.0 source"); job metrics read by the submitted device name, not a hardcoded "dirac-3"
-- Acceptance: an offline dry run reaches a request body naming `dirac-3s` with no device call; the row-schema test fails on a hardware row without `device_type`, proven red; the proxy-identity check passes on 0.22.1; the full suite passes
-- Depends on: nothing
-
-**F142. Dirac-3S verify block: B1 2 fits, B2 1 fit, B4 2 fits (~1.5h + about 172 metered s, cap 360) Priority 8**
-- Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25; revised the same day after the fresh-eyes review)
-- Platform: ULB, SPECTRA, Dirac-3S
-- **B1** `hw_b1_dct` (91 variables, full pair), seeds 42 and 43, first: the first Dirac-3S cost and queue-wait point at a size measured many times (4-5 s per fit on Dirac-3). Stops after the first fit to re-quote everything after it. **Not a fidelity test**: on this pool the Hamiltonian is below the device's resolution, so agreement carries no fidelity information (A31)
-- **B2** seed 42, 833 variables, every sample and job id stored: the Dirac-3S cost at our largest size. **It does not test B2's gain**, which is a pool effect (F64; the classical `deep` proxy reaches 0.7926 against B2's 0.7928). Any device-against-proxy comparison at 833 waits for F144
-- **B4** oilgas_gasturbine (560 variables), seeds 42 and 43: the fidelity twin. B4's Hamiltonians are at 8.1-8.4 dB, inside the stated limit, so the device's answer depends on the problem; weight cosine, objective gap to the proxy optimum and in-pocket AUPRC against the Dirac-3 rows on record
-- Cost at Dirac-3 rates: about 10 s for B1 (cap 60), 82 s for B2 (cap 150), 80 s for B4 (cap 150). Dirac-3S rates are unmeasured; the first fit sets them
-- B1 and B2 fail the F104 resolution screen by design (their purpose is cost); `experiments/phase2/PREREGISTRATION_DRAFT.md` section 4 makes that exception explicit
-- Reported as dated Phase 2 rows naming the device, never as Phase 1 gate cells
-- Depends on: F141; F102 (the entry for these runs); F104 or the draft's stated exception; per-block team-lead approval (Criterion H); the runner is idempotent before its first approval
-- **Done 2026-10-15 (Sprint 26 Task D), 86.0 metered s over 5 fits** (`docs/phase2/F142_DIRAC3S_VERIFY.md`, `experiments/phase2/results/f142_readout.json`). On B4, Dirac-3S returned the reference optimum in every sample (cosine 0.999993 and 0.9999999, against Dirac-3's 0.895 and 0.901; a uniform-plus-zeros vector scores 0.9957 with deviation correlation 0.62), so the band falsifier fires; on the same pools the test AUPRC equals the reference solve's. Returned values agree across samples to 0.0000005 on a 0.0000001 grid, which weighs toward post-processing. Cost per fit: 6 s at 91 variables, 21-22 at 560, 31 at 833, billed as the rounded-up sum of per-sample run times. Whether the returned values are raw or post-processed is unverified (QCi question A6)
-
-**F144. The proxy twin of B2's pool: k=17, order 3, full pair, 833 variables (~1.5h [no-history] + pool-build runtime, zero metered) Priority 9**
-- Phase: Phase 2 preparation (added 2026-10-13 by F139, after the Sprint 25 fresh-eyes review)
-- Platform: ULB, classical proxy (WSL, because the full-pair build needs fork)
-- B2's +0.0256 is measured against B1's arm, a different pool. `docs/F64_LADDER_DECOMPOSITION.md` attributes the gain to the pool, and notes that no proxy twin at k=17, order 3 exists. So whether the device's forced sparsity (A31) helps at 833 variables has never been measured
-- Acceptance: the exact proxy solve on B2's pool for the 10 stratified seeds, as dated Phase 2 rows; the paired difference against B2's device rows with its interval; stated whether the device beats its own proxy
-- Depends on: nothing. Comes before any B2 comparison run on Dirac-3S
-
-**F145. Why the pool build is not reproducible from its seed (~1h [no-history], zero metered) Priority 11**
-- Phase: Phase 2 preparation (added 2026-10-13, from F29 in Sprint 25)
-- Platform: ULB, classical proxy
-- F29 rebuilt the same seed's pool three times; seed 42's full-fold test AUPRC came out 0.8056, 0.8049 and 0.8043 (`docs/phase2/F29_SAMPLE_SIZE.md`). Every result that rebuilds a pool can drift by this much between runs, and no test catches it
-- Acceptance: the cause identified (for example an unseeded tree in the weak-learner build, or thread order); either the build made reproducible with a test proving two builds byte-identical, or the drift measured and recorded as a known limit in the Phase 2 draft
-- Depends on: nothing
-
-**F147. A read-only query tool over the evidence library, for research (~3h [no-history], zero metered) Priority 10**
-- Phase: Phase 2 preparation (added 2026-10-13 by the team lead during Sprint 25 Manual Validation, "for next sprint")
-- Platform: N/A (local). Reads `D:\Data\Harold\EvidenceBasedDB\store\evidence.db`, the path the team lead named. The EvidenceBasedDB code repository (`D:\Data\Harold\github\EvidenceBasedDB`) holds no database; its `store/` folder is code
-- What it is: a tool Claude uses during research and deep dives in this repository to find papers, assertions, acronyms and terms on ML, QML, QC and QCi's devices, with their provenance, certainty, evidence tag, date and relations. Shape on 2026-10-13: 95 assertions and 2,086 papers (33 read, 14 screened, 2,039 seen), 10 contexts including `ml`, `qml`, `qc`, `platform:dirac-3` and `platform:dirac-3s`. For facts its value is the assertion graph (`assertion_relations` supports and contradicts, `paper_yields`, `prerequisites`); for papers it is mostly a catalog
-- Existing reader: EvidenceBasedDB's `scripts/view.py` shows one context, paper or assertion by id. It has no text search and opens the store through that repository's `connect`. This tool has its own `sqlite3` reader (standard library, no new dependency) so this repository does not import code from another one
-- Scope: search by text across record values and paper titles, filtered by context, class, evidence tag, certainty and date; show one record with its relations, yields and the documents it cites; `--json` output; record ids printed so research notes can cite them as `EDB: <id>` (the convention `docs/phase2/DIRAC_UNDERSTANDINGS.md` started)
-- Further uses, one line each: cross-check this repository's `docs/` against the library's assertions for contradictions; flag a cited record whose `updated` date is older than a newer fact here; list what the library holds on a topic before a web search, so a search starts from what is already read
-- **Read-only by construction**: the connection is opened with a `mode=ro` URI, and a test proves a write through it fails (proven red with `assert_can_fail` on a read-write connection). `block_cross_repo_write.py` is the backstop, not the design
-- **Proposed corrections never go into the library.** They go into `docs/phase2/EDB_PROPOSALS.md` in this repository, for a session in EvidenceBasedDB to review. That file was started 2026-10-13 with three proposals (a stale allocation record, two records missing QCi's requested framing, and six Sprint 25 findings with no record)
-- Acceptance: the tool answers a text query and an id lookup on the live database; the read-only test is proven red; one research note in this repository cites records it found; `EDB_PROPOSALS.md` updated with anything found while building it
-- Depends on: nothing
+(F141 Dirac-3S client support, F142 the Dirac-3S verify block, F144 the
+proxy twin of B2, F145 seeded pool builds, F147 the evidence-library query
+tool, F126 the sparsity rule and F105 the IEEE-CIS harness: COMPLETED in
+Sprint 26, merged via PR #21 (main PR #31). F142 spent 86.0 Dirac-3S seconds
+over 5 fits; on B4 Dirac-3S returned the reference optimum. F126's rule
+failed; F105 reports no score until F102 names its entry. See
+SPRINT_26_PLAN.md, SPRINT_26_VALIDATION.md, SPRINT_26_RETROSPECTIVE.md and
+CHANGELOG.md. Their gates on other cards are marked spent below (Pass 1,
+2026-10-18). Removed from candidates per convention.)
 
 **F149. F142 runner: test the pre-submit guard through the real library, and the stop loop (~2h [no-history], zero metered) Priority 12, target Sprint 27**
 - Phase: Phase 2 preparation (added 2026-10-17 from PR #21's test-coverage review, findings 1 and 2; F148 was reserved for Sprint 26 IMP-5, which was applied in-sprint instead and never carded)
@@ -510,7 +474,7 @@ F123's layout is superseded by F127.)
 - The one sized case Dirac-3S's larger ceiling unlocks: telecom_churn at schedule 3 with all 18 features, 987 variables in the full-pair build, 5 seeds. B4 ran it on Dirac-3 at 816 variables with `age` dropped, and its in-segment edges were negative; this adds the dropped feature. At least 450 s: Dirac-3 cost 84-90 s per fit at 816 variables, and the rate at 987 is unmeasured
 - **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138)
 - **Re-price at refinement (2026-10-16, Sprint 26 IMP-5)**: the "at least 450 s" is a Dirac-3 figure. `qpu_cost_model.quote(987, 8)` quotes from F142's Dirac-3S fits and flags 987 as above its largest anchor, so its high end is a floor, not a bound
-- Depends on: QCi's answer; F141; F142's measured rate; per-block approval (Criterion H)
+- Depends on: QCi's answer; per-block approval (Criterion H) (corrected 2026-10-18, Pass 1: F141 and F142's measured rate are spent, both shipped in Sprint 26)
 
 (F138 Dirac-3S research, F139 the re-run review, F113 the oracle-gap test,
 F29 sample-size insensitivity and F94 Experiment 3's classical controls:
@@ -591,15 +555,6 @@ value. Removed from candidates.)
 - Acceptance: flags the frozen B2 pools; passes a pool built to be resolvable; proven red
 - Depends on: nothing
 
-**F105. Experiment 2 build: IEEE-CIS rolling-origin folds and the classical gap (~6h [no-history], zero metered) Priority 60**
-- **Selected for Sprint 26 (team lead, 2026-10-13) ahead of its priority: Task G, issue #28**
-- Phase: Phase 2 preparation, Experiment 2
-- Platform: IEEE-CIS
-- Rolling-origin folds; entity reconstruction `card1_addr1_(day - D1)` used ONLY to compute group aggregations, never as a feature; client-mean post-processing; time-consistency feature selection; adversarial validation; a temporal-leakage audit of any graph features
-- This enables: Experiment 2 and a credible classical bar for every other comparison. Published headroom on IEEE-CIS is about 5-6 AUC points (naive XGBoost 0.88-0.90 against the 0.9459 winning private score)
-- Acceptance: the harness builds and is tested; no score is reported until F102 names its preregistration
-- Depends on: F102 for reporting; nothing for the build
-
 **F106. G3 dequantization check: random-Fourier-feature surrogate and JOINT twin (~3h [no-history], zero metered) Priority 72**
 - Phase: Phase 2 preparation, gate-based arm (sprints with F107)
 - Platform: Braket simulator, classical
@@ -629,7 +584,7 @@ value. Removed from candidates.)
 - Phase: Phase 2 preparation, Experiment 6
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
 - Time including Hamiltonian construction. `HARDWARE_PLAN_PHASE_2.md` owns the sent sizing (12 fits at 833 variables) and the pool-build-to-device-time ratio
-- Depends on: F102 for reporting; F141 and Criterion H for any metered fit (corrected 2026-10-13, Pass 1: the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed)
+- Depends on: F102 for reporting; Criterion H for any metered fit (corrected 2026-10-18, Pass 1: F141 is spent, shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed)
 
 **F111. Experiment 4 build: Loke et al. replication harness (~4h [no-history], zero metered) Priority 120**
 - Phase: Phase 2 preparation, Experiment 4
@@ -695,16 +650,6 @@ not a sweep correction.
   **The four records are reconciled in `docs/SPECTRA_BLOCK_RECONCILIATION.md` (F93, 2026-10-02), which also records that QCi was SENT 30 fits at 91-136 variables for 270 s. The configuration choice is open and is the team lead's.**
 - Depends on: QCi grant; F2 approval pattern
 
-**F126. Model of the device's sparsity, validated on held-out fits (~3h [no-history], zero metered) Priority 101**
-- **Selected for Sprint 26 (team lead, 2026-10-13) ahead of its priority: Task F, issue #27. Fitted on B4 only; B5 reported as a descriptive check (the plan's stated choice, not objected to at approval)**
-- Phase: Phase 2 preparation, Experiment 3 (added 2026-10-07, team lead decision D9 at Sprint 22 Manual Validation: F17 follow-up)
-- Platform: local (`experiments/phase2/src/dirac3_emulator.py`)
-- **Measured (Sprint 22, `experiments/phase2/results/f17_emulator_sparsity.json`)**: F17's emulator fails the card's own acceptance test. Exact-zero fraction of the lowest-energy sample: device 0.14-0.16 (oilgas) and 0.35-0.38 (telecom); emulator 0.002-0.004 and 0.14-0.17. The device's smallest nonzero weights are about 0.00001, far below the ~0.005 step, so "weights below the step are zeroed" is not the mechanism. Its largest weights are about twice the exact proxy's
-- The question: what rule reproduces the device's exact zeros and weight concentration, and does it predict fits it was not fitted to?
-- **Data limit**: only the 10 B4 fits (and 12 B5 fits at small size) have full samples on disk. B2's 11 responses are truncated in storage and returned 404 ("Job not found") on 2026-10-07, so they cannot serve as held-out data. A held-out split inside B4 (for example, fit on oilgas, test on telecom) is the only option without new device time
-- Acceptance: a sparsity rule fitted on one subset reproduces the zero fraction on the held-out subset within a stated tolerance, set before the fit; or a recorded finding that 22 fits cannot support one. A rule fitted and tested on the same 10 fits does not count
-- Depends on: F17 (done, Sprint 22)
-
 **F25. Non-convex CVQBoost: cardinality-constrained weak-learner selection on Dirac-3 (~4h investigation + hardware) Priority HOLD**
 - **F138 and F139 re-check (2026-10-13)**: the Dirac-3S guide gives 16 or 17 integer levels per variable (it contradicts itself), and a total-levels limit with no number. The integer cost model was measured on Dirac-3; F139 recommends re-measuring it with 2 of the 2026-09-23 probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) as this card's first step. The quantum fluctuation coefficient and mean photon number, never set here, belong in this card's design: on a non-convex problem they may matter. F94 (Sprint 25) supplies the controls
 - **F94's findings bind this design (2026-10-13, `docs/phase2/F94_EXP3_CONTROLS.md`)**: (1) on the training fold the dct learners memorize the data, many selections reach the objective's floor `-1 + 2/m`, and no solver can be told from greedy, so build the Hamiltonian on held-out predictions; (2) with `lambda = 2 * rows` the data term is at most 0.33% of the objective and the best selection found is already within 0.0026 of the floor, so the ridge weight must be chosen so the fit to the labels matters; (3) the bar is greedy (equivalent to annealing, seconds per instance), reported against the floor; (4) run F104's screen on the chosen Hamiltonians before sizing
@@ -715,7 +660,7 @@ not a sweep correction.
 - The Sprint 4 evidence: the continuous-weight formulation is strictly convex AND nearly degenerate, so an exact classical proxy matches the hardware at small pool sizes. **Corrected 2026-10-14 (Sprint 26 fresh-eyes review)**: this line said "uniform weights even at lambda = 0", which A27 withdrew (at lambda = 0 the optimum is a face of the simplex; the ridge selects the near-uniform point); and the match holds to 91 variables only, with weight cosine falling to 0.82-0.90 at 560-833 variables (B4, B2), as A31's weight resolution predicts. The formulation where that stops being true is combinatorial selection: choose the best subset of m weak learners from a pool of n (cardinality or L0 sparsity constraint), optionally with integer weights -- NP-hard, no exact classical proxy, and the native problem class for Dirac-3's integer solver (num_levels budget against the documented 949 device limit)
 - Design sketch: same H matrix and objective, plus a cardinality constraint; classical comparators become greedy/forward selection, L1-then-threshold, and a MIP solver at small n; the honest question is solution QUALITY at fixed wall-clock, not just feasibility
 - Expected value: this is the concrete "where quantum optimization is necessary rather than optional" program the Phase 1 paper points at, and the strongest technical item for the QCi conversation
-- Depends on: **F141 (client support) and F104 (the resolution screen) before any device fit** (corrected 2026-10-13, Pass 1: the F138-then-F139 gate is spent, both reported in Sprint 25; the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed; the QCi grant arrived 2026-10-09); Phase 2 preregistration (F102); pairs with F17 (simulator) and F20 (soft votes)
+- Depends on: **F104 (the resolution screen) before any device fit** (corrected 2026-10-18, Pass 1: F141 is spent, shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate is spent, both reported in Sprint 25; the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed; the QCi grant arrived 2026-10-09); Phase 2 preregistration (F102); pairs with F17 (simulator) and F20 (soft votes)
 
 **F30. Concurrent Dirac-3 submission with bounded in-flight requests (~4h build + 1h dry run) Priority HOLD**
 - **F138 re-check (2026-10-13)**: `eqc-models` 0.22.1 describes Dirac-3S as "special queues", with no stated hours. The queue measurements below were taken on `dirac-3` and may not apply to `dirac-3s`
@@ -731,7 +676,7 @@ not a sweep correction.
 - **Measured queue behavior, 2026-09-09**: the F46 probe submitted at 14:33 local was still queued 52 minutes later, having spent ~97 CPU-seconds on its local pool build. Flat CPU against growing wall clock is the signature of queue wait, not computation. The team lead reports the queue is ALMOST ALWAYS EMPTY AFTER 5PM LOCAL, so wall-clock cost is a function of WHEN a block runs, not what it computes
 - **The team lead's intent for this card**: enqueue 4 or more jobs at once so they run CONSECUTIVELY, raising the odds they execute back to back rather than each paying a fresh queue wait. That is a different and stronger value case than the throughput argument below
 - Value was judged to arrive with Phase 2 volume (81+ fit grids), and that judgment was made against a free tier with 163 spent seconds. With 3,000 granted seconds (F46) and queue wait as the binding cost rather than device seconds, the case is stronger: whenever a session needs more than one or two fits, serial submission wastes most of the wall clock. Still not recommended BEFORE submission, on calendar grounds alone
-- Depends on: nothing to build; **F141 (client support) before live vetting** (corrected 2026-10-13, Pass 1: the F138-then-F139 gate and the F124 rank-1-first gate are both spent); live vetting needs team-lead approval (Criterion H)
+- Depends on: nothing to build; live vetting needs F141, spent (corrected 2026-10-18, Pass 1: shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate and the F124 rank-1-first gate are both spent); live vetting needs team-lead approval (Criterion H)
 
 **F13. Phase 2 PoC sprint planning (~unknown) Priority 180**
 - Phase: Phase 2 (Nov 17 - Feb 28, if selected)

@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-18
+
+- **docs**: Backlog refinement Pass 1 after Sprint 26. Sprint 26 merged to `develop` (PR #21) and released to `main` (PR #31). Shipped cards pruned: F141, F142, F144, F145, F147, F126, F105. Spent gates marked on F95 (still needs a schedule 4 Dirac-3S rate), F143, F110, F25 and F30. `CHECKLIST-Phase2.md` already current. `last_completed_sprint` rolled to 26. Sprint 27 branch `feature/20261018_Sprint_27` cut from the Sprint 26 branch. Issues #22-30 still to be closed (the close was not permitted from this session)
+
 ### 2026-10-17
 
 - **fix**: PR #21 review (Copilot: no inline comments; Claude PR review: silent failures, code, tests and comments). `injection.py` aborts when it cannot drop a module's cached bytecode. `metered_fit` charges a failed call with no balance change (a `NoRetry` raised before upload still costs nothing). The F142 runner records a scoring traceback, exits nonzero on a paid unit it could not score, keeps earlier units' hashes across a dry run, and records the Hamiltonian hash it sent on each row; the readout checks that hash first, takes its total from the rows file and lists units not scored. `qpu_cost_model.quote()` takes its rows path (tests use a fixed fixture) and an anchor beyond 2x no longer hides the above-anchor warning. New `test_phase2_helpers.py` covers `f126_sparsity_rule.fit_and_test`, `f144_proxy_twin.paired` and `device(wrap=)`. Comment and document corrections: the Phase 2 draft and the F145 CHANGELOG line (sequential, not full-pair, pool), `qubo_proxy` (drift count points to `f145_build_drift.json`), `ieee_harness` (the modules it imports), `edb_query` (option order), F105 (about 20 minutes), F142 (re-quote bases; the hash source), `eqc_submit.device`, `qpu_cost_model` (schedule ratio source) and the cross-repo hook's example. New card F149 (Sprint 27): the pre-submit guard through the real library, and the runner's stop loop extracted and tested. Every new guard proven red (PR #21)
