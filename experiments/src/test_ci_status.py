@@ -521,3 +521,65 @@ def test_a_correctly_shaped_response_still_parses(ci, monkeypatch):
            '"conclusion": "success", "name": "CI", "url": ""}]', ""))
     runs = ci.runs_for("deadbee")
     assert len(runs) == 1 and runs[0]["conclusion"] == "success"
+
+
+# ------------------- Sprint 26 IMP-4: the command-line path waits longer
+def _calls_under(ci, cli_on: bool, monkeypatch, fail_first: int) -> tuple:
+    """Run `_run` with a subprocess that times out `fail_first` times; return
+    (the timeouts it was given, whether it answered)."""
+    seen = []
+
+    def fake(args, **kw):
+        seen.append(kw["timeout"])
+        if len(seen) <= fail_first:
+            raise subprocess.TimeoutExpired(args, kw["timeout"])
+        return subprocess.CompletedProcess(args, 0, "ok", "")
+
+    monkeypatch.setattr(ci.subprocess, "run", fake)
+    monkeypatch.setitem(ci._cli, "on", cli_on)
+    try:
+        ci._run(["gh", "run", "list"])
+        return seen, True
+    except ci.Undetermined:
+        return seen, False
+
+
+def test_the_hook_path_keeps_its_3s_single_attempt(ci, monkeypatch):
+    assert _calls_under(ci, False, monkeypatch, 1) == ([3], False)
+
+
+def test_the_command_line_path_waits_and_retries_once(ci, monkeypatch):
+    assert _calls_under(ci, True, monkeypatch, 1) == ([20, 20], True)
+    # Still fails closed when the retry also times out.
+    assert _calls_under(ci, True, monkeypatch, 2) == ([20, 20], False)
+
+
+def test_main_turns_the_command_line_path_on(ci, monkeypatch):
+    monkeypatch.setitem(ci._cli, "on", False)
+    monkeypatch.setattr(ci, "head_sha", lambda ref="HEAD": (_ for _ in ()).throw(
+        ci.Undetermined("stub")))
+    ci.main(["--sha", "HEAD"])
+    assert ci._cli["on"] is True
+
+
+def test_the_command_line_wait_can_fail(ci, monkeypatch):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+
+    def run() -> bool:
+        mod = importlib.reload(ci)
+        with pytest.MonkeyPatch.context() as mp:
+            return (_calls_under(mod, True, mp, 1) == ([20, 20], True)
+                    and _calls_under(mod, False, mp, 1) == ([3], False))
+
+    try:
+        assert_can_fail([Mutation(SCRIPT, "CLI_ATTEMPTS = 2",
+                                  "CLI_ATTEMPTS = 1",
+                                  expect_occurrences=1)],
+                        run, "no retry on the command line")
+        assert_can_fail([Mutation(SCRIPT, "    if _cli[\"on\"]:",
+                                  "    if True:", expect_occurrences=1)],
+                        run, "the hook path given the long wait")
+    finally:
+        importlib.reload(ci)

@@ -10,8 +10,8 @@ imbalanced-learn>=0.12    # SMOTE for the Loke/Griffin reproduction arm only (pr
 shap>=0.46
 matplotlib>=3.9
 optuna>=4.0               # tuning with equal budgets per arm
-eqc-models==0.21.0        # QBoostClassifier (CVQBoost), QSVMClassifier; same version as qml-unlocked
-qci-client==5.0.2
+eqc-models==0.22.1        # QBoostClassifier (CVQBoost), QSVMClassifier; 0.22.1 adds sampler_type (Dirac-3S, F141)
+qci-client==5.0.3
 requests>=2.31       # HTTPError from qci-client calls (phase2 recover_device_samples.py)
 python-dotenv>=1.0
 joblib>=1.4

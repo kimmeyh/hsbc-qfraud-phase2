@@ -17,6 +17,14 @@
 # aborts before installing anything. Found by running this file against a fresh
 # clone rather than by reading it (F69). Create the interpreter with your own
 # tooling, then install this file into it.
+#
+# 2026-10-14 (Sprint 26, F141): eqc-models 0.21.0 -> 0.22.1 and qci-client
+# 5.0.2 -> 5.0.3, to reach Dirac-3S. This file now records THIS repository's
+# environment. The submission's filed environment is this file at tag
+# `as-filed` in the archived Phase 1 repository. The eqc-models ml/ and base/
+# sources are identical between the two versions, and
+# test_proxy_hamiltonian_is_the_one_eqc_models_sends holds the proxy's
+# Hamiltonian equal to the library's.
 
 numpy==1.26.4
 pandas==2.3.3
@@ -28,8 +36,8 @@ lightgbm==4.7.0
 catboost==1.2.10
 imbalanced-learn==0.14.2
 
-eqc-models==0.21.0
-qci-client==5.0.2
+eqc-models==0.22.1
+qci-client==5.0.3
 
 optuna==4.9.0
 shap==0.49.1

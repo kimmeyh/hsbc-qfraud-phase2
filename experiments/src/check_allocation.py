@@ -33,14 +33,10 @@ GENERATOR = "experiments/src/check_allocation.py --record"
 
 
 def _load_env() -> None:
-    p = ROOT / ".env"
-    if not p.exists():
-        return
-    for line in p.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip())
+    # The one `.env` reader (Sprint 26 IMP-1); this tool reports a missing
+    # key itself.
+    import qci_env
+    qci_env.load(require=False)
 
 
 def record_read(allocations: dict, path: pathlib.Path = READS,

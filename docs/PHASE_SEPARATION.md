@@ -6,6 +6,13 @@ recommendation - could be adjusted during Manual Validation"). Nothing listed
 for MOVE below has been moved; every move waits for his approval of this
 document.**
 
+> **Read section 9 first (note added 2026-10-14, Sprint 26 Decision 5).**
+> Section 9 replaced sections 4 to 6 on 2026-10-07. The Phase 1 record is
+> the archived Phase 1 repository at tag `as-filed`, so the "import, never
+> edit; wrap" rule in sections 4.1 and 5 no longer applies here. The rules in
+> force are in CLAUDE.md, "The Phase 1 boundary inside THIS repository".
+> Sections 1 to 8 stay as written, as the record of the decision.
+
 The team lead's question (2026-10-06): "since we are no longer in phase 1 and
 now in phase 2, there should be a separate set of files (JSON, .md...) and
 reports for phase 2 so that we are not updating phase 1 files ... separate

@@ -1,0 +1,55 @@
+{
+ "generator": "experiments/phase2/src/f145_build_drift.py",
+ "card": "F145",
+ "sprint": 26,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "dataset": "ulb",
+ "seed": 42,
+ "config": "free",
+ "pair_build": "sequential",
+ "scope": "ULB only; no other dataset's drift is measured",
+ "elapsed_s": 347.0,
+ "two_builds_compared": {
+  "unseeded": {
+   "train": {
+    "learners": 78,
+    "learners_differing": 0,
+    "cells": 13278330,
+    "cells_differing": 0
+   },
+   "validation": {
+    "learners": 78,
+    "learners_differing": 65,
+    "cells": 4426110,
+    "cells_differing": 311
+   },
+   "test": {
+    "learners": 78,
+    "learners_differing": 64,
+    "cells": 4426188,
+    "cells_differing": 347
+   }
+  },
+  "seeded": {
+   "train": {
+    "learners": 78,
+    "learners_differing": 0,
+    "cells": 13278330,
+    "cells_differing": 0
+   },
+   "validation": {
+    "learners": 78,
+    "learners_differing": 0,
+    "cells": 4426110,
+    "cells_differing": 0
+   },
+   "test": {
+    "learners": 78,
+    "learners_differing": 0,
+    "cells": 4426188,
+    "cells_differing": 0
+   }
+  }
+ }
+}

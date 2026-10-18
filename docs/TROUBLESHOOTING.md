@@ -69,6 +69,18 @@ them, are in its docstring.
 It is reading live sprint state rather than a pinned payload.
 → `experiments/src/test_phase3_artifacts.py` and its `PHASE_ORDER` gate.
 
+**Symptom: an injection proof passes, then the next run's baseline is
+already red, and the file on disk is correct.** A same-size mutation
+("= 2" to "= 1") and its restore in the same second match the cached
+bytecode's mtime and size, so a reload ran the mutated module.
+→ `injection._drop_bytecode`, called on every write since Sprint 26 IMP-4;
+`test_injection.py::test_a_same_size_mutation_is_seen_by_a_reload_and_so_is_the_restore`.
+
+**Symptom: `check_ci_status.py` prints "gh timed out after 3s" while
+`gh run list` answers at once.** The 3 s limit is the Stop hook's budget.
+→ From the command line it is 20 s with one retry (Sprint 26 IMP-4; the
+docstring of `_run` in `scripts/check_ci_status.py`).
+
 ---
 
 ## Escapes eaten in transit

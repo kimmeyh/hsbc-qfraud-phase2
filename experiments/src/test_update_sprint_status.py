@@ -124,6 +124,69 @@ def test_add_issue_guard_can_fail(tmp_path):
         importlib.reload(uss)
 
 
+def _timers_behave(path: Path) -> bool:
+    """Sprint 26 IMP-2: a pause stays out of the actual; a second open task
+    needs --parallel, which is recorded."""
+    path.write_text(json.dumps({"current_sprint": {
+        "number": 99, "task_actuals": {}}}), encoding="utf-8")
+    m = lambda a, t: uss.main(["--path", str(path)] + a,  # noqa: E731
+                              now=T0 + timedelta(minutes=t))
+    m(["--start-task", "D"], 0)
+    m(["--pause-task", "D"], 10)
+    m(["--resume-task", "D"], 70)              # an hour awaiting approval
+    try:
+        m(["--start-task", "E"], 71)
+        return False                           # D is open: must be refused
+    except SystemExit:
+        pass
+    m(["--start-task", "E", "--parallel"], 71)
+    m(["--finish-task", "D"], 75)
+    cur = _cur(path)
+    return (cur["task_actuals"]["D"] == 15
+            and cur.get("task_parallel") == {"E": ["D"]})
+
+
+def test_pause_and_parallel_are_measured(tmp_path):
+    assert _timers_behave(tmp_path / "s.json")
+
+
+def test_a_paused_task_cannot_finish(status):
+    uss.main(["--path", str(status), "--start-task", "D"], now=T0)
+    uss.main(["--path", str(status), "--pause-task", "D"], now=T0)
+    with pytest.raises(SystemExit, match="is paused"):
+        uss.main(["--path", str(status), "--finish-task", "D"],
+                 now=T0 + timedelta(minutes=5))
+
+
+def test_timer_guards_can_fail(tmp_path):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = ROOT / "scripts" / "update_sprint_status.py"
+    target = tmp_path / "s.json"
+
+    def run() -> bool:
+        importlib.reload(uss)
+        return _timers_behave(target)
+
+    try:
+        assert_can_fail(
+            [Mutation(src, "    elapsed -= cur.get(\"task_paused_s\", {})"
+                      ".get(task, 0)\n", "", expect_occurrences=1)],
+            run, "the pause counted as work")
+        assert_can_fail(
+            [Mutation(src, "    if running and not parallel:\n",
+                      "    if False:\n", expect_occurrences=1)],
+            run, "a second open task started silently")
+        assert_can_fail(
+            [Mutation(src, "        cur.setdefault(\"task_parallel\", {})"
+                      "[task] = running\n", "        pass\n",
+                      expect_occurrences=1)],
+            run, "a parallel start not recorded")
+    finally:
+        importlib.reload(uss)
+
+
 def test_the_clock_cannot_be_set_from_the_command_line():
     """`now` is for tests only. A flag that sets the clock would let an
     actual be typed in after all."""

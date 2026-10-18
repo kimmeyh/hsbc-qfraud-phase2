@@ -94,6 +94,88 @@ def test_estimate_declines_to_guess_without_an_anchor(ledger):
         "must say so rather than extrapolate")
 
 
+def test_dirac3s_quote_brackets_what_f142_spent():
+    """Sprint 26 IMP-5: a quote from measured Dirac-3S per-sample times. At
+    B4's 560 variables the range must contain both B4 fits' billed seconds,
+    read from the rows, not restated here."""
+    a = m.dirac3s_anchors()
+    b4 = [x["metered_seconds"] for x in a if x["unit"].startswith("b4_")]
+    assert len(b4) >= 2          # a live smoke check; later rows may add more
+    q = m.quote(560, 8)
+    assert q["known"] and q["device"] == "dirac-3s"
+    assert all(q["low_s"] <= s <= q["high_s"] for s in b4), (q, b4)
+
+
+def _fixture_rows(path: Path) -> Path:
+    """Fixed Dirac-3S rows, all at schedule 2, sizes 560 and 833, so the
+    tests below do not change when a later run adds rows (PR #21 review)."""
+    def row(unit, n, runtime, status="ok"):
+        return {"unit": unit, "status": status, "device_type": "dirac-3s",
+                "metered_seconds": math.ceil(runtime),
+                "hw_config": {"num_samples": 8, "relaxation_schedule": 2},
+                "screen": {"n_variables": n},
+                "device_timing": {"runtime_sum_s": runtime}}
+    path.write_text(json.dumps({"rows": [
+        row("x_560", 560, 20.8), row("y_833", 833, 30.6),
+        row("z_failed", 560, 99.0, status="failed")]}), encoding="utf-8")
+    return path
+
+
+def test_dirac3s_quote_is_honest_off_its_anchors(tmp_path):
+    rows = _fixture_rows(tmp_path / "rows.json")
+    assert [a["unit"] for a in m.dirac3s_anchors(rows)] == ["x_560", "y_833"]
+    assert m.quote(560, 8, rows_path=rows)["known"] is True
+    assert m.quote(3000, 8, rows_path=rows)["known"] is False   # beyond 2x
+    assert m.quote(560, 8, relaxation_schedule=4,
+                   rows_path=rows)["known"] is False
+    above = m.quote(987, 8, rows_path=rows)                     # F143's size
+    assert above["above_largest_anchor"] == 833
+    assert "floor" in above["note"]
+    with pytest.raises(ValueError):
+        m.quote(560, 8, device="dirac-4")
+
+
+def test_an_anchor_beyond_2x_does_not_hide_the_warning(monkeypatch):
+    """PR #21 review: the in-range anchors (500, 600) are all smaller than
+    a 700-variable job, so the range's high end is a floor. A 2,000-variable
+    anchor, outside the range, must not suppress the flag."""
+    fake = [{"unit": u, "degree": 2, "n_variables": n,
+             "relaxation_schedule": 2, "per_sample_s": s,
+             "metered_seconds": 0}
+            for u, n, s in (("a", 500, 2.0), ("b", 600, 2.5),
+                            ("c", 2000, 9.0))]
+    monkeypatch.setattr(m, "dirac3s_anchors", lambda *a, **k: fake)
+    q = m.quote(700, 8)
+    assert q["known"] and q["above_largest_anchor"] == 600
+
+
+def test_the_quote_guards_can_fail(tmp_path):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = Path(m.__file__)
+    rows = _fixture_rows(tmp_path / "rows.json")
+
+    def run() -> bool:
+        mod = importlib.reload(m)
+        return (mod.quote(560, 8, relaxation_schedule=4,
+                          rows_path=rows)["known"] is False
+                and "above_largest_anchor" in mod.quote(987, 8,
+                                                        rows_path=rows))
+
+    try:
+        assert_can_fail([Mutation(src, "               if a[\"relaxation_"
+                                  "schedule\"] == relaxation_schedule]",
+                                  "               ]", expect_occurrences=1)],
+                        run, "schedule ignored")
+        assert_can_fail([Mutation(src, "    if q[\"known\"] and n_variables "
+                                  "> max(sizes):", "    if False:",
+                                  expect_occurrences=1)],
+                        run, "no flag above the largest anchor")
+    finally:
+        importlib.reload(m)
+
+
 def test_estimate_uses_an_anchor_when_one_exists(ledger):
     out = m.estimate_for(n_variables=100, degree=2, n_samples=8, ledger=ledger)
     assert out["known"] is True

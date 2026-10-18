@@ -47,12 +47,8 @@ _JOB_ID = re.compile(r"job_id': '([0-9a-f]{24})'")
 
 
 def _load_env() -> None:
-    env = ROOT / ".env"
-    if env.exists():
-        for line in env.read_text(encoding="utf-8").splitlines():
-            if "=" in line and not line.strip().startswith("#"):
-                k, v = line.split("=", 1)
-                os.environ.setdefault(k.strip(), v.strip())
+    import qci_env                  # the one `.env` reader (Sprint 26 IMP-1)
+    qci_env.load()
 
 
 def _find(obj, key):

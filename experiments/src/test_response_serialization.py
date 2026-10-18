@@ -87,7 +87,52 @@ def test_the_offline_solver_returns_the_real_response_type():
     assert isinstance(resp, SolutionResults), (
         f"offline_solver returned {type(resp).__name__}; a real solve returns "
         "SolutionResults, so the dry run would test a shape no run produces")
-    assert len(eqc_submit.samples_of(resp)) == 3
+    # The library sends the model's own num_samples, not the argument (F141
+    # found this once the real job body was built offline), so the count
+    # returned is the count the body asked for.
+    assert len(eqc_submit.samples_of(resp)) == sent[0]["num_samples"]
+
+
+def _offline_body_device(device_type):
+    import eqc_models.ml.classifierbase as cb
+
+    sent: list = []
+    with eqc_submit.offline_solver(sent, device_type=device_type):
+        cb.Dirac3CloudSolver().solve(_model(4), num_samples=3,
+                                     sum_constraint=1.0,
+                                     relaxation_schedule=2)
+    return sent[0]["device_type"]
+
+
+def test_the_offline_dry_run_builds_a_dirac_3s_request_body():
+    """F141: the job body is built by qci-client's own build_job_body, so the
+    device it names is what a real submit would send."""
+    assert _offline_body_device("dirac-3s") == "dirac-3s"
+
+
+def test_a_dirac_3_dry_run_is_unchanged():
+    # qci-client maps the "dirac-3" alias to its device-specific name.
+    assert _offline_body_device("dirac-3") == "dirac-3_normalized_qudit"
+
+
+def test_the_device_block_selects_dirac_3s_and_restores():
+    import eqc_models.ml.classifierbase as cb
+
+    real = cb.Dirac3CloudSolver
+    with eqc_submit.device("dirac-3s"):
+        assert cb.Dirac3CloudSolver().sampler_type == "dirac-3s"
+    assert cb.Dirac3CloudSolver is real
+    assert real().sampler_type == "dirac-3"
+    with eqc_submit.device("dirac-3"):
+        assert cb.Dirac3CloudSolver is real
+
+
+def test_an_unknown_device_is_refused():
+    import pytest
+
+    with pytest.raises(ValueError):
+        with eqc_submit.device("dirac-4"):
+            pass
 
 
 def test_neither_runner_uses_default_str_on_a_response():

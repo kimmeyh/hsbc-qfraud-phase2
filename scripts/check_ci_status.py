@@ -81,15 +81,38 @@ def _run(args: list[str], timeout: int = 3) -> tuple[int, str, str]:
     A 3s ceiling is generous for `git rev-parse` locally and for `gh auth
     status` against a responsive API. An API slower than that is itself a
     reason to report UNDETERMINED rather than wait and be killed.
+
+    RUN FROM THE COMMAND LINE, THERE IS NO HOOK BUDGET (Sprint 26 IMP-4).
+    `main()` sets CLI_TIMEOUT and one retry, because at the 3.3.2 checkpoint
+    the 3s ceiling reported "gh timed out after 3s" while `gh run list`
+    answered at once by hand. The hook imports these functions and never
+    calls `main()`, so its budget is unchanged. A timeout after the retry is
+    still UNDETERMINED: the script fails closed either way.
     """
-    try:
-        r = subprocess.run(args, cwd=str(ROOT), capture_output=True,
-                           text=True, timeout=timeout)
-    except FileNotFoundError as exc:
-        raise Undetermined(f"{args[0]} is not installed: {exc}") from exc
-    except subprocess.TimeoutExpired as exc:
-        raise Undetermined(f"{args[0]} timed out after {timeout}s") from exc
+    if _cli["on"]:
+        timeout, attempts = CLI_TIMEOUT, CLI_ATTEMPTS
+    else:
+        attempts = 1
+    for attempt in range(1, attempts + 1):
+        try:
+            r = subprocess.run(args, cwd=str(ROOT), capture_output=True,
+                               text=True, timeout=timeout)
+            break
+        except FileNotFoundError as exc:
+            raise Undetermined(f"{args[0]} is not installed: {exc}") from exc
+        except subprocess.TimeoutExpired as exc:
+            if attempt == attempts:
+                raise Undetermined(
+                    f"{args[0]} timed out after {timeout}s"
+                    + (f", {attempts} attempts" if attempts > 1 else "")
+                ) from exc
     return r.returncode, r.stdout, r.stderr
+
+
+# The command-line path only; see _run. Not a flag: a hook could pass a flag.
+CLI_TIMEOUT = 20
+CLI_ATTEMPTS = 2
+_cli = {"on": False}
 
 
 def head_sha(ref: str = "HEAD") -> str:
@@ -231,6 +254,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--timeout", type=int, default=1800,
                     help="seconds to wait with --wait (default 1800)")
     args = ap.parse_args(argv)
+    _cli["on"] = True               # no hook budget here (IMP-4); see _run
 
     if args.after > 0:
         # Give CI time to start AND to fail. The point of this checkpoint is

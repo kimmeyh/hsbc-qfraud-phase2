@@ -64,6 +64,63 @@ def samples_of(resp) -> list:
     return [] if sols is None else [list(map(float, s)) for s in np.asarray(sols)]
 
 
+# The devices a fit may name (F141, Sprint 26). eqc-models 0.22.1 reaches
+# Dirac-3S through the solver's `sampler_type`, whose only allowed value is
+# "dirac-3s". The classifiers construct `Dirac3CloudSolver()` with no
+# arguments, so the choice is made at the same substitution point the
+# offline stand-in uses, never by editing the library.
+DIRAC_3 = "dirac-3"
+DIRAC_3S = "dirac-3s"
+DEVICE_TYPES = (DIRAC_3, DIRAC_3S)
+# Phase 2's default device (team lead, Sprint 26 Decision 11, 2026-10-16,
+# after F142). Phase 2 runners pass it to `device()`; a runner that names a
+# device instead marks the line `# device named:` with its reason
+# (`test_phase2_device_default.py`). Nothing here changes the shared default:
+# a fit outside `device()` still goes to Dirac-3, as Phase 1's runners do
+# (CLAUDE.md, Phase 1 boundary rule 4).
+PHASE2_DEVICE = DIRAC_3S
+
+
+def _check_device_type(device_type: str) -> None:
+    if device_type not in DEVICE_TYPES:
+        raise ValueError(f"device_type {device_type!r} is not one of "
+                         f"{DEVICE_TYPES}")
+
+
+def _device_solver_class(real, device_type: str):
+    """The cloud solver class a fit on `device_type` constructs."""
+    _check_device_type(device_type)
+    if device_type == DIRAC_3:
+        return real
+
+    class Dirac3SCloudSolver(real):
+        def __init__(self, url=None, api_token=None):
+            super().__init__(url=url, api_token=api_token,
+                             sampler_type=DIRAC_3S)
+
+    return Dirac3SCloudSolver
+
+
+@contextmanager
+def device(device_type: str, wrap=None):
+    """Point every classifier fit inside the block at `device_type`.
+
+    A no-op for Dirac-3 when no `wrap` is given, so Phase 1 and B4/B5 paths
+    are unchanged. `wrap`, if
+    given, receives the device's solver class and returns a subclass to
+    install instead (F142: a pre-submit check and a raw-response save).
+    """
+    import eqc_models.ml.classifierbase as cb
+
+    real = cb.Dirac3CloudSolver
+    cls = _device_solver_class(real, device_type)
+    cb.Dirac3CloudSolver = wrap(cls) if wrap else cls
+    try:
+        yield
+    finally:
+        cb.Dirac3CloudSolver = real
+
+
 MAX_RETRIES = 2                 # PREREGISTRATION section 11: at most twice
 UNPARSEABLE_CALL_CHARGE_S = 10.0  # run_hardware.py's conservative charge
 
@@ -75,7 +132,14 @@ def _balance_or_none(client):
         return None
 
 
-def metered_fit(make_clf, X, y, make_record, client) -> dict:
+class NoRetry(Exception):
+    """Raised inside a fit to end `metered_fit` at once: no retry, no sleep.
+    F142 raises it from a pre-submit check, before any network call."""
+
+
+def metered_fit(make_clf, X, y, make_record, client,
+                max_attempts: int = MAX_RETRIES + 1,
+                zero_cost_is_unparsed: bool = False) -> dict:
     """Fit through eqc-models with the B3 ledger discipline, retrying at most
     twice with identical config (section 11).
 
@@ -84,11 +148,24 @@ def metered_fit(make_clf, X, y, make_record, client) -> dict:
     balance is charged the conservative estimate and flagged, never counted
     as zero -- a blind spend counter is how a block cap fails to fire (A8).
 
+    Opt-in, for Phase 2 runners (defaults keep Phase 1's behavior):
+    - `max_attempts=1` makes the approved call count the real ceiling (F142
+      review: a fit can fail AFTER the device has billed it, in the metrics
+      read or the size check, and a retry would pay again).
+    - `zero_cost_is_unparsed=True` treats a call that measures 0 s or less
+      as unparsed and charges the conservative estimate, so a balance that
+      does not move (an unverified billing source) cannot hide spend from a
+      cap. This covers a failed call too, since a fit can fail after the
+      device billed it; a `NoRetry` is raised before any upload and is not
+      charged.
+    A `NoRetry` raised inside the fit always ends the loop.
+
     Returns {"clf", "resp", "attempts", "metered_seconds", "parsed", "error",
     "job_id"}; "clf" and "resp" are None if every attempt failed.
     """
     attempts, spent, parsed, err = 0, 0.0, True, None
-    while attempts <= MAX_RETRIES:
+    while attempts < max_attempts:
+        no_retry = False
         clf = make_clf()
         rec = make_record(attempts)
         rec.submitted_utc = mc._utc()
@@ -110,6 +187,7 @@ def metered_fit(make_clf, X, y, make_record, client) -> dict:
             rec.status = "failed"
             rec.error = f"{type(e).__name__}: {str(e)[:400]}"
             err = rec.error
+            no_retry = isinstance(e, NoRetry)
             log.write(f"FAILED {rec.error}")
         finally:
             rec.balance_after = _balance_or_none(client)
@@ -120,6 +198,20 @@ def metered_fit(make_clf, X, y, make_record, client) -> dict:
                 rec.measured_seconds = UNPARSEABLE_CALL_CHARGE_S
                 rec.cost_source = ("estimated: balance unreadable, conservative "
                                    "charge applied")
+                parsed = False
+            # A failure after the device ran (in makeResults, the metrics
+            # read or the size check) may also have been billed, so it is
+            # charged the same way. A NoRetry is raised before any upload and
+            # legitimately costs nothing (PR #21 review).
+            if (zero_cost_is_unparsed and not no_retry
+                    and rec.measured_seconds <= 0):
+                what = ("a successful call" if rec.status == "ok"
+                        else "a failed call")
+                rec.notes.append(f"balance moved {rec.measured_seconds} s on "
+                                 f"{what}; charged the estimate")
+                rec.measured_seconds = UNPARSEABLE_CALL_CHARGE_S
+                rec.cost_source = (f"estimated: balance did not fall on "
+                                   f"{what}, conservative charge applied")
                 parsed = False
             spent += rec.measured_seconds
             rec.finished_utc = mc._utc()
@@ -132,6 +224,8 @@ def metered_fit(make_clf, X, y, make_record, client) -> dict:
             return {"clf": clf, "resp": resp, "attempts": attempts,
                     "metered_seconds": spent, "parsed": parsed,
                     "error": None, "job_id": rec.job_id}
+        if no_retry or attempts >= max_attempts:
+            break
         low = (err or "").lower()
         if "variable" in low and "limit" in low:
             break                                 # sizing refusal: no retry
@@ -143,36 +237,67 @@ def metered_fit(make_clf, X, y, make_record, client) -> dict:
 
 
 @contextmanager
-def offline_solver(record: list):
+def offline_solver(record: list, device_type: str = DIRAC_3):
     """Replace the ONE network object with a local stand-in.
 
     Everything else runs for real: the library builds the weak-learner pool,
     the Hamiltonian, the sum constraint and the solver arguments exactly as it
-    would for Dirac-3, and hands them to `solver.solve(model, ...)`. This
-    stand-in validates what it was handed, records it, and returns a response
-    in the cloud schema, so `fit`, `predict_raw` and the scoring after them all
-    execute. Nothing leaves the machine.
+    would for the device, and hands them to `solver.solve(model, ...)`. The
+    solver is the real cloud solver for `device_type`, so the library's own
+    `solve` uploads the files and builds the job body through qci-client's
+    `build_job_body` (F141, Sprint 26: before that, the stand-in replaced the
+    whole solver and the request body was never built offline). Only the
+    client's three network methods are local: uploads return a placeholder
+    id, `process_job` records the body and returns a response in the cloud
+    schema, and job metrics are empty. Nothing leaves the machine.
 
     `record` receives one dict per solve: the variable count, the solver
-    arguments and the Hamiltonian's dynamic range in dB -- which is what the
-    Criterion H statement quotes, measured rather than assumed.
+    arguments, the Hamiltonian's dynamic range in dB -- which is what the
+    Criterion H statement quotes, measured rather than assumed -- and the
+    `device_type` the request body names.
     """
     import eqc_models.ml.classifierbase as cb
+    from qci_client import QciClient
 
     real = cb.Dirac3CloudSolver
+    device_cls = _device_solver_class(real, device_type)
 
-    class _OfflineClient:
-        """from_cloud_response asks the client for job metrics (a network
-        read). An empty answer takes the library's own KeyError path: no
-        timing, everything else intact."""
+    class _OfflineClient(QciClient):
+        """A real QciClient, so the real `build_job_body` runs; its three
+        network calls are local. An empty metrics answer takes the library's
+        own KeyError path: no timing, everything else intact."""
+
+        def __init__(self):
+            super().__init__(url="https://offline.invalid",
+                             api_token="offline")
+            self.bodies: list = []
+
+        def upload_file(self, *args, **kwargs):
+            return {"file_id": f"offline-{len(self.bodies)}"}
+
         def get_job_metrics(self, job_id=None):
             return {}
 
-    class OfflineSolver:
-        client = _OfflineClient()
+        def process_job(self, job_body, wait=True, **kwargs):
+            self.bodies.append(job_body)
+            dc = job_body["job_submission"]["device_config"]
+            (cfg,) = dc.values()
+            ns = int(cfg.get("num_samples", 1))
+            s = float(cfg.get("sum_constraint", 1.0))
+            n = self._n_variables
+            rng = np.random.default_rng(0)
+            sols = [list(rng.dirichlet(np.ones(n)) * s) for _ in range(ns)]
+            return {"results": {"energies": [0.0] * ns, "solutions": sols,
+                                "counts": [1] * ns},
+                    "job_info": {"job_id": "0" * 24,
+                                 "job_submission": job_body["job_submission"]}}
 
-        def connect(self, *args, **kwargs):
-            pass
+    offline = _OfflineClient()
+
+    class OfflineSolver(device_cls):
+        @property
+        def client(self):
+            return offline
 
         def solve(self, model, **kw):
             C = np.asarray(model._C, dtype=np.float64).reshape(-1)
@@ -185,33 +310,28 @@ def offline_solver(record: list):
                 dr = float(model.get_dynamic_range())
             except Exception:                    # noqa: BLE001
                 dr = None
-            ns = int(kw.get("num_samples", 1))
-            record.append({
-                "n_variables": n,
-                "num_samples": ns,
-                "relaxation_schedule": kw.get("relaxation_schedule"),
-                "sum_constraint": kw.get("sum_constraint"),
-                "dynamic_range_db": dr,
-            })
-            rng = np.random.default_rng(0)
-            s = float(kw.get("sum_constraint", 1.0))
-            sols = [list(rng.dirichlet(np.ones(n)) * s) for _ in range(ns)]
-            # Return what the REAL solver returns: a SolutionResults built by
-            # the same from_cloud_response call Dirac3CloudSolver.makeResults
-            # uses. The first version returned a plain dict, so every dry run
+            offline._n_variables = n
+            # The library's own solve: upload, job body, process_job and
+            # SolutionResults.from_cloud_response, as a real fit runs them.
+            # The first stand-in returned a plain dict, so every dry run
             # exercised a response shape a real run never produces -- which
             # is how the truncated-sample bug reached the device unseen.
-            # No fallback to the dict: a dry run that cannot build the real
-            # type must fail, not quietly diverge from a real run again.
-            from eqc_models.base.results import SolutionResults
-            raw = {"results": {"energies": [0.0] * ns, "solutions": sols,
-                               "counts": [1] * ns},
-                   "job_info": {"job_id": "0" * 24, "job_submission": {
-                       "device_config": {"dirac-3": {
-                           "num_samples": ns,
-                           "relaxation_schedule": kw.get("relaxation_schedule"),
-                           "sum_constraint": s}}}}}
-            return SolutionResults.from_cloud_response(model, raw, self)
+            resp = super().solve(model, **kw)
+            # Recorded from the BODY, not from the arguments: the library
+            # replaces the num_samples argument with the model's own
+            # num_samples attribute (eqc-models 0.21.0 and 0.22.1 alike).
+            body = offline.bodies[-1]
+            ((sent_device, cfg),) = \
+                body["job_submission"]["device_config"].items()
+            record.append({
+                "n_variables": n,
+                "num_samples": cfg.get("num_samples"),
+                "relaxation_schedule": cfg.get("relaxation_schedule"),
+                "sum_constraint": cfg.get("sum_constraint"),
+                "dynamic_range_db": dr,
+                "device_type": sent_device,
+            })
+            return resp
 
     cb.Dirac3CloudSolver = OfflineSolver
     try:
