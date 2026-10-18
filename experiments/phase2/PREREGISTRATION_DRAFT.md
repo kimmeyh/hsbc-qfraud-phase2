@@ -465,6 +465,16 @@ and governs wherever the two differ.
 - **Stopping rules**: a one-seed pilot times every lane first. The
   eight-seed run follows if it projects to 3 hours or less; otherwise the
   step count is cut to fit and the cut is recorded here before the run.
+  - **Cut applied (2026-10-18, before the eight-seed run).** The pilot
+    (seed 42, `experiments/phase2/results/f106_dequant_pilot.json`) took
+    2,239 s: circuit training 1,865 s for 1,500 steps (1.243 s a step,
+    with the F109 run sharing the CPU) and 374 s for prediction and the
+    twins. It projected 17,913 s for eight seeds, over the limit. The
+    limit allows 1,350 s a seed, so about 785 steps; the run uses **750
+    steps**, projected 8 x (750 x 1.243 + 374) = 10,453 s. Nothing else
+    changes. The pilot's lane values were seen before the cut; the cut
+    is set by timing alone, from the rule above. The pilot ran 1,500
+    steps, so its seed 42 row is not a row of the eight-seed run.
 - **What is reported whatever the result**: every lane's AUPRC and AUROC
   per seed, every interval and Wilcoxon p-value, the outcome word, C, |A|,
   the entropy, the lambdas and the pilot timing.

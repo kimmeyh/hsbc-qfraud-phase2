@@ -1,0 +1,262 @@
+{
+ "generator": "experiments/phase2/src/f106_dequant.py",
+ "card": "F106",
+ "sprint": 27,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-18",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F106",
+ "mode": "pilot",
+ "seeds": [
+  42
+ ],
+ "alpha_each": 0.008333333333333333,
+ "margin": 0.005,
+ "n_boot": 2000,
+ "steps": 1500,
+ "rows": [
+  {
+   "seed": 42,
+   "features": [
+    "V17",
+    "V14",
+    "V10",
+    "V12",
+    "V11",
+    "V16",
+    "V4",
+    "V3"
+   ],
+   "n_train": 6295,
+   "n_train_pos": 295,
+   "n_test": 56962,
+   "n_test_pos": 99,
+   "lanes": {
+    "circuit": {
+     "auprc": 0.6954781540273022,
+     "auroc": 0.9569502243297154,
+     "norm_auprc": 0.6949479733693823
+    },
+    "lr": {
+     "auprc": 0.6448768581124437,
+     "auroc": 0.9596099929708779,
+     "norm_auprc": 0.6442585792483867
+    },
+    "gam": {
+     "auprc": 0.6951410311823658,
+     "auroc": 0.9761313609158428,
+     "norm_auprc": 0.6946102635845791
+    },
+    "ga2m": {
+     "auprc": 0.7446861132199405,
+     "auroc": 0.9655660059789282,
+     "norm_auprc": 0.7442416049317526
+    },
+    "hgb": {
+     "auprc": 0.726178981594437,
+     "auroc": 0.9721758143842802,
+     "norm_auprc": 0.725702251896353
+    },
+    "joint": {
+     "auprc": 0.6260890709799999,
+     "auroc": 0.9633265280346863,
+     "norm_auprc": 0.6254380820773219
+    },
+    "rff": {
+     "auprc": 0.6582243758810243,
+     "auroc": 0.9598807127604413,
+     "norm_auprc": 0.6576293354014897
+    }
+   },
+   "lambdas": [
+    0.4653,
+    0.4337,
+    0.797
+   ],
+   "loss_trace": [
+    [
+     100,
+     0.07114
+    ],
+    [
+     200,
+     0.05127
+    ],
+    [
+     300,
+     0.03341
+    ],
+    [
+     400,
+     0.02681
+    ],
+    [
+     500,
+     0.01823
+    ],
+    [
+     600,
+     0.02018
+    ],
+    [
+     700,
+     0.04436
+    ],
+    [
+     800,
+     0.04689
+    ],
+    [
+     900,
+     0.04069
+    ],
+    [
+     1000,
+     0.04234
+    ],
+    [
+     1100,
+     0.0388
+    ],
+    [
+     1200,
+     0.03511
+    ],
+    [
+     1300,
+     0.04837
+    ],
+    [
+     1400,
+     0.04041
+    ],
+    [
+     1500,
+     0.05164
+    ]
+   ],
+   "diagnostics": {
+    "C": 0.5318,
+    "berry_abs": 0.0981,
+    "sum_single_qubit_entropy_bits": 2.8467
+   },
+   "seconds": {
+    "circuit_train": 1865.1,
+    "circuit_predict": 32.4,
+    "seconds_lr_gam_ga2m_hgb": 3.4,
+    "seconds_joint": 149.2,
+    "seconds_rff": 7.6
+   },
+   "twin_detail": {
+    "trained_frequencies": [
+     0.2,
+     3.545,
+     1.0,
+     1.53,
+     0.2,
+     0.965,
+     1.46,
+     0.2
+    ],
+    "rff_val_auprc": {
+     "0.05": 0.6393,
+     "0.2": 0.6155,
+     "0.8": 0.6216
+    },
+    "rff_gamma": 0.05
+   }
+  }
+ ],
+ "compare": {
+  "lr": {
+   "mean_delta_auprc": -0.05060129591485851,
+   "interval": [
+    -0.12809129180427944,
+    0.027109340435502286
+   ],
+   "wilcoxon_p_exact": NaN,
+   "seeds_twin_ahead": 0,
+   "per_seed_delta": [
+    -0.0506
+   ],
+   "no_worse_within_margin": false,
+   "circuit_ahead": false
+  },
+  "gam": {
+   "mean_delta_auprc": -0.00033712284493636613,
+   "interval": [
+    -0.05305613171939676,
+    0.06846316362107771
+   ],
+   "wilcoxon_p_exact": NaN,
+   "seeds_twin_ahead": 0,
+   "per_seed_delta": [
+    -0.00034
+   ],
+   "no_worse_within_margin": false,
+   "circuit_ahead": false
+  },
+  "ga2m": {
+   "mean_delta_auprc": 0.04920795919263832,
+   "interval": [
+    -0.00997698059099337,
+    0.10675907039339852
+   ],
+   "wilcoxon_p_exact": NaN,
+   "seeds_twin_ahead": 1,
+   "per_seed_delta": [
+    0.04921
+   ],
+   "no_worse_within_margin": false,
+   "circuit_ahead": false
+  },
+  "hgb": {
+   "mean_delta_auprc": 0.03070082756713477,
+   "interval": [
+    -0.036209471364626544,
+    0.09109340125225512
+   ],
+   "wilcoxon_p_exact": NaN,
+   "seeds_twin_ahead": 1,
+   "per_seed_delta": [
+    0.0307
+   ],
+   "no_worse_within_margin": false,
+   "circuit_ahead": false
+  },
+  "joint": {
+   "mean_delta_auprc": -0.06938908304730229,
+   "interval": [
+    -0.16878365151673572,
+    0.043612628329938466
+   ],
+   "wilcoxon_p_exact": NaN,
+   "seeds_twin_ahead": 0,
+   "per_seed_delta": [
+    -0.06939
+   ],
+   "no_worse_within_margin": false,
+   "circuit_ahead": false
+  },
+  "rff": {
+   "mean_delta_auprc": -0.03725377814627784,
+   "interval": [
+    -0.11037524408988549,
+    0.03403860022651369
+   ],
+   "wilcoxon_p_exact": NaN,
+   "seeds_twin_ahead": 0,
+   "per_seed_delta": [
+    -0.03725
+   ],
+   "no_worse_within_margin": false,
+   "circuit_ahead": false
+  }
+ },
+ "outcome": "inconclusive",
+ "encoding_built_wrong": false,
+ "elapsed_s": 2239.1,
+ "projected_run_s": 17912.8,
+ "run_within_limit": false
+}
