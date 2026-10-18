@@ -465,6 +465,55 @@ its seed count (five there, eight here, from section 2a).
   per seed, every interval and Wilcoxon p-value, the outcome word, C, |A|,
   the entropy, the lambdas and the pilot timing.
 
+### F107: shot budget of the F106 circuit, and what the Schmidt-rank threshold does not cover
+
+Written 2026-10-18 (Sprint 27 Task J), before the module exists or any
+shot is sampled.
+
+- **Source finding first.** The card's "G1 Schmidt-rank threshold" is
+  the evidence library's `entangled-data-schmidt-rank-threshold`, from
+  Wang et al., "Transition role of entangled data in quantum machine
+  learning", arXiv:2306.03481v2 (Nat. Commun. 2024), read 2026-10-18. Its
+  r is the Schmidt rank of entangled *training states* shared with a
+  reference system, for learning a target unitary under the projective
+  observable (|0><0|)^n, at n = 4 (critical r = 3 at m = 10, r = 4 at
+  m = 100). The F106 classifier has classical inputs, no reference
+  system, no target unitary, and the readout sum_q w_q <Z_q>. So "the
+  critical rank per shot budget for our feature count" has no defined
+  meaning here, and this entry does not construct one.
+- **What transfers (Inferred).** The paper's mechanism: information per
+  measurement falls as entanglement rises. For a readout <Z_q>, the shot
+  variance is (1 - <Z_q>^2) / m, largest when qubit q's reduced state is
+  mixed, which entanglement across a cut produces.
+- **ID and card**: F107.
+- **Question**: how many shots per row does the F106 circuit need before
+  its test AUPRC is within 0.005 of the exact statevector's?
+- **Hypothesis and prediction**: a budget between 100 and 10,000 shots;
+  no direction is claimed for its relation to entanglement.
+- **Falsifier**: none in the hypothesis sense; this is a measurement. It
+  is reported invalid if the shot estimator does not converge to the
+  exact <Z_q> in its test.
+- **Data and arms**: F106's eight trained circuits (parameters saved in
+  `f106_dequant.json`) on F106's test folds, rebuilt by F106's code with
+  the same seeds. Arms: exact, and m in {10, 100, 1,000, 10,000} shots
+  per row. Each shot draws one 8-bit outcome from |psi|^2 (a multinomial
+  over the 256 outcomes, from the seed), so qubit correlations are kept;
+  <Z_q> is the outcome average.
+- **Primary metric**: per seed, the critical shot budget, the smallest m
+  in the grid whose AUPRC is within 0.005 of exact (or "above 10,000").
+  No multiplicity correction: no test is made.
+- **Measured beside it**: per seed, the effective Schmidt rank of the
+  circuit's output state across the qubits 0-3 | 4-7 cut (exp of the
+  entanglement entropy from the SVD of the 16 x 16 amplitude matrix,
+  averaged over 500 test rows), and the distribution of |<Z_q>|.
+- **Not run, and why**: a critical *rank* curve needs circuits at several
+  entanglement levels, which is F116's ON-against-OFF ablation, on HOLD
+  until F106 shows the circuit is not dequantized.
+- **Device**: none. Zero metered seconds.
+- **Stopping rules**: runs after F106's eight-seed run; none otherwise.
+- **What is reported whatever the result**: AUPRC per seed at every m,
+  the critical budget, the effective Schmidt rank and |<Z_q>| summary.
+
 ### F142: the first Dirac-3S fits
 
 Written 2026-10-14 (Sprint 26 Task D), before any Dirac-3S call. Not

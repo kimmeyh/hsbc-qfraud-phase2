@@ -348,9 +348,9 @@ def twin_scores(Ptr, ytr, Pva, yva, Pte, seed: int) -> tuple[dict, dict]:
 
 # -------------------------------------------------------------------- runs
 
-def seed_run(df, seed: int, steps: int = STEPS) -> tuple[dict, np.ndarray, dict]:
+def prepare(df, seed: int) -> dict:
+    """The entry's rows and phases for one seed (F107 rebuilds from this)."""
     import data
-    from sklearn.metrics import average_precision_score, roc_auc_score
     sp = data.stratified_split(df, seed)
     feats = data.top_k_features(sp.X_train, sp.y_train, N_QUBITS, seed)
     ytr_all = sp.y_train.to_numpy().astype(int)
@@ -364,8 +364,16 @@ def seed_run(df, seed: int, steps: int = STEPS) -> tuple[dict, np.ndarray, dict]
     Ptr = ph(Xtr)
     Pva = ph(sp.X_val[feats].to_numpy(dtype=np.float64))
     Pte = ph(sp.X_test[feats].to_numpy(dtype=np.float64))
-    yva = sp.y_val.to_numpy().astype(int)
-    yte = sp.y_test.to_numpy().astype(int)
+    return {"feats": feats, "rows": rows, "Ptr": Ptr, "ytr": ytr, "Pva": Pva,
+            "yva": sp.y_val.to_numpy().astype(int), "Pte": Pte,
+            "yte": sp.y_test.to_numpy().astype(int)}
+
+
+def seed_run(df, seed: int, steps: int = STEPS) -> tuple[dict, np.ndarray, dict]:
+    from sklearn.metrics import average_precision_score, roc_auc_score
+    d = prepare(df, seed)
+    feats, rows, Ptr, ytr, Pva, yva, Pte, yte = (
+        d[k] for k in ("feats", "rows", "Ptr", "ytr", "Pva", "yva", "Pte", "yte"))
 
     t0 = time.perf_counter()
     params, trace = train_circuit(Ptr, ytr, seed, steps)
@@ -387,6 +395,7 @@ def seed_run(df, seed: int, steps: int = STEPS) -> tuple[dict, np.ndarray, dict]
            "n_train_pos": int(ytr.sum()), "n_test": int(len(yte)),
            "n_test_pos": int(yte.sum()), "lanes": lanes,
            "lambdas": [round(float(v), 4) for v in params.lam],
+           "params_flat": [float(v) for v in params.flat()],
            "loss_trace": trace,
            "diagnostics": diagnostics(params, Ptr[diag_rows]),
            "seconds": {"circuit_train": round(train_s, 1),
