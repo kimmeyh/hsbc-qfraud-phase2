@@ -589,6 +589,7 @@ value. Removed from candidates.)
 - Withhold compromised-terminal and targeted-customer state to induce a known, nonzero Bayes error; add FeeBee-style label-noise injection at known rates. A ceiling method that does not recover the known ceiling is not used on real data
 - This enables: F114. This prevents: an unvalidated ceiling estimate on extreme-imbalance data, where published Bayes-error estimators are validated only on balanced classes with few features
 - Depends on: nothing
+- **Done in Sprint 27 Task K (2026-10-18): no method validated** (`docs/phase2/F108_CEILING_VALIDATION.md`, `f108_ceiling.json`). The generator is exact against its posterior on all five seeds. Against the known Bayes error (about 0.006) and Bayes AUPRC (about 0.30), the HGB plug-in and the learning-curve floor overstate the error by about 10% (2 and 1 of 5 seeds), the AUPRC floor understates the ceiling by about 0.04 and is unstable, and Cover-Hart contains the truth on 3 of 5; the entry needed 4. Also found: default HGB reaches AUPRC 0.01-0.03 on the zero-ceiling reference, a single threshold on the top 0.05% of amounts (cause Inferred: binning)
 
 **F109. SPECTRA domain ladder and aggregation experiments (~6h [no-history], zero metered) Priority 90**
 - Phase: Phase 2 preparation (cross-domain study, steps 2-3)
@@ -613,6 +614,7 @@ value. Removed from candidates.)
 - Platform: ULB, IEEE-CIS
 - Fit `a*N^(-b) + c` against N_positives within a fixed time window; confident learning with the diagonal-dominance condition tested and reported when it fails. Report intervals, not points
 - Depends on: F108
+- **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
 
 **F115. Integer cost scaling stated correctly in a new document (~30m, zero metered) Priority 170**
 - Phase: QCi/External
