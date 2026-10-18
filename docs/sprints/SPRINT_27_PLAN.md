@@ -1,9 +1,14 @@
 # Sprint 27 Plan: Gates Before Reporting, and the Screens That Need No Device
 
 **Sprint**: 27 | **Branch**: `feature/20261018_Sprint_27`
-**Planned**: 2026-10-18 | **Status**: DRAFT, awaiting approval. Draft PR #32. Answered 2026-10-18:
+**Planned**: 2026-10-18 | **Status**: APPROVED by the team lead 2026-10-18. Draft PR #32.
+Issues #33-44 (Tasks A-L). Total 1,470 minutes. Decisions:
 Decision 1 option 2 (substrates added; F150 carded for the authors'
-construction), Decision 2 option 1.
+construction); Decision 2 option 1; Decision 3 set by the team lead as
+30, 60, 90 and 119 (119 is the 17-feature maximum, so it equals the
+default build; oilgas's 15 features cap it at 90, so oilgas runs 30, 60
+and 90); Decision 4 not answered, so its recommended option 1 applies;
+Decision 5 option 1.
 **Scope**: F149, F130, F102, F112, F103, F104, F6, F106, F107, F108 and
 F109 (team lead selection, 2026-10-18), plus an F146 update (D3 option 1:
 draft the unsent QCi questions for the team lead to send, presented with
@@ -231,7 +236,7 @@ is corrected in the same commit as the task that meets it.
 | B | F104 | Public resolution gate in `device_resolution.py` wrapping `_coefficient_spread`; the F142 runner calls it; test against a seeded B2 rebuild and B4 | 60 | ~5 (one 833-variable build) | A |
 | C | F102 | Section 7 items: arXiv:2604.18837 re-read, section 5 recomputed from code on 5 seeds, multiplicity families, equivalence margins, F112's section 6 entry | 90 | ~2 | - |
 | D | F112 | Paired bootstrap interval (`paired_delta_ci`) on the k and order effects, 10 seeds, as a Phase 2 result | 45 | ~10 (BCa, 10 seeds) | C |
-| E | F130 | Rank 3 KNN 5 seeds on oilgas and telecom, ULB pilot; rank 5 cos/sin plus whitening on the phase columns; rank 6 per Decision 3 | 120 | ~50 (about 40 s per cell, 70 cells; KNN unmeasured: one-cell pilot first) + ULB pilot | - |
+| E | F130 | Rank 3 KNN 5 seeds on oilgas and telecom, ULB pilot; rank 5 cos/sin plus whitening on the phase columns; rank 6 per Decision 3 | 120 | ~55 (about 40 s per cell, 80 cells; KNN unmeasured: one-cell pilot first) + ULB pilot | - |
 | F | F103 | Tier 1 g1-g5 reimplemented, k-way JOINT new; known-answer check per Decision 1 (g2 on `target_real`, plus the sparse pocket and dense substrate rebuilt from the paper's description); 5 seeds | 300 | under 50 (estimate; one-seed pilot first) | - |
 | G | F109 | Tier 1 on the six datasets on disk; the phase pipeline on classical models alone; gates before and after the IEEE-CIS UID aggregation | 150 | `[unbounded]` on IEEE-CIS: 10% pilot first | F passes |
 | H | F6 | Written analysis and recommendation (pursue, pursue narrowly, decline); `references.md` line 7 corrected | 120 | - | - |
@@ -343,7 +348,8 @@ and verification (F) is 300, so neither dominates the sprint.
 - Rank 5: cos/sin of each `*_phase` column plus train-only whitening, the
   pool rebuilt, 5 seeds, three datasets.
 - Rank 6: `build_pool(weak_cls_pair_count=...)` opt-in, sequential build,
-  values per Decision 3, 5 seeds, three datasets.
+  values per Decision 3 (30, 60, 90 and 119 on energy_steel and telecom;
+  30, 60 and 90 on oilgas), 5 seeds, three datasets.
 - **Acceptance**: each lever against HGB on the same splits with its
   paired CI; "beats HGB" only with a CI excluding zero; "moves AUPRC" only
   with a mean change of at least 0.005 and a CI excluding zero; a lever
