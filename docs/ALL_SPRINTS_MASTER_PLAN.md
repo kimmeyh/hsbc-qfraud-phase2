@@ -550,6 +550,7 @@ value. Removed from candidates.)
 - Acceptance: all five gate values within a stated tolerance of the paper's; if not, the cause is recorded and F109 stays blocked
 - Depends on: nothing. The SPECTRA author's construction details help
 - **Sprint 27 (team lead, Decision 1 option 2, 2026-10-18)**: the known answers are g2 = 0.94 on `target_real` and the four published substrate values, on a sparse pocket and dense substrate rebuilt from the paper's description. F150 repeats the substrate check on the authors' own construction
+- **Done in Sprint 27 Task F (2026-10-18)** (`docs/phase2/F103_TIER1_CHECK.md`, `f103_tier1.json`): the gating g2 reproduces (0.914 against 0.94 ± 0.03), so F109 runs; the sparse pocket's JOINT gap reproduces (+0.334 against +0.37) with its frequencies recovered exactly; both dense-substrate values do not (HGB - GAM +0.230 against +0.15; JOINT - GA2M +0.227 against 0.00), most plausibly because the rebuilt substrate differs from the authors' (Inferred; F150)
 
 **F150. SPECTRA substrates rebuilt to the authors' construction, and the F103 check repeated (~2h [no-history], zero metered) Priority 41, blocked**
 - Phase: Phase 2 preparation (cross-domain study; added 2026-10-18 by the team lead with Sprint 27 Decision 1)
