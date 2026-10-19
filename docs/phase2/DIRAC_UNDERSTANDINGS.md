@@ -18,9 +18,10 @@ marked **Measured** or **Inferred** is our independent finding. None is
 validated by QCi. (Source: the correspondence in `docs/qci_package/`,
 gitignored.)
 
-**Nothing in this file has been sent to QCi.** Sending is the team lead's
-action. Anything sent is filed in `docs/qci_package/`, and its status is
-updated here.
+**Sent to QCi: the questions in section 4 only, on 2026-10-18** (the team
+lead's email, filed in `docs/qci_package/`). Nothing else in this file has
+been sent. Sending is the team lead's action. Anything sent is filed in
+`docs/qci_package/`, and its status is updated here.
 
 ## How each item is labeled
 
@@ -435,16 +436,19 @@ installed (F141): both still hold.
 
 ## 4. Questions for QCi
 
-### Asked 2026-09-25, under QCi review, no answer as of 2026-10-13
+### Asked 2026-09-25, under QCi review; followed up 2026-10-18
 
 - **P1.** Is our reading of the Hamiltonian correct: `J = HH^T + lambda*I`,
   `C = -2Hy`, sum constraint 1.0, `w >= 0`?
 - **P2.** Is our reading of the 200:1 resolution finding correct?
 
-Do not ask these again. Follow up on them if the review has no answer by
-the next message.
+Do not ask these again. The 2026-10-18 email followed up on both.
 
-### Not yet sent
+### Sent 2026-10-18, no answer yet
+
+The email numbered P1-P2 as 1-2 and A1-A12 as 3-14, in order. It split
+A6 into 8, 8a and 8b, and A7 into 9 and 9a. The wording is otherwise as
+drafted.
 
 From F138 (`docs/phase2/DIRAC_3S_RESEARCH.md`, questions (a) to (f)):
 
@@ -501,3 +505,5 @@ Each update adds a row to the revision log and moves items between labels
 | 2026-10-15 | 26 | F142 stop 3: "Measured (F142 stop 3, the B4 twin)" added (cost 21-22 s; the exact optimum returned, beyond a uniform baseline; structure below the 200:1 step; accuracy unchanged); the cost, resolution and A31 items updated |
 | 2026-10-15 | 26 | Fresh-eyes review of F142 (9 findings): the "1/120 of the step" figure replaced (it measured the plateau's renormalization offset) by the per-weight error (1/53 and 1/800 of the step); a uniform-plus-zeros baseline; every sample, not only the best; sample agreement and the 1e-7 grid, weighing toward post-processing; same-pool accuracy; the reference solve's convergence; input and output resolution named apart |
 | 2026-10-16 | 26 | Decision 11: Dirac-3S is the default device for Phase 2 runs; section 2 states it and its basis |
+| 2026-10-18 | 27 | F146 update (Task L): the two pending questions (P1, P2) and the twelve unsent ones (A1-A12) drafted as one message for the team lead to send, in the gitignored `docs/qci_package/`; none dropped, and A3, A6 and A12 now cite what F142 measured. Not sent |
+| 2026-10-19 | 27 | The team lead sent P1-P2 (follow-up) and A1-A12 on 2026-10-18; section 4 headings updated; the email is filed in `docs/qci_package/` |

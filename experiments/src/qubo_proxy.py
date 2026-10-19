@@ -76,11 +76,18 @@ LAMBDA_MULT = 2.0                                      # lambda_coef = 2 * n_tra
 def build_pool(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
                weak_type: str, pair_build: str,
                weak_params: dict | None = None,
-               lambda_coef: float | None = None):
+               lambda_coef: float | None = None,
+               pair_count: int | None = None):
     """Build the weak pool with eqc-models' own builder; return the classifier.
     F18: attribute round-trip assert; n<4 guard; explicit strategy.
     weak_params / lambda_coef default to the frozen starting config; the
-    section-6 tuning (F22) passes explicit values."""
+    section-6 tuning (F22) passes explicit values.
+
+    `pair_count` is OPT-IN (F130, Sprint 27): eqc-models'
+    `weak_cls_pair_count`, the number of top-correlated feature pairs. The
+    library honors it only in the sequential builder and asserts it is at
+    most n(n-3)/2, so a full-pair build refuses it here. None (the default)
+    leaves the constructor call exactly as Phase 1 made it."""
     from eqc_models.ml.classifierqboost import QBoostClassifier
 
     n = X_tr.shape[1]
@@ -93,6 +100,17 @@ def build_pool(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
                weak_cls_schedule=schedule, weak_cls_type=weak_type,
                weak_cls_params=dict(weak_params or {}),
                weak_cls_strategy=strategy, **FIXED)
+    if pair_count is not None:
+        if pair_build == "full":
+            raise ValueError("pair_count is honored only by the sequential "
+                             "builder; a full-pair build would ignore it")
+        if schedule < 2:
+            raise ValueError("pair_count needs schedule >= 2; a schedule 1 "
+                             "pool has no pairs and would ignore it")
+        if int(pair_count) < 1:
+            raise ValueError("pair_count must be >= 1; the library's top-n "
+                             "slice returns ALL pairs for 0")
+        cfg["weak_cls_pair_count"] = int(pair_count)
     clf = QBoostClassifier(**cfg)
     for k, v in cfg.items():   # F18 invariant: silent-kwarg-drop guard
         assert getattr(clf, k) == v, f"constructed attr mismatch: {k}"

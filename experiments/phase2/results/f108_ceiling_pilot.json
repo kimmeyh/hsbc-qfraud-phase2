@@ -1,0 +1,348 @@
+{
+ "generator": "experiments/phase2/src/f108_ceiling.py",
+ "card": "F108",
+ "sprint": 27,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-18",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108",
+ "source": "Fraud Detection Handbook, chapter 3 'Simulated dataset' (prose, CC BY-SA 4.0); clean-room",
+ "mode": "pilot",
+ "seeds": [
+  42
+ ],
+ "margin": {
+  "abs": 0.0005,
+  "rel": 0.1,
+  "auprc": 0.01
+ },
+ "rows": [
+  {
+   "seed": 42,
+   "n_transactions": 1788430,
+   "n_train": 897933,
+   "n_test": 615643,
+   "test_rates": {
+    "pi_T": 0.005542172980119972,
+    "q": 0.0027580919461441126
+   },
+   "closed_form_priors": {
+    "pi_T": 0.005584906175270854,
+    "q": 0.002789106164808837
+   },
+   "train_rates": {
+    "pi_T": 0.005607322595338405,
+    "q": 0.002855446898599339
+   },
+   "generator_check": {
+    "main": {
+     "bayes_error": 0.006099614366235471,
+     "bayes_classifier_error": 0.006092816778555104,
+     "sd_error": 9.892164329545072e-05,
+     "fraud_rate": 0.008288894700337696,
+     "mean_eta": 0.008320739525776335,
+     "sd_rate": 9.892164329545072e-05,
+     "pass": true
+    }
+   },
+   "arms": {
+    "none": {
+     "fraud_rate_test": 0.008288894700337696,
+     "bayes_error": 0.006099614366235471,
+     "bayes_auprc": 0.306269385878548,
+     "curve": [
+      {
+       "fraction": 0.03125,
+       "n_pos": 218,
+       "error": 0.007280193228868029,
+       "auprc": 0.21827568460022412,
+       "plugin": 0.0069724179566807085
+      },
+      {
+       "fraction": 0.0625,
+       "n_pos": 475,
+       "error": 0.007088523706108897,
+       "auprc": 0.2405335932211349,
+       "plugin": 0.00692521569387785
+      },
+      {
+       "fraction": 0.125,
+       "n_pos": 936,
+       "error": 0.006953705312981712,
+       "auprc": 0.24362117564403826,
+       "plugin": 0.006913288168982958
+      },
+      {
+       "fraction": 0.25,
+       "n_pos": 1848,
+       "error": 0.006924467589170997,
+       "auprc": 0.25487228490900826,
+       "plugin": 0.006967507784159249
+      },
+      {
+       "fraction": 0.5,
+       "n_pos": 3778,
+       "error": 0.006888732593402345,
+       "auprc": 0.2509027409494028,
+       "plugin": 0.006662081796722631
+      },
+      {
+       "fraction": 1.0,
+       "n_pos": 7584,
+       "error": 0.006854621915623178,
+       "auprc": 0.2653063218254132,
+       "plugin": 0.0067444144887874695
+      }
+     ],
+     "plugin": {
+      "estimate": 0.0067444144887874695,
+      "recovered": false
+     },
+     "floor_error": {
+      "a": 0.031715813127596505,
+      "b": 0.7906875326918875,
+      "c": 0.006833280047864438,
+      "fit": true,
+      "recovered": false
+     },
+     "floor_auprc": {
+      "a": 1.0122944118029764,
+      "b": 0.5686678590432238,
+      "c": 0.7330527868850595,
+      "fit": true,
+      "ceiling": 0.2669472131149405,
+      "recovered": false
+     },
+     "cover_hart": {
+      "nn_error": 0.01191,
+      "lower": 0.005990890772244961,
+      "upper": 0.01191,
+      "recovered": true
+     }
+    },
+    "flip": {
+     "fraud_rate_test": 0.008363613327853967,
+     "bayes_error": 0.006405274729778547,
+     "bayes_auprc": 0.27606588276997385,
+     "curve": [
+      {
+       "fraction": 0.03125,
+       "n_pos": 227,
+       "error": 0.007445873663795414,
+       "auprc": 0.18522447048814103,
+       "plugin": 0.007247692323589327
+      },
+      {
+       "fraction": 0.0625,
+       "n_pos": 484,
+       "error": 0.007382525262205532,
+       "auprc": 0.21871987319627045,
+       "plugin": 0.007341673329037125
+      },
+      {
+       "fraction": 0.125,
+       "n_pos": 951,
+       "error": 0.007299685044741839,
+       "auprc": 0.2152746848330907,
+       "plugin": 0.0073398912721716805
+      },
+      {
+       "fraction": 0.25,
+       "n_pos": 1857,
+       "error": 0.007189231421456916,
+       "auprc": 0.21879272427581237,
+       "plugin": 0.006926518234558333
+      },
+      {
+       "fraction": 0.5,
+       "n_pos": 3797,
+       "error": 0.007145374835740843,
+       "auprc": 0.22141891343560482,
+       "plugin": 0.006975332367103342
+      },
+      {
+       "fraction": 1.0,
+       "n_pos": 7643,
+       "error": 0.007085275070129929,
+       "auprc": 0.2292605148172299,
+       "plugin": 0.006889628541162158
+      }
+     ],
+     "plugin": {
+      "estimate": 0.006889628541162158,
+      "recovered": true
+     },
+     "floor_error": {
+      "a": 0.0022310763292498334,
+      "b": 0.09448437673380058,
+      "c": 0.006120401730988891,
+      "fit": true,
+      "recovered": true
+     },
+     "floor_auprc": {
+      "a": 23952.857657750654,
+      "b": 2.4682506366133223,
+      "c": 0.7779479420458579,
+      "fit": true,
+      "ceiling": 0.22205205795414207,
+      "recovered": false
+     },
+     "cover_hart": {
+      "nn_error": 0.0128,
+      "lower": 0.006441492829877327,
+      "upper": 0.0128,
+      "recovered": false
+     }
+    },
+    "reference": {
+     "fraud_rate_test": 0.0006107435640460462,
+     "bayes_error": 0.0,
+     "bayes_auprc": 1.0,
+     "curve": [
+      {
+       "fraction": 0.03125,
+       "n_pos": 16,
+       "error": 0.0018338550101276226,
+       "auprc": 0.03450253838672697,
+       "plugin": 0.0007753882810019174
+      },
+      {
+       "fraction": 0.0625,
+       "n_pos": 25,
+       "error": 0.0023308963149097773,
+       "auprc": 0.02173120730624487,
+       "plugin": 0.0004624507080120345
+      },
+      {
+       "fraction": 0.125,
+       "n_pos": 47,
+       "error": 0.0008576398984476393,
+       "auprc": 0.0505980325093754,
+       "plugin": 0.0005672776057573595
+      },
+      {
+       "fraction": 0.25,
+       "n_pos": 90,
+       "error": 0.0015106157302202737,
+       "auprc": 0.020610842798456635,
+       "plugin": 0.00019448983784891818
+      },
+      {
+       "fraction": 0.5,
+       "n_pos": 211,
+       "error": 0.0010574310111541917,
+       "auprc": 0.047839025917938545,
+       "plugin": 0.0003595270522664701
+      },
+      {
+       "fraction": 1.0,
+       "n_pos": 478,
+       "error": 0.0009778394296694676,
+       "auprc": 0.023157158931336186,
+       "plugin": 0.00024628984041969967
+      }
+     ],
+     "plugin": {
+      "estimate": 0.00024628984041969967,
+      "recovered": true
+     },
+     "floor_error": {
+      "a": 0.006128627701734568,
+      "b": 0.5743194652103079,
+      "c": 0.0007936555497886226,
+      "fit": true,
+      "recovered": false
+     },
+     "floor_auprc": {
+      "a": 0.16035697338464788,
+      "b": 1.566650320347739,
+      "c": 0.9663120224882163,
+      "fit": true,
+      "ceiling": 0.03368797751178365,
+      "recovered": false
+     },
+     "cover_hart": {
+      "nn_error": 8e-05,
+      "lower": 4.000160012801457e-05,
+      "upper": 8e-05,
+      "recovered": false
+     }
+    }
+   },
+   "seconds": {
+    "generate": 1.0,
+    "total": 25.5
+   }
+  }
+ ],
+ "summary": {
+  "none": {
+   "plugin": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "floor_error": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "floor_auprc": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "cover_hart": {
+    "seeds_recovered": 1,
+    "n_seeds": 1,
+    "recovers": true
+   }
+  },
+  "flip": {
+   "plugin": {
+    "seeds_recovered": 1,
+    "n_seeds": 1,
+    "recovers": true
+   },
+   "floor_error": {
+    "seeds_recovered": 1,
+    "n_seeds": 1,
+    "recovers": true
+   },
+   "floor_auprc": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "cover_hart": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   }
+  },
+  "reference": {
+   "plugin": {
+    "seeds_recovered": 1,
+    "n_seeds": 1,
+    "recovers": true
+   },
+   "floor_error": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "floor_auprc": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "cover_hart": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   }
+  }
+ },
+ "elapsed_s": 25.5
+}

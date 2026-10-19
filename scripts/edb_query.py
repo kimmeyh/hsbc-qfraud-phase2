@@ -199,5 +199,15 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
+def _utf8_output() -> None:
+    """Record values carry non-ASCII text. On a Windows console whose code
+    page is cp1252, printing one raised UnicodeEncodeError and the query
+    died mid-output (Sprint 27 IMP-6)."""
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
+
+
 if __name__ == "__main__":
+    _utf8_output()
     sys.exit(main())

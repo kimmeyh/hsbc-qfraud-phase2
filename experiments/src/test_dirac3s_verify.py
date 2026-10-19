@@ -437,3 +437,222 @@ def test_the_exit_rule_can_fail():
                         run, "an unscored unit exits 0")
     finally:
         importlib.reload(R)
+
+
+# ---- F149 (Sprint 27): the stop loop, with a stub fit ----------------------
+
+def _stop(tmp_path, monkeypatch, stop, screened, rows=(), ledger=(),
+          results=None, balance=100.0):
+    """Run `_run_stop` for `stop` with every unit to do, the record and the
+    ledger in tmp_path, and a stub fit returning `results[unit]` (status,
+    seconds). Returns (exit code, units fitted, clients made)."""
+    monkeypatch.setattr(R, "RESULT", tmp_path / "f142.json")
+    monkeypatch.setattr(R, "LEDGER", tmp_path / "ledger.json")
+    if rows:
+        R.RESULT.write_text(json.dumps({"rows": list(rows)}),
+                            encoding="utf-8")
+    if ledger:
+        R.LEDGER.write_text(json.dumps({"calls": list(ledger)}),
+                            encoding="utf-8")
+    todo = [u for u in R.UNITS if u["stop"] == stop]
+    fitted, clients = [], []
+
+    def fit(u, s, client, on_submitted):
+        fitted.append(u["unit"])
+        status, secs = (results or {}).get(u["unit"], ("ok", 5.0))
+        row = {"unit": u["unit"], "stop": stop, "status": status,
+               "metered_seconds": secs}
+        on_submitted(row)
+        return row
+    rc = R._run_stop(stop, todo, screened,
+                     make_client=lambda: clients.append(1) or "client",
+                     fit=fit, balance=lambda client: balance)
+    return rc, fitted, len(clients)
+
+
+REPORT = {"b1_43": {"screen_pass": False}, "b2_42": {"screen_pass": False}}
+
+
+def test_the_stop_fits_each_unit_once_and_writes_its_rows(tmp_path,
+                                                          monkeypatch):
+    rc, fitted, _ = _stop(tmp_path, monkeypatch, 2, REPORT)
+    assert rc == 0 and fitted == ["b1_43", "b2_42"]
+    rows = json.loads(R.RESULT.read_text(encoding="utf-8"))["rows"]
+    assert [r["unit"] for r in rows] == ["b1_43", "b2_42"]
+
+
+def _ledger_entry_skips(tmp_path, monkeypatch) -> bool:
+    """A unit that gained a ledger entry after the stop's todo list was made
+    (a crash after an intent write, or a second run) is never submitted."""
+    rc, fitted, _ = _stop(tmp_path, monkeypatch, 2, REPORT, ledger=[
+        {"label": "f142_b2_42_a1", "status": "intent"}])
+    return rc == 0 and fitted == ["b1_43"]
+
+
+def test_a_unit_with_a_ledger_entry_is_not_resubmitted(tmp_path,
+                                                       monkeypatch):
+    assert _ledger_entry_skips(tmp_path, monkeypatch)
+
+
+def test_the_ledger_skip_can_fail(tmp_path, monkeypatch):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = Path(R.__file__)
+
+    def run() -> bool:
+        importlib.reload(R)
+        for f in tmp_path.glob("*.json"):
+            f.unlink()
+        return _ledger_entry_skips(tmp_path, monkeypatch)
+
+    try:
+        assert_can_fail([Mutation(src, 'if u["unit"] in _done():',
+                                  "if False:", expect_occurrences=1)],
+                        run, "a unit resubmitted despite a ledger entry")
+    finally:
+        importlib.reload(R)
+
+
+def test_a_failed_unit_ends_the_stop_and_exits_nonzero(tmp_path,
+                                                       monkeypatch):
+    rc, fitted, _ = _stop(tmp_path, monkeypatch, 2, REPORT,
+                          results={"b1_43": ("failed", 10.0)})
+    assert rc == 1 and fitted == ["b1_43"]
+
+
+def test_the_stop_cap_counts_spend_already_recorded(tmp_path, monkeypatch):
+    # stop 2's cap is 150 s; a 150 s first unit leaves nothing for the next.
+    rc, fitted, _ = _stop(tmp_path, monkeypatch, 2, REPORT,
+                          results={"b1_43": ("ok", 150.0)})
+    assert fitted == ["b1_43"]
+    rc, fitted, _ = _stop(tmp_path, monkeypatch, 2, REPORT, rows=[
+        {"unit": "other", "stop": 2, "status": "ok",
+         "metered_seconds": 150.0}])
+    assert fitted == []
+
+
+def test_an_enforce_unit_failing_the_screen_returns_6(tmp_path, monkeypatch):
+    rc, fitted, clients = _stop(tmp_path, monkeypatch, 3, {
+        "b4_oilgas_42": {"screen_pass": True},
+        "b4_oilgas_43": {"screen_pass": False}})
+    assert (rc, fitted, clients) == (6, [], 0)
+
+
+def test_an_unreadable_balance_returns_4(tmp_path, monkeypatch):
+    rc, fitted, clients = _stop(tmp_path, monkeypatch, 2, REPORT,
+                                balance=None)
+    assert (rc, fitted, clients) == (4, [], 1)
+
+
+def test_nothing_to_do_returns_0():
+    assert R._run_stop(2, [], {}, make_client=lambda: pytest.fail("client"),
+                       fit=lambda *a: pytest.fail("fit")) == 0
+
+
+# ---- F149: the pre-submit guard through the real library -------------------
+#
+# The fit runs through `eqc_submit.metered_fit` and the real eqc-models
+# classifier, with the guard installed by `eqc_submit.device(wrap=)`, as
+# `metered()` runs it. The fake sits at `requests.Session.request`, the one
+# point every qci-client call passes through (`requests.get`/`post` and the
+# FuturesSession upload alike). It answers the token request and refuses
+# everything else, so nothing leaves the machine either way.
+
+FILES = "optimization/v1/files"
+
+
+def _fake_http(monkeypatch) -> list:
+    import requests
+    seen: list = []
+
+    def request(self, method, url, *a, **kw):
+        seen.append((method.upper(), str(url)))
+        if "access-tokens" in str(url) and method.upper() == "POST":
+            r = requests.Response()
+            r.status_code, r.url = 200, str(url)
+            r.headers["Content-Type"] = "application/json"
+            r._content = json.dumps({
+                "access_token": "fake", "token_type": "Bearer",
+                "expires_at_rfc3339": "2099-01-01T00:00:00Z",
+                "organization_id": "o", "user_id": "u"}).encode()
+            return r
+        raise requests.ConnectionError(f"offline fake: {method} {url}")
+    monkeypatch.setattr(requests.Session, "request", request)
+    return seen
+
+
+def _library_fit(tmp_path, monkeypatch, right_hash: bool):
+    """(metered_fit's result, the requests the library made)."""
+    import eqc_submit
+    import metered_call as mc
+    import numpy as np
+    import qubo_proxy as qp
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(120, 4)).astype("float32")
+    y = np.where(X[:, 0] + 0.5 * rng.normal(size=120) > 0, 1, -1)
+    cfg = dict(lambda_coef=2.0 * len(y), weak_cls_schedule=2,
+               weak_cls_type="dct", weak_cls_params=qp.seeded_weak_params(42),
+               weak_cls_strategy="sequential", relaxation_schedule=2,
+               num_samples=8)
+    sent: list = []
+    with eqc_submit.offline_solver(sent, device_type=R.DEVICE):
+        built = R._make_clf(cfg, {})
+        built.fit(X, y)
+    screened = {"hamiltonian_sha256": R._hash(built) if right_hash
+                else "0" * 64}
+
+    monkeypatch.setattr(mc, "LEDGER", tmp_path / "ledger.json")
+    monkeypatch.setattr(mc, "LOG_DIR", tmp_path / "logs")
+    (tmp_path / "logs").mkdir(exist_ok=True)
+    monkeypatch.setattr(mc, "append_ledger", lambda rec: None)
+    monkeypatch.setattr(eqc_submit, "_balance_or_none", lambda c: 100.0)
+    monkeypatch.setattr(R, "RESP_DIR", tmp_path / "resp")
+    seen = _fake_http(monkeypatch)
+    api = dict(api_url="https://offline.invalid", api_token="fake")
+    unit = {"unit": "b1_42", "screen": "report"}
+
+    def record(attempt):
+        return mc.CallRecord(label=f"f149_test_a{attempt + 1}", degree=2,
+                             n_variables=sent[0]["n_variables"], n_samples=8,
+                             expected_seconds="none: offline")
+    with eqc_submit.device(R.DEVICE, wrap=R._guarded(unit, screened, {})):
+        out = eqc_submit.metered_fit(lambda: R._make_clf(cfg, api), X, y,
+                                     record, None, max_attempts=1,
+                                     zero_cost_is_unparsed=True)
+    return out, seen
+
+
+def _guard_holds(tmp_path, monkeypatch) -> bool:
+    """A changed Hamiltonian is refused before the upload; the screened one
+    reaches the upload (so the fake is on the path the library uses, and the
+    first leg's silence is the guard's doing)."""
+    refused, seen_r = _library_fit(tmp_path, monkeypatch, right_hash=False)
+    passed, seen_p = _library_fit(tmp_path, monkeypatch, right_hash=True)
+    return ("NoRetry" in (refused["error"] or "")
+            and not any(FILES in u for _, u in seen_r)
+            and any(m == "POST" and FILES in u for m, u in seen_p)
+            and "ConnectionError" in (passed["error"] or ""))
+
+
+def test_the_guard_refuses_before_the_library_uploads(tmp_path, monkeypatch):
+    assert _guard_holds(tmp_path, monkeypatch)
+
+
+def test_the_library_guard_can_fail(tmp_path, monkeypatch):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+    src = Path(R.__file__)
+
+    def run() -> bool:
+        importlib.reload(R)
+        return _guard_holds(tmp_path, monkeypatch)
+
+    try:
+        assert_can_fail([Mutation(src, 'if _hash(model) != '
+                                  'screened["hamiltonian_sha256"]:',
+                                  "if False:", expect_occurrences=1)],
+                        run, "the guard removed from the wrap")
+    finally:
+        importlib.reload(R)

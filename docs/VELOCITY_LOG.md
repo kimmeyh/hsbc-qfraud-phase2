@@ -87,6 +87,18 @@
 | 26 | Task H (F146) understandings updates | docs | 60m | not timed | n/a | no start stamped; the updates fell inside D's span |
 | 26 | UNPLANNED: Task I (Decision 10) cross-repo guard, EvidenceBasedDB reads | fix+docs | 30m | 18m | 0.6 | stamps written by hand, not through the tool (IMP-2) |
 | 26 | UNPLANNED: Decision 11 (Dirac-3S default) and retrospective IMP-1 to IMP-5 | fix+tooling | 0m | not timed | n/a | at Manual Validation and the retrospective |
+| 27 | Task A (F149) pre-submit guard through the real library | tooling | 120m | 8m | 0.07 | measured stamp gap; E's runs in the background |
+| 27 | Task B (F104) public resolution gate | tooling | 60m | 9m | 0.15 | measured stamp gap; overlapped E |
+| 27 | Task C (F102) draft section 7 | docs | 90m | 5m | 0.06 | measured stamp gap; overlapped E |
+| 27 | Task D (F112) Experiment 1 intervals | research+code | 45m | 22m | 0.49 | measured; overlapped E |
+| 27 | Task E (F130) lever screens | research+code | 120m | 87m | 0.73 | measured elapsed, mostly background runs; overlapped B-L |
+| 27 | Task F (F103) Tier 1 known-answer check | research+code | 300m | 39m | 0.13 | measured; overlapped D and E |
+| 27 | Task G (F109) Tier 1 on six datasets | research+code | 150m | 84m | 0.56 | measured elapsed; a 62-minute background run |
+| 27 | Task H (F6) gate-based arm analysis | docs | 120m | 8m | 0.07 | measured stamp gap; the analysis overlapped D-F |
+| 27 | Task I (F106) circuit against twins | research+code | 120m | 193m | n/a | measured elapsed, not work: a 37-minute pilot and a 144-minute run |
+| 27 | Task J (F107) shot budget | research+code | 120m | 23m | 0.19 | measured, pause excluded (paused for F106's run) |
+| 27 | Task K (F108) ceiling validation | research+code | 180m | 12m | 0.07 | measured stamp gap, not a work time; overlapped E, F and I |
+| 27 | Task L (F146) QCi questions draft | docs | 45m | 3m | 0.07 | measured stamp gap |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

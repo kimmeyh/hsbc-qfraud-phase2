@@ -92,6 +92,33 @@ def _coefficient_spread(J: np.ndarray, C: np.ndarray) -> dict:
     }
 
 
+def resolution_gate(J, C) -> dict:
+    """F104 (Sprint 27): the pre-run gate. Can the device resolve this job?
+
+    A31's test, not `get_dynamic_range`. That library figure is 10 log10(max
+    |coefficient| / min |coefficient|); on a CVQBoost Hamiltonian the
+    off-diagonals are large and nearly equal, so it passes B1 at 4.8 dB
+    while no coefficient DIFFERENCE in B1 reaches the device's step. The
+    gate passes only if both the off-diagonal spread and the linear spread
+    reach max |coefficient| / 200 (`_coefficient_spread`).
+
+    Pure: reads J and C only and writes nothing, so a runner can call it
+    before any metered block. `main()` here writes Phase 1 evidence and is
+    never called for this. Returns the two spreads in units of the step and
+    `pass`.
+    """
+    s = _coefficient_spread(np.asarray(J, dtype=np.float64),
+                            np.asarray(C, dtype=np.float64).reshape(-1))
+    return {"off_diagonal_spread_over_resolvable":
+                s["off_diagonal_spread_over_resolvable"],
+            "linear_spread_over_resolvable":
+                s["linear_spread_over_resolvable"],
+            "resolvable_difference": s["resolvable_difference"],
+            "n_variables": s["n_variables"],
+            "pass": bool(s["off_diagonal_resolvable"]
+                         and s["linear_resolvable"])}
+
+
 def _quantised_minimiser(J: np.ndarray, C: np.ndarray) -> dict:
     """Solve the problem the DEVICE can see, not the one we sent it."""
     n = J.shape[0]

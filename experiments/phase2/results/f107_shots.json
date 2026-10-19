@@ -1,0 +1,246 @@
+{
+ "generator": "experiments/phase2/src/f107_shots.py",
+ "card": "F107",
+ "sprint": 27,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-18",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F107",
+ "source_circuits": "experiments/phase2/results/f106_dequant.json",
+ "f106_outcome": "inconclusive",
+ "shots": [
+  10,
+  100,
+  1000,
+  10000
+ ],
+ "margin": 0.005,
+ "rows": [
+  {
+   "seed": 42,
+   "exact_auprc": 0.7052971328560014,
+   "auprc_at_shots": {
+    "10": 0.36224319445289294,
+    "100": 0.6855225266567309,
+    "1000": 0.6796239298068407,
+    "10000": 0.7137987337431815
+   },
+   "critical_shot_budget": "above 10000",
+   "effective_schmidt_rank": {
+    "mean": 3.217,
+    "quantiles_10_50_90": [
+     2.163,
+     3.157,
+     4.358
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.2541,
+    "quantiles_10_50_90": [
+     0.0389,
+     0.2164,
+     0.5308
+    ]
+   }
+  },
+  {
+   "seed": 43,
+   "exact_auprc": 0.7172182191126087,
+   "auprc_at_shots": {
+    "10": 0.41301076872722103,
+    "100": 0.6262549285058968,
+    "1000": 0.6990552300050533,
+    "10000": 0.7192286856627885
+   },
+   "critical_shot_budget": 10000,
+   "effective_schmidt_rank": {
+    "mean": 2.814,
+    "quantiles_10_50_90": [
+     2.161,
+     2.803,
+     3.515
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.2971,
+    "quantiles_10_50_90": [
+     0.0445,
+     0.2458,
+     0.6374
+    ]
+   }
+  },
+  {
+   "seed": 44,
+   "exact_auprc": 0.7214197508118301,
+   "auprc_at_shots": {
+    "10": 0.5151027764030672,
+    "100": 0.7363265946039481,
+    "1000": 0.7511705480419344,
+    "10000": 0.7550938604516948
+   },
+   "critical_shot_budget": "above 10000",
+   "effective_schmidt_rank": {
+    "mean": 2.558,
+    "quantiles_10_50_90": [
+     1.757,
+     2.541,
+     3.377
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.3108,
+    "quantiles_10_50_90": [
+     0.0538,
+     0.2805,
+     0.6158
+    ]
+   }
+  },
+  {
+   "seed": 45,
+   "exact_auprc": 0.6345040984297263,
+   "auprc_at_shots": {
+    "10": 0.3346111027989732,
+    "100": 0.6210226446379917,
+    "1000": 0.6214360370691048,
+    "10000": 0.6383294367397285
+   },
+   "critical_shot_budget": 10000,
+   "effective_schmidt_rank": {
+    "mean": 2.74,
+    "quantiles_10_50_90": [
+     2.137,
+     2.68,
+     3.451
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.2532,
+    "quantiles_10_50_90": [
+     0.0406,
+     0.2226,
+     0.5141
+    ]
+   }
+  },
+  {
+   "seed": 46,
+   "exact_auprc": 0.7407279829415584,
+   "auprc_at_shots": {
+    "10": 0.5394040816390313,
+    "100": 0.7395905808453723,
+    "1000": 0.6870861494445019,
+    "10000": 0.7353311382288948
+   },
+   "critical_shot_budget": 100,
+   "effective_schmidt_rank": {
+    "mean": 1.671,
+    "quantiles_10_50_90": [
+     1.29,
+     1.617,
+     2.128
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.3799,
+    "quantiles_10_50_90": [
+     0.0615,
+     0.3516,
+     0.7414
+    ]
+   }
+  },
+  {
+   "seed": 47,
+   "exact_auprc": 0.6490710685416842,
+   "auprc_at_shots": {
+    "10": 0.5632120801093795,
+    "100": 0.632236956722907,
+    "1000": 0.6352334084506014,
+    "10000": 0.6527609918608883
+   },
+   "critical_shot_budget": 10000,
+   "effective_schmidt_rank": {
+    "mean": 1.873,
+    "quantiles_10_50_90": [
+     1.422,
+     1.816,
+     2.412
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.4117,
+    "quantiles_10_50_90": [
+     0.0859,
+     0.394,
+     0.7803
+    ]
+   }
+  },
+  {
+   "seed": 48,
+   "exact_auprc": 0.7365183839233412,
+   "auprc_at_shots": {
+    "10": 0.4773062637911155,
+    "100": 0.6871864631952439,
+    "1000": 0.7213271430756083,
+    "10000": 0.7540754545527207
+   },
+   "critical_shot_budget": "above 10000",
+   "effective_schmidt_rank": {
+    "mean": 2.304,
+    "quantiles_10_50_90": [
+     1.6,
+     2.235,
+     3.102
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.3433,
+    "quantiles_10_50_90": [
+     0.0589,
+     0.3078,
+     0.689
+    ]
+   }
+  },
+  {
+   "seed": 49,
+   "exact_auprc": 0.6868502176970916,
+   "auprc_at_shots": {
+    "10": 0.45179473176584906,
+    "100": 0.7019744208724421,
+    "1000": 0.6794162667750704,
+    "10000": 0.6889175748731439
+   },
+   "critical_shot_budget": 10000,
+   "effective_schmidt_rank": {
+    "mean": 2.423,
+    "quantiles_10_50_90": [
+     1.578,
+     2.377,
+     3.328
+    ],
+    "max_possible": 16
+   },
+   "abs_z": {
+    "mean": 0.282,
+    "quantiles_10_50_90": [
+     0.0468,
+     0.243,
+     0.5834
+    ]
+   }
+  }
+ ],
+ "elapsed_s": 507.8
+}

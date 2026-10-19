@@ -1,0 +1,43 @@
+{
+ "generator": "experiments/phase2/src/f104_gate_check.py",
+ "card": "F104",
+ "sprint": 27,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-18",
+ "gate": "device_resolution.resolution_gate (A31: both spreads >= max |coefficient| / 200)",
+ "python": "3.12.14",
+ "rows": [
+  {
+   "unit": "b2_42",
+   "n_variables": 833,
+   "off_diagonal_spread_over_resolvable": 0.014098158428055335,
+   "linear_spread_over_resolvable": 0.01723108252317874,
+   "dynamic_range_db": 4.772131057181338,
+   "gate_pass": false,
+   "expected_pass": false,
+   "as_expected": true,
+   "hamiltonian_sha256": "c121c8577628d9d2b93471a7be13183eb182f8888f946d588e77b766d6a75aaf",
+   "sent_sha256": "c121c8577628d9d2b93471a7be13183eb182f8888f946d588e77b766d6a75aaf",
+   "sent_sha256_source": "f142_dry_run.json",
+   "same_matrix_as_sent": true,
+   "elapsed_s": 106.1
+  },
+  {
+   "unit": "b4_oilgas_42",
+   "n_variables": 560,
+   "off_diagonal_spread_over_resolvable": 37.206769817142344,
+   "linear_spread_over_resolvable": 74.41353963428469,
+   "dynamic_range_db": 8.317987737874036,
+   "gate_pass": true,
+   "expected_pass": true,
+   "as_expected": true,
+   "hamiltonian_sha256": "8facc99bbb27b85e94efc82824c9fdf1402c2468a1acbbf5c5fbc334111a66f4",
+   "sent_sha256": "8facc99bbb27b85e94efc82824c9fdf1402c2468a1acbbf5c5fbc334111a66f4",
+   "sent_sha256_source": "f142_dry_run.json",
+   "same_matrix_as_sent": true,
+   "elapsed_s": 47.5
+  }
+ ]
+}
