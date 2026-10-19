@@ -137,6 +137,37 @@ def test_the_cli_prints_citable_ids(store, capsys):
     assert edb_query.main(["--db", str(store), "show", "nope"]) == 1
 
 
+NON_ASCII = "Resolution ≈ 200:1, μ → ≤"
+
+
+def cli_prints_non_ascii_on_cp1252(store: Path) -> bool:
+    """The CLI as a Windows cp1252 console runs it (Sprint 27 IMP-6)."""
+    import os
+    import subprocess
+    c = sqlite3.connect(store)
+    c.execute("UPDATE records SET value = ? WHERE id = 'a-res'", (NON_ASCII,))
+    c.commit()
+    c.close()
+    env = {**os.environ, "PYTHONIOENCODING": "cp1252"}
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "edb_query.py"),
+                        "--db", str(store), "show", "a-res"],
+                       capture_output=True, env=env)
+    return r.returncode == 0 and NON_ASCII in r.stdout.decode("utf-8")
+
+
+def test_the_cli_prints_non_ascii_on_a_cp1252_console(store):
+    assert cli_prints_non_ascii_on_cp1252(store)
+
+
+def test_the_encoding_check_can_fail(store):
+    from injection import Mutation, assert_can_fail
+    assert_can_fail([Mutation(ROOT / "scripts" / "edb_query.py",
+                              "    _utf8_output()\n", "",
+                              expect_occurrences=1)],
+                    lambda: cli_prints_non_ascii_on_cp1252(store),
+                    "the CLI left on the console's code page")
+
+
 LIVE = edb_query.DEFAULT_DB
 
 

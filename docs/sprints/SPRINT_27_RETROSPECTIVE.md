@@ -202,4 +202,17 @@ exists.
 
 ## Improvement Decisions
 
-Pending the team lead's disposition.
+Team lead, 2026-10-19: "do not do imp-1, do not do imp-2, do not do
+imp-4, do not do imp-5 as usage of heredoc should be minimal and avoided
+in most cases, right? | do now imp-3, imp-6, imp-7 (as recommended)".
+IMP-7 "as recommended" was the backlog card, so it is carded, not run.
+
+| # | Decision | Where |
+|---|---|---|
+| IMP-1 | **skip** | Timers stay as Sprint 26 IMP-2 left them; overlap is recorded, not refused |
+| IMP-2 | **skip** | F107 keeps its own `CHUNK = 8192`, equal to F106's `predict()` default |
+| IMP-3 | **now** | New `test_phase2_scripts_tested.py`: every `experiments/phase2/src/*.py` must be named as a word in some test; the check is proven on a temporary tree (an untested script, a prefix that is not a name). New `test_f102_downsized_pair.py` (known answers; every recorded row equals `pair()` on its own counts; proven red) and `test_validate_emulator.py` (helper known answers; the recorded summary and calibrated budget follow from the rows; proven red). The guard starts with no exemptions |
+| IMP-4 | **skip** | Code review stays where `SPRINT_EXECUTION_WORKFLOW.md` puts it |
+| IMP-5 | **skip** | The team lead's reason: heredocs should be rare. The existing hook already names the Edit and Write tools as the first fix; the CRLF rewrite happened because inline Python was used where Edit was the route |
+| IMP-6 | **now** | `scripts/edb_query.py` sets stdout and stderr to UTF-8 when run as a script. `test_edb_query.py` runs the CLI with `PYTHONIOENCODING=cp1252` on a record with non-ASCII text; proven red |
+| IMP-7 | **backlog** | F151 in `ALL_SPRINTS_MASTER_PLAN.md`, priority 20, zero metered |

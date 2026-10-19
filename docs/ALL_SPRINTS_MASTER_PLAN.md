@@ -43,7 +43,21 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 26: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable**
+**Sprint 27: Gates Before Reporting, and the Screens That Need No Device**
+(Oct 18 - Oct 19, 2026; PR #32). Delivered **F149, F104, F102 (section 7;
+the card stays open), F112, F130, F103, F109, F6, F106, F107, F108**, an
+F146 update (the QCi questions, sent by the team lead 2026-10-18) and
+retrospective IMP-3, IMP-6 and IMP-7 (F151 carded). Zero metered seconds.
+F112: P1 holds and P2 is equivalent within 0.005. F130: no lever beats HGB
+on SPECTRA, and ULB's HGB comparator is unstable (F151). F103 passes on the
+real target and the sparse pocket; the dense substrate misses (F150).
+F109: the g4 prediction is not falsified. F6: pursue the gate-based arm in
+simulation only. F106 is inconclusive. F107: about 10,000 shots per row or
+more. F108: no ceiling method is validated. Records: `SPRINT_27_PLAN.md`,
+`SPRINT_27_VALIDATION.md`, `SPRINT_27_RETROSPECTIVE.md`;
+`SPRINT_27_SUMMARY.md` is written at Sprint 28 planning.
+
+### Sprint 26: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable
 (Oct 13 - Oct 16, 2026; PR #21, main PR #31). Delivered **F141, F145, F144, F142, F147,
 F126, F105** and two F146 updates (more than the two planned), Task I
 (Decision 10: the cross-repo guard covers sibling Claude Code project
@@ -561,6 +575,14 @@ value. Removed from candidates.)
 - Sprint 27's F103 rebuilds the paper's sparse pocket and dense substrate from its description. This card builds the same two substrates as the authors construct them, as close a duplicate as their details allow, and repeats the four published values: JOINT minus GA2M +0.37 and +0.00, HGB minus GAM +0.15, joint ratio 9.9
 - Acceptance: each value against the paper's with F103's tolerances; each difference from F103's rebuild named and explained
 - Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103
+
+**F151. ULB HGB comparator instability: find the cause (~1.5h [no-history], zero metered) Priority 20**
+- Phase: Phase 2 preparation (added 2026-10-19 by the team lead, Sprint 27 retrospective IMP-7)
+- Platform: ULB
+- Sprint 27 F130 found the HGB comparator in its ULB setup unstable under every setting tried: mean test AUPRC 0.22-0.52, single seeds 0.06-0.70 (`experiments/phase2/results/f130_ulb_hgb_check.json`). On F109's ULB subsample HGB was the strongest lane (`f109_ladder.json`), and in F106 the HGB twin was ahead of the circuit on 6 of 8 seeds (`f106_dequant.json`). The cause is unverified. Until it is found, no "beats HGB on ULB" reading stands (F130's was voided)
+- Work: compare the three setups (rows, features, scaling, class weighting, early stopping, seeds) and isolate the setting that makes F130's comparator unstable; then re-run that comparator to a stable reading
+- Acceptance: the cause named and shown by a controlled change (one setting moved, the spread closes); the stable ULB HGB reference recorded with its seeds; F130's ULB reading re-stated against it or left void with the reason
+- Depends on: none
 
 **F104. Pre-run 200:1 resolution screen (~1h [no-history], zero metered) Priority 52**
 - **Done in Sprint 27 Task B (2026-10-18, #34)**: `device_resolution.resolution_gate(J, C)` is the public, pure gate (A31's two spreads against max |coefficient| / 200); the F142 runner's `resolution_screen` calls it. Tested on synthetic CVQBoost-shaped matrices and proven red two ways (`test_f104_resolution_gate.py`). On the real pools (`experiments/phase2/src/f104_gate_check.py`, `f104_gate_check.json`, under WSL): the seeded B2 rebuild `b2_42` (833 variables) fails at 0.014 of the step, and `b4_oilgas_42` passes at 37 times it; both hash to the Hamiltonians F142 sent. The acceptance holds with B2's seeded rebuild in place of the frozen pools, which were never stored
