@@ -1,109 +1,20 @@
 {
   "current_sprint": {
-    "number": 27,
-    "name": "Gates Before Reporting, and the Screens That Need No Device",
-    "branch": "feature/20261018_Sprint_27",
-    "status": "phase_7_retrospective",
-    "plan_doc": "docs/sprints/SPRINT_27_PLAN.md",
-    "pr": 32,
-    "plan_approved": true,
-    "github_issues": [
-      33,
-      34,
-      35,
-      36,
-      37,
-      38,
-      39,
-      40,
-      41,
-      42,
-      43,
-      44
-    ],
-    "task_actuals": {
-      "A": 8,
-      "B": 9,
-      "C": 5,
-      "H": 8,
-      "D": 22,
-      "F": 39,
-      "K": 12,
-      "L": 3,
-      "E": 87,
-      "G": 84,
-      "I": 193,
-      "J": 23
-    },
-    "task_started": {
-      "A": "2026-10-18T13:44:30-07:00",
-      "E": "2026-10-18T13:55:31-07:00",
-      "B": "2026-10-18T13:55:31-07:00",
-      "C": "2026-10-18T14:04:24-07:00",
-      "D": "2026-10-18T14:09:31-07:00",
-      "F": "2026-10-18T14:10:45-07:00",
-      "H": "2026-10-18T14:22:20-07:00",
-      "I": "2026-10-18T14:29:44-07:00",
-      "J": "2026-10-18T14:37:39-07:00",
-      "K": "2026-10-18T14:45:10-07:00",
-      "G": "2026-10-18T14:51:05-07:00",
-      "L": "2026-10-18T14:55:16-07:00"
-    },
-    "task_parallel": {
-      "B": [
-        "E"
-      ],
-      "C": [
-        "E"
-      ],
-      "D": [
-        "E"
-      ],
-      "F": [
-        "D",
-        "E"
-      ],
-      "H": [
-        "D",
-        "E",
-        "F"
-      ],
-      "I": [
-        "D",
-        "E",
-        "F"
-      ],
-      "J": [
-        "E",
-        "F",
-        "I"
-      ],
-      "K": [
-        "E",
-        "F",
-        "I"
-      ],
-      "G": [
-        "E",
-        "I",
-        "K"
-      ],
-      "L": [
-        "E",
-        "G",
-        "I",
-        "K"
-      ]
-    },
-    "task_paused": {},
-    "task_paused_s": {
-      "J": 10581
-    }
+    "number": 28,
+    "name": "(named at planning)",
+    "branch": "feature/20261019_Sprint_28",
+    "status": "phase_1_backlog_refinement",
+    "plan_doc": "docs/sprints/SPRINT_28_PLAN.md",
+    "pr": null,
+    "plan_approved": false,
+    "github_issues": [],
+    "task_actuals": {},
+    "task_started": {}
   },
   "last_completed_sprint": {
-    "number": 26,
-    "merged_pr": 21,
-    "main_merge_pr": null,
+    "number": 27,
+    "merged_pr": 32,
+    "main_merge_pr": 45,
     "docs_triad_complete": false
   },
   "prereg": {
