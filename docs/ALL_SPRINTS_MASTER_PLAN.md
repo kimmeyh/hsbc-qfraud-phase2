@@ -596,11 +596,11 @@ value. Removed from candidates.)
 - Depends on: nothing
 - **Done in Sprint 27 Task K (2026-10-18): no method validated on the main, no-noise arm** (the plug-in meets the 4-of-5 rule on the noise and reference arms; requiring the main arm is a reading added after the run, noted in the entry) (`docs/phase2/F108_CEILING_VALIDATION.md`, `f108_ceiling.json`). The generator is exact against its posterior on all five seeds. Against the known Bayes error (about 0.006) and Bayes AUPRC (about 0.30), the HGB plug-in and the learning-curve floor overstate the error by about 10% (2 and 1 of 5 seeds), the AUPRC floor understates the ceiling by about 0.04 and is unstable, and Cover-Hart contains the truth on 3 of 5; the entry needed 4. Also found: default HGB reaches AUPRC 0.01-0.03 on the zero-ceiling reference, a single threshold on the top 0.05% of amounts (cause Inferred: binning)
 
-**F109. SPECTRA domain ladder and aggregation experiments (~6h [no-history], zero metered) Priority 90**
+**F109. SPECTRA six-dataset ladder and aggregation experiments (~6h [no-history], zero metered) Priority 90**
 - Phase: Phase 2 preparation (cross-domain study, steps 2-3)
 - Platform: SPECTRA, IEEE-CIS, ULB
-- Tier 1 on the seven-dataset ladder with all five gate values recorded; the phase pipeline on classical models alone; gates before and after aggregation, including the IEEE-CIS UID aggregation
-- **Scope corrected (Sprint 27)**: six datasets, the ones on disk (Steel, ai4i, oilgas, telecom, ULB, IEEE-CIS); "seven" is superseded
+- Tier 1 on the six-dataset ladder with all five gate values recorded; the phase pipeline on classical models alone; gates before and after aggregation, including the IEEE-CIS UID aggregation
+- **Scope corrected (Sprint 27)**: six datasets, the ones on disk (Steel, ai4i, oilgas, telecom, ULB, IEEE-CIS); the earlier "seven-dataset" title is superseded
 - Depends on: F103
 - **Done in Sprint 27 Task G (2026-10-18, #39)**: `docs/phase2/F109_TIER1_LADDER.md`, `f109_ladder.json`. The prediction (g4 under 0.02 on the three fraud sets) is not falsified: the falsifier fired on 0, 2 and 1 of 5 seeds on ULB, IEEE-CIS before and after aggregation. Tier 1 says `candidate` on 32 of 35 dataset-seeds, so it does not refuse fraud. The UID aggregation raises every IEEE-CIS lane (HGB 0.758 to 0.816) and lowers g4
 

@@ -130,6 +130,11 @@ Read `docs/phase2/F107_SHOT_BUDGET.md`.
 - The measure is noisy: AUPRC does not rise steadily with the shot count
   on 99 test positives.
 - Effective Schmidt rank 1.7-3.2 of a possible 16.
+- **The plan's acceptance changed.** It asked for "the critical rank per
+  shot budget". The source (Wang et al., arXiv:2306.03481) defines that
+  rank for entangled quantum training data, which a classical-input
+  classifier does not have. J measured the shot budget instead (card and
+  entry, before the run). A rank curve needs F116, on HOLD.
 - **The first run refused correctly.** A different evaluation chunk size
   moved the exact AUPRC by 1.5e-4. F107 now uses F106's chunk size,
   recorded in the entry before any result (`6d551af`).
