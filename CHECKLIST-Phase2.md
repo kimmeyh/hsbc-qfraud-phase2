@@ -79,11 +79,21 @@ Nothing in this stage is time-bound. Schedule on value.
         `experiments/phase2/PREREGISTRATION_DRAFT.md` (Sprint 25). A living
         draft until Phase 2 is approved and a filing date is set; its
         section 7 lists what remains
-- [ ] **C**: F103 SPECTRA Tier 1 known-answer check on the paper's own dataset
-- [ ] **C**: F6 gate-based arm analysis, then F106 (dequantization check) and
-      F107 (Schmidt-rank threshold) if F6 recommends pursue
-- [ ] **C**: F108 ceiling validation harness
-- [ ] **C**: F109 SPECTRA domain ladder and aggregation experiments
+      - **Progress 2026-10-18** (Sprint 27 Task C): section 7 items done,
+        sections 2a and 2b added; open: entries for Experiments 2-6 and the
+        filing date (team lead)
+- [x] **C**: F103 SPECTRA Tier 1 known-answer check on the paper's own dataset.
+      Sprint 27: `docs/phase2/F103_TIER1_CHECK.md`; the dense substrate
+      repeats under F150
+- [x] **C**: F6 gate-based arm analysis, then F106 (dequantization check) and
+      F107 (shot budget; the Schmidt-rank threshold is undefined for
+      classical inputs) if F6 recommends pursue. Sprint 27:
+      `docs/phase2/F6_GATE_BASED_ARM.md` (pursue narrowly, simulation only),
+      `F106_DEQUANTIZATION.md`, `F107_SHOT_BUDGET.md`
+- [x] **C**: F108 ceiling validation harness.
+      Sprint 27: `docs/phase2/F108_CEILING_VALIDATION.md`; no method validated
+- [x] **C**: F109 SPECTRA domain ladder and aggregation experiments.
+      Sprint 27: `docs/phase2/F109_TIER1_LADDER.md`
 - [x] **H**: Goal ordering for prioritization: field advancement leads if it
       conflicts with the track outcome (team lead, 2026-10-03). The backlog
       priorities follow this
@@ -110,8 +120,10 @@ Nothing in this stage is time-bound. Schedule on value.
 - [ ] **C**: 1. Isolate the confound -- the 153-variable ULB cell at k=17,
       subset order 2. Zero device seconds
       - Run as post-submission proxy work in Sprint 18 (F64, then F91's fourth
-        corner): `docs/F64_LADDER_DECOMPOSITION.md`. Remaining: an interval on
-        the decomposition, F112
+        corner): `docs/F64_LADDER_DECOMPOSITION.md`. The interval on the
+        decomposition is done (F112, Sprint 27): P1 holds and P2 is
+        equivalent within 0.005, on the proxy
+        (`experiments/phase2/results/f112_intervals.json`)
 - [ ] **C**: 2. Temporal validity -- IEEE-CIS rolling-origin folds supply the
       test ULB's two-day span cannot. No configuration is recommended for a
       production path until this is settled

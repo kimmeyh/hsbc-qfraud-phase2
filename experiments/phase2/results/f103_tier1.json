@@ -1,0 +1,1981 @@
+{
+ "generator": "experiments/phase2/src/f103_tier1.py",
+ "card": "F103",
+ "sprint": 27,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-18",
+ "mode": "run",
+ "seeds": [
+  42,
+  43,
+  44,
+  45,
+  46
+ ],
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F103",
+ "release_phase_jitter": {
+  "tod_phase": {
+   "mean": 0.00021,
+   "sd": 0.01989,
+   "max_abs": 0.09
+  },
+  "usage_phase": {
+   "mean": -1e-05,
+   "sd": 0.02514,
+   "max_abs": 0.1083
+  },
+  "reactive_phase": {
+   "mean": 5e-05,
+   "sd": 0.16998,
+   "max_abs": 0.6933
+  },
+  "season_phase": {
+   "mean": -0.00221,
+   "sd": 0.02007,
+   "max_abs": 0.0839
+  },
+  "dow_phase": {
+   "mean": 0.0011,
+   "sd": 0.01921,
+   "max_abs": 0.0905
+  }
+ },
+ "real_phases": [
+  "tod",
+  "load",
+  "reactive",
+  "season",
+  "dow"
+ ],
+ "permuted_reference": {
+  "target": "permuted",
+  "seed": 42,
+  "n": 35040,
+  "base_rate": 0.2075,
+  "d": 5,
+  "trained_frequencies": [
+   1.95,
+   3.83,
+   4.835,
+   1.65,
+   4.79
+  ],
+  "gam": 0.5104,
+  "ga2m": 0.4985,
+  "hgb": 0.4952,
+  "lane_seconds": {
+   "gam_ga2m_hgb": 2.9,
+   "joint": 103.8
+  },
+  "joint": 0.4953,
+  "joint_terms": [
+   {
+    "subset": [
+     0,
+     1,
+     2
+    ],
+    "freqs": [
+     8.2,
+     -7.7,
+     2.35
+    ]
+   },
+   {
+    "subset": [
+     1,
+     2,
+     3
+    ],
+    "freqs": [
+     5.8,
+     5.6,
+     7.9
+    ]
+   },
+   {
+    "subset": [
+     0,
+     1,
+     3
+    ],
+    "freqs": [
+     2.7,
+     -6.5,
+     1.15
+    ]
+   },
+   {
+    "subset": [
+     0,
+     2,
+     3
+    ],
+    "freqs": [
+     4.7,
+     2.65,
+     -5.7
+    ]
+   },
+   {
+    "subset": [
+     0,
+     2,
+     3
+    ],
+    "freqs": [
+     6.6,
+     4.25,
+     -5.1
+    ]
+   },
+   {
+    "subset": [
+     0,
+     3,
+     4
+    ],
+    "freqs": [
+     0.6,
+     -2.95,
+     1.4
+    ]
+   }
+  ],
+  "gates": {
+   "g1_rho_off": 0.7973,
+   "g1_pass": true,
+   "g2_gam_auc": 0.5104,
+   "g2_pass": true,
+   "g3_hgb_minus_gam": -0.0152,
+   "g3_pass": false,
+   "g5_qubits_q1": 5,
+   "g5_qubits_q2": 10,
+   "g5_pass": true,
+   "g4_joint_minus_ga2m": -0.0032,
+   "g4_pass": false,
+   "tier1": "refuse"
+  }
+ },
+ "real": [
+  {
+   "target": "real",
+   "seed": 42,
+   "n": 35040,
+   "base_rate": 0.2075,
+   "d": 5,
+   "trained_frequencies": [
+    1.15,
+    0.735,
+    0.765,
+    6.69,
+    6.995
+   ],
+   "gam": 0.9167,
+   "gam_2_harmonics": 0.9279,
+   "gam_3_harmonics": 0.9404,
+   "ga2m": 0.9289,
+   "hgb": 1.0,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 2.0,
+    "joint": 100.6
+   },
+   "joint": 0.9937,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      1.9,
+      -0.15,
+      1.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      1.65,
+      0.15,
+      -0.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      6.0,
+      -0.25,
+      6.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      4.05,
+      -0.35,
+      6.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      8.0,
+      -0.05,
+      6.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      1.2,
+      -0.1,
+      2.0
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.7941,
+    "g1_pass": true,
+    "g2_gam_auc": 0.9167,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.0833,
+    "g3_pass": true,
+    "g5_qubits_q1": 5,
+    "g5_qubits_q2": 10,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.0648,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "real",
+   "seed": 43,
+   "n": 35040,
+   "base_rate": 0.2075,
+   "d": 5,
+   "trained_frequencies": [
+    1.155,
+    0.72,
+    0.76,
+    6.745,
+    7.005
+   ],
+   "gam": 0.9127,
+   "gam_2_harmonics": 0.924,
+   "gam_3_harmonics": 0.9364,
+   "ga2m": 0.9244,
+   "hgb": 0.9999,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 2.3,
+    "joint": 101.7
+   },
+   "joint": 0.9929,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      1.85,
+      -0.2,
+      1.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      3,
+      4
+     ],
+     "freqs": [
+      1.55,
+      -0.95,
+      6.9
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      6.0,
+      -0.3,
+      6.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      4.05,
+      -0.4,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      8.0,
+      -0.1,
+      0.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      1.25,
+      -0.15,
+      1.95
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.7943,
+    "g1_pass": true,
+    "g2_gam_auc": 0.9127,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.0872,
+    "g3_pass": true,
+    "g5_qubits_q1": 5,
+    "g5_qubits_q2": 10,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.0685,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "real",
+   "seed": 44,
+   "n": 35040,
+   "base_rate": 0.2075,
+   "d": 5,
+   "trained_frequencies": [
+    1.15,
+    0.735,
+    0.77,
+    6.745,
+    7.005
+   ],
+   "gam": 0.9127,
+   "gam_2_harmonics": 0.9243,
+   "gam_3_harmonics": 0.9365,
+   "ga2m": 0.9257,
+   "hgb": 0.9998,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.9,
+    "joint": 108.3
+   },
+   "joint": 0.9916,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      3,
+      4
+     ],
+     "freqs": [
+      1.75,
+      -1.05,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      1.45,
+      -0.25,
+      0.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      6.0,
+      -0.3,
+      6.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      4.05,
+      -0.45,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      8.0,
+      -0.05,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      1.65,
+      0.5,
+      -2.0
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.794,
+    "g1_pass": true,
+    "g2_gam_auc": 0.9127,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.0871,
+    "g3_pass": true,
+    "g5_qubits_q1": 5,
+    "g5_qubits_q2": 10,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.0659,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "real",
+   "seed": 45,
+   "n": 35040,
+   "base_rate": 0.2075,
+   "d": 5,
+   "trained_frequencies": [
+    1.155,
+    0.735,
+    0.77,
+    6.59,
+    7.005
+   ],
+   "gam": 0.9157,
+   "gam_2_harmonics": 0.9261,
+   "gam_3_harmonics": 0.9393,
+   "ga2m": 0.9261,
+   "hgb": 1.0,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 2.1,
+    "joint": 105.3
+   },
+   "joint": 0.9929,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      3,
+      4
+     ],
+     "freqs": [
+      1.75,
+      -1.05,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      1.45,
+      -0.25,
+      0.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      6.0,
+      -0.3,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      4.05,
+      -0.45,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      8.0,
+      -0.05,
+      6.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      3.0,
+      0.6,
+      1.15
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.794,
+    "g1_pass": true,
+    "g2_gam_auc": 0.9157,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.0842,
+    "g3_pass": true,
+    "g5_qubits_q1": 5,
+    "g5_qubits_q2": 10,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.0667,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "real",
+   "seed": 46,
+   "n": 35040,
+   "base_rate": 0.2075,
+   "d": 5,
+   "trained_frequencies": [
+    1.15,
+    0.74,
+    0.76,
+    6.735,
+    6.995
+   ],
+   "gam": 0.9119,
+   "gam_2_harmonics": 0.9231,
+   "gam_3_harmonics": 0.9385,
+   "ga2m": 0.9257,
+   "hgb": 1.0,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 3.2,
+    "joint": 105.7
+   },
+   "joint": 0.9926,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      1.85,
+      -0.2,
+      1.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      3,
+      4
+     ],
+     "freqs": [
+      1.55,
+      -0.95,
+      6.9
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      6.0,
+      -0.25,
+      -7.0
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      4.05,
+      -0.4,
+      -7.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      8.0,
+      -0.05,
+      0.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      1.3,
+      -0.15,
+      1.95
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.7938,
+    "g1_pass": true,
+    "g2_gam_auc": 0.9119,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.0881,
+    "g3_pass": true,
+    "g5_qubits_q1": 5,
+    "g5_qubits_q2": 10,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.0668,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  }
+ ],
+ "sparse": [
+  {
+   "target": "sparse",
+   "seed": 42,
+   "n": 35040,
+   "base_rate": 0.4999,
+   "d": 3,
+   "trained_frequencies": [
+    3.62,
+    5.155,
+    6.84
+   ],
+   "gam": 0.6499,
+   "ga2m": 0.6549,
+   "hgb": 0.7853,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.2,
+    "joint": 9.6
+   },
+   "joint": 0.9636,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      3.7,
+      5.1,
+      6.8
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      3.25,
+      -4.0,
+      -5.35
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      1.0,
+      2.65,
+      3.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      7.2,
+      6.85,
+      0.15
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      2.85,
+      3.15,
+      2.0
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      5.8,
+      3.8,
+      -3.25
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8,
+    "g1_pass": true,
+    "g2_gam_auc": 0.6499,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.1354,
+    "g3_pass": true,
+    "g5_qubits_q1": 3,
+    "g5_qubits_q2": 6,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.3087,
+    "g4_pass": true,
+    "tier1": "candidate"
+   },
+   "frequency_recovery": {
+    "first_term_subset": [
+     0,
+     1,
+     2
+    ],
+    "recovered": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "planted": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "paper_recovered": [
+     3.67,
+     5.13,
+     6.83
+    ],
+    "max_abs_error": 0.0,
+    "within_tolerance": true
+   }
+  },
+  {
+   "target": "sparse",
+   "seed": 43,
+   "n": 35040,
+   "base_rate": 0.501,
+   "d": 3,
+   "trained_frequencies": [
+    3.65,
+    4.965,
+    6.75
+   ],
+   "gam": 0.6061,
+   "ga2m": 0.6103,
+   "hgb": 0.7873,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.3,
+    "joint": 9.8
+   },
+   "joint": 0.9644,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      3.7,
+      5.1,
+      6.8
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      2.5,
+      4.55,
+      0.75
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      7.55,
+      6.95,
+      -8.0
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      7.35,
+      4.5,
+      6.4
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      4.5,
+      2.45,
+      1.55
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.15,
+      -5.6,
+      -0.25
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.7969,
+    "g1_pass": true,
+    "g2_gam_auc": 0.6061,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.1812,
+    "g3_pass": true,
+    "g5_qubits_q1": 3,
+    "g5_qubits_q2": 6,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.354,
+    "g4_pass": true,
+    "tier1": "candidate"
+   },
+   "frequency_recovery": {
+    "first_term_subset": [
+     0,
+     1,
+     2
+    ],
+    "recovered": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "planted": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "paper_recovered": [
+     3.67,
+     5.13,
+     6.83
+    ],
+    "max_abs_error": 0.0,
+    "within_tolerance": true
+   }
+  },
+  {
+   "target": "sparse",
+   "seed": 44,
+   "n": 35040,
+   "base_rate": 0.5009,
+   "d": 3,
+   "trained_frequencies": [
+    3.725,
+    5.01,
+    6.92
+   ],
+   "gam": 0.6313,
+   "ga2m": 0.6421,
+   "hgb": 0.7905,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.3,
+    "joint": 10.7
+   },
+   "joint": 0.9677,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      3.7,
+      5.1,
+      6.8
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.2,
+      0.2,
+      6.25
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      1.1,
+      -7.15,
+      0.4
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      6.5,
+      -7.3,
+      5.5
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.9,
+      -1.6,
+      -7.65
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      7.4,
+      -2.6,
+      5.95
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8073,
+    "g1_pass": true,
+    "g2_gam_auc": 0.6313,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.1591,
+    "g3_pass": true,
+    "g5_qubits_q1": 3,
+    "g5_qubits_q2": 6,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.3256,
+    "g4_pass": true,
+    "tier1": "candidate"
+   },
+   "frequency_recovery": {
+    "first_term_subset": [
+     0,
+     1,
+     2
+    ],
+    "recovered": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "planted": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "paper_recovered": [
+     3.67,
+     5.13,
+     6.83
+    ],
+    "max_abs_error": 0.0,
+    "within_tolerance": true
+   }
+  },
+  {
+   "target": "sparse",
+   "seed": 45,
+   "n": 35040,
+   "base_rate": 0.5029,
+   "d": 3,
+   "trained_frequencies": [
+    3.675,
+    5.22,
+    6.8
+   ],
+   "gam": 0.5692,
+   "ga2m": 0.5862,
+   "hgb": 0.7882,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.5,
+    "joint": 10.0
+   },
+   "joint": 0.9654,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      3.7,
+      5.1,
+      6.8
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.95,
+      -1.1,
+      -3.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.95,
+      -8.05,
+      -2.4
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      5.95,
+      -3.5,
+      -7.65
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.8,
+      -4.4,
+      5.95
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      5.9,
+      -3.9,
+      8.05
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.7941,
+    "g1_pass": true,
+    "g2_gam_auc": 0.5692,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.219,
+    "g3_pass": true,
+    "g5_qubits_q1": 3,
+    "g5_qubits_q2": 6,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.3792,
+    "g4_pass": true,
+    "tier1": "candidate"
+   },
+   "frequency_recovery": {
+    "first_term_subset": [
+     0,
+     1,
+     2
+    ],
+    "recovered": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "planted": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "paper_recovered": [
+     3.67,
+     5.13,
+     6.83
+    ],
+    "max_abs_error": 0.0,
+    "within_tolerance": true
+   }
+  },
+  {
+   "target": "sparse",
+   "seed": 46,
+   "n": 35040,
+   "base_rate": 0.5023,
+   "d": 3,
+   "trained_frequencies": [
+    3.725,
+    5.195,
+    6.775
+   ],
+   "gam": 0.6511,
+   "ga2m": 0.6649,
+   "hgb": 0.7949,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.3,
+    "joint": 14.1
+   },
+   "joint": 0.9655,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      3.7,
+      5.1,
+      6.8
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      7.45,
+      8.1,
+      7.1
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      1.5,
+      4.95,
+      1.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      1.45,
+      3.9,
+      -4.1
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      5.95,
+      -6.3,
+      -6.4
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      0.95,
+      -5.45,
+      -3.9
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8051,
+    "g1_pass": true,
+    "g2_gam_auc": 0.6511,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.1437,
+    "g3_pass": true,
+    "g5_qubits_q1": 3,
+    "g5_qubits_q2": 6,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.3006,
+    "g4_pass": true,
+    "tier1": "candidate"
+   },
+   "frequency_recovery": {
+    "first_term_subset": [
+     0,
+     1,
+     2
+    ],
+    "recovered": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "planted": [
+     3.7,
+     5.1,
+     6.8
+    ],
+    "paper_recovered": [
+     3.67,
+     5.13,
+     6.83
+    ],
+    "max_abs_error": 0.0,
+    "within_tolerance": true
+   }
+  }
+ ],
+ "dense": [
+  {
+   "target": "dense",
+   "seed": 42,
+   "n": 6000,
+   "base_rate": 0.5,
+   "d": 7,
+   "trained_frequencies": [
+    2.185,
+    7.85,
+    0.93,
+    0.2,
+    7.105,
+    2.62,
+    4.175
+   ],
+   "gam": 0.5765,
+   "ga2m": 0.5766,
+   "hgb": 0.7603,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 1.2,
+    "joint": 58.9
+   },
+   "joint": 0.8404,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      4.0,
+      -2.05,
+      -2.0
+     ]
+    },
+    {
+     "subset": [
+      1,
+      2,
+      3
+     ],
+     "freqs": [
+      4.05,
+      -2.05,
+      -2.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      2,
+      3
+     ],
+     "freqs": [
+      4.0,
+      -1.95,
+      -2.05
+     ]
+    },
+    {
+     "subset": [
+      1,
+      3,
+      5
+     ],
+     "freqs": [
+      2.0,
+      -2.1,
+      -0.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      4.0,
+      -4.05,
+      0.05
+     ]
+    },
+    {
+     "subset": [
+      2,
+      4,
+      5
+     ],
+     "freqs": [
+      2.0,
+      -0.1,
+      -1.9
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8067,
+    "g1_pass": true,
+    "g2_gam_auc": 0.5765,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.1838,
+    "g3_pass": true,
+    "g5_qubits_q1": 7,
+    "g5_qubits_q2": 14,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.2638,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "dense",
+   "seed": 43,
+   "n": 6000,
+   "base_rate": 0.5,
+   "d": 7,
+   "trained_frequencies": [
+    3.275,
+    2.51,
+    1.03,
+    2.78,
+    6.505,
+    5.025,
+    0.985
+   ],
+   "gam": 0.5951,
+   "ga2m": 0.6189,
+   "hgb": 0.8689,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 0.8,
+    "joint": 62.7
+   },
+   "joint": 0.8939,
+   "joint_terms": [
+    {
+     "subset": [
+      1,
+      3,
+      6
+     ],
+     "freqs": [
+      2.0,
+      -1.9,
+      -0.05
+     ]
+    },
+    {
+     "subset": [
+      1,
+      5,
+      6
+     ],
+     "freqs": [
+      0.15,
+      -2.05,
+      2.25
+     ]
+    },
+    {
+     "subset": [
+      2,
+      4,
+      5
+     ],
+     "freqs": [
+      2.05,
+      -2.0,
+      -0.1
+     ]
+    },
+    {
+     "subset": [
+      1,
+      2,
+      3
+     ],
+     "freqs": [
+      0.1,
+      -2.05,
+      2.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      6
+     ],
+     "freqs": [
+      0.05,
+      2.0,
+      -1.95
+     ]
+    },
+    {
+     "subset": [
+      1,
+      2,
+      4
+     ],
+     "freqs": [
+      2.0,
+      -2.05,
+      0.05
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8076,
+    "g1_pass": true,
+    "g2_gam_auc": 0.5951,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.2737,
+    "g3_pass": true,
+    "g5_qubits_q1": 7,
+    "g5_qubits_q2": 14,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.275,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "dense",
+   "seed": 44,
+   "n": 6000,
+   "base_rate": 0.5,
+   "d": 7,
+   "trained_frequencies": [
+    5.87,
+    2.47,
+    3.69,
+    7.24,
+    1.95,
+    2.06,
+    2.99
+   ],
+   "gam": 0.5834,
+   "ga2m": 0.6299,
+   "hgb": 0.803,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 0.8,
+    "joint": 61.0
+   },
+   "joint": 0.8134,
+   "joint_terms": [
+    {
+     "subset": [
+      1,
+      5,
+      6
+     ],
+     "freqs": [
+      0.1,
+      -2.05,
+      2.0
+     ]
+    },
+    {
+     "subset": [
+      1,
+      3,
+      6
+     ],
+     "freqs": [
+      2.0,
+      -2.0,
+      -0.1
+     ]
+    },
+    {
+     "subset": [
+      3,
+      4,
+      5
+     ],
+     "freqs": [
+      3.9,
+      -1.95,
+      -1.95
+     ]
+    },
+    {
+     "subset": [
+      1,
+      2,
+      4
+     ],
+     "freqs": [
+      2.05,
+      -2.1,
+      -0.05
+     ]
+    },
+    {
+     "subset": [
+      4,
+      5,
+      6
+     ],
+     "freqs": [
+      2.05,
+      2.0,
+      -4.0
+     ]
+    },
+    {
+     "subset": [
+      0,
+      3,
+      5
+     ],
+     "freqs": [
+      2.15,
+      -2.0,
+      -0.15
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8088,
+    "g1_pass": true,
+    "g2_gam_auc": 0.5834,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.2196,
+    "g3_pass": true,
+    "g5_qubits_q1": 7,
+    "g5_qubits_q2": 14,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.1835,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "dense",
+   "seed": 45,
+   "n": 6000,
+   "base_rate": 0.5,
+   "d": 7,
+   "trained_frequencies": [
+    6.26,
+    5.63,
+    5.32,
+    3.91,
+    0.2,
+    2.39,
+    3.515
+   ],
+   "gam": 0.5493,
+   "ga2m": 0.5707,
+   "hgb": 0.7751,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 0.9,
+    "joint": 63.5
+   },
+   "joint": 0.7988,
+   "joint_terms": [
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      0.15,
+      2.1,
+      -2.0
+     ]
+    },
+    {
+     "subset": [
+      1,
+      3,
+      4
+     ],
+     "freqs": [
+      2.0,
+      -0.1,
+      -2.0
+     ]
+    },
+    {
+     "subset": [
+      1,
+      2,
+      3
+     ],
+     "freqs": [
+      1.95,
+      1.95,
+      -4.05
+     ]
+    },
+    {
+     "subset": [
+      2,
+      3,
+      5
+     ],
+     "freqs": [
+      0.15,
+      2.0,
+      -1.9
+     ]
+    },
+    {
+     "subset": [
+      1,
+      2,
+      3
+     ],
+     "freqs": [
+      4.1,
+      -1.95,
+      -1.9
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      3
+     ],
+     "freqs": [
+      1.9,
+      -3.95,
+      1.95
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.805,
+    "g1_pass": true,
+    "g2_gam_auc": 0.5493,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.2257,
+    "g3_pass": true,
+    "g5_qubits_q1": 7,
+    "g5_qubits_q2": 14,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.228,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  },
+  {
+   "target": "dense",
+   "seed": 46,
+   "n": 6000,
+   "base_rate": 0.5,
+   "d": 7,
+   "trained_frequencies": [
+    7.765,
+    8.015,
+    0.74,
+    2.66,
+    1.78,
+    3.105,
+    3.67
+   ],
+   "gam": 0.5989,
+   "ga2m": 0.6416,
+   "hgb": 0.8469,
+   "lane_seconds": {
+    "gam_ga2m_hgb": 0.8,
+    "joint": 59.1
+   },
+   "joint": 0.8247,
+   "joint_terms": [
+    {
+     "subset": [
+      1,
+      2,
+      3
+     ],
+     "freqs": [
+      2.0,
+      -0.05,
+      -1.95
+     ]
+    },
+    {
+     "subset": [
+      1,
+      5,
+      6
+     ],
+     "freqs": [
+      0.2,
+      2.15,
+      -2.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      4
+     ],
+     "freqs": [
+      2.0,
+      -0.2,
+      -1.9
+     ]
+    },
+    {
+     "subset": [
+      1,
+      3,
+      5
+     ],
+     "freqs": [
+      1.95,
+      -0.15,
+      -1.95
+     ]
+    },
+    {
+     "subset": [
+      3,
+      4,
+      6
+     ],
+     "freqs": [
+      0.2,
+      -2.0,
+      2.05
+     ]
+    },
+    {
+     "subset": [
+      0,
+      1,
+      2
+     ],
+     "freqs": [
+      4.1,
+      -1.95,
+      -2.1
+     ]
+    }
+   ],
+   "gates": {
+    "g1_rho_off": 0.8002,
+    "g1_pass": true,
+    "g2_gam_auc": 0.5989,
+    "g2_pass": true,
+    "g3_hgb_minus_gam": 0.248,
+    "g3_pass": true,
+    "g5_qubits_q1": 7,
+    "g5_qubits_q2": 14,
+    "g5_pass": true,
+    "g4_joint_minus_ga2m": 0.1831,
+    "g4_pass": true,
+    "tier1": "candidate"
+   }
+  }
+ ],
+ "frequency_recovery_all_seeds": true,
+ "check": {
+  "real_g2_gam_auc": {
+   "mean": 0.9139,
+   "sd": 0.0021,
+   "published": 0.94,
+   "tolerance": 0.03,
+   "within": true
+  },
+  "sparse_joint_minus_ga2m": {
+   "mean": 0.3336,
+   "sd": 0.0327,
+   "published": 0.37,
+   "tolerance": 0.05,
+   "within": true
+  },
+  "dense_hgb_minus_gam": {
+   "mean": 0.2302,
+   "sd": 0.0336,
+   "published": 0.15,
+   "tolerance": 0.05,
+   "within": false
+  },
+  "dense_joint_minus_ga2m": {
+   "mean": 0.2267,
+   "sd": 0.0432,
+   "published": 0.0,
+   "tolerance": 0.05,
+   "within": false
+  },
+  "task_g_runs": true
+ },
+ "elapsed_s": 1021.2
+}
