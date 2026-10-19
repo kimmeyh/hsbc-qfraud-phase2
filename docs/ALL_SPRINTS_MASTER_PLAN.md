@@ -586,6 +586,7 @@ value. Removed from candidates.)
 - Depends on: F6 recommends pursue
 - **2026-10-18 (Sprint 27 Task H): F6 recommended pursue narrowly, meaning simulation only.** This card runs as Task J on a NumPy statevector with sampled shots. Its result is a prediction; it informs a hardware decision only if F106 finds the circuit is not dequantized
 - **2026-10-18 (Sprint 27 Task J): the source does not transfer.** The "G1 Schmidt-rank threshold" is Wang et al., arXiv:2306.03481 (evidence library `entangled-data-schmidt-rank-threshold`): the Schmidt rank of entangled quantum training data shared with a reference system, for learning a target unitary. A classical-input classifier has neither, so "the critical rank at each shot budget" is undefined here. Task J measures the F106 circuit's critical shot budget instead, with effective Schmidt rank beside it (Phase 2 draft, F107 entry); a rank curve needs F116, on HOLD
+- **Done in Sprint 27 Task J (2026-10-18, #42)**: `docs/phase2/F107_SHOT_BUDGET.md`, `f107_shots.json`. The critical shot budget is 10,000 per row on 4 of 8 seeds and above 10,000 on 3 (one seed reads 100 by luck); the prediction of 100-10,000 holds on 5 of 8. AUPRC does not rise steadily with shots on 99 test positives, so the budget is a noisy measure. Effective Schmidt rank 1.7-3.2 of 16. About 5.7 x 10^8 shots per test fold, which supports simulation only (Inferred)
 
 **F108. Ceiling validation harness with hidden state (~6h [no-history], zero metered) Priority 80**
 - Phase: Phase 2 preparation (ceiling methodology)

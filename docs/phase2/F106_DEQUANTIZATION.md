@@ -78,5 +78,9 @@ slightly different orders (V10, V11, V12, V14, V16, V17, V3, V4).
 - Minibatch loss at step 700 is 0.013-0.070 across seeds, so training
   noise per seed is visible.
 - 99 test positives per seed bound the precision of every AUPRC above.
+- The circuit's AUPRC reproduces bit for bit only at F106's 8,192-row
+  evaluation chunk. At 4,096 the scores move by at most 4e-14, near-tied
+  rows reorder, and seed 42 moves by 1.5e-4 (found by F107's refusal).
+  That is 30 times smaller than the margin.
 - The circuit is exactly simulable at 8 qubits, so this tests the
   circuit's function class, not any computational effect (F6, section 3).
