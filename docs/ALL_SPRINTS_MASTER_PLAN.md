@@ -471,6 +471,7 @@ CHANGELOG.md. Their gates on other cards are marked spent below (Pass 1,
 - Acceptance per update: the triggering fact placed under the right label with its source; the revision log updated
 - Depends on: the triggers above
 - **Sprint 27 Task L (2026-10-18)**: a send-ready draft of P1-P2 (follow-up) and A1-A12 is at `docs/qci_package/F146_QCI_QUESTIONS_DRAFT.md` (gitignored, not sent). None dropped: F142 bears on A3, A6 and A12 but answers none, so those three now cite the measurement. Its message body passes `scripts/outward_readability.py`; the two hits are in the notes marked for deletion. Sending is the team lead's action
+- **Sent 2026-10-18** by the team lead (filed in `docs/qci_package/`); section 4 of `DIRAC_UNDERSTANDINGS.md` records it. The next F146 update is QCi's answer
 
 **F143. telecom_churn with all 18 features (987 variables) on Dirac-3S (~1h + at least 450 metered s, unmeasured at 987) Priority HOLD**
 - Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)

@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-19
+
+- **docs**: F146 records the QCi questions as sent (Sprint 27 Task L, #44). The team lead sent P1-P2 (follow-up) and A1-A12 on 2026-10-18; the email is filed in the gitignored `docs/qci_package/`. `docs/phase2/DIRAC_UNDERSTANDINGS.md` section 4 and its opening note now say what was sent and how the email numbered it, with a revision-log row; the F146 card gains a dated line.
+
 ### 2026-10-18
 
 - **docs**: F107 result (Sprint 27 Task J) and Sprint 27 close-out records. New `docs/phase2/F107_SHOT_BUDGET.md` and `experiments/phase2/results/f107_shots.json`: the F106 circuit needs about 10,000 shots per row or more to stay within 0.005 AUPRC of exact (10,000 on 4 of 8 seeds, above it on 3); the measure is noisy on 99 test positives. The F106 note gains its chunk-size limit. `docs/VELOCITY_LOG.md` gains the Sprint 27 rows; `docs/sprints/SPRINT_27_VALIDATION.md` written (#42)
