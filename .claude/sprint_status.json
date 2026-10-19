@@ -3,7 +3,7 @@
     "number": 27,
     "name": "Gates Before Reporting, and the Screens That Need No Device",
     "branch": "feature/20261018_Sprint_27",
-    "status": "phase_5_validation",
+    "status": "phase_7_retrospective",
     "plan_doc": "docs/sprints/SPRINT_27_PLAN.md",
     "pr": 32,
     "plan_approved": true,
@@ -111,5 +111,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-10-18"
+  "updated": "2026-10-19"
 }
