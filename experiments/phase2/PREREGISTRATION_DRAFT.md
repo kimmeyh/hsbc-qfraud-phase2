@@ -536,6 +536,13 @@ shot is sampled.
   until F106 shows the circuit is not dequantized.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: runs after F106's eight-seed run; none otherwise.
+  - (Noted 2026-10-18, before any F107 result: the first run refused on
+    seed 42, its rebuilt exact AUPRC 0.70514 against F106's 0.70530.
+    Cause: F107 evaluated the circuit in 4,096-row chunks and F106 in
+    8,192; the scores differ by at most 4e-14, but that reorders
+    near-tied rows. At 8,192 the exact value matches F106's bit for bit,
+    so F107 now uses F106's chunk size. Nothing else changes. The shot
+    draws depend on the chunking, so they are drawn under the new size.)
 - **What is reported whatever the result**: AUPRC per seed at every m,
   the critical budget, the effective Schmidt rank and |<Z_q>| summary.
 

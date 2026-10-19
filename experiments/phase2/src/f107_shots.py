@@ -39,7 +39,10 @@ SHOTS = (10, 100, 1000, 10000)
 MARGIN = 0.005
 SCHMIDT_ROWS = 500
 CUT = 4                                              # qubits 0-3 | 4-7
-CHUNK = 4096
+# F106's `predict` chunk. The summation order differs by chunk size, scores
+# move by ~1e-14, near-tied rows reorder and AUPRC moves by ~1e-4, so any
+# other size fails the exact-AUPRC refusal below (seed 42: 0.70514 at 4096).
+CHUNK = 8192
 
 
 def probabilities(psi: np.ndarray) -> np.ndarray:
