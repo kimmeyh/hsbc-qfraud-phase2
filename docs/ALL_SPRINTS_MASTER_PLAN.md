@@ -577,6 +577,7 @@ value. Removed from candidates.)
 - Platform: Braket simulator, classical
 - If an RFF surrogate or an order-matched JOINT twin matches the circuit's accuracy on identical features, the circuit is dequantized and hardware would measure nothing. Stop and report that
 - Depends on: F6 recommends pursue
+- **Done in Sprint 27 Task I (2026-10-18, #41)**: `docs/phase2/F106_DEQUANTIZATION.md`, `f106_dequant.json`, NumPy statevector, 750 steps (cut by the pilot's timing, recorded in the entry before the run). **Inconclusive**: no twin's 99.17% interval clears the -0.005 margin, so the circuit is not shown dequantized; logistic regression, JOINT and RFF are below it; GAM, GA2M and HGB are level inside wide intervals (HGB +0.020, ahead on 6 of 8 seeds). 99 test positives per seed set the width. The JOINT twin overfits (0.625, below its GA2M base; Inferred). The encoding is phase-active (C = 0.53)
 
 **F107. G1 Schmidt-rank threshold on the SV1 simulator (~4h [no-history], zero metered) Priority 74** (title superseded 2026-10-18: runs as the F106 circuit's shot budget on a NumPy statevector; see the Task J note below)
 - Phase: Phase 2 preparation, gate-based arm (sprints with F106)
