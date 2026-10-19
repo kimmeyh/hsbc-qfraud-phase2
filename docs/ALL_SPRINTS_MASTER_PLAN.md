@@ -562,6 +562,24 @@ value. Removed from candidates.)
 - Acceptance: the cause named and shown by a controlled change (one setting moved, the spread closes); the stable ULB HGB reference recorded with its seeds; F130's ULB reading re-stated against it or left void with the reason
 - Depends on: none
 
+**F152. Experiment 2 entry and first rolling-origin score on IEEE-CIS (~4h [no-history], zero metered) Priority 22**
+- Phase: Phase 2, Experiment 2 (added 2026-10-19, Pass 2 after Sprint 27: F105 built and audited the harness and reports no score until F102 names Experiment 2's entry; no card carried the entry or the score)
+- Platform: IEEE-CIS, classical proxy
+- Write Experiment 2's section 6 entry in `experiments/phase2/PREREGISTRATION_DRAFT.md` before any score: the lanes (the complete classical bar and the CVQBoost proxy), the metric and family (section 2a), and the two decisions F105 left to the entry: how to treat the adversarial control that stops at its cap with early-versus-late AUC 0.89-0.95 (a higher cap, group drops, or a stated limit), and whether month 6's 8,111-row partial bucket counts as a fold
+- Then score the three folds with `ieee_harness.py` (about 20 minutes per full pass, measured by F105)
+- This enables: the proposal's temporal-validity test, which ULB's two-day span cannot supply. This prevents: recommending any configuration for a production path before it is settled (`CHECKLIST-Phase2.md`, Experiment 2)
+- Acceptance: the entry committed before the first score; per-fold AUPRC with intervals per section 2; the drift treatment applied as written
+- Depends on: none (F105 shipped in Sprint 26)
+
+**F153. Experiment 3 entry and proxy design: F25's first step, zero metered (~4h [no-history], zero metered) Priority 24**
+- Phase: Phase 2, Experiment 3 (added 2026-10-19, Pass 2 after Sprint 27: a split of F25, whose only hold reason left is F102)
+- Platform: ULB, classical proxy, SCIP
+- Write Experiment 3's section 6 entry, then build its Hamiltonian as F94's findings require: on held-out predictions, with the ridge weight chosen so the fit to the labels matters, against the greedy bar and the objective floor (`docs/phase2/F94_EXP3_CONTROLS.md`); run F104's gate on the chosen Hamiltonians
+- Ends with a quote, not a run: F139's two integer-cost probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) priced on Dirac-3S for a separate approval (Criterion H)
+- This enables: F25, the one experiment native to Dirac-3's integer solver. This prevents: spending device seconds on a Hamiltonian F94 showed every solver solves alike
+- Acceptance: the entry committed before the build; the chosen Hamiltonian's gap between greedy and the floor reported; F104's gate result; the probe quote
+- Depends on: none (F94 and F104 shipped)
+
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~3h [no-history]) Priority 110**
 - Phase: Phase 2 preparation, Experiment 6
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
