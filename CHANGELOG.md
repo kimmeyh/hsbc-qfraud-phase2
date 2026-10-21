@@ -4,6 +4,11 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-21
+
+- **docs**: F146 update: QCi's answers of 2026-10-20 recorded in `docs/phase2/DIRAC_UNDERSTANDINGS.md` section 4. A1-A12 and P2 answered; P1 referred to QCi's eqc-models contact. Cloud `dirac-3s` is base plus expansion; billing is one pool under the same rule; both devices run 24x7; Dirac-3S resolution is the same about 200:1 and its extra decimals are not guaranteed; cloud outputs are post error correction and raw values are not yet offered (corrects a section 2 item); jobs are not seedable. A7's reference for the 200:1 is flagged against F104's gate, unverified. Consequences noted on F143, F25, F30 and F153.
+- **docs**: F154 carded (team lead): confusion matrices (TN, FP, FN, TP) for every saved test result, and where each model wins, to find a subset an ensemble could use. Sized from an inventory of the 131 saved per-row prediction files and the confusion counts already stored at two validation-chosen thresholds.
+
 ### 2026-10-19
 
 - **docs**: Backlog refinement Pass 2 slate after Sprint 27. Two cards registered for the slate: F152 (Experiment 2's entry and first rolling-origin score on F105's harness) and F153 (Experiment 3's entry and proxy design, split from F25). Priorities change only after the team lead's selection.

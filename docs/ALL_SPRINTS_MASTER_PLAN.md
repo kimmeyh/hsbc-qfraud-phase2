@@ -490,12 +490,13 @@ convention (Pass 1, 2026-10-19).)
 - Depends on: the triggers above
 - **Sprint 27 Task L (2026-10-18)**: a send-ready draft of P1-P2 (follow-up) and A1-A12 is at `docs/qci_package/F146_QCI_QUESTIONS_DRAFT.md` (gitignored, not sent). None dropped: F142 bears on A3, A6 and A12 but answers none, so those three now cite the measurement. Its message body passes `scripts/outward_readability.py`; the two hits are in the notes marked for deletion. Sending is the team lead's action
 - **Sent 2026-10-18** by the team lead (filed in `docs/qci_package/`); section 4 of `DIRAC_UNDERSTANDINGS.md` records it. The next F146 update is QCi's answer
+- **Answered 2026-10-20** (update 2026-10-21): QCi answered A1-A12 and P2; P1 was referred to the eqc-models contact and stays open. Recorded in section 4 of `DIRAC_UNDERSTANDINGS.md`. Consequences for other cards are on F143 (A1), F25 (A4), F30 (A5) and F153 (A7)
 
 **F143. telecom_churn with all 18 features (987 variables) on Dirac-3S (~1h + at least 450 metered s, unmeasured at 987) Priority HOLD**
 - Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
 - Platform: SPECTRA, Dirac-3S
 - The one sized case Dirac-3S's larger ceiling unlocks: telecom_churn at schedule 3 with all 18 features, 987 variables in the full-pair build, 5 seeds. B4 ran it on Dirac-3 at 816 variables with `age` dropped, and its in-segment edges were negative; this adds the dropped feature. At least 450 s: Dirac-3 cost 84-90 s per fit at 816 variables, and the rate at 987 is unmeasured
-- **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138). The question (A1) was sent 2026-10-18; no answer yet (Pass 1, 2026-10-19)
+- **HOLD until QCi confirms the cloud `dirac-3s` queue exceeds 949 variables.** The base module's ceiling is 949; only the expansion configuration reaches 9,980, and no source says which serves the cloud (F138). The question (A1) was sent 2026-10-18; no answer yet (Pass 1, 2026-10-19). **Answered 2026-10-20: base unit plus expansion module serves the cloud queue**, whose guide ceiling is 9,980. QCi named the configuration, not a variable figure, so whether that meets this hold is the team lead's call (Pass 2)
 - **Re-price at refinement (2026-10-16, Sprint 26 IMP-5)**: the "at least 450 s" is a Dirac-3 figure. `qpu_cost_model.quote(987, 8)` quotes from F142's Dirac-3S fits and flags 987 as above its largest anchor, so its high end is a floor, not a bound
 - Depends on: QCi's answer; per-block approval (Criterion H) (corrected 2026-10-18, Pass 1: F141 and F142's measured rate are spent, both shipped in Sprint 26)
 
@@ -575,10 +576,22 @@ value. Removed from candidates.)
 - Phase: Phase 2, Experiment 3 (added 2026-10-19, Pass 2 after Sprint 27: a split of F25, whose only hold reason left is F102)
 - Platform: ULB, classical proxy, SCIP
 - Write Experiment 3's section 6 entry, then build its Hamiltonian as F94's findings require: on held-out predictions, with the ridge weight chosen so the fit to the labels matters, against the greedy bar and the objective floor (`docs/phase2/F94_EXP3_CONTROLS.md`); run F104's gate on the chosen Hamiltonians
+- **QCi answer (2026-10-20, A7)**: the 200:1 is relative to the ratio of the maximum and minimum linear contributions (guide section 5.3), and the Hamiltonian is scaled to the problem's dynamic range. Whether F104's gate (each spread against max |coefficient| / 200 over J and C) matches that reading is unverified; re-read guide section 5.3 against `device_resolution.resolution_gate` before the gate's verdict is used here
 - Ends with a quote, not a run: F139's two integer-cost probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) priced on Dirac-3S for a separate approval (Criterion H)
 - This enables: F25, the one experiment native to Dirac-3's integer solver. This prevents: spending device seconds on a Hamiltonian F94 showed every solver solves alike
 - Acceptance: the entry committed before the build; the chosen Hamiltonian's gap between greedy and the floor reported; F104's gate result; the probe quote
 - Depends on: none (F94 and F104 shipped)
+
+**F154. Confusion matrices (TN, FP, FN, TP) for every saved test result, and where each model wins (~130m [no-history], zero metered) Priority 32**
+- Phase: Phase 2 preparation (added 2026-10-21 by the team lead: find whether any ML or QML model is particularly good on a subset of rows that an ensemble could use)
+- Platform: ULB first (where the saved predictions are); classical, CVQBoost proxy, Dirac-3
+- **What is saved (inventory 2026-10-21)**: 131 per-row prediction files in `experiments/results/predictions/` (`y_val`, `p_val`, `y_test`, `p_test`; written by `store.save_predictions`). 80 Phase 1 classical (XGBoost, LightGBM, CatBoost, logistic regression; full and matched13 features; ULB stratified, seeds 42-51), 30 CVQBoost proxy (free, mid and deep dct full-pair), and 21 Dirac-3 hardware (block B2 and F32; the only tracked ones). The other 110 are gitignored and local only. No Phase 2 experiment saved per-row predictions
+- **Confusion counts already exist** at two thresholds chosen on validation (max F1, and the 0.5% alert budget) on every `results.json` row and in `b4_hardware.json`, `b5_hardware.json` and `f142_dirac3s_verify.json` (`metrics.operating_points`), including lanes with no per-row file (QSVM, B1, SPECTRA B4, Dirac-3S)
+- Work: (1) one table of TN, FP, FN and TP for every result that has them, by lane and seed, at both thresholds; (2) from the per-row files, per pair of models at the alert budget: the frauds one catches that the other misses, and the overlap; (3) recall by subset (amount band, time, and the segments the proposal names) per model, with intervals, to find a subset where one model is reliably better
+- Out of scope unless timeboxed separately: regenerating per-row predictions for lanes that saved only summaries (B1 hardware from its stored responses, unverified to map onto the saved pools; the three unsaved proxy configs; IEEE-CIS; F106; F130; F144's weights). Each is free except B3, which was metered
+- Prior evidence to read first: F113 (`docs/phase2/F113_ORACLE_GAP.md`) found no CVQBoost-specific complementarity with XGBoost on these files. This card widens that to every lane and to subsets, and reports a null as plainly as a find
+- Acceptance: the table committed with its source file per row; the pairwise catch-and-miss counts per seed; any subset claim reported only with a paired interval across seeds that excludes zero, under the Phase 2 draft's family rule (section 2a)
+- Depends on: none (the local prediction files; a run on another machine first needs them copied or regenerated)
 
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~3h [no-history]) Priority 110**
 - Phase: Phase 2 preparation, Experiment 6
@@ -652,6 +665,7 @@ not a sweep correction.
 - Depends on: QCi grant; F2 approval pattern
 
 **F25. Non-convex CVQBoost: cardinality-constrained weak-learner selection on Dirac-3 (~4h investigation + hardware) Priority HOLD**
+- **QCi answer (2026-10-20, A4)**: 16 levels per variable, values 0 to 15 (hedged: "I assume"); the sum-of-levels budget was not answered directly
 - **F138 and F139 re-check (2026-10-13)**: the Dirac-3S guide gives 16 or 17 integer levels per variable (it contradicts itself), and a total-levels limit with no number. The integer cost model was measured on Dirac-3; F139 recommends re-measuring it with 2 of the 2026-09-23 probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) as this card's first step. The quantum fluctuation coefficient and mean photon number, never set here, belong in this card's design: on a non-convex problem they may matter. F94 (Sprint 25) supplies the controls
 - **F94's findings bind this design (2026-10-13, `docs/phase2/F94_EXP3_CONTROLS.md`)**: (1) on the training fold the dct learners memorize the data, many selections reach the objective's floor `-1 + 2/m`, and no solver can be told from greedy, so build the Hamiltonian on held-out predictions; (2) with `lambda = 2 * rows` the data term is at most 0.33% of the objective and the best selection found is already within 0.0026 of the floor, so the ridge weight must be chosen so the fit to the labels matters; (3) the bar is greedy (equivalent to annealing, seconds per instance), reported against the floor; (4) run F104's screen on the chosen Hamiltonians before sizing
 - Phase: Phase 2, **Experiment 3 device run** (team-lead approved 2026-09-03; the direct consequence of the Sprint 4 degeneracy finding)
@@ -664,6 +678,7 @@ not a sweep correction.
 - Depends on: **F104's gate (`device_resolution.resolution_gate`, shipped in Sprint 27, corrected 2026-10-19, Pass 1) run on the chosen Hamiltonians before any device fit** (corrected 2026-10-18, Pass 1: F141 is spent, shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate is spent, both reported in Sprint 25; the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed; the QCi grant arrived 2026-10-09); Phase 2 preregistration (F102); pairs with F17 (simulator) and F20 (soft votes)
 
 **F30. Concurrent Dirac-3 submission with bounded in-flight requests (~4h build + 1h dry run) Priority HOLD**
+- **QCi answer (2026-10-20, A5)**: Dirac-3 and Dirac-3S are two separate devices, both running 24x7, and the account can use either. There are no special-queue hours
 - **F138 re-check (2026-10-13)**: `eqc-models` 0.22.1 describes Dirac-3S as "special queues", with no stated hours. The queue measurements below were taken on `dirac-3` and may not apply to `dirac-3s`
 - Phase: Phase 2 preparation / infrastructure (team-lead request 2026-09-04)
 - Platform: Dirac-3 (offline-testable; gated live vetting of 2-3 calls only)
