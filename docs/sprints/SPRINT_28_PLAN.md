@@ -2,7 +2,7 @@
 
 **Sprint**: 28 | **Branch**: `feature/20261019_Sprint_28`
 **Planned**: 2026-10-21 | **Status**: DRAFT, awaiting the team lead's
-approval.
+approval. Draft PR #46.
 **Scope**: F151, F152, F153, F111, F110, F154, F150, F114, F115, F13 and
 F146 (team lead selection, 2026-10-21)
 **Metered Dirac seconds**: **0**. No task calls a device. No task calls a
@@ -37,9 +37,10 @@ November filing, and take each one's first zero-metered measurement.
 - Sprint 27 merged to `develop` (PR #32, `220a461`) and released to `main`
   (PR #45, `efe9641`). The branch is `develop` plus three refinement
   commits. Issues #33-44 are closed; no `sprint` issue is open.
-- Working tree clean before this plan. Full suite run 2026-10-21: one
-  failure, being identified by a second run; the result is recorded here
-  before approval.
+- Working tree clean before this plan. Full suite, 2026-10-21: the first
+  run (with `-x`) stopped on one failure whose name its captured tail did
+  not show; a second full run, without `-x`, had no failure. The first
+  failure is not identified and did not reproduce.
 - Dependency scan: `pip-audit` (through `uvx`) on the lock file, 2026-10-21,
   finds three advisories in **pypdf 6.20.0**: CVE-2026-113792 and
   CVE-2026-113793 (crafted PDF causes an infinite loop in outline
