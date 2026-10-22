@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-22
 
+- **chore**: pypdf 6.20.0 -> 6.21.1 (Sprint 28 Task L, #58; Decision 6) for three pip-audit advisories. Lock file updated with a dated header line; the venv upgraded. The PDF tests ran before and after; pip-audit on the lock now reports none. No tracked PDF rebuilt. One venv exists on this machine (`.venv`); a WSL venv, if one is in use elsewhere, needs the same reinstall from the lock.
+
 - **docs**: F151 result (Sprint 28 Task A, #48). New `experiments/phase2/src/f151_hgb_cause.py`, `experiments/phase2/results/f151_hgb_cause.json`, `docs/phase2/F151_HGB_COMPARATOR.md` and its test. The ULB HGB comparator was unstable because of HGB's default `l2_regularization=0`; 1.0 alone closes the spread under the plan's rule. F130's voided ULB "beats HGB" is restated: both proxy variants are below the stable HGB. `F130_LEVER_SCREENS.md` gains a dated restatement line. Every row carries an outcome block.
 - **docs**: F13 PoC plan skeleton (Sprint 28 Task J, #56). New `docs/phase2/PHASE2_POC_PLAN.md`: calendar from the program roadmap page (team lead's screenshot, 2026-10-22), one row per experiment, the standing rules, the gate-based arm, and what waits for notification.
 
