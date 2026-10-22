@@ -3,7 +3,7 @@
     "number": 28,
     "name": "Experiment Entries First, Then Their First Measurements",
     "branch": "feature/20261019_Sprint_28",
-    "status": "phase_4_execution",
+    "status": "phase_5_3_manual_validation",
     "plan_doc": "docs/sprints/SPRINT_28_PLAN.md",
     "pr": 46,
     "plan_approved": true,
@@ -31,7 +31,9 @@
       "H": 1,
       "G": 8,
       "B": 46,
-      "C": 70
+      "C": 70,
+      "E": 198,
+      "D": 180
     },
     "task_started": {
       "F": "2026-10-22T11:51:11-04:00",
