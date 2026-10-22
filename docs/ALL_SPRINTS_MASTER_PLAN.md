@@ -617,6 +617,7 @@ value. Removed from candidates.)
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
 - Time including Hamiltonian construction. `HARDWARE_PLAN_PHASE_2.md` owns the sent sizing (12 fits at 833 variables) and the pool-build-to-device-time ratio
 - Depends on: F102 for reporting; Criterion H for any metered fit (corrected 2026-10-18, Pass 1: F141 is spent, shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed)
+- **2026-10-22 (Sprint 28 Task E)**: proxy result, five seeds per cell. **P1 is false**: the pool build is the largest part everywhere but grows with a slope of about 1.4 in rows (both intervals above [0.7, 1.3]). **P2 holds at 833 variables** (solve flat, about 0.35 s) and fails under the rule at 91 variables, where 9 of 20 solves are below the timer's resolution. The serial 833-variable build at full rows is about 13 minutes, close to the hardware plan's 735.4 s. Device arm not run (`docs/phase2/F110_SCALING.md`)
 
 **F111. Experiment 4 build: Loke et al. replication harness (~130m [no-history], zero metered) Priority 26**
 - Phase: Phase 2 preparation, Experiment 4
