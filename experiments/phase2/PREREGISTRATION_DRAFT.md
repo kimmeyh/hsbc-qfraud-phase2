@@ -63,6 +63,15 @@ field does not run.
   `p` is the test prevalence (the AUPRC of a random ranking), with raw
   AUPRC and AUROC beside it. Recall at the 0.5% alert budget wherever an
   operating point is claimed.
+- **Outcomes recorded** (team lead, 2026-10-22; F154): every Phase 2
+  result that holds a test score, ML or QML, also records the confusion
+  counts (TN, FP, FN, TP) at the 0.5% alert budget, at the
+  validation-chosen operating points where a validation fold exists, and
+  at the experiment's own threshold where it has one; and saves its
+  per-row test scores with their SHA-256, so any two models can be
+  compared case by case. `experiments/phase2/src/outcome_record.py`
+  builds the block; `experiments/src/test_outcome_record_required.py`
+  fails a new result file without one.
 - **Train-test gap** beside every win (Sprint 21: SPECTRA's wins came with
   large gaps).
 - **Every bottom-line claim carries a label** (Sprint 25 IMP-1), the same
@@ -228,6 +237,7 @@ on 2026-10-18:
 | - | Gate-based arm: the F106 circuit's shot budget | F107 | none (NumPy statevector) | Written 2026-10-18, below |
 | - | Ceiling validation on a simulator with hidden state (verification) | F108 | none | Written 2026-10-18, below |
 | - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
+| - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -828,6 +838,55 @@ scored. Not filed; part of this draft.
   The result is reported in `docs/phase2/F144_PROXY_TWIN.md` with these
   limits, and with a same-pool comparison that needs no rebuild.
 
+### F154: where each model wins, on the stored ULB predictions
+
+Written 2026-10-22 (Sprint 28 Task F, #47), before any pairwise or subset
+count was computed. Not filed; part of this draft.
+
+- **ID and card**: unnumbered analysis entry; F154.
+- **Question**: is any stored model (classical, CVQBoost proxy, Dirac-3)
+  reliably better than another on a subset of ULB test rows, so that an
+  ensemble could use it?
+- **Hypothesis and prediction**: none directional. F113 found no
+  CVQBoost-specific complementarity with XGBoost on these files; this widens
+  it to every pair and to two subsets. A null is reported as plainly as a
+  find.
+- **Data**: the stored per-row predictions in
+  `experiments/results/predictions/` (read, never written), stratified
+  protocol, seeds 42-51. Every family with all ten seeds is in. A family
+  whose test labels differ from the others on any seed is reported and
+  left out of the pairs. The test rows are matched to ULB features by
+  deduplicating first, then `data.stratified_split(df, seed)`; the match is
+  checked label for label on every seed before any subset is read.
+- **Operating point**: the 0.5% alert budget on the test rows: every row at
+  or above the ceil(0.005 x n)th highest score is flagged
+  (`outcome_record.flagged_at_budget`; tied rows are flagged together).
+  Recall in a subset is the share of that subset's frauds flagged.
+- **Subsets**, fixed now: **amount**, a test row's `Amount` above the test
+  fold's median `Amount` against at or below it; **day**, `Time` below
+  86,400 s (day 1) against at or above it (day 2).
+- **Primary test**: per pair (A, B), subset S and seed, the interaction
+  I = [recall_A(S) - recall_B(S)] - [recall_A(not S) - recall_B(not S)].
+  A subset claim needs the t interval of I over the ten seeds to exclude
+  zero. The plain in-subset difference is not the test: on XGBoost full
+  against matched13 it fired on day 1 because the overall difference
+  carries into the subset, and it fired on 31.2% of random half-splits;
+  the interaction fired on 3.8% (Sprint 28 plan, "Show each threshold can
+  fire").
+- **Multiplicity**: one family, m = (pairs) x 2 subsets, Bonferroni at
+  0.05 / m, so each interval is at 1 - 0.05 / m. With 13 families,
+  m = 156. Ten seeds give a t interval at any level, so section 2a's
+  Wilcoxon floor does not bind.
+- **Secondary, uncorrected**: the confusion counts for every stored result
+  at both validation-chosen operating points; per pair and seed, the
+  frauds A flags that B misses, the reverse, and those both flag; the
+  in-subset differences.
+- **Falsifier**: "some model is reliably better on a subset" is false for
+  these files if no interaction interval excludes zero.
+- **Recording**: the result file carries an `outcome_record` block per
+  family and seed, pointing at the stored file and its SHA-256 (section 2,
+  "Outcomes recorded").
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -898,3 +957,6 @@ scored. Not filed; part of this draft.
   post-run reading of its arms) and the F109 entry (Task G; its
   prediction tightened after the fresh-eyes review, before any output was
   read). The section 6 table gains rows for F106-F109.
+- 2026-10-22: section 2 gains "Outcomes recorded" (F154 standing rule,
+  team lead); section 6 gains the F154 entry (Sprint 28 Task F), written
+  before any pairwise or subset count, and its table row.
