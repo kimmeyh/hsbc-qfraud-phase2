@@ -631,6 +631,7 @@ value. Removed from candidates.)
 - Phase: QCi/External
 - Platform: docs
 - `HARDWARE_PLAN_PHASE_2.md` says cost is "superlinear in variables". Its own two-factor fit, `vars^0.75 x levels^0.52`, is sublinear in variables; it is superlinear only when levels grow with variables (exponent sum 1.27). The document is FINAL (team lead, 2026-09-27), so the correction goes in a new document, per the F92 consequence above
+- **2026-10-22 (Sprint 28 Task I, #55)**: done in `docs/phase2/F115_INTEGER_COST_SCALING.md`, with the fit recomputed by `experiments/phase2/src/f115_cost_scaling.py`. Added: four of the five probes lie on levels = 4 x variables, so the split between the exponents rests on `probe_deep` alone
 - Depends on: nothing
 
 ### Paper (Stages 4-6)
