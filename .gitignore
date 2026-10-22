@@ -67,6 +67,11 @@ docs/paper/out/*
 # covers it: without these two lines a `git add -A` publishes the negotiation.
 docs/qci_package/
 docs/paper/out/qci_package/
+# Correspondence with the SPECTRA paper's authors (F150, Sprint 28 Task H):
+# drafts and replies about their substrate construction. Private, like the QCi
+# folder above; written before the folder's first file, and checked with
+# `git check-ignore` before that file was created.
+docs/spectra_package/
 # Predictions: ignore the CONTENTS (not the directory itself, or the negation
 # below cannot re-include anything -- the Sprint 2 MANIFEST.json defect class).
 experiments/results/predictions/*
