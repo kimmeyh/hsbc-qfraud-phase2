@@ -119,6 +119,42 @@ def resolution_gate(J, C) -> dict:
                          and s["linear_resolvable"])}
 
 
+def resolution_check_guide(J, C) -> dict:
+    """The Dirac-3S User Guide's own test (Rev A, section 5.3, p.18). Opt-in.
+
+    Added Sprint 28 Task C (Decision 1). Two conditions over ALL terms (the
+    upper triangle of J, its diagonal included, and C; zeros left out):
+      1. max |coefficient| / min |coefficient| at most 200;
+      2. eq. 5: two distinct terms resolve only if their difference is at
+         least max |coefficient| / 200. Reported as the share of pairs of
+         terms with different values that meet it.
+    F104's `resolution_gate` applies the max/200 step to each block's whole
+    spread, which is much weaker than the pairwise test, and omits the
+    ratio. This function does not replace it; both are reported. Pure:
+    reads J and C and writes nothing.
+    """
+    J = np.asarray(J, dtype=np.float64)
+    C = np.asarray(C, dtype=np.float64).reshape(-1)
+    terms = np.r_[J[np.triu_indices(J.shape[0])], C]
+    terms = terms[terms != 0]
+    mags = np.abs(terms)
+    max_abs = float(mags.max())
+    ratio = max_abs / float(mags.min())
+    step = max_abs / DYNAMIC_RANGE
+    v = np.sort(terms)
+    n = len(v)
+    # Pairs (i < j) with v[j] - v[i] >= step, and pairs with different values.
+    resolved = int(np.sum(n - np.searchsorted(v, v + step, side="left")))
+    _, counts = np.unique(v, return_counts=True)
+    distinct_pairs = n * (n - 1) // 2 - int(np.sum(counts * (counts - 1) // 2))
+    share = resolved / distinct_pairs if distinct_pairs else float("nan")
+    return {"n_terms": n, "max_abs_coefficient": max_abs,
+            "max_min_ratio": ratio, "ratio_ok": bool(ratio <= DYNAMIC_RANGE),
+            "step": step, "distinct_pairs": distinct_pairs,
+            "resolved_pairs": resolved, "resolved_pair_share": share,
+            "pass": bool(ratio <= DYNAMIC_RANGE and share == 1.0)}
+
+
 def _quantised_minimiser(J: np.ndarray, C: np.ndarray) -> dict:
     """Solve the problem the DEVICE can see, not the one we sent it."""
     n = J.shape[0]

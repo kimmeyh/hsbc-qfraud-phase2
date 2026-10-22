@@ -590,6 +590,7 @@ value. Removed from candidates.)
 - Ends with a quote, not a run: F139's two integer-cost probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) priced on Dirac-3S for a separate approval (Criterion H)
 - This enables: F25, the one experiment native to Dirac-3's integer solver. This prevents: spending device seconds on a Hamiltonian F94 showed every solver solves alike
 - Acceptance: the entry committed before the build; the chosen Hamiltonian's gap between greedy and the floor reported; F104's gate result; the probe quote
+- **2026-10-22 (Sprint 28 Task C)**: **the design fails** under the entry's falsifier, on all six instances: the gap to the floor is 0.0016-0.0026 (below 0.01) and both resolution checks fail. The ridge rule was never met (fallback 0.002), and the rule itself was ill-posed: |objective| is close to 1 at every weight. QCi's A7 reading (the max/min ratio) passes at about 2; the pairwise check and F104's gate fail; both are reported. No device quote carried forward; F25 stays parked (`docs/phase2/F153_EXP3_DESIGN.md`)
 - Depends on: none (F94 and F104 shipped)
 
 **F154. Confusion matrices (TN, FP, FN, TP) for every saved test result, and where each model wins (~130m [no-history], zero metered) Priority 32**
