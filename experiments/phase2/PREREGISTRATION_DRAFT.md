@@ -229,7 +229,7 @@ on 2026-10-18:
 | 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below |
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
-| 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
+| 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
 | - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below |
@@ -443,6 +443,52 @@ design only; the device arm is F25 and needs its own per-block approval.
   arm's family is set in F25's amendment to this entry before its run.
 - **Recording**: test AUPRC rows carry outcome blocks (section 2,
   "Outcomes recorded").
+
+### Experiment 6 (F110): training time against sample count, proxy first
+
+Written 2026-10-22 (Sprint 28 Task E, #52), before any timing below.
+Not filed; part of this draft. The device arm needs its own per-block
+approval and is not part of this sprint.
+
+- **What was already seen.** No row-count timing exists. F29 built its
+  pools once, at full rows. The hardware plan's "about 12 minutes of CPU
+  per fit" at 833 variables comes from one 735.4 s build
+  (`SPRINT_12_PLAN.md`); whether that build was sequential or full-pair is
+  unverified. The QCi paper reports CVQBoost at about 2 s end to end
+  (Dirac-3 solve about 1.3 s) at 150,000 rows
+  (`docs/evidence-inventory.md`, section 3a).
+- **ID and card**: Experiment 6, F110.
+- **Question**: how does each part of CVQBoost training (weak-learner pool
+  build, Hamiltonian construction, solve) grow with the number of training
+  rows, at 91 and at 833 variables?
+- **Predictions, stated now**: (P1) the pool build is the largest part at
+  every row count and grows close to linearly in rows (log-log slope
+  between 0.7 and 1.3). (P2) the solve does not grow with rows (slope
+  between -0.2 and +0.2), because it works on the variables-by-variables
+  matrix only. Hamiltonian construction is reported, with no prediction.
+- **Falsifier**: P1 is false if the build is not the largest part at
+  every fraction, or its slope interval leaves [0.7, 1.3]; P2 is false if
+  the solve slope interval leaves [-0.2, +0.2].
+- **Data**: ULB, F130's preparation (`qubo_proxy._prep`); training rows
+  subsampled to 10%, 25%, 50% and 100%, stratified by label with the seed.
+- **Cells**: `free` (k=13, schedule 2, full-pair, 91 variables) and
+  `full` (k=17, schedule 3, full-pair, 833 variables), `dct` weak
+  learners seeded per F145 (`qubo_proxy.seeded_weak_params`).
+- **Timed parts**: `qubo_proxy.build_pool`; `h_matrix` plus `hamiltonian`
+  (construction); `solve_simplex_qp` (solve; it rebuilds J once, so the
+  construction time is subtracted and both are reported). Wall clock on
+  this machine; the core count is recorded.
+- **Seeds**: `free` 42-46. `full`: a one-seed pilot at all four fractions
+  first; five seeds only if the pilot projects the five-seed run at 120
+  minutes or less. Otherwise the pilot is the result, labeled one seed.
+- **Test**: per part and cell, least squares of log time on log rows over
+  all runs; the slope's 95% interval (t, residual degrees of freedom).
+  m = 2 predictions, Bonferroni, so 97.5% intervals for P1 and P2.
+- **Reported beside it**: the build at 833 variables against the
+  hardware plan's 12 minutes, and the end-to-end time at about 150,000
+  rows against the paper's 2 s.
+- **Recording**: timing only, no test score, so no outcome block is
+  required (section 2, "Outcomes recorded").
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -1093,3 +1139,5 @@ count was computed. Not filed; part of this draft.
   Task B), written before any Phase 2 score on IEEE-CIS.
 - 2026-10-22: section 6 gains the Experiment 3 entry (F153, Sprint 28
   Task C), written before any Hamiltonian is built.
+- 2026-10-22: section 6 gains the Experiment 6 entry (F110, Sprint 28
+  Task E), written before any timing.
