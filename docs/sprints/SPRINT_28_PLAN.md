@@ -40,7 +40,9 @@ November filing, and take each one's first zero-metered measurement.
 - Working tree clean before this plan. Full suite, 2026-10-21: the first
   run (with `-x`) stopped on one failure whose name its captured tail did
   not show; a second full run, without `-x`, had no failure. The first
-  failure is not identified and did not reproduce.
+  failure is not identified and did not reproduce. The first run overlapped
+  four verification agents reading the same data and prediction files; the
+  second ran alone (context, not a diagnosis).
 - Dependency scan: `pip-audit` (through `uvx`) on the lock file, 2026-10-21,
   finds three advisories in **pypdf 6.20.0**: CVE-2026-113792 and
   CVE-2026-113793 (crafted PDF causes an infinite loop in outline
@@ -79,7 +81,7 @@ is corrected in the same commit as the task that meets it.
   no score by design: it has a pilot and an audit subcommand, no lanes,
   and `test_ieee_harness.py:111-121` fails if the module names a metric.
   So the scoring goes in a new module that imports the harness's folds and
-  audits; the harness and its no-score test are unchanged. Other findings:
+  audits; the harness and its no-score test, which scans only `ieee_harness.py` (`inspect.getsource`), are unchanged. Other findings:
   - Section 6 lists Experiment 2 as "To write". Section 2 makes
     floor-normalized AUPRC primary (the card said AUPRC) and requires at
     least 5 seeds for a headline (the card named none).
@@ -215,11 +217,11 @@ is corrected in the same commit as the task that meets it.
 | Task | Card | What | Est | Runtime | Depends on |
 |---|---|---|---|---|---|
 | A | F151 | One-setting controlled changes on F130's exact ULB preparation (`l2_regularization`, then early stopping); the stable reference recorded; F130's ULB reading re-stated or left void | 50 | ~10 (5 seeds per setting, about 25 s per fit) | - |
-| B | F152 | Experiment 2 entry; new scoring module over F105's folds; classical lanes, 5 seeds, 3 folds; proxy lane per Decision 2 | 130 | ~45 (20 fixed + 10-25 classical, unverified) + proxy pilot | - |
+| B | F152 | Experiment 2 entry; new scoring module over F105's folds; lanes HGB (F151 settings), logistic regression, XGBoost and LightGBM, 5 seeds, 3 folds (GAM, GA2M and the JOINT twin stay on the card: unsized on IEEE-CIS's 400-plus features); proxy lane per Decision 2 | 130 | ~45 (20 fixed + 10-25 for the four lanes, from Phase 1's 10-18 s GBM fits per fold, unverified) + proxy pilot | - |
 | C | F153 | Experiment 3 entry; Hamiltonian on held-out predictions with a ridge sweep; greedy, SCIP and the floor; the resolution check per Decision 1; the probe quote | 150 | ~30 (SCIP per instance, F94 measured; one-instance pilot first) | - |
-| D | F111 | Experiment 4 entry; their stated protocol (random 70/30, SMOTE on train, [0, 1] scaling, KNN k = 15, schedule 2, lambda 0) and ours, 10 seeds, same lane | 130 | ~30 (KNN on full ULB about 2.5 min per seed; SMOTE adds rows) | A |
+| D | F111 | Experiment 4 entry; their stated protocol (random 70/30, SMOTE on train, [0, 1] scaling, KNN k = 15, schedule 2, lambda 0) and ours, 10 seeds, on the CVQBoost-KNN proxy, with F151's stable HGB as the reference under both | 130 | ~30 (KNN on full ULB about 2.5 min per seed; SMOTE adds rows) | A |
 | E | F110 | Experiment 6 entry; pool build plus solve time at 10, 25, 50 and 100% of ULB training rows | 100 | free cell ~12 (5 seeds); 833-variable cell ~23 per seed, so a 1-seed pilot first and 5 seeds only if projected at 120 or less | - |
-| F | F154 | One confusion-count table for every result that has them; pairwise catch-and-miss at the alert budget; subset interaction (amount band, day) under the rewritten rule | 130 | ~5 | A |
+| F | F154 | One confusion-count table for every result that has them; pairwise catch-and-miss at the alert budget; subset interaction (amount band, day) under the rewritten rule | 130 | ~5 | - |
 | G | F114 | Per Decision 3 | 60 | ~3 (F108 measured 115 s for 5 seeds) | - |
 | H | F150 | Per Decision 4 | 30 | - | - |
 | I | F115 | `docs/phase2/F115_INTEGER_COST_SCALING.md`; the fit computed by a new script with a test | 45 | - | - |
@@ -256,10 +258,10 @@ dominate.
 
 ### Task order
 
-1. **A** (F151) first: D and F read ULB against it.
+1. **A** (F151) first: D uses its stable HGB as the reference.
 2. **B** (F152), **C** (F153) and **E** (F110): entries first, then runs in
    the background.
-3. **D** (F111) and **F** (F154) after A.
+3. **D** (F111) after A; **F** (F154) at any point.
 4. **G** (F114), **H** (F150), **I** (F115), **J** (F13) while runs go.
 5. **K** (F146) last, so it can carry I's correction if Decision 5 says so;
    presented at Manual Validation.
@@ -300,7 +302,8 @@ dominate.
 ### Task D detail (F111)
 
 - The entry records every choice the paper leaves open. Their protocol and
-  ours on the same lane (the CVQBoost-KNN proxy), 10 seeds (42-51).
+  ours on the same lane (the CVQBoost-KNN proxy), 10 seeds (42-51), with
+  F151's stable HGB run under both protocols as the reference.
 - **Acceptance**: their figure reported as consistent or not, with the
   tolerance stated as unable to separate lanes; the paired protocol
   difference with its interval; CAD cited, not run.
@@ -328,7 +331,7 @@ dominate.
 
 - The F108 entry gains a dated amendment before the run: an
   isotonic-calibrated plug-in (HGB, calibrated on a held-out slice of
-  train) with `max_bins` set, against the same rule on the main arm.
+  train) using F151's candidate settings (`l2_regularization=1.0`, `early_stopping=False`, `max_bins` at its default 255), against the same rule on the main arm.
 - **Acceptance**: pass or fail under F108's rule. If it passes, F114's
   real-data run (ULB, IEEE-CIS) follows (90); if not, F114 stays blocked
   with the reason.
@@ -380,7 +383,7 @@ totals in Decisions 1-5 exclude Task L; add 45 if Decision 6 is option 1.
 1. Add an opt-in `device_resolution.resolution_check_guide(J, C)` that
    reports the max/min ratio and the share of coefficient pairs that meet
    eq. 5; F153 reports it beside F104's gate; F104's gate and Phase 1 are
-   unchanged; the F104 card gains the difference. Total 945.
+   unchanged; the difference is recorded on the F153 card and in the Phase 2 draft's section 4. Total 945.
    (Recommended)
 2. F153 uses F104's gate only, and records the difference from the guide.
    Total 925.
@@ -396,7 +399,7 @@ totals in Decisions 1-5 exclude Task L; add 45 if Decision 6 is option 1.
 **Decision 3. F114**
 
 1. Validate one new method on F108's harness this sprint: the
-   isotonic-calibrated plug-in with `max_bins` set (Task G, 60). The real
+   isotonic-calibrated plug-in with F151's candidate HGB settings (Task G, 60). The real
    data run (90) only if it passes. Total 945. (Recommended)
 2. No F114 work this sprint; it stays blocked. Total 885.
 
