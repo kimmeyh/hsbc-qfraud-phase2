@@ -1,0 +1,72 @@
+{
+ "generator": "experiments/phase2/src/f111_loke_protocol.py",
+ "card": "F111",
+ "sprint": 28,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "cpu_count": 32,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, Experiment 4",
+ "lane": {
+  "features": "all 30 ULB columns",
+  "scaler": "MinMaxScaler, train",
+  "weak": "knn",
+  "weak_params": {
+   "n_neighbors": 15
+  },
+  "schedule": 2,
+  "pair_build": "full (full_pair_pool)",
+  "lambda": 0.0
+ },
+ "reference": {
+  "hgb_l2_regularization": 1.0
+ },
+ "rows": [],
+ "pilot": {
+  "seed": 42,
+  "fraction": 0.1,
+  "A": {
+   "seconds": 20.7,
+   "lane": {
+    "build": 5.1,
+    "h_train": 10.0,
+    "h_scored": 4.7
+   },
+   "prep_seconds_full": 18.8,
+   "balance_full": {
+    "applied": true,
+    "ratio": 0.02,
+    "k_neighbors": 10,
+    "pos_before": 344,
+    "neg_before": 199020,
+    "pos_after": 3974,
+    "neg_after": 199014
+   },
+   "eval_duplicates_in_train_full": 326,
+   "pilot_train": 20300,
+   "pilot_query": 28843,
+   "full_train": 202988,
+   "full_query": 288431
+  },
+  "B": {
+   "seconds": 22.3,
+   "lane": {
+    "build": 4.3,
+    "h_train": 9.7,
+    "h_scored": 5.9
+   },
+   "prep_seconds_full": 2.1,
+   "balance_full": {
+    "applied": false
+   },
+   "eval_duplicates_in_train_full": 0,
+   "pilot_train": 17023,
+   "pilot_query": 28371,
+   "full_train": 170235,
+   "full_query": 283726
+  },
+  "projected_minutes": 824.6,
+  "cap_minutes": 120.0,
+  "run": false
+ }
+}

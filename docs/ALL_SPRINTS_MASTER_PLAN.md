@@ -624,6 +624,7 @@ value. Removed from candidates.)
 - Platform: ULB
 - Their split and comparator, target AUC-PR 0.80, then re-evaluated under ours
 - Depends on: F102 for reporting
+- **2026-10-22 (Sprint 28 Task D)**: entry and harness committed; the pilot projects the run at about 825 minutes against the entry's 120-minute cap, so no seed ran at full size and the seed count is a Manual Validation decision. No result yet. Protocol A leaves 326 evaluation rows that duplicate training rows (`docs/phase2/F111_LOKE_PROTOCOL.md`)
 
 **F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)

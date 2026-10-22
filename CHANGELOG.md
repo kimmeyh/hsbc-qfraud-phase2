@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-22
 
+- **docs**: Experiment 4 pilot (F111, Sprint 28 Task D, #51). The pilot record and `docs/phase2/F111_LOKE_PROTOCOL.md`: the run projects at about 825 minutes against the entry's 120-minute cap, so under the entry's size rule no seed ran at full size and the seed count goes to Manual Validation. The duplicate count under the source protocol is reported. The F111 card gains a dated line.
 - **docs**: Experiment 6 result (F110, Sprint 28 Task E, #52). The result file and `docs/phase2/F110_SCALING.md`: five seeds at 91 and at 833 variables, four row fractions, zero metered. P1 is false (the pool build grows faster than linearly in rows); P2 holds at 833 variables and fails under the rule at 91, where the solve is below the timer's resolution. The F110 card gains a dated line.
 - **fix**: `test_requirements_complete.py` maps the import name `imblearn` to its declared distribution, `imbalanced-learn` (Sprint 28 Task D, #51). CI went red when `f111_loke_protocol.py` became the first first-party module to import it; the package was already declared and pinned.
 - **fix**: Experiment 6 timing (F110, Sprint 28 Task E, #52): the solve time now subtracts only the J rebuild, not the H matrix, which clamped the solve to zero. The entry carries a dated correction made before any slope; the two affected rows were discarded and the run restarted. A new test fails on the old subtraction. The analysis reports how many solves are still below the timer's resolution.
