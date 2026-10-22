@@ -227,7 +227,7 @@ on 2026-10-18:
 | 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below |
 | 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below |
 | 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below |
-| 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
+| 4 | Replication under the source protocol (Loke et al.) | F111 | none | Written 2026-10-22, below |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
@@ -444,6 +444,97 @@ design only; the device arm is F25 and needs its own per-block approval.
 - **Recording**: test AUPRC rows carry outcome blocks (section 2,
   "Outcomes recorded").
 
+### Experiment 4 (F111): the CVQBoost-KNN lane under the source protocol and ours
+
+Written 2026-10-22 (Sprint 28 Task D, #51), before the harness exists or
+any lane below is fit. Not filed; part of this draft. No device.
+
+- **What was already seen.** Loke et al. (ICAART 2026, DOI
+  10.5220/0014628400004052) report CVQBoost-KNN at AUC-PR **0.8108**,
+  mean of 10 runs, on ULB (Tables 3 and 4). Under our protocol, lanes that
+  are not their method already sit within 0.03 of it: the CVQBoost proxy
+  dct cell (0.793) and XGBoost (0.802, 0.830). F130's KNN proxy (k = 5,
+  13 features, 78 sequential learners, our split) reached 0.7772. So a
+  value near 0.81 cannot show that the protocol matters; the paired
+  difference below is the result.
+- **Sources for the source protocol.** The paper (section 2, Tables 1-2)
+  and the first author's repository, read only: commit `0092a38`
+  (2026-05-22), the version nearest the paper; upstream `main` and the
+  October branch read through the GitHub API. The code postdates the
+  paper and compares XGBoost with hybrid XGBoost, so it shows the
+  author's practice, not proof of the paper's settings.
+- **ID and card**: Experiment 4, F111.
+- **Question**: on the same lane, how much does the source protocol
+  change test AUC-PR against our protocol? Is the lane, under the source
+  protocol, consistent with 0.8108?
+- **The lane, identical under both protocols**:
+  - All 30 ULB columns (Time, V1-V28, Amount). The paper names no
+    feature selection, and the code drops only the label. The 13
+    mutual-information features of our `free` cell are a lane choice,
+    not a protocol choice, and are not used here.
+  - `MinMaxScaler` fit on the training rows only (paper: "scaled to
+    [0, 1]"; code: fit on train). KNN is scale-sensitive, so the scaler
+    is part of the lane on both sides.
+  - KNN weak learners, `n_neighbors=15`, other settings scikit-learn's
+    defaults (uniform weights, Minkowski p = 2, leaf size 30: Table 1).
+  - Weak-classifier schedule 2, full-pair: 30 singles and 435 pairs, 465
+    learners. The code's `weak_cls_strategy="multi_processing"` is the
+    full-pair builder; it needs `fork`, so the pool is built by
+    `experiments/phase2/src/full_pair_pool.py` (same learners, same
+    order; checked equal to the library's under `fork`, 2026-10-22).
+  - lambda = 0 (paper and code), solved classically on the simplex by
+    `qubo_proxy.solve_simplex_qp`, the Hamiltonian eqc-models sends (QCi
+    confirmed it on 2026-10-21). Score: w . H, the code's `predict_raw`.
+- **Protocol A, the source's**: `load_ulb()`, `dropna()` (ULB has no
+  missing values, so it removes nothing), **no deduplication**.
+  `train_test_split(test_size=0.3, stratify=y, random_state=seed)`. The
+  test fold split again, `test_size=0.67`, stratified, `random_state=seed`:
+  33% validation, 67% evaluation (the code's choice; the paper says only
+  "randomly split"). SMOTETomek on the training rows only, after scaling:
+  `sampling_strategy` 0.02 (the minority-to-majority ratio after
+  resampling; the code's May value), SMOTE `k_neighbors =
+  max(1, min(10, positives - 1))`, `random_state=seed`. AUC-PR on the
+  evaluation part.
+- **Protocol B, ours**: deduplicated, `data.stratified_split(df, seed)`
+  (60/20/20 stratified), no resampling. AUC-PR on the test fold; the
+  validation fold sets the threshold.
+- **Seeds**: 42-51. The paper's seeds are unrecoverable: the code draws
+  each run's seed with `random.randint(0, 100000)` and logs it.
+- **Reference lane**: F151's stable HGB (`l2_regularization=1.0`,
+  `random_state=seed`), on the same scaled features and the same training
+  rows (resampled under A) as the KNN lane, under both protocols.
+- **Primary result**: per seed, KNN lane AUC-PR under A minus under B;
+  the mean over 10 seeds with its 95% t interval (9 degrees of freedom).
+  One interval, so no multiplicity family. **Secondary, reported**: the
+  same difference for the HGB lane; within each protocol, KNN minus HGB
+  with its interval.
+- **Consistency with 0.8108**: "consistent" if the KNN lane's mean under
+  A is within 0.03 of 0.8108. The tolerance cannot separate lanes
+  (above), so the result is never stated as "reproduces".
+- **Sensitivity, reported, not decisive**: SMOTETomek ratio 0.05 (the
+  October value) under A, seeds 42-44, KNN and HGB.
+- **Named in advance**: without deduplication, an evaluation row can have
+  an exact copy in the training rows, and a 15-neighbor learner on a pair
+  of columns will find it. Reported per seed under A: the count of
+  evaluation rows with an exact duplicate (all 30 columns and the label)
+  among the training rows.
+- **Size rule**: a pilot at seed 42 on a stratified 10% sample of the
+  training and scored rows, both protocols, KNN lane. Projection: pilot
+  seconds x (full training rows / pilot training rows) x (full query rows
+  / pilot query rows), F130's formula. If the 10-seed A and B runs plus
+  the sensitivity rows project at **120 minutes or less**, they run.
+  Otherwise the pilot and its projection are recorded and the seed count
+  goes to the team lead at Manual Validation; no silent cut. The full run
+  starts only after Experiment 6's timing has finished, so the two do not
+  share the processor.
+- **Comparator**: CAD (0.7423, Gao et al. 2025) is cited, not run; it was
+  not run on their split either.
+- **Recording**: every row carries an outcome block (section 2,
+  "Outcomes recorded"), with the validation part as `y_val`, `p_val`.
+- **Reported whatever the result**: per seed and protocol, both lanes'
+  AUC-PR and ROC-AUC, the resampled class counts, the duplicate count,
+  the pilot timing and projection, and the primary interval.
+
 ### Experiment 6 (F110): training time against sample count, proxy first
 
 Written 2026-10-22 (Sprint 28 Task E, #52), before any timing below.
@@ -489,6 +580,21 @@ approval and is not part of this sprint.
   rows against the paper's 2 s.
 - **Recording**: timing only, no test score, so no outcome block is
   required (section 2, "Outcomes recorded").
+- **Implementation note, 2026-10-22, before any timing.** The library's
+  full-pair builder (`build_pool(..., "full")`) forces `fork`, which does
+  not exist on Windows, and the only Linux venv on this machine does not
+  match the lock (numpy 2.5.2 against 1.26.4), so a result from it would
+  not be comparable (`docs/ENVIRONMENT.md`). The pool is therefore built
+  by `experiments/phase2/src/full_pair_pool.py`: the same learners, in the
+  library's order, trained one after another by the library's own
+  `WeakClassifier`. It was checked equal to the library's builder (same
+  order, identical H) under `fork` on 2026-10-22, and
+  `test_full_pair_pool.py` repeats that check on Linux CI. **Consequence
+  for the reading**: "build" is a serial build. Set beside the hardware
+  plan's 12 minutes it is like for like only if that build was serial
+  too, which is unverified (above). The library's parallel build would be
+  faster by up to its worker count; the slopes (P1, P2) are about growth
+  with rows and are read the same way.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -1173,3 +1279,7 @@ count was computed. Not filed; part of this draft.
 - 2026-10-22: the F108 entry gains a dated amendment (F114, Sprint 28
   Task G): an isotonic-calibrated plug-in on F151's stable HGB, written
   before its module exists.
+- 2026-10-22: section 6 gains the Experiment 4 entry (F111, Sprint 28
+  Task D), written before its harness exists; the Experiment 6 entry
+  gains an implementation note (serial full-pair build), before any
+  timing.
