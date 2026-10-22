@@ -56,6 +56,12 @@ The one field filled from memory was the one that was wrong.)
 - Team-lead `0*` working files at repo root: commit with a neutral message, never read.
 - `--no-verify` is banned; the pre-commit confidentiality hook stays active.
 - Every reported number originates in `results.json` with an evidence tag.
+- **Every experiment records its outcomes** (team lead, 2026-10-22, F154).
+  A Phase 2 result that holds a test score, ML or QML, carries a block from
+  `experiments/phase2/src/outcome_record.py`: confusion counts at the 0.5%
+  alert budget (and at the validation-chosen and own thresholds where they
+  exist) and the per-row test scores with their SHA-256.
+  `test_outcome_record_required.py` fails a new result file without one.
 - **US English, always.** The team lead writes and expects US English, even though
   HSBC is based in England. Prefer `-ize` over `-ise`, `-or` over `-our`, `-er`
   over `-re`, `-se` over `-ce` in nouns like `license` and `defense`, and single
