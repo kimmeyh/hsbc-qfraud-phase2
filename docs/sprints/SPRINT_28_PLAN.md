@@ -1,8 +1,9 @@
 # Sprint 28 Plan: Experiment Entries First, Then Their First Measurements
 
 **Sprint**: 28 | **Branch**: `feature/20261019_Sprint_28`
-**Planned**: 2026-10-21 | **Status**: DRAFT, revised 2026-10-22 from the
-team lead's answers to Decisions 1-6; Decisions 7 and 8 open. Draft PR #46.
+**Planned**: 2026-10-21 | **Status**: APPROVED 2026-10-22 as amended
+(Decision 8; Decision 7 option 2 with the team lead's comment). Draft
+PR #46.
 **Scope**: F151, F152, F153, F111, F110, F154, F150, F114, F115, F13 and
 F146 (team lead selection, 2026-10-21)
 **Metered Dirac seconds**: **0**. No task calls a device. No task calls a
@@ -52,8 +53,18 @@ November filing, and take each one's first zero-metered measurement.
   Phase II PoC runs 17 Nov 2026 to 28 Feb 2027; Review and Close runs
   1 Mar to 30 Apr 2027; winners are announced 30 April 2027. Task J cites
   the page and the capture date instead of marking the dates unconfirmed.
-- **Decision 7**: the team lead asked for more information; it is restated
-  below with it. **Decision 8** is open.
+- **Decision 7**: option 2, F143 stays on HOLD. The team lead's comment:
+  "Dirac-3S has the expansion unit but not 'fully implemented' so still,
+  temporarily, at 949 variables. When it changes to 9,980 we can re-run
+  with the full 987 variables." He suggested a minimal metered probe to
+  learn whether the queue still rejects a job above 949. Carded as F155,
+  not run this sprint: a metered call needs its own per-block approval
+  (Criterion H), which plan approval does not give. The probe must use
+  950 variables, not 949: 949 is inside both limits, so it cannot tell
+  them apart.
+- **Decision 8**: option 1, approved as amended (team lead, 2026-10-22).
+- **Issues**: F #47, A #48, B #49, C #50, D #51, E #52, G #53, H #54,
+  I #55, J #56, K #57, L #58.
 
 ## Pre-kickoff (Phase 2)
 

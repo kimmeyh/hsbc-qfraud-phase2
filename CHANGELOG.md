@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-22
 
+- **docs**: Sprint 28 plan approved as amended (Decision 8). Decision 7: F143 stays on HOLD; the team lead reports the Dirac-3S expansion unit is not fully implemented, so the cloud queue is still at 949 variables. F155 carded: a one-sample 950-variable probe to detect the change, needing its own per-block approval. Issues #47-58 opened, one per task.
+
 - **docs**: Sprint 28 plan revised from the team lead's answers to Decisions 1-6 (1, 2, 1, 1, 1, 1). F152's proxy lane dropped; Task L (pypdf 6.21.1) added; F154 moved first and widened into a standing rule that every later experiment records confusion counts and per-row test scores, with a recorder and a guard. F111's protocol gaps checked against the Loke repository (read only): stratified split, SMOTETomek on the training fold, seeds drawn at random and logged, and the code is not the paper's. F13's dates sourced to the program roadmap page. Decision 7 restated with the facts behind F143's hold; Decisions 7 and 8 open.
 
 ### 2026-10-21
