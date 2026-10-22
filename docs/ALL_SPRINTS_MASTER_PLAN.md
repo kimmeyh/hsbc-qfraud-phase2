@@ -628,6 +628,7 @@ value. Removed from candidates.)
 - Fit `a*N^(-b) + c` against N_positives within a fixed time window; confident learning with the diagonal-dominance condition tested and reported when it fails. Report intervals, not points
 - Depends on: a ceiling method that passes F108's harness (corrected 2026-10-19, Pass 1: F108 shipped in Sprint 27 and validated none, so this card is blocked, not ready)
 - **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods on its main arm, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
+- **2026-10-22 (Sprint 28 Task G)**: an isotonic-calibrated plug-in on F151's stable HGB, under a dated F108 amendment, recovers 2 of 5 seeds on the main arm, the same as F108's default plug-in; calibration does not move the estimate. **Still blocked.** The next candidate is a different estimator, not a re-scaled one (`docs/phase2/F114_CALIBRATED_PLUGIN.md`)
 
 **F115. Integer cost scaling stated correctly in a new document (~45m, zero metered) Priority 170**
 - Phase: QCi/External

@@ -1,0 +1,113 @@
+{
+ "generator": "experiments/phase2/src/f114_calibrated_plugin.py",
+ "card": "F114",
+ "sprint": 28,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-22",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, amendment 2026-10-22",
+ "model": {
+  "hgb_l2_regularization": 1.0,
+  "holdout": 0.25,
+  "calibration": "isotonic"
+ },
+ "margin": {
+  "abs": 0.0005,
+  "rel": 0.1
+ },
+ "mode": "pilot",
+ "seeds": [
+  42
+ ],
+ "rows": [
+  {
+   "seed": 42,
+   "n_train": 897933,
+   "n_test": 615643,
+   "generator_check": {
+    "bayes_error": 0.006099614366235471,
+    "bayes_classifier_error": 0.006092816778555104,
+    "sd_error": 9.892164329545072e-05,
+    "fraud_rate": 0.008288894700337696,
+    "mean_eta": 0.008320739525776335,
+    "sd_rate": 9.892164329545072e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006099614366235471,
+     "uncalibrated": 0.006812960182786822,
+     "calibrated": 0.006799097264989137,
+     "n_fit": 673449,
+     "n_holdout": 224484,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    },
+    "flip": {
+     "bayes_error": 0.006405274729778547,
+     "uncalibrated": 0.00706395027803557,
+     "calibrated": 0.00698646686867346,
+     "n_fit": 673449,
+     "n_holdout": 224484,
+     "calibrated_recovered": true,
+     "uncalibrated_recovered": false
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "uncalibrated": 0.0019031987169985858,
+     "calibrated": 0.0005381916839490698,
+     "n_fit": 673449,
+     "n_holdout": 224484,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    }
+   },
+   "seconds": 8.9
+  }
+ ],
+ "summary": {
+  "none": {
+   "calibrated": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "uncalibrated": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   }
+  },
+  "flip": {
+   "calibrated": {
+    "seeds_recovered": 1,
+    "n_seeds": 1,
+    "recovers": true
+   },
+   "uncalibrated": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   }
+  },
+  "reference": {
+   "calibrated": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   },
+   "uncalibrated": {
+    "seeds_recovered": 0,
+    "n_seeds": 1,
+    "recovers": false
+   }
+  }
+ },
+ "verdict": {
+  "deciding_arm": "none",
+  "calibrated_plugin_recovers": false,
+  "f114": "stays blocked: the calibrated plug-in does not recover"
+ },
+ "elapsed_s": 8.9
+}

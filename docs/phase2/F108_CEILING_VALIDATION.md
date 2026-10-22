@@ -94,6 +94,9 @@ plug-in meets 4 of 5 on the noise arm (5 of 5) and on the reference arm
   under the plug-in (the gap is the model's), a Bayes-error estimator
   that does not go through one model, and an HGB with `max_bins` and
   early stopping set for extreme imbalance.
+- **2026-10-22 (Sprint 28 Task G)**: the first candidate, a calibrated
+  plug-in on F151's stable HGB, does not recover on the main arm (2 of
+  5). `docs/phase2/F114_CALIBRATED_PLUGIN.md`.
 
 ## Clean-room note
 
