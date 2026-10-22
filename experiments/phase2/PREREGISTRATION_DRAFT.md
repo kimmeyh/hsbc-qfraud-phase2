@@ -805,6 +805,35 @@ transaction is generated.
   the reference arm's ceiling is 0, where the absolute margin alone
   decides. Under the entry as written, the plug-in meets the 4-of-5 rule
   on the noise and reference arms and fails it on the main arm.
+- **Amendment, 2026-10-22 (Sprint 28 Task G, Decision 3 option 1),
+  written before its module exists or any calibrated model is fit.** One
+  new plug-in variant, scored on F108's generator, posterior, splits,
+  seeds, arms and margin, all unchanged (`f108_ceiling` is imported, not
+  edited):
+  - **Model**: `HistGradientBoostingClassifier(l2_regularization=1.0,
+    random_state=seed)`, other settings default. This is F151's stable
+    reference (`docs/phase2/F151_HGB_COMPARATOR.md`), where 1.0 alone
+    closed the spread. The Sprint 28 plan also listed
+    `early_stopping=False` as a candidate; F151 found it unneeded, so it
+    is not used here.
+  - **Calibration**: the training rows are split once by the seed, 75%
+    to fit HGB and 25% held out (stratified on the label). Isotonic
+    regression (`IsotonicRegression(out_of_bounds="clip")`) maps HGB's
+    held-out probabilities to the held-out labels; the test plug-in is
+    the test mean of min(p, 1 - p) with p the calibrated probability.
+  - **Reported beside it, not decisive**: the same 75% model's
+    uncalibrated plug-in, which separates the effect of calibration from
+    the effect of the regularization and the smaller fitting set.
+  - **Rule**: F108's margin and 4-of-5 rule, decided on the **main
+    no-noise arm** (the reading above, now written as the rule for this
+    variant). The noise and reference arms are reported.
+  - **Consequence, set here**: if the calibrated plug-in recovers on the
+    main arm, F114's real-data run (ULB and IEEE-CIS, about 90 minutes)
+    becomes eligible with this plug-in. If not, F114 stays blocked and
+    the result is recorded on its card with the miss per seed.
+  - **Reported whatever the result**: per seed and arm, the Bayes error,
+    the calibrated and uncalibrated estimates, recovered or not, and the
+    run time.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -1141,3 +1170,6 @@ count was computed. Not filed; part of this draft.
   Task C), written before any Hamiltonian is built.
 - 2026-10-22: section 6 gains the Experiment 6 entry (F110, Sprint 28
   Task E), written before any timing.
+- 2026-10-22: the F108 entry gains a dated amendment (F114, Sprint 28
+  Task G): an isotonic-calibrated plug-in on F151's stable HGB, written
+  before its module exists.
