@@ -580,6 +580,7 @@ value. Removed from candidates.)
 - This enables: the proposal's temporal-validity test, which ULB's two-day span cannot supply. This prevents: recommending any configuration for a production path before it is settled (`CHECKLIST-Phase2.md`, Experiment 2)
 - Acceptance: the entry committed before the first score; per-fold AUPRC with intervals per section 2; the drift treatment applied as written
 - Depends on: none (F105 shipped in Sprint 26)
+- **2026-10-22 (Sprint 28 Task B)**: entry committed first (`cec20d6`), then scored. P1 holds (XGBoost above logistic regression on months 4 and 5); P2: XGBoost improves from month 4 to 5, a change that mixes drift with training size. LightGBM and F151's stable HGB both beat Phase 1's XGBoost configuration on every month (secondary). All under the stated drift limit (`docs/phase2/F152_EXP2_RESULT.md`)
 
 **F153. Experiment 3 entry and proxy design: F25's first step (~150m [no-history], zero metered) Priority 24**
 - Phase: Phase 2, Experiment 3 (added 2026-10-19, Pass 2 after Sprint 27: a split of F25, whose only hold reason left is F102)
