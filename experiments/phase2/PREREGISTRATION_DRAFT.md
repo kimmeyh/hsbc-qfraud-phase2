@@ -225,7 +225,7 @@ on 2026-10-18:
 | # | Experiment | Card(s) | Device | Entry |
 |---|---|---|---|---|
 | 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below |
-| 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105 | none | To write |
+| 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below |
 | 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F25 | Dirac-3S, after F141 and F142 | To write; F94's result informs it |
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
@@ -314,6 +314,78 @@ computed (Task D computes them).
     regenerated: `score_gates.py` rewrites the report on any invocation.
   - Consistent with the point estimates already seen; this is a
     re-analysis, as stated above, and its evidence is precision.
+
+### Experiment 2 (F152): temporal validity on IEEE-CIS rolling-origin folds
+
+Written 2026-10-22 (Sprint 28 Task B, #49), before any Phase 2 score on
+IEEE-CIS. Not filed; part of this draft.
+
+- **What was already seen.** Phase 1 scored XGBoost, LightGBM and CatBoost
+  on the same three folds with one seed (`experiments/results/
+  ieee_classical.json`). So the direction of the lane ordering is known in
+  part. What this entry adds is section 2's standard: five seeds,
+  floor-normalized AUPRC, paired intervals, a written drift treatment, and
+  two lanes Phase 1 did not run on IEEE-CIS (HGB, logistic regression).
+- **ID and card**: Experiment 2, F152 (harness F105).
+- **Question**: does the ULB ordering of model families hold when every
+  model is trained on earlier months and scored on a later one, and how
+  much does a strong lane lose from one month to the next?
+- **Hypotheses and predictions**: (P1) XGBoost beats logistic regression
+  on floor-normalized AUPRC on each full evaluation month (4 and 5), as on
+  ULB. (P2) none directional: XGBoost's floor-normalized AUPRC changes
+  from month 4 to month 5; the size and its interval are the result.
+- **Falsifier**: P1 is false if, on either full month, the interval on
+  XGBoost minus logistic regression reaches zero. P2 reports a change only
+  if its interval excludes zero.
+- **Data and splits**: IEEE-CIS train, exact duplicates removed
+  (`ieee_loader.dedupe_ieee`), the harness's three rolling-origin folds
+  (evaluation months 4, 5, 6; each trained on every earlier month), with
+  the leakage assertion run on every build. Features from
+  `ieee_harness.build_fold`, unchanged.
+- **Month 6**: a partial bucket, 8,111 rows, about a tenth of a full fold.
+  It is scored and reported, labeled secondary, and is not in P1 or P2.
+- **Drift treatment: a stated limit.** The adversarial control runs as in
+  Phase 1 (`ieee_controls.apply_item4_controls`, its round cap of 20,
+  controls seed 42 for every model seed, so all lanes and seeds see the
+  same features per fold). It stops at the cap with early-versus-late AUC
+  far above target (F105). No higher cap and no group drop: either would
+  change the estimator from Phase 1's and remove features chosen for
+  drift, not for leakage. The per-fold early-versus-late AUC is reported
+  beside every score, and every claim from this entry carries the limit
+  "trained on drifting features".
+- **Lanes** (all on the same features per fold):
+  1. XGBoost, Phase 1's IEEE-CIS configuration (`run_ieee.ARMS`, with its
+     per-fold `scale_pos_weight`).
+  2. LightGBM, the same.
+  3. HGB with F151's stable setting (`l2_regularization=1.0`, other
+     settings default), no class weight.
+  4. Logistic regression: median imputation fitted on training rows,
+     standard scaling, `class_weight="balanced"`, `max_iter=2000`.
+  GAM, GA2M and the JOINT twin stay on the card (unsized on 180-plus
+  features). No CVQBoost proxy lane (Decision 2).
+- **Seeds**: 42-46 (model seeds; the folds are fixed). Before the full
+  run, one lane on two seeds: the paired interval between the two seeds
+  must include zero, or the interval method is too narrow for seed noise.
+- **Primary metric**: floor-normalized AUPRC, `(AUPRC - p) / (1 - p)`,
+  with `p` the evaluation month's prevalence; raw AUPRC and AUROC beside
+  it.
+- **Test**: the paired stratified bootstrap over evaluation transactions
+  (section 2): each of 1,000 replicates resamples the month's rows by
+  label, with the same indices for both lanes and all five seeds, and
+  computes the across-seed mean difference; percentile interval. For P2
+  the two months are independent samples, each resampled on its own.
+- **Multiplicity**: one family. P1 is two intervals that must both exclude
+  zero (an intersection-union test, which needs no correction across its
+  two parts) and P2 is one; m = 2, Bonferroni, so 97.5% intervals. Three
+  folds cannot support a Wilcoxon test (its floor is 0.25), so the
+  bootstrap is primary (section 2a).
+- **Secondary, uncorrected**: every other lane pair per month; month 6;
+  the per-seed spread; the shuffled-label control is not re-run (Phase 1
+  ran it on these folds).
+- **Recording**: every lane, month and seed carries an outcome block
+  (section 2, "Outcomes recorded").
+- **Limits stated now**: the drift limit above; one dataset; three folds
+  from one six-month file.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -960,3 +1032,5 @@ count was computed. Not filed; part of this draft.
 - 2026-10-22: section 2 gains "Outcomes recorded" (F154 standing rule,
   team lead); section 6 gains the F154 entry (Sprint 28 Task F), written
   before any pairwise or subset count, and its table row.
+- 2026-10-22: section 6 gains the Experiment 2 entry (F152, Sprint 28
+  Task B), written before any Phase 2 score on IEEE-CIS.
