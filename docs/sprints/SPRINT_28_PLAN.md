@@ -1,8 +1,8 @@
 # Sprint 28 Plan: Experiment Entries First, Then Their First Measurements
 
 **Sprint**: 28 | **Branch**: `feature/20261019_Sprint_28`
-**Planned**: 2026-10-21 | **Status**: DRAFT, awaiting the team lead's
-approval. Draft PR #46.
+**Planned**: 2026-10-21 | **Status**: DRAFT, revised 2026-10-22 from the
+team lead's answers to Decisions 1-6; Decisions 7 and 8 open. Draft PR #46.
 **Scope**: F151, F152, F153, F111, F110, F154, F150, F114, F115, F13 and
 F146 (team lead selection, 2026-10-21)
 **Metered Dirac seconds**: **0**. No task calls a device. No task calls a
@@ -31,6 +31,29 @@ November filing, and take each one's first zero-metered measurement.
 - Priorities: the slate's numbers stand (F151 20, F152 22, F153 24, F111
   26, F110 28, F154 32, F150 41, F114 140, F115 170, F13 180, F146 HOLD).
   Task order below is by dependency, not by number.
+
+## Decisions made 2026-10-22 (team lead)
+
+- **Decision 1**: option 1. Opt-in `resolution_check_guide` beside F104's
+  gate.
+- **Decision 2**: option 2. Classical lanes only; F152's proxy lane stays
+  on the card. B drops from 130 to 110.
+- **Decisions 3, 4 and 5**: option 1 each (Tasks G, H and K as written).
+- **Decision 6**: option 1. Task L (pypdf to 6.21.1) added.
+- **F154 goes first, and becomes a standing rule.** "Please do first and
+  ensure all future experiments (ML/QML...) compute and record these
+  values (this sprint and future sprints)." Task F gains a shared recorder,
+  a guard and the written rule (Task F detail); F rises from 130 to 190.
+- **F111's protocol source**: the team lead named two local repositories:
+  the unchanged clone of the Loke repository and his test copy of it. What
+  they settle, and what they do not, is in Task D detail.
+- **F13's dates**: the team lead supplied a screenshot of the program
+  roadmap page (`quantumai.thequantuminsider.com/program/`), 2026-10-22.
+  Phase II PoC runs 17 Nov 2026 to 28 Feb 2027; Review and Close runs
+  1 Mar to 30 Apr 2027; winners are announced 30 April 2027. Task J cites
+  the page and the capture date instead of marking the dates unconfirmed.
+- **Decision 7**: the team lead asked for more information; it is restated
+  below with it. **Decision 8** is open.
 
 ## Pre-kickoff (Phase 2)
 
@@ -168,7 +191,9 @@ is corrected in the same commit as the task that meets it.
 - **F13: one date claim is unverified.** "Nov 17 - Feb 28" has no primary
   source in the repository; the guidelines PDF says notification and the
   PoC start are mid-November 2026, with no end date. The skeleton marks
-  every date unconfirmed.
+  every date unconfirmed. **Settled 2026-10-22**: the team lead's
+  screenshot of the program roadmap page gives 17 Nov 2026 to 28 Feb 2027
+  (see "Decisions made 2026-10-22").
 - **F146: confirmed.** P1 is open (referred to the eqc-models contact);
   QCi's offer to review our report is recorded with no reply. Drafts go in
   the gitignored `docs/qci_package/` (`.gitignore:68`).
@@ -217,23 +242,23 @@ is corrected in the same commit as the task that meets it.
 | Task | Card | What | Est | Runtime | Depends on |
 |---|---|---|---|---|---|
 | A | F151 | One-setting controlled changes on F130's exact ULB preparation (`l2_regularization`, then early stopping); the stable reference recorded; F130's ULB reading re-stated or left void | 50 | ~10 (5 seeds per setting, about 25 s per fit) | - |
-| B | F152 | Experiment 2 entry; new scoring module over F105's folds; lanes HGB (F151 settings), logistic regression, XGBoost and LightGBM, 5 seeds, 3 folds (GAM, GA2M and the JOINT twin stay on the card: unsized on IEEE-CIS's 400-plus features); proxy lane per Decision 2 | 130 | ~45 (20 fixed + 10-25 for the four lanes, from Phase 1's 10-18 s GBM fits per fold, unverified) + proxy pilot | - |
+| B | F152 | Experiment 2 entry; new scoring module over F105's folds; lanes HGB (F151 settings), logistic regression, XGBoost and LightGBM, 5 seeds, 3 folds (GAM, GA2M and the JOINT twin stay on the card: unsized on IEEE-CIS's 400-plus features); no proxy lane (Decision 2) | 110 | ~45 (20 fixed + 10-25 for the four lanes, from Phase 1's 10-18 s GBM fits per fold, unverified) | F |
 | C | F153 | Experiment 3 entry; Hamiltonian on held-out predictions with a ridge sweep; greedy, SCIP and the floor; the resolution check per Decision 1; the probe quote | 150 | ~30 (SCIP per instance, F94 measured; one-instance pilot first) | - |
 | D | F111 | Experiment 4 entry; their stated protocol (random 70/30, SMOTE on train, [0, 1] scaling, KNN k = 15, schedule 2, lambda 0) and ours, 10 seeds, on the CVQBoost-KNN proxy, with F151's stable HGB as the reference under both | 130 | ~30 (KNN on full ULB about 2.5 min per seed; SMOTE adds rows) | A |
 | E | F110 | Experiment 6 entry; pool build plus solve time at 10, 25, 50 and 100% of ULB training rows | 100 | free cell ~12 (5 seeds); 833-variable cell ~23 per seed, so a 1-seed pilot first and 5 seeds only if projected at 120 or less | - |
-| F | F154 | One confusion-count table for every result that has them; pairwise catch-and-miss at the alert budget; subset interaction (amount band, day) under the rewritten rule | 130 | ~5 | - |
+| F | F154 | First. One confusion-count table for every result that has them; pairwise catch-and-miss at the alert budget; subset interaction (amount band, day) under the rewritten rule; a shared recorder, a guard and the written rule so every later experiment records the same values | 190 | ~5 | - |
 | G | F114 | Per Decision 3 | 60 | ~3 (F108 measured 115 s for 5 seeds) | - |
 | H | F150 | Per Decision 4 | 30 | - | - |
 | I | F115 | `docs/phase2/F115_INTEGER_COST_SCALING.md`; the fit computed by a new script with a test | 45 | - | - |
-| J | F13 | `docs/phase2/PHASE2_POC_PLAN.md` skeleton; dates marked unconfirmed | 75 | - | - |
+| J | F13 | `docs/phase2/PHASE2_POC_PLAN.md` skeleton; dates cited to the program roadmap page | 75 | - | - |
 | K | F146 | Drafts per Decision 5; `QCI_CORRESPONDENCE_HASHES.md`'s stale line cite corrected; `DIRAC_UNDERSTANDINGS.md` revision row | 45 | - | - |
+| L | none (Decision 6) | pypdf 6.20.0 to 6.21.1 in the lock and both venvs, with the lock header line; the PDF tests run before and after (Decision 6) | 45 | - | - |
 
-**Derived total: 945 minutes of work**, the sum of the 11 task estimates
-(50 + 130 + 150 + 130 + 100 + 130 + 60 + 30 + 45 + 75 + 45), with
-Decisions 1-5 at their recommended options. Decision 6's recommended
-option adds Task L (45), for **990**. Each other option's total is on the
-option. One conditional addition is not in the total: if G's method
-passes F108's rule, F114's real-data run adds 90.
+**Derived total: 1,030 minutes of work**, the sum of the 12 task
+estimates (50 + 110 + 150 + 130 + 100 + 190 + 60 + 30 + 45 + 75 + 45 +
+45), with Decisions 1-6 as answered on 2026-10-22. One conditional
+addition is not in the total: if G's method passes F108's rule, F114's
+real-data run adds 90.
 
 Runtime is separate. B's, C's, D's and E's runs go to the background, each
 with a heartbeat file before any run over 30 minutes. A full suite run
@@ -245,25 +270,32 @@ rows):
 - **Research+code (A-G)**: Sprint 27's six measured research+code rows ran
   at 0.07-0.73 of estimate, median about 0.34. Each card is sized to its
   first decisive measurement: A 50 of the card's 90 (the probe already
-  found the candidate); B 130 of 240 (entry, a scoring module, classical
-  lanes); C 150 of 240 (130 plus 20 for the resolution check); D 130 of
-  240; E 100 of 180; F 130 (the card's figure); G 60 (one method).
+  found the candidate); B 110 of 240 (entry, a scoring module, classical
+  lanes; the proxy pilot's 20 removed by Decision 2); C 150 of 240 (130
+  plus 20 for the resolution check); D 130 of 240; E 100 of 180; F 190
+  (the card's 130 plus 60 for the recorder, its guard proven red and the
+  written rule); G 60 (one method).
 - **Docs (H-K)**: Sprint 27's docs rows ran at 0.06-0.07, but drew on
   sweeps already done. H 30, I 45 (30 plus the fit script and its test),
   J 75 (the timebox), K 45 (30 per update plus two drafts).
+- **Dependency (L)**: 45, a lock change with the PDF tests before and
+  after.
 
 **Allowances**: none carried. Writing (the four entries, about 120, plus
-H-K, 195) is about 315 of 945 minutes, a third; verification does not
-dominate.
+H-K, 195) is about 315 of 1,030 minutes, under a third; verification does
+not dominate.
 
 ### Task order
 
-1. **A** (F151) first: D uses its stable HGB as the reference.
-2. **B** (F152), **C** (F153) and **E** (F110): entries first, then runs in
+1. **F** (F154) first (team lead, 2026-10-22): its recorder and guard
+   exist before any other task writes a result, so every result this
+   sprint records the values.
+2. **A** (F151) next: D uses its stable HGB as the reference.
+3. **B** (F152), **C** (F153) and **E** (F110): entries first, then runs in
    the background.
-3. **D** (F111) after A; **F** (F154) at any point.
-4. **G** (F114), **H** (F150), **I** (F115), **J** (F13) while runs go.
-5. **K** (F146) last, so it can carry I's correction if Decision 5 says so;
+4. **D** (F111) after A. **L** (pypdf) at any point.
+5. **G** (F114), **H** (F150), **I** (F115), **J** (F13) while runs go.
+6. **K** (F146) last, so it can carry I's correction if Decision 5 says so;
    presented at Manual Validation.
 
 ### Task A detail (F151)
@@ -301,6 +333,36 @@ dominate.
 
 ### Task D detail (F111)
 
+- **The Loke repository** (team lead, 2026-10-22). Read only, never
+  written: the local clone, its committed `0092a38` (2026-05-22), and the
+  upstream `main` (`39a3443`, 2026-05-29) and `integrate-additional-datasets`
+  (`2ac7d77`, 2026-10-17) branches through the GitHub API. Findings:
+  - **The clone is not as-is.** Its working tree has uncommitted changes
+    (`main.py`, `README.md`, `requirements.txt`; the README carries an
+    "HK How to Run" section), and it lags upstream by 2 commits on `main`.
+    The committed and upstream versions were read instead.
+  - **It is not the paper's code.** It starts 2026-05-19, after the
+    ICAART 2026 paper, and compares XGBoost with hybrid XGBoost; its
+    default weak learner is XGBoost, not KNN. The October branch adds a
+    KNN catalog (k of 3, 5, 11, 21), none at the paper's k = 15. So it
+    shows the first author's own practice, not proof of the paper's
+    settings. The entry says so.
+  - **Seeds**: drawn by `random.randint(0, 100000)` on each run and
+    logged; no fixed list exists. The paper's 10 seeds are unrecoverable.
+    We use 42-51 and say why.
+  - **Split**: `train_test_split(test_size=0.3, stratify=y, random_state=seed)`,
+    so stratified. The test fold is split again into validation and
+    evaluation, 33/67, stratified (`0092a38`). AUC-PR is scored on the
+    evaluation part. The scaler is `MinMaxScaler`, fit on train only.
+    `main` removed the validation split on 2026-05-29.
+  - **SMOTE**: SMOTETomek, not plain SMOTE, on the training fold only,
+    `k_neighbors = min(10, positives - 1)`, `random_state = seed`. Off by
+    default. Target positive ratio 0.02 in May, 0.05 in October.
+  - **Missing values**: `dropna()`. No deduplication, as the paper says.
+- **Our use**: their protocol runs with the code's split and SMOTETomek
+  at ratio 0.02 (the version nearest the paper) as primary, 0.05 as a
+  sensitivity row, KNN k = 15 from the paper. Each choice is in the entry
+  before the first run.
 - The entry records every choice the paper leaves open. Their protocol and
   ours on the same lane (the CVQBoost-KNN proxy), 10 seeds (42-51), with
   F151's stable HGB run under both protocols as the reference.
@@ -322,10 +384,26 @@ dominate.
 - The table from `results.json` and the Phase 2 hardware files; the
   pairwise counts from the 131 local files, the split recovered by
   deduplicating first; the interaction rule above.
+- **The standing rule** (team lead, 2026-10-22: every future experiment,
+  ML or QML, this sprint and later, computes and records these values):
+  - New `experiments/phase2/src/outcome_record.py`: the confusion counts
+    (TP, FP, TN, FN) at the alert budget and at the experiment's own
+    threshold, and the per-row test scores saved to a gitignored local
+    file with its SHA-256 in the result row, so any two models can be
+    compared case by case later.
+  - New guard `experiments/phase2/src/test_outcome_record_required.py`:
+    every result file under `experiments/phase2/results/` that holds a
+    test score must hold both. Files that exist on the day it lands are
+    listed by name as exempt, and the list can only shrink. Proven red.
+  - The rule written in `docs/SPRINT_PROCESS.md`, in the Phase 2 draft's
+    reporting section, and as one standing-rule line in `CLAUDE.md`.
+  - Metered hardware rows are covered by the same guard; this sprint has
+    none.
 - **Acceptance**: the table committed with its source per row; the
   pairwise counts per seed; any subset claim only under the rewritten
   rule; a null reported as plainly as a find; the F154 card's segment
-  wording corrected.
+  wording corrected; the recorder used by every later task this sprint;
+  the guard proven red.
 
 ### Task G detail (F114, Decision 3 option 1)
 
@@ -357,11 +435,13 @@ dominate.
 
 ### Task J detail (F13)
 
-- Calendar (unconfirmed), one row per experiment (card, entry, device,
+- Calendar from the program roadmap page (team lead's screenshot,
+  2026-10-22): PoC 17 Nov 2026 to 28 Feb 2027, Review and Close 1 Mar to
+  30 Apr 2027. One row per experiment (card, entry, device,
   quoted seconds, state), sprint cadence, the Dirac-3S default, the F6
   gate-based arm, confidentiality on receipt of the brief, and the items
   that wait for notification.
-- **Acceptance**: every date labeled with its source or unconfirmed; no
+- **Acceptance**: every date labeled with its source and capture date; no
   figure restated that another file owns.
 
 ### Task K detail (F146, Decision 5 option 1)
@@ -373,68 +453,57 @@ dominate.
   gitignored `docs/qci_package/`; listed at Manual Validation for the team
   lead to send or change.
 
-## Decisions at approval
+### Task L detail (pypdf, Decision 6 option 1)
 
-Each is independent of the others, and each option names its total. The
-totals in Decisions 1-5 exclude Task L; add 45 if Decision 6 is option 1.
+- pip-audit found pypdf 6.20.0 affected by CVE-2026-113792 and
+  CVE-2026-113793 (fixed in 6.20.1) and CVE-2026-113786 (fixed in
+  6.21.1). Bump to 6.21.1 in `experiments/requirements-lock.txt` and both
+  venvs, with a dated line in the lock header (rule 5).
+- **Acceptance**: the PDF tests (`test_submission_artifacts.py`,
+  `test_published_artifacts.py`, `test_requirements_complete.py`) run
+  before and after; pip-audit shows no pypdf finding; no tracked PDF
+  rebuilt.
 
-**Decision 1. F153's resolution check**
+## Decisions
 
-1. Add an opt-in `device_resolution.resolution_check_guide(J, C)` that
-   reports the max/min ratio and the share of coefficient pairs that meet
-   eq. 5; F153 reports it beside F104's gate; F104's gate and Phase 1 are
-   unchanged; the difference is recorded on the F153 card and in the Phase 2 draft's section 4. Total 945.
-   (Recommended)
-2. F153 uses F104's gate only, and records the difference from the guide.
-   Total 925.
-
-**Decision 2. F152's CVQBoost proxy lane on IEEE-CIS**
-
-1. A one-fold timed pilot at Phase 1's 100,000-row subsample, through a
-   Phase 2 wrapper; three folds only if projected at 60 minutes or less,
-   otherwise the pilot timing is the result. Total 945. (Recommended)
-2. Classical lanes only this sprint; the proxy lane stays on the card.
-   Total 925.
-
-**Decision 3. F114**
-
-1. Validate one new method on F108's harness this sprint: the
-   isotonic-calibrated plug-in with F151's candidate HGB settings (Task G, 60). The real
-   data run (90) only if it passes. Total 945. (Recommended)
-2. No F114 work this sprint; it stays blocked. Total 885.
-
-**Decision 4. F150**
-
-1. Draft the construction request for you to send (Task H, 30); the
-   rebuild waits for the reply. Total 945. (Recommended)
-2. No F150 work this sprint. Total 915.
-
-**Decision 5. F146's drafts**
-
-1. Draft P1 for the eqc-models contact and a reply to QCi's review offer,
-   with F115's correction as an optional paragraph (Task K, 45). Total 945.
-   (Recommended)
-2. Draft P1 only. Total 925.
-
-**Decision 6. pypdf 6.20.0 advisories**
-
-1. Add Task L: bump pypdf to 6.21.1 in the lock and both venvs, with the
-   lock header line; the PDF tests run before and after (45). Total 990.
-   (Recommended)
-2. Card it for the backlog (F155, Priority 50). Total 945.
+**Decisions 1-6** were answered on 2026-10-22; the answers are in
+"Decisions made 2026-10-22" above and applied in the tasks.
 
 **Decision 7. F143's hold** (independent of the plan; F143 is not in
-scope). It waited for QCi to confirm the cloud queue exceeds 949
-variables. QCi named the configuration (base unit plus expansion, whose
-guide ceiling is 9,980) but gave no variable figure.
+scope, and no option changes the sprint total).
 
-1. The hold is met: F143 becomes a candidate at Priority 150; its metered
-   run still needs per-block approval.
-2. Keep the hold until QCi states a variable figure.
+- **What F143 is**: telecom_churn (a SPECTRA dataset) with all 18
+  features, 987 variables, schedule 3, 5 seeds, on Dirac-3S. B4 ran it on
+  Dirac-3 at 816 variables with `age` dropped, because Dirac-3 stops at
+  949. Its in-segment edges were negative. F143 asks whether the dropped
+  feature changes that.
+- **Why it is held**: the Dirac-3S base module also stops at 949. Only
+  base plus one expansion module reaches 9,980 (guide Table 2). No source
+  said which one serves the cloud queue, so a 987-variable job might not
+  fit.
+- **What QCi said on 2026-10-20 (A1)**: base unit plus expansion module
+  serves the cloud `dirac-3s` queue. Under Table 2 that is 9,980, so 987
+  fits. **Inferred**: QCi named the configuration, not a number.
+- **Cost if it runs later**: at least 450 metered seconds (Dirac-3 cost
+  84-90 s per fit at 816 variables). `qpu_cost_model.quote(987, 8)` flags
+  987 as above its largest Dirac-3S anchor, so its high figure is a floor.
+  Every block still needs your per-block approval (Criterion H).
+- **What a wrong inference costs**: one rejected or failed first fit. The
+  first approved block can be a single fit. Whether a rejected job is
+  metered is **unverified**.
+
+1. The hold is met. F143 becomes a backlog candidate at Priority 150; it
+   is not added to Sprint 28. (Recommended: the vendor's answer and its
+   own guide table agree, and a wrong inference costs one fit.)
+2. Keep the hold until QCi states a variable figure; no question is sent.
+3. Keep the hold, and Task K's reply to QCi asks one line: "Does the
+   cloud `dirac-3s` queue accept a 987-variable continuous job?" Task K
+   stays at 45.
 
 **Decision 8. The plan**
 
-1. Approve the plan as written, with Decisions 1-6 applied.
+1. Approve the plan as revised on 2026-10-22: 12 tasks (A-L), 1,030
+   minutes, F154 first, zero metered seconds.
 2. Do not approve yet. I revise it from your comments and present it
    again.
 

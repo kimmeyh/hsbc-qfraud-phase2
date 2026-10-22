@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-22
+
+- **docs**: Sprint 28 plan revised from the team lead's answers to Decisions 1-6 (1, 2, 1, 1, 1, 1). F152's proxy lane dropped; Task L (pypdf 6.21.1) added; F154 moved first and widened into a standing rule that every later experiment records confusion counts and per-row test scores, with a recorder and a guard. F111's protocol gaps checked against the Loke repository (read only): stratified split, SMOTETomek on the training fold, seeds drawn at random and logged, and the code is not the paper's. F13's dates sourced to the program roadmap page. Decision 7 restated with the facts behind F143's hold; Decisions 7 and 8 open.
+
 ### 2026-10-21
 
 - **docs**: Sprint 28 plan (draft) and Sprint 27 summary. Team lead selection recorded on the master plan: F151, F152, F153, F111, F110, F154, F150, F114, F115, F13 and F146; card estimates set to the plan's, F110 and F111 at the slate's priorities 28 and 26. Plan verification corrected seven cards before they run, among them: `ieee_harness.py` has no scoring path, so F152 adds a scoring module; F104's gate is weaker than the Dirac-3S guide's section 5.3 test (F153, Decision 1); F154's subset rule fired on a same-family reference and is rewritten as an interaction. Dependency scan: three pypdf 6.20.0 advisories (Decision 6). `SPRINT_27_SUMMARY.md` written and linked; status at Phase 3 planning.
