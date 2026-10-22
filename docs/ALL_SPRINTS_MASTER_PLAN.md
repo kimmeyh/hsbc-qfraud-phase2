@@ -567,6 +567,7 @@ value. Removed from candidates.)
 - Phase: Phase 2 preparation (added 2026-10-19 by the team lead, Sprint 27 retrospective IMP-7)
 - Platform: ULB
 - Sprint 27 F130 found the HGB comparator in its ULB setup unstable under every setting tried: mean test AUPRC 0.22-0.52, single seeds 0.06-0.70 (`experiments/phase2/results/f130_ulb_hgb_check.json`). On F109's ULB subsample HGB was the strongest lane (`f109_ladder.json`), and in F106 the HGB twin was ahead of the circuit on 6 of 8 seeds (`f106_dequant.json`). The cause is unverified. Until it is found, no "beats HGB on ULB" reading stands (F130's was voided)
+- **2026-10-22 (Sprint 28 Task A, #48)**: found. HGB's default `l2_regularization=0`; 1.0 alone closes the spread (`docs/phase2/F151_HGB_COMPARATOR.md`). The stable reference is `l2_regularization=1.0`, other settings default. F130's ULB cell restated: below the stable HGB, not above it. "Unstable under every setting tried" was wrong for "no early stopping" (stable at the wrong level)
 - Work: compare the three setups (rows, features, scaling, class weighting, early stopping, seeds) and isolate the setting that makes F130's comparator unstable; then re-run that comparator to a stable reading
 - Acceptance: the cause named and shown by a controlled change (one setting moved, the spread closes); the stable ULB HGB reference recorded with its seeds; F130's ULB reading re-stated against it or left void with the reason
 - Depends on: none
@@ -711,6 +712,7 @@ not a sweep correction.
 - Depends on: nothing to build; live vetting needs F141, spent (corrected 2026-10-18, Pass 1: shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate and the F124 rank-1-first gate are both spent); live vetting needs team-lead approval (Criterion H)
 
 **F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 180**
+- **2026-10-22 (Sprint 28 Task J, #56)**: skeleton written, `docs/phase2/PHASE2_POC_PLAN.md`. Dates now sourced: program roadmap page, team lead's screenshot of 2026-10-22 (PoC 17 Nov 2026 - 28 Feb 2027; Review and Close 1 Mar - 30 Apr 2027). The content after notification stays open
 - Phase: Phase 2 (Nov 17 - Feb 28, if selected)
 - Platform: All
 - Braket hardware validation, IEEE-CIS at scale, calibrated deployment per the routing architecture; plan built on acceptance
