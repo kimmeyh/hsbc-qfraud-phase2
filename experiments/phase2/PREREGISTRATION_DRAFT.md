@@ -226,7 +226,7 @@ on 2026-10-18:
 |---|---|---|---|---|
 | 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below |
 | 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below |
-| 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F25 | Dirac-3S, after F141 and F142 | To write; F94's result informs it |
+| 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below |
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
@@ -386,6 +386,63 @@ IEEE-CIS. Not filed; part of this draft.
   (section 2, "Outcomes recorded").
 - **Limits stated now**: the drift limit above; one dataset; three folds
   from one six-month file.
+
+### Experiment 3 (F153, F25): cardinality-constrained selection, proxy design first
+
+Written 2026-10-22 (Sprint 28 Task C, #50), before any Hamiltonian below
+is built. Not filed; part of this draft. This sprint runs the proxy
+design only; the device arm is F25 and needs its own per-block approval.
+
+- **What was already seen.** F94 (`docs/phase2/F94_EXP3_CONTROLS.md`):
+  on the training fold every method reaches the objective floor; on the
+  validation fold the best found is within 0.0016-0.0026 of it, and the
+  ridge term carries over 99.67% of the objective at `lambda = 2` (in
+  `exp3_controls.problem`'s scaled units). So a device could gain almost
+  nothing on F94's Hamiltonian. This entry changes the ridge before any
+  device time is asked for.
+- **ID and card**: Experiment 3, F153 (design), F25 (device run).
+- **Question**: is there a ridge weight at which the selection problem
+  leaves room between greedy and the floor, and that the device can
+  resolve? Only then is a device comparison worth its seconds.
+- **Hypothesis and prediction**: none directional for the design. For the
+  later device arm (F25): the device's objective beats greedy's, or
+  matches it faster, on the chosen Hamiltonian.
+- **Falsifier (design)**: the design fails, and no device quote is
+  carried forward as ready, if at the chosen ridge weight the gap between
+  greedy and the floor is below 0.01 on every instance, or the chosen
+  Hamiltonian fails both resolution checks below.
+- **Instances**: F94's, unchanged: ULB, seeds 42-44, sequential `dct`
+  pools; the first 60 `free` learners choose 10, and the 136 `mid`
+  learners choose 25. Built on the **validation fold** (held-out
+  predictions); the test fold is never optimized on.
+- **Objective**: `exp3_controls.problem(H, y, lam_mult)`, weights on the
+  simplex. Its floor is `-1 + lam_mult / m` (the data term is never
+  negative, and `||w||^2 >= 1/m` with m learners).
+- **Ridge sweep, fixed now**: `lam_mult` in {2, 0.2, 0.02, 0.002}. Greedy
+  on every instance at every value. **The chosen value** is the largest
+  whose greedy solution has a data term of at least 10% of the
+  objective's absolute value on all six instances; if none qualifies,
+  the smallest, labeled as such.
+- **Controls at the chosen value**: greedy, simulated annealing (F94's
+  3,000 iterations) and SCIP (300 s cap, a change from F94's 600 s to fit
+  the sprint; the cap is reported beside every SCIP figure). The first
+  instance is checked for a gap between greedy and the floor before any
+  method is compared.
+- **Reported per instance**: each method's objective, the floor, the gap
+  from the best found to the floor, the data-term share, and test AUPRC
+  for context only (three seeds, no interval).
+- **Resolution, both checks (Decision 1)**: F104's gate
+  (`device_resolution.resolution_gate`, unchanged) and the guide's
+  section 5.3 check (`device_resolution.resolution_check_guide`, new and
+  opt-in): the max/min ratio of the nonzero coefficients against 200, and
+  the share of coefficient pairs whose difference reaches max / 200
+  (eq. 5). Both are reported; the gate's verdict is not replaced.
+- **Device quote, not a run**: F139's two integer probes priced for
+  Dirac-3S as a bracket, labeled inferred, for a separate approval.
+- **Multiplicity**: the design makes no claim tested at alpha; the device
+  arm's family is set in F25's amendment to this entry before its run.
+- **Recording**: test AUPRC rows carry outcome blocks (section 2,
+  "Outcomes recorded").
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -1034,3 +1091,5 @@ count was computed. Not filed; part of this draft.
   before any pairwise or subset count, and its table row.
 - 2026-10-22: section 6 gains the Experiment 2 entry (F152, Sprint 28
   Task B), written before any Phase 2 score on IEEE-CIS.
+- 2026-10-22: section 6 gains the Experiment 3 entry (F153, Sprint 28
+  Task C), written before any Hamiltonian is built.
