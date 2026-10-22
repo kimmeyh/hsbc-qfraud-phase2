@@ -1,6 +1,6 @@
 """The sent QCi correspondence has a recorded hash, so alteration is visible.
 
-F99, Sprint 20. `docs/qci_package/` is wholly gitignored (`.gitignore:62`) and
+F99, Sprint 20. `docs/qci_package/` is wholly gitignored (its own `.gitignore` rule) and
 correctly so: it holds private commercial correspondence that must not be
 published. The consequence was that the artifacts sent to QCi on 2026-09-25
 existed on one workstation with NO recorded hash anywhere, so a silent

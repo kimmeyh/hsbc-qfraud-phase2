@@ -20,7 +20,8 @@ gitignored.)
 
 **Sent to QCi: the questions in section 4 only, on 2026-10-18** (the team
 lead's email, filed in `docs/qci_package/`). **QCi answered A1-A12 and P2
-on 2026-10-20; P1 is still open** (section 4). Nothing else in this file has
+on 2026-10-20, and P1 on 2026-10-21**; on 2026-10-21 QCi also raised the
+integer solver to 954 levels (section 4). Nothing else in this file has
 been sent. Sending is the team lead's action. Anything sent is filed in
 `docs/qci_package/`, and its status is updated here.
 
@@ -291,7 +292,10 @@ and `6ad05b47358b23d0cb3727b4`, 2026-10-15. Write-up:
   (Client docs, through the site sweep; not re-checked.)
 - **Ceilings**: the base module equals Dirac-3 (949, 135, 39, 19). With one
   expansion module: 9,980, 580, 145 and 55. (Guide Table 2; EDB:
-  `dirac3s-variable-ceiling-by-configuration`)
+  `dirac3s-variable-ceiling-by-configuration`) **Updated 2026-10-21**: the
+  integer solver now has 954 levels on both devices, and Dirac-3S moves to
+  9,980 levels "in the coming weeks" (section 4, "QCi's answers,
+  2026-10-21").
 - **Resolution**: the same 23 dB maximum and the same about 200:1 sentence
   as the Dirac-3 guide. (EDB: `dirac3s-analog-resolution-about-200-to-1`)
 - **It is not an exact solver**; the best returned sample is the answer.
@@ -440,7 +444,7 @@ installed (F141): both still hold.
 
 ## 4. Questions for QCi
 
-### Asked 2026-09-25, under QCi review; followed up 2026-10-18
+### Asked 2026-09-25, followed up 2026-10-18; both answered (P2 2026-10-20, P1 2026-10-21)
 
 - **P1.** Is our reading of the Hamiltonian correct: `J = HH^T + lambda*I`,
   `C = -2Hy`, sum constraint 1.0, `w >= 0`?
@@ -536,11 +540,39 @@ labeled.
 - **A11. Yes**: the cloud cap is 100 samples per job on `dirac-3s`.
 - **A12. Not seedable.** Randomness comes from measuring the quantum
   state; each sample is computed the same way.
-- **P1. Not answered**: referred to QCi's eqc-models contact. Still open.
+- **P1. Not answered**: referred to QCi's eqc-models contact. Answered by
+  that contact on 2026-10-21; see below.
 - **P2. "Consistent with our estimate from the user guide"**, and QCi
   offered to review our report. The resolution finding has not been
   shown wrong; QCi has not validated our reading either, so it stays our
   independent finding (the 2026-09-25 condition above).
+
+### QCi's answers, 2026-10-21
+
+Two replies on the same thread, both filed in `docs/qci_package/` (files
+dated 20261021). Each item is **QCi states**.
+
+- **P1. Confirmed** by QCi's eqc-models contact: the Hamiltonian that
+  `eqc_models.ml.classifierqboost` constructs "follows the formula
+  described" (`J = HH^T + lambda*I`, `C = -2Hy`, sum constraint 1.0,
+  `w >= 0`). This agrees with the offline check in section 2 (F141), where
+  the J and C a fit sends equal the proxy's. P1 is closed. The reply
+  assumed the question was about our `eqc_submit` module; the confirmation
+  is of the library's construction, which is what P1 asked.
+- **The integer solver now has 954 levels**, on both Dirac-3 and Dirac-3S.
+  **Dirac-3S moves to 9,980 levels "in the coming weeks."** This matches
+  the team lead's Decision 7 reading (expansion installed, not yet fully
+  implemented). **Inferred**: the guide gives the same 949 figure for the
+  continuous ceiling and for the integer level budget, so the continuous
+  ceiling may now also be 954. **Unverified**: QCi named levels, not
+  continuous variables. **Consequence for F155** (Inferred): a 950-variable
+  probe can no longer tell the old limit from the new one. If the
+  continuous ceiling is now 954, a job at 950 is accepted while the
+  9,980 configuration is still not live. The probe size is a Manual
+  Validation decision (Sprint 28).
+- **Consequence for F115** (Inferred): F115's sizing points sit at level
+  budgets at or below 949, so its fit is unaffected. A budget between 950
+  and 954 is newly reachable and unmeasured.
 
 ---
 
@@ -572,3 +604,4 @@ Each update adds a row to the revision log and moves items between labels
 | 2026-10-18 | 27 | F146 update (Task L): the two pending questions (P1, P2) and the twelve unsent ones (A1-A12) drafted as one message for the team lead to send, in the gitignored `docs/qci_package/`; none dropped, and A3, A6 and A12 now cite what F142 measured. Not sent |
 | 2026-10-19 | 27 | The team lead sent P1-P2 (follow-up) and A1-A12 on 2026-10-18; section 4 headings updated; the email is filed in `docs/qci_package/` |
 | 2026-10-21 | 28 | QCi's answers of 2026-10-20 recorded (section 4, "QCi's answers"): A1-A12 and P2 answered, P1 referred to the eqc-models contact. Section 2's "raw values come back too" corrected (A6b); "Not known" items updated; A7's reference for the 200:1 flagged against A31 and F104's gate, unverified |
+| 2026-10-22 | 28 | QCi's two replies of 2026-10-21 recorded (section 4, "QCi's answers, 2026-10-21"): P1 confirmed by the eqc-models contact and closed; integer solver at 954 levels on both devices, Dirac-3S to 9,980 levels in the coming weeks; the consequence for F155's 950-variable probe flagged. Missed in the 2026-10-21 update, which recorded only the 2026-10-20 reply; found by the team lead's check |
