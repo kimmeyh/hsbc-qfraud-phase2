@@ -595,6 +595,13 @@ approval and is not part of this sprint.
   too, which is unverified (above). The library's parallel build would be
   faster by up to its worker count; the slopes (P1, P2) are about growth
   with rows and are read the same way.
+- **Correction, 2026-10-22, after two timing rows and before any slope.**
+  "The construction time is subtracted" is narrowed to what the reason
+  given for it covers: `solve_simplex_qp` rebuilds J, not H, so only the J
+  build is subtracted from the solver's time. The first version subtracted
+  H as well; the solve went negative and was clamped to zero on both rows.
+  Those two rows were discarded and the run restarted. A row whose solve
+  is still clamped is flagged (`solve_clamped`) and reported.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
