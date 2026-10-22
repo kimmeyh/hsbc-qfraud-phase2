@@ -40,6 +40,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 24 | docs/sprints/SPRINT_24_SUMMARY.md | [OK] Complete | ~2 days (Oct 9-10, 2026) |
 | 25 | docs/sprints/SPRINT_25_SUMMARY.md | [OK] Complete | ~4 days (Oct 10-13, 2026) |
 | 26 | docs/sprints/SPRINT_26_SUMMARY.md | [OK] Complete | ~5 days (Oct 13-17, 2026) |
+| 27 | docs/sprints/SPRINT_27_SUMMARY.md | [OK] Complete | ~2 days (Oct 18-19, 2026) |
 
 ## Last Completed Sprint
 
@@ -54,8 +55,8 @@ real target and the sparse pocket; the dense substrate misses (F150).
 F109: the g4 prediction is not falsified. F6: pursue the gate-based arm in
 simulation only. F106 is inconclusive. F107: about 10,000 shots per row or
 more. F108: no ceiling method is validated. Records: `SPRINT_27_PLAN.md`,
-`SPRINT_27_VALIDATION.md`, `SPRINT_27_RETROSPECTIVE.md`;
-`SPRINT_27_SUMMARY.md` is written at Sprint 28 planning.
+`SPRINT_27_VALIDATION.md`, `SPRINT_27_RETROSPECTIVE.md`,
+`SPRINT_27_SUMMARY.md` (written at Sprint 28 planning).
 
 ### Sprint 26: Reach Dirac-3S, Measure It, and Make the Proxy Repeatable
 (Oct 13 - Oct 16, 2026; PR #21, main PR #31). Delivered **F141, F145, F144, F142, F147,
@@ -480,6 +481,13 @@ F116 (F106 inconclusive). See SPRINT_27_PLAN.md, SPRINT_27_VALIDATION.md,
 SPRINT_27_RETROSPECTIVE.md and CHANGELOG.md. Removed from candidates per
 convention (Pass 1, 2026-10-19).)
 
+**Selected for Sprint 28** (team lead, 2026-10-21): F151, F152, F153, F111,
+F110, F154, F150, F114, F115, F13 and F146, zero metered. F150 and F114
+are blocked; each gets the in-sprint step that can unblock it, set at
+approval in `docs/sprints/SPRINT_28_PLAN.md`. Card estimates above are
+the plan's (velocity-adjusted 2026-10-21). F102, F95, F143, F25 and F30
+not selected.
+
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
 - Platform: N/A (document)
@@ -548,14 +556,14 @@ value. Removed from candidates.)
 - Acceptance: the template committed; each later experiment card names its preregistration file before it runs. `experiments/PREREGISTRATION.md` stays FROZEN; this is a new document. The downsized-matched-pair control and the repeated-draw reporting are both written into it, with the feasibility arithmetic and the reason it is not a Phase 1 amendment
 - Depends on: nothing
 
-**F150. SPECTRA substrates rebuilt to the authors' construction, and the F103 check repeated (~2h [no-history], zero metered) Priority 41, blocked**
+**F150. SPECTRA substrates rebuilt to the authors' construction, and the F103 check repeated (~30m request draft; rebuild ~2h after the reply [no-history], zero metered) Priority 41, blocked**
 - Phase: Phase 2 preparation (cross-domain study; added 2026-10-18 by the team lead with Sprint 27 Decision 1)
 - Platform: SPECTRA
 - Sprint 27's F103 rebuilds the paper's sparse pocket and dense substrate from its description. This card builds the same two substrates as the authors construct them, as close a duplicate as their details allow, and repeats the four published values: JOINT minus GA2M +0.37 and +0.00, HGB minus GAM +0.15, joint ratio 9.9
 - Acceptance: each value against the paper's with F103's tolerances; each difference from F103's rebuild named and explained
 - Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103 spent (corrected 2026-10-19, Pass 1: shipped in Sprint 27)
 
-**F151. ULB HGB comparator instability: find the cause (~1.5h [no-history], zero metered) Priority 20**
+**F151. ULB HGB comparator instability: find the cause (~50m [no-history], zero metered) Priority 20**
 - Phase: Phase 2 preparation (added 2026-10-19 by the team lead, Sprint 27 retrospective IMP-7)
 - Platform: ULB
 - Sprint 27 F130 found the HGB comparator in its ULB setup unstable under every setting tried: mean test AUPRC 0.22-0.52, single seeds 0.06-0.70 (`experiments/phase2/results/f130_ulb_hgb_check.json`). On F109's ULB subsample HGB was the strongest lane (`f109_ladder.json`), and in F106 the HGB twin was ahead of the circuit on 6 of 8 seeds (`f106_dequant.json`). The cause is unverified. Until it is found, no "beats HGB on ULB" reading stands (F130's was voided)
@@ -563,7 +571,7 @@ value. Removed from candidates.)
 - Acceptance: the cause named and shown by a controlled change (one setting moved, the spread closes); the stable ULB HGB reference recorded with its seeds; F130's ULB reading re-stated against it or left void with the reason
 - Depends on: none
 
-**F152. Experiment 2 entry and first rolling-origin score on IEEE-CIS (~4h [no-history], zero metered) Priority 22**
+**F152. Experiment 2 entry and first rolling-origin score on IEEE-CIS (~130m [no-history], zero metered) Priority 22**
 - Phase: Phase 2, Experiment 2 (added 2026-10-19, Pass 2 after Sprint 27: F105 built and audited the harness and reports no score until F102 names Experiment 2's entry; no card carried the entry or the score)
 - Platform: IEEE-CIS, classical proxy
 - Write Experiment 2's section 6 entry in `experiments/phase2/PREREGISTRATION_DRAFT.md` before any score: the lanes (the complete classical bar and the CVQBoost proxy), the metric and family (section 2a), and the two decisions F105 left to the entry: how to treat the adversarial control that stops at its cap with early-versus-late AUC 0.89-0.95 (a higher cap, group drops, or a stated limit), and whether month 6's 8,111-row partial bucket counts as a fold
@@ -572,7 +580,7 @@ value. Removed from candidates.)
 - Acceptance: the entry committed before the first score; per-fold AUPRC with intervals per section 2; the drift treatment applied as written
 - Depends on: none (F105 shipped in Sprint 26)
 
-**F153. Experiment 3 entry and proxy design: F25's first step, zero metered (~4h [no-history], zero metered) Priority 24**
+**F153. Experiment 3 entry and proxy design: F25's first step (~150m [no-history], zero metered) Priority 24**
 - Phase: Phase 2, Experiment 3 (added 2026-10-19, Pass 2 after Sprint 27: a split of F25, whose only hold reason left is F102)
 - Platform: ULB, classical proxy, SCIP
 - Write Experiment 3's section 6 entry, then build its Hamiltonian as F94's findings require: on held-out predictions, with the ridge weight chosen so the fit to the labels matters, against the greedy bar and the objective floor (`docs/phase2/F94_EXP3_CONTROLS.md`); run F104's gate on the chosen Hamiltonians
@@ -593,26 +601,26 @@ value. Removed from candidates.)
 - Acceptance: the table committed with its source file per row; the pairwise catch-and-miss counts per seed; any subset claim reported only with a paired interval across seeds that excludes zero, under the Phase 2 draft's family rule (section 2a)
 - Depends on: none (the local prediction files; a run on another machine first needs them copied or regenerated)
 
-**F110. Experiment 6 scaling claim: end-to-end training time against sample count (~3h [no-history]) Priority 110**
+**F110. Experiment 6 scaling claim: end-to-end training time against sample count (~100m [no-history], proxy only) Priority 28**
 - Phase: Phase 2 preparation, Experiment 6
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
 - Time including Hamiltonian construction. `HARDWARE_PLAN_PHASE_2.md` owns the sent sizing (12 fits at 833 variables) and the pool-build-to-device-time ratio
 - Depends on: F102 for reporting; Criterion H for any metered fit (corrected 2026-10-18, Pass 1: F141 is spent, shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed)
 
-**F111. Experiment 4 build: Loke et al. replication harness (~4h [no-history], zero metered) Priority 120**
+**F111. Experiment 4 build: Loke et al. replication harness (~130m [no-history], zero metered) Priority 26**
 - Phase: Phase 2 preparation, Experiment 4
 - Platform: ULB
 - Their split and comparator, target AUC-PR 0.80, then re-evaluated under ours
 - Depends on: F102 for reporting
 
-**F114. Ceiling estimates on real data: learning-curve floor and label noise (~6h [no-history], zero metered) Priority 140**
+**F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)
 - Platform: ULB, IEEE-CIS
 - Fit `a*N^(-b) + c` against N_positives within a fixed time window; confident learning with the diagonal-dominance condition tested and reported when it fails. Report intervals, not points
 - Depends on: a ceiling method that passes F108's harness (corrected 2026-10-19, Pass 1: F108 shipped in Sprint 27 and validated none, so this card is blocked, not ready)
 - **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods on its main arm, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
 
-**F115. Integer cost scaling stated correctly in a new document (~30m, zero metered) Priority 170**
+**F115. Integer cost scaling stated correctly in a new document (~45m, zero metered) Priority 170**
 - Phase: QCi/External
 - Platform: docs
 - `HARDWARE_PLAN_PHASE_2.md` says cost is "superlinear in variables". Its own two-factor fit, `vars^0.75 x levels^0.52`, is sublinear in variables; it is superlinear only when levels grow with variables (exponent sum 1.27). The document is FINAL (team lead, 2026-09-27), so the correction goes in a new document, per the F92 consequence above
@@ -694,7 +702,7 @@ not a sweep correction.
 - Value was judged to arrive with Phase 2 volume (81+ fit grids), and that judgment was made against a free tier with 163 spent seconds. With 3,000 granted seconds (F46) and queue wait as the binding cost rather than device seconds, the case is stronger: whenever a session needs more than one or two fits, serial submission wastes most of the wall clock. Still not recommended BEFORE submission, on calendar grounds alone
 - Depends on: nothing to build; live vetting needs F141, spent (corrected 2026-10-18, Pass 1: shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate and the F124 rank-1-first gate are both spent); live vetting needs team-lead approval (Criterion H)
 
-**F13. Phase 2 PoC sprint planning (~unknown) Priority 180**
+**F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 180**
 - Phase: Phase 2 (Nov 17 - Feb 28, if selected)
 - Platform: All
 - Braket hardware validation, IEEE-CIS at scale, calibrated deployment per the routing architecture; plan built on acceptance

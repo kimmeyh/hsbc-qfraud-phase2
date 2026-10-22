@@ -1,9 +1,9 @@
 {
   "current_sprint": {
     "number": 28,
-    "name": "(named at planning)",
+    "name": "Experiment Entries First, Then Their First Measurements",
     "branch": "feature/20261019_Sprint_28",
-    "status": "phase_1_backlog_refinement",
+    "status": "phase_3_planning",
     "plan_doc": "docs/sprints/SPRINT_28_PLAN.md",
     "pr": null,
     "plan_approved": false,
@@ -15,12 +15,12 @@
     "number": 27,
     "merged_pr": 32,
     "main_merge_pr": 45,
-    "docs_triad_complete": false
+    "docs_triad_complete": true
   },
   "prereg": {
     "status": "FROZEN",
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-10-19"
+  "updated": "2026-10-21"
 }
