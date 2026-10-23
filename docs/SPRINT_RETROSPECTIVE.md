@@ -2,6 +2,47 @@
 
 Adapted 2026-08-30 from spamfilter-multi's SPRINT_RETROSPECTIVE.md. The source's 14-category x 4-role structure and 7-step protocol are preserved in shape and EXTENDED to 16 categories (15 and 16 are team-lead additions from Sprint 2); examples are adapted to this project.
 
+## Purpose (team lead, verbatim, 2026-10-23)
+
+"The overall goals of the Retrospective is for the entire team (Coding
+Agents and Non-Coding agents) to be long-term (many sprints) more effective
+while as efficient as reasonably possible in the context of long-term
+support of the repository and keeping in mind the Architecture, Software
+Engineering, Security, DevOps, Six Sigma (heavily weighting improvement
+that can prevent any current and future issues instead of responding to
+them), Agile standards and best practices. To accomplish this we must base
+what we do on facts supported by references, honesty, objectivity while
+treating each other in a "tactfully honest way" (as opposed to "brutally
+honest")."
+
+This applies to every retrospective without being restated in the prompt.
+The team lead does not need to paste it or the standing request below.
+
+## Standing request (team lead, verbatim, 2026-10-23; applies every sprint)
+
+"Please complete your sprint retrospective feedback (same sections)
+Combined feedback (yours and mine) and Summarize
+Make suggestions for improvements to be implemented. Ensure that all
+improvement suggestions first attempt to prevent the problem from happening
+first, then implement additional controls if absolutely necessary. Look for
+ways of extending current method of preventions "connected" to the current
+improvement when it makes more sense than creating a new method.
+Display suggestions for improvement for review and approval."
+
+How the 7-step protocol below carries it out:
+
+- Steps 2-3: Claude completes its own feedback in all 16 categories.
+- Step 4: the combined feedback is displayed AND summarized.
+- Step 5: each proposal is prevention first (stop the problem from
+  occurring); a detection or control is added only if prevention cannot
+  be made sufficient, and the proposal says why. Before proposing a new
+  guard, test, hook or document, check whether an existing prevention
+  connected to the problem can be extended instead; prefer extending it
+  when that makes more sense, and name it. Each proposal cites the fact
+  it rests on (a finding, a commit, a file and line, a measurement).
+- Steps 5-6: the proposals are displayed for review and approval; nothing
+  is applied before the team lead disposes it.
+
 ## Rules
 
 - Retrospectives are MANDATORY for every sprint, conducted after Phase 6 (PR updated, reviews on the draft PR complete, findings fixed) and BEFORE the PR is marked ready. The step 1 prompt goes out when the reviews start, so the team lead's feedback is collected while they run (team lead, 2026-10-23, Sprint 28 DV5).
@@ -14,8 +55,8 @@ Adapted 2026-08-30 from spamfilter-multi's SPRINT_RETROSPECTIVE.md. The source's
 1. **Send the prompt**: ask the team lead for PO/SM/LD feedback across all 16 categories (combined per-category lines acceptable), noting that Claude is drafting its own role's feedback in parallel.
 2. **Draft in parallel**: Claude writes its Development Team feedback for all 16 categories into `docs/sprints/drafts/SPRINT_N_RETROSPECTIVE_claude_draft.md` while waiting.
 3. **Record verbatim**: paste the template into `docs/sprints/SPRINT_N_RETROSPECTIVE.md`; the team lead's exact words per category; Claude's lines from the draft. Exit gate: 16 categories, 4 roles, no placeholders.
-4. **Combine and display** in chat, both feedback sets together per category.
-5. **Propose improvements** from the combined feedback; per proposal: Title / Source / Type / Effort / Recommendation. Display; do NOT auto-apply.
+4. **Combine, display and summarize** in chat: both feedback sets together per category, then a short summary of the themes.
+5. **Propose improvements** from the combined feedback and the review findings; per proposal: Title / Source (the fact it rests on) / Type / **Prevention or control** (a control says why prevention is not enough) / **Extends** (the existing prevention it extends, or "new" with why) / Effort / Recommendation. Display; do NOT auto-apply.
 6. **Team lead disposes each**: apply now, backlog, or skip (blanket disposition acceptable). Record in an "Improvement Decisions" section.
 7. **Apply**: now-items as commits on the sprint branch; backlog-items to ALL_SPRINTS_MASTER_PLAN.md; skips noted. Then the mandatory completion updates (master plan Last Completed Sprint, summary doc scheduling, CHECKLIST reconciliation, **one `docs/VELOCITY_LOG.md` row per task from `sprint_status.json` `task_actuals`** (IMP-7, Sprint 22)). THEN `gh pr ready`.
 
