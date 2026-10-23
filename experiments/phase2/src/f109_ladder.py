@@ -71,7 +71,9 @@ def top_phases(X: pd.DataFrame, y: np.ndarray, tr: np.ndarray,
     return t1.whiten_rerank(P), feats
 
 
-def ulb_run(seed: int) -> dict:
+def ulb_run(seed: int, scores: dict | None = None) -> dict:
+    """`scores`, opt-in (Sprint 28 DV4 outcome backfill): passed to
+    `f103_tier1.run_target`. The row returned is the same with or without."""
     import data
     df = data.load_ulb()
     y_all = df[data.LABEL_COL].to_numpy().astype(int)
@@ -80,13 +82,19 @@ def ulb_run(seed: int) -> dict:
     y = y_all[S]
     tr, _ = t1._split(len(y), y, seed)
     P, feats = top_phases(X, y, tr, seed)
-    row = t1.run_target("ulb", P, y, seed)
+    row = t1.run_target("ulb", P, y, seed, scores=scores)
     row["features"] = feats
     return row
 
 
-def ieee_runs(df: pd.DataFrame, seed: int) -> dict:
+def ieee_runs(df: pd.DataFrame, seed: int,
+              scores: dict | None = None) -> dict:
+    """`scores`, opt-in: filled under "before" and "after" as
+    `f103_tier1.run_target` describes."""
     import ieee_features
+
+    def sink(k):
+        return None if scores is None else scores.setdefault(k, {})
     y_all = df["isFraud"].to_numpy().astype(int)
     S = subsample(y_all, seed)
     y = y_all[S]
@@ -96,7 +104,7 @@ def ieee_runs(df: pd.DataFrame, seed: int) -> dict:
     raw = sub.drop(columns=["isFraud", "TransactionID", "TransactionDT"])
     raw = raw.select_dtypes(include=[np.number])
     P, feats = top_phases(raw, y, tr, seed)
-    before = t1.run_target("ieee_before", P, y, seed)
+    before = t1.run_target("ieee_before", P, y, seed, scores=sink("before"))
     before["features"] = feats
 
     t0 = time.perf_counter()
@@ -108,7 +116,7 @@ def ieee_runs(df: pd.DataFrame, seed: int) -> dict:
     assert not any(c in agg.columns for c in ("TransactionID", "TransactionDT"))
     pipe_s = time.perf_counter() - t0
     P, feats = top_phases(agg, y, tr, seed)
-    after = t1.run_target("ieee_after", P, y, seed)
+    after = t1.run_target("ieee_after", P, y, seed, scores=sink("after"))
     after["features"] = feats
     after["pipeline_seconds"] = round(pipe_s, 1)
     after["uid_features_chosen"] = [f for f in feats if f.startswith("uid_")

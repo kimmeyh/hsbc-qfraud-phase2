@@ -79,22 +79,131 @@
     "auprc": 0.8072915380038548,
     "auprc_norm": 0.8069683785911412,
     "auroc": 0.928288904641438,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 42,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 308,
+      "confusion": {
+       "tn": 56424,
+       "fp": 227,
+       "fn": 14,
+       "tp": 81
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_42.npz",
+      "sha256": "b5d104e67ce7863cbe640a1d96093fa3811a8148fdb3e899235c71b2553133e7",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.8093418414537183,
     "auprc_norm": 0.8090221202650033,
     "auroc": 0.9283049771964819,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 42,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 306,
+      "confusion": {
+       "tn": 56426,
+       "fp": 225,
+       "fn": 14,
+       "tp": 81
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_42.npz",
+      "sha256": "742ba1e39eb292bb09e1341776d537e96fa28476d4f9d5f316b1bfa440500a5e",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.8244885273294417,
     "auprc_norm": 0.8241942061364582,
     "auroc": 0.9482944975189735,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 42,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 291,
+      "confusion": {
+       "tn": 56441,
+       "fp": 210,
+       "fn": 14,
+       "tp": 81
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_42.npz",
+      "sha256": "7c33bf11a6e3457d2aba967d28db46242809e2d6c0e752732f8aae7ffd896547",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.8231491278876261,
-   "stored_row_auprc": 0.8072915380038548
+   "stored_row_auprc": 0.8072915380038548,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 42,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56448,
+      "fp": 203,
+      "fn": 14,
+      "tp": 81
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.22287598252296448,
+      "confusion": {
+       "tn": 56644,
+       "fp": 7,
+       "fn": 19,
+       "tp": 76
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.022515558004379193,
+      "confusion": {
+       "tn": 56415,
+       "fp": 236,
+       "fn": 14,
+       "tp": 81
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_42.npz",
+     "sha256": "e80770b431007ab8d7eb0f257ac9d76c5b32b4c918dd07b4519cac2c2c17fadc"
+    }
+   }
   },
   {
    "seed": 43,
@@ -103,22 +212,131 @@
     "auprc": 0.7644740060409198,
     "auprc_norm": 0.7640790444440174,
     "auroc": 0.9107404616818209,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 43,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 326,
+      "confusion": {
+       "tn": 56400,
+       "fp": 251,
+       "fn": 20,
+       "tp": 75
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_43.npz",
+      "sha256": "aab5324c1616e5dc9a2d4bbea009b211e842056c7cde82722d0966574ec44d3e",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7618652926752792,
     "auprc_norm": 0.7614659564376868,
     "auroc": 0.9055631479539079,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 43,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 327,
+      "confusion": {
+       "tn": 56399,
+       "fp": 252,
+       "fn": 20,
+       "tp": 75
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_43.npz",
+      "sha256": "1de837241a4e9cb56ecb854ca765363ea3fccba2ca9abd891d906a5999ad3762",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7828583622765716,
     "auprc_norm": 0.7824942300355922,
     "auroc": 0.9441935804542866,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 43,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 285,
+      "confusion": {
+       "tn": 56442,
+       "fp": 209,
+       "fn": 19,
+       "tp": 76
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_43.npz",
+      "sha256": "f91e9ba72d44525a148024c9a7a293ed757c7bb24ad62403bc85ae35a57dd31f",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7820991639982819,
-   "stored_row_auprc": 0.7644740060409198
+   "stored_row_auprc": 0.7644740060409198,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 43,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56443,
+      "fp": 208,
+      "fn": 19,
+      "tp": 76
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.27632609009742737,
+      "confusion": {
+       "tn": 56645,
+       "fp": 6,
+       "fn": 26,
+       "tp": 69
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.028555516004562326,
+      "confusion": {
+       "tn": 56505,
+       "fp": 146,
+       "fn": 19,
+       "tp": 76
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_43.npz",
+     "sha256": "32050846800914e3b5cbe0bc7c93c8661c2712cab2fcdd55b70f4e8f5b21fef0"
+    }
+   }
   },
   {
    "seed": 44,
@@ -127,22 +345,131 @@
     "auprc": 0.7447843848453629,
     "auprc_norm": 0.7443564050490717,
     "auroc": 0.9384284571554923,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 44,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 351,
+      "confusion": {
+       "tn": 56380,
+       "fp": 271,
+       "fn": 15,
+       "tp": 80
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_44.npz",
+      "sha256": "4db457dc34c2b36256f597f431a22252c9c0ec5e3ae9a3d460dd3ee2221201b5",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7381044981157967,
     "auprc_norm": 0.7376653165889216,
     "auroc": 0.9383971481898866,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 44,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 352,
+      "confusion": {
+       "tn": 56379,
+       "fp": 272,
+       "fn": 15,
+       "tp": 80
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_44.npz",
+      "sha256": "ceaede765037ff19c3c16bf1339942c8e86940fdd39a8f8e7d083336d23aea53",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7641023509792446,
     "auprc_norm": 0.7637067661412547,
     "auroc": 0.9412747858773339,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 44,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 284,
+      "confusion": {
+       "tn": 56447,
+       "fp": 204,
+       "fn": 15,
+       "tp": 80
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_44.npz",
+      "sha256": "3cef47a2df41287b41255ad6b9385c375400f138caaa34dd0c4d7d0a93ca3ab8",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7694739110479076,
-   "stored_row_auprc": 0.7447843848453629
+   "stored_row_auprc": 0.7447843848453629,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 44,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56447,
+      "fp": 204,
+      "fn": 15,
+      "tp": 80
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.2554684281349182,
+      "confusion": {
+       "tn": 56642,
+       "fp": 9,
+       "fn": 24,
+       "tp": 71
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.02545597672462463,
+      "confusion": {
+       "tn": 56450,
+       "fp": 201,
+       "fn": 15,
+       "tp": 80
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_44.npz",
+     "sha256": "78d1703a9d2d467c18d306c06312fb980581c598750cbe7835e20bbc5615421b"
+    }
+   }
   },
   {
    "seed": 45,
@@ -151,22 +478,131 @@
     "auprc": 0.7812149230576372,
     "auprc_norm": 0.7808480348772074,
     "auroc": 0.9113392340359114,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 45,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 340,
+      "confusion": {
+       "tn": 56389,
+       "fp": 262,
+       "fn": 17,
+       "tp": 78
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_45.npz",
+      "sha256": "7682db9a311da2260096b6f88bb7d27b4253d110ea2cb2bf90f272991b5aa0f4",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7821463802812783,
     "auprc_norm": 0.7817810540933331,
     "auroc": 0.9116745279732137,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 45,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 340,
+      "confusion": {
+       "tn": 56389,
+       "fp": 262,
+       "fn": 17,
+       "tp": 78
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_45.npz",
+      "sha256": "8dd25d44e8252736edb28191d7c46c0c0e0e8f735d22c665d2cbe52cd14a35f1",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.8088636448875325,
     "auprc_norm": 0.8085431217946359,
     "auroc": 0.9451308055137225,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 45,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 285,
+      "confusion": {
+       "tn": 56444,
+       "fp": 207,
+       "fn": 17,
+       "tp": 78
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_45.npz",
+      "sha256": "7fdf81b5c2d7c992a5f5296c02b74fe45b8f8c8333842f424ff5d7a0ba70cd8c",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.8097074489486878,
-   "stored_row_auprc": 0.7812149230576372
+   "stored_row_auprc": 0.7812149230576372,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 45,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56445,
+      "fp": 206,
+      "fn": 17,
+      "tp": 78
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.19442996382713318,
+      "confusion": {
+       "tn": 56640,
+       "fp": 11,
+       "fn": 18,
+       "tp": 77
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.02670177936553938,
+      "confusion": {
+       "tn": 56494,
+       "fp": 157,
+       "fn": 17,
+       "tp": 78
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_45.npz",
+     "sha256": "a6c163a8fe0510c81dd9dd470b7ca6d75ea7fc57801c51c0a926a82a30c5b13f"
+    }
+   }
   },
   {
    "seed": 46,
@@ -175,22 +611,131 @@
     "auprc": 0.757999070634843,
     "auprc_norm": 0.7575932509972427,
     "auroc": 0.9221869080213198,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 46,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 284,
+      "confusion": {
+       "tn": 56447,
+       "fp": 204,
+       "fn": 15,
+       "tp": 80
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_46.npz",
+      "sha256": "2a74840cf50462fbd04d67b4d81145d7333a4aa7aae0599333cff20b76d59743",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7583166859640817,
     "auprc_norm": 0.7579113989464932,
     "auroc": 0.9273837317871474,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 46,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 286,
+      "confusion": {
+       "tn": 56445,
+       "fp": 206,
+       "fn": 15,
+       "tp": 80
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_46.npz",
+      "sha256": "8011e452a2b10a8dfcb22c0deba325604646ff3e11e7c1729c8c38503f66e7c2",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7700855442587254,
     "auprc_norm": 0.7696999928422381,
     "auroc": 0.9410162314224957,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 46,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 289,
+      "confusion": {
+       "tn": 56444,
+       "fp": 207,
+       "fn": 13,
+       "tp": 82
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_46.npz",
+      "sha256": "faa9351d521716bd3800ce0083f13e9c87f0e5867389c6c00ff8fdaaa3a4c071",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7715760036250875,
-   "stored_row_auprc": 0.757999070634843
+   "stored_row_auprc": 0.757999070634843,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 46,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56449,
+      "fp": 202,
+      "fn": 13,
+      "tp": 82
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.1660941243171692,
+      "confusion": {
+       "tn": 56637,
+       "fp": 14,
+       "fn": 16,
+       "tp": 79
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.025814282894134493,
+      "confusion": {
+       "tn": 56438,
+       "fp": 213,
+       "fn": 13,
+       "tp": 82
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_46.npz",
+     "sha256": "fa7bbbaef83e91185d1b3ade06631c7da051ba5fe406729276e665e19b021470"
+    }
+   }
   },
   {
    "seed": 47,
@@ -199,22 +744,131 @@
     "auprc": 0.7640312352451879,
     "auprc_norm": 0.7636355311507905,
     "auroc": 0.9164965732011977,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 47,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 365,
+      "confusion": {
+       "tn": 56363,
+       "fp": 288,
+       "fn": 18,
+       "tp": 77
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_47.npz",
+      "sha256": "5b2e5bf3dbdea34c58ab1f27e2e5b3a5d4def8c608cf82aece55522c635831a4",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7614794131977958,
     "auprc_norm": 0.7610794298657061,
     "auroc": 0.9162764813925335,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 47,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 364,
+      "confusion": {
+       "tn": 56364,
+       "fp": 287,
+       "fn": 18,
+       "tp": 77
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_47.npz",
+      "sha256": "1281b7d2f53adda2de1ead78366ba13a8d377f41b49bd2b0cfa41b23c2f7a761",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7938988782869166,
     "auprc_norm": 0.7935532602649445,
     "auroc": 0.9395176747007765,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 47,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 290,
+      "confusion": {
+       "tn": 56439,
+       "fp": 212,
+       "fn": 17,
+       "tp": 78
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_47.npz",
+      "sha256": "2915bbbc8af4ff00e943858d68ef64a6b0be698053a07dcb04051a7cc72024ff",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7918568069638294,
-   "stored_row_auprc": 0.7640312352451879
+   "stored_row_auprc": 0.7640312352451879,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 47,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56445,
+      "fp": 206,
+      "fn": 17,
+      "tp": 78
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.19586336612701416,
+      "confusion": {
+       "tn": 56639,
+       "fp": 12,
+       "fn": 21,
+       "tp": 74
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.026630662679672158,
+      "confusion": {
+       "tn": 56456,
+       "fp": 195,
+       "fn": 17,
+       "tp": 78
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_47.npz",
+     "sha256": "2b3c849196de7a388bef7fd13f3cbcd1a060e8a03a02cb39f8ef828c40ce5f87"
+    }
+   }
   },
   {
    "seed": 48,
@@ -223,22 +877,131 @@
     "auprc": 0.8251258348938328,
     "auprc_norm": 0.8248325824237073,
     "auroc": 0.9447430202839362,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 48,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 289,
+      "confusion": {
+       "tn": 56447,
+       "fp": 204,
+       "fn": 10,
+       "tp": 85
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_48.npz",
+      "sha256": "63ba3797996aa6acfa20c373c5ad2563417f2fb35ca9d355c0eedd05f04b9417",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.8237748355884141,
     "auprc_norm": 0.823479317581334,
     "auroc": 0.9447335439798062,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 48,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 289,
+      "confusion": {
+       "tn": 56447,
+       "fp": 204,
+       "fn": 10,
+       "tp": 85
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_48.npz",
+      "sha256": "a26230e11c1e66934e8909b887e39742cbdece79cb4448c8a3ba357f178f50a3",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.8567032803732263,
     "auprc_norm": 0.8564629812017281,
     "auroc": 0.9660589444697868,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 48,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 284,
+      "confusion": {
+       "tn": 56452,
+       "fp": 199,
+       "fn": 10,
+       "tp": 85
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_48.npz",
+      "sha256": "eb510c2fc40ebf69dd1cefd3c29d06f664b807eab99c6f6a053f37fe3f0226c3",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.8548289971815659,
-   "stored_row_auprc": 0.8251258348938328
+   "stored_row_auprc": 0.8251258348938328,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 48,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56452,
+      "fp": 199,
+      "fn": 10,
+      "tp": 85
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.191494882106781,
+      "confusion": {
+       "tn": 56636,
+       "fp": 15,
+       "fn": 15,
+       "tp": 80
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.025115176439285198,
+      "confusion": {
+       "tn": 56434,
+       "fp": 217,
+       "fn": 10,
+       "tp": 85
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_48.npz",
+     "sha256": "fbca7be0e89c09d745787ff8f4c22cc6d5573b0329e3202c7c89349399c2279b"
+    }
+   }
   },
   {
    "seed": 49,
@@ -247,22 +1010,131 @@
     "auprc": 0.7765226511380334,
     "auprc_norm": 0.7761478943262934,
     "auroc": 0.9164713030568513,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 49,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 350,
+      "confusion": {
+       "tn": 56377,
+       "fp": 274,
+       "fn": 19,
+       "tp": 76
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_49.npz",
+      "sha256": "5f04481916c45ba8847dbb469e4b4f17218741780b6cb283dd2a26897bbdaefd",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7780780217908597,
     "auprc_norm": 0.7777058732333785,
     "auroc": 0.9164889549959168,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 49,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 348,
+      "confusion": {
+       "tn": 56379,
+       "fp": 272,
+       "fn": 19,
+       "tp": 76
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_49.npz",
+      "sha256": "2e343434c4fe64030f6813efd791469234b6586a56a2ae6fba23a72a22d8f216",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7976143512637923,
     "auprc_norm": 0.797274963845566,
     "auroc": 0.9547009436355005,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 49,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 297,
+      "confusion": {
+       "tn": 56431,
+       "fp": 220,
+       "fn": 18,
+       "tp": 77
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_49.npz",
+      "sha256": "aa2fa6c27d1bfebd9a4a43e6c71d4d63349b6d6aa617991db25082d71b0dc21b",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7977268565573054,
-   "stored_row_auprc": 0.7765226511380334
+   "stored_row_auprc": 0.7765226511380334,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 49,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56444,
+      "fp": 207,
+      "fn": 18,
+      "tp": 77
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.2481555938720703,
+      "confusion": {
+       "tn": 56647,
+       "fp": 4,
+       "fn": 25,
+       "tp": 70
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.02445621848106376,
+      "confusion": {
+       "tn": 56452,
+       "fp": 199,
+       "fn": 18,
+       "tp": 77
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_49.npz",
+     "sha256": "c3f525cb8ce4028b3b6ddfe5fa87e5f5c72b6dd3de4da723eb48e45cef202e12"
+    }
+   }
   },
   {
    "seed": 50,
@@ -271,22 +1143,131 @@
     "auprc": 0.7385695751480436,
     "auprc_norm": 0.7381311735247547,
     "auroc": 0.9211254690538282,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 50,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 345,
+      "confusion": {
+       "tn": 56380,
+       "fp": 271,
+       "fn": 21,
+       "tp": 74
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_50.npz",
+      "sha256": "80dd0575546b5d7801fd7c3d73521f2f10175ecb6d6d32c82a4aff91c1030d98",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7383633601967133,
     "auprc_norm": 0.7379246127645177,
     "auroc": 0.9211999788176731,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 50,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 346,
+      "confusion": {
+       "tn": 56380,
+       "fp": 271,
+       "fn": 20,
+       "tp": 75
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_50.npz",
+      "sha256": "dc92aef8e166e60aa51376e5a7a1a656bb8daec6ab470e62aefaf1eeaa1cec2f",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7647566997290689,
     "auprc_norm": 0.7643622121908835,
     "auroc": 0.9334879581258845,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 50,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 286,
+      "confusion": {
+       "tn": 56441,
+       "fp": 210,
+       "fn": 19,
+       "tp": 76
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_50.npz",
+      "sha256": "b06b5f4b75dad6fb2cb53b18e1139a4150eb0ab9a19c5a0d038c2d740aa56fdc",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7645516816860618,
-   "stored_row_auprc": 0.7385695751480436
+   "stored_row_auprc": 0.7385695751480436,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 50,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56443,
+      "fp": 208,
+      "fn": 19,
+      "tp": 76
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.2490580976009369,
+      "confusion": {
+       "tn": 56645,
+       "fp": 6,
+       "fn": 26,
+       "tp": 69
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.02578227162361141,
+      "confusion": {
+       "tn": 56459,
+       "fp": 192,
+       "fn": 19,
+       "tp": 76
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_50.npz",
+     "sha256": "5b1d66f49f1fef8ab29696d2de8e119c297dbec9eb8ec72c4e5bc3213c86f473"
+    }
+   }
   },
   {
    "seed": 51,
@@ -295,22 +1276,151 @@
     "auprc": 0.7214334512439528,
     "auprc_norm": 0.7209663134682414,
     "auroc": 0.9003458851007413,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_stored",
+     "seed": 51,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 360,
+      "confusion": {
+       "tn": 56366,
+       "fp": 285,
+       "fn": 20,
+       "tp": 75
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_stored_51.npz",
+      "sha256": "da4a0fe3d896a6321851a3c0836578f44482952c268fe120a92a09eae17e8847",
+      "n_rows": 56746
+     }
+    }
    },
    "ref_rebuilt": {
     "auprc": 0.7229688523664488,
     "auprc_norm": 0.7225042893574077,
     "auroc": 0.9003488580588997,
-    "n_pool": 91
+    "n_pool": 91,
+    "outcome": {
+     "name": "f144_ref_rebuilt",
+     "seed": 51,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 372,
+      "confusion": {
+       "tn": 56354,
+       "fp": 297,
+       "fn": 20,
+       "tp": 75
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_ref_rebuilt_51.npz",
+      "sha256": "b029776db29bf7b7557e35018c3520897eb62a7329c6296c86122338ae14870d",
+      "n_rows": 56746
+     }
+    }
    },
    "twin": {
     "auprc": 0.7620926011645519,
     "auprc_norm": 0.7616936461083417,
     "auroc": 0.9273066206849138,
-    "n_pool": 833
+    "n_pool": 833,
+    "outcome": {
+     "name": "f144_twin",
+     "seed": 51,
+     "n_test": 56746,
+     "n_positives": 95,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 284,
+      "n_flagged": 284,
+      "confusion": {
+       "tn": 56443,
+       "fp": 208,
+       "fn": 19,
+       "tp": 76
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f144_twin_51.npz",
+      "sha256": "5c137d0046143281480ce8ba2dcf7e8880f368fc6126ad121dfc1b9686e14c7a",
+      "n_rows": 56746
+     }
+    }
    },
    "b2_device_auprc": 0.7626351002564601,
-   "stored_row_auprc": 0.7214334512439528
+   "stored_row_auprc": 0.7214334512439528,
+   "b2_device_outcome": {
+    "name": "cvqboost_hw_None",
+    "seed": 51,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56443,
+      "fp": 208,
+      "fn": 19,
+      "tp": 76
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.17314636707305908,
+      "confusion": {
+       "tn": 56637,
+       "fp": 14,
+       "fn": 26,
+       "tp": 69
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.023621183633804305,
+      "confusion": {
+       "tn": 56449,
+       "fp": 202,
+       "fn": 19,
+       "tp": 76
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/results/predictions/cvqboost_hw_None_stratified_51.npz",
+     "sha256": "938deb9fb246616ded0f8d87943429ac8e6bf2f7f5c686db8cc6ae5cb3de8c77"
+    }
+   }
   }
- ]
+ ],
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "ref_stored (Phase 1 pools, solved here), seeds 42-51",
+   "ref_rebuilt (F144 pools, solved here), seeds 42-51",
+   "twin (F144 seeded pools, solved here), seeds 42-51",
+   "B2 device (hw_b2_full), seeds 42-51, stored Phase 1 predictions cvqboost_hw_None"
+  ],
+  "uncovered_lanes": {},
+  "n_blocks": 40,
+  "metric_check": {
+   "n_checks": 70,
+   "all_within_tolerance": true,
+   "max_abs_diff": 0.0,
+   "not_identical": []
+  },
+  "pools": "experiments/phase2/results/pools/f144_* are gitignored and local to the machine that built them; the per-row files carry the scores and their SHA-256"
+ }
 }

@@ -317,7 +317,7 @@ the proxy) picks weights for them. The weighted vote is the prediction.
 2. Leave them exempt, as now
 
 **DV4 answer (2026-10-23): 1, done now, not carded.** Survey of the 29:
-14 rebuild exactly and are being backfilled (f112, f113 model families,
+14 rebuild exactly and were backfilled on 2026-10-23, each reproducing its stored metrics, and left the exemption list (f112, f113 model families,
 f144, f142 Dirac-3S lane, f130_ulb_hgb_check, f108 x2, f103 x2, f106 x2,
 f107, f109 x2). Each rebuild must reproduce the stored metric or nothing
 is written. Not rebuildable: 11 files on unseeded `dct` pools (a rebuild

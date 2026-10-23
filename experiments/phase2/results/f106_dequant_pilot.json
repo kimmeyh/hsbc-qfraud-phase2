@@ -36,37 +36,191 @@
     "circuit": {
      "auprc": 0.6954781540273022,
      "auroc": 0.9569502243297154,
-     "norm_auprc": 0.6949479733693823
+     "norm_auprc": 0.6949479733693823,
+     "outcome": {
+      "name": "f106_pilot_circuit",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 285,
+       "confusion": {
+        "tn": 56662,
+        "fp": 201,
+        "fn": 15,
+        "tp": 84
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_circuit_42.npz",
+       "sha256": "d5471337b05810d147e92df3f46df22844825147a966bdb422eb6c4e5cd125d6",
+       "n_rows": 56962
+      }
+     }
     },
     "lr": {
      "auprc": 0.6448768581124437,
      "auroc": 0.9596099929708779,
-     "norm_auprc": 0.6442585792483867
+     "norm_auprc": 0.6442585792483867,
+     "outcome": {
+      "name": "f106_pilot_lr",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 285,
+       "confusion": {
+        "tn": 56649,
+        "fp": 214,
+        "fn": 28,
+        "tp": 71
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_lr_42.npz",
+       "sha256": "a84267c37f6323bb9148278338957b0022e4353f80571f98989010b3b6f70c02",
+       "n_rows": 56962
+      }
+     }
     },
     "gam": {
      "auprc": 0.6951410311823658,
      "auroc": 0.9761313609158428,
-     "norm_auprc": 0.6946102635845791
+     "norm_auprc": 0.6946102635845791,
+     "outcome": {
+      "name": "f106_pilot_gam",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 285,
+       "confusion": {
+        "tn": 56664,
+        "fp": 199,
+        "fn": 13,
+        "tp": 86
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_gam_42.npz",
+       "sha256": "3f6e878c2bedd8aa02d59206466b8701bed2744592583b8ba61dd95afefa0e85",
+       "n_rows": 56962
+      }
+     }
     },
     "ga2m": {
      "auprc": 0.7446861132199405,
      "auroc": 0.9655660059789282,
-     "norm_auprc": 0.7442416049317526
+     "norm_auprc": 0.7442416049317526,
+     "outcome": {
+      "name": "f106_pilot_ga2m",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 286,
+       "confusion": {
+        "tn": 56661,
+        "fp": 202,
+        "fn": 15,
+        "tp": 84
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_ga2m_42.npz",
+       "sha256": "6f0f155d6d36e58015440e5139907bc969ec81831ddb3219f5be911604c4195b",
+       "n_rows": 56962
+      }
+     }
     },
     "hgb": {
      "auprc": 0.726178981594437,
      "auroc": 0.9721758143842802,
-     "norm_auprc": 0.725702251896353
+     "norm_auprc": 0.725702251896353,
+     "outcome": {
+      "name": "f106_pilot_hgb",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 285,
+       "confusion": {
+        "tn": 56661,
+        "fp": 202,
+        "fn": 16,
+        "tp": 83
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_hgb_42.npz",
+       "sha256": "1774ede8fab080d1e04388cf752f9b9e972319f3bbb38aa2aac70dbc845d96f8",
+       "n_rows": 56962
+      }
+     }
     },
     "joint": {
      "auprc": 0.6260890709799999,
      "auroc": 0.9633265280346863,
-     "norm_auprc": 0.6254380820773219
+     "norm_auprc": 0.6254380820773219,
+     "outcome": {
+      "name": "f106_pilot_joint",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 285,
+       "confusion": {
+        "tn": 56660,
+        "fp": 203,
+        "fn": 17,
+        "tp": 82
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_joint_42.npz",
+       "sha256": "33d24573ef65e5aa67a25388c8543d516c509dc68e666985bce7b712e98eab33",
+       "n_rows": 56962
+      }
+     }
     },
     "rff": {
      "auprc": 0.6582243758810243,
      "auroc": 0.9598807127604413,
-     "norm_auprc": 0.6576293354014897
+     "norm_auprc": 0.6576293354014897,
+     "outcome": {
+      "name": "f106_pilot_rff",
+      "seed": 42,
+      "n_test": 56962,
+      "n_positives": 99,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 285,
+       "n_flagged": 285,
+       "confusion": {
+        "tn": 56649,
+        "fp": 214,
+        "fn": 28,
+        "tp": 71
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f106_pilot_rff_42.npz",
+       "sha256": "b30cfe08c5344406a012bb23d61c8bec3c982add60c584e38f116f3764fc0cf1",
+       "n_rows": 56962
+      }
+     }
     }
    },
    "lambdas": [
@@ -258,5 +412,27 @@
  "encoding_built_wrong": false,
  "elapsed_s": 2239.1,
  "projected_run_s": 17912.8,
- "run_within_limit": false
+ "run_within_limit": false,
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "circuit (retrained at the file's 1500 steps (the pilot stored no parameters)), seeds 42",
+   "lr twin, seeds 42",
+   "gam twin, seeds 42",
+   "ga2m twin, seeds 42",
+   "hgb twin, seeds 42",
+   "joint twin, seeds 42",
+   "rff twin, seeds 42"
+  ],
+  "uncovered_lanes": {},
+  "n_blocks": 7,
+  "metric_check": {
+   "n_checks": 35,
+   "all_within_tolerance": true,
+   "max_abs_diff": 0.0,
+   "not_identical": []
+  }
+ }
 }

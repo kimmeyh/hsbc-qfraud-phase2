@@ -336,11 +336,15 @@ HGB_CHECK_VARIANTS = {
 }
 
 
-def run_ulb_hgb_check() -> dict:
+def run_ulb_hgb_check(scores: dict | None = None) -> dict:
     """Why `ulb_full`'s "beats HGB" is not a finding: the HGB comparator,
     refit on the same features and split under the variants above, with the
     iterations it ran. Added after the run (Sprint 27), so a check of the
-    comparator, not a lever screen; it changes no recorded row."""
+    comparator, not a lever screen; it changes no recorded row.
+
+    `scores`, opt-in (Sprint 28 DV4 outcome backfill): a dict that receives
+    (test labels, per-row test scores) under (seed, variant). The rows
+    returned are the same with or without it."""
     from sklearn.ensemble import HistGradientBoostingClassifier
     c = qp.CONFIGS["free"]
     rows = []
@@ -351,10 +355,12 @@ def run_ulb_hgb_check() -> dict:
             t0 = time.time()
             m = HistGradientBoostingClassifier(random_state=seed, **kw).fit(
                 Xtr, ytr01)
+            p_te = m.predict_proba(Xte)[:, 1]
+            if scores is not None:
+                scores[(seed, name)] = (yte, p_te)
             rows.append({"seed": seed, "variant": name, "params": kw,
                          "n_iter": int(m.n_iter_),
-                         "test_auprc": float(sv._ap(
-                             yte, m.predict_proba(Xte)[:, 1])),
+                         "test_auprc": float(sv._ap(yte, p_te)),
                          "test_positive_rate": float(np.mean(yte)),
                          "elapsed_s": round(time.time() - t0, 1)})
             print(f"  s{seed} {name:34s} iter {rows[-1]['n_iter']:4d} "
