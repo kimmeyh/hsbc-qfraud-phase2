@@ -316,6 +316,25 @@ the proxy) picks weights for them. The weighted vote is the prediction.
    cannot
 2. Leave them exempt, as now
 
+**DV4 answer (2026-10-23): 1, done now, not carded.** Survey of the 29:
+14 rebuild exactly and are being backfilled (f112, f113 model families,
+f144, f142 Dirac-3S lane, f130_ulb_hgb_check, f108 x2, f103 x2, f106 x2,
+f107, f109 x2). Each rebuild must reproduce the stored metric or nothing
+is written. Not rebuildable: 11 files on unseeded `dct` pools (a rebuild
+is a sibling model, not the stored one), f130_levers (its recorded
+generator matches no committed version), the Dirac-3 B4 device lanes
+(per-row scores never stored), and 3 files with no per-row
+classification score (f102, f105 x2).
+
+**DV5 answer (2026-10-23): 1.** Reviews run on the draft PR before the
+retrospective; the retrospective takes their findings as input; each
+recurring class produces an improvement; one short review of the
+improvement commits; then CI on the final HEAD and `gh pr ready`.
+Applies from Sprint 28's own close-out. `SPRINT_CHECKLIST.md`,
+`SPRINT_EXECUTION_WORKFLOW.md` and `SPRINT_RETROSPECTIVE.md` updated.
+`CLAUDE.md` and the close-out hook need no change: the PR still stays
+draft until the end, and the hook checks no review order.
+
 ## Your actions (no decision needed from me)
 
 - Check the SPECTRA paper's exact title, then send, change or discard the

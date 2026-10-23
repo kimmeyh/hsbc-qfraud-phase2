@@ -4,7 +4,8 @@ Adapted 2026-08-30 from spamfilter-multi's SPRINT_RETROSPECTIVE.md. The source's
 
 ## Rules
 
-- Retrospectives are MANDATORY for every sprint, conducted after Phase 6 (PR updated) and BEFORE the PR is marked ready.
+- Retrospectives are MANDATORY for every sprint, conducted after Phase 6 (PR updated, reviews on the draft PR complete, findings fixed) and BEFORE the PR is marked ready. The step 1 prompt goes out when the reviews start, so the team lead's feedback is collected while they run (team lead, 2026-10-23, Sprint 28 DV5).
+- **The review findings are an input.** Step 5 groups them by class. Each RECURRING class (two or more findings this sprint, or seen in an earlier sprint) must produce an improvement: a card acceptance criterion, a Phase 5 gate, a test or a hook. A single finding gets its root cause recorded. After step 7, ONE short review of the improvement commits only; no second round (`SPRINT_EXECUTION_WORKFLOW.md` Phase 7).
 - **A retrospective is NEVER complete unless ALL 16 categories are addressed by ALL 4 roles.** The team lead wears Product Owner, Scrum Master, and Lead Developer; Claude provides the Development Team perspective. A role with nothing to say writes `No issues -- expectations met.` explicitly; silence is not acceptable.
 - Record the team lead's words VERBATIM; never paraphrase or substitute Claude's draft for them.
 
