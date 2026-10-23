@@ -31,7 +31,7 @@ variant; the last combines the two single moves.
 | Variant | Setting moved | Mean AUPRC | SD | Range | Closes |
 |---|---|---|---|---|---|
 | default | none | 0.375 | 0.170 | 0.480 | no |
-| l2_0p1 | `l2_regularization=0.1` | 0.766 | 0.034 | 0.092 | no (SD) |
+| l2_0p1 | `l2_regularization=0.1` | 0.766 | 0.034 | 0.092 | no (SD, level) |
 | **l2_1p0** | **`l2_regularization=1.0`** | **0.804** | **0.022** | **0.055** | **yes** |
 | no_early_stopping | `early_stopping=False` | 0.219 | 0.020 | 0.052 | no (level) |
 | l2_1p0_no_early_stopping | both | 0.806 | 0.022 | 0.062 | yes |
@@ -49,8 +49,13 @@ reference on the same seeds.
   against 35-89 with `l2_regularization=1.0`. Without early stopping and
   without L2, 100 iterations give a stable but poor model (0.219), which
   fits overshooting leaves.
-- **The dose follows**: 0.1 nearly closes the spread (SD 0.034); 1.0
-  closes it.
+- **The dose follows**: 0.1 nearly closes the spread (SD 0.034) but sits
+  0.05 below the reference level (0.766 against 0.816); 1.0 closes both.
+- **The range threshold cannot decide at five seeds** (found in the PR
+  review, 2026-10-23). With n = 5, a range above 0.10 forces an SD above
+  0.035, which already fails the 0.03 SD limit, so the range term never
+  changes a verdict. It would bind only below 0.0849 (0.03 x sqrt(8)).
+  No verdict here changes.
 - **Leading alternative not ruled out**: a larger `min_samples_leaf`,
   which also limits small leaves. A scratch probe before the plan
   (`min_samples_leaf=200`) stayed unstable (SD 0.246), but that probe is

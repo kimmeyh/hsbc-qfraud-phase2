@@ -20,13 +20,13 @@ Read `docs/phase2/F154_WHERE_MODELS_WIN.md`.
   holding a test score carries an outcome block (confusion counts at the
   0.5% alert budget, and the per-row scores with their SHA-256).
   `experiments/phase2/src/outcome_record.py`; enforced by
-  `test_outcome_record_required.py`, which exempts the 30 files written
-  before the rule. Written into `docs/SPRINT_PROCESS.md` and `CLAUDE.md`.
+  `test_outcome_record_required.py`, which exempted the 30 files written
+  before the rule (16 after the DV4 backfill). Written into `docs/SPRINT_PROCESS.md` and `CLAUDE.md`.
 - **Result: null.** 66 model pairs, 132 subset cells. The in-subset
   difference alone fired on 73 cells; the interaction (the rewritten
   rule) fired on none at the Bonferroni level.
-- Both models flag at least 776 of the 950 rows either flags; the most
-  rows one model catches alone is 34.
+- In every pair, both models flag at least 776 of the 950 test frauds
+  (95 per seed, 10 seeds); the most frauds one model catches alone is 34.
 - The F32 `cvqboost_hw_mixed` family was excluded: it used the
   undeduplicated split.
 

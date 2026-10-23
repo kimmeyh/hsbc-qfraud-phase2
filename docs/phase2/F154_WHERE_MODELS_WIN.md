@@ -105,7 +105,8 @@ record these values. From this sprint on:
   threshold, plus the per-row test scores saved with their SHA-256.
 - `experiments/src/test_outcome_record_required.py` fails any new Phase 2
   result file that holds a test score without a block. The 30 scored files
-  that predate the rule are exempt by name, and that list can only shrink.
+  that predated the rule were exempt by name, and that list can only
+  shrink; after the Sprint 28 DV4 backfill, 16 remain.
 - The rule is in the Phase 2 draft (section 2, "Outcomes recorded"),
   `docs/SPRINT_PROCESS.md` and `CLAUDE.md`.
 

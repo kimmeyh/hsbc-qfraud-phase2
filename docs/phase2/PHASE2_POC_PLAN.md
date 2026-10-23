@@ -70,7 +70,10 @@ that cost, **unverified** until the brief states them.
 - The four entries this sprint writes (Experiments 2, 3, 4 and 6).
 - F150's construction request to the SPECTRA authors (drafted this
   sprint; the send is the team lead's).
-- F146's open item P1 with QCi's eqc-models contact.
+- F146's P1 is closed: QCi's eqc-models contact confirmed it on
+  2026-10-21 (`DIRAC_UNDERSTANDINGS.md` section 4). The open QCi
+  question is whether the continuous solver accepts 954 variables, in
+  the reply draft the team lead sends.
 - Section 7 of the Phase 2 draft ("Open items before filing").
 
 ## On notification
