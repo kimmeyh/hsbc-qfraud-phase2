@@ -254,9 +254,28 @@ def pilot() -> dict:
     return doc["pilot"]
 
 
+def approve(reference: str) -> dict:
+    """Record the team lead's approval of a run over the cap, with the
+    decision it came from. Only after a pilot, and only once."""
+    if not reference.strip():
+        raise SystemExit("an approval names the decision it came from")
+    doc = _load()
+    pilot_ = doc.get("pilot")
+    if not pilot_:
+        raise SystemExit("no pilot recorded; nothing to approve")
+    if "over_cap_approval" in pilot_:
+        raise SystemExit("an approval is already recorded")
+    pilot_["over_cap_approval"] = {"reference": reference,
+                                   "date": time.strftime("%Y-%m-%d"),
+                                   "projected_minutes": pilot_["projected_minutes"]}
+    _save(doc)
+    return pilot_["over_cap_approval"]
+
+
 def run() -> None:
     doc = _load()
-    if not doc.get("pilot", {}).get("run"):
+    pilot_ = doc.get("pilot", {})
+    if not (pilot_.get("run") or pilot_.get("over_cap_approval")):
         raise SystemExit("the pilot did not project the run within the cap; "
                          "the seed count goes to Manual Validation")
     done = {_key(r) for r in doc["rows"]}
@@ -321,6 +340,8 @@ def main(argv=None) -> int:
     mode = (argv or sys.argv[1:] or ["pilot"])[0]
     if mode == "pilot":
         print(json.dumps(pilot(), indent=1))
+    elif mode == "approve":
+        print(json.dumps(approve(" ".join((argv or sys.argv[1:])[1:]))))
     elif mode == "run":
         run()
     elif mode == "analyze":

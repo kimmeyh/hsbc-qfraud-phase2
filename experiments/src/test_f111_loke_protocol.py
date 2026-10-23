@@ -117,7 +117,39 @@ def test_projection_adds_preparation_and_counts_the_sensitivity_seeds():
     assert fl.projection_min(p) == pytest.approx((630 * 13 + 630 * 10) / 60)
 
 
+def _no_real_work(monkeypatch):
+    # A run() that wrongly proceeds must fail fast, not start the real
+    # 825-minute experiment (a mutation did exactly that once).
+    def refuse(*a, **k):
+        raise AssertionError("run() reached real work")
+    monkeypatch.setattr(fl, "protocol_a", refuse)
+    monkeypatch.setattr(fl, "protocol_b", refuse)
+
+
 def test_run_refuses_without_a_passing_pilot(tmp_path, monkeypatch):
+    _no_real_work(monkeypatch)
     monkeypatch.setattr(fl, "OUT", tmp_path / "f111.json")
     with pytest.raises(SystemExit, match="Manual Validation"):
         fl.run()
+
+
+def test_an_over_cap_run_needs_a_recorded_approval(tmp_path, monkeypatch):
+    import json
+    _no_real_work(monkeypatch)
+    out = tmp_path / "f111.json"
+    monkeypatch.setattr(fl, "OUT", out)
+    with pytest.raises(SystemExit, match="no pilot"):
+        fl.approve("DV2")
+    out.write_text(json.dumps({"rows": [], "pilot": {"projected_minutes": 824.6,
+                                                     "run": False}}))
+    with pytest.raises(SystemExit, match="Manual Validation"):
+        fl.run()
+    with pytest.raises(SystemExit, match="names the decision"):
+        fl.approve("  ")
+    a = fl.approve("Sprint 28 DV2")
+    assert a["reference"] == "Sprint 28 DV2" and a["projected_minutes"] == 824.6
+    with pytest.raises(SystemExit, match="already recorded"):
+        fl.approve("again")
+    monkeypatch.setattr(fl, "SEEDS", ())
+    monkeypatch.setattr(fl, "SENS_SEEDS", ())
+    fl.run()                                   # approved: no refusal

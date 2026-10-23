@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-23
+
+- **feat**: Experiment 4 over-cap approval (F111, Sprint 28 Manual Validation DV2, #51). The team lead approved the run as written above the 120-minute cap. The entry gains a dated note before any full-size row. `f111_loke_protocol.py approve <decision>` records the approval in the pilot block, once, naming its decision; `run` proceeds on a pilot inside the cap or on that record. The tests now stub the real protocols, so a defect that lets `run` proceed fails fast instead of starting the experiment. F155's card records DV1: the probe is 1,300 variables.
+
 ### 2026-10-22
 
 - **docs**: Experiment 4 pilot (F111, Sprint 28 Task D, #51). The pilot record and `docs/phase2/F111_LOKE_PROTOCOL.md`: the run projects at about 825 minutes against the entry's 120-minute cap, so under the entry's size rule no seed ran at full size and the seed count goes to Manual Validation. The duplicate count under the source protocol is reported. The F111 card gains a dated line.

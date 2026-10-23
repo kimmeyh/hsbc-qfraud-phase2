@@ -527,6 +527,12 @@ any lane below is fit. Not filed; part of this draft. No device.
   goes to the team lead at Manual Validation; no silent cut. The full run
   starts only after Experiment 6's timing has finished, so the two do not
   share the processor.
+- **Seed count decided, 2026-10-23, after the pilot and before any
+  full-size row.** The pilot projected 824.6 minutes. The team lead
+  approved the run as written (10 seeds on A and B, plus the sensitivity
+  rows) above the cap (Sprint 28 Manual Validation, DV2). No other part of
+  the entry changes. The approval is recorded in the result file's pilot
+  block (`over_cap_approval`), and `run` reads it there.
 - **Comparator**: CAD (0.7423, Gao et al. 2025) is cited, not run; it was
   not run on their split either.
 - **Recording**: every row carries an outcome block (section 2,
