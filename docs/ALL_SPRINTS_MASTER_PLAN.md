@@ -488,6 +488,9 @@ approval in `docs/sprints/SPRINT_28_PLAN.md`. Card estimates above are
 the plan's (velocity-adjusted 2026-10-21). F102, F95, F143, F25 and F30
 not selected.
 
+**Assigned to Sprint 29** (team lead, 2026-10-23, during Sprint 28 Manual
+Validation): F159. The rest of Sprint 29's scope is set at its Pass 2.
+
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
 - Platform: N/A (document)
@@ -636,7 +639,7 @@ value. Removed from candidates.)
 - Risk named in advance: gradient boosting already concentrates on hard rows, so the gain may be small; removing a type also removes its legitimate look-alikes' context
 - Depends on: nothing
 
-**F159. Parallel weak-learner pool build: measure the speed-up (~60m [no-history], zero metered) Priority 50**
+**F159. Parallel weak-learner pool build: measure the speed-up (~60m [no-history], zero metered) Priority 50; assigned to Sprint 29 (team lead, 2026-10-23)**
 - Phase: Phase 2 preparation (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F110)
 - Platform: this machine first
 - F110 found the serial pool build is the cost (about 13 minutes at 833 learners and full ULB rows). The learners are independent, so the build splits across processes. Build them with a process pool that works on Windows (no `fork`), check the pool equals `full_pair_pool.build_full`'s, and time it at 1, 4, 8, 16 and 32 workers at F110's four row fractions. Report the speed-up against workers and the longest single learner (the floor any number of processors reaches)
