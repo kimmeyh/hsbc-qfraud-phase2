@@ -72,6 +72,10 @@ docs/paper/out/qci_package/
 # folder above; written before the folder's first file, and checked with
 # `git check-ignore` before that file was created.
 docs/spectra_package/
+# Correspondence with the Loke et al. authors (F111, Sprint 28 Manual
+# Validation): feedback drafts on Experiment 4. Private, like the folders
+# above; written and checked with `git check-ignore` before the first file.
+docs/loke_package/
 # Predictions: ignore the CONTENTS (not the directory itself, or the negation
 # below cannot re-include anything -- the Sprint 2 MANIFEST.json defect class).
 experiments/results/predictions/*

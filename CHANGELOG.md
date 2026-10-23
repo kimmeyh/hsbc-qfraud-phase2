@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-23
 
+- **docs**: Backlog from the team lead's Sprint 28 Manual Validation feedback: F156 (a ceiling estimator not tied to one model; F114's unblocker), F157 (best achievable result per algorithm per dataset, every metric, one document each), F158 (fraud types: find, remove, then predict the rest), F159 (measure the parallel pool build), F160 (Experiment 3's room check on IEEE-CIS). New `.gitignore` rule for `docs/loke_package/`, written and checked with `git check-ignore` before its first file, a feedback draft to the Loke et al. authors.
 - **feat**: Experiment 4 over-cap approval (F111, Sprint 28 Manual Validation DV2, #51). The team lead approved the run as written above the 120-minute cap. The entry gains a dated note before any full-size row. `f111_loke_protocol.py approve <decision>` records the approval in the pilot block, once, naming its decision; `run` proceeds on a pilot inside the cap or on that record. The tests now stub the real protocols, so a defect that lets `run` proceed fails fast instead of starting the experiment. F155's card records DV1: the probe is 1,300 variables.
 
 ### 2026-10-22

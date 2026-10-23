@@ -613,6 +613,41 @@ value. Removed from candidates.)
 - **2026-10-22 (Sprint 28 Task K): 950 may no longer separate the limits.** QCi's reply of 2026-10-21 raised the integer solver to 954 levels on both devices, with Dirac-3S to 9,980 "in the coming weeks" (`docs/phase2/DIRAC_UNDERSTANDINGS.md` section 4). If the continuous ceiling moved with it (inferred, unverified), a 950-variable job is accepted before the expansion is live. The probe size is a Manual Validation decision: 955 (just above 954) or 987 (F143's own size, which answers whether F143 fits under any intermediate limit). `qpu_cost_model.quote` gives 3-4 s for each, a floor above the 833 anchor. Not run
 - **2026-10-23 (team lead, Sprint 28 Manual Validation, DV1): the probe is 1,300 variables**, above both 954 and F143's 987, so an accepted job shows the queue has moved past both. `qpu_cost_model.quote(1300, 1)` gives 4 s from one Dirac-3S anchor (833, the only one within 2x); above that anchor, 4 s is a floor, not a bound. The run still needs its own per-block approval (Criterion H)
 
+**F156. Ceiling estimator that does not go through one model: F114's unblocker (~90m on F108's harness [no-history], zero metered) Priority 45**
+- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-23 by the team lead, Sprint 28 Manual Validation)
+- Platform: F108's simulator first; ULB and IEEE-CIS only after a pass
+- F108 and F114 found that every plug-in estimate tried overstates the Bayes error, and calibration does not move it. F108's four methods, its Cover-Hart nearest-neighbor bound among them, all failed. Candidates named in `F108_CEILING_VALIDATION.md`: a Bayes-error estimator not tied to one fitted model (for example a divergence-based bound such as Henze-Penrose; the choice is made in the entry), and an HGB set for extreme imbalance. Entry first, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm)
+- Scope note (team lead's question, 2026-10-23): the ceiling is a property of the data, not of the algorithm, so one validated estimate bounds every model, ML or QML (kernels, QNN, CVQBoost). A transform of the same features, quantum feature maps included, cannot lower it; synthetic or augmented rows cannot either. Only new information (new features or sources) can
+- Depends on: nothing. Enables: F114
+
+**F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 30**
+- Phase: Phase 2 (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F151 and F152)
+- Platform: ULB, IEEE-CIS, then the other datasets already used
+- For each algorithm (HGB, LightGBM, XGBoost, CatBoost, logistic regression, SVM, CVQBoost proxy and device, QSVM, QNN), find the best settings under one protocol per dataset, and record the alternatives tried and why each was kept or dropped. Every result reports TP, FP, TN and FN at the 0.5% alert budget and at validation-chosen thresholds, precision, recall, specificity, F1, MCC, balanced accuracy, AUC-PR and ROC-AUC, each with its interval over seeds
+- Output: one document per dataset per algorithm under `docs/phase2/algorithms/`, plus one comparison page per dataset that references them (numbers live in the result files, per the official-record rule)
+- Split at refinement into one card per dataset; device lanes need per-block approval (Criterion H)
+- Depends on: F102 for reporting; the F154 outcome rule supplies the confusion counts
+
+**F158. Fraud types: find, remove, then predict the rest (~150m exploration on the simulator [no-history], zero metered) Priority 35**
+- Phase: Phase 2 exploration (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F154)
+- Platform: F108's simulator (its fraud scenarios are known, so types are ground truth), then ULB and IEEE-CIS
+- Question: if each fraud type can be found by its own detector and its rows removed, does a model on the remaining rows catch more of the remaining fraud than one model on everything, at the same alert budget? The team lead's 2001 neural-network work used this approach
+- Steps: (1) on the simulator, per-type detectors in a cascade against one model, end to end on the same test rows; (2) on ULB and IEEE-CIS, which carry no type labels, candidate types from clustering the training frauds (features, or model explanations), kept only if stable across seeds; (3) the frauds every stored model misses (F154) characterized first. Entry before any run, with the comparison as the primary result
+- Risk named in advance: gradient boosting already concentrates on hard rows, so the gain may be small; removing a type also removes its legitimate look-alikes' context
+- Depends on: nothing
+
+**F159. Parallel weak-learner pool build: measure the speed-up (~60m [no-history], zero metered) Priority 50**
+- Phase: Phase 2 preparation (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F110)
+- Platform: this machine first
+- F110 found the serial pool build is the cost (about 13 minutes at 833 learners and full ULB rows). The learners are independent, so the build splits across processes. Build them with a process pool that works on Windows (no `fork`), check the pool equals `full_pair_pool.build_full`'s, and time it at 1, 4, 8, 16 and 32 workers at F110's four row fractions. Report the speed-up against workers and the longest single learner (the floor any number of processors reaches)
+- Depends on: nothing
+
+**F160. Experiment 3 room check on a second dataset (~45m [no-history], zero metered) Priority 70**
+- Phase: Phase 2 preparation (added 2026-10-23 by the team lead's question, Sprint 28 Manual Validation, after F153)
+- Platform: IEEE-CIS, classical proxy, greedy and SCIP
+- F94 and F153 tested only ULB. Repeat F153's gap check (greedy against the floor, threshold 0.01) on IEEE-CIS pools. The problem size is set by the number of learners, not rows, so more rows alone are not expected to open room (inferred); different learners or data might
+- Depends on: nothing; a pass reopens F25's design
+
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~100m [no-history], proxy only) Priority 28**
 - Phase: Phase 2 preparation, Experiment 6
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
