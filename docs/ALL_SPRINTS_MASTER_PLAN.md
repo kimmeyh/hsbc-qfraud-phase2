@@ -669,6 +669,7 @@ value. Removed from candidates.)
 - Primary result: the paired in-pocket PR-AUC difference (proxy minus each classical model) per dataset, with its interval over the five seeds, under the Phase 2 draft's family rule (section 2a). Entry written before any score. Every row carries an outcome block (F154 rule); pools seeded (`qubo_proxy.seeded_weak_params`)
 - A pass (proxy reliably above both classical models inside the pocket on a dataset) is what would justify a device block on that dataset (F161 or a new card); a null closes the in-pocket question for the proxy
 - Depends on: nothing
+- **2026-10-23 (Sprint 28 Task M, #59): entry written before any score** (Phase 2 draft section 6, "F162"). Two changes from the card, made in the entry: seeds 42-51 (ten; eight if seed 42's time projects ten above 120 minutes), because six primary tests need eight seeds for the Wilcoxon test to reach 0.05 / 6; and XGBoost at library defaults, because the Phase 1 tuned parameters were tuned on ULB
 
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~100m [no-history], proxy only) Priority 28**
 - Phase: Phase 2 preparation, Experiment 6

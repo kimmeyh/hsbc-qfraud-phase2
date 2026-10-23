@@ -238,6 +238,7 @@ on 2026-10-23:
 | - | Ceiling validation on a simulator with hidden state (verification) | F108 | none | Written 2026-10-18, below |
 | - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
 | - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
+| - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -1215,6 +1216,76 @@ count was computed. Not filed; part of this draft.
   family and seed, pointing at the stored file and its SHA-256 (section 2,
   "Outcomes recorded").
 
+### F162: in-pocket head-to-head on SPECTRA
+
+Written 2026-10-23 (Sprint 28 Task M, #59), before any score. Not filed;
+part of this draft.
+
+- **ID and card**: unnumbered analysis entry; F162.
+- **Question**: inside the SPECTRA pocket (`in_pocket` = 1), does the
+  CVQBoost proxy rank the test rows better than HGB and XGBoost, paired by
+  seed? Phase 1's H5 compared CVQBoost inside the pocket with a matched
+  random segment outside it, which asks whether the pocket is special for
+  CVQBoost. This asks the head-to-head the FourierWall2 in-pocket wins
+  rested on (one seed, one stochastic run, never repeated).
+- **Hypothesis and prediction**: the prior single-run evidence points to
+  the proxy above XGBoost in the pocket on all three cells; F100 found HGB
+  above the proxy overall on all three. No direction is predicted; a null
+  is reported as plainly as a find.
+- **Protocol** (the SPECTRA authors' recommendation, 2026-10-23):
+  covariates plus phases only; `target`, `target_real` and `in_pocket`
+  are never features (`spectra_segment._prep_spectra`, which asserts it;
+  telecom_churn also drops `age`, as the frozen cell does); label
+  `target`; `spectra_segment.spectra_split` (60/20/20 stratified on
+  `target`); features through `coerce_features_to_numeric`.
+- **Cells**: the three frozen cells (`spectra_segment.FROZEN_CELLS`):
+  telecom_churn, energy_steel and oilgas_gasturbine. energy_steel is in:
+  this comparison needs no matched control, so the infeasibility in
+  `docs/SPECTRA_CONTROL_FEASIBILITY.md` does not apply.
+- **Lanes**, all fitted on the training fold only:
+  - **proxy**: the frozen cell's CVQBoost configuration (weak-classifier
+    schedule 3, `dct` learners, sequential build, lambda = 2 x n_train),
+    the pool seeded (`qubo_proxy.seeded_weak_params(seed)`), weights from
+    `qubo_proxy.solve_simplex_qp`, score `(w @ H + 1) / 2` clipped to
+    [0, 1], as `spectra_segment.proxy_dry_run_cell` scores.
+  - **hgb**: `HistGradientBoostingClassifier(l2_regularization=1.0,
+    random_state=seed)`, F151's stable setting.
+  - **xgboost**: `XGBClassifier` at library defaults (xgboost 3.4.1) with
+    `random_state=seed`. The Phase 1 tuned parameters were tuned on ULB and
+    are not carried over. The FourierWall2 XGBoost settings are not on
+    record here.
+- **Seeds**: 42-51 (10). Section 2a: m = 6 primary tests need k = 8 for an
+  exact Wilcoxon test to reach 0.05 / 6. Seed 42 runs first and is timed;
+  if it projects the ten seeds above 120 minutes, the run is cut to 8
+  seeds (42-49), decided from the time alone before any score is read.
+- **No in-pocket positive floor.** Phase 1's 50-positive floor protected
+  an unpaired comparison with a separately drawn control. Here every lane
+  is scored on the identical pocket rows, so the pair shares the noise.
+  Every seed counts; each seed's pocket size and positive count are
+  reported.
+- **Primary tests** (one family, m = 6): for each cell, proxy minus hgb
+  and proxy minus xgboost in in-pocket AUPRC, per seed. Each test is the
+  exact two-sided Wilcoxon signed-rank test on the per-seed differences at
+  alpha 0.05 / 6, with the mean difference and its t interval at
+  1 - 0.05 / 6 reported beside it. A cell's comparison is "proxy above"
+  or "proxy below" only if the Wilcoxon test rejects and the interval
+  excludes zero on the same side; otherwise "no reliable difference".
+- **Secondary, uncorrected**: in-pocket ROC-AUC differences; in-pocket
+  floor-normalized AUPRC (section 2); overall AUPRC and ROC-AUC per lane;
+  hgb minus xgboost in the pocket; per-seed paired bootstrap intervals
+  (`metrics.paired_delta_ci`) on the in-pocket AUPRC differences; each
+  lane's train-test AUPRC gap (section 2).
+- **Falsifier**: "the proxy is better than a classical model inside the
+  pocket" is false on a cell if neither primary comparison there reads
+  "proxy above".
+- **What follows**: a "proxy above" on a cell is what would justify a
+  device block there (F161 or a new card, under its own approval). Not
+  run on any device here.
+- **Recording**: every lane, cell and seed carries an outcome block
+  (section 2), with validation scores for the validation-chosen operating
+  points. Result `experiments/phase2/results/f162_in_pocket.json`
+  (evidence tag `SIM`), generator `experiments/phase2/src/f162_in_pocket.py`.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -1310,3 +1381,5 @@ count was computed. Not filed; part of this draft.
 - 2026-10-23: the Experiment 6 entry gains a post-run note: the pilot
   projected four remaining seeds, not five; the decision is unchanged
   (PR review). The section 6 status date updated.
+- 2026-10-23: section 6 gains the F162 entry (Sprint 28 Task M, #59),
+  written before any score, and its table row.
