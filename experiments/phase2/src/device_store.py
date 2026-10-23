@@ -8,7 +8,7 @@ unseeded, so it can never be rescored.
 
 This lifts F142's raw-response save (`run_dirac3s_verify._guarded`) into one
 place every Phase 2 device runner uses, on any eqc-models cloud solver
-(the CVQBoost solver through `eqc_submit.device(wrap=...)`, or the integer
+(the CVQBoost solver through eqc_submit's `device` context with `wrap=`, or the integer
 solver class directly):
 
 - `saving(...)` refuses, before anything is sent, a problem it could not

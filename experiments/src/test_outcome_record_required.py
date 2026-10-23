@@ -26,6 +26,11 @@ brought under the rule is removed from it. `ORIGINAL_EXEMPT_2026_10_22` is
 the list as frozen, and the tests pin the current list to a subset of it at
 its exact current size. There is no other exemption and no flag that
 switches the guard off.
+
+The same file also holds D4 part 3's rule (2026-10-23): every new top-level
+result file carries a `provenance` block. Its exemption is a frozen list of
+the 47 files that existed then, pinned by a hash of its names, less the
+files backfilled since.
 """
 from __future__ import annotations
 
@@ -98,6 +103,45 @@ CITED_ENTRIES = {
     ("f109_ladder_pilot.json", ("datasets", "energy_steel")):
         "energy_steel",
 }
+
+# Sprint 28 D4 part 3 (team lead, 2026-10-23): every new top-level result
+# file, of every run type (ML, QML, optimization, tensor), scored or not,
+# carries `provenance` (generator, commit, clean flag, seeds, versions;
+# build it with provenance.record). The 47 files that existed when the rule
+# landed are listed below, never edited: the test pins the list to a SHA-256
+# of its sorted names, so a name added to it fails whatever counts are
+# changed. A file that gains a complete block moves to PROVENANCE_BACKFILLED.
+# Subfolders (call_logs, device_samples, pools) are records a run writes,
+# not results, and are not checked here; device_store's guard covers
+# device_samples.
+ORIGINAL_PROVENANCE_EXEMPT_2026_10_23 = frozenset((
+    "f102_downsized_pair.json", "f103_tier1.json", "f103_tier1_pilot.json",
+    "f104_gate_check.json", "f105_full_audit.json", "f105_pilot.json",
+    "f106_dequant.json", "f106_dequant_pilot.json", "f107_shots.json",
+    "f108_ceiling.json", "f108_ceiling_pilot.json", "f109_ladder.json",
+    "f109_ladder_pilot.json", "f110_scaling.json", "f111_loke_protocol.json",
+    "f112_intervals.json", "f113_oracle_gap.json",
+    "f114_calibrated_plugin.json", "f114_calibrated_plugin_pilot.json",
+    "f115_cost_scaling.json", "f124_lever_confirm_energy_steel.json",
+    "f124_lever_screen.json", "f124_lever_stack_energy_steel.json",
+    "f126_sparsity_rule.json", "f128_leaf_sweep.json", "f130_levers.json",
+    "f130_ulb_hgb_check.json", "f142_dirac3s_verify.json",
+    "f142_dry_run.json", "f142_readout.json", "f144_proxy_twin.json",
+    "f145_build_drift.json", "f151_hgb_cause.json", "f152_exp2.json",
+    "f152_exp2_pilot.json", "f153_exp3_design.json", "f154_confusion.json",
+    "f162_in_pocket.json", "f17_emulator_sparsity.json",
+    "f17_emulator_validation.json", "f20_multisample_ensemble.json",
+    "f20_multisample_ensemble_emulated.json", "f20_soft_votes.json",
+    "f20_soft_vs_classical.json", "f29_sample_size.json",
+    "f94_controls.json", "qpu_cost_ledger_phase2.json",
+))
+ORIGINAL_PROVENANCE_SHA256 = (
+    "705c7aa95dc9ed0f30ae6946cbe89969385a370f73759cb7e759e0724d5cad77")
+# Listed files brought under the rule since. Only grows.
+PROVENANCE_BACKFILLED: frozenset = frozenset()
+PROVENANCE_EXEMPT = ORIGINAL_PROVENANCE_EXEMPT_2026_10_23 - PROVENANCE_BACKFILLED
+
+import provenance as prov  # noqa: E402
 
 
 def _keys(o):
@@ -184,6 +228,18 @@ def violations(results_dir: Path = RESULTS,
     return bad
 
 
+def provenance_violations(results_dir: Path = RESULTS,
+                          exempt: frozenset = PROVENANCE_EXEMPT) -> list[str]:
+    bad = []
+    for f in sorted(results_dir.glob("*.json")):
+        if f.name in exempt:
+            continue
+        doc = json.loads(f.read_text(encoding="utf-8"))
+        block = doc.get("provenance") if isinstance(doc, dict) else None
+        bad += [f"{f.name} ({p})" for p in prov.problems(block)]
+    return bad
+
+
 def check_hashes(results_dir: Path = RESULTS,
                  root: Path = ROOT) -> tuple[list[str], set[str], set[str]]:
     """(stale entries, block paths verified, every block path).
@@ -246,6 +302,29 @@ def test_the_exempt_list_only_shrinks():
     assert not new, f"names added to the exempt list: {sorted(new)}"
     assert len(EXEMPT_BEFORE_RULE) == EXEMPT_COUNT_NOW == 16
     assert len(ORIGINAL_EXEMPT_2026_10_22) == 30
+
+
+def test_every_new_result_records_its_provenance():
+    bad = provenance_violations()
+    assert not bad, (
+        "These Phase 2 result files lack a complete provenance block (D4; "
+        "build one with provenance.record): " + ", ".join(bad))
+
+
+def test_the_provenance_exempt_list_only_shrinks():
+    import hashlib
+    names = "\n".join(sorted(ORIGINAL_PROVENANCE_EXEMPT_2026_10_23))
+    assert hashlib.sha256(names.encode()).hexdigest() == \
+        ORIGINAL_PROVENANCE_SHA256, "the frozen provenance list was edited"
+    assert PROVENANCE_BACKFILLED <= ORIGINAL_PROVENANCE_EXEMPT_2026_10_23
+    assert PROVENANCE_EXEMPT <= ORIGINAL_PROVENANCE_EXEMPT_2026_10_23
+    for name in sorted(PROVENANCE_EXEMPT):
+        f = RESULTS / name
+        assert f.exists(), f"{name} is exempt but does not exist"
+        doc = json.loads(f.read_text(encoding="utf-8"))
+        assert prov.problems(doc.get("provenance")), (
+            f"{name} now has a complete provenance block; add it to "
+            "PROVENANCE_BACKFILLED")
 
 
 def test_every_cited_entry_is_declared_uncovered_in_its_file():
@@ -382,6 +461,41 @@ def test_a_block_must_carry_its_per_row_scores(tmp_path):
         orec.record("demo", 1, [0, 1], [0.1, 0.9], save=False)
 
 
+def test_a_new_file_without_provenance_is_caught(tmp_path):
+    _write(tmp_path, "opt.json", {"objective": -3.2, "seed": 42})
+    assert provenance_violations(tmp_path, frozenset()) == [
+        "opt.json (no provenance block)"]
+
+
+def test_a_recorded_provenance_block_passes(tmp_path):
+    _write(tmp_path, "ok.json", {"objective": -3.2, "provenance": prov.record(
+        ROOT / "experiments" / "phase2" / "src" / "provenance.py", [42, 43])})
+    assert provenance_violations(tmp_path, frozenset()) == []
+
+
+def test_an_incomplete_provenance_block_is_caught(tmp_path):
+    blk = prov.record(SELF, [42])
+    blk["generator_commit"] = blk["generator_commit"][:7]
+    blk["seeds"] = []
+    del blk["versions"]
+    _write(tmp_path, "part.json", {"provenance": blk})
+    assert provenance_violations(tmp_path, frozenset()) == [
+        "part.json (missing versions)",
+        "part.json (generator_commit is not a full commit hash)",
+        "part.json (seeds is not a non-empty list of integers)"]
+
+
+def test_subfolders_are_not_results(tmp_path):
+    (tmp_path / "call_logs").mkdir()
+    _write(tmp_path / "call_logs", "c.json", {"calls": 1})
+    assert provenance_violations(tmp_path, frozenset()) == []
+
+
+def test_record_refuses_no_seeds():
+    with pytest.raises(ValueError):
+        prov.record(SELF, [])
+
+
 # ------------------------------------------------------------ guards can fail
 # Each proof edits this file and runs one node of it in a subprocess. The
 # nodes read only small JSON files or tmp_path, so a broken guard cannot
@@ -441,6 +555,22 @@ def test_the_hash_comparison_can_fail():
     _proof([('if sha[rel] != b["test_scores"]["sha256"]:\n',
              "if False:\n")],
            "test_a_changed_per_row_file_is_reported", "a changed .npz")
+
+
+def test_a_new_provenance_exempt_name_is_caught():
+    _proof([('    "f94_controls.json", "qpu_cost_ledger_phase2.json",\n',
+             '    "f94_controls.json", "f99_new.json",\n'
+             '    "qpu_cost_ledger_phase2.json",\n')],
+           "test_the_provenance_exempt_list_only_shrinks",
+           "a new provenance exempt name")
+
+
+def test_the_provenance_rule_can_fail():
+    _proof([("        bad += [f\"{f.name} ({p})\" for p in "
+             "prov.problems(block)]\n",
+             "        bad += []\n")],
+           "test_a_new_file_without_provenance_is_caught",
+           "a result with no provenance")
 
 
 def test_the_verified_floor_can_fail():

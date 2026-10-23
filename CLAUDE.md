@@ -62,6 +62,14 @@ The one field filled from memory was the one that was wrong.)
   alert budget (and at the validation-chosen and own thresholds where they
   exist) and the per-row test scores with their SHA-256.
   `test_outcome_record_required.py` fails a new result file without one.
+- **Every experiment records its provenance** (team lead, 2026-10-23,
+  Sprint 28 D4). Every new top-level file in `experiments/phase2/results/`,
+  of every run type, scored or not, carries the block from
+  `experiments/phase2/src/provenance.py` (`record(__file__, seeds)`): the
+  generator, its git commit, a clean-tree flag, the seeds and the library
+  versions. The same guard fails a new file without it. Device runs also
+  store their full response through `experiments/phase2/src/device_store.py`
+  (`test_device_store_required.py`).
 - **US English, always.** The team lead writes and expects US English, even though
   HSBC is based in England. Prefer `-ize` over `-ise`, `-or` over `-our`, `-er`
   over `-re`, `-se` over `-ce` in nouns like `license` and `defense`, and single
