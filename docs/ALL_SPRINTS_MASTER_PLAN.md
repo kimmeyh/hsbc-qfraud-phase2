@@ -670,6 +670,7 @@ value. Removed from candidates.)
 - A pass (proxy reliably above both classical models inside the pocket on a dataset) is what would justify a device block on that dataset (F161 or a new card); a null closes the in-pocket question for the proxy
 - Depends on: nothing
 - **2026-10-23 (Sprint 28 Task M, #59): entry written before any score** (Phase 2 draft section 6, "F162"). Two changes from the card, made in the entry: seeds 42-51 (ten; eight if seed 42's time projects ten above 120 minutes), because six primary tests need eight seeds for the Wilcoxon test to reach 0.05 / 6; and XGBoost at library defaults, because the Phase 1 tuned parameters were tuned on ULB
+- **2026-10-23 (Sprint 28 Task M): result, ten seeds.** No cell reads "proxy above"; the falsifier fires on all three. Inside the pocket XGBoost beats the proxy reliably on energy_steel (-0.024, p = 0.0020) and oilgas_gasturbine (-0.011, p = 0.0059); telecom_churn favors the proxy on average (+0.013 against HGB, +0.033 against XGBoost) without a reliable difference. The FourierWall2 single-run wins do not repeat. No device block is justified (`docs/phase2/F162_IN_POCKET.md`)
 
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~100m [no-history], proxy only) Priority 28**
 - Phase: Phase 2 preparation, Experiment 6
