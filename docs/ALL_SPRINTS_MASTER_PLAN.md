@@ -660,6 +660,16 @@ value. Removed from candidates.)
 - Cost: `qpu_cost_model.quote(560 or 816, 8, relaxation_schedule=2)` gives 21-31 s per fit from three Dirac-3S anchors, so about 210-310 s for ten fits; F142's two B4 fits on Dirac-3S measured 22.0 and 21.0 s. Re-quote at the time
 - Depends on: per-block approval (Criterion H); the run condition above
 
+**F162. In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost inside the pocket (~90m [no-history], zero metered) Priority 26**
+- Phase: Phase 2 preparation (added 2026-10-23 by the team lead, Sprint 28 Phase 6, after the SPECTRA authors' reply on in_pocket)
+- Platform: classical proxy and classical models, this machine
+- Question: inside the pocket (in_pocket = 1), does the CVQBoost proxy beat HGB and XGBoost, paired by seed? Phase 1's H5 compared CVQBoost inside the pocket against a matched random segment drawn outside it, which asks whether the pocket is special for CVQBoost, not whether CVQBoost beats a classical model there. The FourierWall2 in-pocket wins (for example telecom_churn PR-AUC 0.875 against XGBoost's 0.784) were that head-to-head, on one seed and one stochastic run, and were never repeated
+- Protocol (the authors' recommendation, 2026-10-23): covariates plus phases only; `target`, `target_real` and `in_pocket` never features (`spectra_segment._prep_spectra` and its leak guard); label `target`; PR-AUC and ROC-AUC reported overall and inside the pocket separately. The three frozen cells' configurations (`spectra_segment` frozen cells), seeds 42-46, house 60/20/20 split; HGB at F151's stable setting (`l2_regularization=1.0`); XGBoost at the Phase 1 tuned parameters
+- energy_steel is included: this comparison needs no matched control, so the infeasibility in `docs/SPECTRA_CONTROL_FEASIBILITY.md` does not apply. It is the cell where the prior work reported CVQBoost's overall win
+- Primary result: the paired in-pocket PR-AUC difference (proxy minus each classical model) per dataset, with its interval over the five seeds, under the Phase 2 draft's family rule (section 2a). Entry written before any score. Every row carries an outcome block (F154 rule); pools seeded (`qubo_proxy.seeded_weak_params`)
+- A pass (proxy reliably above both classical models inside the pocket on a dataset) is what would justify a device block on that dataset (F161 or a new card); a null closes the in-pocket question for the proxy
+- Depends on: nothing
+
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~100m [no-history], proxy only) Priority 28**
 - Phase: Phase 2 preparation, Experiment 6
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
