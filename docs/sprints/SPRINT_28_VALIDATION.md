@@ -198,6 +198,95 @@ Manual Validation, alone on the processor.
 1. Keep the optional F115 paragraph
 2. Cut the optional F115 paragraph
 
+## Plain summaries (asked for at Manual Validation, 2026-10-23)
+
+What each task ran, what it found, and what it means for better fraud
+predictions. CVQBoost is the QML method throughout: it builds many small
+"weak learners", then a solver (Dirac-3, or a classical stand-in called
+the proxy) picks weights for them. The weighted vote is the prediction.
+
+- **F151 (A), the classical yardstick (ML only).** Our gradient-boosted
+  tree baseline (HGB) on ULB swung from good to useless between seeds.
+  Cause: its default has no L2 penalty, so at 0.17% fraud a few tiny leaves
+  get huge values. With `l2_regularization=1.0`: AUC-PR 0.804, stable.
+  **Learned**: an earlier "the QML proxy beats HGB" came from the broken
+  baseline. Against the stable HGB, both proxy variants are lower (by
+  0.027 and 0.036). **For predictions**: the bar any QML model must clear
+  on ULB is now about 0.80, and no proxy clears it.
+- **F152 (B), Experiment 2: do models hold up over time? (ML only).**
+  IEEE-CIS, trained on earlier months and scored on later months, as a
+  bank would use it. **Learned**: trees beat logistic regression by a wide
+  margin (P1 holds), and logistic regression collapses in month 5.
+  LightGBM is best every month, then stable HGB, then XGBoost. The
+  features drift strongly. **For predictions**: under time drift, the
+  model family matters more than tuning; a QML model must be compared with
+  LightGBM, not with XGBoost.
+- **F153 (C), Experiment 3 design: let Dirac-3 pick a team of learners
+  (QML design, no device time).** The idea: the integer solver chooses the
+  best 10 learners out of 60 or 136. **Learned**: the problem is too easy.
+  Simple greedy selection already reaches the best possible answer to
+  within 0.002, so a quantum solver has nothing to gain. The coefficients
+  are also too close together for the device to tell apart. **For
+  predictions**: this formulation cannot give better predictions from the
+  device. No device seconds are asked for until a different formulation
+  leaves room.
+- **F111 (D), Experiment 4: check a published QML result (QML proxy and
+  ML, running now).** Loke et al. report CVQBoost with KNN learners at
+  AUC-PR 0.81 on ULB. We run their method two ways: under their protocol
+  (no duplicate removal, synthetic oversampling) and under ours. **Found
+  so far**: their protocol leaves 326 test rows that are exact copies of
+  training rows, which can inflate a score. **For predictions**: it
+  measures how much of a published QML number is method and how much is
+  protocol. The result arrives in about 14 hours.
+- **F110 (E), Experiment 6: how training time grows with data (QML
+  proxy timing).** QCi's paper claims CVQBoost trains in about 2 s at
+  150,000 rows. **Learned**: the device-like solve is fast and flat (about
+  0.35 s at 833 variables). The cost is the classical step before it:
+  building the weak learners takes about 13 minutes at full rows and grows
+  faster than linearly. **For predictions**: a speed advantage, if any,
+  depends on that classical step, not on the quantum solve. It does not
+  change accuracy.
+- **F114 (G), how good could any model get? (ML method check).** A
+  "ceiling" estimate tells us how much room is left above the best model.
+  We tested one estimator on simulated data where the true answer is
+  known. **Learned**: it misses (2 of 5 seeds, 4 needed); calibrating the
+  model did not help. **For predictions**: we still cannot say how close
+  ULB or IEEE-CIS models are to the best possible, so we cannot yet tell
+  "QML has no room" from "QML is not good enough". A different estimator
+  is next.
+- **F150 (H), SPECTRA rebuild request (interpretable ML).** SPECTRA finds
+  which features act jointly (interactions) using Fourier terms. Our
+  reimplementation reproduces most published values, but not one
+  synthetic data set, because the paper leaves its construction open. The
+  draft asks the authors 11 questions. **For predictions**: if the
+  reimplementation is trusted, it can show where fraud depends on feature
+  combinations that simple models miss, which is where a better model, ML
+  or QML, could gain.
+
+**F154 (F): confusion matrices and where each model wins**
+
+- **What was added**: one table of confusion counts (true and false
+  alarms, caught and missed frauds) for 430 operating points. That is
+  every scored result in Phase 1's `results.json` (210 results, each at
+  two validation-chosen thresholds) and the 10 Dirac-3S rows in
+  `f142_dirac3s_verify.json`. From now on, every new scored result must
+  carry its confusion counts and per-row scores (the standing rule, which
+  a test enforces).
+- **Not covered (gap)**: the 29 other Phase 2 result files written
+  before the rule are exempt by name and carry no confusion counts. Some
+  may lack the per-row scores needed to make them. This is Decision DV4.
+- **Where each model wins**: for 12 models with saved per-row scores on
+  the same split (XGBoost, LightGBM, CatBoost and logistic regression,
+  each at 13 and 30 features; three CVQBoost proxy setups; Dirac-3
+  hardware), every pair (66) was compared on large against
+  small amounts and on day 1 against day 2. **Result: null.** No model is
+  reliably better than another on any subset. The models catch almost
+  the same frauds: in each pair, both catch at least 776 of 950. One
+  model catches at most 34 that the other misses.
+- **For predictions**: combining these models into an ensemble that
+  routes by amount or day would not help. Any gain must come from a
+  model that sees different frauds, not from mixing these.
+
 ## Notes for the retrospective
 
 - K and H timers record about 1 minute: each was started at its commit,
@@ -210,6 +299,22 @@ Manual Validation, alone on the processor.
 - E's first timing version subtracted H as well as J and clamped the
   solve to zero; found after two rows, corrected by a dated entry
   note before any slope.
+
+### Answers, 2026-10-23
+
+- **DV1**: 1,300 variables (team lead's own value). Recorded on F155's
+  card; quote 4 s, a floor. The run needs its own per-block approval.
+- **DV2**: the run as written, above the cap. The entry carries a dated
+  note, the approval is recorded in the pilot block, and the run started
+  in the background on 2026-10-23 (about 825 minutes projected).
+- **DV3**: 1, keep the optional F115 paragraph. Sending is yours.
+
+**DV4. Confusion counts for the 29 older Phase 2 result files**
+
+1. Card a backfill for Sprint 29: add confusion counts to each of the 29
+   files whose per-row scores can be rebuilt, and list the ones that
+   cannot
+2. Leave them exempt, as now
 
 ## Your actions (no decision needed from me)
 
