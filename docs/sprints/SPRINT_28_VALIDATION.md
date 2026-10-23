@@ -61,8 +61,9 @@ Read `docs/phase2/F153_EXP3_DESIGN.md`.
   gap to the floor is 0.0016-0.0026 (below 0.01), and both resolution
   checks fail. No device quote is carried forward; F25 stays parked.
 - No ridge weight met the 10% data-share rule; the fallback (0.002) was
-  used, as written. The rule itself was ill-posed: |objective| is close
-  to 1 at every weight, so a data term near 0.002 could never reach 10%.
+  used, as written. The rule itself was ill-posed: |objective| is
+  between 0.8 and 1 at every weight, so a data term near 0.002 is at most
+  0.33% of it and could never reach 10%.
 - Greedy equals the best selection found everywhere; SCIP hit its 300 s
   cap on all six without improving on it.
 - **The two resolution checks disagree in kind.** QCi's A7 reading (max/min
@@ -95,8 +96,10 @@ Read `docs/phase2/F110_SCALING.md`.
   everywhere, but its slope in rows is about 1.4 (intervals [1.35, 1.45]
   at 91 variables, [1.38, 1.49] at 833), above the predicted [0.7, 1.3].
 - **P2 holds at 833 variables** (solve flat, about 0.35 s). At 91
-  variables it fails under the rule: 9 of 20 solves were below the
-  timer's resolution, so the interval is too wide to read.
+  variables it fails under the rule: 9 of 20 solves clamp, because the
+  separately timed J build that is subtracted came out longer than the
+  whole solver call, so the interval is too wide to read. (Corrected
+  2026-10-23, PR review: this first said "below the timer's resolution".)
 - A serial 833-variable build at full rows takes about 13 minutes,
   close to the hardware plan's 735.4 s. That suggests the plan's build
   was serial too (inferred, unverified).
@@ -113,8 +116,10 @@ Read `docs/phase2/F114_CALIBRATED_PLUGIN.md`.
 - **Does not recover: 2 of 5 seeds on the main arm** (4 needed), the same
   as F108's default plug-in. **F114 stays blocked**; the 90-minute
   real-data run was not spent.
-- Calibration does not move the estimate (under 0.0002 on every seed).
-  Every seed overestimates the Bayes error, by about 3% to 13%.
+- On the main arm, calibration does not move the estimate (under 0.0002
+  on every seed); on the other two arms it moves some. Every main-arm
+  estimate is above the Bayes error: calibrated by about 3% to 13%,
+  uncalibrated by about 4% to 14%.
 - The amendment named F151's setting (`l2_regularization=1.0`) and not the
   plan's candidate `early_stopping=False`, because F151 found l2 alone
   sufficient.
@@ -293,9 +298,10 @@ the proxy) picks weights for them. The weighted vote is the prediction.
   not when its work began.
 - E (198 min) and D (180 min) actuals include time while other tasks
   ran beside them; they are wall clock from start, not effort.
-- E's method: 9 of 20 solves at 91 variables were below the timer's
-  resolution. A timing entry needs repeated solves or a finer timer
-  when the solve is milliseconds.
+- E's method: 9 of 20 solves at 91 variables clamped, because a
+  separately timed J build was subtracted and its spread exceeded the
+  millisecond solve. A timing entry must time the part it reports
+  directly, not as a difference of two noisy timings.
 - E's first timing version subtracted H as well as J and clamped the
   solve to zero; found after two rows, corrected by a dated entry
   note before any slope.
@@ -307,6 +313,10 @@ the proxy) picks weights for them. The weighted vote is the prediction.
 - **DV2**: the run as written, above the cap. The entry carries a dated
   note, the approval is recorded in the pilot block, and the run started
   in the background on 2026-10-23 (about 825 minutes projected).
+  Run complete 2026-10-23: the result, and the corrected cost model
+  that replaces V5's and the plain summary's, are in
+  `docs/phase2/F111_LOKE_PROTOCOL.md`. V5 and the plain summary stay as
+  handed over.
 - **DV3**: 1, keep the optional F115 paragraph. Sending is yours.
 
 **DV4. Confusion counts for the 29 older Phase 2 result files**
@@ -316,13 +326,20 @@ the proxy) picks weights for them. The weighted vote is the prediction.
    cannot
 2. Leave them exempt, as now
 
-**DV4 answer (2026-10-23): 1, done now, not carded.** Survey of the 29:
+**DV4 answer (2026-10-23): 1, done now, not carded.** Survey of the 30
+exempt files (the 29 above plus `f142_dirac3s_verify.json`, whose
+confusion counts are in F154's table but whose per-row scores were never
+stored; corrected 2026-10-23, PR review):
 14 rebuild exactly and were backfilled on 2026-10-23, each reproducing its stored metrics, and left the exemption list (f112, f113 model families,
 f144, f142 Dirac-3S lane, f130_ulb_hgb_check, f108 x2, f103 x2, f106 x2,
 f107, f109 x2). Each rebuild must reproduce the stored metric or nothing
 is written. Not rebuildable: 11 files on unseeded `dct` pools (a rebuild
-is a sibling model, not the stored one), f130_levers (its recorded
-generator matches no committed version), the Dirac-3 B4 device lanes
+is a sibling model, not the stored one), f130_levers (rebuild not
+attempted: held for a decision because its recorded generator
+matches no committed version; `f130_ulb_hgb_check` had the same mismatch
+and was backfilled because every row reproduced, so the same test could
+be tried on f130_levers; corrected 2026-10-23, PR review), the Dirac-3 B4
+device lanes
 (per-row scores never stored), and 3 files with no per-row
 classification score (f102, f105 x2).
 

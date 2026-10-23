@@ -50,8 +50,9 @@ selection any method found.
 
 - **The ridge rule was ill-posed (Inferred).** The objective is
   `data term - 1 + ridge` in `exp3_controls`' scaled units, so its
-  absolute value is close to 1 at every weight. A data term of about 0.002
-  can never be 10% of it. The rule meant "the data term is a material
+  absolute value is between 0.8 and 1 at every weight (0.80-0.92 at
+  weight 2). A data term of about 0.002 is at most 0.33% of it and can
+  never be 10%. The rule meant "the data term is a material
   share of what the optimizer trades off"; a share of data against ridge
   would have said that. This does not rescue the design: the gap to the
   floor is the data term itself, and it does not move with the weight.

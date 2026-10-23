@@ -15,7 +15,8 @@
 - **The stable ULB HGB reference is `HistGradientBoostingClassifier(
   l2_regularization=1.0)`, other settings at their defaults**, on F130's
   preparation (`qubo_proxy._prep(seed, 13)`), seeds 42-46. Later tasks
-  that need an HGB on ULB use it (Sprint 28 Tasks B, D and G).
+  that need an HGB use this setting: Sprint 28 Task D on ULB, Task B on
+  IEEE-CIS and Task G on F108's simulator.
 - **F130's voided ULB reading reverses.** Against the stable HGB, both of
   F130's CVQBoost proxy variants are below it: KNN by 0.027 (95% interval
   -0.046 to -0.008), the dct baseline by 0.036 (-0.047 to -0.026).

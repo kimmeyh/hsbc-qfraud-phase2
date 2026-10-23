@@ -13,9 +13,10 @@ Code: `experiments/phase2/src/f114_calibrated_plugin.py`; test:
 **The calibrated plug-in does not recover the ceiling, so F114 stays
 blocked.** On the main no-noise arm, the deciding arm, it is within the
 margin on 2 of 5 seeds; the rule needs 4. That is the same count as
-F108's default plug-in. Calibration did not move the estimate: the
-calibrated and uncalibrated plug-ins from the same model differ by less
-than 0.0002 on every seed.
+F108's default plug-in. On the main arm, calibration did not move the
+estimate: the calibrated and uncalibrated plug-ins from the same model
+differ by less than 0.0002 on every seed. On the other two arms it does
+move some estimates (see Results).
 
 ## What ran
 
@@ -30,8 +31,8 @@ and the test checks it).
 ## Results (Measured, `SIM`)
 
 - **Main arm (deciding)**: calibrated recovers 2 of 5, uncalibrated 2 of
-  5. Every seed's estimate is **above** the Bayes error, by about 3% to
-  13%; the margin is 10%.
+  5. Every estimate is **above** the Bayes error: calibrated by about
+  3% to 13%, uncalibrated by about 4% to 14%; the margin is 10%.
 - **Noise arm**: calibrated 3 of 5, uncalibrated 4 of 5. F108's default
   plug-in recovered 5 of 5 here.
 - **Zero-ceiling reference arm**: calibrated 0 of 5, uncalibrated 1 of 5.

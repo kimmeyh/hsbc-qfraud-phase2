@@ -63,7 +63,8 @@ before any pairwise or subset count. Result:
   That is the question an ensemble needs answered.
 - **Correction**: Bonferroni over the family, m = 132, so each t interval
   over the ten seeds is at 99.96%. The closest cell to firing was the
-  CVQBoost proxy (13 features) against logistic regression (30 features)
+  CVQBoost proxy `deep` configuration (`cvqboost_proxy_47012b1404d5d4de`,
+  13 features) against logistic regression (30 features)
   on day 1: interaction +0.034, interval [-0.006, +0.074].
 
 ## Limits

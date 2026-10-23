@@ -18,11 +18,16 @@ Its log-log slope is about 1.4, and both 97.5% intervals are above the
 predicted band [0.7, 1.3].
 
 **P2 holds at 833 variables. At 91 variables it fails under the committed
-rule, because the timer cannot measure that solve.** At 833 variables the
-solve is flat in rows, at about 0.35 s. At 91 variables it takes 0 to 4 ms,
-and 9 of 20 solves are below the timer's resolution. The interval is
-therefore too wide to read. This is a failure of measurement, not evidence
-that the solve grows.
+rule, because the method cannot measure that solve.** At 833 variables
+the solve is flat in rows, at about 0.35 s. At 91 variables it takes 0 to
+4 ms after subtraction, and 9 of 20 solves clamp: the solve time is the
+raw solver call (8-81 ms) minus a J build timed separately, and on those
+rows the J build came out longer than the whole call. The run-to-run
+spread of the subtracted J build is larger than the solve itself, and
+`solve_s` is stored rounded to 1 ms. The interval is therefore too wide
+to read. This is a failure of measurement, not evidence that the solve
+grows. (Corrected 2026-10-23, PR review: this paragraph first blamed the
+timer's resolution, which is far finer than these times.)
 
 **At full rows, a serial 833-variable build takes about 13 minutes.** That
 is close to the hardware plan's 735.4 s. The full training at about
@@ -89,8 +94,9 @@ inside the 120-minute cap, so the five-seed run went ahead. It took
   about 2.7 times, not 2 times, because the slope is about 1.4.
 - **P1's linear growth is refuted for this builder.** A plan that scales
   the build linearly in rows underestimates it at larger row counts.
-- **P2 at 91 variables needs a finer timer or repeated solves** before it
-  can be read. The committed rule's result stands as recorded: fail.
+- **P2 at 91 variables needs the solve timed without subtraction**
+  (pass a prebuilt J, or repeat the solve and the J build and average)
+  before it can be read. The committed rule's result stands as recorded: fail.
 
 ## What was not done
 

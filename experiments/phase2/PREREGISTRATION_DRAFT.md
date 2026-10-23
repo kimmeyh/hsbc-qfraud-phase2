@@ -220,7 +220,7 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
 ## 6. Experiments
 
 Entries are filled in as each experiment's card reaches readiness. Status
-on 2026-10-18:
+on 2026-10-23:
 
 | # | Experiment | Card(s) | Device | Entry |
 |---|---|---|---|---|
@@ -608,6 +608,11 @@ approval and is not part of this sprint.
   H as well; the solve went negative and was clamped to zero on both rows.
   Those two rows were discarded and the run restarted. A row whose solve
   is still clamped is flagged (`solve_clamped`) and reported.
+- **Note, 2026-10-23, after the run (PR review).** The code projected
+  the remaining four seeds (43-46), not the five-seed run the Seeds line
+  states: 79.4 minutes. With the pilot's own time added, the five-seed
+  figure is also under the 120-minute cap (about 99 minutes), so the
+  decision is the same under either reading.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -1296,3 +1301,12 @@ count was computed. Not filed; part of this draft.
   Task D), written before its harness exists; the Experiment 6 entry
   gains an implementation note (serial full-pair build), before any
   timing.
+- 2026-10-22: the Experiment 6 entry gains a dated timing correction
+  (only the J build is subtracted), after two timing rows and before any
+  slope.
+- 2026-10-23: the Experiment 4 entry gains its seed-count decision (the
+  run as written, above the cap; Sprint 28 Manual Validation DV2), after
+  the pilot and before any full-size row.
+- 2026-10-23: the Experiment 6 entry gains a post-run note: the pilot
+  projected four remaining seeds, not five; the decision is unchanged
+  (PR review). The section 6 status date updated.

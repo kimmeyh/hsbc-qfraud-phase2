@@ -593,7 +593,7 @@ value. Removed from candidates.)
 - Ends with a quote, not a run: F139's two integer-cost probes (`probe_mid_hi`, `probe_high`; about 195 s at Dirac-3 rates) priced on Dirac-3S for a separate approval (Criterion H)
 - This enables: F25, the one experiment native to Dirac-3's integer solver. This prevents: spending device seconds on a Hamiltonian F94 showed every solver solves alike
 - Acceptance: the entry committed before the build; the chosen Hamiltonian's gap between greedy and the floor reported; F104's gate result; the probe quote
-- **2026-10-22 (Sprint 28 Task C)**: **the design fails** under the entry's falsifier, on all six instances: the gap to the floor is 0.0016-0.0026 (below 0.01) and both resolution checks fail. The ridge rule was never met (fallback 0.002), and the rule itself was ill-posed: |objective| is close to 1 at every weight. QCi's A7 reading (the max/min ratio) passes at about 2; the pairwise check and F104's gate fail; both are reported. No device quote carried forward; F25 stays parked (`docs/phase2/F153_EXP3_DESIGN.md`)
+- **2026-10-22 (Sprint 28 Task C)**: **the design fails** under the entry's falsifier, on all six instances: the gap to the floor is 0.0016-0.0026 (below 0.01) and both resolution checks fail. The ridge rule was never met (fallback 0.002), and the rule itself was ill-posed: |objective| is between 0.8 and 1 at every weight, so a 0.002 data term is at most 0.33% of it. QCi's A7 reading (the max/min ratio) passes at about 2; the pairwise check and F104's gate fail; both are reported. No device quote carried forward; F25 stays parked (`docs/phase2/F153_EXP3_DESIGN.md`)
 - Depends on: none (F94 and F104 shipped)
 
 **F154. Confusion matrices (TN, FP, FN, TP) for every saved test result, and where each model wins (~130m [no-history], zero metered) Priority 32**
@@ -656,7 +656,7 @@ value. Removed from candidates.)
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
 - Time including Hamiltonian construction. `HARDWARE_PLAN_PHASE_2.md` owns the sent sizing (12 fits at 833 variables) and the pool-build-to-device-time ratio
 - Depends on: F102 for reporting; Criterion H for any metered fit (corrected 2026-10-18, Pass 1: F141 is spent, shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F124 rank-1-first gate is spent, because rank 1's device pilot, F129, was closed)
-- **2026-10-22 (Sprint 28 Task E)**: proxy result, five seeds per cell. **P1 is false**: the pool build is the largest part everywhere but grows with a slope of about 1.4 in rows (both intervals above [0.7, 1.3]). **P2 holds at 833 variables** (solve flat, about 0.35 s) and fails under the rule at 91 variables, where 9 of 20 solves are below the timer's resolution. The serial 833-variable build at full rows is about 13 minutes, close to the hardware plan's 735.4 s. Device arm not run (`docs/phase2/F110_SCALING.md`)
+- **2026-10-22 (Sprint 28 Task E)**: proxy result, five seeds per cell. **P1 is false**: the pool build is the largest part everywhere but grows with a slope of about 1.4 in rows (both intervals above [0.7, 1.3]). **P2 holds at 833 variables** (solve flat, about 0.35 s) and fails under the rule at 91 variables, where 9 of 20 solves clamp: the separately timed J build, which is subtracted, exceeds the 1-4 ms solve. The serial 833-variable build at full rows is about 13 minutes, close to the hardware plan's 735.4 s. Device arm not run (`docs/phase2/F110_SCALING.md`)
 
 **F111. Experiment 4 build: Loke et al. replication harness (~130m [no-history], zero metered) Priority 26**
 - Phase: Phase 2 preparation, Experiment 4
@@ -664,7 +664,7 @@ value. Removed from candidates.)
 - Their split and comparator, target AUC-PR 0.80, then re-evaluated under ours
 - Depends on: F102 for reporting
 - **2026-10-22 (Sprint 28 Task D)**: entry and harness committed; the pilot projects the run at about 825 minutes against the entry's 120-minute cap, so no seed ran at full size and the seed count is a Manual Validation decision. No result yet. Protocol A leaves 326 evaluation rows that duplicate training rows (`docs/phase2/F111_LOKE_PROTOCOL.md`)
-- **2026-10-23 (Sprint 28 Manual Validation, DV2: run as written above the cap)**: KNN lane A minus B -0.014 [-0.046, +0.019], so the protocol does not measurably change the lane; its mean under A is 0.760, not consistent with 0.8108. The stable HGB beats the lane under both protocols (by 0.082 under A, 0.033 under B); HGB itself gains +0.035 under A. The run took about 95 minutes against the projected 825: F130's formula assumed brute-force KNN cost
+- **2026-10-23 (Sprint 28 Manual Validation, DV2: run as written above the cap)**: KNN lane A minus B -0.014 [-0.046, +0.019], so the protocol does not measurably change the lane; its mean under A is 0.760, not consistent with 0.8108. The stable HGB beats the lane under both protocols (by 0.082 under A, 0.033 under B); HGB itself gains +0.035 under A. The rows record 82.5 minutes of lane time (wall clock about 95, not recorded) against the projected 825: F130's formula assumed brute-force KNN cost
 
 **F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)
