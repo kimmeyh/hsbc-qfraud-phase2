@@ -44,12 +44,15 @@ ALPHA = 0.05
 
 
 # ---------------------------------------------------------------- part 1
-def table_rows(rows: list[dict], source: str) -> list[dict]:
-    out = []
+def table_rows(rows: list[dict], source: str) -> tuple[list[dict], int]:
+    """The table's rows, and the count of operating points skipped because
+    they carry no confusion counts (recorded, so a short table is visible)."""
+    out, skipped = [], 0
     for r in rows:
         ops = (r.get("metrics") or {}).get("operating_points") or []
         for op in ops:
             if "confusion" not in op:
+                skipped += 1
                 continue
             out.append({"source": source, "arm": r.get("arm"),
                         "dataset": r.get("dataset"), "protocol": r.get("protocol"),
@@ -57,7 +60,7 @@ def table_rows(rows: list[dict], source: str) -> list[dict]:
                         "evidence_tag": r.get("evidence_tag"),
                         "operating_point": op["operating_point"],
                         **op["confusion"]})
-    return out
+    return out, skipped
 
 
 # ---------------------------------------------------------------- part 2
@@ -125,6 +128,31 @@ def t_interval(values, level: float) -> dict:
             "excludes_zero": bool(mean - half > 0 or mean + half < 0)}
 
 
+def interaction_interval(values, level: float) -> dict:
+    """The t interval over seeds, or "not estimable" when any seed's value
+    is not finite (a subset with no fraud gives NaN). A NaN interval would
+    read as "does not exclude zero", a false null."""
+    v = np.asarray(values, dtype=float)
+    bad = int((~np.isfinite(v)).sum())
+    if bad:
+        return {"estimable": False, "n": len(v), "n_nonfinite": bad,
+                "level": level,
+                "reason": f"not estimable: {bad} of {len(v)} seeds non-finite"}
+    return {"estimable": True, **t_interval(v, level)}
+
+
+def verdict(pair_rows: list[dict], subset_names, key: str = "interaction") -> str:
+    """The entry's verdict, with the count of estimable pair-subsets."""
+    cells = [p[key][s] for p in pair_rows for s in subset_names]
+    est = sum(c["estimable"] for c in cells)
+    count = f"{est} of {len(cells)} pair-subsets estimable"
+    if any(c.get("excludes_zero") for c in cells):
+        return f"some pair is reliably different on a subset ({count})"
+    if est == 0:
+        return f"not estimable: no interaction could be computed ({count})"
+    return f"null: no interaction interval excludes zero ({count})"
+
+
 # ---------------------------------------------------------------- the split
 def test_features(seed: int, df) -> "object":
     """ULB test rows for `seed`, recovered as the stored files were made."""
@@ -155,8 +183,9 @@ def run() -> dict:
     t0 = time.time()
     rows = json.loads(RESULTS.read_text(encoding="utf-8"))["rows"]
     f142 = json.loads(F142.read_text(encoding="utf-8"))["rows"]
-    table = table_rows(rows, "experiments/results/results.json") + \
-        table_rows(f142, "experiments/phase2/results/f142_dirac3s_verify.json")
+    t1, skip1 = table_rows(rows, "experiments/results/results.json")
+    t2, skip2 = table_rows(f142, "experiments/phase2/results/f142_dirac3s_verify.json")
+    table, table_skipped = t1 + t2, skip1 + skip2
 
     fams = families()
     if len(fams) < 2:
@@ -225,20 +254,21 @@ def run() -> dict:
             "both_total": sum(r["both"] for r in per_seed),
             "overall_recall_diff": t_interval(
                 [r["recall_a"] - r["recall_b"] for r in per_seed], 0.95),
-            "interaction": {s: t_interval(inter[s], level) for s in subset_names},
+            "interaction": {s: interaction_interval(inter[s], level)
+                            for s in subset_names},
             "interaction_tie_neutral_sensitivity": {
-                s: t_interval(inter_w[s], level) for s in subset_names},
+                s: interaction_interval(inter_w[s], level) for s in subset_names},
             "in_subset_diff_secondary": {
                 s: t_interval([r[f"{s}_in_diff"] for r in per_seed], 0.95)
                 for s in subset_names}})
 
     fired = [{"a": p["a"], "b": p["b"], "subset": s, **p["interaction"][s]}
              for p in pair_rows for s in subset_names
-             if p["interaction"][s]["excludes_zero"]]
+             if p["interaction"][s].get("excludes_zero")]
     fired_w = [{"a": p["a"], "b": p["b"], "subset": s,
                 **p["interaction_tie_neutral_sensitivity"][s]}
                for p in pair_rows for s in subset_names
-               if p["interaction_tie_neutral_sensitivity"][s]["excludes_zero"]]
+               if p["interaction_tie_neutral_sensitivity"][s].get("excludes_zero")]
     extra = {}
     for blk in blocks:
         ab = blk["at_budget_on_test"]
@@ -255,13 +285,15 @@ def run() -> dict:
         "excluded_reason": excluded_why,
         "family_m": m, "interval_level": level,
         "table": table,
+        "table_operating_points_skipped_no_confusion": table_skipped,
         "pairs": pair_rows,
         "interactions_excluding_zero": fired,
         "tie_neutral_interactions_excluding_zero": fired_w,
         "extra_rows_flagged_by_ties": {k: {"max": max(v), "mean": float(np.mean(v))}
                                        for k, v in extra.items()},
-        "verdict": ("some pair is reliably different on a subset" if fired else
-                    "null: no interaction interval excludes zero"),
+        "verdict": verdict(pair_rows, subset_names),
+        "tie_neutral_verdict": verdict(pair_rows, subset_names,
+                                       "interaction_tie_neutral_sensitivity"),
         "outcome_records": blocks,
         "wall_seconds": round(time.time() - t0, 1),
     }

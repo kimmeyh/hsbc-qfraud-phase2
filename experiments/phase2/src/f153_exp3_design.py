@@ -33,6 +33,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 import exp3_controls as ec  # noqa: E402  (Phase 2, F94)
 import outcome_record as orec  # noqa: E402  (Phase 2)
+import strict_json  # noqa: E402  (Phase 2)
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f153_exp3_design.json"
 SEEDS = (42, 43, 44)
@@ -71,6 +72,21 @@ def choose_ridge(greedy_rows: list[dict]) -> dict:
     if ok:
         return {"lam_mult": max(ok), "rule_met": True}
     return {"lam_mult": min(SWEEP), "rule_met": False}
+
+
+def design_fails(rows: list[dict]) -> bool:
+    """The entry's falsifier (PREREGISTRATION_DRAFT.md, Experiment 3): at the
+    chosen weight, the gap between GREEDY and the floor is below 0.01 on
+    every instance, or the chosen Hamiltonian fails both resolution checks
+    on every instance. Greedy, not the best found: best <= greedy, so the
+    best-found gap would declare a failure more readily than the entry."""
+    if not rows:
+        raise ValueError("no chosen rows: the verdict would come from an empty all()")
+    no_room = all(r["methods"]["greedy"]["objective"] - r["floor"] < GAP_MIN
+                  for r in rows)
+    unresolvable = all(not r["f104_gate"]["pass"] and not r["guide_check"]["pass"]
+                       for r in rows)
+    return bool(no_room or unresolvable)
 
 
 def quote() -> dict:
@@ -142,6 +158,7 @@ def run() -> dict:
             "seed": seed, "instance": cfg, "m": m, "lam_mult": lm,
             "floor": floor(lm, m), "best_found": best,
             "gap_best_to_floor": best - floor(lm, m),
+            "gap_greedy_to_floor": g["objective"] - floor(lm, m),
             "greedy_minus_best": g["objective"] - best,
             "methods": {k: {kk: vv for kk, vv in v.items() if kk != "support"}
                         | {"support_size": v.get("support_size")}
@@ -153,9 +170,6 @@ def run() -> dict:
               f"scip {sc.get('status')} gate {rows[-1]['f104_gate']['pass']} "
               f"guide {rows[-1]['guide_check']['pass']}", flush=True)
 
-    design_fails = (all(r["gap_best_to_floor"] < GAP_MIN for r in rows)
-                    or all(not r["f104_gate"]["pass"] and not r["guide_check"]["pass"]
-                           for r in rows))
     return {"generator": "experiments/phase2/src/f153_exp3_design.py",
             "card": "F153", "sprint": 28, "evidence_tag": "SIM",
             "metered_seconds": 0,
@@ -165,13 +179,13 @@ def run() -> dict:
                      "scip_cap_s": SCIP_CAP_S},
             "greedy_sweep": greedy_rows, "ridge_choice": choice,
             "first_instance_check": first_check,
-            "chosen": rows, "design_fails": design_fails,
+            "chosen": rows, "design_fails": design_fails(rows),
             "quote": quote(), "wall_seconds": round(time.time() - t_start, 1)}
 
 
 def main() -> None:
     res = run()
-    OUT.write_text(json.dumps(res, indent=1, default=str), encoding="utf-8")
+    OUT.write_text(json.dumps(res, indent=1, default=strict_json.numpy_scalar), encoding="utf-8")
     print("chosen", res["ridge_choice"], "first", res["first_instance_check"],
           "design_fails", res["design_fails"], "quote", res["quote"]["dirac3s_low_s"],
           res["quote"]["dirac3s_high_s"])

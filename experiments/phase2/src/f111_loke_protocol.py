@@ -13,14 +13,22 @@ there and repeated here.
              33/67 validation/evaluation, SMOTETomek on train (ratio 0.02)
   protocol B ours: dedup, 60/20/20 stratified, no resampling
 
-Modes:
+Modes (one is required; there is no default):
   pilot    seed 42, 10% stratified sample of every fold, both protocols,
-           KNN lane timed; writes the projection and whether to run
+           KNN lane timed; writes the projection and whether to run.
+           Refuses when a pilot is already recorded, so the recorded pilot
+           and any approval on it are never overwritten.
+  approve <reference>
+           records the team lead's approval of a run over the cap, naming
+           the decision it came from; only after a pilot, and only once
   run      seeds 42-51 under A and B, then the 0.05 sensitivity (A, 42-44);
-           resumable, saved after every row; refuses unless the pilot said run
-  analyze  the paired A - B difference and the rest of the entry's report
+           resumable, saved after every row; refuses unless the pilot said
+           run or an over-cap approval is recorded. Each invocation's wall
+           clock is recorded under `run_sessions`.
+  analyze  the paired A - B difference and the rest of the entry's report;
+           `complete` says whether every planned row is present
 
-Run:  <venv python> experiments/phase2/src/f111_loke_protocol.py pilot|run|analyze
+Run:  <venv python> experiments/phase2/src/f111_loke_protocol.py pilot|approve <reference>|run|analyze
 """
 from __future__ import annotations
 
@@ -37,6 +45,7 @@ ROOT = HERE.parents[2]
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 import outcome_record as orec  # noqa: E402  (Phase 2)
+import strict_json  # noqa: E402  (Phase 2)
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f111_loke_protocol.json"
 SEEDS = tuple(range(42, 52))
@@ -207,7 +216,7 @@ def _load() -> dict:
 
 def _save(doc: dict) -> None:
     tmp = OUT.with_suffix(".tmp.json")
-    tmp.write_text(json.dumps(doc, indent=1, default=float), encoding="utf-8")
+    tmp.write_text(json.dumps(doc, indent=1, default=strict_json.numpy_scalar), encoding="utf-8")
     tmp.replace(OUT)
 
 
@@ -229,6 +238,11 @@ def projection_min(pilot: dict) -> float:
 
 
 def pilot() -> dict:
+    # Before any work: a second pilot would replace the recorded one and the
+    # approval recorded on it. No override flag (CLAUDE.md: a guard does not
+    # ship with its escape hatch).
+    if _load().get("pilot"):
+        raise SystemExit("a pilot is already recorded; it is not re-run")
     out = {}
     for p, fn in (("A", protocol_a), ("B", protocol_b)):
         t0 = time.perf_counter()
@@ -278,10 +292,10 @@ def run() -> None:
     if not (pilot_.get("run") or pilot_.get("over_cap_approval")):
         raise SystemExit("the pilot did not project the run within the cap; "
                          "the seed count goes to Manual Validation")
+    t_start, started = time.perf_counter(), time.strftime("%Y-%m-%dT%H:%M:%S")
     done = {_key(r) for r in doc["rows"]}
-    plan = [x for seed in SEEDS for x in ((seed, "A", RATIO), (seed, "B", None))]
-    plan += [(seed, "A", SENS_RATIO) for seed in SENS_SEEDS]
-    for seed, p, ratio in plan:
+    n_before = len(doc["rows"])
+    for seed, p, ratio in _plan():
         if all((p, ratio, lane, seed) in done for lane in ("knn", "hgb")):
             continue
         d = protocol_a(seed, ratio) if p == "A" else protocol_b(seed)
@@ -294,6 +308,23 @@ def run() -> None:
             r = doc["rows"][-1]
             print(f"  {p} r={ratio} {lane} s{seed}: auprc {r['test_auprc']:.4f} "
                   f"dups {r['eval_duplicates_in_train']} {r.get('seconds')}", flush=True)
+    # Additive: this invocation's wall clock, start to last write.
+    doc.setdefault("run_sessions", []).append(
+        {"started": started, "run_wall_s": round(time.perf_counter() - t_start, 1),
+         "rows_added": len(doc["rows"]) - n_before})
+    _save(doc)
+
+
+def _plan() -> list[tuple]:
+    """(seed, protocol, ratio) in run order: the main seeds, then the
+    sensitivity seeds."""
+    plan = [x for seed in SEEDS for x in ((seed, "A", RATIO), (seed, "B", None))]
+    return plan + [(seed, "A", SENS_RATIO) for seed in SENS_SEEDS]
+
+
+def planned_keys() -> set:
+    return {(p, ratio, lane, seed) for seed, p, ratio in _plan()
+            for lane in ("knn", "hgb")}
 
 
 # ------------------------------------------------------------------ analysis
@@ -328,8 +359,14 @@ def analyze(doc: dict) -> dict:
     if "knn_A_mean" in out:
         out["consistent_with_0_8108"] = bool(abs(out["knn_A_mean"] - TARGET) <= TOLERANCE)
     sens = {lane: by("A", SENS_RATIO, lane) for lane in ("knn", "hgb")}
-    out["sensitivity_r005"] = {lane: (float(np.mean(list(v.values()))) if v else None)
-                               for lane, v in sens.items()}
+    out["sensitivity_r005"] = {
+        lane: {"mean": float(np.mean(list(v.values()))) if v else None,
+               "n": len(v), "seeds": sorted(v)}
+        for lane, v in sens.items()}
+    present = {_key(r) for r in doc["rows"]}
+    missing = planned_keys() - present
+    out["complete"] = not missing
+    out["n_missing_rows"] = len(missing)
     out["eval_duplicates_in_train_A"] = sorted(
         {r["seed"]: r["eval_duplicates_in_train"] for r in doc["rows"]
          if r["protocol"] == "A" and r["ratio"] == RATIO}.items())
@@ -337,11 +374,15 @@ def analyze(doc: dict) -> dict:
 
 
 def main(argv=None) -> int:
-    mode = (argv or sys.argv[1:] or ["pilot"])[0]
+    argv = sys.argv[1:] if argv is None else argv
+    if not argv:
+        raise SystemExit("usage: f111_loke_protocol.py "
+                         "pilot|approve <reference>|run|analyze (no default)")
+    mode = argv[0]
     if mode == "pilot":
         print(json.dumps(pilot(), indent=1))
     elif mode == "approve":
-        print(json.dumps(approve(" ".join((argv or sys.argv[1:])[1:]))))
+        print(json.dumps(approve(" ".join(argv[1:]))))
     elif mode == "run":
         run()
     elif mode == "analyze":

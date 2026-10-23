@@ -74,8 +74,8 @@ def test_table_rows_carry_every_confusion_with_its_source():
                  {"operating_point": "alert_budget_0.005",
                   "confusion": {"tn": 5, "fp": 6, "fn": 7, "tp": 8}}]}},
             {"arm": "x", "metrics": {}}]
-    t = fc.table_rows(rows, "src.json")
-    assert len(t) == 2
+    t, skipped = fc.table_rows(rows, "src.json")
+    assert len(t) == 2 and skipped == 0
     assert t[1]["tp"] == 8 and t[1]["source"] == "src.json"
 
 
@@ -85,3 +85,40 @@ def test_families_need_all_ten_seeds(tmp_path):
     np.savez(tmp_path / "part_abc_stratified_42.npz", y_test=[0])
     np.savez(tmp_path / "full_abc_temporal_None.npz", y_test=[0])
     assert fc.families(tmp_path) == ["full_abc"]
+
+
+def test_table_rows_count_an_operating_point_without_confusion():
+    rows = [{"arm": "a", "metrics": {"operating_points": [
+        {"operating_point": "max_f1_on_val",
+         "confusion": {"tn": 1, "fp": 2, "fn": 3, "tp": 4}},
+        {"operating_point": "alert_budget_0.005"}]}}]
+    t, skipped = fc.table_rows(rows, "src.json")
+    assert len(t) == 1 and skipped == 1
+
+
+def test_a_subset_with_no_fraud_is_not_estimable():
+    y = np.array([1, 1, 1, 1, 0, 0, 0, 0])
+    mask = np.array([0, 0, 0, 0, 1, 1, 1, 1], bool)     # no fraud inside
+    a = np.array([1, 1, 0, 0, 0, 0, 0, 0], bool)
+    assert np.isnan(fc.interaction(y, a, a, mask))
+    iv = fc.interaction_interval([0.1, 0.2, float("nan"), 0.1], 0.95)
+    assert iv["estimable"] is False and iv["n_nonfinite"] == 1
+    assert "excludes_zero" not in iv
+    ok = fc.interaction_interval([0.1, 0.2, 0.15, 0.1], 0.95)
+    assert ok["estimable"] and ok["excludes_zero"]
+
+
+def _pair(*cells):
+    return {"interaction": dict(zip(("amount_above_median", "day_1"), cells))}
+
+
+def test_the_verdict_counts_estimable_pairs_and_never_reads_nan_as_null():
+    names = ("amount_above_median", "day_1")
+    nan = fc.interaction_interval([float("nan")] * 3, 0.95)
+    null = fc.interaction_interval([0.1, -0.1, 0.05], 0.95)
+    fired = fc.interaction_interval([0.1, 0.11, 0.12], 0.95)
+    assert fc.verdict([_pair(nan, nan)], names).startswith("not estimable")
+    v = fc.verdict([_pair(null, nan)], names)
+    assert v.startswith("null") and "1 of 2 pair-subsets estimable" in v
+    v = fc.verdict([_pair(fired, nan)], names)
+    assert v.startswith("some pair") and "1 of 2" in v

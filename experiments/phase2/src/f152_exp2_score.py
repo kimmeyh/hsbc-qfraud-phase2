@@ -11,8 +11,10 @@ Modes:
           two-seed check. The paired interval between the two seeds must
           include zero, or the interval method is too narrow for seed noise.
   full    four lanes, three months, seeds 42-46, then the analysis.
+  analyze the analysis again, from the recorded full run and its per-row
+          score files (each file's SHA-256 is checked against its block).
 
-Run:  <venv python> experiments/phase2/src/f152_exp2_score.py pilot|full
+Run:  <venv python> experiments/phase2/src/f152_exp2_score.py pilot|full|analyze
 """
 from __future__ import annotations
 
@@ -29,6 +31,7 @@ ROOT = HERE.parents[2]
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 import outcome_record as orec  # noqa: E402  (Phase 2)
+import strict_json  # noqa: E402  (Phase 2)
 
 RESULTS = ROOT / "experiments" / "phase2" / "results"
 OUT = RESULTS / "f152_exp2.json"
@@ -124,6 +127,22 @@ def boot_change(y1, scores1: list, y2, scores2: list, *, n_boot=N_BOOT,
 
 
 # ------------------------------------------------------------ the lanes
+def hgb_model(seed: int):
+    """F151's stable HGB (its REFERENCE_VARIANT, l2_regularization=1.0);
+    every other setting at its default."""
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    return HistGradientBoostingClassifier(l2_regularization=1.0, random_state=seed)
+
+
+def item4_features(ctrl: dict, em: int) -> list:
+    """The features the item-4 controls kept. None kept is a stop, never a
+    fall back to every column: that would fit on the uncontrolled set."""
+    if not ctrl["features"]:
+        raise RuntimeError(f"month {em}: the item-4 controls removed every "
+                           "feature; the fold cannot be scored as controlled")
+    return list(ctrl["features"])
+
+
 def fit_predict(lane: str, Xtr, ytr, Xev, seed: int):
     t0 = time.time()
     if lane in ("xgboost", "lightgbm"):
@@ -137,8 +156,7 @@ def fit_predict(lane: str, Xtr, ytr, Xev, seed: int):
             from lightgbm import LGBMClassifier
             m = LGBMClassifier(**cfg)
     elif lane == "hgb":
-        from sklearn.ensemble import HistGradientBoostingClassifier
-        m = HistGradientBoostingClassifier(l2_regularization=1.0, random_state=seed)
+        m = hgb_model(seed)
     elif lane == "logistic":
         from sklearn.impute import SimpleImputer
         from sklearn.linear_model import LogisticRegression
@@ -181,7 +199,7 @@ def score(lanes=LANES, seeds=SEEDS, months=None) -> dict:
         day_tr = ieee_features.add_day(b["parts"]["X_train"]).to_numpy()
         ctrl = ieee_controls.apply_item4_controls(b["X_train"], ytr, day_tr,
                                                   seed=CONTROLS_SEED)
-        keep = ctrl["features"] or list(b["X_train"].columns)
+        keep = item4_features(ctrl, em)
         _beat("controls", eval_month=em, kept=len(keep))
         out["folds"].append({
             "eval_month": em, "n_train": int(len(ytr)), "n_eval": int(len(yev)),
@@ -204,10 +222,18 @@ def score(lanes=LANES, seeds=SEEDS, months=None) -> dict:
 
 
 def _load_scores(rec: dict) -> tuple[np.ndarray, list]:
-    """Labels and per-seed scores back from the saved outcome files."""
+    """Labels and per-seed scores back from the saved outcome files. Each
+    file must still hash to its block's SHA-256: the pilot and the full run
+    write the same names, so a later run can replace a file silently."""
     ps, y = [], None
     for r in rec:
-        z = np.load(ROOT / r["outcome"]["test_scores"]["path"])
+        ts = r["outcome"]["test_scores"]
+        path = ROOT / ts["path"]
+        got = orec.sha256_of(path)
+        if got != ts["sha256"]:
+            raise ValueError(f"{ts['path']}: SHA-256 {got} does not match the "
+                             f"recorded {ts['sha256']}; the file was replaced")
+        z = np.load(path)
         y = z["y_test"].astype(int) if y is None else y
         if not np.array_equal(y, z["y_test"]):
             raise ValueError("seeds disagree on the evaluation labels")
@@ -262,25 +288,38 @@ def _header() -> dict:
             "drift_treatment": "stated limit: Phase 1's adversarial control at its cap"}
 
 
+def _dump(res: dict) -> str:
+    return json.dumps(res, indent=1, default=strict_json.numpy_scalar)
+
+
 def main(argv=None) -> int:
-    mode = (argv or sys.argv[1:] or ["pilot"])[0]
+    argv = sys.argv[1:] if argv is None else argv
+    if not argv:
+        raise SystemExit("usage: f152_exp2_score.py pilot|full|analyze "
+                         "(no default)")
+    mode = argv[0]
+    if mode in ("pilot", "full"):
+        out = PILOT_OUT if mode == "pilot" else OUT
+        if out.exists():
+            raise SystemExit(f"{out.name} is recorded; {mode} would "
+                             "overwrite it and its per-row score files")
     if mode == "pilot":
         res = pilot_check()
-        PILOT_OUT.write_text(json.dumps(res, indent=1, default=str), encoding="utf-8")
+        PILOT_OUT.write_text(_dump(res), encoding="utf-8")
         print(json.dumps(res["between_seed_interval"]), res["check_passes"])
     elif mode == "full":
         s = score()
         res = {**_header(), "mode": "full", **s}
-        OUT.write_text(json.dumps(res, indent=1, default=str), encoding="utf-8")
+        OUT.write_text(_dump(res), encoding="utf-8")
         res["analysis"] = analyze(s)
-        OUT.write_text(json.dumps(res, indent=1, default=str), encoding="utf-8")
+        OUT.write_text(_dump(res), encoding="utf-8")
         a = res["analysis"]
         print("P1", json.dumps(a["P1_xgboost_minus_logistic"]), "holds", a["P1_holds"])
         print("P2", json.dumps(a["P2_xgboost_change_m4_to_m5"]))
     elif mode == "analyze":
         res = json.loads(OUT.read_text(encoding="utf-8"))
         res["analysis"] = analyze(res)
-        OUT.write_text(json.dumps(res, indent=1, default=str), encoding="utf-8")
+        OUT.write_text(_dump(res), encoding="utf-8")
     else:
         raise SystemExit(f"unknown mode {mode!r}")
     return 0

@@ -42,6 +42,14 @@ def test_a_wide_spread_at_the_right_level_does_not_close():
     assert r["level_ok"] and not r["closes"]
 
 
+def test_the_sd_term_alone_stops_a_close():
+    # Range 0.09 (passes) and the right level; only the SD (about 0.045)
+    # fails. Dropping the SD term from `closes` turns this green.
+    r = fh.spread_closes([0.77, 0.77, 0.86, 0.86, 0.82], level=0.816)
+    assert r["range_ok"] and r["level_ok"] and not r["sd_ok"]
+    assert not r["closes"]
+
+
 def test_a_tight_spread_at_the_right_level_closes():
     r = fh.spread_closes([0.80, 0.82, 0.79, 0.81, 0.80], level=0.816)
     assert r["closes"]

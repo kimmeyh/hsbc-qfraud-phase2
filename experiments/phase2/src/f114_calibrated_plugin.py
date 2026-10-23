@@ -117,12 +117,20 @@ def summarize(rows: list) -> dict:
         out[arm] = {}
         for k in ("calibrated", "uncalibrated"):
             n = sum(r["arms"][arm][f"{k}_recovered"] for r in live)
+            # Always the preregistered count: a one-seed pilot cannot reach
+            # it, so it can never read as "recovers".
             out[arm][k] = {"seeds_recovered": int(n), "n_seeds": len(rows),
-                           "recovers": bool(live and n >= min(fc.PASS_SEEDS, len(rows)))}
+                           "recovers": bool(live and n >= fc.PASS_SEEDS)}
     return out
 
 
-def verdict(summary: dict) -> dict:
+def verdict(summary: dict, mode: str) -> dict:
+    """The gate verdict, for `run` only. A pilot gets no gate verdict."""
+    if mode == "pilot":
+        return {"deciding_arm": DECIDING_ARM, "f114": "pilot only, not a gate",
+                "pass_seeds": fc.PASS_SEEDS}
+    if mode != "run":
+        raise ValueError(f"unknown mode {mode!r}")
     ok = summary[DECIDING_ARM]["calibrated"]["recovers"]
     return {"deciding_arm": DECIDING_ARM, "calibrated_plugin_recovers": ok,
             "f114": "eligible: real-data run with this plug-in" if ok
@@ -147,7 +155,7 @@ def main(argv=None) -> int:
                      "calibration": "isotonic"},
            "margin": {"abs": fc.MARGIN_ABS, "rel": fc.MARGIN_REL},
            "mode": mode, "seeds": list(seeds), "rows": rows,
-           "summary": summary, "verdict": verdict(summary),
+           "summary": summary, "verdict": verdict(summary, mode),
            "elapsed_s": round(time.perf_counter() - t0, 1)}
     (OUT_PILOT if mode == "pilot" else OUT).write_text(
         json.dumps(res, indent=1) + "\n", encoding="utf-8")

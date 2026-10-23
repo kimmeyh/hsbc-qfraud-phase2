@@ -8,10 +8,14 @@ fractions.
 
 Modes:
   free    the 91-variable cell, seeds 42-46
-  pilot   the 833-variable cell, seed 42 only, with the five-seed projection
+  pilot   the 833-variable cell, seed 42 only, with the projection for the
+          remaining four seeds (43-46)
   full    the 833-variable cell, seeds 43-46 (run only if the pilot projects
-          five seeds at 120 minutes or less)
+          those four seeds at 120 minutes or less)
   analyze the slopes, from every recorded run
+
+`free`, `pilot` and `full` resume: a (cell, seed, fraction) already recorded
+is skipped, never timed twice.
 
 Run:  <venv python> experiments/phase2/src/f110_scaling.py free|pilot|full|analyze
 """
@@ -79,12 +83,19 @@ def time_one(config: str, seed: int, frac: float) -> dict:
     # solve_simplex_qp rebuilds J (not H), so only the J build is
     # subtracted; subtracting H too clamped the solve to zero.
     t_solve = max(t_solve_raw - t_j, 0.0)
+    # Clamped: the separately timed J build (jitter) exceeded the raw solve
+    # call, or the difference rounds to 0.000 at the stored 1 ms. Either way
+    # the stored solve_s is 0.0 and slope() reads it at its 1e-4 floor.
+    clamped = bool(t_solve_raw < t_j or round(t_solve, 3) == 0.0)
     return {"cell": config, "seed": seed, "fraction": frac, "rows": int(len(y)),
             "n_variables": int(H.shape[0]),
             "build_s": round(t_build, 3), "construction_s": round(t_h + t_j, 3),
             "h_matrix_s": round(t_h, 3), "j_build_s": round(t_j, 3),
             "solve_raw_s": round(t_solve_raw, 3), "solve_s": round(t_solve, 3),
-            "solve_clamped": t_solve_raw < t_j,
+            "solve_clamped": clamped,
+            # Unrounded, so a later reader can redo the subtraction (added
+            # after the committed runs; rows before it lack these two keys).
+            "solve_raw_s_unrounded": t_solve_raw, "j_build_s_unrounded": t_j,
             "total_s": round(t_build + t_h + t_j + t_solve, 3)}
 
 
@@ -103,23 +114,41 @@ def projection_min(pilot_rows: list[dict], n_more: int = len(FULL_REST)) -> floa
     return sum(r["total_s"] for r in pilot_rows) * n_more / 60.0
 
 
+def _key(r: dict) -> tuple:
+    return (r["cell"], r["seed"], r["fraction"])
+
+
 def analyze(doc: dict) -> dict:
+    keys = [_key(r) for r in doc.get("runs", [])]
+    dupes = sorted({k for k in keys if keys.count(k) > 1})
+    if dupes:
+        # A duplicate is counted twice by the regression and narrows the
+        # interval; it is a defect in the file, not data.
+        raise ValueError(f"duplicate (cell, seed, fraction) rows: {dupes}")
     out = {}
     for cell in CELLS:
         rows = [r for r in doc.get("runs", []) if r["cell"] == cell]
         if len(rows) < 3:
             continue
         b, s = slope(rows, "build_s"), slope(rows, "solve_s")
+        n_clamped = sum(bool(r.get("solve_clamped")) or r["solve_s"] == 0.0
+                        for r in rows)
         largest = all(r["build_s"] >= max(r["construction_s"], r["solve_s"]) for r in rows)
         out[cell] = {
             "n_runs": len(rows), "seeds": sorted({r["seed"] for r in rows}),
             "build": b, "construction": slope(rows, "construction_s"), "solve": s,
             "P1_build_largest_everywhere": largest,
             "P1_holds": bool(largest and P1_BAND[0] <= b["low"] and b["high"] <= P1_BAND[1]),
+            # P2_holds is the committed rule, unchanged. A clamped row is not
+            # below perf_counter's resolution: the J build, timed separately
+            # and subtracted, ran longer than the raw solve call (jitter), or
+            # the difference rounded to 0.000 at the stored 1 ms. Its stored
+            # solve_s is 0.0 and its log is the 1e-4 floor, a flat value of
+            # the kind P2 predicts. So P2_readable is False when any row in
+            # the cell clamped, and P2_holds is then not a reading of P2.
             "P2_holds": bool(P2_BAND[0] <= s["low"] and s["high"] <= P2_BAND[1]),
-            # A clamped solve is below the timer's resolution; its log is
-            # the 1e-4 floor, so P2 is not readable where many rows clamp.
-            "n_solve_clamped": sum(bool(r.get("solve_clamped")) for r in rows),
+            "n_solve_clamped": n_clamped,
+            "P2_readable": n_clamped == 0,
             "mean_by_fraction": {str(f): {k: float(np.mean([r[k] for r in rows
                                                             if r["fraction"] == f]))
                                           for k in ("rows", "build_s", "construction_s",
@@ -146,9 +175,12 @@ def _save(doc: dict) -> None:
 
 def _run(cell: str, seeds) -> list[dict]:
     doc = _load()
+    done = {_key(r) for r in doc["runs"]}
     new = []
     for seed in seeds:
         for frac in FRACTIONS:
+            if (CELLS[cell], seed, frac) in done:
+                continue               # resume: never time a key twice
             r = time_one(CELLS[cell], seed, frac)
             doc["runs"].append(r)
             new.append(r)
@@ -162,8 +194,16 @@ def main(argv=None) -> int:
     if mode == "free":
         _run("free", FREE_SEEDS)
     elif mode == "pilot":
-        rows = _run("full", (FULL_PILOT_SEED,))
+        _run("full", (FULL_PILOT_SEED,))
         doc = _load()
+        # The projection reads every recorded pilot row, not only the ones
+        # timed now: on a resume the new list is short or empty, and an
+        # empty sum would project 0 minutes and pass the cap.
+        rows = [r for r in doc["runs"]
+                if r["cell"] == CELLS["full"] and r["seed"] == FULL_PILOT_SEED]
+        if len(rows) != len(FRACTIONS):
+            raise SystemExit(f"{len(rows)} pilot rows recorded, expected "
+                             f"{len(FRACTIONS)}; no projection")
         proj = projection_min(rows)
         doc["full_pilot"] = {"seed": FULL_PILOT_SEED,
                              "projected_minutes_for_seeds_43_46": proj,
@@ -174,7 +214,8 @@ def main(argv=None) -> int:
     elif mode == "full":
         doc = _load()
         if not doc.get("full_pilot", {}).get("run_five_seeds"):
-            raise SystemExit("the pilot did not project five seeds within the cap")
+            raise SystemExit("the pilot did not project the remaining four "
+                             "seeds (43-46) within the cap")
         _run("full", FULL_REST)
     elif mode == "analyze":
         doc = _load()

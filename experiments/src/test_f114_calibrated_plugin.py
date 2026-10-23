@@ -73,9 +73,9 @@ def _row(seed, rec_none, rec_cal=True):
 
 def test_verdict_needs_four_of_five_on_the_main_arm():
     rows = [_row(s, s != 42) for s in range(42, 47)]
-    assert fp.verdict(fp.summarize(rows))["calibrated_plugin_recovers"]
+    assert fp.verdict(fp.summarize(rows), "run")["calibrated_plugin_recovers"]
     rows = [_row(s, s > 43) for s in range(42, 47)]
-    v = fp.verdict(fp.summarize(rows))
+    v = fp.verdict(fp.summarize(rows), "run")
     assert not v["calibrated_plugin_recovers"] and "blocked" in v["f114"]
 
 
@@ -85,3 +85,18 @@ def test_a_stopped_seed_counts_as_a_miss():
     rows[0]["arms"]["none"]["calibrated_recovered"] = False
     s = fp.summarize(rows)["none"]["calibrated"]
     assert s == {"seeds_recovered": 3, "n_seeds": 5, "recovers": False}
+
+
+def test_a_one_seed_pilot_never_reads_as_a_gate_verdict():
+    rows = [_row(42, True)]                      # the one seed recovers
+    s = fp.summarize(rows)
+    assert s["none"]["calibrated"]["recovers"] is False   # 1 < PASS_SEEDS
+    v = fp.verdict(s, "pilot")
+    assert v["f114"] == "pilot only, not a gate"
+    assert "calibrated_plugin_recovers" not in v and "eligible" not in str(v)
+
+
+def test_the_verdict_needs_a_known_mode():
+    import pytest
+    with pytest.raises(ValueError, match="unknown mode"):
+        fp.verdict(fp.summarize([_row(42, True)]), "full")

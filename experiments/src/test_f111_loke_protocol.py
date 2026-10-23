@@ -153,3 +153,81 @@ def test_an_over_cap_run_needs_a_recorded_approval(tmp_path, monkeypatch):
     monkeypatch.setattr(fl, "SEEDS", ())
     monkeypatch.setattr(fl, "SENS_SEEDS", ())
     fl.run()                                   # approved: no refusal
+
+
+def test_main_needs_an_explicit_mode(tmp_path, monkeypatch):
+    _no_real_work(monkeypatch)
+    monkeypatch.setattr(fl, "OUT", tmp_path / "f111.json")
+    with pytest.raises(SystemExit, match="no default"):
+        fl.main([])
+    assert not (tmp_path / "f111.json").exists()
+
+
+def test_a_recorded_pilot_is_never_rerun(tmp_path, monkeypatch):
+    import json
+    _no_real_work(monkeypatch)                 # a broken guard dies here
+    out = tmp_path / "f111.json"
+    monkeypatch.setattr(fl, "OUT", out)
+    doc = {"rows": [], "pilot": {"projected_minutes": 824.6, "run": False,
+                                 "over_cap_approval": {"reference": "DV2"}}}
+    out.write_text(json.dumps(doc))
+    with pytest.raises(SystemExit, match="already recorded"):
+        fl.main(["pilot"])
+    assert json.loads(out.read_text()) == doc   # approval kept, file untouched
+
+
+def test_run_resumes_only_the_missing_keys(tmp_path, monkeypatch):
+    import json
+    out = tmp_path / "f111.json"
+    monkeypatch.setattr(fl, "OUT", out)
+    monkeypatch.setattr(fl, "SEEDS", (42, 43))
+    monkeypatch.setattr(fl, "SENS_SEEDS", (42,))
+    calls = {"a": 0, "b": 0, "knn": 0, "hgb": 0}
+
+    def prot_a(seed, ratio=fl.RATIO, frac=None):
+        calls["a"] += 1
+        return {"protocol": "A", "ratio": ratio}
+
+    def prot_b(seed, frac=None):
+        calls["b"] += 1
+        return {"protocol": "B", "ratio": None}
+
+    def knn(d):
+        calls["knn"] += 1
+        return {}
+
+    def hgb(d, seed):
+        calls["hgb"] += 1
+        return {}
+
+    def row(d, lane, seed, o):
+        return {"protocol": d["protocol"], "ratio": d["ratio"], "lane": lane,
+                "seed": seed, "test_auprc": 0.8, "eval_duplicates_in_train": 0}
+    for name, f in (("protocol_a", prot_a), ("protocol_b", prot_b),
+                    ("knn_lane", knn), ("hgb_lane", hgb), ("_row", row)):
+        monkeypatch.setattr(fl, name, f)
+    present = [row({"protocol": "A", "ratio": 0.02}, lane, 42, None)
+               for lane in ("knn", "hgb")]              # (42, A) complete
+    present.append(row({"protocol": "B", "ratio": None}, "knn", 42, None))
+    out.write_text(json.dumps({"rows": present, "pilot": {"run": True}}))
+    fl.run()
+    # Missing: B hgb 42; A and B for 43 (4 rows); A 0.05 for 42 (2 rows).
+    assert calls == {"a": 2, "b": 2, "knn": 3, "hgb": 4}
+    doc = json.loads(out.read_text())
+    keys = [fl._key(r) for r in doc["rows"]]
+    assert len(keys) == len(set(keys)) and set(keys) == fl.planned_keys()
+    assert doc["run_sessions"][-1]["rows_added"] == 7
+    a = fl.analyze(doc)
+    assert a["complete"] and a["n_missing_rows"] == 0
+
+
+def test_analysis_records_completeness_and_the_sensitivity_count():
+    knn_b = [0.77 + 0.002 * i for i in range(10)]
+    doc = _rows([v + 0.03 for v in knn_b], knn_b)
+    out = fl.analyze(doc)
+    assert not out["complete"] and out["n_missing_rows"] == 6
+    assert out["sensitivity_r005"]["knn"] == {"mean": None, "n": 0, "seeds": []}
+    doc["rows"].append({"protocol": "A", "ratio": 0.05, "lane": "knn", "seed": 43,
+                        "test_auprc": 0.7, "eval_duplicates_in_train": 0})
+    s = fl.analyze(doc)["sensitivity_r005"]["knn"]
+    assert s == {"mean": pytest.approx(0.7), "n": 1, "seeds": [43]}

@@ -88,6 +88,61 @@ def test_guide_check_fails_on_ratio_and_on_close_pairs():
     assert r["resolved_pair_share"] < 1.0 and not r["pass"]
 
 
+def test_guide_check_fails_on_the_ratio_alone():
+    # One distinct value: every pair (none) is resolved, so only the ratio
+    # part can fail. Dropping the ratio part from `pass` turns this green.
+    r = dr.resolution_check_guide(np.array([[1000.0]]), np.array([1.0]))
+    assert not r["ratio_ok"] and r["resolved_pair_share"] == 1.0
+    assert not r["pass"]
+
+
+def test_guide_check_fails_on_close_pairs_alone():
+    # The ratio is fine; the coefficients sit closer than the step. This is
+    # the real F153 case (ratio about 2, share well under 1).
+    J = np.array([[10.0, 10.02], [10.02, 10.0]])
+    C = np.array([9.99, 10.01])
+    r = dr.resolution_check_guide(J, C)
+    assert r["ratio_ok"] and r["resolved_pair_share"] < 1.0
+    assert not r["pass"]
+
+
+def _chosen(greedy_gap, best_gap, gate=True, guide=True):
+    fl = -0.5
+    return {"floor": fl, "gap_best_to_floor": best_gap,
+            "methods": {"greedy": {"objective": fl + greedy_gap}},
+            "f104_gate": {"pass": gate}, "guide_check": {"pass": guide}}
+
+
+def test_design_fails_when_every_greedy_gap_is_below_the_minimum():
+    rows = [_chosen(0.002, 0.002) for _ in range(6)]
+    assert fd.design_fails(rows)
+
+
+def test_design_holds_with_one_gap_and_both_checks_passing():
+    rows = [_chosen(0.002, 0.002) for _ in range(5)] + [_chosen(0.05, 0.05)]
+    assert not fd.design_fails(rows)
+
+
+def test_design_fails_when_every_instance_fails_both_checks():
+    rows = [_chosen(0.05, 0.05, gate=False, guide=False) for _ in range(6)]
+    assert fd.design_fails(rows)
+    # One instance passing one check is enough to keep the design.
+    rows[3] = _chosen(0.05, 0.05, gate=False, guide=True)
+    assert not fd.design_fails(rows)
+
+
+def test_design_reads_the_greedy_gap_not_the_best_found():
+    # The entry: "the gap between greedy and the floor". Greedy leaves room
+    # (>= 0.01) although the best found does not: the design holds.
+    rows = [_chosen(0.02, 0.005) for _ in range(6)]
+    assert not fd.design_fails(rows)
+
+
+def test_design_verdict_refuses_no_rows():
+    with pytest.raises(ValueError, match="empty"):
+        fd.design_fails([])
+
+
 def test_guide_check_passes_a_well_spread_problem():
     J = np.array([[10.0, 2.0], [2.0, 8.0]])
     C = np.array([-4.0, 6.0])
