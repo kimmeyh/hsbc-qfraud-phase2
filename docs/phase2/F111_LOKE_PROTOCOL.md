@@ -1,6 +1,7 @@
-# Experiment 4 (F111): the CVQBoost-KNN lane, the pilot
+# Experiment 4 (F111): the CVQBoost-KNN lane, the result
 
-Sprint 28 Task D (#51), 2026-10-22. Zero metered seconds. The entry is
+Sprint 28 Task D (#51), 2026-10-22 (pilot) and 2026-10-23 (run). Zero
+metered seconds. The entry is
 `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6, "Experiment 4",
 committed before its harness (`e07aa84`). Every figure below is in
 `experiments/phase2/results/f111_loke_protocol.json`. Code:
@@ -9,13 +10,64 @@ committed before its harness (`e07aa84`). Every figure below is in
 
 ## BLUF
 
-**The pilot projects the run at about 825 minutes, far over the
-entry's 120-minute cap. Under the entry's size rule, the run did not
-start, and the seed count goes to the team lead at Manual Validation.**
-There is no Experiment 4 result yet. This document records the pilot,
-which the entry requires to be reported whatever happens next.
+- **Primary result: the protocol does not measurably change the KNN
+  lane.** KNN AUC-PR under the source protocol (A) minus under ours (B):
+  -0.014, 95% interval [-0.046, +0.019], 10 paired seeds. The interval
+  includes zero.
+- **The lane is not consistent with the published 0.8108.** Its mean
+  under A is 0.760, 0.051 below; the entry's tolerance is 0.03.
+- **The stable HGB beats the KNN lane under both protocols**: by 0.082
+  [0.061, 0.104] under A and by 0.033 [0.014, 0.053] under B.
+- **The protocol does move HGB**: A minus B is +0.035 [+0.008, +0.062].
+  A differs from B in more than duplicates (more training rows,
+  resampling, a different split), so this run cannot say which part
+  moves it.
+- **Duplicates**: under A, 267 to 329 evaluation rows per seed (mean
+  303.5) have an exact copy in the training rows. Under B, none.
 
-## The pilot (Measured, `SIM`)
+## Results (Measured, `SIM`)
+
+Seeds 42-51, both protocols, both lanes; every row carries an outcome
+block. The run took about 95 minutes, against the pilot's projection of
+824.6 (see "The projection was wrong").
+
+- **KNN lane AUC-PR**: A mean 0.760 (range 0.683-0.829), B mean 0.774
+  (0.707-0.831).
+- **HGB AUC-PR** (F151's stable setting): A mean 0.842 (0.788-0.881),
+  B mean 0.807 (0.762-0.849).
+- **Sensitivity, SMOTETomek 0.05 under A** (seeds 42-44, reported, not
+  decisive): KNN 0.774, HGB 0.860.
+- **Team lead's approval**: the run was over the entry's cap and ran
+  under the dated amendment and the recorded `over_cap_approval`
+  (Sprint 28 Manual Validation DV2).
+
+## Reading
+
+- **Duplicates did not lift this lane (Inferred).** About 300
+  evaluation rows per seed have a twin in training, yet the KNN lane is
+  no higher under A. A 15-neighbor vote on one or two columns, weighted
+  over 465 learners, is not dominated by a single exact match.
+- **0.8108 is not reached with the settings recoverable from the paper
+  and the code.** The paper's seeds cannot be recovered, and settings it
+  leaves open (feature count, resampling ratio) may differ. This run
+  cannot say which, so it does not claim the published value is wrong.
+- **For a QML claim on ULB, the comparison that matters is against a
+  stable classical model on the same rows**, and here the KNN lane is
+  below it under both protocols.
+
+## The projection was wrong
+
+The pilot projected 824.6 minutes with F130's formula, which scales the
+lane time by training rows times query rows. The run took about 95
+minutes (each KNN lane 184-252 s), so the formula overstated the cost
+about 9 times. Inferred cause: scikit-learn's KNN on one or two columns
+uses a tree search, whose cost grows close to rows times log rows, not
+rows squared. The full run also shared the processor with the DV4
+backfill, so its seconds are not timing evidence. A projection formula
+that assumes brute-force search needs a check against a second pilot
+size before it decides a run.
+
+## The pilot (Measured, `SIM`, 2026-10-22)
 
 Seed 42. The lane was timed on 10% of each protocol's rows. The data
 preparation was timed at full size.
@@ -46,26 +98,15 @@ preparation was timed at full size.
 - The projection is an inference from the pilot and the formula, not a
   measurement.
 
-## Why the run is this slow
-
-The weak learners are KNN with k = 15 on all 30 columns, and schedule 2
-full-pair gives 465 of them. Each learner predicts every training row to
-build H, and every scored row too. Prediction is the cost. The pool
-build itself is small (about 5 s at 10%). Inferred: the cost grows with
-training rows times query rows, which is why the full-size projection is
-about 100 times the 10% pilot.
-
-## What the team lead decides (Manual Validation)
-
-The entry says: run if the projection is at most 120 minutes, otherwise
-the seed count goes to Manual Validation. The options and their projected
-serial times are in the sprint's validation document. Any seed count
-other than the entry's is recorded as a dated amendment to the entry
-before the run starts.
+The pilot's reading of the cost ("each learner compares every query row
+with every training row") was the inference the run disproved; see "The
+projection was wrong".
 
 ## What was not done
 
-- No seed was run at full size. `run` refuses unless the pilot clears
-  the cap, and it did not.
-- No timing was taken with other work on the processor. The pilot ran
-  alone, after Experiment 6's timing had finished.
+- The paper's own seeds: unrecoverable (the code draws them at random).
+- Which part of protocol A moves HGB (duplicates, training size,
+  resampling or split): one protocol against another cannot separate
+  them.
+- No device: the lane was solved classically on the Hamiltonian
+  eqc-models sends.

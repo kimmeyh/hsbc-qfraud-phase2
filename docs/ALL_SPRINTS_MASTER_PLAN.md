@@ -661,6 +661,7 @@ value. Removed from candidates.)
 - Their split and comparator, target AUC-PR 0.80, then re-evaluated under ours
 - Depends on: F102 for reporting
 - **2026-10-22 (Sprint 28 Task D)**: entry and harness committed; the pilot projects the run at about 825 minutes against the entry's 120-minute cap, so no seed ran at full size and the seed count is a Manual Validation decision. No result yet. Protocol A leaves 326 evaluation rows that duplicate training rows (`docs/phase2/F111_LOKE_PROTOCOL.md`)
+- **2026-10-23 (Sprint 28 Manual Validation, DV2: run as written above the cap)**: KNN lane A minus B -0.014 [-0.046, +0.019], so the protocol does not measurably change the lane; its mean under A is 0.760, not consistent with 0.8108. The stable HGB beats the lane under both protocols (by 0.082 under A, 0.033 under B); HGB itself gains +0.035 under A. The run took about 95 minutes against the projected 825: F130's formula assumed brute-force KNN cost
 
 **F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)
