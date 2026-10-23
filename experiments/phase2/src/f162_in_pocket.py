@@ -187,11 +187,32 @@ def choose_seeds(first_seed_minutes: float) -> dict:
 
 
 # --------------------------------------------------------------- the run
+def provenance() -> dict:
+    """The commit and library versions the rows were made with (Sprint 28
+    D4: results can be reproduced). `generator_clean` is False when this
+    file differs from that commit."""
+    import subprocess
+    import sklearn
+    import xgboost
+
+    def git(*a):
+        return subprocess.run(["git", *a], cwd=ROOT, capture_output=True,
+                              text=True, check=True).stdout.strip()
+
+    rel = Path(__file__).resolve().relative_to(ROOT).as_posix()
+    return {"generator_commit": git("rev-parse", "HEAD"),
+            "generator_clean": git("status", "--porcelain", "--", rel) == "",
+            "versions": {"python": sys.version.split()[0], "numpy": np.__version__,
+                         "scikit-learn": sklearn.__version__,
+                         "xgboost": xgboost.__version__}}
+
+
 def _load() -> dict:
     if OUT.exists():
         return json.loads(OUT.read_text(encoding="utf-8"))
     return {"generator": "experiments/phase2/src/f162_in_pocket.py", "card": "F162",
             "sprint": 28, "evidence_tag": "SIM", "metered_seconds": 0,
+            "provenance": provenance(),
             "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F162",
             "lanes": {"proxy": "frozen cell config, seeded pool, simplex solve",
                       "hgb": f"HistGradientBoostingClassifier(l2_regularization={HGB_L2})",
