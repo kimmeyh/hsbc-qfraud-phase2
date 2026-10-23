@@ -135,6 +135,60 @@ def test_refuses_to_overwrite_an_existing_key(tmp_path):
     with pytest.raises(bo.BackfillRefused, match="already exists"):
         bo.apply(path, plan, pred_dir=tmp_path / "pred")
     assert _read(path) == before
+    assert not (tmp_path / "pred").exists()      # no per-row file either
+
+
+def test_refuses_a_stray_leaf_before_any_per_row_file(tmp_path, monkeypatch):
+    y, p = _scores()
+    path, before = _write_doc(tmp_path, bo.ap(y, p))
+    real = bo.check_leaves
+
+    def stray(old, new, added):
+        new["rows"][0]["stray"] = 1
+        real(old, new, added)
+    monkeypatch.setattr(bo, "check_leaves", stray)
+    with pytest.raises(bo.BackfillRefused, match="outside"):
+        bo.apply(path, _plan(y, p, bo.ap(y, p)), pred_dir=tmp_path / "pred")
+    assert _read(path) == before
+    assert not (tmp_path / "pred").exists()
+
+
+def test_refuses_to_replace_a_per_row_file_with_other_bytes(tmp_path):
+    y, p = _scores()
+    path, before = _write_doc(tmp_path, bo.ap(y, p))
+    pred = tmp_path / "pred"
+    pred.mkdir()
+    other = pred / "demo_lane_42.npz"
+    other.write_bytes(b"another block's scores")
+    with pytest.raises(bo.BackfillRefused, match="different bytes"):
+        bo.apply(path, _plan(y, p, bo.ap(y, p)), pred_dir=pred)
+    assert _read(path) == before
+    assert other.read_bytes() == b"another block's scores"
+
+
+def test_keeps_a_per_row_file_with_the_same_bytes(tmp_path):
+    y, p = _scores()
+    first, _ = _write_doc(tmp_path / "a", bo.ap(y, p))
+    bo.apply(first, _plan(y, p, bo.ap(y, p)), pred_dir=tmp_path / "pred")
+    second, _ = _write_doc(tmp_path / "b", bo.ap(y, p))
+    bo.apply(second, _plan(y, p, bo.ap(y, p)), pred_dir=tmp_path / "pred")
+    blk = json.loads(_read(second))["rows"][0]["outcome"]
+    assert orec.sha256_of(tmp_path / "pred" / "demo_lane_42.npz") == \
+        blk["test_scores"]["sha256"]
+
+
+def test_a_failed_read_back_leaves_the_result_untouched(tmp_path, monkeypatch):
+    y, p = _scores()
+    path, before = _write_doc(tmp_path, bo.ap(y, p))
+    real = bo.read_exact
+    # Valid JSON that differs from what was written (its last newline lost),
+    # so only the byte comparison can refuse it.
+    monkeypatch.setattr(bo, "read_exact", lambda f: real(f)[:-1]
+                        if str(f).endswith(".tmp") else real(f))
+    with pytest.raises(bo.BackfillRefused, match="did not read back"):
+        bo.apply(path, _plan(y, p, bo.ap(y, p)), pred_dir=tmp_path / "pred")
+    assert _read(path) == before
+    assert not list(path.parent.glob("*.tmp"))
 
 
 def test_refuses_a_second_backfill(tmp_path):
@@ -170,22 +224,86 @@ def test_dry_run_writes_nothing(tmp_path):
     meta = bo.apply(path, _plan(y, p, bo.ap(y, p)), write=False,
                     pred_dir=tmp_path / "pred")
     assert meta["n_blocks"] == 1 and _read(path) == before
+    assert not (tmp_path / "pred").exists()
 
 
-def test_rounding_tolerance_reads_the_stored_digits():
-    assert bo.rounding_tol(0.1234) == pytest.approx(5e-5)
-    assert bo.rounding_tol(0.12345678901234567) == bo.FULL_PRECISION_TOL
-    assert bo.rounding_tol(1e-7) == bo.FULL_PRECISION_TOL
+def test_the_default_tolerance_is_full_precision_whatever_the_digits():
+    # A short stored value is not evidence of rounding: 0.5 must not accept
+    # 0.46 (the repr heuristic this replaced gave it a 0.05 tolerance).
+    with pytest.raises(bo.BackfillRefused, match="metric mismatch"):
+        bo.run_checks([bo.Check("recall", 0.5, lambda: 0.46)])
+    with pytest.raises(bo.BackfillRefused, match="metric mismatch"):
+        bo.run_checks([bo.Check("recall", 0.5, lambda: 0.5 + 1e-9)])
+    assert bo.run_checks([bo.Check("recall", 0.5, lambda: 0.5)])[0][
+        "tolerance"] == bo.FULL_PRECISION_TOL
+
+
+def test_a_recheck_finds_the_committed_blocks_again(tmp_path, monkeypatch):
+    y, p = _scores()
+    path, _ = _write_doc(tmp_path, bo.ap(y, p))
+    monkeypatch.setattr(bo.orec, "PRED_DIR", tmp_path / "pred")
+    bo.apply(path, _plan(y, p, bo.ap(y, p)), pred_dir=tmp_path / "pred")
+    rep = bo.recheck(path, lambda doc: _plan(y, p, bo.ap(y, p)))
+    assert rep["blocks_differing"] == [] and rep["n_blocks"] == 1
+    y2 = y.copy()
+    y2[np.flatnonzero(y2 == 0)[:5]] = 1           # different labels
+    with pytest.raises(bo.BackfillRefused, match="different bytes"):
+        bo.recheck(path, lambda doc: _plan(y2, p, bo.ap(y2, p)))
+    rep = bo.recheck(path, lambda doc: bo.Plan(
+        [bo.Lane("demo_lane", 42, y, p, place=("rows", 0),
+                 source={"path": "elsewhere.npz", "sha256": "0" * 64})],
+        [bo.Check("x", 0.0, lambda: 0.0)], ["demo"]))
+    assert rep["blocks_differing"] == [["rows", "0", "outcome"]]
 
 
 # ------------------------------------------------------------ guards can fail
 SRC = Path(bo.__file__)
 
 
-def _proof(old, new, node, label):
+def _proof(old, new, node, label, more=()):
     from injection import Mutation, assert_can_fail, run_pytest
-    assert_can_fail([Mutation(SRC, old, new, expect_occurrences=1)],
+    assert_can_fail([Mutation(SRC, o, n, expect_occurrences=1)
+                     for o, n in [(old, new), *more]],
                     lambda: run_pytest(f"{THIS}::{node}", ROOT), label)
+
+
+def test_full_precision_default_can_fail():
+    _proof("    tol: float = FULL_PRECISION_TOL\n",
+           "    tol: float = 0.05\n",
+           "test_the_default_tolerance_is_full_precision_whatever_the_digits",
+           "a loose default tolerance")
+
+
+def test_staging_guard_can_fail():
+    _proof("pred_dir=staging, source=ln.source)",
+           "pred_dir=pred_dir, source=ln.source)",
+           "test_refuses_a_stray_leaf_before_any_per_row_file",
+           "per-row files saved before the leaf check")
+
+
+def test_placement_first_guard_can_fail():
+    _proof("        if ln.key in parent or target in targets:\n",
+           "        if False:\n",
+           "test_refuses_to_overwrite_an_existing_key",
+           "an existing key not refused before saving")
+
+
+def test_different_bytes_guard_can_fail():
+    _proof("            if final.exists() and orec.sha256_of(final) != sha:\n",
+           "            if False:\n",
+           "test_refuses_to_replace_a_per_row_file_with_other_bytes",
+           "a per-row file with other bytes replaced",
+           more=[("        if final.exists():\n"
+                  "            if orec.sha256_of(final) == sha:\n",
+                  "        if False:\n"
+                  "            if orec.sha256_of(final) == sha:\n")])
+
+
+def test_read_back_guard_can_fail():
+    _proof("        if back != out or detect_format(back) != fmt:\n",
+           "        if False:\n",
+           "test_a_failed_read_back_leaves_the_result_untouched",
+           "a failed read-back ignored")
 
 
 def test_metric_guard_can_fail():

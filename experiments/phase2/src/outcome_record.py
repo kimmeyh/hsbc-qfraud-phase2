@@ -80,12 +80,18 @@ def save_test_scores(name: str, seed, y_test, p_test,
     tmp = f.with_suffix(f".{os.getpid()}.tmp.npz")
     np.savez_compressed(tmp, y_test=np.asarray(y_test), p_test=np.asarray(p_test))
     os.replace(tmp, f)
-    try:
-        shown = f.relative_to(ROOT).as_posix()
-    except ValueError:
-        shown = f.as_posix()
-    return {"path": shown, "sha256": hashlib.sha256(f.read_bytes()).hexdigest(),
+    return {"path": shown_path(f),
+            "sha256": hashlib.sha256(f.read_bytes()).hexdigest(),
             "n_rows": int(len(p_test))}
+
+
+def shown_path(f: Path) -> str:
+    """The path a block records: relative to the repository when inside it,
+    so `stale_hashes` resolves it on any clone."""
+    try:
+        return Path(f).relative_to(ROOT).as_posix()
+    except ValueError:
+        return Path(f).as_posix()
 
 
 def record(name: str, seed, y_test, p_test, *, y_val=None, p_val=None,

@@ -16,10 +16,24 @@ reason. This module then does the rest, and refuses to write when:
     indent styles below (the format could not be preserved);
   - the file already holds an `outcome_backfill` object (no second run);
   - the plan carries no metric check, or any check differs from the stored
-    value by more than that value's stored rounding;
+    value by more than its tolerance: full precision (1e-12) unless the
+    adapter declares, with `rounded(n)`, that the generator stored the value
+    with round(x, n);
+  - a placement is not an object, a key it would add already exists, or two
+    lanes would write the same per-row file;
+  - a per-row file of the same name already exists with different bytes;
   - any pre-existing leaf value would change, or a new value would land
     anywhere but under a key this module adds;
-  - the written bytes, read back from disk, fail either check above.
+  - the new bytes, written to a temporary file and read back from it, fail
+    the format or leaf check. The result file is replaced only after that
+    read-back passes; a failed read-back removes the temporary file and
+    leaves the result untouched.
+
+Every refusal runs before any per-row file reaches the predictions folder:
+blocks are built in a temporary folder, and their files are copied in only
+after all the checks above pass, just before the result is written. If that
+final result write then fails, the copied per-row files stay (new names, or
+names whose bytes already matched), and no result refers to them.
 
 Every new value goes under a new key: `"outcome"` beside a scored entry, or
 the top-level `"outcome_backfill"` object, which also records the date, this
@@ -29,6 +43,11 @@ Zero metered seconds; nothing here calls a device or a network service.
 
     python experiments/phase2/src/backfill_outcomes.py f112_intervals --dry-run
     python experiments/phase2/src/backfill_outcomes.py f112_intervals
+    python experiments/phase2/src/backfill_outcomes.py f112_intervals --recheck
+
+`--recheck` is for a file already backfilled: it removes the added keys,
+rebuilds the plan under the current checks, writes nothing, and compares
+every rebuilt block with the committed one.
 """
 from __future__ import annotations
 
@@ -36,6 +55,7 @@ import argparse
 import copy
 import json
 import os
+import shutil
 import sys
 import tempfile
 from dataclasses import dataclass, field
@@ -87,11 +107,15 @@ class Lane:
 
 @dataclass
 class Check:
-    """A stored test metric and the same metric recomputed from the lanes."""
+    """A stored test metric and the same metric recomputed from the lanes.
+
+    `tol` is explicit: full precision by default, `rounded(n)` only where
+    the generator called round(x, n). It is never inferred from the stored
+    digits, because a full-precision value can have a short repr (0.5)."""
     label: str
     stored: float
     recomputed: Callable[[], float]
-    tol: float | None = None
+    tol: float = FULL_PRECISION_TOL
 
 
 @dataclass
@@ -104,18 +128,6 @@ class Plan:
 
 
 # ------------------------------------------------------------ the core
-def rounding_tol(stored: float) -> float:
-    """Half a unit in the stored value's last decimal place, or 1e-12 when
-    the value carries full float precision (no rounding to undo)."""
-    r = repr(float(stored))
-    if "e" in r or "E" in r:
-        return FULL_PRECISION_TOL
-    decimals = len(r.split(".")[1]) if "." in r else 0
-    if decimals >= 12:
-        return FULL_PRECISION_TOL
-    return 0.5 * 10.0 ** -decimals * (1 + 1e-9)
-
-
 def rounded(decimals: int) -> float:
     """The tolerance of a value the generator stored with round(x, decimals):
     explicit, because repr drops trailing zeros (round(x, 4) can read 0.515)."""
@@ -197,7 +209,7 @@ def run_checks(checks: list[Check]) -> list[dict]:
     out = []
     for c in checks:
         got = float(c.recomputed())
-        tol = rounding_tol(c.stored) if c.tol is None else c.tol
+        tol = c.tol
         diff = abs(got - float(c.stored))
         if not diff <= tol:
             raise BackfillRefused(f"metric mismatch on {c.label}: stored "
@@ -217,9 +229,14 @@ def summarize_checks(checks: list[dict]) -> dict:
             "not_identical": [c for c in checks if c["abs_diff"] > 0]}
 
 
-def build(doc, plan: Plan, pred_dir: Path = orec.PRED_DIR) -> tuple:
-    """The new document and the key paths added. Checks run first, so a
-    refused plan writes no per-row file either."""
+def build(doc, plan: Plan, pred_dir: Path, staging: Path) -> tuple:
+    """The new document, the key paths added, and the per-row files still
+    to copy as (staged file, final file, SHA-256).
+
+    Every refusal runs before any per-row file reaches `pred_dir`: blocks
+    that save scores are built in `staging`, a temporary folder the caller
+    owns, and each block names its final path under `pred_dir`. Only
+    `commit_files` copies them there, after this function returns."""
     if META_KEY in doc:
         raise BackfillRefused(f"the file already holds {META_KEY!r}; "
                               "a second backfill is refused")
@@ -228,18 +245,40 @@ def build(doc, plan: Plan, pred_dir: Path = orec.PRED_DIR) -> tuple:
         raise BackfillRefused("the plan covers no lane")
     new = copy.deepcopy(doc)
     added: list[tuple] = [(META_KEY,)]
-    listed = []
+    targets: set = set()
+    for ln in plan.lanes:                 # placements first: nothing saved
+        if ln.place is None:
+            continue
+        parent = _navigate(new, ln.place)
+        target = tuple(ln.place) + (ln.key,)
+        if ln.key in parent or target in targets:
+            raise BackfillRefused(f"{target} already exists")
+        targets.add(target)
+    files = [f"{ln.name}_{ln.seed}.npz" for ln in plan.lanes
+             if ln.source is None]
+    dup = sorted({f for f in files if files.count(f) > 1})
+    if dup:
+        raise BackfillRefused(f"two lanes would write the same per-row "
+                              f"file, first {dup[:3]}")
+    listed, pending = [], []
     for ln in plan.lanes:
         blk = orec.record(ln.name, ln.seed, ln.y, ln.p, y_val=ln.y_val,
                           p_val=ln.p_val, threshold=ln.threshold,
-                          pred_dir=pred_dir, source=ln.source)
+                          pred_dir=staging, source=ln.source)
+        if ln.source is None:
+            staged = staging / f"{ln.name}_{ln.seed}.npz"
+            final = pred_dir / staged.name
+            sha = blk["test_scores"]["sha256"]
+            if final.exists() and orec.sha256_of(final) != sha:
+                raise BackfillRefused(f"{final.name} already exists with "
+                                      "different bytes; a block elsewhere "
+                                      "may name it, so it is not replaced")
+            blk["test_scores"]["path"] = orec.shown_path(final)
+            pending.append((staged, final, sha))
         if ln.place is None:
             listed.append(blk)
             continue
-        parent = _navigate(new, ln.place)
-        if ln.key in parent:
-            raise BackfillRefused(f"{ln.place + (ln.key,)} already exists")
-        parent[ln.key] = blk
+        _navigate(new, ln.place)[ln.key] = blk
         added.append(tuple(ln.place) + (ln.key,))
     meta = {"date": DATE, "generator": GENERATOR, "decision": DECISION,
             "covered_lanes": plan.covered,
@@ -250,26 +289,112 @@ def build(doc, plan: Plan, pred_dir: Path = orec.PRED_DIR) -> tuple:
         meta["blocks"] = listed
     new[META_KEY] = meta
     check_leaves(doc, new, added)
-    return new, added
+    return new, added, pending
+
+
+def commit_files(pending: list[tuple]) -> None:
+    """Copy each staged per-row file to its final path. A final file with
+    the same bytes is kept; one with different bytes is refused (checked
+    again here, in case it appeared after `build`)."""
+    for staged, final, sha in pending:
+        if final.exists():
+            if orec.sha256_of(final) == sha:
+                continue
+            raise BackfillRefused(f"{final.name} already exists with "
+                                  "different bytes")
+    for staged, final, sha in pending:
+        if final.exists():
+            continue
+        final.parent.mkdir(parents=True, exist_ok=True)
+        tmp = final.with_name(f"{final.stem}.{os.getpid()}.tmp.npz")
+        try:
+            shutil.copyfile(staged, tmp)
+            if orec.sha256_of(tmp) != sha:
+                raise BackfillRefused(f"{final.name}: the copy does not "
+                                      "match its recorded SHA-256")
+            os.replace(tmp, final)
+        finally:
+            if tmp.exists():
+                tmp.unlink()
+
+
+def write_verified(path: Path, out: str, fmt: tuple, old, added) -> None:
+    """Write `out` to a temporary file, verify the temporary file, and only
+    then replace `path`. A failed check removes the temporary file and
+    leaves `path` as it was."""
+    fd, name = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
+    tmp = Path(name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="") as fh:
+            fh.write(out)
+        back = read_exact(tmp)
+        if back != out or detect_format(back) != fmt:
+            raise BackfillRefused(f"{path.name}: the new bytes did not read "
+                                  "back as written; the result is unchanged")
+        check_leaves(old, json.loads(back), added)
+        os.replace(tmp, path)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
 
 
 def apply(path: Path, plan: Plan, *, write: bool = True,
           pred_dir: Path = orec.PRED_DIR) -> dict:
+    """Build, check and (with `write`) save. A dry run writes nothing at
+    all: no result and no per-row file."""
     text = read_exact(path)
     fmt = detect_format(text)
     old = json.loads(text)
-    new, added = build(old, plan, pred_dir)
-    out = dumps(new, fmt)
-    if write:
-        fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
-        with os.fdopen(fd, "w", encoding="utf-8", newline="") as fh:
-            fh.write(out)
-        os.replace(tmp, path)
-        back = read_exact(path)
-        if back != out or detect_format(back) != fmt:
-            raise BackfillRefused(f"{path.name} did not read back as written")
-        check_leaves(old, json.loads(back), added)
+    with tempfile.TemporaryDirectory() as staging:
+        new, added, pending = build(old, plan, pred_dir, Path(staging))
+        out = dumps(new, fmt)
+        if write:
+            commit_files(pending)
+            write_verified(path, out, fmt, old, added)
     return new[META_KEY]
+
+
+def strip_backfill(doc) -> tuple:
+    """A backfilled document with its added keys removed, and the committed
+    blocks in plan order: (stripped document, {place: block}, listed)."""
+    meta = doc.get(META_KEY)
+    if meta is None:
+        raise BackfillRefused(f"the file holds no {META_KEY!r} to recheck")
+    old = copy.deepcopy(doc)
+    del old[META_KEY]
+    placed: dict = {}
+
+    def walk(o, path):
+        if isinstance(o, dict):
+            for k in [k for k, v in o.items() if orec.is_block(v)]:
+                placed[path + (k,)] = o.pop(k)
+            for k, v in o.items():
+                walk(v, path + (k,))
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                walk(v, path + (i,))
+    walk(old, ())
+    return old, placed, meta.get("blocks", [])
+
+
+def recheck(path: Path, plan_of: Callable) -> dict:
+    """Rebuild an already backfilled file under the current checks, write
+    nothing, and compare every rebuilt block with the committed one."""
+    doc = json.loads(read_exact(path))
+    old, placed, listed = strip_backfill(doc)
+    plan = plan_of(old)
+    with tempfile.TemporaryDirectory() as staging:
+        new, added, _ = build(old, plan, orec.PRED_DIR, Path(staging))
+    rebuilt_placed = {a: _leaf_value(new, a) for a in added[1:]}
+    rebuilt_listed = new[META_KEY].get("blocks", [])
+    diff = [list(map(str, a)) for a in set(placed) | set(rebuilt_placed)
+            if placed.get(a) != rebuilt_placed.get(a)]
+    if rebuilt_listed != listed:
+        diff.append([META_KEY, "blocks"])
+    mc = new[META_KEY]["metric_check"]
+    return {"file": path.name, "n_blocks": len(added) - 1 + len(listed),
+            "n_checks": mc["n_checks"], "max_abs_diff": mc["max_abs_diff"],
+            "blocks_differing": diff}
 
 
 # ------------------------------------------------------------ helpers
@@ -774,18 +899,24 @@ def run_one(name: str, write: bool) -> dict:
     path = RESULTS / f"{name}.json"
     doc = json.loads(read_exact(path))
     plan = ADAPTERS[name](doc)
-    if write:
-        return apply(path, plan)
-    with tempfile.TemporaryDirectory() as tmp:
-        return apply(path, plan, write=False, pred_dir=Path(tmp))
+    return apply(path, plan, write=write)
 
 
 def main(argv=None) -> int:
     ap_ = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap_.add_argument("name", choices=sorted(ADAPTERS))
-    ap_.add_argument("--dry-run", action="store_true",
-                     help="rebuild and check; write nothing to the result")
+    mode = ap_.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true",
+                      help="rebuild and check; write nothing at all")
+    mode.add_argument("--recheck", action="store_true",
+                      help="for a backfilled file: rebuild under the "
+                           "current checks, compare the blocks, write "
+                           "nothing")
     a = ap_.parse_args(argv)
+    if a.recheck:
+        rep = recheck(RESULTS / f"{a.name}.json", ADAPTERS[a.name])
+        print(json.dumps(rep, indent=1))
+        return 1 if rep["blocks_differing"] else 0
     meta = run_one(a.name, write=not a.dry_run)
     mc = meta["metric_check"]
     print(json.dumps({"file": a.name, "written": not a.dry_run,
