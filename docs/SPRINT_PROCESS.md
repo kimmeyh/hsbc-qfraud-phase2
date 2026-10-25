@@ -36,6 +36,7 @@ Surface with the template phrasing; wait.
 - `--no-verify` is banned; the pre-commit confidentiality hook stays active.
 - Repo-root `CHECKLIST-Phase2.md` is the Phase 2 deliverable ledger, reconciled at every sprint close; ALL_SPRINTS_MASTER_PLAN.md is the sprint-scoping view.
 - Every reported number originates in results.json with an evidence tag.
+- Every Phase 2 result that holds a test score, ML or QML, records its outcomes: confusion counts at the 0.5% alert budget (and at the validation-chosen and own thresholds where they exist) and the per-row test scores with their SHA-256, built by `experiments/phase2/src/outcome_record.py`. `test_outcome_record_required.py` enforces it. (Team lead, 2026-10-22; F154.)
 - Team-lead `0*` working files at repo root: commit neutrally, never read.
 
 ## Sprint calendar (Phase 1 of the challenge)

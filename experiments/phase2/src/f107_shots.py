@@ -72,7 +72,10 @@ def critical_budget(auprc: dict, exact: float) -> str | int:
     return f"above {SHOTS[-1]}"
 
 
-def seed_shots(df, row: dict) -> dict:
+def seed_shots(df, row: dict, scores: dict | None = None) -> dict:
+    """`scores`, opt-in (Sprint 28 DV4 outcome backfill): a dict that
+    receives (test labels, per-row test scores) under "exact" and each shot
+    budget. The row returned is the same with or without it."""
     from sklearn.metrics import average_precision_score
     seed = row["seed"]
     d = fd.prepare(df, seed)
@@ -97,6 +100,10 @@ def seed_shots(df, row: dict) -> dict:
     if abs(exact - row["lanes"]["circuit"]["auprc"]) > 1e-9:
         raise SystemExit(f"REFUSING: seed {seed} exact AUPRC {exact} differs "
                          f"from F106's {row['lanes']['circuit']['auprc']}")
+    if scores is not None:
+        scores["exact"] = (yte, params.b + exact_m @ params.w)
+        for m in SHOTS:
+            scores[m] = (yte, params.b + np.vstack(shot_m[m]) @ params.w)
     auprc = {m: ap(np.vstack(shot_m[m])) for m in SHOTS}
     pick = np.random.default_rng(seed).choice(len(Pte), SCHMIDT_ROWS,
                                                replace=False)

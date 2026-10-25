@@ -193,15 +193,24 @@ def recovered(est, true) -> bool:
                 and abs(est - true) <= max(MARGIN_ABS, MARGIN_REL * true))
 
 
-def score_arm(Xtr, ytr, Xte, yte, eta_te, seed, rng) -> dict:
+def score_arm(Xtr, ytr, Xte, yte, eta_te, seed, rng,
+              scores: dict | None = None) -> dict:
+    """`scores`, opt-in (Sprint 28 DV4 outcome backfill): a dict that
+    receives (test labels, per-row test scores) under "bayes" and
+    ("hgb", fraction). It changes nothing returned and draws no random
+    number."""
     from sklearn.metrics import average_precision_score
     bayes_err = float(np.mean(np.minimum(eta_te, 1 - eta_te)))
     bayes_ap = float(average_precision_score(yte, eta_te))
+    if scores is not None:
+        scores["bayes"] = (yte, eta_te)
     order = np.random.default_rng(seed).permutation(len(ytr))
     curve = []
     for frac in CURVE:
         idx = order[:max(1, int(round(frac * len(ytr))))]
         p = _hgb(Xtr[idx], ytr[idx], seed).predict_proba(Xte)[:, 1]
+        if scores is not None:
+            scores[("hgb", frac)] = (yte, p)
         curve.append({"fraction": frac, "n_pos": int(ytr[idx].sum()),
                       "error": float(np.mean((p > 0.5) != yte)),
                       "auprc": float(average_precision_score(yte, p)),
@@ -230,7 +239,10 @@ def score_arm(Xtr, ytr, Xte, yte, eta_te, seed, rng) -> dict:
 METHODS = ("plugin", "floor_error", "floor_auprc", "cover_hart")
 
 
-def seed_run(seed: int) -> dict:
+def seed_run(seed: int, scores: dict | None = None) -> dict:
+    """`scores`, opt-in: filled per arm name as `score_arm` describes."""
+    def sink(arm):
+        return None if scores is None else scores.setdefault(arm, {})
     t0 = time.perf_counter()
     d = generate(seed)
     gen_s = time.perf_counter() - t0
@@ -254,12 +266,12 @@ def seed_run(seed: int) -> dict:
     for name, rates in NOISE.items():
         y, e = add_noise(d["y_main"], eta, rates, rng)
         row["arms"][name] = score_arm(X[tr], y[tr], X[te], y[te], e[te],
-                                      seed, rng)
+                                      seed, rng, sink(name))
     ref_eta = (d["base_amount"] > S1_AMOUNT).astype(float)
     Xref = np.column_stack([d["base_amount"], d["mu"], d["time"]])
     row["arms"]["reference"] = score_arm(
         Xref[tr], d["y_ref"][tr], Xref[te], d["y_ref"][te], ref_eta[te],
-        seed, rng)
+        seed, rng, sink("reference"))
     row["seconds"] = {"generate": round(gen_s, 1),
                       "total": round(time.perf_counter() - t0, 1)}
     print(f"  s{seed} " + " | ".join(

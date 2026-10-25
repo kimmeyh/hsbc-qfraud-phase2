@@ -1,0 +1,8588 @@
+{
+ "generator": "experiments/phase2/src/f162_in_pocket.py",
+ "card": "F162",
+ "sprint": 28,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "provenance": {
+  "generator_commit": "d1c83eec2ff32b8fbd390b909ca8d717515b0b86",
+  "generator_clean": true,
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1"
+  }
+ },
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F162",
+ "lanes": {
+  "proxy": "frozen cell config, seeded pool, simplex solve",
+  "hgb": "HistGradientBoostingClassifier(l2_regularization=1.0)",
+  "xgboost": "XGBClassifier() defaults"
+ },
+ "rows": [
+  {
+   "cell": "telecom_churn",
+   "seed": 42,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.7599419177470227,
+   "test_auc_roc": 0.9029398810834618,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.2400580822529773,
+   "pocket": {
+    "n": 101,
+    "n_positives": 46,
+    "prevalence": 0.45544554455445546,
+    "auprc": 0.8137402758409782,
+    "auprc_normalized": 0.6579594156352507,
+    "auc_roc": 0.8090909090909092
+   },
+   "seconds": 8.1,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 42,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3172299963672257,
+      "confusion": {
+       "tn": 403,
+       "fp": 75,
+       "fn": 35,
+       "tp": 117
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8915592450388057,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 148,
+       "tp": 4
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_42.npz",
+     "sha256": "663e50570c1541cd163492657b67943472751a6f2a097909a3994031dab7f68f",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 718
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 42,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8857030018234151,
+   "test_auc_roc": 0.952777471922484,
+   "train_auprc": 0.9996646571217813,
+   "train_test_gap_auprc": 0.11396165529836622,
+   "pocket": {
+    "n": 101,
+    "n_positives": 46,
+    "prevalence": 0.45544554455445546,
+    "auprc": 0.8269381608872061,
+    "auprc_normalized": 0.6821955318110511,
+    "auc_roc": 0.807905138339921
+   },
+   "seconds": 2.9,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 42,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3530450439012014,
+      "confusion": {
+       "tn": 446,
+       "fp": 32,
+       "fn": 31,
+       "tp": 121
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9967751323006636,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_42.npz",
+     "sha256": "2439401db5536e4dc4a6b60cd2d159bc505d2fad13e132a4cadf7a6791e27cf3",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 42,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8782546787901904,
+   "test_auc_roc": 0.9485245540629818,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.12174532120980963,
+   "pocket": {
+    "n": 101,
+    "n_positives": 46,
+    "prevalence": 0.45544554455445546,
+    "auprc": 0.832390091083542,
+    "auprc_normalized": 0.6922072581715952,
+    "auc_roc": 0.8051383399209485
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 42,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.24532626569271088,
+      "confusion": {
+       "tn": 440,
+       "fp": 38,
+       "fn": 30,
+       "tp": 122
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995688459277153,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 149,
+       "tp": 3
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_42.npz",
+     "sha256": "614d93a59bb0999ffc28f042ea13a2da06793927cbfc6c68111f6c1988134849",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 42,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9010524234142784,
+   "test_auc_roc": 0.9662363310787854,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.09894757658572162,
+   "pocket": {
+    "n": 1228,
+    "n_positives": 927,
+    "prevalence": 0.754885993485342,
+    "auprc": 0.9327690156169097,
+    "auprc_normalized": 0.72571545241716,
+    "auc_roc": 0.8124231705175485
+   },
+   "seconds": 61.3,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 42,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4507892901140831,
+      "confusion": {
+       "tn": 4780,
+       "fp": 446,
+       "fn": 246,
+       "tp": 1536
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.7542046253010458,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1568,
+       "tp": 214
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_42.npz",
+     "sha256": "611f71b80106650951f3411a3401a5fd31d65563ca008130b85fedf2e1b1b082",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 723
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 42,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9824135276929804,
+   "test_auc_roc": 0.9932822613170873,
+   "train_auprc": 0.9957676496171419,
+   "train_test_gap_auprc": 0.013354121924161522,
+   "pocket": {
+    "n": 1228,
+    "n_positives": 927,
+    "prevalence": 0.754885993485342,
+    "auprc": 0.9622025499941693,
+    "auprc_normalized": 0.8457964498100994,
+    "auc_roc": 0.8754009468617734
+   },
+   "seconds": 0.7,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 42,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.33281549153465556,
+      "confusion": {
+       "tn": 4959,
+       "fp": 267,
+       "fn": 69,
+       "tp": 1713
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.994109655010153,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1537,
+       "tp": 245
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_42.npz",
+     "sha256": "7e5d51e6965576e831c9a333cd8869134cb630d567f391f52231d1b29f06a429",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 42,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9830930477361493,
+   "test_auc_roc": 0.9934591696614914,
+   "train_auprc": 0.9997137222724515,
+   "train_test_gap_auprc": 0.016620674536302227,
+   "pocket": {
+    "n": 1228,
+    "n_positives": 927,
+    "prevalence": 0.754885993485342,
+    "auprc": 0.9668365823816196,
+    "auprc_normalized": 0.8647020703143817,
+    "auc_roc": 0.8900249796614663
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 42,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.32934248447418213,
+      "confusion": {
+       "tn": 5010,
+       "fp": 216,
+       "fn": 90,
+       "tp": 1692
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997888773679733,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1743,
+       "tp": 39
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_42.npz",
+     "sha256": "913a5489db324d96034d3ca8ade8508da90fd77cf799f2cc95d21e50670e75a3",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 42,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.85223788120042,
+   "test_auc_roc": 0.9145683935223342,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.14776211879958,
+   "pocket": {
+    "n": 1319,
+    "n_positives": 753,
+    "prevalence": 0.5708870356330553,
+    "auprc": 0.7912026474078495,
+    "auprc_normalized": 0.5134210104787165,
+    "auc_roc": 0.7133139995964317
+   },
+   "seconds": 59.0,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 42,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3457134980423835,
+      "confusion": {
+       "tn": 4840,
+       "fp": 457,
+       "fn": 561,
+       "tp": 1489
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9087755285364217,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2019,
+       "tp": 31
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_42.npz",
+     "sha256": "c88779bf33067dc5cffb362bd156ac26fd4423076775918d3f8b2a76fdcd8525",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 42,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8870174128308388,
+   "test_auc_roc": 0.9391931926493137,
+   "train_auprc": 0.9177359227790315,
+   "train_test_gap_auprc": 0.030718509948192696,
+   "pocket": {
+    "n": 1319,
+    "n_positives": 753,
+    "prevalence": 0.5708870356330553,
+    "auprc": 0.7985508124882282,
+    "auprc_normalized": 0.5305450912932386,
+    "auc_roc": 0.7192302638679675
+   },
+   "seconds": 0.7,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 42,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.37678815330914256,
+      "confusion": {
+       "tn": 4893,
+       "fp": 404,
+       "fn": 466,
+       "tp": 1584
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9934991688019109,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2002,
+       "tp": 48
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_42.npz",
+     "sha256": "b60a3e93be4e3cdb016e0a226006210c3a657eefd97b2ed77e85951c2f971afd",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 42,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8867207969736801,
+   "test_auc_roc": 0.9393712962238174,
+   "train_auprc": 0.9698010719212594,
+   "train_test_gap_auprc": 0.0830802749475793,
+   "pocket": {
+    "n": 1319,
+    "n_positives": 753,
+    "prevalence": 0.5708870356330553,
+    "auprc": 0.8159428635302963,
+    "auprc_normalized": 0.5710753303824397,
+    "auc_roc": 0.7458035936348834
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 42,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.39382022619247437,
+      "confusion": {
+       "tn": 4917,
+       "fp": 380,
+       "fn": 451,
+       "tp": 1599
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9994148635864257,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2022,
+       "tp": 28
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_42.npz",
+     "sha256": "cb8a3aa20fedd147d41bbe4272920396f53a6dbc49f6527c59141ce4e3bb1c6a",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 43,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.7358673421855169,
+   "test_auc_roc": 0.9050456947808853,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.26413265781448314,
+   "pocket": {
+    "n": 124,
+    "n_positives": 52,
+    "prevalence": 0.41935483870967744,
+    "auprc": 0.7580498295918814,
+    "auprc_normalized": 0.5833080398526846,
+    "auc_roc": 0.8039529914529915
+   },
+   "seconds": 4.9,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 43,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3641133587932547,
+      "confusion": {
+       "tn": 434,
+       "fp": 44,
+       "fn": 40,
+       "tp": 112
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8499184103671164,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 148,
+       "tp": 4
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_43.npz",
+     "sha256": "35863b68107a7239c8a07acff292714c8f2e836dae41ba01dbe4f4d03db3c63b",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 711
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 43,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8758855600412346,
+   "test_auc_roc": 0.952502202158115,
+   "train_auprc": 0.9981317503333454,
+   "train_test_gap_auprc": 0.12224619029211081,
+   "pocket": {
+    "n": 124,
+    "n_positives": 52,
+    "prevalence": 0.41935483870967744,
+    "auprc": 0.7722643335882575,
+    "auprc_normalized": 0.6077885745131102,
+    "auc_roc": 0.8210470085470085
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 43,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.44278233313079324,
+      "confusion": {
+       "tn": 452,
+       "fp": 26,
+       "fn": 37,
+       "tp": 115
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9970080353080087,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 151,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_43.npz",
+     "sha256": "c7759cd768c205ac53027d69f83c778be2bcf268832a6ae66488508375e91c1c",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 43,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8553648264091911,
+   "test_auc_roc": 0.9475198194230345,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.1446351735908089,
+   "pocket": {
+    "n": 124,
+    "n_positives": 52,
+    "prevalence": 0.41935483870967744,
+    "auprc": 0.7501409611965143,
+    "auprc_normalized": 0.5696872109495524,
+    "auc_roc": 0.8141025641025641
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 43,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.26802879571914673,
+      "confusion": {
+       "tn": 442,
+       "fp": 36,
+       "fn": 31,
+       "tp": 121
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9996881258487701,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 149,
+       "tp": 3
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_43.npz",
+     "sha256": "0529c25b092310ab0918bcade9e9b7be6475cb98bc37ecb293161f3f9678b413",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 43,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.8928562072458894,
+   "test_auc_roc": 0.9649364976893997,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.10714379275411057,
+   "pocket": {
+    "n": 1286,
+    "n_positives": 950,
+    "prevalence": 0.7387247278382582,
+    "auprc": 0.924838578903479,
+    "auprc_normalized": 0.7123286085412915,
+    "auc_roc": 0.807124060150376
+   },
+   "seconds": 50.4,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 43,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5225,
+      "fp": 1,
+      "fn": 1747,
+      "tp": 35
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4543235757302148,
+      "confusion": {
+       "tn": 4753,
+       "fp": 473,
+       "fn": 241,
+       "tp": 1541
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8188279737096277,
+      "confusion": {
+       "tn": 5225,
+       "fp": 1,
+       "fn": 1738,
+       "tp": 44
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_43.npz",
+     "sha256": "01482f77b7e3cfb6b9cb9f39304a929262a44dab59bdcdea8ff36f9a98393c25",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 713
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 43,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9844756920978361,
+   "test_auc_roc": 0.9940445510511844,
+   "train_auprc": 0.9957196806499056,
+   "train_test_gap_auprc": 0.011243988552069428,
+   "pocket": {
+    "n": 1286,
+    "n_positives": 950,
+    "prevalence": 0.7387247278382582,
+    "auprc": 0.9655468633786302,
+    "auprc_normalized": 0.8681347211455904,
+    "auc_roc": 0.8914129072681705
+   },
+   "seconds": 0.7,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 43,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.52148810316522,
+      "confusion": {
+       "tn": 5108,
+       "fp": 118,
+       "fn": 149,
+       "tp": 1633
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.996959530640056,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1749,
+       "tp": 33
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_43.npz",
+     "sha256": "d0c0acaba22d902a087d2d6dce021254194337db52ef57a455efd0bbd9569365",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 43,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.984502330229846,
+   "test_auc_roc": 0.9938882596428202,
+   "train_auprc": 0.9996995584192805,
+   "train_test_gap_auprc": 0.015197228189434475,
+   "pocket": {
+    "n": 1286,
+    "n_positives": 950,
+    "prevalence": 0.7387247278382582,
+    "auprc": 0.967361165109212,
+    "auprc_normalized": 0.8750787450310912,
+    "auc_roc": 0.8974749373433584
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 43,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5240331888198853,
+      "confusion": {
+       "tn": 5116,
+       "fp": 110,
+       "fn": 156,
+       "tp": 1626
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997659200429916,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1740,
+       "tp": 42
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_43.npz",
+     "sha256": "12415d33d0d1590f79262ac454907b202ecbe5d1307ab6fc14a1c66619fac20b",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 43,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8418035906119528,
+   "test_auc_roc": 0.9067961156107691,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.15819640938804724,
+   "pocket": {
+    "n": 1305,
+    "n_positives": 754,
+    "prevalence": 0.5777777777777777,
+    "auprc": 0.7901237447956111,
+    "auprc_normalized": 0.5029246587264474,
+    "auc_roc": 0.6999354922566637
+   },
+   "seconds": 53.0,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 43,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.32501270890733225,
+      "confusion": {
+       "tn": 4811,
+       "fp": 486,
+       "fn": 560,
+       "tp": 1490
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9071135976063988,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 1995,
+       "tp": 55
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_43.npz",
+     "sha256": "c6caf14257ca19c4391335fa589eab1bdfe38d3401872267da334d0f7804f25a",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 43,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8777837314174064,
+   "test_auc_roc": 0.9337755379252868,
+   "train_auprc": 0.9225808814997012,
+   "train_test_gap_auprc": 0.04479715008229479,
+   "pocket": {
+    "n": 1305,
+    "n_positives": 754,
+    "prevalence": 0.5777777777777777,
+    "auprc": 0.7985099471935333,
+    "auprc_normalized": 0.5227867170373157,
+    "auc_roc": 0.7023786026852552
+   },
+   "seconds": 0.5,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 43,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3227541388257567,
+      "confusion": {
+       "tn": 4777,
+       "fp": 520,
+       "fn": 407,
+       "tp": 1643
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9947515029236674,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2015,
+       "tp": 35
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_43.npz",
+     "sha256": "1d6ffbed5deaabbaea11f7ddb1496f2767ced4fa0e7fa1b095cc3f133f7d68f2",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 43,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.875980879718925,
+   "test_auc_roc": 0.930687595831971,
+   "train_auprc": 0.9689580112728208,
+   "train_test_gap_auprc": 0.09297713155389575,
+   "pocket": {
+    "n": 1305,
+    "n_positives": 754,
+    "prevalence": 0.5777777777777777,
+    "auprc": 0.8014140043639628,
+    "auprc_normalized": 0.5296647471778068,
+    "auc_roc": 0.712317127768658
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 43,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.31384575366973877,
+      "confusion": {
+       "tn": 4788,
+       "fp": 509,
+       "fn": 427,
+       "tp": 1623
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995459330081939,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2010,
+       "tp": 40
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_43.npz",
+     "sha256": "3dd60665ca2d361a9554024a43f0af9493a8610cd2b1011b487c9a00c6b2325d",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 44,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.7637325065521382,
+   "test_auc_roc": 0.9035179475886368,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.2362674934478618,
+   "pocket": {
+    "n": 110,
+    "n_positives": 52,
+    "prevalence": 0.4727272727272727,
+    "auprc": 0.8028188836144758,
+    "auprc_normalized": 0.626035813751592,
+    "auc_roc": 0.7844827586206896
+   },
+   "seconds": 6.5,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 44,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.32511861346395876,
+      "confusion": {
+       "tn": 412,
+       "fp": 66,
+       "fn": 33,
+       "tp": 119
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8551075489836747,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_44.npz",
+     "sha256": "841d9ad445911a5c90f4285b782b3e2e321d713884d1d2d0089021be03027a39",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 712
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 44,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8631613183846121,
+   "test_auc_roc": 0.9441890552741686,
+   "train_auprc": 0.9992582900622047,
+   "train_test_gap_auprc": 0.1360969716775926,
+   "pocket": {
+    "n": 110,
+    "n_positives": 52,
+    "prevalence": 0.4727272727272727,
+    "auprc": 0.7812020682574655,
+    "auprc_normalized": 0.5850384053158828,
+    "auc_roc": 0.789787798408488
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 44,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.30044212989956887,
+      "confusion": {
+       "tn": 430,
+       "fp": 48,
+       "fn": 26,
+       "tp": 126
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9960643198073557,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 148,
+       "tp": 4
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_44.npz",
+     "sha256": "11f45e822e6769dab214d85e62155fc789ab531a90db673170016144482724d7",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 44,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8620798733851293,
+   "test_auc_roc": 0.9457168024664171,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.13792012661487074,
+   "pocket": {
+    "n": 110,
+    "n_positives": 52,
+    "prevalence": 0.4727272727272727,
+    "auprc": 0.7677343421520575,
+    "auprc_normalized": 0.5594961661504538,
+    "auc_roc": 0.791445623342175
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 44,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.38986629247665405,
+      "confusion": {
+       "tn": 443,
+       "fp": 35,
+       "fn": 35,
+       "tp": 117
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995681014657021,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 146,
+       "tp": 6
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_44.npz",
+     "sha256": "6f066f0653fb0ba12c5a2b37444f7b3ce66bc47d294be29e3071489001e4007a",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 44,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.8925718741167868,
+   "test_auc_roc": 0.9650775948454224,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.10742812588321315,
+   "pocket": {
+    "n": 1250,
+    "n_positives": 918,
+    "prevalence": 0.7344,
+    "auprc": 0.9083716022544441,
+    "auprc_normalized": 0.6550135627049853,
+    "auc_roc": 0.7799695514082473
+   },
+   "seconds": 57.0,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 44,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5225,
+      "fp": 1,
+      "fn": 1747,
+      "tp": 35
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4172717334655548,
+      "confusion": {
+       "tn": 4774,
+       "fp": 452,
+       "fn": 239,
+       "tp": 1543
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.7723166329470501,
+      "confusion": {
+       "tn": 5225,
+       "fp": 1,
+       "fn": 1749,
+       "tp": 33
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_44.npz",
+     "sha256": "637a318f689ab385e0f2b977d6ad92b11fa9d211b33b0dc60b7929347a606cde",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 715
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 44,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9486498211319149,
+   "test_auc_roc": 0.9799622173171095,
+   "train_auprc": 0.9950442880982606,
+   "train_test_gap_auprc": 0.04639446696634575,
+   "pocket": {
+    "n": 1250,
+    "n_positives": 918,
+    "prevalence": 0.7344,
+    "auprc": 0.9396730067245267,
+    "auprc_normalized": 0.7728652361616215,
+    "auc_roc": 0.8253241725070215
+   },
+   "seconds": 0.5,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 44,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4281381625270744,
+      "confusion": {
+       "tn": 4824,
+       "fp": 402,
+       "fn": 154,
+       "tp": 1628
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9966925722615649,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1740,
+       "tp": 42
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_44.npz",
+     "sha256": "d19c30f02646d77798801f5b3df8347cbe2516cdddb3a1cc20e09f1393ebcb58",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 44,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9498815275176261,
+   "test_auc_roc": 0.9800736239376372,
+   "train_auprc": 0.9994556411384812,
+   "train_test_gap_auprc": 0.049574113620855065,
+   "pocket": {
+    "n": 1250,
+    "n_positives": 918,
+    "prevalence": 0.7344,
+    "auprc": 0.9461726558996818,
+    "auprc_normalized": 0.7973368068512116,
+    "auc_roc": 0.8428583615507782
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 44,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.782447099685669,
+      "confusion": {
+       "tn": 5135,
+       "fp": 91,
+       "fn": 409,
+       "tp": 1373
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995796716213227,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1745,
+       "tp": 37
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_44.npz",
+     "sha256": "a6afc5d5617b45ed39cd99d67a9d7d010ad2f74ba6829c2c4091c6ea2ce9501f",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 44,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8233313557737143,
+   "test_auc_roc": 0.8981106654940442,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.1766686442262857,
+   "pocket": {
+    "n": 1341,
+    "n_positives": 785,
+    "prevalence": 0.5853840417598807,
+    "auprc": 0.7576285302923114,
+    "auprc_normalized": 0.41543140129854234,
+    "auc_roc": 0.6652660037575037
+   },
+   "seconds": 57.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 44,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.33622647198020467,
+      "confusion": {
+       "tn": 4797,
+       "fp": 500,
+       "fn": 628,
+       "tp": 1422
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9134149288639255,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2026,
+       "tp": 24
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_44.npz",
+     "sha256": "cab15c897e05d9c1ebe5b42fdb561c926af931c6a1f9fb7d8515cae1d713c37e",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 44,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8618438824222433,
+   "test_auc_roc": 0.9233859018220161,
+   "train_auprc": 0.9201380618772159,
+   "train_test_gap_auprc": 0.05829417945497262,
+   "pocket": {
+    "n": 1341,
+    "n_positives": 785,
+    "prevalence": 0.5853840417598807,
+    "auprc": 0.7668129313550096,
+    "auprc_normalized": 0.43758298731487033,
+    "auc_roc": 0.6682857535627549
+   },
+   "seconds": 1.0,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 44,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4242726886431263,
+      "confusion": {
+       "tn": 4919,
+       "fp": 378,
+       "fn": 575,
+       "tp": 1475
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.995151643346091,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2022,
+       "tp": 28
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_44.npz",
+     "sha256": "46a8071b77aec87603daf1ad028ab50e11848c17566fa13caa786028a4ab3fb4",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 44,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.859802356743019,
+   "test_auc_roc": 0.9213369739889582,
+   "train_auprc": 0.9725281162114933,
+   "train_test_gap_auprc": 0.1127257594684743,
+   "pocket": {
+    "n": 1341,
+    "n_positives": 785,
+    "prevalence": 0.5853840417598807,
+    "auprc": 0.7749099611559049,
+    "auprc_normalized": 0.45711197465839665,
+    "auc_roc": 0.6845392475828255
+   },
+   "seconds": 0.3,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 44,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.40658849477767944,
+      "confusion": {
+       "tn": 4858,
+       "fp": 439,
+       "fn": 549,
+       "tp": 1501
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9993340653181076,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2017,
+       "tp": 33
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_44.npz",
+     "sha256": "a0224b3680bd00d7b9954c5cbd4b564c84df9f60e857d3ce2de4984b3949e365",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 45,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.6981718556187445,
+   "test_auc_roc": 0.8833394993217413,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.3018281443812555,
+   "pocket": {
+    "n": 114,
+    "n_positives": 49,
+    "prevalence": 0.4298245614035088,
+    "auprc": 0.7410737242828838,
+    "auprc_normalized": 0.5458831472038269,
+    "auc_roc": 0.7623233908948194
+   },
+   "seconds": 6.1,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 45,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 476,
+      "fp": 1,
+      "fn": 150,
+      "tp": 3
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3449237647924848,
+      "confusion": {
+       "tn": 415,
+       "fp": 62,
+       "fn": 39,
+       "tp": 114
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8822640283479505,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 152,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_45.npz",
+     "sha256": "e4bdf4c93bd6cdb990431b4ed59e50769979f588887aef3937e431f36a3b446d",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 717
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 45,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.845605870115361,
+   "test_auc_roc": 0.9316739973417739,
+   "train_auprc": 0.9994542335222428,
+   "train_test_gap_auprc": 0.1538483634068818,
+   "pocket": {
+    "n": 114,
+    "n_positives": 49,
+    "prevalence": 0.4298245614035088,
+    "auprc": 0.7229233574995142,
+    "auprc_normalized": 0.5140501962299172,
+    "auc_roc": 0.7494505494505495
+   },
+   "seconds": 2.1,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 45,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.2120520429330947,
+      "confusion": {
+       "tn": 421,
+       "fp": 56,
+       "fn": 22,
+       "tp": 131
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9962702867525799,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 149,
+       "tp": 4
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_45.npz",
+     "sha256": "02ff0e4880dc2c4742e78e62b23a667b46d2449a1c4c718d2e6a670d1c168638",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 45,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8326125818885534,
+   "test_auc_roc": 0.9291801975856729,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.16738741811144664,
+   "pocket": {
+    "n": 114,
+    "n_positives": 49,
+    "prevalence": 0.4298245614035088,
+    "auprc": 0.6800462155132256,
+    "auprc_normalized": 0.4388502856693496,
+    "auc_roc": 0.7544740973312402
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 45,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.43870243430137634,
+      "confusion": {
+       "tn": 441,
+       "fp": 36,
+       "fn": 42,
+       "tp": 111
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9996502250432968,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 152,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_45.npz",
+     "sha256": "5ec26444b418c088a84570a8b8397a378d935585e0feecceddb5cc55b29dca24",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 45,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9087338040291508,
+   "test_auc_roc": 0.9697184456720112,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.09126619597084917,
+   "pocket": {
+    "n": 1255,
+    "n_positives": 946,
+    "prevalence": 0.7537848605577689,
+    "auprc": 0.9292869563070602,
+    "auprc_normalized": 0.7127997739979304,
+    "auc_roc": 0.8007143003756235
+   },
+   "seconds": 52.8,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 45,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.43784680794523584,
+      "confusion": {
+       "tn": 4863,
+       "fp": 363,
+       "fn": 266,
+       "tp": 1516
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.7686174474217612,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1762,
+       "tp": 20
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_45.npz",
+     "sha256": "9a08937e5278f5b7a6fbb77a61db852a0263991d7dc750074516f4dae85b70af",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 714
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 45,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9285809725018935,
+   "test_auc_roc": 0.9744373079779383,
+   "train_auprc": 0.9951113623983983,
+   "train_test_gap_auprc": 0.06653038989650473,
+   "pocket": {
+    "n": 1255,
+    "n_positives": 946,
+    "prevalence": 0.7537848605577689,
+    "auprc": 0.9363927831092861,
+    "auprc_normalized": 0.7416600090684596,
+    "auc_roc": 0.8136131009804526
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 45,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5727074400308149,
+      "confusion": {
+       "tn": 4854,
+       "fp": 372,
+       "fn": 251,
+       "tp": 1531
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9972913351900573,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1753,
+       "tp": 29
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_45.npz",
+     "sha256": "30bc3fec1fbfc8b8c0370d7cd1309174eab17eca9a69e35c2b18497dda82ec79",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 45,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9462578468800382,
+   "test_auc_roc": 0.9783607001683287,
+   "train_auprc": 0.9993687217113647,
+   "train_test_gap_auprc": 0.05311087483132648,
+   "pocket": {
+    "n": 1255,
+    "n_positives": 946,
+    "prevalence": 0.7537848605577689,
+    "auprc": 0.9493808752772644,
+    "auprc_normalized": 0.7944109982943912,
+    "auc_roc": 0.8422655090074372
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 45,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.6234225034713745,
+      "confusion": {
+       "tn": 5004,
+       "fp": 222,
+       "fn": 315,
+       "tp": 1467
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9999033403396607,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1757,
+       "tp": 25
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_45.npz",
+     "sha256": "0bb551728c10f24eb740a959ae6583152806847407297a7f3cc4311a1c86b0df",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 45,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8332124600367298,
+   "test_auc_roc": 0.9070677834208963,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.16678753996327023,
+   "pocket": {
+    "n": 1280,
+    "n_positives": 765,
+    "prevalence": 0.59765625,
+    "auprc": 0.7931930305580137,
+    "auprc_normalized": 0.48599432837719914,
+    "auc_roc": 0.6963639824861984
+   },
+   "seconds": 59.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 45,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5296,
+      "fp": 1,
+      "fn": 2014,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3680851363784778,
+      "confusion": {
+       "tn": 4931,
+       "fp": 366,
+       "fn": 655,
+       "tp": 1395
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9085910954234926,
+      "confusion": {
+       "tn": 5295,
+       "fp": 2,
+       "fn": 1993,
+       "tp": 57
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_45.npz",
+     "sha256": "e8cdcbfa88b64bc4118f6ae8e17b37bf689bfee49487ddfdc0c92086d2a491a0",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 45,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8671372002198509,
+   "test_auc_roc": 0.9324340975333484,
+   "train_auprc": 0.9214999013897939,
+   "train_test_gap_auprc": 0.05436270116994302,
+   "pocket": {
+    "n": 1280,
+    "n_positives": 765,
+    "prevalence": 0.59765625,
+    "auprc": 0.7884935268085329,
+    "auprc_normalized": 0.4743140083784896,
+    "auc_roc": 0.6891465194492037
+   },
+   "seconds": 1.0,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 45,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3884228514191406,
+      "confusion": {
+       "tn": 4899,
+       "fp": 398,
+       "fn": 538,
+       "tp": 1512
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9937892691293074,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2012,
+       "tp": 38
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_45.npz",
+     "sha256": "cdbdc9333dd6293fd01dc3c3da7fbe8f364ea697317886bb5bee3d73692cd5fe",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 45,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8667775281769905,
+   "test_auc_roc": 0.9288986402795876,
+   "train_auprc": 0.9725129379574197,
+   "train_test_gap_auprc": 0.10573540978042917,
+   "pocket": {
+    "n": 1280,
+    "n_positives": 765,
+    "prevalence": 0.59765625,
+    "auprc": 0.7936033865879085,
+    "auprc_normalized": 0.48701424239324836,
+    "auc_roc": 0.6983057300590139
+   },
+   "seconds": 0.3,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 45,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.40294256806373596,
+      "confusion": {
+       "tn": 4865,
+       "fp": 432,
+       "fn": 529,
+       "tp": 1521
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995298862457276,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2008,
+       "tp": 42
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_45.npz",
+     "sha256": "8e015aa9f41f6b9205360c1966d33fb26a1c49ecb3fc7e8a39edc22e9245b3d6",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 46,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.705465455103994,
+   "test_auc_roc": 0.9025499787615954,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.29453454489600595,
+   "pocket": {
+    "n": 125,
+    "n_positives": 57,
+    "prevalence": 0.456,
+    "auprc": 0.759555103279829,
+    "auprc_normalized": 0.5580057045585092,
+    "auc_roc": 0.8328173374613003
+   },
+   "seconds": 6.4,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 46,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 476,
+      "fp": 1,
+      "fn": 150,
+      "tp": 3
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.30153979429390276,
+      "confusion": {
+       "tn": 406,
+       "fp": 71,
+       "fn": 32,
+       "tp": 121
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8515218514337852,
+      "confusion": {
+       "tn": 476,
+       "fp": 1,
+       "fn": 151,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_46.npz",
+     "sha256": "b318f794a8e9bc8223775b74ffa54cdc2530cd442c15fb7e3d8016879256db9b",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 709
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 46,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8752290525965344,
+   "test_auc_roc": 0.9471506282457078,
+   "train_auprc": 0.9987348696063943,
+   "train_test_gap_auprc": 0.12350581700985996,
+   "pocket": {
+    "n": 125,
+    "n_positives": 57,
+    "prevalence": 0.456,
+    "auprc": 0.7506505013536204,
+    "auprc_normalized": 0.5416369510176846,
+    "auc_roc": 0.7912796697626419
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 46,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.22362169807246765,
+      "confusion": {
+       "tn": 419,
+       "fp": 58,
+       "fn": 22,
+       "tp": 131
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.996982169530118,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 152,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_46.npz",
+     "sha256": "1a27675611d8016940cc371257f32572461d7744f0f45026663f2155f56021b8",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 46,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8635448895999039,
+   "test_auc_roc": 0.9429440539318452,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.13645511040009606,
+   "pocket": {
+    "n": 125,
+    "n_positives": 57,
+    "prevalence": 0.456,
+    "auprc": 0.7599152605600084,
+    "auprc_normalized": 0.5586677583823683,
+    "auc_roc": 0.7871517027863777
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 46,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.19399848580360413,
+      "confusion": {
+       "tn": 418,
+       "fp": 59,
+       "fn": 23,
+       "tp": 130
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995030504465103,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 146,
+       "tp": 7
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_46.npz",
+     "sha256": "a60a5b283de5cce8c2c7ffa44dfbb2571b80ba94ad820148db51c28075cb7c79",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 46,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9146843070720663,
+   "test_auc_roc": 0.9706884080847596,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.08531569292793373,
+   "pocket": {
+    "n": 1259,
+    "n_positives": 949,
+    "prevalence": 0.7537728355837967,
+    "auprc": 0.9323607288064644,
+    "auprc_normalized": 0.7252972824752859,
+    "auc_roc": 0.8147149801148917
+   },
+   "seconds": 47.9,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 46,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.45612251897416256,
+      "confusion": {
+       "tn": 4861,
+       "fp": 365,
+       "fn": 274,
+       "tp": 1508
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.771818952755962,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1759,
+       "tp": 23
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_46.npz",
+     "sha256": "c5c0be383aeaf3b4e8ffe9c75175cbf9783a6f6d5ae531a3ff85ce609e70f93f",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 715
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 46,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9830567855480392,
+   "test_auc_roc": 0.9935260673237456,
+   "train_auprc": 0.9955640067200806,
+   "train_test_gap_auprc": 0.012507221172041394,
+   "pocket": {
+    "n": 1259,
+    "n_positives": 949,
+    "prevalence": 0.7537728355837967,
+    "auprc": 0.9647047074772659,
+    "auprc_normalized": 0.8566555700447669,
+    "auc_roc": 0.88193684353649
+   },
+   "seconds": 0.5,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 46,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.24467571254663445,
+      "confusion": {
+       "tn": 5002,
+       "fp": 224,
+       "fn": 104,
+       "tp": 1678
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.995338356375248,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1748,
+       "tp": 34
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_46.npz",
+     "sha256": "cd93ae09db337b49fd7cb9d31c99e358b527df582199be6261b65d7fd1403928",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 46,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9817609472731528,
+   "test_auc_roc": 0.9930252475857783,
+   "train_auprc": 0.9998028030990449,
+   "train_test_gap_auprc": 0.018041855825892128,
+   "pocket": {
+    "n": 1259,
+    "n_positives": 949,
+    "prevalence": 0.7537728355837967,
+    "auprc": 0.9648417516862118,
+    "auprc_normalized": 0.8572121463643246,
+    "auc_roc": 0.885312213195554
+   },
+   "seconds": 0.3,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 46,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3083221912384033,
+      "confusion": {
+       "tn": 5073,
+       "fp": 153,
+       "fn": 154,
+       "tp": 1628
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9999022483825684,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1759,
+       "tp": 23
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_46.npz",
+     "sha256": "f678c6e63225bcf369784188c3ff1c332f094ddc71463be8935d2dabf1383bb2",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 46,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8440342677064443,
+   "test_auc_roc": 0.9067564244832556,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.1559657322935557,
+   "pocket": {
+    "n": 1315,
+    "n_positives": 756,
+    "prevalence": 0.5749049429657794,
+    "auprc": 0.8019402001856542,
+    "auprc_normalized": 0.534081150705072,
+    "auc_roc": 0.7102393730300707
+   },
+   "seconds": 54.7,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 46,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3386460440779884,
+      "confusion": {
+       "tn": 4847,
+       "fp": 450,
+       "fn": 561,
+       "tp": 1489
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9119730472207265,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2014,
+       "tp": 36
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_46.npz",
+     "sha256": "bd6b496c6919d489156cca7e884afab28e7b574b961bcc585da77fd70b62ca0f",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 558
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 46,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8772888622955166,
+   "test_auc_roc": 0.9337907329044972,
+   "train_auprc": 0.9207257205972923,
+   "train_test_gap_auprc": 0.04343685830177568,
+   "pocket": {
+    "n": 1315,
+    "n_positives": 756,
+    "prevalence": 0.5749049429657794,
+    "auprc": 0.7957756124396255,
+    "auprc_normalized": 0.5195794818570796,
+    "auc_roc": 0.7060226595110315
+   },
+   "seconds": 0.9,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 46,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3417968364752332,
+      "confusion": {
+       "tn": 4807,
+       "fp": 490,
+       "fn": 439,
+       "tp": 1611
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.994968497422337,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2018,
+       "tp": 32
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_46.npz",
+     "sha256": "2fc32c9d282dcd4321a8231837d825d52429260643be914686c896e0c56a866c",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 46,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.87576663921808,
+   "test_auc_roc": 0.9314970738153672,
+   "train_auprc": 0.9740777965812373,
+   "train_test_gap_auprc": 0.09831115736315732,
+   "pocket": {
+    "n": 1315,
+    "n_positives": 756,
+    "prevalence": 0.5749049429657794,
+    "auprc": 0.8051366338218939,
+    "auprc_normalized": 0.5416004892232389,
+    "auc_roc": 0.7207314649175114
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 46,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5296,
+      "fp": 1,
+      "fn": 2014,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3381803333759308,
+      "confusion": {
+       "tn": 4790,
+       "fp": 507,
+       "fn": 424,
+       "tp": 1626
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9993758708238601,
+      "confusion": {
+       "tn": 5296,
+       "fp": 1,
+       "fn": 2017,
+       "tp": 33
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_46.npz",
+     "sha256": "2a2b7241195748a977ed90be5cb63bf6bb641543567db4017c00befbe513dc67",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 47,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.7580085034722944,
+   "test_auc_roc": 0.9114290020690317,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.24199149652770557,
+   "pocket": {
+    "n": 112,
+    "n_positives": 49,
+    "prevalence": 0.4375,
+    "auprc": 0.8289562652412171,
+    "auprc_normalized": 0.6959222493177193,
+    "auc_roc": 0.8461289277615808
+   },
+   "seconds": 6.2,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 47,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.32760162557915146,
+      "confusion": {
+       "tn": 422,
+       "fp": 55,
+       "fn": 34,
+       "tp": 119
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8871705131347376,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 152,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_47.npz",
+     "sha256": "0fec0981214633a90d8da875edbed960ab386be30d204309dd610552b74cfc4f",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 713
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 47,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8944675412642398,
+   "test_auc_roc": 0.9603595456351652,
+   "train_auprc": 0.9993950762809357,
+   "train_test_gap_auprc": 0.10492753501669594,
+   "pocket": {
+    "n": 112,
+    "n_positives": 49,
+    "prevalence": 0.4375,
+    "auprc": 0.8109794887881558,
+    "auprc_normalized": 0.6639635356233882,
+    "auc_roc": 0.8373825720764496
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 47,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3677459070131519,
+      "confusion": {
+       "tn": 443,
+       "fp": 34,
+       "fn": 26,
+       "tp": 127
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9966922560030641,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 150,
+       "tp": 3
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_47.npz",
+     "sha256": "dbe4e377c3611eb9c30b7a45109434eba524e4f729842c2f5e90187b43b24fe2",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 47,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8812592389621463,
+   "test_auc_roc": 0.9584754936216275,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.11874076103785369,
+   "pocket": {
+    "n": 112,
+    "n_positives": 49,
+    "prevalence": 0.4375,
+    "auprc": 0.7489718846259584,
+    "auprc_normalized": 0.5537277948905928,
+    "auc_roc": 0.8305798509880142
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 47,
+    "n_test": 630,
+    "n_positives": 153,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 0,
+      "fn": 149,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.35936087369918823,
+      "confusion": {
+       "tn": 442,
+       "fp": 35,
+       "fn": 27,
+       "tp": 126
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.999678680896759,
+      "confusion": {
+       "tn": 477,
+       "fp": 0,
+       "fn": 150,
+       "tp": 3
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_47.npz",
+     "sha256": "fa34370a8e2610a7ffe30fc800798bdcc5a64ba8fae4c3bac5944af500657a49",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 47,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9345704087774926,
+   "test_auc_roc": 0.9784355439413482,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.06542959122250736,
+   "pocket": {
+    "n": 1249,
+    "n_positives": 934,
+    "prevalence": 0.7477982385908727,
+    "auprc": 0.9467751675389051,
+    "auprc_normalized": 0.7889593150987063,
+    "auc_roc": 0.8558240712416301
+   },
+   "seconds": 44.9,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 47,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5225,
+      "fp": 1,
+      "fn": 1747,
+      "tp": 35
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5019129206664203,
+      "confusion": {
+       "tn": 4935,
+       "fp": 291,
+       "fn": 232,
+       "tp": 1550
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8843600439766532,
+      "confusion": {
+       "tn": 5225,
+       "fp": 1,
+       "fn": 1731,
+       "tp": 51
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_47.npz",
+     "sha256": "98309e52abf977ab611269ac8443c911b765fef3096c875f945143a3311aabde",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 717
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 47,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.984209107289931,
+   "test_auc_roc": 0.9937868393506868,
+   "train_auprc": 0.9953471078909,
+   "train_test_gap_auprc": 0.011138000600968923,
+   "pocket": {
+    "n": 1249,
+    "n_positives": 934,
+    "prevalence": 0.7477982385908727,
+    "auprc": 0.9663863825903157,
+    "auprc_normalized": 0.8667193392231884,
+    "auc_roc": 0.8909469426600047
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 47,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5846103252219529,
+      "confusion": {
+       "tn": 5146,
+       "fp": 80,
+       "fn": 185,
+       "tp": 1597
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9972581667776178,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1736,
+       "tp": 46
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_47.npz",
+     "sha256": "cc7642ff7094e1b9afa52ca96271d715744f4495a28b48a5cbaca03a25d903d0",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 47,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9850091896938794,
+   "test_auc_roc": 0.9939867269883854,
+   "train_auprc": 0.999657414363397,
+   "train_test_gap_auprc": 0.01464822466951754,
+   "pocket": {
+    "n": 1249,
+    "n_positives": 934,
+    "prevalence": 0.7477982385908727,
+    "auprc": 0.967957700290001,
+    "auprc_normalized": 0.8729497386101946,
+    "auc_roc": 0.8967710139016349
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 47,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5501940846443176,
+      "confusion": {
+       "tn": 5114,
+       "fp": 112,
+       "fn": 138,
+       "tp": 1644
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9998542028665542,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1728,
+       "tp": 54
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_47.npz",
+     "sha256": "e7c4c115b7aebe7234726864c395e09d8850579f7e956539cbb0b6b59d4106c7",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 47,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8443306755250272,
+   "test_auc_roc": 0.9067941817043241,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.15566932447497284,
+   "pocket": {
+    "n": 1311,
+    "n_positives": 758,
+    "prevalence": 0.5781845919145691,
+    "auprc": 0.7650173791301655,
+    "auprc_normalized": 0.4429254684261248,
+    "auc_roc": 0.6695882855329768
+   },
+   "seconds": 52.5,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 47,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.38102441623814004,
+      "confusion": {
+       "tn": 4943,
+       "fp": 354,
+       "fn": 645,
+       "tp": 1405
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9063074334926471,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2014,
+       "tp": 36
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_47.npz",
+     "sha256": "2d8da85baf2c3a80e4b7f7170af1f04dec7619d5d03b1e6a93d318089e2cdc26",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 47,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8767753885570566,
+   "test_auc_roc": 0.9337969029869645,
+   "train_auprc": 0.9204559166485966,
+   "train_test_gap_auprc": 0.043680528091539994,
+   "pocket": {
+    "n": 1311,
+    "n_positives": 758,
+    "prevalence": 0.5781845919145691,
+    "auprc": 0.7690944050823503,
+    "auprc_normalized": 0.45259089523139456,
+    "auc_roc": 0.6749166217370353
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 47,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.388173684809254,
+      "confusion": {
+       "tn": 4878,
+       "fp": 419,
+       "fn": 497,
+       "tp": 1553
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.995390880370318,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2008,
+       "tp": 42
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_47.npz",
+     "sha256": "e1a0d179eb99d4f55d60ef00d755a2e547c3477b1f632d42fbad54bdf4bff74d",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 47,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8772528867792401,
+   "test_auc_roc": 0.9326304350829048,
+   "train_auprc": 0.9716659896237451,
+   "train_test_gap_auprc": 0.09441310284450499,
+   "pocket": {
+    "n": 1311,
+    "n_positives": 758,
+    "prevalence": 0.5781845919145691,
+    "auprc": 0.7829299143576749,
+    "auprc_normalized": 0.48539080962551856,
+    "auc_roc": 0.6945468946070128
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 47,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4257633686065674,
+      "confusion": {
+       "tn": 4916,
+       "fp": 381,
+       "fn": 503,
+       "tp": 1547
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9996160328388214,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2004,
+       "tp": 46
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_47.npz",
+     "sha256": "70707125a6a2982c80b2e371f4e1c18f4f103322125e24bcbda25efb9b1827ec",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 48,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.696448366552885,
+   "test_auc_roc": 0.8754679585994274,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.303551633447115,
+   "pocket": {
+    "n": 119,
+    "n_positives": 58,
+    "prevalence": 0.48739495798319327,
+    "auprc": 0.7876673668211931,
+    "auprc_normalized": 0.5857773221593767,
+    "auc_roc": 0.7608818541548898
+   },
+   "seconds": 6.9,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 48,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.29428020526580323,
+      "confusion": {
+       "tn": 396,
+       "fp": 82,
+       "fn": 33,
+       "tp": 119
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.898560112403862,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 152,
+       "tp": 0
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_48.npz",
+     "sha256": "25292d54960b03ca470337215433c84f873a0feb0f3d393b8dbf706e372103c6",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 705
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 48,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8592343555991417,
+   "test_auc_roc": 0.9412092600748734,
+   "train_auprc": 0.9993896609980717,
+   "train_test_gap_auprc": 0.14015530539892995,
+   "pocket": {
+    "n": 119,
+    "n_positives": 58,
+    "prevalence": 0.48739495798319327,
+    "auprc": 0.7436350064811568,
+    "auprc_normalized": 0.49987812739766657,
+    "auc_roc": 0.7473148671565856
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 48,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4858992745334478,
+      "confusion": {
+       "tn": 449,
+       "fp": 29,
+       "fn": 35,
+       "tp": 117
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9963084747378246,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_48.npz",
+     "sha256": "b7fa4b76cf37d37860c31ed5dbf4dc34d95c021a09764cf595df8316313da0d4",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 48,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8454584600632226,
+   "test_auc_roc": 0.9339421382955297,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.15454153993677744,
+   "pocket": {
+    "n": 119,
+    "n_positives": 58,
+    "prevalence": 0.48739495798319327,
+    "auprc": 0.7476496266130208,
+    "auprc_normalized": 0.5077099273270407,
+    "auc_roc": 0.7430751837196156
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 48,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4524303674697876,
+      "confusion": {
+       "tn": 447,
+       "fp": 31,
+       "fn": 35,
+       "tp": 117
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997005519270897,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 151,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_48.npz",
+     "sha256": "fa5c4223b02dd1414666f782586bf070e7d3739577d8329e038b6e1788e81121",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 48,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9469312054169886,
+   "test_auc_roc": 0.9819830528785751,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.05306879458301139,
+   "pocket": {
+    "n": 1204,
+    "n_positives": 934,
+    "prevalence": 0.7757475083056479,
+    "auprc": 0.9584710501698586,
+    "auprc_normalized": 0.8148116459426286,
+    "auc_roc": 0.8659053057339995
+   },
+   "seconds": 56.0,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 48,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.48044590638298473,
+      "confusion": {
+       "tn": 4937,
+       "fp": 289,
+       "fn": 193,
+       "tp": 1589
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8918125899183788,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1752,
+       "tp": 30
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_48.npz",
+     "sha256": "debe06172d17072bbf8d5700a351adeebb1eb67a5fbac37e5aa8b8d0ef979201",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 716
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 48,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9869247858074525,
+   "test_auc_roc": 0.9951491141375055,
+   "train_auprc": 0.994989099932384,
+   "train_test_gap_auprc": 0.008064314124931582,
+   "pocket": {
+    "n": 1204,
+    "n_positives": 934,
+    "prevalence": 0.7757475083056479,
+    "auprc": 0.9696295168389072,
+    "auprc_normalized": 0.8645701417557194,
+    "auc_roc": 0.8887223411848679
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 48,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.493046251357712,
+      "confusion": {
+       "tn": 5140,
+       "fp": 86,
+       "fn": 163,
+       "tp": 1619
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9977267579313392,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1750,
+       "tp": 32
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_48.npz",
+     "sha256": "9aacc0e06a92f5d65e1f64e9445aa070fa714c7844a793b8f920f9748944e294",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 48,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.987049145831407,
+   "test_auc_roc": 0.9951664022974138,
+   "train_auprc": 0.9994700969361539,
+   "train_test_gap_auprc": 0.012420951104746836,
+   "pocket": {
+    "n": 1204,
+    "n_positives": 934,
+    "prevalence": 0.7757475083056479,
+    "auprc": 0.9708654277854282,
+    "auprc_normalized": 0.870081389087613,
+    "auc_roc": 0.8947140931080975
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 48,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.43797793984413147,
+      "confusion": {
+       "tn": 5115,
+       "fp": 111,
+       "fn": 135,
+       "tp": 1647
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9998256021738052,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1744,
+       "tp": 38
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_48.npz",
+     "sha256": "a68da6c02c1018ffb723818c2e5c156c161a1091600f3b850ad42807426fa22f",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 48,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.838792075893337,
+   "test_auc_roc": 0.9045269987153336,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.16120792410666296,
+   "pocket": {
+    "n": 1349,
+    "n_positives": 801,
+    "prevalence": 0.5937731653076352,
+    "auprc": 0.8083450771541745,
+    "auprc_normalized": 0.5282071333594551,
+    "auc_roc": 0.7051541412650245
+   },
+   "seconds": 48.6,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 48,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.349864920482728,
+      "confusion": {
+       "tn": 4909,
+       "fp": 388,
+       "fn": 626,
+       "tp": 1424
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9124001280728239,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2023,
+       "tp": 27
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_48.npz",
+     "sha256": "6b3d50002c650f208b3fd6d858309b14f8644b6a69eadeb0fd0d5290887f1538",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 48,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8717270074492749,
+   "test_auc_roc": 0.9315926180028271,
+   "train_auprc": 0.9231996547024108,
+   "train_test_gap_auprc": 0.05147264725313594,
+   "pocket": {
+    "n": 1349,
+    "n_positives": 801,
+    "prevalence": 0.5937731653076352,
+    "auprc": 0.8010344562824063,
+    "auprc_normalized": 0.5102107327097922,
+    "auc_roc": 0.7008370011937632
+   },
+   "seconds": 0.5,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 48,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.41838112510333314,
+      "confusion": {
+       "tn": 4952,
+       "fp": 345,
+       "fn": 570,
+       "tp": 1480
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9944612261098322,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2026,
+       "tp": 24
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_48.npz",
+     "sha256": "869f067ec9ccd03934ac10375202024f434f8d71cd54a5d2da05282648366673",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 48,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8691303080437518,
+   "test_auc_roc": 0.9293106544431502,
+   "train_auprc": 0.9713508854297477,
+   "train_test_gap_auprc": 0.10222057738599588,
+   "pocket": {
+    "n": 1349,
+    "n_positives": 801,
+    "prevalence": 0.5937731653076352,
+    "auprc": 0.8130886805870636,
+    "auprc_normalized": 0.5398843615181549,
+    "auc_roc": 0.71894848592544
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 48,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.34521156549453735,
+      "confusion": {
+       "tn": 4846,
+       "fp": 451,
+       "fn": 489,
+       "tp": 1561
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9994563859701157,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2011,
+       "tp": 39
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_48.npz",
+     "sha256": "ad1385d28873a493f09314fcc81a7bfdec23d52f6826a8322d77e178ff225fbd",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 49,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.7147843183571196,
+   "test_auc_roc": 0.8888873596124203,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.28521568164288036,
+   "pocket": {
+    "n": 119,
+    "n_positives": 54,
+    "prevalence": 0.453781512605042,
+    "auprc": 0.7578840629630499,
+    "auprc_normalized": 0.5567415921938913,
+    "auc_roc": 0.7823361823361823
+   },
+   "seconds": 4.6,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 49,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3174199346680776,
+      "confusion": {
+       "tn": 408,
+       "fp": 70,
+       "fn": 36,
+       "tp": 116
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8061550185259856,
+      "confusion": {
+       "tn": 477,
+       "fp": 1,
+       "fn": 145,
+       "tp": 7
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_49.npz",
+     "sha256": "0cf71338bd2542e2fbfc7f4457df45f4452abba335f3fbc9bffd237748faa7f0",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 705
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 49,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8793357436609256,
+   "test_auc_roc": 0.944106474344858,
+   "train_auprc": 0.999511723917551,
+   "train_test_gap_auprc": 0.12017598025662546,
+   "pocket": {
+    "n": 119,
+    "n_positives": 54,
+    "prevalence": 0.453781512605042,
+    "auprc": 0.8016043245120003,
+    "auprc_normalized": 0.6367833017988928,
+    "auc_roc": 0.7754985754985754
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 49,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.38914448013191705,
+      "confusion": {
+       "tn": 440,
+       "fp": 38,
+       "fn": 29,
+       "tp": 123
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9958767560525555,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 146,
+       "tp": 6
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_49.npz",
+     "sha256": "a92edf6b65009193d620cbd37538294b16df684f63c4c4fc432edc06b3d889d1",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 49,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8658757395506209,
+   "test_auc_roc": 0.9410922704250164,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.13412426044937908,
+   "pocket": {
+    "n": 119,
+    "n_positives": 54,
+    "prevalence": 0.453781512605042,
+    "auprc": 0.7860383313196244,
+    "auprc_normalized": 0.6082855604159277,
+    "auc_roc": 0.7797720797720799
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 49,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.1916525810956955,
+      "confusion": {
+       "tn": 423,
+       "fp": 55,
+       "fn": 21,
+       "tp": 131
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997527712583542,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_49.npz",
+     "sha256": "3bbcf0d6544a9138c257056c655b0948f1697ebb81c4743bfe23a68b80b08593",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 49,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.8915350210830645,
+   "test_auc_roc": 0.9649392895661554,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.10846497891693552,
+   "pocket": {
+    "n": 1270,
+    "n_positives": 937,
+    "prevalence": 0.7377952755905511,
+    "auprc": 0.9187682341856647,
+    "auprc_normalized": 0.6901971694167992,
+    "auc_roc": 0.7996096416587345
+   },
+   "seconds": 58.0,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 49,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5153548609509976,
+      "confusion": {
+       "tn": 5017,
+       "fp": 209,
+       "fn": 468,
+       "tp": 1314
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8933861886448539,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1782,
+       "tp": 0
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_49.npz",
+     "sha256": "b5c26621a04aa3f1541e2a1029270af4fb8687b6eebe5bed935863b3886bad86",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 716
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 49,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.8009238576481946,
+   "test_auc_roc": 0.9329466369267364,
+   "train_auprc": 0.9953991532019146,
+   "train_test_gap_auprc": 0.19447529555372,
+   "pocket": {
+    "n": 1270,
+    "n_positives": 937,
+    "prevalence": 0.7377952755905511,
+    "auprc": 0.9067987592780641,
+    "auprc_normalized": 0.6445478206700943,
+    "auc_roc": 0.7679210694151997
+   },
+   "seconds": 43.0,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 49,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5375199124653127,
+      "confusion": {
+       "tn": 4802,
+       "fp": 424,
+       "fn": 621,
+       "tp": 1161
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9978909197898301,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1781,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_49.npz",
+     "sha256": "bdc6468b81eb4b6ff192f8b60425284dc37acc59aaccf75d378676ec08b59635",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 49,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.8514454353945955,
+   "test_auc_roc": 0.9484990548423384,
+   "train_auprc": 0.9997090477206383,
+   "train_test_gap_auprc": 0.1482636123260428,
+   "pocket": {
+    "n": 1270,
+    "n_positives": 937,
+    "prevalence": 0.7377952755905511,
+    "auprc": 0.9202823816761005,
+    "auprc_normalized": 0.6959718460319751,
+    "auc_roc": 0.7947718262552842
+   },
+   "seconds": 0.3,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 49,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.6019532680511475,
+      "confusion": {
+       "tn": 4814,
+       "fp": 412,
+       "fn": 527,
+       "tp": 1255
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997766321897507,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1776,
+       "tp": 6
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_49.npz",
+     "sha256": "dd2faf922419750782e8660ec44a5ecf5eee03d5c52673b8615154d6fdd1ad10",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 49,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8412158837260479,
+   "test_auc_roc": 0.9067903138914342,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.15878411627395206,
+   "pocket": {
+    "n": 1352,
+    "n_positives": 774,
+    "prevalence": 0.5724852071005917,
+    "auprc": 0.7899098166178276,
+    "auprc_normalized": 0.5085779793551952,
+    "auc_roc": 0.7092911492002183
+   },
+   "seconds": 65.9,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 49,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3635131142700302,
+      "confusion": {
+       "tn": 4955,
+       "fp": 342,
+       "fn": 661,
+       "tp": 1389
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.909519015657678,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2017,
+       "tp": 33
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_49.npz",
+     "sha256": "c08701bedcd25ddba92dc6ecf0a9b3794f7bb672691364f87cb55f56fa05061d",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 49,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8741196595116991,
+   "test_auc_roc": 0.9320063358458769,
+   "train_auprc": 0.9209861743804981,
+   "train_test_gap_auprc": 0.046866514868799,
+   "pocket": {
+    "n": 1352,
+    "n_positives": 774,
+    "prevalence": 0.5724852071005917,
+    "auprc": 0.7869735331635941,
+    "auprc_normalized": 0.5017097177113827,
+    "auc_roc": 0.7009803921568627
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 49,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 38,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2012,
+      "tp": 38
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.39538327095891745,
+      "confusion": {
+       "tn": 4932,
+       "fp": 365,
+       "fn": 527,
+       "tp": 1523
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9940904032844821,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2038,
+       "tp": 12
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_49.npz",
+     "sha256": "522c010f61e22eac0ed2c22cacbb39cf0bede8ce5198156eb9bd28811c9f9575",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 49,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8696176481044311,
+   "test_auc_roc": 0.9275720265037274,
+   "train_auprc": 0.9723991233278768,
+   "train_test_gap_auprc": 0.10278147522344572,
+   "pocket": {
+    "n": 1352,
+    "n_positives": 774,
+    "prevalence": 0.5724852071005917,
+    "auprc": 0.7893193493727946,
+    "auprc_normalized": 0.5071968172180247,
+    "auc_roc": 0.7063450551219119
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 49,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.389103502035141,
+      "confusion": {
+       "tn": 4900,
+       "fp": 397,
+       "fn": 539,
+       "tp": 1511
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9995109486579895,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2009,
+       "tp": 41
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_49.npz",
+     "sha256": "fb8c0ec669c24cd900121af1c29f6c913b35af6589e6d0cfda187f4d7d11b6c8",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 50,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.7453226739869026,
+   "test_auc_roc": 0.922497797841885,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.25467732601309745,
+   "pocket": {
+    "n": 107,
+    "n_positives": 49,
+    "prevalence": 0.45794392523364486,
+    "auprc": 0.898693665376544,
+    "auprc_normalized": 0.8131072792291415,
+    "auc_roc": 0.9018296973961999
+   },
+   "seconds": 5.4,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 50,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 1,
+      "fn": 149,
+      "tp": 3
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.30517151354686656,
+      "confusion": {
+       "tn": 421,
+       "fp": 57,
+       "fn": 24,
+       "tp": 128
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8737864300864013,
+      "confusion": {
+       "tn": 477,
+       "fp": 1,
+       "fn": 149,
+       "tp": 3
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_50.npz",
+     "sha256": "a7c236ce1cbeb065b90507e319c9201910d236cecfcd538faf27400588cbeeec",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 712
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 50,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.8957838164077397,
+   "test_auc_roc": 0.9630312706452323,
+   "train_auprc": 0.9995303772834464,
+   "train_test_gap_auprc": 0.10374656087570666,
+   "pocket": {
+    "n": 107,
+    "n_positives": 49,
+    "prevalence": 0.45794392523364486,
+    "auprc": 0.8468465782273232,
+    "auprc_normalized": 0.7174583425917859,
+    "auc_roc": 0.8782547501759326
+   },
+   "seconds": 0.4,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 50,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.40147905175454884,
+      "confusion": {
+       "tn": 452,
+       "fp": 26,
+       "fn": 22,
+       "tp": 130
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9978363731318045,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_50.npz",
+     "sha256": "9c41088724e3ddf4327664e6d473cc5699e187b9026e287c98c3b459dd80f629",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 50,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.9032844388099873,
+   "test_auc_roc": 0.9632101959920722,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.09671556119001268,
+   "pocket": {
+    "n": 107,
+    "n_positives": 49,
+    "prevalence": 0.45794392523364486,
+    "auprc": 0.8355351430562364,
+    "auprc_normalized": 0.6965906949485741,
+    "auc_roc": 0.862420830401126
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 50,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.2588566839694977,
+      "confusion": {
+       "tn": 444,
+       "fp": 34,
+       "fn": 18,
+       "tp": 134
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997688382863998,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_50.npz",
+     "sha256": "9b11dc4a7769604fd83637b1c455d8f5c017c543ae9c3ccb4eda5e8b5b9c9425",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 50,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9429242171290518,
+   "test_auc_roc": 0.9807069504416104,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.057075782870948166,
+   "pocket": {
+    "n": 1230,
+    "n_positives": 935,
+    "prevalence": 0.7601626016260162,
+    "auprc": 0.9566006644421639,
+    "auprc_normalized": 0.8190468381825815,
+    "auc_roc": 0.8719260400616334
+   },
+   "seconds": 50.9,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 50,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4820346661864265,
+      "confusion": {
+       "tn": 4944,
+       "fp": 282,
+       "fn": 214,
+       "tp": 1568
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8893695678694079,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1751,
+       "tp": 31
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_50.npz",
+     "sha256": "c1d3c1b8a5b46e8b0e8962728e153c155bb2441aacf7c31af753800af83684ed",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 722
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 50,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9864561050810007,
+   "test_auc_roc": 0.9948274040313841,
+   "train_auprc": 0.9952723495204351,
+   "train_test_gap_auprc": 0.008816244439434406,
+   "pocket": {
+    "n": 1230,
+    "n_positives": 935,
+    "prevalence": 0.7601626016260162,
+    "auprc": 0.9704812579497801,
+    "auprc_normalized": 0.8769218551804392,
+    "auc_roc": 0.898678509924771
+   },
+   "seconds": 1.0,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 50,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5224485960741037,
+      "confusion": {
+       "tn": 5123,
+       "fp": 103,
+       "fn": 154,
+       "tp": 1628
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9975997712769039,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1733,
+       "tp": 49
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_50.npz",
+     "sha256": "7c92dd20d1dd93b83fcbb32ad5ab96f463ab4c416bfad1500e6730a7bef59722",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 50,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.986252262874718,
+   "test_auc_roc": 0.9947462248457273,
+   "train_auprc": 0.9997404416029679,
+   "train_test_gap_auprc": 0.013488178728249922,
+   "pocket": {
+    "n": 1230,
+    "n_positives": 935,
+    "prevalence": 0.7601626016260162,
+    "auprc": 0.9717554411469965,
+    "auprc_normalized": 0.8822345512230703,
+    "auc_roc": 0.904588054019759
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 50,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.38315120339393616,
+      "confusion": {
+       "tn": 5052,
+       "fp": 174,
+       "fn": 96,
+       "tp": 1686
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9996837151050567,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1741,
+       "tp": 41
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_50.npz",
+     "sha256": "f9e99eaa6861c38f24cad267719b61d7b885e07046b5dc5d75baef4fb4e5312a",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 50,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8361416179639719,
+   "test_auc_roc": 0.9015783439314476,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.1638583820360281,
+   "pocket": {
+    "n": 1323,
+    "n_positives": 759,
+    "prevalence": 0.5736961451247166,
+    "auprc": 0.770220321973146,
+    "auprc_normalized": 0.46099554250083724,
+    "auc_roc": 0.6750039712574403
+   },
+   "seconds": 60.5,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 50,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3608383901523332,
+      "confusion": {
+       "tn": 4926,
+       "fp": 371,
+       "fn": 663,
+       "tp": 1387
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.901961223360769,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2003,
+       "tp": 47
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_50.npz",
+     "sha256": "5d64cf92a3be7103c298f865877d6934db86f2bbbdf0a1a4dc49dd9d0ffcf7ec",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 50,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8679784712898551,
+   "test_auc_roc": 0.927060600339815,
+   "train_auprc": 0.9205516856838479,
+   "train_test_gap_auprc": 0.05257321439399287,
+   "pocket": {
+    "n": 1323,
+    "n_positives": 759,
+    "prevalence": 0.5736961451247166,
+    "auprc": 0.7713502064328541,
+    "auprc_normalized": 0.46364596296217375,
+    "auc_roc": 0.6683544510787804
+   },
+   "seconds": 0.8,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 50,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5296,
+      "fp": 1,
+      "fn": 2014,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.38829089334285605,
+      "confusion": {
+       "tn": 4905,
+       "fp": 392,
+       "fn": 511,
+       "tp": 1539
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9939134442229086,
+      "confusion": {
+       "tn": 5296,
+       "fp": 1,
+       "fn": 2001,
+       "tp": 49
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_50.npz",
+     "sha256": "32828d54bf5b207fa6483b8a5fed911e7909cbeba6b8cc7fea6ecbc398142e81",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 50,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8671968810146814,
+   "test_auc_roc": 0.9258388779658987,
+   "train_auprc": 0.9685732527791462,
+   "train_test_gap_auprc": 0.10137637176446479,
+   "pocket": {
+    "n": 1323,
+    "n_positives": 759,
+    "prevalence": 0.5736961451247166,
+    "auprc": 0.7769089860668197,
+    "auprc_normalized": 0.4766854407205717,
+    "auc_roc": 0.6878054364178323
+   },
+   "seconds": 0.3,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 50,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.28778794407844543,
+      "confusion": {
+       "tn": 4637,
+       "fp": 660,
+       "fn": 404,
+       "tp": 1646
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9993981808423996,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2004,
+       "tp": 46
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_50.npz",
+     "sha256": "b36423281eadab9a3f72cc626103dea894f7375a47d09f2b1481ae87ef849b58",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 51,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.6852230287712706,
+   "test_auc_roc": 0.9034766571239815,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.3147769712287294,
+   "pocket": {
+    "n": 117,
+    "n_positives": 56,
+    "prevalence": 0.47863247863247865,
+    "auprc": 0.80551094827995,
+    "auprc_normalized": 0.6269636221107238,
+    "auc_roc": 0.8293325526932085
+   },
+   "seconds": 7.2,
+   "outcome": {
+    "name": "f162_telecom_churn_proxy",
+    "seed": 51,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 477,
+      "fp": 1,
+      "fn": 149,
+      "tp": 3
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3523298150499146,
+      "confusion": {
+       "tn": 423,
+       "fp": 55,
+       "fn": 42,
+       "tp": 110
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.888852084473847,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 151,
+       "tp": 1
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_proxy_51.npz",
+     "sha256": "10c13b9b2f8724af8e0012adea6b2bb809c42ccb41a7979b1f0a5b47f5294a44",
+     "n_rows": 630
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 708
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 51,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.860108845016647,
+   "test_auc_roc": 0.948352510460251,
+   "train_auprc": 0.9994589779957099,
+   "train_test_gap_auprc": 0.13935013297906296,
+   "pocket": {
+    "n": 117,
+    "n_positives": 56,
+    "prevalence": 0.47863247863247865,
+    "auprc": 0.76841045321454,
+    "auprc_normalized": 0.5558036561655932,
+    "auc_roc": 0.8192330210772834
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_telecom_churn_hgb",
+    "seed": 51,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4420245832845971,
+      "confusion": {
+       "tn": 447,
+       "fp": 31,
+       "fn": 33,
+       "tp": 119
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.994550383656804,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 146,
+       "tp": 6
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_hgb_51.npz",
+     "sha256": "975f65e6cf0fedc37dfbe60ec8b7bc478288b22667e99a188cbb724e981f08bc",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 51,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "customer_value",
+    "seconds_of_use_phase",
+    "frequency_of_use_phase",
+    "frequency_of_sms_phase",
+    "distinct_called_numbers_phase",
+    "customer_value_phase"
+   ],
+   "test_auprc": 0.834183110226976,
+   "test_auc_roc": 0.9423241026205683,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.165816889773024,
+   "pocket": {
+    "n": 117,
+    "n_positives": 56,
+    "prevalence": 0.47863247863247865,
+    "auprc": 0.711506578459532,
+    "auprc_normalized": 0.4466601586846762,
+    "auc_roc": 0.7946428571428572
+   },
+   "seconds": 0.1,
+   "outcome": {
+    "name": "f162_telecom_churn_xgboost",
+    "seed": 51,
+    "n_test": 630,
+    "n_positives": 152,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 4,
+     "n_flagged": 4,
+     "confusion": {
+      "tn": 478,
+      "fp": 0,
+      "fn": 148,
+      "tp": 4
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4605201184749603,
+      "confusion": {
+       "tn": 448,
+       "fp": 30,
+       "fn": 39,
+       "tp": 113
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9996764099597931,
+      "confusion": {
+       "tn": 478,
+       "fp": 0,
+       "fn": 150,
+       "tp": 2
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_telecom_churn_xgboost_51.npz",
+     "sha256": "64560a1372e6cdf03b37985acb53669ccca61cbca892741d1bfe6fd1d2b6dea1",
+     "n_rows": 630
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 51,
+   "lane": "proxy",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9361205418772468,
+   "test_auc_roc": 0.9792595771036898,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.0638794581227532,
+   "pocket": {
+    "n": 1251,
+    "n_positives": 937,
+    "prevalence": 0.7490007993605116,
+    "auprc": 0.9413517072816773,
+    "auprc_normalized": 0.7663407191381474,
+    "auc_roc": 0.8428172307608643
+   },
+   "seconds": 54.2,
+   "outcome": {
+    "name": "f162_energy_steel_proxy",
+    "seed": 51,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5196156193170887,
+      "confusion": {
+       "tn": 4993,
+       "fp": 233,
+       "fn": 261,
+       "tp": 1521
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.8946921152716663,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1753,
+       "tp": 29
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_proxy_51.npz",
+     "sha256": "baf18d1ad781339e7d034f55fff8c0afb4615cf8d13bd403e1c97824a8bd111a",
+     "n_rows": 7008
+    }
+   },
+   "n_learners": 816,
+   "n_nonzero_weights": 716
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 51,
+   "lane": "hgb",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.9851891204148016,
+   "test_auc_roc": 0.9941742659404351,
+   "train_auprc": 0.9953384375614187,
+   "train_test_gap_auprc": 0.010149317146617154,
+   "pocket": {
+    "n": 1251,
+    "n_positives": 937,
+    "prevalence": 0.7490007993605116,
+    "auprc": 0.9654883742542227,
+    "auprc_normalized": 0.8625030451975562,
+    "auc_roc": 0.8874066168623266
+   },
+   "seconds": 0.6,
+   "outcome": {
+    "name": "f162_energy_steel_hgb",
+    "seed": 51,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 40,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1742,
+      "tp": 40
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5633537691074797,
+      "confusion": {
+       "tn": 5157,
+       "fp": 69,
+       "fn": 189,
+       "tp": 1593
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9977055009321497,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1755,
+       "tp": 27
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_hgb_51.npz",
+     "sha256": "5964efaf98ad4ba35ff373230bf213de849ede8cbebfc9dd4180315a0c61756d",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 51,
+   "lane": "xgboost",
+   "n_features": 17,
+   "features": [
+    "date",
+    "Usage_kWh",
+    "Lagging_Current_Reactive.Power_kVarh",
+    "Leading_Current_Reactive_Power_kVarh",
+    "CO2(tCO2)",
+    "Lagging_Current_Power_Factor",
+    "Leading_Current_Power_Factor",
+    "NSM",
+    "WeekStatus",
+    "Day_of_week",
+    "dow_num",
+    "day_of_year",
+    "tod_phase",
+    "usage_phase",
+    "reactive_phase",
+    "season_phase",
+    "dow_phase"
+   ],
+   "test_auprc": 0.984946226586668,
+   "test_auc_roc": 0.9940016527910391,
+   "train_auprc": 0.9997230390615892,
+   "train_test_gap_auprc": 0.014776812474921242,
+   "pocket": {
+    "n": 1251,
+    "n_positives": 937,
+    "prevalence": 0.7490007993605116,
+    "auprc": 0.9665085601485658,
+    "auprc_normalized": 0.8665675437766108,
+    "auc_roc": 0.8925932471840607
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_energy_steel_xgboost",
+    "seed": 51,
+    "n_test": 7008,
+    "n_positives": 1782,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 36,
+     "n_flagged": 36,
+     "confusion": {
+      "tn": 5226,
+      "fp": 0,
+      "fn": 1746,
+      "tp": 36
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.5244333148002625,
+      "confusion": {
+       "tn": 5128,
+       "fp": 98,
+       "fn": 149,
+       "tp": 1633
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9997381275892258,
+      "confusion": {
+       "tn": 5226,
+       "fp": 0,
+       "fn": 1745,
+       "tp": 37
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_energy_steel_xgboost_51.npz",
+     "sha256": "9accf273f2b9954103abbd4de5d1128d3354ce8c5f949a9b8995697eea370197",
+     "n_rows": 7008
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 51,
+   "lane": "proxy",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8411474872841059,
+   "test_auc_roc": 0.908568771094545,
+   "train_auprc": 1.0,
+   "train_test_gap_auprc": 0.15885251271589407,
+   "pocket": {
+    "n": 1282,
+    "n_positives": 720,
+    "prevalence": 0.5616224648985959,
+    "auprc": 0.7456472113755157,
+    "auprc_normalized": 0.4197859875149665,
+    "auc_roc": 0.6667086793198893
+   },
+   "seconds": 54.7,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_proxy",
+    "seed": 51,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.40098999841469485,
+      "confusion": {
+       "tn": 4991,
+       "fp": 306,
+       "fn": 657,
+       "tp": 1393
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9149805644766908,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2021,
+       "tp": 29
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_proxy_51.npz",
+     "sha256": "625c7938abe1c3aeb80711d9123dd5dfef88be086a9fe95bad7eae09f4dc767f",
+     "n_rows": 7347
+    }
+   },
+   "n_learners": 560,
+   "n_nonzero_weights": 557
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 51,
+   "lane": "hgb",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8694292098408214,
+   "test_auc_roc": 0.9295047818139122,
+   "train_auprc": 0.9210801313373755,
+   "train_test_gap_auprc": 0.05165092149655415,
+   "pocket": {
+    "n": 1282,
+    "n_positives": 720,
+    "prevalence": 0.5616224648985959,
+    "auprc": 0.7465951627790244,
+    "auprc_normalized": 0.4219483962325788,
+    "auc_roc": 0.6632784697508897
+   },
+   "seconds": 0.9,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_hgb",
+    "seed": 51,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.3160522649063803,
+      "confusion": {
+       "tn": 4689,
+       "fp": 608,
+       "fn": 411,
+       "tp": 1639
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9954809113445233,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2003,
+       "tp": 47
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_hgb_51.npz",
+     "sha256": "4e256c771438504d9b0abfee4531b1ff7c0de459025b6a69a260e5ac0ee9d6f7",
+     "n_rows": 7347
+    }
+   }
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 51,
+   "lane": "xgboost",
+   "n_features": 15,
+   "features": [
+    "AT",
+    "AP",
+    "AH",
+    "AFDP",
+    "GTEP",
+    "TIT",
+    "TAT",
+    "TEY",
+    "CDP",
+    "year",
+    "at_phase",
+    "ap_phase",
+    "ah_phase",
+    "afdp_phase",
+    "gtep_phase"
+   ],
+   "test_auprc": 0.8700760260542587,
+   "test_auc_roc": 0.9284816532137381,
+   "train_auprc": 0.9722354457087197,
+   "train_test_gap_auprc": 0.10215941965446096,
+   "pocket": {
+    "n": 1282,
+    "n_positives": 720,
+    "prevalence": 0.5616224648985959,
+    "auprc": 0.7700536122031321,
+    "auprc_normalized": 0.4754603751679988,
+    "auc_roc": 0.6865089956504548
+   },
+   "seconds": 0.2,
+   "outcome": {
+    "name": "f162_oilgas_gasturbine_xgboost",
+    "seed": 51,
+    "n_test": 7347,
+    "n_positives": 2050,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 37,
+     "n_flagged": 37,
+     "confusion": {
+      "tn": 5297,
+      "fp": 0,
+      "fn": 2013,
+      "tp": 37
+     }
+    },
+    "operating_points_from_validation": [
+     {
+      "operating_point": "max_f1_on_val",
+      "threshold": 0.4424230456352234,
+      "confusion": {
+       "tn": 4906,
+       "fp": 391,
+       "fn": 531,
+       "tp": 1519
+      }
+     },
+     {
+      "operating_point": "alert_budget_0.005",
+      "threshold": 0.9996061372756958,
+      "confusion": {
+       "tn": 5297,
+       "fp": 0,
+       "fn": 2000,
+       "tp": 50
+      }
+     }
+    ],
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f162_oilgas_gasturbine_xgboost_51.npz",
+     "sha256": "6d390b1c1c7308fd8576aa09d1c6ad687736c5ac007bd1c116f977eeb89dab4d",
+     "n_rows": 7347
+    }
+   }
+  }
+ ],
+ "pairs": [
+  {
+   "cell": "telecom_churn",
+   "seed": 42,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.013197885046227875,
+     "ci95": [
+      -0.07631850249943499,
+      0.02224419765427835
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.018649815242563816,
+     "ci95": [
+      -0.10631581270601748,
+      0.026461221447650285
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.005451930196335941,
+     "ci95": [
+      -0.04645895168752154,
+      0.02058679616686616
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 29.2
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 42,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.029433534377259596,
+     "ci95": [
+      -0.03921760877890081,
+      -0.020986140256628007
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.0340675667647099,
+     "ci95": [
+      -0.044256445084086576,
+      -0.02599490910079694
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.004634032387450304,
+     "ci95": [
+      -0.007898352722726331,
+      -0.001602175000997024
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 81.5
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 42,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.007348165080378721,
+     "ci95": [
+      -0.021733438276932044,
+      0.008181569657647585
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.024740216122446812,
+     "ci95": [
+      -0.03990882501554524,
+      -0.008427894089502466
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.01739205104206809,
+     "ci95": [
+      -0.028074277818233125,
+      -0.006787131696778229
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 73.8
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 43,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.014214503996376138,
+     "ci95": [
+      -0.0722011400738233,
+      0.039676452445948994
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.007908868395367086,
+     "ci95": [
+      -0.05822749237820969,
+      0.07724508003899559
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.022123372391743223,
+     "ci95": [
+      -0.014063610277518537,
+      0.07510035658614611
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 17.4
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 43,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.04070828447515118,
+     "ci95": [
+      -0.054974537960632695,
+      -0.03070504064853688
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.042522586205733015,
+     "ci95": [
+      -0.05712222025679416,
+      -0.03272794505444168
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0018143017305818354,
+     "ci95": [
+      -0.00434367382309952,
+      0.000531691966748415
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 65.2
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 43,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.008386202397922204,
+     "ci95": [
+      -0.0235383822335167,
+      0.005934381724227557
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.011290259568351724,
+     "ci95": [
+      -0.027092035101073456,
+      0.004659928575833878
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0029040571704295193,
+     "ci95": [
+      -0.01312112110439676,
+      0.0078364332596594
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 70.8
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 44,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.02161681535701032,
+     "ci95": [
+      -0.024619151754504704,
+      0.08684228252422249
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.03508454146241835,
+     "ci95": [
+      -0.009814696059126347,
+      0.09959868134384525
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.013467726105408029,
+     "ci95": [
+      -0.02507817125255433,
+      0.07063115261103463
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 21.7
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 44,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.03130140447008256,
+     "ci95": [
+      -0.046764312950936165,
+      -0.02012569946182317
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.03780105364523767,
+     "ci95": [
+      -0.052789911965075126,
+      -0.026471214053347344
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.006499649175155109,
+     "ci95": [
+      -0.010294866362773021,
+      -0.00299341657217923
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 76.4
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 44,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.009184401062698244,
+     "ci95": [
+      -0.022667021813217506,
+      0.0051986126948224696
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.017281430863593572,
+     "ci95": [
+      -0.031828760190630606,
+      -0.0013158458744515435
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.008097029800895328,
+     "ci95": [
+      -0.017310944610928622,
+      0.002131461070302512
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 74.4
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 45,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.018150366783369565,
+     "ci95": [
+      -0.0360118091038435,
+      0.08306736042470211
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.06102750876965812,
+     "ci95": [
+      0.0009363180214769241,
+      0.15246328858306088
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.04287714198628856,
+     "ci95": [
+      -0.002021428118490073,
+      0.09451634935329042
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 19.5
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 45,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.007105826802225934,
+     "ci95": [
+      -0.019169893105959138,
+      0.0034118605895375512
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.020093918970204294,
+     "ci95": [
+      -0.030790220596525912,
+      -0.011590889330462652
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.01298809216797836,
+     "ci95": [
+      -0.02121270636277415,
+      -0.006861340693893289
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 68.8
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 45,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.0046995037494808045,
+     "ci95": [
+      -0.009459869396709874,
+      0.019952455321383428
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.00041035602989480946,
+     "ci95": [
+      -0.01589547302115358,
+      0.014595573924476902
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.005109859779375614,
+     "ci95": [
+      -0.015242902897096143,
+      0.0047416272523185116
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 76.7
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 46,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.008904601926208566,
+     "ci95": [
+      -0.04439127859659596,
+      0.056322468194453794
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.0003601572801793518,
+     "ci95": [
+      -0.06256706225891741,
+      0.04925451831382748
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.009264759206387918,
+     "ci95": [
+      -0.05889457196876467,
+      0.021885825382792722
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 21.1
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 46,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.03234397867080152,
+     "ci95": [
+      -0.04599801518199929,
+      -0.023950335849363735
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.03248102287974741,
+     "ci95": [
+      -0.046883736710139345,
+      -0.02423011861003039
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0001370442089458912,
+     "ci95": [
+      -0.003651159930501942,
+      0.0032199518694503507
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 63.6
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 46,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.006164587746028682,
+     "ci95": [
+      -0.008870527042297214,
+      0.018836509999527393
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.0031964336362397816,
+     "ci95": [
+      -0.019427690740536668,
+      0.011773456501206907
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.009361021382268464,
+     "ci95": [
+      -0.020220052600354043,
+      0.0005892998832312382
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 70.5
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 47,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.017976776453061283,
+     "ci95": [
+      -0.03058855719625598,
+      0.06896595104971613
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.0799843806152587,
+     "ci95": [
+      0.013454184463769864,
+      0.18694879683624466
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.062007604162197416,
+     "ci95": [
+      0.01175955572603804,
+      0.14912867466183624
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 16.9
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 47,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.019611215051410613,
+     "ci95": [
+      -0.034496119986627154,
+      -0.012279500437392057
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.02118253275109594,
+     "ci95": [
+      -0.03611203692509438,
+      -0.014125501443603007
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0015713176996853262,
+     "ci95": [
+      -0.004225147069761333,
+      0.0008040231442977048
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 61.1
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 47,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.004077025952184732,
+     "ci95": [
+      -0.017890992656398496,
+      0.010427547945991749
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.017912535227509352,
+     "ci95": [
+      -0.03256011618496217,
+      -0.0020493319717307694
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.01383550927532462,
+     "ci95": [
+      -0.024840037094242876,
+      -0.003900731539138177
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 71.7
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 48,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.044032360340036325,
+     "ci95": [
+      -0.0029369739834310526,
+      0.12429079954094167
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.04001774020817228,
+     "ci95": [
+      -0.008710346220627193,
+      0.10544123540480957
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.004014620131864044,
+     "ci95": [
+      -0.039187496905886646,
+      0.027830209062424657
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 22.5
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 48,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.011158466669048628,
+     "ci95": [
+      -0.018615049605741295,
+      -0.005294950429062367
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.012394377615569607,
+     "ci95": [
+      -0.019768372046014736,
+      -0.006613448973547786
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0012359109465209794,
+     "ci95": [
+      -0.0039082502502245505,
+      0.0013180955105916734
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 70.3
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 48,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.0073106208717681476,
+     "ci95": [
+      -0.006382141054147306,
+      0.021376387924756362
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.004743603432889154,
+     "ci95": [
+      -0.018162340165071414,
+      0.009245855199327331
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.012054224304657302,
+     "ci95": [
+      -0.021690374517921135,
+      -0.002225816983168205
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 61.3
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 49,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.04372026154895037,
+     "ci95": [
+      -0.13051174282982153,
+      0.008006590912136305
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.02815426835657453,
+     "ci95": [
+      -0.09322316639239228,
+      0.04190138985927885
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.015565993192375838,
+     "ci95": [
+      -0.017424397217748244,
+      0.06923949401794986
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 18.9
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 49,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.011969474907600586,
+     "ci95": [
+      -0.0035213560176331586,
+      0.026515773380731942
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.0015141474904358798,
+     "ci95": [
+      -0.015590592541048524,
+      0.012077092251699402
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.013483622398036466,
+     "ci95": [
+      -0.01961617448887586,
+      -0.007604402131698066
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 134.5
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 49,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.002936283454233468,
+     "ci95": [
+      -0.010908495551774802,
+      0.017165523031863698
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.0005904672450329773,
+     "ci95": [
+      -0.01365974327382587,
+      0.01684338803867394
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.002345816209200491,
+     "ci95": [
+      -0.013158474180798942,
+      0.008541553677266377
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 82.7
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 50,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.051847087149220816,
+     "ci95": [
+      0.0033510692002922,
+      0.14288837306394866
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.06315852232030761,
+     "ci95": [
+      0.019772469113452422,
+      0.125980810031419
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.011311435171086792,
+     "ci95": [
+      -0.046248044052665006,
+      0.055055771499204736
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 17.5
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 50,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.013880593507616279,
+     "ci95": [
+      -0.022795385084748748,
+      -0.007522852209592905
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.015154776704832673,
+     "ci95": [
+      -0.024232828652056358,
+      -0.00909537524266688
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0012741831972163942,
+     "ci95": [
+      -0.0035942612569967356,
+      0.0012422091167387116
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 70.9
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 50,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.0011298844597080748,
+     "ci95": [
+      -0.014355286638195821,
+      0.013981285117360496
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.006688664093673635,
+     "ci95": [
+      -0.021515068309035837,
+      0.009136615614420201
+     ],
+     "excludes_zero": false
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.00555877963396556,
+     "ci95": [
+      -0.01613645180478532,
+      0.004866148189398621
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 81.3
+  },
+  {
+   "cell": "telecom_churn",
+   "seed": 51,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": 0.03710049506540991,
+     "ci95": [
+      -0.02137960807601193,
+      0.12302154836002284
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": 0.09400436982041793,
+     "ci95": [
+      0.0353272989756423,
+      0.1863996170288697
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": 0.05690387475500802,
+     "ci95": [
+      -0.0029289817973902534,
+      0.1357576263302943
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 24.3
+  },
+  {
+   "cell": "energy_steel",
+   "seed": 51,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.024136666972545462,
+     "ci95": [
+      -0.03446932580850115,
+      -0.01665687437513522
+     ],
+     "excludes_zero": true
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.025156852866888513,
+     "ci95": [
+      -0.03496057010689066,
+      -0.017903483397406234
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.0010201858943430508,
+     "ci95": [
+      -0.0036742184816328082,
+      0.0014947262683783966
+     ],
+     "excludes_zero": false
+    }
+   },
+   "wall_s": 73.0
+  },
+  {
+   "cell": "oilgas_gasturbine",
+   "seed": 51,
+   "bootstrap": {
+    "proxy_minus_hgb": {
+     "diff": -0.0009479514035086734,
+     "ci95": [
+      -0.01689989781246763,
+      0.015484113061794291
+     ],
+     "excludes_zero": false
+    },
+    "proxy_minus_xgboost": {
+     "diff": -0.02440640082761636,
+     "ci95": [
+      -0.04089677771130014,
+      -0.007808871536778451
+     ],
+     "excludes_zero": true
+    },
+    "hgb_minus_xgboost": {
+     "diff": -0.023458449424107686,
+     "ci95": [
+      -0.03544994560766599,
+      -0.012202821543998831
+     ],
+     "excludes_zero": true
+    }
+   },
+   "wall_s": 70.5
+  }
+ ],
+ "seed_choice": {
+  "first_seed_minutes": 3.075,
+  "projected_minutes_ten_seeds": 30.75,
+  "cap_minutes": 120.0,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51
+  ]
+ },
+ "analysis": {
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51
+  ],
+  "primary": {
+   "telecom_churn": {
+    "proxy_minus_hgb": {
+     "n_seeds": 10,
+     "mean": 0.01284958524827624,
+     "wilcoxon_p": 0.16015625,
+     "alpha_family": 0.008333333333333333,
+     "interval": [
+      -0.01854799275300689,
+      0.044247163249559365
+     ],
+     "interval_level": 0.9916666666666667,
+     "reading": "no reliable difference"
+    },
+    "proxy_minus_xgboost": {
+     "n_seeds": 10,
+     "mean": 0.03340216907122824,
+     "wilcoxon_p": 0.048828125,
+     "alpha_family": 0.008333333333333333,
+     "interval": [
+      -0.011209491805871975,
+      0.07801382994832845
+     ],
+     "interval_level": 0.9916666666666667,
+     "reading": "no reliable difference"
+    }
+   },
+   "energy_steel": {
+    "proxy_minus_hgb": {
+     "n_seeds": 10,
+     "mean": -0.01977104960885412,
+     "wilcoxon_p": 0.009765625,
+     "alpha_family": 0.008333333333333333,
+     "interval": [
+      -0.03609345075002722,
+      -0.003448648467681021
+     ],
+     "interval_level": 0.9916666666666667,
+     "reading": "no reliable difference"
+    },
+    "proxy_minus_xgboost": {
+     "n_seeds": 10,
+     "mean": -0.02423688358944549,
+     "wilcoxon_p": 0.001953125,
+     "alpha_family": 0.008333333333333333,
+     "interval": [
+      -0.03773733178898465,
+      -0.010736435389906332
+     ],
+     "interval_level": 0.9916666666666667,
+     "reading": "proxy below"
+    }
+   },
+   "oilgas_gasturbine": {
+    "proxy_minus_hgb": {
+     "n_seeds": 10,
+     "mean": -0.0009962634534889548,
+     "wilcoxon_p": 0.556640625,
+     "alpha_family": 0.008333333333333333,
+     "interval": [
+      -0.007532248236140162,
+      0.005539721329162253
+     ],
+     "interval_level": 0.9916666666666667,
+     "reading": "no reliable difference"
+    },
+    "proxy_minus_xgboost": {
+     "n_seeds": 10,
+     "mean": -0.011007943255718222,
+     "wilcoxon_p": 0.005859375,
+     "alpha_family": 0.008333333333333333,
+     "interval": [
+      -0.02116856485115709,
+      -0.0008473216602793553
+     ],
+     "interval_level": 0.9916666666666667,
+     "reading": "proxy below"
+    }
+   }
+  },
+  "secondary": {
+   "telecom_churn": {
+    "proxy_minus_hgb_pocket_auc_roc_mean": 0.009602265136933597,
+    "proxy_minus_hgb_pocket_auprc_normalized_mean": 0.024510756354774354,
+    "proxy_minus_xgboost_pocket_auc_roc_mean": 0.015037347235577281,
+    "proxy_minus_xgboost_pocket_auprc_normalized_mean": 0.061782137042258524,
+    "hgb_minus_xgboost_pocket_auc_roc_mean": 0.005435082098643684,
+    "hgb_minus_xgboost_pocket_auprc_normalized_mean": 0.037271380687484174,
+    "hgb_minus_xgboost_pocket_auprc_mean": 0.020552583822951997,
+    "lanes": {
+     "proxy": {
+      "pocket_auprc_mean": 0.7953950125292002,
+      "pocket_auc_roc_mean": 0.811317660186277,
+      "test_auprc_mean": 0.7262965968347889,
+      "test_auc_roc_mean": 0.8999151776783065,
+      "train_test_gap_auprc_mean": 0.27370340316521113
+     },
+     "hgb": {
+      "pocket_auprc_mean": 0.782545427280924,
+      "pocket_auc_roc_mean": 0.8017153950493434,
+      "test_auprc_mean": 0.873451510490985,
+      "test_auc_roc_mean": 0.9485352416102628,
+      "train_test_gap_auprc_mean": 0.12580145122118322
+     },
+     "xgboost": {
+      "pocket_auprc_mean": 0.7619928434579719,
+      "pocket_auc_roc_mean": 0.7962803129506998,
+      "test_auprc_mean": 0.8621917837685922,
+      "test_auc_roc_mean": 0.9452929628424768,
+      "train_test_gap_auprc_mean": 0.1378082162314079
+     }
+    },
+    "pocket_positives_by_seed": {
+     "42": 46,
+     "43": 52,
+     "44": 52,
+     "45": 49,
+     "46": 57,
+     "47": 49,
+     "48": 58,
+     "49": 54,
+     "50": 49,
+     "51": 56
+    }
+   },
+   "energy_steel": {
+    "proxy_minus_hgb_pocket_auc_roc_mean": -0.03703350991775291,
+    "proxy_minus_hgb_pocket_auprc_normalized_mean": -0.07898638203420193,
+    "proxy_minus_xgboost_pocket_auc_roc_mean": -0.04903458832038815,
+    "proxy_minus_xgboost_pocket_auprc_normalized_mean": -0.0966035467669348,
+    "hgb_minus_xgboost_pocket_auc_roc_mean": -0.012001078402635246,
+    "hgb_minus_xgboost_pocket_auprc_normalized_mean": -0.017617164732732882,
+    "hgb_minus_xgboost_pocket_auprc_mean": -0.004465833980591372,
+    "lanes": {
+     "proxy": {
+      "pocket_auprc_mean": 0.9349593705506628,
+      "pocket_auc_roc_mean": 0.8251028352023548,
+      "test_auprc_mean": 0.9161980010162015,
+      "test_auc_roc_mean": 0.9721981691301756,
+      "train_test_gap_auprc_mean": 0.08380199898379839
+     },
+     "hgb": {
+      "pocket_auprc_mean": 0.9547304201595168,
+      "pocket_auc_roc_mean": 0.8621363451201078,
+      "test_auprc_mean": 0.9570879775214045,
+      "test_auc_roc_mean": 0.9846136665373812,
+      "train_test_gap_auprc_mean": 0.03826733603767949
+     },
+     "xgboost": {
+      "pocket_auprc_mean": 0.9591962541401081,
+      "pocket_auc_roc_mean": 0.874137423522743,
+      "test_auprc_mean": 0.9640197960018082,
+      "test_auc_roc_mean": 0.9865207062760961,
+      "train_test_gap_auprc_mean": 0.03561425263072887
+     }
+    },
+    "pocket_positives_by_seed": {
+     "42": 927,
+     "43": 950,
+     "44": 918,
+     "45": 946,
+     "46": 949,
+     "47": 934,
+     "48": 934,
+     "49": 937,
+     "50": 935,
+     "51": 937
+    }
+   },
+   "oilgas_gasturbine": {
+    "proxy_minus_hgb_pocket_auc_roc_mean": 0.0017434342708873229,
+    "proxy_minus_hgb_pocket_auprc_normalized_mean": -0.002256932998575961,
+    "proxy_minus_xgboost_pocket_auc_roc_mean": -0.014498695398312656,
+    "proxy_minus_xgboost_pocket_auprc_normalized_mean": -0.025873992734284278,
+    "hgb_minus_xgboost_pocket_auc_roc_mean": -0.016242129669199978,
+    "hgb_minus_xgboost_pocket_auprc_normalized_mean": -0.023617059735708316,
+    "hgb_minus_xgboost_pocket_auprc_mean": -0.010011679802229268,
+    "lanes": {
+     "proxy": {
+      "pocket_auprc_mean": 0.781322795949027,
+      "pocket_auc_roc_mean": 0.6910865077702417,
+      "test_auprc_mean": 0.8396247295721752,
+      "test_auc_roc_mean": 0.9061557991868383,
+      "train_test_gap_auprc_mean": 0.1603752704278249
+     },
+     "hgb": {
+      "pocket_auprc_mean": 0.7823190594025158,
+      "pocket_auc_roc_mean": 0.6893430734993544,
+      "test_auprc_mean": 0.8731100825834563,
+      "test_auc_roc_mean": 0.9316540701823858,
+      "train_test_gap_auprc_mean": 0.047785322506120075
+     },
+     "xgboost": {
+      "pocket_auprc_mean": 0.7923307392047452,
+      "pocket_auc_roc_mean": 0.7055852031685544,
+      "test_auprc_mean": 0.8718321950827057,
+      "test_auc_roc_mean": 0.929562522734912,
+      "train_test_gap_auprc_mean": 0.09957806799864082
+     }
+    },
+    "pocket_positives_by_seed": {
+     "42": 753,
+     "43": 754,
+     "44": 785,
+     "45": 765,
+     "46": 756,
+     "47": 758,
+     "48": 801,
+     "49": 774,
+     "50": 759,
+     "51": 720
+    }
+   }
+  },
+  "cells_with_proxy_above": [],
+  "falsifier": {
+   "telecom_churn": true,
+   "energy_steel": true,
+   "oilgas_gasturbine": true
+  }
+ }
+}

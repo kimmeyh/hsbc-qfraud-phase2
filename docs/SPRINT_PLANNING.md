@@ -230,6 +230,21 @@ XGBoost configurations (3.6 points), and F94's training-fold instances tied
 for every method, so neither could have failed. Both were checkable from
 files already on disk before approval.
 
+**And show each term can fire, in the tests (Sprint 28 IMP-5).** A decision
+rule with more than one term (`a and b`, `a or b`, a level test beside a
+spread test, a gap measured from one of two baselines) gets one test per
+term in which **only that term fails** (or, for `or`, only that term
+passes), each proven red with `assert_can_fail`. A test where every term
+fails at once cannot show that any one of them is checked. Where a term
+cannot decide the outcome at the planned sample size, the plan and the
+result document say so instead of keeping it as a check. A card's
+acceptance criteria name the terms. Sprint 28 paid three times in one PR
+review: F153's guide check (`ratio_ok and share == 1.0`) was tested only
+with both parts failing; F151's range term could never decide at five
+seeds, because a range above 0.10 forces the SD above its 0.03 bar; and
+F152's bootstrap was tested only against itself, so its "no difference"
+half could not fail.
+
 ### A verification sprint GENERATES work; budget for it (Sprint 13 improvement 2)
 
 A sprint whose tasks are "check that X is true" produces a second body of work

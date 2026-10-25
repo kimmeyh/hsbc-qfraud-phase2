@@ -86,11 +86,18 @@ def cmd_build(args) -> None:
           f"{meta['build_seconds']}s")
 
 
-def test_auprc(npz) -> dict:
-    """Score a saved pool exactly as qubo_proxy.cmd_solve does."""
+def pool_scores(npz) -> tuple[np.ndarray, np.ndarray]:
+    """The solved weights and per-row test scores of a saved pool, exactly
+    as qubo_proxy.cmd_solve computes them. Split out of `test_auprc` for the
+    Sprint 28 DV4 outcome backfill; `test_auprc` is unchanged in effect."""
     y_pm1 = np.where(npz["y_tr01"] == 1, 1, -1)
     w = qp.solve_simplex_qp(npz["H_tr"], y_pm1, qp.LAMBDA_MULT * len(y_pm1))
-    p = np.clip((w @ npz["H_te"] + 1.0) / 2.0, 0.0, 1.0)
+    return w, np.clip((w @ npz["H_te"] + 1.0) / 2.0, 0.0, 1.0)
+
+
+def test_auprc(npz) -> dict:
+    """Score a saved pool exactly as qubo_proxy.cmd_solve does."""
+    w, p = pool_scores(npz)
     y = npz["y_te"]
     from sklearn.metrics import average_precision_score, roc_auc_score
     ap = float(average_precision_score(y, p))

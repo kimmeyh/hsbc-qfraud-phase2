@@ -3,7 +3,9 @@
 **What this is.** The sha256 of each artifact sent to QCi on **2026-09-25 at
 12:23 PM**, recorded 2026-10-02 (F99, Sprint 20). The artifacts themselves are
 NOT in this repository and must not be: `docs/qci_package/` is gitignored
-(`.gitignore:62`) because it holds a private commercial negotiation. Only the
+(the `docs/qci_package/` rule in `.gitignore`; corrected 2026-10-22 from a
+line number that had gone stale) because it holds a private commercial
+negotiation. Only the
 hashes are tracked.
 
 **Why it exists.** Until now the sent artifacts lived on one workstation with

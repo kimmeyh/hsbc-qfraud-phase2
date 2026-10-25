@@ -123,6 +123,50 @@
       "lower": 0.005990890772244961,
       "upper": 0.01191,
       "recovered": true
+     },
+     "outcome": {
+      "name": "f108_none_hgb_full",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5103,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3088,
+       "confusion": {
+        "tn": 608825,
+        "fp": 1715,
+        "fn": 3730,
+        "tp": 1373
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_hgb_full_42.npz",
+       "sha256": "de738788f26c9ff97d9f6ffe81faaf9a11348afa73b0c44b9f1b3a27f8166b3e",
+       "n_rows": 615643
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_none_bayes",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5103,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3079,
+       "confusion": {
+        "tn": 608959,
+        "fp": 1581,
+        "fn": 3605,
+        "tp": 1498
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_bayes_42.npz",
+       "sha256": "d6183ed05ecbaf48a1304f1d8647e0a3b8c549a7394528e21060b6c6f8ac6b2f",
+       "n_rows": 615643
+      }
      }
     },
     "flip": {
@@ -197,6 +241,50 @@
       "lower": 0.006441492829877327,
       "upper": 0.0128,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_flip_hgb_full",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5149,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3080,
+       "confusion": {
+        "tn": 608660,
+        "fp": 1834,
+        "fn": 3903,
+        "tp": 1246
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_hgb_full_42.npz",
+       "sha256": "c18713d43101b0be888b092db68ec05eec83e7eea7599768b44a13fee66b25ff",
+       "n_rows": 615643
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_flip_bayes",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5149,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3079,
+       "confusion": {
+        "tn": 608846,
+        "fp": 1648,
+        "fn": 3718,
+        "tp": 1431
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_bayes_42.npz",
+       "sha256": "944cdd82d17c55ef0374ca8331a615625ac7ba3fa6e0598a19294ffa678cd9a2",
+       "n_rows": 615643
+      }
      }
     },
     "reference": {
@@ -271,6 +359,50 @@
       "lower": 4.000160012801457e-05,
       "upper": 8e-05,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_reference_hgb_full",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 376,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 532128,
+       "confusion": {
+        "tn": 83202,
+        "fp": 532065,
+        "fn": 313,
+        "tp": 63
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_hgb_full_42.npz",
+       "sha256": "7252094bc5b78c66e984c830b22350a4b0c983b416f4f13b43fb41da2e81fe9d",
+       "n_rows": 615643
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_reference_bayes",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 376,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 615643,
+       "confusion": {
+        "tn": 0,
+        "fp": 615267,
+        "fn": 0,
+        "tp": 376
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_bayes_42.npz",
+       "sha256": "a7340680db122f6c1153495614f91e145b396707c459fa5f219c7377e90a16a4",
+       "n_rows": 615643
+      }
      }
     }
    },
@@ -380,6 +512,50 @@
       "lower": 0.005914987072062672,
       "upper": 0.01176,
       "recovered": true
+     },
+     "outcome": {
+      "name": "f108_none_hgb_full",
+      "seed": 43,
+      "n_test": 603745,
+      "n_positives": 5105,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3019,
+       "n_flagged": 3052,
+       "confusion": {
+        "tn": 596928,
+        "fp": 1712,
+        "fn": 3765,
+        "tp": 1340
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_hgb_full_43.npz",
+       "sha256": "60ac7fa5d356a7bfbf7f03244f6885c4cf567390aab13c807ab140c442f275d4",
+       "n_rows": 603745
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_none_bayes",
+      "seed": 43,
+      "n_test": 603745,
+      "n_positives": 5105,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3019,
+       "n_flagged": 3019,
+       "confusion": {
+        "tn": 597089,
+        "fp": 1551,
+        "fn": 3637,
+        "tp": 1468
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_bayes_43.npz",
+       "sha256": "8477887008309208934d45faed793e5a63de6347f154dabbc34f213f4a7c3358",
+       "n_rows": 603745
+      }
      }
     },
     "flip": {
@@ -454,6 +630,50 @@
       "lower": 0.006264240711694069,
       "upper": 0.01245,
       "recovered": true
+     },
+     "outcome": {
+      "name": "f108_flip_hgb_full",
+      "seed": 43,
+      "n_test": 603745,
+      "n_positives": 5174,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3019,
+       "n_flagged": 3021,
+       "confusion": {
+        "tn": 596862,
+        "fp": 1709,
+        "fn": 3862,
+        "tp": 1312
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_hgb_full_43.npz",
+       "sha256": "230ac274d46a8f1a287680f0831c303d614dcca606cfbf19b10864c504c58a71",
+       "n_rows": 603745
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_flip_bayes",
+      "seed": 43,
+      "n_test": 603745,
+      "n_positives": 5174,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3019,
+       "n_flagged": 3019,
+       "confusion": {
+        "tn": 596954,
+        "fp": 1617,
+        "fn": 3772,
+        "tp": 1402
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_bayes_43.npz",
+       "sha256": "cfbb4aa13c2ccf496613d28e673062b6c6b4992665edb4eab8d14c38a7518c67",
+       "n_rows": 603745
+      }
      }
     },
     "reference": {
@@ -528,6 +748,50 @@
       "lower": 5.0002500250001525e-05,
       "upper": 0.0001,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_reference_hgb_full",
+      "seed": 43,
+      "n_test": 603745,
+      "n_positives": 335,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3019,
+       "n_flagged": 5752,
+       "confusion": {
+        "tn": 597717,
+        "fp": 5693,
+        "fn": 276,
+        "tp": 59
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_hgb_full_43.npz",
+       "sha256": "235b19490a2fcd12b3bb61446933c586f604e03a72d04c4d9fa0b6b37f6f154f",
+       "n_rows": 603745
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_reference_bayes",
+      "seed": 43,
+      "n_test": 603745,
+      "n_positives": 335,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3019,
+       "n_flagged": 603745,
+       "confusion": {
+        "tn": 0,
+        "fp": 603410,
+        "fn": 0,
+        "tp": 335
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_bayes_43.npz",
+       "sha256": "cc240a20187bb4327e006e6229e9fc5556869c08929dc787bd383e4fe3776277",
+       "n_rows": 603745
+      }
      }
     }
    },
@@ -637,6 +901,50 @@
       "lower": 0.006380713504830715,
       "upper": 0.01268,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_none_hgb_full",
+      "seed": 44,
+      "n_test": 609725,
+      "n_positives": 5230,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3049,
+       "n_flagged": 3064,
+       "confusion": {
+        "tn": 602819,
+        "fp": 1676,
+        "fn": 3842,
+        "tp": 1388
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_hgb_full_44.npz",
+       "sha256": "5bddc983f2bcb45770cec58ec1fa583716dbeee90668d1ba52f3184678eedad2",
+       "n_rows": 609725
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_none_bayes",
+      "seed": 44,
+      "n_test": 609725,
+      "n_positives": 5230,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3049,
+       "n_flagged": 3049,
+       "confusion": {
+        "tn": 603040,
+        "fp": 1455,
+        "fn": 3636,
+        "tp": 1594
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_bayes_44.npz",
+       "sha256": "bad17659ec623d2fb82091a6f125e3260c9d00e03e4eda3238f5cdf5463ba576",
+       "n_rows": 609725
+      }
      }
     },
     "flip": {
@@ -711,6 +1019,50 @@
       "lower": 0.006639077348033151,
       "upper": 0.01319,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_flip_hgb_full",
+      "seed": 44,
+      "n_test": 609725,
+      "n_positives": 5303,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3049,
+       "n_flagged": 3049,
+       "confusion": {
+        "tn": 602692,
+        "fp": 1730,
+        "fn": 3984,
+        "tp": 1319
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_hgb_full_44.npz",
+       "sha256": "4b9ea327ce8c4c02365b0294cc63e21da7937011ad440f2238d54013b9c8b786",
+       "n_rows": 609725
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_flip_bayes",
+      "seed": 44,
+      "n_test": 609725,
+      "n_positives": 5303,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3049,
+       "n_flagged": 3049,
+       "confusion": {
+        "tn": 602901,
+        "fp": 1521,
+        "fn": 3775,
+        "tp": 1528
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_bayes_44.npz",
+       "sha256": "1086a52b68a8177d4a32782f7ac91564695955356dad99937e5ab5201e129e3b",
+       "n_rows": 609725
+      }
      }
     },
     "reference": {
@@ -785,6 +1137,50 @@
       "lower": 4.5002025182261374e-05,
       "upper": 9e-05,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_reference_hgb_full",
+      "seed": 44,
+      "n_test": 609725,
+      "n_positives": 378,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3049,
+       "n_flagged": 3672,
+       "confusion": {
+        "tn": 605740,
+        "fp": 3607,
+        "fn": 313,
+        "tp": 65
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_hgb_full_44.npz",
+       "sha256": "bda9cde0ce739ed36f96c24a2e66b4593eca99c9cae5d757f325a8d29353f0e7",
+       "n_rows": 609725
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_reference_bayes",
+      "seed": 44,
+      "n_test": 609725,
+      "n_positives": 378,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3049,
+       "n_flagged": 609725,
+       "confusion": {
+        "tn": 0,
+        "fp": 609347,
+        "fn": 0,
+        "tp": 378
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_bayes_44.npz",
+       "sha256": "2676d53e94fab1a77aae1d33cca4abdb74e3b78a145be02cb7d619e2404c253e",
+       "n_rows": 609725
+      }
      }
     }
    },
@@ -894,6 +1290,50 @@
       "lower": 0.005909927239981849,
       "upper": 0.01175,
       "recovered": true
+     },
+     "outcome": {
+      "name": "f108_none_hgb_full",
+      "seed": 45,
+      "n_test": 618114,
+      "n_positives": 5031,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3091,
+       "n_flagged": 3091,
+       "confusion": {
+        "tn": 611276,
+        "fp": 1807,
+        "fn": 3747,
+        "tp": 1284
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_hgb_full_45.npz",
+       "sha256": "4755d780158cf3e9871379610d48d2d56d953357e7af040fcdcd703805ad165d",
+       "n_rows": 618114
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_none_bayes",
+      "seed": 45,
+      "n_test": 618114,
+      "n_positives": 5031,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3091,
+       "n_flagged": 3091,
+       "confusion": {
+        "tn": 611420,
+        "fp": 1663,
+        "fn": 3603,
+        "tp": 1428
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_bayes_45.npz",
+       "sha256": "3088f4ae03830a942212aa8256226d4c0280ba004612c910c90efb1264877080",
+       "n_rows": 618114
+      }
      }
     },
     "flip": {
@@ -968,6 +1408,50 @@
       "lower": 0.006142733170807768,
       "upper": 0.01221,
       "recovered": true
+     },
+     "outcome": {
+      "name": "f108_flip_hgb_full",
+      "seed": 45,
+      "n_test": 618114,
+      "n_positives": 5118,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3091,
+       "n_flagged": 3170,
+       "confusion": {
+        "tn": 611046,
+        "fp": 1950,
+        "fn": 3898,
+        "tp": 1220
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_hgb_full_45.npz",
+       "sha256": "73ec3f52b5e82c2e6d32aa8c45b3fab4b53584fd054ed260b80518bdf7ecb815",
+       "n_rows": 618114
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_flip_bayes",
+      "seed": 45,
+      "n_test": 618114,
+      "n_positives": 5118,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3091,
+       "n_flagged": 3091,
+       "confusion": {
+        "tn": 611245,
+        "fp": 1751,
+        "fn": 3778,
+        "tp": 1340
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_bayes_45.npz",
+       "sha256": "0cc0390639ca949865aae696d81744b72db1dde56d4bf49d428887f9c5e35e6b",
+       "n_rows": 618114
+      }
      }
     },
     "reference": {
@@ -1042,6 +1526,50 @@
       "lower": 4.000160012801457e-05,
       "upper": 8e-05,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_reference_hgb_full",
+      "seed": 45,
+      "n_test": 618114,
+      "n_positives": 400,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3091,
+       "n_flagged": 3091,
+       "confusion": {
+        "tn": 614718,
+        "fp": 2996,
+        "fn": 305,
+        "tp": 95
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_hgb_full_45.npz",
+       "sha256": "bd9a7f90ab55f6505c019e64da453d8f574b82789a1a4ce4e9f602723e5c1927",
+       "n_rows": 618114
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_reference_bayes",
+      "seed": 45,
+      "n_test": 618114,
+      "n_positives": 400,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3091,
+       "n_flagged": 618114,
+       "confusion": {
+        "tn": 0,
+        "fp": 617714,
+        "fn": 0,
+        "tp": 400
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_bayes_45.npz",
+       "sha256": "fea719edaa383b98c12f2e17c4b7d4b4a713ad3f5a47213ae50b609c9b1ae69d",
+       "n_rows": 618114
+      }
      }
     }
    },
@@ -1151,6 +1679,50 @@
       "lower": 0.006304749870935045,
       "upper": 0.01253,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_none_hgb_full",
+      "seed": 46,
+      "n_test": 602629,
+      "n_positives": 4979,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3014,
+       "n_flagged": 3019,
+       "confusion": {
+        "tn": 595944,
+        "fp": 1706,
+        "fn": 3666,
+        "tp": 1313
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_hgb_full_46.npz",
+       "sha256": "ce864cfb03684df5c76d4771ae2cdda87d883b26a4aa14406d948b2ea148139c",
+       "n_rows": 602629
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_none_bayes",
+      "seed": 46,
+      "n_test": 602629,
+      "n_positives": 4979,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3014,
+       "n_flagged": 3014,
+       "confusion": {
+        "tn": 596101,
+        "fp": 1549,
+        "fn": 3514,
+        "tp": 1465
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_none_bayes_46.npz",
+       "sha256": "cab61666e44201e862a4396d129cacb56034f4552d2dd65cc6643f202e4e4a08",
+       "n_rows": 602629
+      }
      }
     },
     "flip": {
@@ -1225,6 +1797,50 @@
       "lower": 0.006694820623176501,
       "upper": 0.0133,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_flip_hgb_full",
+      "seed": 46,
+      "n_test": 602629,
+      "n_positives": 5022,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3014,
+       "n_flagged": 3026,
+       "confusion": {
+        "tn": 595850,
+        "fp": 1757,
+        "fn": 3753,
+        "tp": 1269
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_hgb_full_46.npz",
+       "sha256": "8e5d49ef8fc932a81f48b6545783ef90d0ff4b22766e367efccb76b509bc18bc",
+       "n_rows": 602629
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_flip_bayes",
+      "seed": 46,
+      "n_test": 602629,
+      "n_positives": 5022,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3014,
+       "n_flagged": 3014,
+       "confusion": {
+        "tn": 595994,
+        "fp": 1613,
+        "fn": 3621,
+        "tp": 1401
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_flip_bayes_46.npz",
+       "sha256": "a0493998631f72e766bcd59192f2a36df14c9b0a4db19928aeb45d56a11fb55c",
+       "n_rows": 602629
+      }
      }
     },
     "reference": {
@@ -1299,6 +1915,50 @@
       "lower": 2.5000625031246226e-05,
       "upper": 5e-05,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_reference_hgb_full",
+      "seed": 46,
+      "n_test": 602629,
+      "n_positives": 301,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3014,
+       "n_flagged": 6550,
+       "confusion": {
+        "tn": 595842,
+        "fp": 6486,
+        "fn": 237,
+        "tp": 64
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_hgb_full_46.npz",
+       "sha256": "7de471639ea9d7b42975f87954aca197cb04866f8f787fa2509675872a38ca9b",
+       "n_rows": 602629
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_reference_bayes",
+      "seed": 46,
+      "n_test": 602629,
+      "n_positives": 301,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3014,
+       "n_flagged": 602629,
+       "confusion": {
+        "tn": 0,
+        "fp": 602328,
+        "fn": 0,
+        "tp": 301
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_reference_bayes_46.npz",
+       "sha256": "8cbb44cdb5be0b23706581c1b7bb5f123b59cad2eccad7d04a978f224f816666",
+       "n_rows": 602629
+      }
      }
     }
    },
@@ -1376,5 +2036,30 @@
    }
   }
  },
- "elapsed_s": 114.8
+ "elapsed_s": 114.8,
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "none: HGB on the full training days (curve fraction 1.0), seeds 42, 43, 44, 45, 46",
+   "flip: HGB on the full training days (curve fraction 1.0), seeds 42, 43, 44, 45, 46",
+   "reference: HGB on the full training days (curve fraction 1.0), seeds 42, 43, 44, 45, 46",
+   "none: the exact Bayes posterior (bayes_auprc), seeds 42, 43, 44, 45, 46",
+   "flip: the exact Bayes posterior (bayes_auprc), seeds 42, 43, 44, 45, 46",
+   "reference: the exact Bayes posterior (bayes_auprc), seeds 42, 43, 44, 45, 46"
+  ],
+  "uncovered_lanes": {
+   "learning-curve fits at fractions 1/32 to 1/2": "rebuildable exactly by the same seed_run, but not saved: five more 615k-row files per arm and seed (about 5 MB each); the full-data fit is the model",
+   "cover_hart": "a 1-NN error on a 100k-row test subsample; no per-row score"
+  },
+  "n_blocks": 30,
+  "metric_check": {
+   "n_checks": 865,
+   "all_within_tolerance": true,
+   "max_abs_diff": 0.0,
+   "not_identical": []
+  },
+  "row_check": "every stored leaf of each row except 'seconds' was rebuilt by f108_ceiling.seed_run and compared"
+ }
 }

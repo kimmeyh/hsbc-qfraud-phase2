@@ -404,5 +404,2183 @@
       "spearman_all_mean": 0.13438601360886657,
       "spearman_frauds_mean": 0.6840954819417054
     }
-  ]
+  ],
+  "outcome_backfill": {
+    "date": "2026-10-23",
+    "generator": "experiments/phase2/src/backfill_outcomes.py",
+    "decision": "Sprint 28 Manual Validation DV4",
+    "covered_lanes": [
+      "cvqboost_proxy_1e6bf03caab3676b, seeds 42-51, stored Phase 1 predictions",
+      "cvqboost_proxy_47012b1404d5d4de, seeds 42-51, stored Phase 1 predictions",
+      "cvqboost_proxy_640ed4cf9c46ea4b, seeds 42-51, stored Phase 1 predictions",
+      "xgboost_03999a57a5107f44, seeds 42-51, stored Phase 1 predictions",
+      "xgboost_d68789d82137da1d, seeds 42-51, stored Phase 1 predictions"
+    ],
+    "uncovered_lanes": {
+      "oracle": "not a model: it picks each row's better rank using the row's label",
+      "fraud_side_only, legit_side_only": "not models: each uses the row's label to pick a rank",
+      "label_free_mean_rank, label_free_max_rank": "derived rank combinations of two covered lanes; recomputable from their per-row files"
+    },
+    "n_blocks": 50,
+    "metric_check": {
+      "n_checks": 37,
+      "all_within_tolerance": true,
+      "max_abs_diff": 0.0,
+      "not_identical": []
+    },
+    "placement": "one block per family and seed, listed here; pairs share families",
+    "tie_handling": "the file's recalls give the tie at the cut fractional credit (oracle_gap.recall_at_budget); a block flags the whole tie (outcome_record), so its n_flagged can exceed n_budget by design",
+    "blocks": [
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 42,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 298,
+          "confusion": {
+            "tn": 56434,
+            "fp": 217,
+            "fn": 14,
+            "tp": 81
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.13725490889645597,
+            "confusion": {
+              "tn": 56640,
+              "fp": 11,
+              "fn": 20,
+              "tp": 75
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0326797382318228,
+            "confusion": {
+              "tn": 56434,
+              "fp": 217,
+              "fn": 14,
+              "tp": 81
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_42.npz",
+          "sha256": "f0d5a9c8d38fdcd343b4e06924937900b508bd7e8e5a614baeebc5a467031aab"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 43,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 290,
+          "confusion": {
+            "tn": 56436,
+            "fp": 215,
+            "fn": 20,
+            "tp": 75
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.18954248674912128,
+            "confusion": {
+              "tn": 56643,
+              "fp": 8,
+              "fn": 26,
+              "tp": 69
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.039215683360370124,
+            "confusion": {
+              "tn": 56476,
+              "fp": 175,
+              "fn": 20,
+              "tp": 75
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_43.npz",
+          "sha256": "ee7b8b68a6fc133fbbe180f7a878119374c35b20eb3a5435220844e99c27dce2"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 44,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 291,
+          "confusion": {
+            "tn": 56440,
+            "fp": 211,
+            "fn": 15,
+            "tp": 80
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.1699346447516218,
+            "confusion": {
+              "tn": 56639,
+              "fp": 12,
+              "fn": 24,
+              "tp": 71
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03267973857504425,
+            "confusion": {
+              "tn": 56440,
+              "fp": 211,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_44.npz",
+          "sha256": "e138b30419c16de024baf931dfe97802ababee591262d8a16668a957eb8a441d"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 45,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 290,
+          "confusion": {
+            "tn": 56439,
+            "fp": 212,
+            "fn": 17,
+            "tp": 78
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.15686274861443772,
+            "confusion": {
+              "tn": 56641,
+              "fp": 10,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.032679739501092875,
+            "confusion": {
+              "tn": 56450,
+              "fp": 201,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_45.npz",
+          "sha256": "9af1c71277713cca37e75d722f8894a363a593f5414f0434d5e33d8fd8571036"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 46,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 299,
+          "confusion": {
+            "tn": 56432,
+            "fp": 219,
+            "fn": 15,
+            "tp": 80
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.12418301035023782,
+            "confusion": {
+              "tn": 56632,
+              "fp": 19,
+              "fn": 18,
+              "tp": 77
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03267973857504414,
+            "confusion": {
+              "tn": 56423,
+              "fp": 228,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_46.npz",
+          "sha256": "e74994858fea063e8a523e3c5904b6c05de2ecb11b6fdedd907ce906edb85d76"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 47,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 299,
+          "confusion": {
+            "tn": 56428,
+            "fp": 223,
+            "fn": 19,
+            "tp": 76
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.15686274976066783,
+            "confusion": {
+              "tn": 56639,
+              "fp": 12,
+              "fn": 22,
+              "tp": 73
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.032679739533473695,
+            "confusion": {
+              "tn": 56428,
+              "fp": 223,
+              "fn": 19,
+              "tp": 76
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_47.npz",
+          "sha256": "75366b7e43e7854949f9aa7e4a81ed6bf204373131d4cacbdbada7bed23095f8"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 48,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 306,
+          "confusion": {
+            "tn": 56430,
+            "fp": 221,
+            "fn": 10,
+            "tp": 85
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.1372549065845579,
+            "confusion": {
+              "tn": 56631,
+              "fp": 20,
+              "fn": 18,
+              "tp": 77
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03267973966298926,
+            "confusion": {
+              "tn": 56430,
+              "fp": 221,
+              "fn": 10,
+              "tp": 85
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_48.npz",
+          "sha256": "88c7ea3d3373a60c20cbd34ce8058bd582b7f82cca7754165d8a205671085e94"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 49,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 294,
+          "confusion": {
+            "tn": 56435,
+            "fp": 216,
+            "fn": 17,
+            "tp": 78
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.19607843718141182,
+            "confusion": {
+              "tn": 56646,
+              "fp": 5,
+              "fn": 28,
+              "tp": 67
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.032679739695371746,
+            "confusion": {
+              "tn": 56435,
+              "fp": 216,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_49.npz",
+          "sha256": "4cb44585906b1572f9266c510febd814b88d606b485c8e925918e1ed8fdecf77"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 50,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 288,
+          "confusion": {
+            "tn": 56438,
+            "fp": 213,
+            "fn": 20,
+            "tp": 75
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.15032680141361737,
+            "confusion": {
+              "tn": 56635,
+              "fp": 16,
+              "fn": 24,
+              "tp": 71
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.032679740083923436,
+            "confusion": {
+              "tn": 56448,
+              "fp": 203,
+              "fn": 20,
+              "tp": 75
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_50.npz",
+          "sha256": "fdd51fba22ad8c5fc44273ce24b158eec405dfa6bcc17d12024a2431c24fac5b"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_1e6bf03caab3676b",
+        "seed": 51,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 289,
+          "confusion": {
+            "tn": 56437,
+            "fp": 214,
+            "fn": 20,
+            "tp": 75
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.13071895891099733,
+            "confusion": {
+              "tn": 56636,
+              "fp": 15,
+              "fn": 26,
+              "tp": 69
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03267973972774879,
+            "confusion": {
+              "tn": 56447,
+              "fp": 204,
+              "fn": 20,
+              "tp": 75
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_1e6bf03caab3676b_stratified_51.npz",
+          "sha256": "a0cec1976b5ea8cd6f514f93043f8bff3b7903a47ea42fb1c9559ca37673041f"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 42,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 287,
+          "confusion": {
+            "tn": 56445,
+            "fp": 206,
+            "fn": 14,
+            "tp": 81
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.2599469501216427,
+            "confusion": {
+              "tn": 56645,
+              "fp": 6,
+              "fn": 19,
+              "tp": 76
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.02652519867989045,
+            "confusion": {
+              "tn": 56437,
+              "fp": 214,
+              "fn": 14,
+              "tp": 81
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_42.npz",
+          "sha256": "6965aa8104e11bd2a6b3cb06ca3ced661ac5d2930a606a3b784063aa3b83730f"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 43,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 285,
+          "confusion": {
+            "tn": 56442,
+            "fp": 209,
+            "fn": 19,
+            "tp": 76
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.2944297089006735,
+            "confusion": {
+              "tn": 56645,
+              "fp": 6,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.031830238306729486,
+            "confusion": {
+              "tn": 56488,
+              "fp": 163,
+              "fn": 19,
+              "tp": 76
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_43.npz",
+          "sha256": "45c4b04fdabc05c632240d9178df8b7376597d947dc5751c5c629082ed1d5fec"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 44,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56447,
+            "fp": 204,
+            "fn": 15,
+            "tp": 80
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.3103448285048537,
+            "confusion": {
+              "tn": 56645,
+              "fp": 6,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.026525199017511603,
+            "confusion": {
+              "tn": 56425,
+              "fp": 226,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_44.npz",
+          "sha256": "d026b67e6200f14ed3011817bcb52c933d4567da87e1fe7436c6fdee68668f6f"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 45,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 286,
+          "confusion": {
+            "tn": 56444,
+            "fp": 207,
+            "fn": 16,
+            "tp": 79
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.23342175111285818,
+            "confusion": {
+              "tn": 56643,
+              "fp": 8,
+              "fn": 20,
+              "tp": 75
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.029177718909666694,
+            "confusion": {
+              "tn": 56479,
+              "fp": 172,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_45.npz",
+          "sha256": "91f7b57e6f97760cea66f45f83a599cc153fd7da3c95da48ce42acd5f4657c83"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 46,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 285,
+          "confusion": {
+            "tn": 56446,
+            "fp": 205,
+            "fn": 15,
+            "tp": 80
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.24668435094396546,
+            "confusion": {
+              "tn": 56641,
+              "fp": 10,
+              "fn": 18,
+              "tp": 77
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.029177718599959157,
+            "confusion": {
+              "tn": 56439,
+              "fp": 212,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_46.npz",
+          "sha256": "1de683ed7f428531ec39007405055ec6e3e55b647a3ca54fdfd33e9119b409ef"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 47,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 285,
+          "confusion": {
+            "tn": 56443,
+            "fp": 208,
+            "fn": 18,
+            "tp": 77
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.2201591518815278,
+            "confusion": {
+              "tn": 56640,
+              "fp": 11,
+              "fn": 21,
+              "tp": 74
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.027267904410298402,
+            "confusion": {
+              "tn": 56439,
+              "fp": 212,
+              "fn": 18,
+              "tp": 77
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_47.npz",
+          "sha256": "a3ff3e3b5403cb75dc5b144c303cfa130600644388355e591c84514a86b36c70"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 48,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56452,
+            "fp": 199,
+            "fn": 10,
+            "tp": 85
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.18832891321013556,
+            "confusion": {
+              "tn": 56633,
+              "fp": 18,
+              "fn": 13,
+              "tp": 82
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.029177718454702684,
+            "confusion": {
+              "tn": 56448,
+              "fp": 203,
+              "fn": 10,
+              "tp": 85
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_48.npz",
+          "sha256": "2fc3aec0f01548cb2d3ea6b903ff7d2b710881d9f6d192843d9807fb8b7b81d8"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 49,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 295,
+          "confusion": {
+            "tn": 56433,
+            "fp": 218,
+            "fn": 18,
+            "tp": 77
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.28912466957612404,
+            "confusion": {
+              "tn": 56647,
+              "fp": 4,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.026525199043682113,
+            "confusion": {
+              "tn": 56433,
+              "fp": 218,
+              "fn": 18,
+              "tp": 77
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_49.npz",
+          "sha256": "4c5de9a1029040463883ffec412ebf7110ebf12c0ee7cdb4a0cdfff252890b3d"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 50,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 303,
+          "confusion": {
+            "tn": 56424,
+            "fp": 227,
+            "fn": 19,
+            "tp": 76
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.38461538631047465,
+            "confusion": {
+              "tn": 56648,
+              "fp": 3,
+              "fn": 27,
+              "tp": 68
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.026525199078578587,
+            "confusion": {
+              "tn": 56424,
+              "fp": 227,
+              "fn": 19,
+              "tp": 76
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_50.npz",
+          "sha256": "6d9396c42eb66cfa1f59d6c2b68a3120fcbb78a27ab430d0eff14ab927fc9d7c"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_47012b1404d5d4de",
+        "seed": 51,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 285,
+          "confusion": {
+            "tn": 56442,
+            "fp": 209,
+            "fn": 19,
+            "tp": 76
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.1909814327302093,
+            "confusion": {
+              "tn": 56637,
+              "fp": 14,
+              "fn": 23,
+              "tp": 72
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.02652519884870075,
+            "confusion": {
+              "tn": 56442,
+              "fp": 209,
+              "fn": 19,
+              "tp": 76
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_47012b1404d5d4de_stratified_51.npz",
+          "sha256": "b775415f01e055804a1abccc45f928109c0dc76592d2d955f5dc2a561194de72"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 42,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 308,
+          "confusion": {
+            "tn": 56424,
+            "fp": 227,
+            "fn": 14,
+            "tp": 81
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.15384615790402717,
+            "confusion": {
+              "tn": 56639,
+              "fp": 12,
+              "fn": 19,
+              "tp": 76
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03296703443152754,
+            "confusion": {
+              "tn": 56424,
+              "fp": 227,
+              "fn": 14,
+              "tp": 81
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_42.npz",
+          "sha256": "061fcc8936a065bca296c50ceb542d6ea18ed979d643d8d28945ada04e5bf88e"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 43,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 326,
+          "confusion": {
+            "tn": 56400,
+            "fp": 251,
+            "fn": 20,
+            "tp": 75
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.21978022554666904,
+            "confusion": {
+              "tn": 56643,
+              "fp": 8,
+              "fn": 26,
+              "tp": 69
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.043956042888182945,
+            "confusion": {
+              "tn": 56486,
+              "fp": 165,
+              "fn": 20,
+              "tp": 75
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_43.npz",
+          "sha256": "437445869363cf1dece7262e15d14cb59d8aa3ab11190965f7c0b76aa0fd6d1a"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 44,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 351,
+          "confusion": {
+            "tn": 56380,
+            "fp": 271,
+            "fn": 15,
+            "tp": 80
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.19780220768754958,
+            "confusion": {
+              "tn": 56639,
+              "fp": 12,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03296703461459155,
+            "confusion": {
+              "tn": 56380,
+              "fp": 271,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_44.npz",
+          "sha256": "536f4d8bad41854800d8fbfabb576a31c0eedfea5d764781a9bcd548dd55221a"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 45,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 340,
+          "confusion": {
+            "tn": 56389,
+            "fp": 262,
+            "fn": 17,
+            "tp": 78
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.2087912180663537,
+            "confusion": {
+              "tn": 56643,
+              "fp": 8,
+              "fn": 26,
+              "tp": 69
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.043956040355822346,
+            "confusion": {
+              "tn": 56486,
+              "fp": 165,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_45.npz",
+          "sha256": "0215b5d6061fe395c69dcc3e8f1e13a140524b7b514e0e33e887011d94b5c08d"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 46,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56447,
+            "fp": 204,
+            "fn": 15,
+            "tp": 80
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.20879122038514064,
+            "confusion": {
+              "tn": 56637,
+              "fp": 14,
+              "fn": 21,
+              "tp": 74
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.04395603529110542,
+            "confusion": {
+              "tn": 56434,
+              "fp": 217,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_46.npz",
+          "sha256": "2125228baf6858b8808bc47d048c06651a56f3f3ea3e3bad306dcee81ee64809"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 47,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 365,
+          "confusion": {
+            "tn": 56363,
+            "fp": 288,
+            "fn": 18,
+            "tp": 77
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.17582418509931952,
+            "confusion": {
+              "tn": 56637,
+              "fp": 14,
+              "fn": 23,
+              "tp": 72
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.03604395483573551,
+            "confusion": {
+              "tn": 56447,
+              "fp": 204,
+              "fn": 19,
+              "tp": 76
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_47.npz",
+          "sha256": "af30a1192b5bf0f5fa49aa9d4de68fa04bf6af5f5277c36660e53cd5f7561ae3"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 48,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 289,
+          "confusion": {
+            "tn": 56447,
+            "fp": 204,
+            "fn": 10,
+            "tp": 85
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.1868131881556428,
+            "confusion": {
+              "tn": 56632,
+              "fp": 19,
+              "fn": 19,
+              "tp": 76
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.032967035163779135,
+            "confusion": {
+              "tn": 56369,
+              "fp": 282,
+              "fn": 10,
+              "tp": 85
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_48.npz",
+          "sha256": "97eaa0b904fae5d49c0a038c7b539237cb417da19f123465d866f5d713f72bf1"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 49,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 350,
+          "confusion": {
+            "tn": 56377,
+            "fp": 274,
+            "fn": 19,
+            "tp": 76
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.2307692405935764,
+            "confusion": {
+              "tn": 56643,
+              "fp": 8,
+              "fn": 29,
+              "tp": 66
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0439560274499205,
+            "confusion": {
+              "tn": 56466,
+              "fp": 185,
+              "fn": 19,
+              "tp": 76
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_49.npz",
+          "sha256": "010876fd5519b3aa3ed3e245d0a0943292cf4ff740bbc34a68c2a54d90d6b499"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 50,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 345,
+          "confusion": {
+            "tn": 56380,
+            "fp": 271,
+            "fn": 21,
+            "tp": 74
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.17582418589260507,
+            "confusion": {
+              "tn": 56635,
+              "fp": 16,
+              "fn": 24,
+              "tp": 71
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.04395602287336353,
+            "confusion": {
+              "tn": 56464,
+              "fp": 187,
+              "fn": 22,
+              "tp": 73
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_50.npz",
+          "sha256": "337705a4b38dc4f32a3a09914754e78174dfd8cf9eb512398025c2487a590952"
+        }
+      },
+      {
+        "name": "cvqboost_proxy_640ed4cf9c46ea4b",
+        "seed": 51,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 360,
+          "confusion": {
+            "tn": 56366,
+            "fp": 285,
+            "fn": 20,
+            "tp": 75
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.17582418412298778,
+            "confusion": {
+              "tn": 56636,
+              "fp": 15,
+              "fn": 26,
+              "tp": 69
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.032967034523060434,
+            "confusion": {
+              "tn": 56366,
+              "fp": 285,
+              "fn": 20,
+              "tp": 75
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/cvqboost_proxy_640ed4cf9c46ea4b_stratified_51.npz",
+          "sha256": "7c1555db2481c6524454ddd02afe4ba3d3eb2b3fc3d784bf765877460d44ec8c"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 42,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56450,
+            "fp": 201,
+            "fn": 12,
+            "tp": 83
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.20104385912418365,
+            "confusion": {
+              "tn": 56639,
+              "fp": 12,
+              "fn": 17,
+              "tp": 78
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.008174099698662748,
+            "confusion": {
+              "tn": 56469,
+              "fp": 182,
+              "fn": 12,
+              "tp": 83
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_42.npz",
+          "sha256": "662782d36014175121db9954f14afb07e401c5e9ab07824666a166b8682abc64"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 43,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56446,
+            "fp": 205,
+            "fn": 16,
+            "tp": 79
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.4863516092300415,
+            "confusion": {
+              "tn": 56646,
+              "fp": 5,
+              "fn": 29,
+              "tp": 66
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.013843739330768415,
+            "confusion": {
+              "tn": 56483,
+              "fp": 168,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_43.npz",
+          "sha256": "9c7d16fd26f906938f64ad5a71f02e02c0e9dbce1e34633567f88c0dc3c51510"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 44,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56448,
+            "fp": 203,
+            "fn": 14,
+            "tp": 81
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.7642822861671448,
+            "confusion": {
+              "tn": 56644,
+              "fp": 7,
+              "fn": 29,
+              "tp": 66
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.00866780396550891,
+            "confusion": {
+              "tn": 56452,
+              "fp": 199,
+              "fn": 14,
+              "tp": 81
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_44.npz",
+          "sha256": "e3034b36c38dbe2e91b2d3c8bd8b89294f830dc34e8d35ccb97516a510ebd1ea"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 45,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56451,
+            "fp": 200,
+            "fn": 11,
+            "tp": 84
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.2985910475254059,
+            "confusion": {
+              "tn": 56640,
+              "fp": 11,
+              "fn": 19,
+              "tp": 76
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.00728395236656063,
+            "confusion": {
+              "tn": 56413,
+              "fp": 238,
+              "fn": 11,
+              "tp": 84
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_45.npz",
+          "sha256": "45b1d97266f08e4c8253e2a07243892c4fe5e9dd50d6382a41b9b1793c916d43"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 46,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56448,
+            "fp": 203,
+            "fn": 14,
+            "tp": 81
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.23217551410198212,
+            "confusion": {
+              "tn": 56630,
+              "fp": 21,
+              "fn": 18,
+              "tp": 77
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0103546826541423,
+            "confusion": {
+              "tn": 56468,
+              "fp": 183,
+              "fn": 14,
+              "tp": 81
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_46.npz",
+          "sha256": "b4a9446d6487e6356a8a11c004589bcf1fc3cbf5f0099c3cded0cc1bdadf7f3c"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 47,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56446,
+            "fp": 205,
+            "fn": 16,
+            "tp": 79
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.4174082279205322,
+            "confusion": {
+              "tn": 56637,
+              "fp": 14,
+              "fn": 22,
+              "tp": 73
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.010448735170066252,
+            "confusion": {
+              "tn": 56426,
+              "fp": 225,
+              "fn": 16,
+              "tp": 79
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_47.npz",
+          "sha256": "485d723a678acd296f4c3f8fed30fb99a8c1463a7a0867ce13ed17e7245fa84a"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 48,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56453,
+            "fp": 198,
+            "fn": 9,
+            "tp": 86
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.6629126667976379,
+            "confusion": {
+              "tn": 56637,
+              "fp": 14,
+              "fn": 21,
+              "tp": 74
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.008840780518948956,
+            "confusion": {
+              "tn": 56397,
+              "fp": 254,
+              "fn": 8,
+              "tp": 87
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_48.npz",
+          "sha256": "6a6095d228e97357eef8989545c3408ebd9957cb95fbe0a1c52f8d856909b0a2"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 49,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56445,
+            "fp": 206,
+            "fn": 17,
+            "tp": 78
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.5883074402809143,
+            "confusion": {
+              "tn": 56645,
+              "fp": 6,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.01017319530248636,
+            "confusion": {
+              "tn": 56459,
+              "fp": 192,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_49.npz",
+          "sha256": "4aedb87eec9be3530c8a2437a761c7530a3befbe9adbe6f0780a9434b5e42c7b"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 50,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56445,
+            "fp": 206,
+            "fn": 17,
+            "tp": 78
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.5370070934295654,
+            "confusion": {
+              "tn": 56638,
+              "fp": 13,
+              "fn": 24,
+              "tp": 71
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.008040952719747974,
+            "confusion": {
+              "tn": 56452,
+              "fp": 199,
+              "fn": 18,
+              "tp": 77
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_50.npz",
+          "sha256": "92de438885bc8ac77031a1dcc85c1bd05f0d890794f8cf0ddbc0dcac0550b444"
+        }
+      },
+      {
+        "name": "xgboost_03999a57a5107f44",
+        "seed": 51,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56444,
+            "fp": 207,
+            "fn": 18,
+            "tp": 77
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.5368416905403137,
+            "confusion": {
+              "tn": 56641,
+              "fp": 10,
+              "fn": 27,
+              "tp": 68
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.008148308321833485,
+            "confusion": {
+              "tn": 56441,
+              "fp": 210,
+              "fn": 18,
+              "tp": 77
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_03999a57a5107f44_stratified_51.npz",
+          "sha256": "ac694ebe99c21bc65e0faaab213e5d38fea4c697f10bacaa04fa778348ac4763"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 42,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56452,
+            "fp": 199,
+            "fn": 10,
+            "tp": 85
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.5677443742752075,
+            "confusion": {
+              "tn": 56648,
+              "fp": 3,
+              "fn": 18,
+              "tp": 77
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0032567262649536043,
+            "confusion": {
+              "tn": 56448,
+              "fp": 203,
+              "fn": 10,
+              "tp": 85
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_42.npz",
+          "sha256": "44e357c202a48a5023c96fb35eedaa77bf7f35bd16a34dd8ffdae10e34bfbf68"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 43,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56446,
+            "fp": 205,
+            "fn": 16,
+            "tp": 79
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.9257394075393677,
+            "confusion": {
+              "tn": 56648,
+              "fp": 3,
+              "fn": 26,
+              "tp": 69
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0036281139217316733,
+            "confusion": {
+              "tn": 56468,
+              "fp": 183,
+              "fn": 17,
+              "tp": 78
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_43.npz",
+          "sha256": "0db898a7cdad9370bdf3224d387694d3529db83cd1d20380e3266c5126a6ab1b"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 44,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56451,
+            "fp": 200,
+            "fn": 11,
+            "tp": 84
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.7403134107589722,
+            "confusion": {
+              "tn": 56645,
+              "fp": 6,
+              "fn": 23,
+              "tp": 72
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0019162553688511226,
+            "confusion": {
+              "tn": 56420,
+              "fp": 231,
+              "fn": 11,
+              "tp": 84
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_44.npz",
+          "sha256": "e010b3dde0266b0d58f84d56ffec266ad7e8ef84ac2f81165cfdae4c1d353151"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 45,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56449,
+            "fp": 202,
+            "fn": 13,
+            "tp": 82
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.9323313236236572,
+            "confusion": {
+              "tn": 56650,
+              "fp": 1,
+              "fn": 23,
+              "tp": 72
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.001726613892242307,
+            "confusion": {
+              "tn": 56417,
+              "fp": 234,
+              "fn": 11,
+              "tp": 84
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_45.npz",
+          "sha256": "2af644c14290f02f8d64edcd481438047d2e6d1200b16284a28c09a18ff9cf6f"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 46,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56449,
+            "fp": 202,
+            "fn": 13,
+            "tp": 82
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.7161316275596619,
+            "confusion": {
+              "tn": 56641,
+              "fp": 10,
+              "fn": 19,
+              "tp": 76
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.01733820237219333,
+            "confusion": {
+              "tn": 56446,
+              "fp": 205,
+              "fn": 13,
+              "tp": 82
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_46.npz",
+          "sha256": "807525ebcabac4ee71b8062c043afa8ac95a650d6826461d60ae1a5d90c92c5d"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 47,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56446,
+            "fp": 205,
+            "fn": 16,
+            "tp": 79
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.4415207803249359,
+            "confusion": {
+              "tn": 56646,
+              "fp": 5,
+              "fn": 20,
+              "tp": 75
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0035325695294886766,
+            "confusion": {
+              "tn": 56442,
+              "fp": 209,
+              "fn": 16,
+              "tp": 79
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_47.npz",
+          "sha256": "a2fdc2e3416d9aa23e7a7b8b79529c2d080d14b5cd942aa63bd6c8741c2c881e"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 48,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56454,
+            "fp": 197,
+            "fn": 8,
+            "tp": 87
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.6335874795913696,
+            "confusion": {
+              "tn": 56645,
+              "fp": 6,
+              "fn": 14,
+              "tp": 81
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.0019043406890705099,
+            "confusion": {
+              "tn": 56438,
+              "fp": 213,
+              "fn": 8,
+              "tp": 87
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_48.npz",
+          "sha256": "cf9d4a65c049ccd68ef5b12b8c081247df4f17c93c5335df5511d28a55cdb4de"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 49,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56448,
+            "fp": 203,
+            "fn": 14,
+            "tp": 81
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.9160872101783752,
+            "confusion": {
+              "tn": 56649,
+              "fp": 2,
+              "fn": 25,
+              "tp": 70
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.005188361145555928,
+            "confusion": {
+              "tn": 56450,
+              "fp": 201,
+              "fn": 14,
+              "tp": 81
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_49.npz",
+          "sha256": "bed3c9350d863ce44da398916a68b32455c156d10e4147823d6ca0410987235a"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 50,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56444,
+            "fp": 207,
+            "fn": 18,
+            "tp": 77
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.8160924911499023,
+            "confusion": {
+              "tn": 56646,
+              "fp": 5,
+              "fn": 24,
+              "tp": 71
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.016236298084259016,
+            "confusion": {
+              "tn": 56453,
+              "fp": 198,
+              "fn": 18,
+              "tp": 77
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_50.npz",
+          "sha256": "95cfebe23d95ba25e73fcfea979a5ad8d31276fd2b127a71d73f3af2893500cd"
+        }
+      },
+      {
+        "name": "xgboost_d68789d82137da1d",
+        "seed": 51,
+        "n_test": 56746,
+        "n_positives": 95,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 284,
+          "n_flagged": 284,
+          "confusion": {
+            "tn": 56444,
+            "fp": 207,
+            "fn": 18,
+            "tp": 77
+          }
+        },
+        "operating_points_from_validation": [
+          {
+            "operating_point": "max_f1_on_val",
+            "threshold": 0.5130027532577515,
+            "confusion": {
+              "tn": 56641,
+              "fp": 10,
+              "fn": 24,
+              "tp": 71
+            }
+          },
+          {
+            "operating_point": "alert_budget_0.005",
+            "threshold": 0.004487167429178944,
+            "confusion": {
+              "tn": 56420,
+              "fp": 231,
+              "fn": 15,
+              "tp": 80
+            }
+          }
+        ],
+        "test_scores": {
+          "path": "experiments/results/predictions/xgboost_d68789d82137da1d_stratified_51.npz",
+          "sha256": "6a15c3c82b1223079cbb3cb82f9da0ad363e6145ccbb4a8bbcb37674dc9ebe3a"
+        }
+      }
+    ]
+  }
 }

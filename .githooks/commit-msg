@@ -1,0 +1,14 @@
+#!/bin/sh
+# Commit-message gate (Sprint 28 IMP-4). Enabled with the pre-commit gate by
+# `git config core.hooksPath .githooks`. A feat or fix commit on a sprint
+# branch names its task issue or the PR review; the rule and its reasons are
+# in scripts/check_commit_issue.py. No override flag.
+
+script="$(git rev-parse --show-toplevel)/scripts/check_commit_issue.py"
+for py in python python3; do
+  if command -v "$py" >/dev/null 2>&1; then
+    exec "$py" "$script" "$1"
+  fi
+done
+echo "BLOCKED: no python found to check the commit message."
+exit 1

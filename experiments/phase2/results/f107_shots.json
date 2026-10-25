@@ -43,6 +43,116 @@
      0.2164,
      0.5308
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 42,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_42.npz",
+     "sha256": "91b06df2adc17e95b6113298226fb4c86ff7cb2cef29b7bf7dee5cbdda77f180",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 42,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56634,
+      "fp": 229,
+      "fn": 43,
+      "tp": 56
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_42.npz",
+     "sha256": "47ea7e7e7b1ee8cdb01148d699ebd3453523c1d83087eb977088b826b5654b1b",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 42,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56657,
+      "fp": 206,
+      "fn": 20,
+      "tp": 79
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_42.npz",
+     "sha256": "b914f4b5bc6a7de00d68772fd43851c97c654b837a02ce4fc63c071dcba08670",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 42,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56659,
+      "fp": 204,
+      "fn": 18,
+      "tp": 81
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_42.npz",
+     "sha256": "2ec244e1272e65f45c3993b89f96574e9d00dd49eaca8b987b62a212ae40eb49",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 42,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56661,
+      "fp": 202,
+      "fn": 16,
+      "tp": 83
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_42.npz",
+     "sha256": "4cca30b3305cc0afc7062a029506067d75165b1c8c72aa11a202ab4e86dc8a04",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -71,6 +181,116 @@
      0.2458,
      0.6374
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 43,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_43.npz",
+     "sha256": "00a0910a8edf2d36aac16e4ced42ab9b624309ef3d2c507ad3eee32d3fdce7f4",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 43,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56648,
+      "fp": 215,
+      "fn": 29,
+      "tp": 70
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_43.npz",
+     "sha256": "fa68aa6978512d69e7adb257b55b4b8ca83bc0030f66ced1f636ec8ab9b5a1d5",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 43,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_43.npz",
+     "sha256": "be18ef76d7abf857ce0c70f2428df016631f0307e15da5af542afc37dd91beec",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 43,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_43.npz",
+     "sha256": "ca5665f7aee90a111a3cc9b93f605ecc5f8686062814c28d903df0157d5a7136",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 43,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_43.npz",
+     "sha256": "1cc9d615ff3f7bf98d6a125b89ae0a61c22404bd3f7b9a4218689e22ec4a607b",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -99,6 +319,116 @@
      0.2805,
      0.6158
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 44,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56666,
+      "fp": 197,
+      "fn": 11,
+      "tp": 88
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_44.npz",
+     "sha256": "2203260eb335b3a0d12c72d5ba4a8ce7bb75d172d501e9070bb678b28eb97d72",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 44,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56650,
+      "fp": 213,
+      "fn": 27,
+      "tp": 72
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_44.npz",
+     "sha256": "c924918cdb82019d4d2f22410ad03a4dfa10d20a2f1dcba864e667fcfcabfa14",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 44,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56665,
+      "fp": 198,
+      "fn": 12,
+      "tp": 87
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_44.npz",
+     "sha256": "c564fa98c790caee0b9df75c3ca256afc843f0b58e97359a85cd370dd7280d08",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 44,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56666,
+      "fp": 197,
+      "fn": 11,
+      "tp": 88
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_44.npz",
+     "sha256": "1563d803195010cdb6423ed4fe1a40f89182564c7858ff70c1f47203c142f5d0",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 44,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56666,
+      "fp": 197,
+      "fn": 11,
+      "tp": 88
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_44.npz",
+     "sha256": "165aeaaf8f2fea8e961877932312f5cc8c00463c556217a87a6bd2b577430271",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -127,6 +457,116 @@
      0.2226,
      0.5141
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 45,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56655,
+      "fp": 208,
+      "fn": 22,
+      "tp": 77
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_45.npz",
+     "sha256": "921cb0f59c1ac2764875eb03fbef562aeed8ce0cc08d55ba6e74cf2742844124",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 45,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56642,
+      "fp": 221,
+      "fn": 35,
+      "tp": 64
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_45.npz",
+     "sha256": "79b6d72ef54f509e0de98d93872d1c8f1a57df1c64e7ba0fa7b9f53b4aa50438",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 45,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56655,
+      "fp": 208,
+      "fn": 22,
+      "tp": 77
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_45.npz",
+     "sha256": "9a3e0eb7bfa0fc843ec51432c0ed60b0440bdd72fedca6ad36b214aadf92bed8",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 45,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56657,
+      "fp": 206,
+      "fn": 20,
+      "tp": 79
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_45.npz",
+     "sha256": "5d4c54d8fdf0c5296224a6430dafdcbf889d7b0a530f9680be92bae6d81fbc08",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 45,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56655,
+      "fp": 208,
+      "fn": 22,
+      "tp": 77
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_45.npz",
+     "sha256": "a1514e74651fa64e5c535074f97442da9cb54fc781bb4d1f1cc714450d2c8fa9",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -155,6 +595,116 @@
      0.3516,
      0.7414
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 46,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_46.npz",
+     "sha256": "c0aba66d7dc6df0c024747777243cc347616b0841a7eac5debb70fe53a81d4bb",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 46,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56648,
+      "fp": 215,
+      "fn": 29,
+      "tp": 70
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_46.npz",
+     "sha256": "1a3b4245d8141987ecd0c4fe5908b544939bdabf81e5e21898f222cba27fe38a",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 46,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_46.npz",
+     "sha256": "2d92ac5ac51535c4114ec11e1cf5c81bb1ca01ee44574547530187ff75360960",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 46,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56661,
+      "fp": 202,
+      "fn": 16,
+      "tp": 83
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_46.npz",
+     "sha256": "2942ebe9f710f02d8843771ff19bf477b9f3ad050b103952c9f760dd96f1434c",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 46,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_46.npz",
+     "sha256": "24594efb8684395c311dd003626a0f3fced7f46dbf4ea5a145509969bc3546fe",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -183,6 +733,116 @@
      0.394,
      0.7803
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 47,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_47.npz",
+     "sha256": "58584b1b673f011136198e73808babf0c8a959ed25a4679c985fc434f6d8cb6b",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 47,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56657,
+      "fp": 206,
+      "fn": 20,
+      "tp": 79
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_47.npz",
+     "sha256": "4dacb65d4b8830cc71094dce81273cfc9601d908adbca1d3f4ed1a99ebf39f2c",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 47,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56657,
+      "fp": 206,
+      "fn": 20,
+      "tp": 79
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_47.npz",
+     "sha256": "5e266ef4f93ca467e8ab589b039cbf1a58964ea94b86e5ea9fd7347c198ca7f1",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 47,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_47.npz",
+     "sha256": "a8f105e2c4b7bb5965a9376eba80adc6f16b4b4670f4925ab69c8eb1d43d04a7",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 47,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_47.npz",
+     "sha256": "b83d1a1fdffc8368f0e78a79ef4491b3997a6e7f071a26ed5ada8b7f6a57604c",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -211,6 +871,116 @@
      0.3078,
      0.689
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 48,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_48.npz",
+     "sha256": "bafd6f2de34ae0bf661e33fab19c5422072a35c18c975125e65e0b92f69915e9",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 48,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56648,
+      "fp": 215,
+      "fn": 29,
+      "tp": 70
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_48.npz",
+     "sha256": "b2c55a4c0ae3397a2d237325ab731653c9fb66e31b2706fda6d3daf69364b496",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 48,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56659,
+      "fp": 204,
+      "fn": 18,
+      "tp": 81
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_48.npz",
+     "sha256": "5f2368270d8ec63c630b6c01f450e5c8fccb5dd843f51d3b7d655d4c4f30c7e4",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 48,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_48.npz",
+     "sha256": "b61aaa3c9c82450259e550004b37adcdcfe96f2b00e11035b8e02a14f2531995",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 48,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56660,
+      "fp": 203,
+      "fn": 17,
+      "tp": 82
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_48.npz",
+     "sha256": "2dcfede77e9afa5ee2bec9eec8c4fd9848959ba29af7241ca1974529f28b9f3d",
+     "n_rows": 56962
+    }
    }
   },
   {
@@ -239,8 +1009,140 @@
      0.243,
      0.5834
     ]
+   },
+   "exact_outcome": {
+    "name": "f107_exact",
+    "seed": 49,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_exact_49.npz",
+     "sha256": "1b6a113b4b1f5aae539e5116a262d0f7412c828b750847e43b362d02b6dfb273",
+     "n_rows": 56962
+    }
+   },
+   "shots_10_outcome": {
+    "name": "f107_shots_10",
+    "seed": 49,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56650,
+      "fp": 213,
+      "fn": 27,
+      "tp": 72
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10_49.npz",
+     "sha256": "2794fc0ef1511cb6fe0530709549cd6707c1393907f9efe78ff03cd0d70a25f9",
+     "n_rows": 56962
+    }
+   },
+   "shots_100_outcome": {
+    "name": "f107_shots_100",
+    "seed": 49,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_100_49.npz",
+     "sha256": "f9bfeb4adf91cc064cc322585bd0c32c24d5744f6e51cf4163ab21185f010d39",
+     "n_rows": 56962
+    }
+   },
+   "shots_1000_outcome": {
+    "name": "f107_shots_1000",
+    "seed": 49,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_1000_49.npz",
+     "sha256": "bc59396f18127006b4b04af8833d16c7c39cc7a43220ae79c7962ca52cb016ea",
+     "n_rows": 56962
+    }
+   },
+   "shots_10000_outcome": {
+    "name": "f107_shots_10000",
+    "seed": 49,
+    "n_test": 56962,
+    "n_positives": 99,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 285,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56658,
+      "fp": 205,
+      "fn": 19,
+      "tp": 80
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f107_shots_10000_49.npz",
+     "sha256": "244621aa6c978ee555f4c24ec5512e729bf6fbe3c2843de6357c4cc7ce15bc82",
+     "n_rows": 56962
+    }
    }
   }
  ],
- "elapsed_s": 507.8
+ "elapsed_s": 507.8,
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "exact circuit (F106 stored params), seeds 42, 43, 44, 45, 46, 47, 48, 49",
+   "10 shots, seeds 42, 43, 44, 45, 46, 47, 48, 49",
+   "100 shots, seeds 42, 43, 44, 45, 46, 47, 48, 49",
+   "1000 shots, seeds 42, 43, 44, 45, 46, 47, 48, 49",
+   "10000 shots, seeds 42, 43, 44, 45, 46, 47, 48, 49"
+  ],
+  "uncovered_lanes": {},
+  "n_blocks": 40,
+  "metric_check": {
+   "n_checks": 168,
+   "all_within_tolerance": true,
+   "max_abs_diff": 0.0,
+   "not_identical": []
+  },
+  "row_check": "every stored leaf of each row was rebuilt by f107_shots.seed_shots and compared",
+  "score_scale": "the per-row score is the circuit logit b + <Z> w, as the file's AUPRC used it"
+ }
 }

@@ -96,7 +96,29 @@
         "objective_exact": -21958.447976763746,
         "test_auprc": 0.8522473860491636,
         "in_segment_auprc": 0.7911997237395052,
-        "random_control_auprc": 0.973934357467271
+        "random_control_auprc": 0.973934357467271,
+        "outcome": {
+          "name": "f142_b4_dirac3s",
+          "seed": 42,
+          "n_test": 7347,
+          "n_positives": 2050,
+          "at_budget_on_test": {
+            "budget": 0.005,
+            "n_budget": 37,
+            "n_flagged": 37,
+            "confusion": {
+              "tn": 5297,
+              "fp": 0,
+              "fn": 2013,
+              "tp": 37
+            }
+          },
+          "test_scores": {
+            "path": "experiments/phase2/predictions/f142_b4_dirac3s_42.npz",
+            "sha256": "89ba9b15f898f5d94e1c3f67ae1688388934e1d37f2d9de0c66c6096f92d3521",
+            "n_rows": 7347
+          }
+        }
       },
       "uniform_vector_cosine_vs_exact": 0.9930759107826841,
       "exact_median_abs_departure_from_uniform": 4.102766143393487e-05,
@@ -123,7 +145,29 @@
         "objective_exact": -21958.43195810875,
         "test_auprc": 0.8418049874273019,
         "in_segment_auprc": 0.7901283570814235,
-        "random_control_auprc": 0.9759637602136474
+        "random_control_auprc": 0.9759637602136474,
+        "outcome": {
+          "name": "f142_b4_dirac3s",
+          "seed": 43,
+          "n_test": 7347,
+          "n_positives": 2050,
+          "at_budget_on_test": {
+            "budget": 0.005,
+            "n_budget": 37,
+            "n_flagged": 37,
+            "confusion": {
+              "tn": 5297,
+              "fp": 0,
+              "fn": 2013,
+              "tp": 37
+            }
+          },
+          "test_scores": {
+            "path": "experiments/phase2/predictions/f142_b4_dirac3s_43.npz",
+            "sha256": "92a3b4097683a6c4b7fd015b77c9ee0f1bfee9a16132b8bbace952dd8582efbf",
+            "n_rows": 7347
+          }
+        }
       },
       "uniform_vector_cosine_vs_exact": 0.9926726849144876,
       "exact_median_abs_departure_from_uniform": 4.196196927356015e-05,
@@ -236,6 +280,28 @@
         "exact_reference": 0.85223788120042,
         "device_best_sample": 0.8522473860491636,
         "device_row_metrics": 0.8522473860491636
+      },
+      "exact_reference_outcome": {
+        "name": "f142_b4_exact",
+        "seed": 42,
+        "n_test": 7347,
+        "n_positives": 2050,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 37,
+          "n_flagged": 37,
+          "confusion": {
+            "tn": 5297,
+            "fp": 0,
+            "fn": 2013,
+            "tp": 37
+          }
+        },
+        "test_scores": {
+          "path": "experiments/phase2/predictions/f142_b4_exact_42.npz",
+          "sha256": "c88779bf33067dc5cffb362bd156ac26fd4423076775918d3f8b2a76fdcd8525",
+          "n_rows": 7347
+        }
       }
     },
     {
@@ -333,7 +399,50 @@
         "exact_reference": 0.8418035906119528,
         "device_best_sample": 0.8418049874273019,
         "device_row_metrics": 0.8418049874273019
+      },
+      "exact_reference_outcome": {
+        "name": "f142_b4_exact",
+        "seed": 43,
+        "n_test": 7347,
+        "n_positives": 2050,
+        "at_budget_on_test": {
+          "budget": 0.005,
+          "n_budget": 37,
+          "n_flagged": 37,
+          "confusion": {
+            "tn": 5297,
+            "fp": 0,
+            "fn": 2013,
+            "tp": 37
+          }
+        },
+        "test_scores": {
+          "path": "experiments/phase2/predictions/f142_b4_exact_43.npz",
+          "sha256": "c6caf14257ca19c4391335fa589eab1bdfe38d3401872267da334d0f7804f25a",
+          "n_rows": 7347
+        }
       }
     }
-  ]
+  ],
+  "outcome_backfill": {
+    "date": "2026-10-23",
+    "generator": "experiments/phase2/src/backfill_outcomes.py",
+    "decision": "Sprint 28 Manual Validation DV4",
+    "covered_lanes": [
+      "B4 Dirac-3S best sample (seeded pool rebuilt behind its Hamiltonian-hash refusal), seeds 42-43",
+      "B4 exact reference solve (F126), seeds 42-43"
+    ],
+    "uncovered_lanes": {
+      "B4 Dirac-3 (b4[].dirac3)": "per-row scores were never stored, and its Phase 1 pool was an unseeded build that does not reproduce",
+      "b1, b2 cost rows": "no test score; cost only"
+    },
+    "n_blocks": 4,
+    "metric_check": {
+      "n_checks": 6,
+      "all_within_tolerance": true,
+      "max_abs_diff": 0.0,
+      "not_identical": []
+    },
+    "per_row_files": "the Dirac-3S lane's scores are rebuilt from stored device samples at zero metered seconds, so they are saved under the gitignored name f142_*, not hw_*"
+  }
 }

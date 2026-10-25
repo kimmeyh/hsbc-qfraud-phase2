@@ -119,6 +119,50 @@
       "lower": 0.005990890772244961,
       "upper": 0.01191,
       "recovered": true
+     },
+     "outcome": {
+      "name": "f108_pilot_none_hgb_full",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5103,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3088,
+       "confusion": {
+        "tn": 608825,
+        "fp": 1715,
+        "fn": 3730,
+        "tp": 1373
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_pilot_none_hgb_full_42.npz",
+       "sha256": "de738788f26c9ff97d9f6ffe81faaf9a11348afa73b0c44b9f1b3a27f8166b3e",
+       "n_rows": 615643
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_pilot_none_bayes",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5103,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3079,
+       "confusion": {
+        "tn": 608959,
+        "fp": 1581,
+        "fn": 3605,
+        "tp": 1498
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_pilot_none_bayes_42.npz",
+       "sha256": "d6183ed05ecbaf48a1304f1d8647e0a3b8c549a7394528e21060b6c6f8ac6b2f",
+       "n_rows": 615643
+      }
      }
     },
     "flip": {
@@ -193,6 +237,50 @@
       "lower": 0.006441492829877327,
       "upper": 0.0128,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_pilot_flip_hgb_full",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5149,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3080,
+       "confusion": {
+        "tn": 608660,
+        "fp": 1834,
+        "fn": 3903,
+        "tp": 1246
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_pilot_flip_hgb_full_42.npz",
+       "sha256": "c18713d43101b0be888b092db68ec05eec83e7eea7599768b44a13fee66b25ff",
+       "n_rows": 615643
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_pilot_flip_bayes",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 5149,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 3079,
+       "confusion": {
+        "tn": 608846,
+        "fp": 1648,
+        "fn": 3718,
+        "tp": 1431
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_pilot_flip_bayes_42.npz",
+       "sha256": "944cdd82d17c55ef0374ca8331a615625ac7ba3fa6e0598a19294ffa678cd9a2",
+       "n_rows": 615643
+      }
      }
     },
     "reference": {
@@ -267,6 +355,50 @@
       "lower": 4.000160012801457e-05,
       "upper": 8e-05,
       "recovered": false
+     },
+     "outcome": {
+      "name": "f108_pilot_reference_hgb_full",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 376,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 532128,
+       "confusion": {
+        "tn": 83202,
+        "fp": 532065,
+        "fn": 313,
+        "tp": 63
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_pilot_reference_hgb_full_42.npz",
+       "sha256": "7252094bc5b78c66e984c830b22350a4b0c983b416f4f13b43fb41da2e81fe9d",
+       "n_rows": 615643
+      }
+     },
+     "bayes_outcome": {
+      "name": "f108_pilot_reference_bayes",
+      "seed": 42,
+      "n_test": 615643,
+      "n_positives": 376,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 3079,
+       "n_flagged": 615643,
+       "confusion": {
+        "tn": 0,
+        "fp": 615267,
+        "fn": 0,
+        "tp": 376
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f108_pilot_reference_bayes_42.npz",
+       "sha256": "a7340680db122f6c1153495614f91e145b396707c459fa5f219c7377e90a16a4",
+       "n_rows": 615643
+      }
      }
     }
    },
@@ -344,5 +476,30 @@
    }
   }
  },
- "elapsed_s": 25.5
+ "elapsed_s": 25.5,
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "none: HGB on the full training days (curve fraction 1.0), seeds 42",
+   "flip: HGB on the full training days (curve fraction 1.0), seeds 42",
+   "reference: HGB on the full training days (curve fraction 1.0), seeds 42",
+   "none: the exact Bayes posterior (bayes_auprc), seeds 42",
+   "flip: the exact Bayes posterior (bayes_auprc), seeds 42",
+   "reference: the exact Bayes posterior (bayes_auprc), seeds 42"
+  ],
+  "uncovered_lanes": {
+   "learning-curve fits at fractions 1/32 to 1/2": "rebuildable exactly by the same seed_run, but not saved: five more 615k-row files per arm and seed (about 5 MB each); the full-data fit is the model",
+   "cover_hart": "a 1-NN error on a 100k-row test subsample; no per-row score"
+  },
+  "n_blocks": 6,
+  "metric_check": {
+   "n_checks": 173,
+   "all_within_tolerance": true,
+   "max_abs_diff": 0.0,
+   "not_identical": []
+  },
+  "row_check": "every stored leaf of each row except 'seconds' was rebuilt by f108_ceiling.seed_run and compared"
+ }
 }
