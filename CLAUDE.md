@@ -67,7 +67,11 @@ The one field filled from memory was the one that was wrong.)
   of every run type, scored or not, carries the block from
   `experiments/phase2/src/provenance.py` (`record(__file__, seeds)`): the
   generator, its git commit, a clean-tree flag, the seeds and the library
-  versions. The same guard fails a new file without it. Device runs also
+  versions. The same guard fails a new file without it. A new module writes
+  its result with `provenance.write_result(path, doc, __file__, seeds,
+  run_id)`, which adds the block, refuses to replace another run's result
+  unless `replace=` states why, and checks the file before it replaces
+  anything (Sprint 28 IMP-6; `test_result_writer_required.py`). Device runs also
   store their full response through `experiments/phase2/src/device_store.py`
   (`test_device_store_required.py`).
 - **US English, always.** The team lead writes and expects US English, even though

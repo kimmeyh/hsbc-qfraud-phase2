@@ -9,13 +9,27 @@ library versions. `test_outcome_record_required.py` fails a new file
 without it.
 
 Use:  doc["provenance"] = provenance.record(__file__, seeds)
+
+Sprint 28 IMP-6: a new module writes its result through `write_result`,
+which adds the block itself, refuses to replace a recorded result from
+another run unless the call states why, and checks the written file before
+it takes the result's place. f110, f111 and f152 each overwrote or
+duplicated recorded output in a default mode, and the backfill replaced a
+file before checking it (PR #46 review); each was fixed one module at a
+time. `test_result_writer_required.py` routes new modules here.
 """
 from __future__ import annotations
 
+import json
+import os
 import subprocess
 import sys
+import uuid
 from importlib import metadata
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import strict_json  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -54,6 +68,61 @@ def record(generator, seeds) -> dict:
             "generator_clean": _git("status", "--porcelain", "--", rel) == "",
             "seeds": seeds,
             "versions": versions()}
+
+
+def new_run_id() -> str:
+    """One per run. Every write of the same run passes the same id, so a
+    resumable run may rewrite its own file and no other run's."""
+    return uuid.uuid4().hex
+
+
+def write_result(path, doc: dict, generator, seeds, run_id: str,
+                 replace: str | None = None) -> dict:
+    """Write `doc` with its provenance block to `path`; return what was
+    written. Refuses, with nothing written:
+      - a file there from another run (or from before this rule), unless
+        `replace` states why; the reason and the replaced run's id are
+        recorded in the block;
+      - a file that does not read back equal to what was meant.
+    The temporary file sits beside the result, so the final step is one
+    `os.replace` on the same volume."""
+    path = Path(path)
+    if not run_id:
+        raise ValueError("write_result needs the run's id (new_run_id())")
+    if replace is not None and not str(replace).strip():
+        raise ValueError("replace must state why the recorded result goes")
+    block = record(generator, seeds)
+    block["run_id"] = run_id
+    if path.exists():
+        try:
+            old = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError:
+            old = None
+        old_run = (old.get("provenance") or {}).get("run_id") \
+            if isinstance(old, dict) else None
+        if old_run != run_id:
+            if replace is None:
+                raise FileExistsError(
+                    f"{path.name} holds a recorded result from another run "
+                    f"({old_run or 'no run id'}); pass replace='<why>' to "
+                    "replace it")
+            block["replaces"] = {"reason": str(replace),
+                                 "previous_run_id": old_run}
+        elif isinstance(old, dict) and "replaces" in old.get("provenance", {}):
+            block["replaces"] = old["provenance"]["replaces"]
+    out = {**doc, "provenance": block}
+    text = json.dumps(out, indent=1, default=strict_json.numpy_scalar) + "\n"
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8", newline="\n")
+    try:
+        back = json.loads(tmp.read_text(encoding="utf-8"))
+        if back != json.loads(text):
+            raise OSError(f"{tmp.name} did not read back as written")
+        os.replace(tmp, path)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+    return out
 
 
 def problems(block) -> list[str]:
