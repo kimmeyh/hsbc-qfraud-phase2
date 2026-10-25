@@ -91,6 +91,9 @@ ORIGINAL_EXEMPT_2026_10_22 = frozenset((
     "f20_multisample_ensemble_emulated.json", "f20_soft_votes.json",
     "f20_soft_vs_classical.json", "f29_sample_size.json", "f94_controls.json",
 ))
+# Pins the literal above (Sprint 28 IMP-1, `frozen_list.check`).
+ORIGINAL_EXEMPT_SHA256 = (
+    "01004173571686d6d23b34d50963f41aa58aeb42343548a515d7df57f1054a61")
 BACKFILL_KEY = "outcome_backfill"
 
 # Scored entries a file copies from another result, which carries their
@@ -142,6 +145,7 @@ PROVENANCE_BACKFILLED: frozenset = frozenset()
 PROVENANCE_EXEMPT = ORIGINAL_PROVENANCE_EXEMPT_2026_10_23 - PROVENANCE_BACKFILLED
 
 import provenance as prov  # noqa: E402
+import frozen_list as fl  # noqa: E402
 
 
 def _keys(o):
@@ -298,8 +302,9 @@ def test_recorded_per_row_files_match_their_hashes():
 
 
 def test_the_exempt_list_only_shrinks():
-    new = EXEMPT_BEFORE_RULE - ORIGINAL_EXEMPT_2026_10_22
-    assert not new, f"names added to the exempt list: {sorted(new)}"
+    bad = fl.check(EXEMPT_BEFORE_RULE, ORIGINAL_EXEMPT_2026_10_22,
+                   ORIGINAL_EXEMPT_SHA256)
+    assert not bad, bad
     assert len(EXEMPT_BEFORE_RULE) == EXEMPT_COUNT_NOW == 16
     assert len(ORIGINAL_EXEMPT_2026_10_22) == 30
 
@@ -312,12 +317,10 @@ def test_every_new_result_records_its_provenance():
 
 
 def test_the_provenance_exempt_list_only_shrinks():
-    import hashlib
-    names = "\n".join(sorted(ORIGINAL_PROVENANCE_EXEMPT_2026_10_23))
-    assert hashlib.sha256(names.encode()).hexdigest() == \
-        ORIGINAL_PROVENANCE_SHA256, "the frozen provenance list was edited"
+    bad = fl.check(PROVENANCE_EXEMPT, ORIGINAL_PROVENANCE_EXEMPT_2026_10_23,
+                   ORIGINAL_PROVENANCE_SHA256)
+    assert not bad, bad
     assert PROVENANCE_BACKFILLED <= ORIGINAL_PROVENANCE_EXEMPT_2026_10_23
-    assert PROVENANCE_EXEMPT <= ORIGINAL_PROVENANCE_EXEMPT_2026_10_23
     for name in sorted(PROVENANCE_EXEMPT):
         f = RESULTS / name
         assert f.exists(), f"{name} is exempt but does not exist"
@@ -525,6 +528,19 @@ def test_a_new_exempt_name_is_caught_even_with_the_count_raised():
             (RAISE_COUNT[0], RAISE_COUNT[1]),
             ("== EXEMPT_COUNT_NOW == 16\n", "== EXEMPT_COUNT_NOW == 17\n")],
            "test_the_exempt_list_only_shrinks", "a new exempt name")
+
+
+def test_a_name_added_to_the_original_too_is_caught_by_its_hash():
+    # Every count raised to match, so only the content pin can fire.
+    _proof([_add("f153_exp3_design.json"),
+            (RAISE_COUNT[0], RAISE_COUNT[1]),
+            ("== EXEMPT_COUNT_NOW == 16\n", "== EXEMPT_COUNT_NOW == 17\n"),
+            ('"f94_controls.json",\n))\n# Pins',
+             '"f94_controls.json",\n    "f153_exp3_design.json",\n))\n# Pins'),
+            ("assert len(ORIGINAL_EXEMPT_2026_10_22) == 30\n",
+             "assert len(ORIGINAL_EXEMPT_2026_10_22) == 31\n")],
+           "test_the_exempt_list_only_shrinks",
+           "a name added to the list and its original")
 
 
 def test_a_backfilled_name_put_back_is_caught_by_the_count():

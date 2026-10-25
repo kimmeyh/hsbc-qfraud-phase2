@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-25
+
+- **fix**: Sprint 28 IMP-1 (#61), one content pin for every shrink-only list. New `experiments/src/frozen_list.py`: `check(current, original, sha256)` fails when the frozen original's SHA-256 differs, when the current list holds a name the original lacks, or when a count rises. Applied to all six lists: the outcome and provenance exempt lists in `test_outcome_record_required.py` (the outcome original gains its hash), and in `test_device_store_required.py` `PHASE2_NOT_SUBMITTING` (unpinned before), `PHASE2_SUBMIT_BEFORE_RULE` (a swap passed `<= 1`), `PHASE1_FROZEN` (a name passed with its count raised) and `UNSEEDED_BEFORE_RULE` (counts could move between modules; now each count is held against a frozen table). The count constants `PHASE1_FROZEN_COUNT` and `UNSEEDED_FROZEN_TOTAL` are removed. New `test_frozen_lists_pinned.py` fails a test module that keeps a list named like a shrink-only list without passing it to `frozen_list.check`. Every hole has a proof that goes red.
+
 ### 2026-10-24
 
 - **fix**: Sprint 28 IMP-2 (#61), text guards read code, not prose. New `experiments/src/source_scan.py`: `code_text(src)` blanks comments and docstrings with spaces and keeps line numbers. `test_phase2_device_default.py` matches calls in the code only and still finds its `# device named:` marker in the raw lines; `test_device_store_required.py`'s SUBMIT and `device_store.saving(` checks read the code only, so a docstring can neither trip nor satisfy them. New tests on the `device_store.py` docstring shape; comment and docstring blanking each proven red. `docs/TROUBLESHOOTING.md` gains the symptom.

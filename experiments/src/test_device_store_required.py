@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 # Calls are matched in the code alone, not in docstrings or comments
 # (Sprint 28 IMP-2).
 from source_scan import code_text  # noqa: E402
+import frozen_list as fl  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 PHASE2 = ROOT / "experiments" / "phase2" / "src"
@@ -52,7 +53,16 @@ PHASE1_FROZEN = frozenset({
     "probe_variable_ceiling.py", "run_hardware.py", "run_hardware_b3.py",
     "run_hardware_b4.py", "run_hardware_b5.py", "run_integer_probe.py",
 })
-PHASE1_FROZEN_COUNT = 10
+
+# Content pins (Sprint 28 IMP-1, `frozen_list.check`). The three lists above
+# cannot legitimately gain a name and have no reason to lose one, so each is
+# its own frozen original. Never edit a hash to admit a name.
+PHASE2_NOT_SUBMITTING_SHA256 = (
+    "5abe00b37845d06d2fadad90b1c7d5944ffa83361ba7a9173b0c41a6ca876f7f")
+PHASE2_SUBMIT_BEFORE_RULE_SHA256 = (
+    "876587bfc31ac633ce243f7a96fd3614637cf73514e97c51e94029769366eeb5")
+PHASE1_FROZEN_SHA256 = (
+    "0e3b8b8faee110299e7790dbbd79f05de8202b0cc07a93fb34af46221df2deaf")
 
 POOL_CALLS = {"build_pool", "build_full", "QBoostClassifier"}
 # Unseeded pool builds per module on 2026-10-23, before the rule. A count
@@ -70,7 +80,15 @@ UNSEEDED_BEFORE_RULE = {
     "soft_votes.py": (3, "F20, before F145"),
     "validate_emulator.py": (1, "F17 emulator study; pools from Phase 1 configs"),
 }
-UNSEEDED_FROZEN_TOTAL = 16
+# The counts as frozen on 2026-10-23. Never edit; lower the table above.
+ORIGINAL_UNSEEDED_COUNTS_2026_10_23 = {
+    "emulator_sparsity.py": 1, "exp3_controls.py": 1,
+    "f111_loke_protocol.py": 1, "f130_levers.py": 1, "f144_proxy_twin.py": 1,
+    "full_pair_pool.py": 1, "lever_screen.py": 4, "run_dirac3s_verify.py": 1,
+    "sample_size.py": 1, "soft_votes.py": 3, "validate_emulator.py": 1,
+}
+ORIGINAL_UNSEEDED_SHA256 = (
+    "bdef827f3949fd9cffc5dd4dbcac4ceac3daee60634b6ec3ae16e20a38d96e5a")
 
 
 def _modules(d: Path):
@@ -112,12 +130,20 @@ def test_no_new_phase1_module_submits():
     new = found - PHASE1_FROZEN
     assert not new, (f"{sorted(new)} submit from experiments/src; new device "
                      "runners go in experiments/phase2/src, through device_store")
-    assert len(PHASE1_FROZEN) == PHASE1_FROZEN_COUNT
 
 
 def test_frozen_lists_only_shrink():
-    assert len(PHASE2_SUBMIT_BEFORE_RULE) <= 1
-    assert sum(n for n, _ in UNSEEDED_BEFORE_RULE.values()) <= UNSEEDED_FROZEN_TOTAL
+    bad = (fl.check(frozenset(PHASE2_NOT_SUBMITTING),
+                    frozenset(PHASE2_NOT_SUBMITTING),
+                    PHASE2_NOT_SUBMITTING_SHA256)
+           + fl.check(frozenset(PHASE2_SUBMIT_BEFORE_RULE),
+                      frozenset(PHASE2_SUBMIT_BEFORE_RULE),
+                      PHASE2_SUBMIT_BEFORE_RULE_SHA256)
+           + fl.check(PHASE1_FROZEN, PHASE1_FROZEN, PHASE1_FROZEN_SHA256)
+           + fl.check({k: n for k, (n, _) in UNSEEDED_BEFORE_RULE.items()},
+                      ORIGINAL_UNSEEDED_COUNTS_2026_10_23,
+                      ORIGINAL_UNSEEDED_SHA256))
+    assert not bad, bad
     for name in list(PHASE2_NOT_SUBMITTING) + list(PHASE2_SUBMIT_BEFORE_RULE) \
             + list(UNSEEDED_BEFORE_RULE):
         assert (PHASE2 / name).exists(), f"{name} is gone; remove it from the list"
@@ -140,3 +166,59 @@ def test_the_scan_sees_an_unseeded_build():
            "c3 = qp.build_pool(X, y, 2, 'dct', 'full', "
            "weak_params=qp.seeded_weak_params(42))\n")
     assert _unseeded_pool_calls(src) == 2
+
+
+# ------------------------------------------------------------ pins can fail
+# Each proof edits this file and runs the one shrink test, which reads only
+# source text, so a broken pin cannot start any work (Sprint 28 IMP-1).
+SELF = Path(__file__)
+THIS = SELF.relative_to(ROOT).as_posix()
+
+
+def _shrink_fails(edits, label):
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(SELF, old, new, expect_occurrences=1)
+                     for old, new in edits],
+                    lambda: run_pytest(f"{THIS}::test_frozen_lists_only_shrink",
+                                       ROOT), label)
+
+
+def test_a_new_not_submitting_name_is_caught():
+    _shrink_fails([('    "device_store.py": "the store itself",\n',
+                    '    "device_store.py": "the store itself",'
+                    ' "f170_runner.py": "x",\n')],
+                  "a runner exempted as not submitting")
+
+
+def test_a_swapped_before_rule_runner_is_caught():
+    _shrink_fails([('    "run_dirac3s_verify.py": "F142, complete; saves its '
+                    'raw response in "\n',
+                    '    "f170_runner.py": "F142, complete; saves its '
+                    'raw response in "\n')],
+                  "a before-rule runner swapped")
+
+
+def test_a_new_phase1_name_is_caught():
+    _shrink_fails([('"run_integer_probe.py",\n})',
+                    '"run_integer_probe.py", "f170.py",\n})')],
+                  "a Phase 1 name added")
+
+
+def test_an_unseeded_count_moved_between_modules_is_caught():
+    _shrink_fails([(LEVER, LEVER.replace("(4,", "(3,")),
+                   (SAMPLE, SAMPLE.replace("(1,", "(2,"))],
+                  "an unseeded count raised while another falls")
+
+
+def test_an_original_edited_to_admit_a_name_is_caught():
+    _shrink_fails([(ORIG, ORIG.replace('"sample_size.py": 1', '"sample_size.py": 2')),
+                   (SAMPLE, SAMPLE.replace("(1,", "(2,"))],
+                  "the frozen counts edited with the table")
+
+
+# Whole lines, ending in a real newline, so the targets cannot match the
+# escaped copies in these proofs.
+LEVER = '    "lever_screen.py": (4, "F124 screens, before F145"),\n'
+SAMPLE = '    "sample_size.py": (1, "F29, before F145"),\n'
+ORIG = ('    "sample_size.py": 1, "soft_votes.py": 3, '
+        '"validate_emulator.py": 1,\n')
