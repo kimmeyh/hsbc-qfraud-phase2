@@ -240,4 +240,18 @@ exists unless it says "new".
 
 ## Improvement Decisions
 
-Pending the team lead's disposition (step 6).
+Team lead, 2026-10-24: "do now imp-1, 2, 4, 5, 6 and backlog imp-7 | we
+have covered CI checks sufficiently, so no to IMP-3".
+
+The now-items are timed as task R under issue #61. D4 was given issue #60
+after the work, closed at once, and its time is recorded as not measured.
+
+| # | Decision | Where |
+|---|---|---|
+| IMP-1 | **now** | See the commit for IMP-1 under #61 |
+| IMP-2 | **now** | See the commit for IMP-2 under #61 |
+| IMP-3 | **skip** | The team lead's reason: CI checks are covered sufficiently |
+| IMP-4 | **now** | See the commit for IMP-4 under #61 |
+| IMP-5 | **now** | See the commit for IMP-5 under #61 |
+| IMP-6 | **now** | Not the recommended backlog; built this sprint under #61 |
+| IMP-7 | **backlog** | F164 in `ALL_SPRINTS_MASTER_PLAN.md`, priority 25 |

@@ -18,7 +18,11 @@ The rule, per module:
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from source_scan import code_text  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 PHASE2_SRC = ROOT / "experiments" / "phase2" / "src"
@@ -28,17 +32,21 @@ NAMED = re.compile(r"eqc_submit\.DIRAC_3S?\b")
 
 
 def problems(text: str) -> list[str]:
-    """What breaks the rule in one module's source text."""
+    """What breaks the rule in one module's source text. Calls are matched
+    in the code alone (`source_scan.code_text`), so a docstring or comment
+    that names a call is not read as one (Sprint 28 IMP-2). The marker is a
+    comment, so it is looked for in the raw lines."""
     out = []
     lines = text.splitlines()
-    if "metered_fit(" in text and "eqc_submit.device(" not in text:
+    code = code_text(text)
+    if "metered_fit(" in code and "eqc_submit.device(" not in code:
         out.append("calls metered_fit outside eqc_submit.device(): the fit "
                    "would go to Dirac-3")
-    for i, line in enumerate(lines, 1):
-        if NAMED.search(line) and MARK not in line:
+    for i, (line, raw) in enumerate(zip(code.splitlines(), lines), 1):
+        if NAMED.search(line) and MARK not in raw:
             out.append(f"line {i} names a device without '{MARK}': "
-                       f"{line.strip()}")
-    if "eqc_submit.device(" in text and "eqc_submit.PHASE2_DEVICE" not in text \
+                       f"{raw.strip()}")
+    if "eqc_submit.device(" in code and "eqc_submit.PHASE2_DEVICE" not in code \
             and not any(MARK in line for line in lines):
         out.append("calls eqc_submit.device( with neither PHASE2_DEVICE nor "
                    f"a '{MARK}' line")
@@ -68,6 +76,44 @@ def test_the_rule_reads_each_shape():
     assert problems("D = eqc_submit.DIRAC_3\n"
                     "with eqc_submit.device(D):\n    metered_fit(a)\n")
     assert problems("with eqc_submit.device('dirac-3'):\n    metered_fit(a)\n")
+
+
+def test_prose_naming_a_call_is_not_a_call():
+    # The device_store.py docstring that turned CI red (39f9943).
+    doc = ('"""Through `eqc_submit.device(wrap=...)` and `metered_fit(`."""\n'
+           "# eqc_submit.DIRAC_3 is named here only in a comment\n"
+           "x = 1\n")
+    assert problems(doc) == []
+    assert code_text(doc).count("\n") == doc.count("\n")
+    assert "x = 1" in code_text(doc)
+
+
+def test_a_call_after_prose_is_still_found():
+    src = ('"""Only prose: eqc_submit.device(."""\n'
+           "s = 'eqc_submit.device( in a value string'\n"
+           "with eqc_submit.device(D):\n    metered_fit(a)\n")
+    assert problems(src)
+    assert "eqc_submit.device(" in code_text(src).splitlines()[2]
+
+
+def test_the_prose_blanking_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(ROOT / "experiments" / "src" / "source_scan.py",
+                              "            spans.append((tok.start, tok.end))\n"
+                              "        elif",
+                              "            pass\n        elif",
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        "experiments/src/test_phase2_device_default.py::"
+                        "test_prose_naming_a_call_is_not_a_call", ROOT),
+                    "comments kept as code")
+    assert_can_fail([Mutation(ROOT / "experiments" / "src" / "source_scan.py",
+                              "elif tok.type == tokenize.STRING and prev in",
+                              "elif False and prev in", expect_occurrences=1)],
+                    lambda: run_pytest(
+                        "experiments/src/test_phase2_device_default.py::"
+                        "test_prose_naming_a_call_is_not_a_call", ROOT),
+                    "docstrings kept as code")
 
 
 def test_the_module_check_can_fail():

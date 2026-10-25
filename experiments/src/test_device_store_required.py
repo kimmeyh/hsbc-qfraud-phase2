@@ -19,7 +19,13 @@ from __future__ import annotations
 
 import ast
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# Calls are matched in the code alone, not in docstrings or comments
+# (Sprint 28 IMP-2).
+from source_scan import code_text  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 PHASE2 = ROOT / "experiments" / "phase2" / "src"
@@ -90,7 +96,7 @@ def _unseeded_pool_calls(src: str) -> int:
 def test_phase2_device_runners_store_every_job():
     bad = []
     for p in _modules(PHASE2):
-        src = p.read_text(encoding="utf-8")
+        src = code_text(p.read_text(encoding="utf-8"))
         if not SUBMIT.search(src) or p.name in PHASE2_NOT_SUBMITTING \
                 or p.name in PHASE2_SUBMIT_BEFORE_RULE:
             continue
@@ -102,7 +108,7 @@ def test_phase2_device_runners_store_every_job():
 
 def test_no_new_phase1_module_submits():
     found = {p.name for p in _modules(PHASE1)
-             if SUBMIT.search(p.read_text(encoding="utf-8"))}
+             if SUBMIT.search(code_text(p.read_text(encoding="utf-8")))}
     new = found - PHASE1_FROZEN
     assert not new, (f"{sorted(new)} submit from experiments/src; new device "
                      "runners go in experiments/phase2/src, through device_store")

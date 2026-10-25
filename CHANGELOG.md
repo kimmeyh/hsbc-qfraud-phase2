@@ -4,6 +4,11 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-24
+
+- **fix**: Sprint 28 IMP-2 (#61), text guards read code, not prose. New `experiments/src/source_scan.py`: `code_text(src)` blanks comments and docstrings with spaces and keeps line numbers. `test_phase2_device_default.py` matches calls in the code only and still finds its `# device named:` marker in the raw lines; `test_device_store_required.py`'s SUBMIT and `device_store.saving(` checks read the code only, so a docstring can neither trip nor satisfy them. New tests on the `device_store.py` docstring shape; comment and docstring blanking each proven red. `docs/TROUBLESHOOTING.md` gains the symptom.
+- **docs**: Sprint 28 retrospective (`docs/sprints/SPRINT_28_RETROSPECTIVE.md`): the team lead's feedback verbatim, Claude's lines, the review finding classes, seven improvements and their decisions (now: IMP-1, 2, 4, 5, 6; backlog: IMP-7; skip: IMP-3). Issues #60 (D4, opened after the work) and #61 (the now-items).
+
 ### 2026-10-23
 
 - **feat**: Sprint 28 D4 part 3, provenance on every new Phase 2 result. New `experiments/phase2/src/provenance.py`: `record(generator, seeds)` returns the generator path, its git commit, whether the generator file matched that commit, the seeds and the installed library versions; `problems(block)` names what a block lacks. `test_outcome_record_required.py` now fails any new top-level file under `experiments/phase2/results/`, of every run type and scored or not, without a complete `provenance` block. The 47 files that existed when the rule landed are listed by name in a frozen literal pinned by the SHA-256 of its sorted names, so a name added to it fails whatever else is changed; a listed file that gains a complete block must move to `PROVENANCE_BACKFILLED`, so the exemption only shrinks. Subfolders (`call_logs`, `device_samples`, `pools`) are not checked by this rule. Both new rules proven red.

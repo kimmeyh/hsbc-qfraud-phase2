@@ -50,6 +50,16 @@ must not exist; a `"270"` presence check that passed after the figure was
 deleted from the table that owned it, because seven prose mentions remained; a
 figure check that passed while the value was wrong by a factor of ten.
 
+**Symptom: a source-scanning guard fails on a module that does not do
+what the guard says it does.**
+The guard matched a call pattern as text, and the module named the call in a
+docstring or comment. Sprint 28: `device_store.py`'s docstring named the
+device call, and CI ran red on eight commits (39f9943 to f98ea2f).
+→ `experiments/src/source_scan.py`, `code_text(src)`: scan the code with
+comments and docstrings blanked, line numbers kept. Used by
+`test_phase2_device_default.py` and `test_device_store_required.py`
+(Sprint 28 IMP-2).
+
 **Symptom: a test skips instead of failing, and the suite reads green.**
 "Could not check" rendering as "clean". A skip is legitimate only when the
 fixture is genuinely unavailable, and the message must say nothing was checked.
