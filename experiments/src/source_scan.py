@@ -19,7 +19,10 @@ _SKIP = {tokenize.NL, tokenize.NEWLINE, tokenize.INDENT, tokenize.DEDENT,
 
 
 def code_text(src: str) -> str:
-    lines = src.splitlines(keepends=True)
+    # Split the way tokenize reads: only at newline characters. splitlines
+    # also breaks at a form feed and other separators, which shifts every
+    # later row and blanks the wrong line (Sprint 28 improvement review).
+    lines = io.StringIO(src).readlines()
     spans = []
     prev = None                     # the last significant token's type
     for tok in tokenize.generate_tokens(io.StringIO(src).readline):

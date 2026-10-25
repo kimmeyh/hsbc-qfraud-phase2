@@ -53,7 +53,7 @@ figure check that passed while the value was wrong by a factor of ten.
 **Symptom: a source-scanning guard fails on a module that does not do
 what the guard says it does.**
 The guard matched a call pattern as text, and the module named the call in a
-docstring or comment. Sprint 28: `device_store.py`'s docstring named the
+docstring or comment. Sprint 28: `experiments/phase2/src/device_store.py`'s docstring named the
 device call, and CI ran red on eight commits (39f9943 to f98ea2f).
 → `experiments/src/source_scan.py`, `code_text(src)`: scan the code with
 comments and docstrings blanked, line numbers kept. Used by

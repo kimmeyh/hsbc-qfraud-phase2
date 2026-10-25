@@ -99,6 +99,21 @@
 | 27 | Task J (F107) shot budget | research+code | 120m | 23m | 0.19 | measured, pause excluded (paused for F106's run) |
 | 27 | Task K (F108) ceiling validation | research+code | 180m | 12m | 0.07 | measured stamp gap, not a work time; overlapped E, F and I |
 | 27 | Task L (F146) QCi questions draft | docs | 45m | 3m | 0.07 | measured stamp gap |
+| 28 | Task A (F151) ULB HGB comparator cause | research+code | 50m | 8m | 0.16 | measured; overlapped I and J |
+| 28 | Task B (F152) Experiment 2 entry and first score | research+code | 110m | 46m | 0.42 | measured; overlapped C-L |
+| 28 | Task C (F153) Experiment 3 entry and proxy design | research+code | 150m | 70m | 0.47 | measured; overlapped B, E-L |
+| 28 | Task D (F111) Experiment 4 harness and run | research+code | 130m | 180m | n/a | measured elapsed, not work: the run above the cap (DV2) in the background |
+| 28 | Task E (F110) Experiment 6 scaling | research+code | 100m | 198m | n/a | measured elapsed, not work: the pilot and the 833-variable runs in the background |
+| 28 | Task F (F154) confusion counts and the outcome rule | research+code | 190m | 12m | 0.06 | measured stamp gap; first task |
+| 28 | Task G (F114) calibrated plug-in | research+code | 60m | 8m | 0.13 | measured; overlapped B, C, E |
+| 28 | Task H (F150) construction request draft | docs | 30m | 1m | n/a | measured from the commit, after the work |
+| 28 | Task I (F115) integer cost scaling | docs | 45m | 3m | 0.07 | measured; overlapped A |
+| 28 | Task J (F13) PoC plan skeleton | docs | 75m | 4m | 0.05 | measured; overlapped A |
+| 28 | Task K (F146) QCi drafts | docs | 45m | 1m | n/a | measured from the commit, after the work |
+| 28 | Task L pypdf 6.20.0 to 6.21.1 | tooling | 45m | 2m | 0.04 | measured; overlapped B, C, E |
+| 28 | Task M (F162) in-pocket head-to-head | research+code | 90m | 39m | 0.43 | measured; a 28.5-minute run inside it |
+| 28 | D4 storage prevention (#60) | tooling | none | not measured | n/a | added at Manual Validation; no timer or issue until the retrospective (IMP-4) |
+| 28 | Task R retrospective IMP-1, 2, 4, 5, 6 | tooling | 195m | 16m | 0.08 | measured |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

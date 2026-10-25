@@ -96,6 +96,26 @@ def test_a_call_after_prose_is_still_found():
     assert "eqc_submit.device(" in code_text(src).splitlines()[2]
 
 
+def test_a_form_feed_does_not_shift_the_blanking():
+    src = ("x = 1\n\x0c\ndef f():\n" + '    """doc"""\n'
+           + "    eqc_submit.device(D)\n")
+    code = code_text(src)
+    assert "eqc_submit.device(D)" in code and "doc" not in code
+    assert "def f():" in code
+
+
+def test_the_line_split_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(ROOT / "experiments" / "src" / "source_scan.py",
+                              "    lines = io.StringIO(src).readlines()\n",
+                              "    lines = src.splitlines(keepends=True)\n",
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        "experiments/src/test_phase2_device_default.py::"
+                        "test_a_form_feed_does_not_shift_the_blanking", ROOT),
+                    "lines split at a form feed")
+
+
 def test_the_prose_blanking_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail([Mutation(ROOT / "experiments" / "src" / "source_scan.py",

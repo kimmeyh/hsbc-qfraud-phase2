@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import uuid
@@ -36,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[3]
 # Recorded when installed; a package that is absent is left out, not faked.
 PACKAGES = ("numpy", "scipy", "pandas", "scikit-learn", "xgboost", "lightgbm",
             "catboost", "imbalanced-learn", "eqc-models", "qci-client")
+RUN_ID = re.compile(r"[0-9a-f]{32}")
 REQUIRED = ("generator", "generator_commit", "generator_clean", "seeds",
             "versions")
 
@@ -71,8 +73,12 @@ def record(generator, seeds) -> dict:
 
 
 def new_run_id() -> str:
-    """One per run. Every write of the same run passes the same id, so a
-    resumable run may rewrite its own file and no other run's."""
+    """One per run, made fresh when the run starts. Every write of that run
+    passes the same id, so the run may rewrite its own file. The refusal
+    holds only while each run makes its own id: `write_result` refuses an
+    id that is not 32 hex characters, so a constant name cannot switch it
+    off, but a caller that copies the id out of a recorded result can.
+    A resumed run in a new process is a new run and states `replace=`."""
     return uuid.uuid4().hex
 
 
@@ -87,8 +93,9 @@ def write_result(path, doc: dict, generator, seeds, run_id: str,
     The temporary file sits beside the result, so the final step is one
     `os.replace` on the same volume."""
     path = Path(path)
-    if not run_id:
-        raise ValueError("write_result needs the run's id (new_run_id())")
+    if not isinstance(run_id, str) or not RUN_ID.fullmatch(run_id):
+        raise ValueError("write_result needs the run's id from new_run_id() "
+                         "(32 hex characters)")
     if replace is not None and not str(replace).strip():
         raise ValueError("replace must state why the recorded result goes")
     block = record(generator, seeds)

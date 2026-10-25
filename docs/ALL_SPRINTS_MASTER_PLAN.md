@@ -44,7 +44,22 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 27: Gates Before Reporting, and the Screens That Need No Device**
+**Sprint 28: Experiment Entries First, Then Their First Measurements**
+(Oct 22 - Oct 25, 2026; PR #46). Delivered **F154, F115, F151, F13
+(skeleton), F114, F152, F153, F110, F111, F162**, F146 and F150 drafts,
+the pypdf bump, D4 (every device job stored in full, every new result with
+its provenance) and retrospective IMP-1, 2, 4, 5 and 6 (F164 carded).
+Zero metered seconds. F151: `l2_regularization=1.0` alone stabilizes ULB's
+HGB. F152: P1 holds on IEEE-CIS months 4 and 5. F153: the Experiment 3
+proxy design fails on all six instances. F110: P1 is false; P2 holds at
+833 variables. F111: the KNN lane is not consistent with 0.8108 under
+either protocol. F114: still blocked. F162: inside the SPECTRA pocket the
+proxy is not reliably above HGB or XGBoost on any cell. Records:
+`SPRINT_28_PLAN.md`, `SPRINT_28_VALIDATION.md`,
+`SPRINT_28_RETROSPECTIVE.md`; `SPRINT_28_SUMMARY.md` is written at
+Sprint 29 planning.
+
+### Sprint 27: Gates Before Reporting, and the Screens That Need No Device
 (Oct 18 - Oct 19, 2026; PR #32, main PR #45). Delivered **F149, F104, F102 (section 7;
 the card stays open), F112, F130, F103, F109, F6, F106, F107, F108**, an
 F146 update (the QCi questions, sent by the team lead 2026-10-18) and

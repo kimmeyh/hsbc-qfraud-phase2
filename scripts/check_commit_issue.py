@@ -22,6 +22,7 @@ from pathlib import Path
 
 TYPED = re.compile(r"^(feat|fix)(\([^)]*\))?!?:")
 SPRINT_BRANCH = re.compile(r"Sprint_\d+")
+COMMENT = re.compile(r"#(\s|$)")
 
 
 def _git(*args: str, cwd: Path) -> str:
@@ -31,14 +32,24 @@ def _git(*args: str, cwd: Path) -> str:
 
 def problem(message: str, branch: str, status) -> str | None:
     """Why the commit is refused, or None."""
-    lines = [ln for ln in message.splitlines() if not ln.startswith("#")]
+    lines = []
+    for ln in message.splitlines():
+        if ln.startswith("#") and ">8" in ln:      # git's scissors line
+            break
+        # git's own comment lines are "#" or "# ..."; a line that starts
+        # "#61" is the message naming an issue and stays.
+        if not COMMENT.match(ln):
+            lines.append(ln)
     subject = next((ln for ln in lines if ln.strip()), "")
     if subject.startswith(("Merge", "Revert")) or not TYPED.match(subject):
         return None
     if not SPRINT_BRANCH.search(branch):
         return None
     cur = status.get("current_sprint") if isinstance(status, dict) else None
-    if not isinstance(cur, dict) or cur.get("branch") != branch:
+    if not isinstance(cur, dict):
+        return ("the sprint status file could not be read; check "
+                ".claude/sprint_status.json")
+    if cur.get("branch") != branch:
         return ("the sprint status file does not describe this branch "
                 f"({branch}); update it with scripts/update_sprint_status.py")
     body = "\n".join(lines)

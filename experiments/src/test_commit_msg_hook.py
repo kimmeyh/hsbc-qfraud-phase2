@@ -52,8 +52,12 @@ def test_other_types_merges_and_other_branches_pass():
     assert cci.problem("feat: e\n", "develop", STATUS) is None
 
 
-def test_a_status_file_that_cannot_answer_blocks():
+def test_an_unreadable_status_file_blocks():
     assert cci.problem("feat: f (#61)\n", BRANCH, None)
+    assert cci.problem("feat: f (#61)\n", BRANCH, {"current_sprint": []})
+
+
+def test_a_status_file_for_another_branch_blocks():
     other = {"current_sprint": {**STATUS["current_sprint"],
                                 "branch": "feature/x_Sprint_29"}}
     assert cci.problem("feat: f (#61)\n", BRANCH, other)
@@ -61,6 +65,14 @@ def test_a_status_file_that_cannot_answer_blocks():
 
 def test_comment_lines_are_not_the_message():
     assert cci.problem("# feat: (#61)\nfeat: g\n", BRANCH, STATUS)
+    assert cci.problem("feat: g\n#\n# Please enter (#61)\n", BRANCH, STATUS)
+    assert cci.problem("feat: g\n# ------------------------ >8 -------\n"
+                       "#61 in the diff below\n", BRANCH, STATUS)
+
+
+def test_a_body_line_naming_the_issue_is_kept():
+    # git commit -m "feat: x" -m "#61 is the task" keeps that line.
+    assert cci.problem("feat: x\n\n#61 is the task\n", BRANCH, STATUS) is None
 
 
 @pytest.mark.skipif(shutil.which("git") is None, reason="git is not installed")
@@ -100,10 +112,17 @@ def test_the_rule_can_fail():
                         "is_refused", ROOT),
                     "a feat commit with no issue")
     assert_can_fail([Mutation(SCRIPT,
-                              '    if not isinstance(cur, dict) or '
-                              'cur.get("branch") != branch:\n',
+                              '    if cur.get("branch") != branch:\n',
                               "    if False:\n", expect_occurrences=1)],
                     lambda: run_pytest(
-                        f"{THIS}::test_a_status_file_that_cannot_answer_"
+                        f"{THIS}::test_a_status_file_for_another_branch_"
                         "blocks", ROOT),
-                    "an unreadable status file")
+                    "a status file for another branch")
+    assert_can_fail([Mutation(SCRIPT,
+                              "        if not COMMENT.match(ln):\n",
+                              "        if not ln.startswith('#'):\n",
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_a_body_line_naming_the_issue_is_kept",
+                        ROOT),
+                    "an issue line dropped as a comment")

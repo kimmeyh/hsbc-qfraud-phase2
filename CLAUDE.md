@@ -69,8 +69,9 @@ The one field filled from memory was the one that was wrong.)
   generator, its git commit, a clean-tree flag, the seeds and the library
   versions. The same guard fails a new file without it. A new module writes
   its result with `provenance.write_result(path, doc, __file__, seeds,
-  run_id)`, which adds the block, refuses to replace another run's result
-  unless `replace=` states why, and checks the file before it replaces
+  run_id)`, with `run_id` from `provenance.new_run_id()` at the run's start;
+  it adds the block, refuses to replace another run's result unless
+  `replace=` states why, and checks the file before it replaces
   anything (Sprint 28 IMP-6; `test_result_writer_required.py`). Device runs also
   store their full response through `experiments/phase2/src/device_store.py`
   (`test_device_store_required.py`).

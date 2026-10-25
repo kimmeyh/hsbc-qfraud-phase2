@@ -9,15 +9,18 @@ provenance block, refuses to replace another run's result without a stated
 reason, and checks the written file before it takes the result's place.
 
 The static rule, per module under `experiments/phase2/src`: a direct JSON
-file write is a call to `json.dump(`, or a `.write_text(` whose argument
-calls `json.dumps` or a helper whose name ends `_dump`. Modules from
-before the rule keep their counted writes; a count may fall, never rise
-(`frozen_list.check`), and a module not listed must have none.
+file write is a call to `json.dump(`, or a `.write_text(` or `.write(`
+whose argument calls `json.dumps` or a helper whose name ends `_dump`.
+Modules from before the rule keep their counted writes; a count may fall,
+never rise (`frozen_list.check`), and a module not listed must have none.
+The counts include log lines written with `json.dumps`, which are not
+results; a new module writes its log lines from text it builds first, or
+the count blocks it.
 
 Stated gap: a write whose text was built in an earlier statement
-(`text = json.dumps(...)`, then `.write_text(text)`) is not counted.
-`backfill_outcomes.py` writes that way; a module written to evade the rule
-could too. The rule catches the default shape every Phase 2 runner uses.
+(`text = json.dumps(...)`, then `.write_text(text)` or `fh.write(text)`)
+is not counted. `backfill_outcomes.py` writes that way; a module written
+to evade the rule could too.
 """
 from __future__ import annotations
 
@@ -51,13 +54,15 @@ JSON_WRITES_BEFORE_RULE = {
     "f115_cost_scaling.py": 1, "f126_sparsity_rule.py": 2,
     "f130_levers.py": 2, "f142_readout.py": 1, "f144_proxy_twin.py": 2,
     "f145_build_drift.py": 1, "f151_hgb_cause.py": 2,
-    "f152_exp2_score.py": 4, "f153_exp3_design.py": 1,
-    "f154_confusion.py": 1, "f162_in_pocket.py": 1, "ieee_harness.py": 1,
+    "f152_exp2_score.py": 5, "f153_exp3_design.py": 1,
+    "f154_confusion.py": 1, "f162_in_pocket.py": 1, "ieee_harness.py": 2,
     "lever_screen.py": 2, "oracle_gap.py": 1,
     "recover_device_samples.py": 1, "run_dirac3s_verify.py": 3,
     "sample_size.py": 1, "soft_votes.py": 1, "validate_emulator.py": 1,
 }
-# The table as frozen on 2026-10-24. Never edit; lower the table above.
+# The table as frozen on 2026-10-24, re-frozen 2026-10-25 before the merge
+# when the improvement review found the fh.write(json.dumps(...)) shape
+# (f152 and ieee_harness log lines). Never edit; lower the table above.
 ORIGINAL_JSON_WRITES_2026_10_24 = {
     "device_store.py": 1, "emulator_sparsity.py": 1, "exp3_controls.py": 1,
     "f102_downsized_pair.py": 1, "f103_tier1.py": 1, "f104_gate_check.py": 1,
@@ -67,14 +72,14 @@ ORIGINAL_JSON_WRITES_2026_10_24 = {
     "f115_cost_scaling.py": 1, "f126_sparsity_rule.py": 2,
     "f130_levers.py": 2, "f142_readout.py": 1, "f144_proxy_twin.py": 2,
     "f145_build_drift.py": 1, "f151_hgb_cause.py": 2,
-    "f152_exp2_score.py": 4, "f153_exp3_design.py": 1,
-    "f154_confusion.py": 1, "f162_in_pocket.py": 1, "ieee_harness.py": 1,
+    "f152_exp2_score.py": 5, "f153_exp3_design.py": 1,
+    "f154_confusion.py": 1, "f162_in_pocket.py": 1, "ieee_harness.py": 2,
     "lever_screen.py": 2, "oracle_gap.py": 1,
     "recover_device_samples.py": 1, "run_dirac3s_verify.py": 3,
     "sample_size.py": 1, "soft_votes.py": 1, "validate_emulator.py": 1,
 }
 ORIGINAL_JSON_WRITES_SHA256 = (
-    "1ad77b211b60514f525fb2836024b2bbe32dd8456bbed1c7e3c295a89cabca72")
+    "b1cb963e600675734ffd51d9c189247d450a16728cd798d729924af772992f94")
 
 
 def _calls_dumps(node) -> bool:
@@ -96,7 +101,7 @@ def json_writes(src: str) -> int:
         if isinstance(f, ast.Attribute) and f.attr == "dump" \
                 and isinstance(f.value, ast.Name) and f.value.id == "json":
             n += 1
-        elif isinstance(f, ast.Attribute) and f.attr == "write_text" \
+        elif isinstance(f, ast.Attribute) and f.attr in ("write_text", "write") \
                 and node.args and _calls_dumps(node.args[0]):
             n += 1
     return n
@@ -138,9 +143,11 @@ def test_the_scan_counts_each_shape():
     src = "\n".join(["OUT.write_text(json.dumps(doc, indent=1))",
                      "json.dump(doc, fh)",
                      "P.write_text(_dump(res), encoding='utf-8')",
+                     "fh.write(json.dumps(doc))",
                      "LOG.write_text('plain text')",
+                     "fh.write('plain text')",
                      "print(json.dumps(doc))"])
-    assert json_writes(src) == 3
+    assert json_writes(src) == 4
 
 
 def test_the_scan_flags_a_new_writer(tmp_path):
@@ -151,31 +158,34 @@ def test_the_scan_flags_a_new_writer(tmp_path):
 
 
 # ------------------------------------------------------------ write_result
+RUN1, RUN2 = "a" * 32, "b" * 32
+
+
 def _write(tmp_path, run, replace=None, doc=None):
     return prov.write_result(tmp_path / "r.json", doc or {"auprc": 0.5},
                              GENERATOR, [42], run, replace=replace)
 
 
 def test_a_new_result_carries_a_complete_block(tmp_path):
-    out = _write(tmp_path, "run1", doc={"n": np.int64(3), "ok": np.bool_(True)})
+    out = _write(tmp_path, RUN1, doc={"n": np.int64(3), "ok": np.bool_(True)})
     back = json.loads((tmp_path / "r.json").read_text(encoding="utf-8"))
     assert back == out and back["n"] == 3 and back["ok"] is True
     assert prov.problems(back["provenance"]) == []
-    assert back["provenance"]["run_id"] == "run1"
+    assert back["provenance"]["run_id"] == RUN1
 
 
 def test_the_same_run_may_rewrite_its_own_file(tmp_path):
-    _write(tmp_path, "run1")
-    _write(tmp_path, "run1", doc={"auprc": 0.6})
+    _write(tmp_path, RUN1)
+    _write(tmp_path, RUN1, doc={"auprc": 0.6})
     back = json.loads((tmp_path / "r.json").read_text(encoding="utf-8"))
     assert back["auprc"] == 0.6 and "replaces" not in back["provenance"]
 
 
 def test_another_runs_result_is_refused_and_left_alone(tmp_path):
-    _write(tmp_path, "run1")
+    _write(tmp_path, RUN1)
     before = (tmp_path / "r.json").read_bytes()
     with pytest.raises(FileExistsError):
-        _write(tmp_path, "run2", doc={"auprc": 0.1})
+        _write(tmp_path, RUN2, doc={"auprc": 0.1})
     assert (tmp_path / "r.json").read_bytes() == before
     assert sorted(p.name for p in tmp_path.iterdir()) == ["r.json"]
 
@@ -183,35 +193,44 @@ def test_another_runs_result_is_refused_and_left_alone(tmp_path):
 def test_a_result_from_before_the_rule_is_refused(tmp_path):
     (tmp_path / "r.json").write_text('{"auprc": 0.9}', encoding="utf-8")
     with pytest.raises(FileExistsError):
-        _write(tmp_path, "run1")
+        _write(tmp_path, RUN1)
 
 
 def test_a_stated_replacement_is_recorded(tmp_path):
-    _write(tmp_path, "run1")
-    out = _write(tmp_path, "run2", replace="the full run replaces the pilot")
+    _write(tmp_path, RUN1)
+    out = _write(tmp_path, RUN2, replace="the full run replaces the pilot")
     assert out["provenance"]["replaces"] == {
-        "reason": "the full run replaces the pilot", "previous_run_id": "run1"}
+        "reason": "the full run replaces the pilot", "previous_run_id": RUN1}
     # A later write of the same run keeps the record of what it replaced.
-    out = _write(tmp_path, "run2", doc={"auprc": 0.7})
-    assert out["provenance"]["replaces"]["previous_run_id"] == "run1"
+    out = _write(tmp_path, RUN2, doc={"auprc": 0.7})
+    assert out["provenance"]["replaces"]["previous_run_id"] == RUN1
 
 
 def test_a_blank_reason_or_run_id_is_refused(tmp_path):
     with pytest.raises(ValueError):
-        _write(tmp_path, "run1", replace="  ")
+        _write(tmp_path, RUN1, replace="  ")
     with pytest.raises(ValueError):
         _write(tmp_path, "")
     assert not (tmp_path / "r.json").exists()
 
 
+def test_a_constant_run_id_is_refused(tmp_path):
+    # A runner passing a fixed name would rewrite its earlier result on
+    # every rerun with no reason recorded (improvement review).
+    with pytest.raises(ValueError):
+        _write(tmp_path, "f170")
+    assert not (tmp_path / "r.json").exists()
+    assert prov.RUN_ID.fullmatch(prov.new_run_id())
+
+
 def test_an_unknown_type_stops_the_write(tmp_path):
     with pytest.raises(TypeError):
-        _write(tmp_path, "run1", doc={"x": object()})
+        _write(tmp_path, RUN1, doc={"x": object()})
     assert list(tmp_path.iterdir()) == []
 
 
 def test_a_file_that_does_not_read_back_is_refused(tmp_path, monkeypatch):
-    _write(tmp_path, "run1")
+    _write(tmp_path, RUN1)
     before = (tmp_path / "r.json").read_bytes()
     real = Path.write_text
 
@@ -220,7 +239,7 @@ def test_a_file_that_does_not_read_back_is_refused(tmp_path, monkeypatch):
                     *a, **kw)
     monkeypatch.setattr(Path, "write_text", corrupting)
     with pytest.raises(OSError):
-        _write(tmp_path, "run1", doc={"auprc": 0.6})
+        _write(tmp_path, RUN1, doc={"auprc": 0.6})
     assert (tmp_path / "r.json").read_bytes() == before
     assert sorted(p.name for p in tmp_path.iterdir()) == ["r.json"]
 
@@ -243,6 +262,13 @@ def test_the_refusal_can_fail():
            "another run's result replaced")
 
 
+def test_the_run_id_shape_check_can_fail():
+    _fails(WRITER, "    if not isinstance(run_id, str) or not "
+                   "RUN_ID.fullmatch(run_id):\n",
+           "    if not run_id:\n",
+           "test_a_constant_run_id_is_refused", "a constant run id")
+
+
 def test_the_read_back_check_can_fail():
     _fails(WRITER, "        if back != json.loads(text):\n",
            "        if False:\n",
@@ -257,15 +283,15 @@ def test_the_module_scan_can_fail():
 
 
 def test_the_frozen_table_can_fail():
-    _fails(SELF, '    "f152_exp2_score.py": 4, "f153_exp3_design.py": 1,\n'
+    _fails(SELF, '    "f152_exp2_score.py": 5, "f153_exp3_design.py": 1,\n'
                  '    "f154_confusion.py": 1, "f162_in_pocket.py": 1, '
-                 '"ieee_harness.py": 1,\n    "lever_screen.py": 2, '
+                 '"ieee_harness.py": 2,\n    "lever_screen.py": 2, '
                  '"oracle_gap.py": 1,\n    "recover_device_samples.py": 1, '
                  '"run_dirac3s_verify.py": 3,\n    "sample_size.py": 1, '
                  '"soft_votes.py": 1, "validate_emulator.py": 1,\n}\n# The',
-           '    "f152_exp2_score.py": 4, "f153_exp3_design.py": 1,\n'
+           '    "f152_exp2_score.py": 5, "f153_exp3_design.py": 1,\n'
            '    "f154_confusion.py": 1, "f162_in_pocket.py": 2, '
-           '"ieee_harness.py": 1,\n    "lever_screen.py": 2, '
+           '"ieee_harness.py": 2,\n    "lever_screen.py": 2, '
            '"oracle_gap.py": 1,\n    "recover_device_samples.py": 1, '
            '"run_dirac3s_verify.py": 3,\n    "sample_size.py": 1, '
            '"soft_votes.py": 1, "validate_emulator.py": 1,\n}\n# The',

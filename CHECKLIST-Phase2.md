@@ -82,6 +82,14 @@ Nothing in this stage is time-bound. Schedule on value.
       - **Progress 2026-10-18** (Sprint 27 Task C): section 7 items done,
         sections 2a and 2b added; open: entries for Experiments 2-6 and the
         filing date (team lead)
+      - **Progress 2026-10-22/23** (Sprint 28): entries for Experiments 2,
+        3, 4 and 6 and for F162 written before their first scores, each with
+        its result recorded after (F152, F153, F111, F110, F162). Open: the
+        filing date (team lead)
+- [x] **C**: F154 every saved test result's confusion counts, and where
+      each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
+      the standing rule that every result records its outcomes (CLAUDE.md),
+      and from D4 its provenance
 - [x] **C**: F103 SPECTRA Tier 1 known-answer check on the paper's own dataset.
       Sprint 27: `docs/phase2/F103_TIER1_CHECK.md`; the dense substrate
       repeats under F150
@@ -114,6 +122,9 @@ Nothing in this stage is time-bound. Schedule on value.
 - [ ] **H+C**: If selected, start F13 (Phase 2 PoC sprint planning). If not
       selected, the repository stands as the public record of a null reported
       honestly
+      - **Progress 2026-10-22** (Sprint 28 Task J): skeleton
+        `docs/phase2/PHASE2_POC_PLAN.md`, dates cited to the program
+        roadmap; the content after notification stays open
 
 ## The six experiments, in the order the proposal commits to (section 5)
 
@@ -133,6 +144,10 @@ Nothing in this stage is time-bound. Schedule on value.
         all three folds; the adversarial control hits its round cap, and
         month 6 is a partial bucket, which Experiment 2's entry must decide.
         No score reported
+      - **Progress 2026-10-22** (Sprint 28, F152): entry first, then the
+        first rolling-origin score. P1 holds (XGBoost above logistic
+        regression on months 4 and 5); P2's month-4-to-5 change mixes drift
+        with training size (`docs/phase2/F152_EXP2_RESULT.md`)
 - [ ] **H+C**: 3. Cardinality-constrained selection on Dirac-3's integer solver,
       against a time-capped MIQP, greedy, and simulated annealing. **A win
       against a certified-optimal classical solve is a result; a win against no
@@ -153,10 +168,20 @@ Nothing in this stage is time-bound. Schedule on value.
         (`docs/phase2/F142_DIRAC3S_VERIFY.md`). Dirac-3S is now the Phase 2
         default device (Sprint 26 Decision 11); the experiment's sizing is
         a Dirac-3 figure to re-price
+      - **Progress 2026-10-22** (Sprint 28, F153): the entry's proxy design
+        fails on all six instances: the gap to the floor is 0.0016-0.0026,
+        below 0.01, and both resolution checks fail
+        (`docs/phase2/F153_EXP3_DESIGN.md`). F160 repeats the room check on
+        a second dataset
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours
       - Backlog: F111
+      - **Progress 2026-10-23** (Sprint 28, F111, on the CVQBoost-KNN
+        proxy): the KNN lane's mean under their protocol is 0.760, not
+        consistent with 0.8108; their protocol does not measurably change
+        the lane; the stable HGB beats it under both
+        (`docs/phase2/F111_LOKE_PROTOCOL.md`)
 - [ ] **H+C**: 5. Segment transfer (H5) -- replicate a prior Dirac-3 campaign's
       in-segment wins with seeds and intervals, then test transfer to fraud
       segments against a matched random-segment control. **A failure of H5 is
@@ -167,9 +192,19 @@ Nothing in this stage is time-bound. Schedule on value.
         10 feasible cells). The in-segment edge is negative on all 8
         scoreable cells; energy_steel is unscoreable. Transfer half not
         started. `docs/B4_B5_HARDWARE_RESULT.md`
+      - **Progress 2026-10-23** (Sprint 28, F162, classical proxy, ten
+        seeds): inside the pocket the proxy is not reliably above HGB or
+        XGBoost on any cell, and XGBoost is reliably above it on
+        energy_steel and oilgas_gasturbine (`docs/phase2/F162_IN_POCKET.md`).
+        F161, the B4 re-run on Dirac-3S, is carded with its run condition
 - [ ] **C**: 6. Scaling claim -- end-to-end training time against sample count,
       including Hamiltonian construction
       - Backlog: F110
+      - **Progress 2026-10-22** (Sprint 28, F110, proxy): P1 is false (the
+        pool build grows with a slope of about 1.4 in rows); P2 holds at
+        833 variables and fails under the rule at 91, where the subtracted
+        J build exceeds the solve (`docs/phase2/F110_SCALING.md`). Device
+        arm not run
 
 ## Other commitments in the proposal
 

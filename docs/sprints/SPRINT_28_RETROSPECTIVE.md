@@ -253,5 +253,31 @@ after the work, closed at once, and its time is recorded as not measured.
 | IMP-3 | **skip** | The team lead's reason: CI checks are covered sufficiently |
 | IMP-4 | **now** | a8b5ade: `.githooks/commit-msg` and `scripts/check_commit_issue.py`; checklist Phase 4 names it. The live hook refused this sprint's first attempt at that commit, which lacked the issue number. D4's issue #60 opened and closed; D4's time is not measured |
 | IMP-5 | **now** | 132c8ec: `SPRINT_PLANNING.md` (extends Sprint 25 IMP-2 to the tests) and a Phase 5 gate in `SPRINT_CHECKLIST.md` |
-| IMP-6 | **now** | de15d6c: `provenance.write_result` and `test_result_writer_required.py`; 43 direct JSON writes in 33 existing modules frozen. Built now, not the recommended backlog. F163 was reserved for it and is not used |
+| IMP-6 | **now** | de15d6c: `provenance.write_result` and `test_result_writer_required.py`; the existing direct JSON writes frozen per module (45 in 33 modules after the review below). Built now, not the recommended backlog. F163 was reserved for it and is not used |
 | IMP-7 | **backlog** | F164 in `ALL_SPRINTS_MASTER_PLAN.md`, priority 25 |
+
+## Review of the improvement commits
+
+One short review of 6142eef..fefd24b (one agent, the evidence files
+excluded). Five findings, all fixed in the same round, none sent on:
+
+- `source_scan.code_text` split lines at a form feed, where `tokenize` does
+  not, so blanking could land on the wrong line and hide a call. Now split
+  as `tokenize` reads; a form-feed test, proven red.
+- The commit hook's status proof went red on a crash, not on the check.
+  The two status terms are now separate, each with its own test; the
+  branch term proven red.
+- `write_result` accepted any run id, so a constant id switched off the
+  refusal. It now requires the 32-hex-character id `new_run_id()` makes;
+  the docstring states what remains (a caller that copies an id out of a
+  recorded result).
+- The module scan missed `fh.write(json.dumps(...))`. It now counts it; the
+  frozen table was re-frozen before the merge with the two log writers it
+  found (f152, ieee_harness), from 43 to 45 writes.
+- The hook dropped a body line starting `#61` as a comment. It now drops
+  only git's own comment and scissors lines; proven red.
+
+The same pass found that 9993ab6's `docs/TROUBLESHOOTING.md` entry named
+`device_store.py` without its path, which `test_troubleshooting_index.py`
+fails; fixed. It was missed for the same reason as the CI red in category
+1: only the targeted tests were run before the commit.
