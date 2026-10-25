@@ -41,6 +41,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 25 | docs/sprints/SPRINT_25_SUMMARY.md | [OK] Complete | ~4 days (Oct 10-13, 2026) |
 | 26 | docs/sprints/SPRINT_26_SUMMARY.md | [OK] Complete | ~5 days (Oct 13-17, 2026) |
 | 27 | docs/sprints/SPRINT_27_SUMMARY.md | [OK] Complete | ~2 days (Oct 18-19, 2026) |
+| 28 | docs/sprints/SPRINT_28_SUMMARY.md | [OK] Complete | ~4 days (Oct 22-25, 2026) |
 
 ## Last Completed Sprint
 
@@ -56,8 +57,8 @@ proxy design fails on all six instances. F110: P1 is false; P2 holds at
 either protocol. F114: still blocked. F162: inside the SPECTRA pocket the
 proxy is not reliably above HGB or XGBoost on any cell. Records:
 `SPRINT_28_PLAN.md`, `SPRINT_28_VALIDATION.md`,
-`SPRINT_28_RETROSPECTIVE.md`; `SPRINT_28_SUMMARY.md` is written at
-Sprint 29 planning.
+`SPRINT_28_RETROSPECTIVE.md`, `SPRINT_28_SUMMARY.md` (written at
+Sprint 29 planning).
 
 ### Sprint 27: Gates Before Reporting, and the Screens That Need No Device
 (Oct 18 - Oct 19, 2026; PR #32, main PR #45). Delivered **F149, F104, F102 (section 7;
@@ -509,8 +510,11 @@ stable HGB, F154's outcome rule). See SPRINT_28_PLAN.md,
 SPRINT_28_VALIDATION.md, SPRINT_28_RETROSPECTIVE.md and CHANGELOG.md.
 Removed from candidates per convention (Pass 1, 2026-10-25).)
 
-**Assigned to Sprint 29** (team lead, 2026-10-23, during Sprint 28 Manual
-Validation): F159. The rest of Sprint 29's scope is set at its Pass 2.
+**Selected for Sprint 29** (team lead, 2026-10-25): F159 (assigned
+2026-10-23), F164, F156, F160, F166, F158 and F165, and F167, a copy of
+F13 for drafting the full PoC plan now. Zero metered. F155, F102, F157's
+other datasets, F161, F95 and F13 itself not selected. Plan:
+`docs/sprints/SPRINT_29_PLAN.md`.
 
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
@@ -523,6 +527,7 @@ Validation): F159. The rest of Sprint 29's scope is set at its Pass 2.
 - **Sprint 27 Task L (2026-10-18)**: a send-ready draft of P1-P2 (follow-up) and A1-A12 is at `docs/qci_package/F146_QCI_QUESTIONS_DRAFT.md` (gitignored, not sent). None dropped: F142 bears on A3, A6 and A12 but answers none, so those three now cite the measurement. Its message body passes `scripts/outward_readability.py`; the two hits are in the notes marked for deletion. Sending is the team lead's action
 - **Sent 2026-10-18** by the team lead (filed in `docs/qci_package/`); section 4 of `DIRAC_UNDERSTANDINGS.md` records it. The next F146 update is QCi's answer
 - **Answered 2026-10-20** (update 2026-10-21): QCi answered A1-A12 and P2; P1 was referred to the eqc-models contact and stays open. Recorded in section 4 of `DIRAC_UNDERSTANDINGS.md`. Consequences for other cards are on F143 (A1), F25 (A4), F30 (A5) and F153 (A7)
+- **P1 answered 2026-10-21** by QCi's eqc-models contact, and closed (recorded 2026-10-22, `DIRAC_UNDERSTANDINGS.md` section 4). No question is pending (corrected 2026-10-25, Sprint 29 planning: the line above still read "stays open")
 
 **F143. telecom_churn with all 18 features (987 variables) on Dirac-3S (~1h + at least 450 metered s, unmeasured at 987) Priority HOLD**
 - Phase: Phase 2 (added 2026-10-13 by F139, Sprint 25)
@@ -762,6 +767,14 @@ not a sweep correction.
 - Braket hardware validation, IEEE-CIS at scale, calibrated deployment per the routing architecture; plan built on acceptance
 - **OFF HOLD 2026-10-05 (team lead): waiting is no longer a HOLD reason for Phase 2 work.** Scored 180, last in the numeric set, because the *content* of the plan still depends on finalist notification --- but the card is now schedulable rather than parked, and much of the preparation it names is already carded (F102 preregistration framework, F6 Braket, F105 IEEE-CIS at scale, F118-F120 deployment)
 - Depends on: nothing to start the skeleton; the dataset-specific content needs finalist notification
+
+**F167. F13 copy: the full PoC plan drafted now, on stated assumptions (~60m [no-history], zero metered) Priority 30; selected for Sprint 29**
+- Phase: Phase 2 (added 2026-10-25 by the team lead at Sprint 29 selection: "Make a copy so that we can draft what this will look like and assign to this sprint")
+- Platform: docs
+- A draft of the plan F13 will hold after notification, written now so the team lead can see its shape: the PoC window split into sprints, each experiment placed with its entry, its device block (if any) and the decision that releases it, and the items that wait for the brief. Every assumption about the brief (data, metrics, compute, confidentiality, device seconds) labeled as an assumption
+- Output: a new file, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. The skeleton (`PHASE2_POC_PLAN.md`) and F13 stay as they are; on notification F13 replaces the assumptions with the brief's terms
+- Acceptance: every date sourced; every assumption labeled; no figure restated that another file owns
+- Depends on: nothing
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control

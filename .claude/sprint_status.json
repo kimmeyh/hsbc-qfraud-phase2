@@ -1,10 +1,10 @@
 {
   "current_sprint": {
     "number": 29,
-    "name": "(named at planning)",
+    "name": "Make the Tools Repeatable, Then Find the Best Each Model Can Do",
     "branch": "feature/20261025_Sprint_29",
-    "status": "phase_1_backlog_refinement",
-    "plan_doc": null,
+    "status": "phase_3_planning",
+    "plan_doc": "docs/sprints/SPRINT_29_PLAN.md",
     "pr": null,
     "plan_approved": false,
     "github_issues": [],
