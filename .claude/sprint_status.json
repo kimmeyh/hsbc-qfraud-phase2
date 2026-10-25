@@ -1,107 +1,21 @@
 {
   "current_sprint": {
-    "number": 28,
-    "name": "Experiment Entries First, Then Their First Measurements",
-    "branch": "feature/20261019_Sprint_28",
-    "status": "phase_7_retrospective",
-    "plan_doc": "docs/sprints/SPRINT_28_PLAN.md",
-    "pr": 46,
-    "plan_approved": true,
-    "github_issues": [
-      47,
-      48,
-      49,
-      50,
-      51,
-      52,
-      53,
-      54,
-      55,
-      56,
-      57,
-      58,
-      59,
-      60,
-      61
-    ],
-    "task_actuals": {
-      "F": 12,
-      "I": 3,
-      "A": 8,
-      "J": 4,
-      "L": 2,
-      "K": 1,
-      "H": 1,
-      "G": 8,
-      "B": 46,
-      "C": 70,
-      "E": 198,
-      "D": 180,
-      "M": 39,
-      "R": 16
-    },
-    "task_started": {
-      "F": "2026-10-22T11:51:11-04:00",
-      "A": "2026-10-22T12:02:14-04:00",
-      "I": "2026-10-22T12:03:14-04:00",
-      "J": "2026-10-22T12:05:56-04:00",
-      "B": "2026-10-22T12:09:52-04:00",
-      "C": "2026-10-22T12:12:45-04:00",
-      "E": "2026-10-22T12:14:48-04:00",
-      "L": "2026-10-22T12:16:59-04:00",
-      "K": "2026-10-22T12:24:41-04:00",
-      "H": "2026-10-22T12:26:19-04:00",
-      "G": "2026-10-22T12:26:34-04:00",
-      "D": "2026-10-22T12:33:50-04:00",
-      "M": "2026-10-23T14:57:10-04:00",
-      "R": "2026-10-24T23:51:53-04:00"
-    },
-    "task_parallel": {
-      "I": [
-        "A"
-      ],
-      "J": [
-        "A"
-      ],
-      "C": [
-        "B"
-      ],
-      "E": [
-        "B",
-        "C"
-      ],
-      "L": [
-        "B",
-        "C",
-        "E"
-      ],
-      "K": [
-        "B",
-        "C",
-        "E"
-      ],
-      "H": [
-        "B",
-        "C",
-        "E"
-      ],
-      "G": [
-        "B",
-        "C",
-        "E"
-      ],
-      "D": [
-        "B",
-        "C",
-        "E"
-      ]
-    }
+    "number": 29,
+    "name": "(named at planning)",
+    "branch": "feature/20261025_Sprint_29",
+    "status": "phase_1_backlog_refinement",
+    "plan_doc": null,
+    "pr": null,
+    "plan_approved": false,
+    "github_issues": [],
+    "task_actuals": {},
+    "task_started": {}
   },
   "last_completed_sprint": {
-    "number": 27,
-    "merged_pr": 32,
-    "main_merge_pr": 45,
-    "docs_triad_complete": true
+    "number": 28,
+    "merged_pr": 46,
+    "main_merge_pr": 62,
+    "docs_triad_complete": false
   },
   "prereg": {
     "status": "FROZEN",
