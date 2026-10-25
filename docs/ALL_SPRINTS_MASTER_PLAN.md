@@ -649,6 +649,26 @@ value. Removed from candidates.)
 - Scope: extend F44's check to `docs/phase2/*.md`: every decimal resolves to a value in `experiments/phase2/results/` or `experiments/results/` at the quoted rounding, or is registered once with a reason (derived ratios, dataset properties, citations); an unregistered number that matches nothing fails. F44's stated limit stays: a figure that exists somewhere but is quoted in the wrong place is not caught, which needs per-claim provenance (F39)
 - Acceptance: the seven figures above, put back, each fail (proven red with `assert_can_fail`); the registry starts with every current figure either resolved or registered
 - Depends on: nothing; size the registry at refinement by counting the decimals in `docs/phase2/`
+- **Sized at Pass 2 (2026-10-25)**: 1,631 decimals, 837 distinct values, in 34 documents. How many resolve to a result file is unmeasured, so the registry's size is unknown; the ~3h estimate assumes most resolve
+
+**F165. Result writer: a resumed run keeps its own id (~60m [no-history], zero metered) Priority 40**
+- Phase: Phase 2 preparation, tooling (added 2026-10-25, Pass 2 after Sprint 28: the stronger option of review finding 3 on the Sprint 28 improvement commits, left open by `fb56862`)
+- Platform: tests, this machine
+- `provenance.write_result` refuses to replace a result from another run, and the refusal holds only while each run makes its own id. Two gaps remain, both stated in `new_run_id`'s docstring: a caller that copies the id out of a recorded result switches the refusal off, and a resumed run in a new process must pass `replace=` to continue its own file, so a resume and a real replacement look the same in the record
+- Work: the run's id is kept beside the result at the run's start (a gitignored sidecar), a resume reads it from there, and `write_result` refuses an id that matches the recorded result but not the sidecar
+- This enables: resumable Phase 2 runs (as F162's and F111's were) that record a resume as a resume. This prevents: a copied id silently overwriting a recorded result
+- Acceptance: a resume in a new process continues its file with no `replace=`; a copied id with no sidecar is refused; each term proven red with `assert_can_fail`
+- Depends on: nothing
+
+**F166. F157 part 1: best achievable result per algorithm on ULB, classical and proxy lanes (~240m [no-history], zero metered) Priority 30**
+- Phase: Phase 2 (split from F157 at the 2026-10-25 refinement, as F157 directs)
+- Platform: ULB, classical proxy
+- F157's scope for one dataset: HGB, LightGBM, XGBoost, CatBoost, logistic regression, SVM and the CVQBoost proxy, each tuned under one protocol, with the alternatives tried and why each was kept or dropped. Every result carries the F154 outcome block and the metrics F157 names, with intervals over seeds. Device lanes (CVQBoost device, QSVM) and QNN are out of this part
+- Output: one document per algorithm under `docs/phase2/algorithms/` and one ULB comparison page that references them; the numbers live in the result files
+- Starting points already measured: F151's stable HGB (`l2_regularization=1.0`), F111's ULB lanes, Phase 1's tuned XGBoost
+- This enables: a per-dataset reference that every later Phase 2 claim on ULB is read against. This prevents: comparing a tuned lane against an untuned one, as F151 and F162 each found
+- Acceptance: entry before any score; seven algorithm documents and the comparison page; each figure resolves to a result file
+- Depends on: F102 for reporting (the draft's section 2 standard applies)
 
 **F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)
