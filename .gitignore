@@ -67,6 +67,15 @@ docs/paper/out/*
 # covers it: without these two lines a `git add -A` publishes the negotiation.
 docs/qci_package/
 docs/paper/out/qci_package/
+# Correspondence with the SPECTRA paper's authors (F150, Sprint 28 Task H):
+# drafts and replies about their substrate construction. Private, like the QCi
+# folder above; written before the folder's first file, and checked with
+# `git check-ignore` before that file was created.
+docs/spectra_package/
+# Correspondence with the Loke et al. authors (F111, Sprint 28 Manual
+# Validation): feedback drafts on Experiment 4. Private, like the folders
+# above; written and checked with `git check-ignore` before the first file.
+docs/loke_package/
 # Predictions: ignore the CONTENTS (not the directory itself, or the negation
 # below cannot re-include anything -- the Sprint 2 MANIFEST.json defect class).
 experiments/results/predictions/*
@@ -74,6 +83,11 @@ experiments/results/predictions/*
 # QPU seconds, so they are version-controlled. Classical and proxy predictions
 # stay ignored because they rebuild for free (see QUALITY_STANDARDS).
 !experiments/results/predictions/cvqboost_hw_*.npz
+# Phase 2 per-row test scores (F154 standing rule, Sprint 28): the same
+# treatment. Free to regenerate, so ignored; hardware files (`hw_*`) cost
+# metered seconds, so tracked.
+experiments/phase2/predictions/*
+!experiments/phase2/predictions/hw_*.npz
 
 # Smoke-run output; evidence lives in ieee_classical.json only.
 experiments/results/*_smoke.json

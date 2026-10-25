@@ -24,7 +24,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 
 ## Phase 4: Execution (auto-advance window: no permission-asking)
 - [ ] Tasks in plan order; tests after each change; commits reference issue #N
-- [ ] ACTUAL minutes recorded in `sprint_status.json` `task_actuals` as each task completes (not reconstructed at the retrospective): `update_sprint_status.py --start-task X` when it begins, `--finish-task X` when it ends. `--pause-task X` / `--resume-task X` around an approval wait; `--parallel` only when tasks truly run at once. A task added mid-sprint (including at Manual Validation) starts its timer with the tool before its first file; the status file is never written by hand or by a one-off script (Sprint 26 IMP-2)
+- [ ] ACTUAL minutes recorded in `sprint_status.json` `task_actuals` as each task completes (not reconstructed at the retrospective): `update_sprint_status.py --start-task X` when it begins, `--finish-task X` when it ends. `--pause-task X` / `--resume-task X` around an approval wait; `--parallel` only when tasks truly run at once. A task added mid-sprint (including at Manual Validation) starts its timer with the tool before its first file; the status file is never written by hand or by a one-off script (Sprint 26 IMP-2). Such a task also gets its issue first (`gh issue create`, then `update_sprint_status.py --add-issue N`): `.githooks/commit-msg` refuses a `feat:` or `fix:` commit on a sprint branch that names neither an issue from `github_issues` nor `PR <n> review` (Sprint 28 IMP-4)
 - [ ] `git status --short` before every staging; every entry accounted for; 0* files committed neutrally, never read
 - [ ] Results only via frozen protocol; every metric -> results.json with evidence tag
 - [ ] HARDWARE: any metered run stops for approval (Criterion H), always
@@ -32,17 +32,22 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 ## Phase 5: Review & Validation
 - [ ] Full suite green; no unamended drift from prereg-freeze in analysis code
 - [ ] Plan acceptance criteria walked line by line WITH EVIDENCE
+- [ ] Every compound decision rule added this sprint has one test per term in which only that term fails, each proven red (`SPRINT_PLANNING.md`, Sprint 28 IMP-5)
 - [ ] OUTWARD documents pass `scripts/outward_readability.py` BEFORE handover (IMP-5: the QCi package needed a revision round purely to strip tokens a vendor reader cannot resolve, after the team lead had already reviewed it)
 - [ ] **The validation items are LISTED TO THE SCREEN as the last step before handover** (team lead, 2026-10-03). Writing them to a file and pointing at the file is not the handover; it is the same referring-back failure in another form. The file is the durable copy, the screen list is the handover
 - [ ] Handed to team lead for manual validation (questions correct from here)
 
 ## Phase 6: Push & Finalize PR
 - [ ] Branch pushed; existing draft PR body updated (still DRAFT); interim status given, not "ready"
+- [ ] **Reviews on the DRAFT PR** (team lead, 2026-10-23, Sprint 28 DV5): Copilot (GraphQL request, verified on the timeline) and pr-review-toolkit, the invocation naming the excluded evidence files. The PR stays draft. While they run, the team lead's retrospective feedback is collected (retrospective step 1)
+- [ ] Every finding fixed, prevention first (the guard or gate before the patch), each thread answered and resolved
 - [ ] ON MERGE NOTIFICATION: next sprint branch created FROM CURRENT FEATURE BRANCH immediately; post-merge work committed there; never stash; never branch from develop post-merge
 
 ## Phase 7: Retrospective (before ready)
-- [ ] 7-step protocol run in order (SPRINT_RETROSPECTIVE.md); 16 categories x 4 roles, verbatim, no placeholders
+- [ ] 7-step protocol run in order (SPRINT_RETROSPECTIVE.md); 16 categories x 4 roles, verbatim, no placeholders; the review findings are an input
+- [ ] Every RECURRING finding class has an improvement (card acceptance criterion, Phase 5 gate, test or hook); single findings have a root cause recorded
 - [ ] Improvements proposed + dispositioned; now-items committed; backlog-items -> master plan with F#s
+- [ ] ONE short review of the improvement commits only; its trivial findings fixed, the rest to the next sprint's Phase 1 refinement (no second round)
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
 - [ ] CI checked on the final HEAD (`scripts/check_ci_status.py`, no waiting). If it is still running or RED, arm the watcher and hand the result to an agent; the close-out hook blocks the completion claim until it is green
 - [ ] `gh pr ready` (ONLY here); final gate; team lead notified for approval

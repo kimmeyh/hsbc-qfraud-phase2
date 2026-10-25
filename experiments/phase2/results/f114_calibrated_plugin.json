@@ -1,0 +1,293 @@
+{
+ "generator": "experiments/phase2/src/f114_calibrated_plugin.py",
+ "card": "F114",
+ "sprint": 28,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "date": "2026-10-22",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, amendment 2026-10-22",
+ "model": {
+  "hgb_l2_regularization": 1.0,
+  "holdout": 0.25,
+  "calibration": "isotonic"
+ },
+ "margin": {
+  "abs": 0.0005,
+  "rel": 0.1
+ },
+ "mode": "run",
+ "seeds": [
+  42,
+  43,
+  44,
+  45,
+  46
+ ],
+ "rows": [
+  {
+   "seed": 42,
+   "n_train": 897933,
+   "n_test": 615643,
+   "generator_check": {
+    "bayes_error": 0.006099614366235471,
+    "bayes_classifier_error": 0.006092816778555104,
+    "sd_error": 9.892164329545072e-05,
+    "fraud_rate": 0.008288894700337696,
+    "mean_eta": 0.008320739525776335,
+    "sd_rate": 9.892164329545072e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006099614366235471,
+     "uncalibrated": 0.006812960182786822,
+     "calibrated": 0.006799097264989137,
+     "n_fit": 673449,
+     "n_holdout": 224484,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    },
+    "flip": {
+     "bayes_error": 0.006405274729778547,
+     "uncalibrated": 0.00706395027803557,
+     "calibrated": 0.00698646686867346,
+     "n_fit": 673449,
+     "n_holdout": 224484,
+     "calibrated_recovered": true,
+     "uncalibrated_recovered": false
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "uncalibrated": 0.0019031987169985858,
+     "calibrated": 0.0005381916839490698,
+     "n_fit": 673449,
+     "n_holdout": 224484,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    }
+   },
+   "seconds": 9.5
+  },
+  {
+   "seed": 43,
+   "n_train": 881184,
+   "n_test": 603745,
+   "generator_check": {
+    "bayes_error": 0.006256330713384506,
+    "bayes_classifier_error": 0.006272515714415855,
+    "sd_error": 0.0001011438222682125,
+    "fraud_rate": 0.008455556567756255,
+    "mean_eta": 0.00846660110734864,
+    "sd_rate": 0.0001011438222682125,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006256330713384506,
+     "uncalibrated": 0.00649150653004427,
+     "calibrated": 0.006436460274512406,
+     "n_fit": 660888,
+     "n_holdout": 220296,
+     "calibrated_recovered": true,
+     "uncalibrated_recovered": true
+    },
+    "flip": {
+     "bayes_error": 0.006553617231673909,
+     "uncalibrated": 0.006803562324690442,
+     "calibrated": 0.006751519644309192,
+     "n_fit": 660888,
+     "n_holdout": 220296,
+     "calibrated_recovered": true,
+     "uncalibrated_recovered": true
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "uncalibrated": 0.0005215029956486593,
+     "calibrated": 0.0005154014383771078,
+     "n_fit": 660888,
+     "n_holdout": 220296,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    }
+   },
+   "seconds": 10.1
+  },
+  {
+   "seed": 44,
+   "n_train": 890741,
+   "n_test": 609725,
+   "generator_check": {
+    "bayes_error": 0.006208546065179572,
+    "bayes_classifier_error": 0.006227397597277461,
+    "sd_error": 0.0001002372204012521,
+    "fraud_rate": 0.008577637459510436,
+    "mean_eta": 0.008571484340145522,
+    "sd_rate": 0.0001002372204012521,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006208546065179572,
+     "uncalibrated": 0.006885867887307466,
+     "calibrated": 0.007015963517655899,
+     "n_fit": 668055,
+     "n_holdout": 222686,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    },
+    "flip": {
+     "bayes_error": 0.006515885580583689,
+     "uncalibrated": 0.007164395444078508,
+     "calibrated": 0.0072064453790934265,
+     "n_fit": 668055,
+     "n_holdout": 222686,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": true
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "uncalibrated": 0.00020393034047560085,
+     "calibrated": 0.0005523517375372523,
+     "n_fit": 668055,
+     "n_holdout": 222686,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": true
+    }
+   },
+   "seconds": 6.2
+  },
+  {
+   "seed": 45,
+   "n_train": 901670,
+   "n_test": 618114,
+   "generator_check": {
+    "bayes_error": 0.006039362363182529,
+    "bayes_classifier_error": 0.006019925127080118,
+    "sd_error": 9.8246568712195e-05,
+    "fraud_rate": 0.008139275279317407,
+    "mean_eta": 0.008151475872763759,
+    "sd_rate": 9.8246568712195e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006039362363182529,
+     "uncalibrated": 0.006424056120150556,
+     "calibrated": 0.006368733067007514,
+     "n_fit": 676252,
+     "n_holdout": 225418,
+     "calibrated_recovered": true,
+     "uncalibrated_recovered": true
+    },
+    "flip": {
+     "bayes_error": 0.006342994004676264,
+     "uncalibrated": 0.006782671219330415,
+     "calibrated": 0.0067623706448556205,
+     "n_fit": 676252,
+     "n_holdout": 225418,
+     "calibrated_recovered": true,
+     "uncalibrated_recovered": true
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "uncalibrated": 0.0005946651262938167,
+     "calibrated": 0.000615038992575509,
+     "n_fit": 676252,
+     "n_holdout": 225418,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    }
+   },
+   "seconds": 10.3
+  },
+  {
+   "seed": 46,
+   "n_train": 879888,
+   "n_test": 602629,
+   "generator_check": {
+    "bayes_error": 0.006026596882732953,
+    "bayes_classifier_error": 0.006033562938391614,
+    "sd_error": 9.936072712069097e-05,
+    "fraud_rate": 0.008262131427462004,
+    "mean_eta": 0.008245475862870152,
+    "sd_rate": 9.936072712069097e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006026596882732953,
+     "uncalibrated": 0.006871479317609731,
+     "calibrated": 0.006687158739493853,
+     "n_fit": 659916,
+     "n_holdout": 219972,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    },
+    "flip": {
+     "bayes_error": 0.0063359471318471545,
+     "uncalibrated": 0.006933816492786887,
+     "calibrated": 0.007039451212927689,
+     "n_fit": 659916,
+     "n_holdout": 219972,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": true
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "uncalibrated": 0.0006012588250154533,
+     "calibrated": 0.0005861168219852,
+     "n_fit": 659916,
+     "n_holdout": 219972,
+     "calibrated_recovered": false,
+     "uncalibrated_recovered": false
+    }
+   },
+   "seconds": 10.8
+  }
+ ],
+ "summary": {
+  "none": {
+   "calibrated": {
+    "seeds_recovered": 2,
+    "n_seeds": 5,
+    "recovers": false
+   },
+   "uncalibrated": {
+    "seeds_recovered": 2,
+    "n_seeds": 5,
+    "recovers": false
+   }
+  },
+  "flip": {
+   "calibrated": {
+    "seeds_recovered": 3,
+    "n_seeds": 5,
+    "recovers": false
+   },
+   "uncalibrated": {
+    "seeds_recovered": 4,
+    "n_seeds": 5,
+    "recovers": true
+   }
+  },
+  "reference": {
+   "calibrated": {
+    "seeds_recovered": 0,
+    "n_seeds": 5,
+    "recovers": false
+   },
+   "uncalibrated": {
+    "seeds_recovered": 1,
+    "n_seeds": 5,
+    "recovers": false
+   }
+  }
+ },
+ "verdict": {
+  "deciding_arm": "none",
+  "calibrated_plugin_recovers": false,
+  "f114": "stays blocked: the calibrated plug-in does not recover"
+ },
+ "elapsed_s": 47.0
+}

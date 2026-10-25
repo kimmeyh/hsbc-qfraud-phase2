@@ -1,0 +1,79 @@
+{
+ "generator": "experiments/phase2/src/f115_cost_scaling.py",
+ "card": "F115",
+ "sprint": 28,
+ "evidence_tag": "HW (re-analysis, no new call)",
+ "metered_seconds": 0,
+ "source": "experiments/results/integer_probe.json",
+ "points": [
+  {
+   "label": "probe_small",
+   "n_variables": 8,
+   "level_budget": 32,
+   "metered_seconds": 4
+  },
+  {
+   "label": "probe_mid",
+   "n_variables": 24,
+   "level_budget": 96,
+   "metered_seconds": 8
+  },
+  {
+   "label": "probe_mid_hi",
+   "n_variables": 60,
+   "level_budget": 240,
+   "metered_seconds": 28
+  },
+  {
+   "label": "probe_high",
+   "n_variables": 150,
+   "level_budget": 600,
+   "metered_seconds": 165
+  },
+  {
+   "label": "probe_deep",
+   "n_variables": 60,
+   "level_budget": 840,
+   "metered_seconds": 71
+  }
+ ],
+ "two_factor_fit": {
+  "intercept": -2.28506299626725,
+  "vars_exponent": 0.7466315100569263,
+  "levels_exponent": 0.5184268318151403,
+  "exponent_sum": 1.2650583418720664,
+  "r2": 0.9533979843349947,
+  "relative_miss": [
+   -0.275338257486086,
+   0.45442577250258154,
+   0.3244660937157702,
+   -0.2836384631271933,
+   0.0
+  ],
+  "max_abs_miss": 0.45442577250258154
+ },
+ "levels_per_variable": [
+  4.0,
+  4.0,
+  4.0,
+  4.0,
+  14.0
+ ],
+ "points_with_levels_proportional": [
+  "probe_small",
+  "probe_mid",
+  "probe_mid_hi",
+  "probe_high"
+ ],
+ "points_off_the_line": [
+  "probe_deep"
+ ],
+ "sum_only_fit_on_proportional_points": {
+  "exponent_sum": 1.265058341872068
+ },
+ "reading": {
+  "fixed_levels": "cost ~ vars^b with b < 1: sublinear in variables",
+  "levels_grow_with_variables": "cost ~ vars^(b+c) with b+c > 1: superlinear",
+  "identification": "the split between b and c rests on the points off the levels = k x vars line; here one point"
+ }
+}

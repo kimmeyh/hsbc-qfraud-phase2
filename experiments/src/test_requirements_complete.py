@@ -34,6 +34,7 @@ ALIASES = {
     "eqc_models": "eqc-models",
     "qci_client": "qci-client",
     "PIL": "pillow",
+    "imblearn": "imbalanced-learn",
 }
 
 # Imports that are legitimately absent from requirements.txt.

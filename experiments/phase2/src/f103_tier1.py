@@ -259,24 +259,34 @@ def joint_scan(P: np.ndarray, r: np.ndarray, subset: tuple) -> tuple:
 
 
 def fit_lanes(Ptr, ytr, Pte, yte, seed: int, joint: bool = True,
-              secondary: bool = False) -> dict:
+              secondary: bool = False, scores: dict | None = None) -> dict:
+    """`scores`, opt-in (Sprint 28 DV4 outcome backfill): a dict that
+    receives (test labels, per-row test scores) under each lane's key. The
+    lanes returned are the same with or without it."""
     from sklearn.ensemble import HistGradientBoostingClassifier
+
+    def _scored(lane, p):
+        if scores is not None:
+            scores[lane] = (yte, p)
+        return _auc(yte, p)
     t0 = time.perf_counter()
     freqs = [trained_frequency(Ptr[:, j], ytr) for j in range(Ptr.shape[1])]
     out = {"trained_frequencies": [round(f, 3) for f in freqs]}
     gam = _lr(gam_basis(Ptr, freqs), ytr)
-    out["gam"] = _auc(yte, gam.predict_proba(gam_basis(Pte, freqs))[:, 1])
+    out["gam"] = _scored(
+        "gam", gam.predict_proba(gam_basis(Pte, freqs))[:, 1])
     if secondary:
         for h in (2, 3):
             m = _lr(gam_basis(Ptr, freqs, h), ytr)
-            out[f"gam_{h}_harmonics"] = _auc(
-                yte, m.predict_proba(gam_basis(Pte, freqs, h))[:, 1])
+            out[f"gam_{h}_harmonics"] = _scored(
+                f"gam_{h}_harmonics",
+                m.predict_proba(gam_basis(Pte, freqs, h))[:, 1])
     Gtr, Gte = ga2m_basis(Ptr, freqs), ga2m_basis(Pte, freqs)
     ga2m = _lr(Gtr, ytr)
     p_tr = ga2m.predict_proba(Gtr)[:, 1]
-    out["ga2m"] = _auc(yte, ga2m.predict_proba(Gte)[:, 1])
+    out["ga2m"] = _scored("ga2m", ga2m.predict_proba(Gte)[:, 1])
     hgb = HistGradientBoostingClassifier(random_state=seed).fit(Ptr, ytr)
-    out["hgb"] = _auc(yte, hgb.predict_proba(Pte)[:, 1])
+    out["hgb"] = _scored("hgb", hgb.predict_proba(Pte)[:, 1])
     out["lane_seconds"] = {"gam_ga2m_hgb": round(time.perf_counter() - t0, 1)}
     if joint:
         t1 = time.perf_counter()
@@ -294,7 +304,7 @@ def fit_lanes(Ptr, ytr, Pte, yte, seed: int, joint: bool = True,
             p_tr = m.predict_proba(Jtr)[:, 1]
             terms.append({"subset": list(S),
                           "freqs": [round(float(x), 3) for x in f]})
-        out["joint"] = _auc(yte, m.predict_proba(Jte)[:, 1])
+        out["joint"] = _scored("joint", m.predict_proba(Jte)[:, 1])
         out["joint_terms"] = terms
         out["lane_seconds"]["joint"] = round(time.perf_counter() - t1, 1)
     return out
@@ -340,9 +350,11 @@ def _split(n, y, seed):
 
 
 def run_target(name: str, P: np.ndarray, y: np.ndarray, seed: int,
-               secondary: bool = False) -> dict:
+               secondary: bool = False, scores: dict | None = None) -> dict:
+    """`scores`, opt-in: passed to `fit_lanes`."""
     tr, te = _split(len(y), y, seed)
-    lanes = fit_lanes(P[tr], y[tr], P[te], y[te], seed, secondary=secondary)
+    lanes = fit_lanes(P[tr], y[tr], P[te], y[te], seed, secondary=secondary,
+                      scores=scores)
     row = {"target": name, "seed": seed, "n": int(len(y)),
            "base_rate": round(float(y.mean()), 4), "d": int(P.shape[1]),
            **{k: (round(v, 4) if isinstance(v, float) else v)

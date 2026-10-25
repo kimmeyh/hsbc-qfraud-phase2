@@ -56,6 +56,25 @@ The one field filled from memory was the one that was wrong.)
 - Team-lead `0*` working files at repo root: commit with a neutral message, never read.
 - `--no-verify` is banned; the pre-commit confidentiality hook stays active.
 - Every reported number originates in `results.json` with an evidence tag.
+- **Every experiment records its outcomes** (team lead, 2026-10-22, F154).
+  A Phase 2 result that holds a test score, ML or QML, carries a block from
+  `experiments/phase2/src/outcome_record.py`: confusion counts at the 0.5%
+  alert budget (and at the validation-chosen and own thresholds where they
+  exist) and the per-row test scores with their SHA-256.
+  `test_outcome_record_required.py` fails a new result file without one.
+- **Every experiment records its provenance** (team lead, 2026-10-23,
+  Sprint 28 D4). Every new top-level file in `experiments/phase2/results/`,
+  of every run type, scored or not, carries the block from
+  `experiments/phase2/src/provenance.py` (`record(__file__, seeds)`): the
+  generator, its git commit, a clean-tree flag, the seeds and the library
+  versions. The same guard fails a new file without it. A new module writes
+  its result with `provenance.write_result(path, doc, __file__, seeds,
+  run_id)`, with `run_id` from `provenance.new_run_id()` at the run's start;
+  it adds the block, refuses to replace another run's result unless
+  `replace=` states why, and checks the file before it replaces
+  anything (Sprint 28 IMP-6; `test_result_writer_required.py`). Device runs also
+  store their full response through `experiments/phase2/src/device_store.py`
+  (`test_device_store_required.py`).
 - **US English, always.** The team lead writes and expects US English, even though
   HSBC is based in England. Prefer `-ize` over `-ise`, `-or` over `-our`, `-er`
   over `-re`, `-se` over `-ce` in nouns like `license` and `defense`, and single

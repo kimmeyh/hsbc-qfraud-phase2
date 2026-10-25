@@ -63,6 +63,15 @@ field does not run.
   `p` is the test prevalence (the AUPRC of a random ranking), with raw
   AUPRC and AUROC beside it. Recall at the 0.5% alert budget wherever an
   operating point is claimed.
+- **Outcomes recorded** (team lead, 2026-10-22; F154): every Phase 2
+  result that holds a test score, ML or QML, also records the confusion
+  counts (TN, FP, FN, TP) at the 0.5% alert budget, at the
+  validation-chosen operating points where a validation fold exists, and
+  at the experiment's own threshold where it has one; and saves its
+  per-row test scores with their SHA-256, so any two models can be
+  compared case by case. `experiments/phase2/src/outcome_record.py`
+  builds the block; `experiments/src/test_outcome_record_required.py`
+  fails a new result file without one.
 - **Train-test gap** beside every win (Sprint 21: SPECTRA's wins came with
   large gaps).
 - **Every bottom-line claim carries a label** (Sprint 25 IMP-1), the same
@@ -211,16 +220,16 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
 ## 6. Experiments
 
 Entries are filled in as each experiment's card reaches readiness. Status
-on 2026-10-18:
+on 2026-10-23:
 
 | # | Experiment | Card(s) | Device | Entry |
 |---|---|---|---|---|
 | 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below |
-| 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105 | none | To write |
-| 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F25 | Dirac-3S, after F141 and F142 | To write; F94's result informs it |
-| 4 | Replication under the source protocol (Loke et al.) | F111 | none | To write |
+| 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below |
+| 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below |
+| 4 | Replication under the source protocol (Loke et al.) | F111 | none | Written 2026-10-22, below |
 | 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
-| 6 | Scaling claim: training time against sample count | F110 | proxy first | To write |
+| 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
 | - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below |
@@ -228,6 +237,8 @@ on 2026-10-18:
 | - | Gate-based arm: the F106 circuit's shot budget | F107 | none (NumPy statevector) | Written 2026-10-18, below |
 | - | Ceiling validation on a simulator with hidden state (verification) | F108 | none | Written 2026-10-18, below |
 | - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
+| - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
+| - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -304,6 +315,305 @@ computed (Task D computes them).
     regenerated: `score_gates.py` rewrites the report on any invocation.
   - Consistent with the point estimates already seen; this is a
     re-analysis, as stated above, and its evidence is precision.
+
+### Experiment 2 (F152): temporal validity on IEEE-CIS rolling-origin folds
+
+Written 2026-10-22 (Sprint 28 Task B, #49), before any Phase 2 score on
+IEEE-CIS. Not filed; part of this draft.
+
+- **What was already seen.** Phase 1 scored XGBoost, LightGBM and CatBoost
+  on the same three folds with one seed (`experiments/results/
+  ieee_classical.json`). So the direction of the lane ordering is known in
+  part. What this entry adds is section 2's standard: five seeds,
+  floor-normalized AUPRC, paired intervals, a written drift treatment, and
+  two lanes Phase 1 did not run on IEEE-CIS (HGB, logistic regression).
+- **ID and card**: Experiment 2, F152 (harness F105).
+- **Question**: does the ULB ordering of model families hold when every
+  model is trained on earlier months and scored on a later one, and how
+  much does a strong lane lose from one month to the next?
+- **Hypotheses and predictions**: (P1) XGBoost beats logistic regression
+  on floor-normalized AUPRC on each full evaluation month (4 and 5), as on
+  ULB. (P2) none directional: XGBoost's floor-normalized AUPRC changes
+  from month 4 to month 5; the size and its interval are the result.
+- **Falsifier**: P1 is false if, on either full month, the interval on
+  XGBoost minus logistic regression reaches zero. P2 reports a change only
+  if its interval excludes zero.
+- **Data and splits**: IEEE-CIS train, exact duplicates removed
+  (`ieee_loader.dedupe_ieee`), the harness's three rolling-origin folds
+  (evaluation months 4, 5, 6; each trained on every earlier month), with
+  the leakage assertion run on every build. Features from
+  `ieee_harness.build_fold`, unchanged.
+- **Month 6**: a partial bucket, 8,111 rows, about a tenth of a full fold.
+  It is scored and reported, labeled secondary, and is not in P1 or P2.
+- **Drift treatment: a stated limit.** The adversarial control runs as in
+  Phase 1 (`ieee_controls.apply_item4_controls`, its round cap of 20,
+  controls seed 42 for every model seed, so all lanes and seeds see the
+  same features per fold). It stops at the cap with early-versus-late AUC
+  far above target (F105). No higher cap and no group drop: either would
+  change the estimator from Phase 1's and remove features chosen for
+  drift, not for leakage. The per-fold early-versus-late AUC is reported
+  beside every score, and every claim from this entry carries the limit
+  "trained on drifting features".
+- **Lanes** (all on the same features per fold):
+  1. XGBoost, Phase 1's IEEE-CIS configuration (`run_ieee.ARMS`, with its
+     per-fold `scale_pos_weight`).
+  2. LightGBM, the same.
+  3. HGB with F151's stable setting (`l2_regularization=1.0`, other
+     settings default), no class weight.
+  4. Logistic regression: median imputation fitted on training rows,
+     standard scaling, `class_weight="balanced"`, `max_iter=2000`.
+  GAM, GA2M and the JOINT twin stay on the card (unsized on 180-plus
+  features). No CVQBoost proxy lane (Decision 2).
+- **Seeds**: 42-46 (model seeds; the folds are fixed). Before the full
+  run, one lane on two seeds: the paired interval between the two seeds
+  must include zero, or the interval method is too narrow for seed noise.
+- **Primary metric**: floor-normalized AUPRC, `(AUPRC - p) / (1 - p)`,
+  with `p` the evaluation month's prevalence; raw AUPRC and AUROC beside
+  it.
+- **Test**: the paired stratified bootstrap over evaluation transactions
+  (section 2): each of 1,000 replicates resamples the month's rows by
+  label, with the same indices for both lanes and all five seeds, and
+  computes the across-seed mean difference; percentile interval. For P2
+  the two months are independent samples, each resampled on its own.
+- **Multiplicity**: one family. P1 is two intervals that must both exclude
+  zero (an intersection-union test, which needs no correction across its
+  two parts) and P2 is one; m = 2, Bonferroni, so 97.5% intervals. Three
+  folds cannot support a Wilcoxon test (its floor is 0.25), so the
+  bootstrap is primary (section 2a).
+- **Secondary, uncorrected**: every other lane pair per month; month 6;
+  the per-seed spread; the shuffled-label control is not re-run (Phase 1
+  ran it on these folds).
+- **Recording**: every lane, month and seed carries an outcome block
+  (section 2, "Outcomes recorded").
+- **Limits stated now**: the drift limit above; one dataset; three folds
+  from one six-month file.
+
+### Experiment 3 (F153, F25): cardinality-constrained selection, proxy design first
+
+Written 2026-10-22 (Sprint 28 Task C, #50), before any Hamiltonian below
+is built. Not filed; part of this draft. This sprint runs the proxy
+design only; the device arm is F25 and needs its own per-block approval.
+
+- **What was already seen.** F94 (`docs/phase2/F94_EXP3_CONTROLS.md`):
+  on the training fold every method reaches the objective floor; on the
+  validation fold the best found is within 0.0016-0.0026 of it, and the
+  ridge term carries over 99.67% of the objective at `lambda = 2` (in
+  `exp3_controls.problem`'s scaled units). So a device could gain almost
+  nothing on F94's Hamiltonian. This entry changes the ridge before any
+  device time is asked for.
+- **ID and card**: Experiment 3, F153 (design), F25 (device run).
+- **Question**: is there a ridge weight at which the selection problem
+  leaves room between greedy and the floor, and that the device can
+  resolve? Only then is a device comparison worth its seconds.
+- **Hypothesis and prediction**: none directional for the design. For the
+  later device arm (F25): the device's objective beats greedy's, or
+  matches it faster, on the chosen Hamiltonian.
+- **Falsifier (design)**: the design fails, and no device quote is
+  carried forward as ready, if at the chosen ridge weight the gap between
+  greedy and the floor is below 0.01 on every instance, or the chosen
+  Hamiltonian fails both resolution checks below.
+- **Instances**: F94's, unchanged: ULB, seeds 42-44, sequential `dct`
+  pools; the first 60 `free` learners choose 10, and the 136 `mid`
+  learners choose 25. Built on the **validation fold** (held-out
+  predictions); the test fold is never optimized on.
+- **Objective**: `exp3_controls.problem(H, y, lam_mult)`, weights on the
+  simplex. Its floor is `-1 + lam_mult / m` (the data term is never
+  negative, and `||w||^2 >= 1/m` with m learners).
+- **Ridge sweep, fixed now**: `lam_mult` in {2, 0.2, 0.02, 0.002}. Greedy
+  on every instance at every value. **The chosen value** is the largest
+  whose greedy solution has a data term of at least 10% of the
+  objective's absolute value on all six instances; if none qualifies,
+  the smallest, labeled as such.
+- **Controls at the chosen value**: greedy, simulated annealing (F94's
+  3,000 iterations) and SCIP (300 s cap, a change from F94's 600 s to fit
+  the sprint; the cap is reported beside every SCIP figure). The first
+  instance is checked for a gap between greedy and the floor before any
+  method is compared.
+- **Reported per instance**: each method's objective, the floor, the gap
+  from the best found to the floor, the data-term share, and test AUPRC
+  for context only (three seeds, no interval).
+- **Resolution, both checks (Decision 1)**: F104's gate
+  (`device_resolution.resolution_gate`, unchanged) and the guide's
+  section 5.3 check (`device_resolution.resolution_check_guide`, new and
+  opt-in): the max/min ratio of the nonzero coefficients against 200, and
+  the share of coefficient pairs whose difference reaches max / 200
+  (eq. 5). Both are reported; the gate's verdict is not replaced.
+- **Device quote, not a run**: F139's two integer probes priced for
+  Dirac-3S as a bracket, labeled inferred, for a separate approval.
+- **Multiplicity**: the design makes no claim tested at alpha; the device
+  arm's family is set in F25's amendment to this entry before its run.
+- **Recording**: test AUPRC rows carry outcome blocks (section 2,
+  "Outcomes recorded").
+
+### Experiment 4 (F111): the CVQBoost-KNN lane under the source protocol and ours
+
+Written 2026-10-22 (Sprint 28 Task D, #51), before the harness exists or
+any lane below is fit. Not filed; part of this draft. No device.
+
+- **What was already seen.** Loke et al. (ICAART 2026, DOI
+  10.5220/0014628400004052) report CVQBoost-KNN at AUC-PR **0.8108**,
+  mean of 10 runs, on ULB (Tables 3 and 4). Under our protocol, lanes that
+  are not their method already sit within 0.03 of it: the CVQBoost proxy
+  dct cell (0.793) and XGBoost (0.802, 0.830). F130's KNN proxy (k = 5,
+  13 features, 78 sequential learners, our split) reached 0.7772. So a
+  value near 0.81 cannot show that the protocol matters; the paired
+  difference below is the result.
+- **Sources for the source protocol.** The paper (section 2, Tables 1-2)
+  and the first author's repository, read only: commit `0092a38`
+  (2026-05-22), the version nearest the paper; upstream `main` and the
+  October branch read through the GitHub API. The code postdates the
+  paper and compares XGBoost with hybrid XGBoost, so it shows the
+  author's practice, not proof of the paper's settings.
+- **ID and card**: Experiment 4, F111.
+- **Question**: on the same lane, how much does the source protocol
+  change test AUC-PR against our protocol? Is the lane, under the source
+  protocol, consistent with 0.8108?
+- **The lane, identical under both protocols**:
+  - All 30 ULB columns (Time, V1-V28, Amount). The paper names no
+    feature selection, and the code drops only the label. The 13
+    mutual-information features of our `free` cell are a lane choice,
+    not a protocol choice, and are not used here.
+  - `MinMaxScaler` fit on the training rows only (paper: "scaled to
+    [0, 1]"; code: fit on train). KNN is scale-sensitive, so the scaler
+    is part of the lane on both sides.
+  - KNN weak learners, `n_neighbors=15`, other settings scikit-learn's
+    defaults (uniform weights, Minkowski p = 2, leaf size 30: Table 1).
+  - Weak-classifier schedule 2, full-pair: 30 singles and 435 pairs, 465
+    learners. The code's `weak_cls_strategy="multi_processing"` is the
+    full-pair builder; it needs `fork`, so the pool is built by
+    `experiments/phase2/src/full_pair_pool.py` (same learners, same
+    order; checked equal to the library's under `fork`, 2026-10-22).
+  - lambda = 0 (paper and code), solved classically on the simplex by
+    `qubo_proxy.solve_simplex_qp`, the Hamiltonian eqc-models sends (QCi
+    confirmed it on 2026-10-21). Score: w . H, the code's `predict_raw`.
+- **Protocol A, the source's**: `load_ulb()`, `dropna()` (ULB has no
+  missing values, so it removes nothing), **no deduplication**.
+  `train_test_split(test_size=0.3, stratify=y, random_state=seed)`. The
+  test fold split again, `test_size=0.67`, stratified, `random_state=seed`:
+  33% validation, 67% evaluation (the code's choice; the paper says only
+  "randomly split"). SMOTETomek on the training rows only, after scaling:
+  `sampling_strategy` 0.02 (the minority-to-majority ratio after
+  resampling; the code's May value), SMOTE `k_neighbors =
+  max(1, min(10, positives - 1))`, `random_state=seed`. AUC-PR on the
+  evaluation part.
+- **Protocol B, ours**: deduplicated, `data.stratified_split(df, seed)`
+  (60/20/20 stratified), no resampling. AUC-PR on the test fold; the
+  validation fold sets the threshold.
+- **Seeds**: 42-51. The paper's seeds are unrecoverable: the code draws
+  each run's seed with `random.randint(0, 100000)` and logs it.
+- **Reference lane**: F151's stable HGB (`l2_regularization=1.0`,
+  `random_state=seed`), on the same scaled features and the same training
+  rows (resampled under A) as the KNN lane, under both protocols.
+- **Primary result**: per seed, KNN lane AUC-PR under A minus under B;
+  the mean over 10 seeds with its 95% t interval (9 degrees of freedom).
+  One interval, so no multiplicity family. **Secondary, reported**: the
+  same difference for the HGB lane; within each protocol, KNN minus HGB
+  with its interval.
+- **Consistency with 0.8108**: "consistent" if the KNN lane's mean under
+  A is within 0.03 of 0.8108. The tolerance cannot separate lanes
+  (above), so the result is never stated as "reproduces".
+- **Sensitivity, reported, not decisive**: SMOTETomek ratio 0.05 (the
+  October value) under A, seeds 42-44, KNN and HGB.
+- **Named in advance**: without deduplication, an evaluation row can have
+  an exact copy in the training rows, and a 15-neighbor learner on a pair
+  of columns will find it. Reported per seed under A: the count of
+  evaluation rows with an exact duplicate (all 30 columns and the label)
+  among the training rows.
+- **Size rule**: a pilot at seed 42 on a stratified 10% sample of the
+  training and scored rows, both protocols, KNN lane. Projection: pilot
+  seconds x (full training rows / pilot training rows) x (full query rows
+  / pilot query rows), F130's formula. If the 10-seed A and B runs plus
+  the sensitivity rows project at **120 minutes or less**, they run.
+  Otherwise the pilot and its projection are recorded and the seed count
+  goes to the team lead at Manual Validation; no silent cut. The full run
+  starts only after Experiment 6's timing has finished, so the two do not
+  share the processor.
+- **Seed count decided, 2026-10-23, after the pilot and before any
+  full-size row.** The pilot projected 824.6 minutes. The team lead
+  approved the run as written (10 seeds on A and B, plus the sensitivity
+  rows) above the cap (Sprint 28 Manual Validation, DV2). No other part of
+  the entry changes. The approval is recorded in the result file's pilot
+  block (`over_cap_approval`), and `run` reads it there.
+- **Comparator**: CAD (0.7423, Gao et al. 2025) is cited, not run; it was
+  not run on their split either.
+- **Recording**: every row carries an outcome block (section 2,
+  "Outcomes recorded"), with the validation part as `y_val`, `p_val`.
+- **Reported whatever the result**: per seed and protocol, both lanes'
+  AUC-PR and ROC-AUC, the resampled class counts, the duplicate count,
+  the pilot timing and projection, and the primary interval.
+
+### Experiment 6 (F110): training time against sample count, proxy first
+
+Written 2026-10-22 (Sprint 28 Task E, #52), before any timing below.
+Not filed; part of this draft. The device arm needs its own per-block
+approval and is not part of this sprint.
+
+- **What was already seen.** No row-count timing exists. F29 built its
+  pools once, at full rows. The hardware plan's "about 12 minutes of CPU
+  per fit" at 833 variables comes from one 735.4 s build
+  (`SPRINT_12_PLAN.md`); whether that build was sequential or full-pair is
+  unverified. The QCi paper reports CVQBoost at about 2 s end to end
+  (Dirac-3 solve about 1.3 s) at 150,000 rows
+  (`docs/evidence-inventory.md`, section 3a).
+- **ID and card**: Experiment 6, F110.
+- **Question**: how does each part of CVQBoost training (weak-learner pool
+  build, Hamiltonian construction, solve) grow with the number of training
+  rows, at 91 and at 833 variables?
+- **Predictions, stated now**: (P1) the pool build is the largest part at
+  every row count and grows close to linearly in rows (log-log slope
+  between 0.7 and 1.3). (P2) the solve does not grow with rows (slope
+  between -0.2 and +0.2), because it works on the variables-by-variables
+  matrix only. Hamiltonian construction is reported, with no prediction.
+- **Falsifier**: P1 is false if the build is not the largest part at
+  every fraction, or its slope interval leaves [0.7, 1.3]; P2 is false if
+  the solve slope interval leaves [-0.2, +0.2].
+- **Data**: ULB, F130's preparation (`qubo_proxy._prep`); training rows
+  subsampled to 10%, 25%, 50% and 100%, stratified by label with the seed.
+- **Cells**: `free` (k=13, schedule 2, full-pair, 91 variables) and
+  `full` (k=17, schedule 3, full-pair, 833 variables), `dct` weak
+  learners seeded per F145 (`qubo_proxy.seeded_weak_params`).
+- **Timed parts**: `qubo_proxy.build_pool`; `h_matrix` plus `hamiltonian`
+  (construction); `solve_simplex_qp` (solve; it rebuilds J once, so the
+  construction time is subtracted and both are reported). Wall clock on
+  this machine; the core count is recorded.
+- **Seeds**: `free` 42-46. `full`: a one-seed pilot at all four fractions
+  first; five seeds only if the pilot projects the five-seed run at 120
+  minutes or less. Otherwise the pilot is the result, labeled one seed.
+- **Test**: per part and cell, least squares of log time on log rows over
+  all runs; the slope's 95% interval (t, residual degrees of freedom).
+  m = 2 predictions, Bonferroni, so 97.5% intervals for P1 and P2.
+- **Reported beside it**: the build at 833 variables against the
+  hardware plan's 12 minutes, and the end-to-end time at about 150,000
+  rows against the paper's 2 s.
+- **Recording**: timing only, no test score, so no outcome block is
+  required (section 2, "Outcomes recorded").
+- **Implementation note, 2026-10-22, before any timing.** The library's
+  full-pair builder (`build_pool(..., "full")`) forces `fork`, which does
+  not exist on Windows, and the only Linux venv on this machine does not
+  match the lock (numpy 2.5.2 against 1.26.4), so a result from it would
+  not be comparable (`docs/ENVIRONMENT.md`). The pool is therefore built
+  by `experiments/phase2/src/full_pair_pool.py`: the same learners, in the
+  library's order, trained one after another by the library's own
+  `WeakClassifier`. It was checked equal to the library's builder (same
+  order, identical H) under `fork` on 2026-10-22, and
+  `test_full_pair_pool.py` repeats that check on Linux CI. **Consequence
+  for the reading**: "build" is a serial build. Set beside the hardware
+  plan's 12 minutes it is like for like only if that build was serial
+  too, which is unverified (above). The library's parallel build would be
+  faster by up to its worker count; the slopes (P1, P2) are about growth
+  with rows and are read the same way.
+- **Correction, 2026-10-22, after two timing rows and before any slope.**
+  "The construction time is subtracted" is narrowed to what the reason
+  given for it covers: `solve_simplex_qp` rebuilds J, not H, so only the J
+  build is subtracted from the solver's time. The first version subtracted
+  H as well; the solve went negative and was clamped to zero on both rows.
+  Those two rows were discarded and the run restarted. A row whose solve
+  is still clamped is flagged (`solve_clamped`) and reported.
+- **Note, 2026-10-23, after the run (PR review).** The code projected
+  the remaining four seeds (43-46), not the five-seed run the Seeds line
+  states: 79.4 minutes. With the pilot's own time added, the five-seed
+  figure is also under the 120-minute cap (about 99 minutes), so the
+  decision is the same under either reading.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -620,6 +930,35 @@ transaction is generated.
   the reference arm's ceiling is 0, where the absolute margin alone
   decides. Under the entry as written, the plug-in meets the 4-of-5 rule
   on the noise and reference arms and fails it on the main arm.
+- **Amendment, 2026-10-22 (Sprint 28 Task G, Decision 3 option 1),
+  written before its module exists or any calibrated model is fit.** One
+  new plug-in variant, scored on F108's generator, posterior, splits,
+  seeds, arms and margin, all unchanged (`f108_ceiling` is imported, not
+  edited):
+  - **Model**: `HistGradientBoostingClassifier(l2_regularization=1.0,
+    random_state=seed)`, other settings default. This is F151's stable
+    reference (`docs/phase2/F151_HGB_COMPARATOR.md`), where 1.0 alone
+    closed the spread. The Sprint 28 plan also listed
+    `early_stopping=False` as a candidate; F151 found it unneeded, so it
+    is not used here.
+  - **Calibration**: the training rows are split once by the seed, 75%
+    to fit HGB and 25% held out (stratified on the label). Isotonic
+    regression (`IsotonicRegression(out_of_bounds="clip")`) maps HGB's
+    held-out probabilities to the held-out labels; the test plug-in is
+    the test mean of min(p, 1 - p) with p the calibrated probability.
+  - **Reported beside it, not decisive**: the same 75% model's
+    uncalibrated plug-in, which separates the effect of calibration from
+    the effect of the regularization and the smaller fitting set.
+  - **Rule**: F108's margin and 4-of-5 rule, decided on the **main
+    no-noise arm** (the reading above, now written as the rule for this
+    variant). The noise and reference arms are reported.
+  - **Consequence, set here**: if the calibrated plug-in recovers on the
+    main arm, F114's real-data run (ULB and IEEE-CIS, about 90 minutes)
+    becomes eligible with this plug-in. If not, F114 stays blocked and
+    the result is recorded on its card with the miss per seed.
+  - **Reported whatever the result**: per seed and arm, the Bayes error,
+    the calibrated and uncalibrated estimates, recovered or not, and the
+    run time.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -828,6 +1167,125 @@ scored. Not filed; part of this draft.
   The result is reported in `docs/phase2/F144_PROXY_TWIN.md` with these
   limits, and with a same-pool comparison that needs no rebuild.
 
+### F154: where each model wins, on the stored ULB predictions
+
+Written 2026-10-22 (Sprint 28 Task F, #47), before any pairwise or subset
+count was computed. Not filed; part of this draft.
+
+- **ID and card**: unnumbered analysis entry; F154.
+- **Question**: is any stored model (classical, CVQBoost proxy, Dirac-3)
+  reliably better than another on a subset of ULB test rows, so that an
+  ensemble could use it?
+- **Hypothesis and prediction**: none directional. F113 found no
+  CVQBoost-specific complementarity with XGBoost on these files; this widens
+  it to every pair and to two subsets. A null is reported as plainly as a
+  find.
+- **Data**: the stored per-row predictions in
+  `experiments/results/predictions/` (read, never written), stratified
+  protocol, seeds 42-51. Every family with all ten seeds is in. A family
+  whose test labels differ from the others on any seed is reported and
+  left out of the pairs. The test rows are matched to ULB features by
+  deduplicating first, then `data.stratified_split(df, seed)`; the match is
+  checked label for label on every seed before any subset is read.
+- **Operating point**: the 0.5% alert budget on the test rows: every row at
+  or above the ceil(0.005 x n)th highest score is flagged
+  (`outcome_record.flagged_at_budget`; tied rows are flagged together).
+  Recall in a subset is the share of that subset's frauds flagged.
+- **Subsets**, fixed now: **amount**, a test row's `Amount` above the test
+  fold's median `Amount` against at or below it; **day**, `Time` below
+  86,400 s (day 1) against at or above it (day 2).
+- **Primary test**: per pair (A, B), subset S and seed, the interaction
+  I = [recall_A(S) - recall_B(S)] - [recall_A(not S) - recall_B(not S)].
+  A subset claim needs the t interval of I over the ten seeds to exclude
+  zero. The plain in-subset difference is not the test: on XGBoost full
+  against matched13 it fired on day 1 because the overall difference
+  carries into the subset, and it fired on 31.2% of random half-splits;
+  the interaction fired on 3.8% (Sprint 28 plan, "Show each threshold can
+  fire").
+- **Multiplicity**: one family, m = (pairs) x 2 subsets, Bonferroni at
+  0.05 / m, so each interval is at 1 - 0.05 / m. With 13 families,
+  m = 156. Ten seeds give a t interval at any level, so section 2a's
+  Wilcoxon floor does not bind.
+- **Secondary, uncorrected**: the confusion counts for every stored result
+  at both validation-chosen operating points; per pair and seed, the
+  frauds A flags that B misses, the reverse, and those both flag; the
+  in-subset differences.
+- **Falsifier**: "some model is reliably better on a subset" is false for
+  these files if no interaction interval excludes zero.
+- **Recording**: the result file carries an `outcome_record` block per
+  family and seed, pointing at the stored file and its SHA-256 (section 2,
+  "Outcomes recorded").
+
+### F162: in-pocket head-to-head on SPECTRA
+
+Written 2026-10-23 (Sprint 28 Task M, #59), before any score. Not filed;
+part of this draft.
+
+- **ID and card**: unnumbered analysis entry; F162.
+- **Question**: inside the SPECTRA pocket (`in_pocket` = 1), does the
+  CVQBoost proxy rank the test rows better than HGB and XGBoost, paired by
+  seed? Phase 1's H5 compared CVQBoost inside the pocket with a matched
+  random segment outside it, which asks whether the pocket is special for
+  CVQBoost. This asks the head-to-head the FourierWall2 in-pocket wins
+  rested on (one seed, one stochastic run, never repeated).
+- **Hypothesis and prediction**: the prior single-run evidence points to
+  the proxy above XGBoost in the pocket on all three cells; F100 found HGB
+  above the proxy overall on all three. No direction is predicted; a null
+  is reported as plainly as a find.
+- **Protocol** (the SPECTRA authors' recommendation, 2026-10-23):
+  covariates plus phases only; `target`, `target_real` and `in_pocket`
+  are never features (`spectra_segment._prep_spectra`, which asserts it;
+  telecom_churn also drops `age`, as the frozen cell does); label
+  `target`; `spectra_segment.spectra_split` (60/20/20 stratified on
+  `target`); features through `coerce_features_to_numeric`.
+- **Cells**: the three frozen cells (`spectra_segment.FROZEN_CELLS`):
+  telecom_churn, energy_steel and oilgas_gasturbine. energy_steel is in:
+  this comparison needs no matched control, so the infeasibility in
+  `docs/SPECTRA_CONTROL_FEASIBILITY.md` does not apply.
+- **Lanes**, all fitted on the training fold only:
+  - **proxy**: the frozen cell's CVQBoost configuration (weak-classifier
+    schedule 3, `dct` learners, sequential build, lambda = 2 x n_train),
+    the pool seeded (`qubo_proxy.seeded_weak_params(seed)`), weights from
+    `qubo_proxy.solve_simplex_qp`, score `(w @ H + 1) / 2` clipped to
+    [0, 1], as `spectra_segment.proxy_dry_run_cell` scores.
+  - **hgb**: `HistGradientBoostingClassifier(l2_regularization=1.0,
+    random_state=seed)`, F151's stable setting.
+  - **xgboost**: `XGBClassifier` at library defaults (xgboost 3.4.1) with
+    `random_state=seed`. The Phase 1 tuned parameters were tuned on ULB and
+    are not carried over. The FourierWall2 XGBoost settings are not on
+    record here.
+- **Seeds**: 42-51 (10). Section 2a: m = 6 primary tests need k = 8 for an
+  exact Wilcoxon test to reach 0.05 / 6. Seed 42 runs first and is timed;
+  if it projects the ten seeds above 120 minutes, the run is cut to 8
+  seeds (42-49), decided from the time alone before any score is read.
+- **No in-pocket positive floor.** Phase 1's 50-positive floor protected
+  an unpaired comparison with a separately drawn control. Here every lane
+  is scored on the identical pocket rows, so the pair shares the noise.
+  Every seed counts; each seed's pocket size and positive count are
+  reported.
+- **Primary tests** (one family, m = 6): for each cell, proxy minus hgb
+  and proxy minus xgboost in in-pocket AUPRC, per seed. Each test is the
+  exact two-sided Wilcoxon signed-rank test on the per-seed differences at
+  alpha 0.05 / 6, with the mean difference and its t interval at
+  1 - 0.05 / 6 reported beside it. A cell's comparison is "proxy above"
+  or "proxy below" only if the Wilcoxon test rejects and the interval
+  excludes zero on the same side; otherwise "no reliable difference".
+- **Secondary, uncorrected**: in-pocket ROC-AUC differences; in-pocket
+  floor-normalized AUPRC (section 2); overall AUPRC and ROC-AUC per lane;
+  hgb minus xgboost in the pocket; per-seed paired bootstrap intervals
+  (`metrics.paired_delta_ci`) on the in-pocket AUPRC differences; each
+  lane's train-test AUPRC gap (section 2).
+- **Falsifier**: "the proxy is better than a classical model inside the
+  pocket" is false on a cell if neither primary comparison there reads
+  "proxy above".
+- **What follows**: a "proxy above" on a cell is what would justify a
+  device block there (F161 or a new card, under its own approval). Not
+  run on any device here.
+- **Recording**: every lane, cell and seed carries an outcome block
+  (section 2), with validation scores for the validation-chosen operating
+  points. Result `experiments/phase2/results/f162_in_pocket.json`
+  (evidence tag `SIM`), generator `experiments/phase2/src/f162_in_pocket.py`.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -898,3 +1356,30 @@ scored. Not filed; part of this draft.
   post-run reading of its arms) and the F109 entry (Task G; its
   prediction tightened after the fresh-eyes review, before any output was
   read). The section 6 table gains rows for F106-F109.
+- 2026-10-22: section 2 gains "Outcomes recorded" (F154 standing rule,
+  team lead); section 6 gains the F154 entry (Sprint 28 Task F), written
+  before any pairwise or subset count, and its table row.
+- 2026-10-22: section 6 gains the Experiment 2 entry (F152, Sprint 28
+  Task B), written before any Phase 2 score on IEEE-CIS.
+- 2026-10-22: section 6 gains the Experiment 3 entry (F153, Sprint 28
+  Task C), written before any Hamiltonian is built.
+- 2026-10-22: section 6 gains the Experiment 6 entry (F110, Sprint 28
+  Task E), written before any timing.
+- 2026-10-22: the F108 entry gains a dated amendment (F114, Sprint 28
+  Task G): an isotonic-calibrated plug-in on F151's stable HGB, written
+  before its module exists.
+- 2026-10-22: section 6 gains the Experiment 4 entry (F111, Sprint 28
+  Task D), written before its harness exists; the Experiment 6 entry
+  gains an implementation note (serial full-pair build), before any
+  timing.
+- 2026-10-22: the Experiment 6 entry gains a dated timing correction
+  (only the J build is subtracted), after two timing rows and before any
+  slope.
+- 2026-10-23: the Experiment 4 entry gains its seed-count decision (the
+  run as written, above the cap; Sprint 28 Manual Validation DV2), after
+  the pilot and before any full-size row.
+- 2026-10-23: the Experiment 6 entry gains a post-run note: the pilot
+  projected four remaining seeds, not five; the decision is unchanged
+  (PR review). The section 6 status date updated.
+- 2026-10-23: section 6 gains the F162 entry (Sprint 28 Task M, #59),
+  written before any score, and its table row.

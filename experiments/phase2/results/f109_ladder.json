@@ -700,7 +700,95 @@
      "speed_phase",
      "torque_phase",
      "tool_wear_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_maintenance_ai4i_gam",
+     "seed": 42,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2895,
+       "fp": 3,
+       "fn": 90,
+       "tp": 12
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_gam_42.npz",
+      "sha256": "d912d3a429247562e655e2ac3f8226afbeb1f4215ec5653f14a45f1546d19979",
+      "n_rows": 3000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_maintenance_ai4i_ga2m",
+     "seed": 42,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_ga2m_42.npz",
+      "sha256": "39b9499ef09341cdf04f289241cdb3f1ba420d157ebf4c3187ee594387eb1bfb",
+      "n_rows": 3000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_maintenance_ai4i_hgb",
+     "seed": 42,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2898,
+       "fp": 0,
+       "fn": 87,
+       "tp": 15
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_hgb_42.npz",
+      "sha256": "10a8139b0cd6c7ec24b8caacd9340baa38e02c48f57fbc10454300b4e31b9533",
+      "n_rows": 3000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_maintenance_ai4i_joint",
+     "seed": 42,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_joint_42.npz",
+      "sha256": "86d9ddfbc29ff17e3843deef1fab1652cfdeb855819931597b7f7a5dcd1f7acd",
+      "n_rows": 3000
+     }
+    }
    },
    {
     "target": "maintenance_ai4i",
@@ -817,7 +905,95 @@
      "speed_phase",
      "torque_phase",
      "tool_wear_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_maintenance_ai4i_gam",
+     "seed": 43,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2895,
+       "fp": 3,
+       "fn": 90,
+       "tp": 12
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_gam_43.npz",
+      "sha256": "29ea2f58889c09a5bbf6c1c2c05e1fcc2028c0a4edf4e652b20139dde2c06373",
+      "n_rows": 3000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_maintenance_ai4i_ga2m",
+     "seed": 43,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_ga2m_43.npz",
+      "sha256": "a396f61be1fcbb44d0f25647e0dbf762caad627d980b7e082ccb3d2207d8c874",
+      "n_rows": 3000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_maintenance_ai4i_hgb",
+     "seed": 43,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2898,
+       "fp": 0,
+       "fn": 87,
+       "tp": 15
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_hgb_43.npz",
+      "sha256": "323aca9942cf079e8c67cf41aa8d111f2221c29a4f36076b6cadae91f4361ab2",
+      "n_rows": 3000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_maintenance_ai4i_joint",
+     "seed": 43,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_joint_43.npz",
+      "sha256": "6a4781ed1665d34cf842e3c0009e2eaeb723b7789b085fe14d7d88f7bd208ced",
+      "n_rows": 3000
+     }
+    }
    },
    {
     "target": "maintenance_ai4i",
@@ -934,7 +1110,95 @@
      "speed_phase",
      "torque_phase",
      "tool_wear_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_maintenance_ai4i_gam",
+     "seed": 44,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_gam_44.npz",
+      "sha256": "19d035dd776c3a9b486fb690c4790457e2c7354130decd05d79d61cefe1b5e50",
+      "n_rows": 3000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_maintenance_ai4i_ga2m",
+     "seed": 44,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_ga2m_44.npz",
+      "sha256": "ec2fc37fe504dbd826058e8a1433668d166133a81c58c36775860a920b188aa5",
+      "n_rows": 3000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_maintenance_ai4i_hgb",
+     "seed": 44,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2898,
+       "fp": 0,
+       "fn": 87,
+       "tp": 15
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_hgb_44.npz",
+      "sha256": "aeb3353b8c57c658ff5b73a194dd053fec0ae95a6fb1fd6421b090e435203633",
+      "n_rows": 3000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_maintenance_ai4i_joint",
+     "seed": 44,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2894,
+       "fp": 4,
+       "fn": 91,
+       "tp": 11
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_joint_44.npz",
+      "sha256": "cf30c743ae6a28e474d42690fc4bea9f07b866edf1e71ee3d5b9c31de7b5613c",
+      "n_rows": 3000
+     }
+    }
    },
    {
     "target": "maintenance_ai4i",
@@ -1051,7 +1315,95 @@
      "speed_phase",
      "torque_phase",
      "tool_wear_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_maintenance_ai4i_gam",
+     "seed": 45,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_gam_45.npz",
+      "sha256": "08d279f8fdf79eaeef7314db56568af913c36645b89b223740df97b4b253f263",
+      "n_rows": 3000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_maintenance_ai4i_ga2m",
+     "seed": 45,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2896,
+       "fp": 2,
+       "fn": 89,
+       "tp": 13
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_ga2m_45.npz",
+      "sha256": "5a75b0241d16f9bbba14f9eb2c8bfc0a43c106c940cefdd8ac9425e765004583",
+      "n_rows": 3000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_maintenance_ai4i_hgb",
+     "seed": 45,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2897,
+       "fp": 1,
+       "fn": 88,
+       "tp": 14
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_hgb_45.npz",
+      "sha256": "a77acf24b5333aa685a5739c0bd0e4c0184f7754359b57b0ba3e1c1e28225686",
+      "n_rows": 3000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_maintenance_ai4i_joint",
+     "seed": 45,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2894,
+       "fp": 4,
+       "fn": 91,
+       "tp": 11
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_joint_45.npz",
+      "sha256": "36e9a52bab6aa52ea1eefe0517f8484b2f00c273dad68ec971440a6061e5ffd4",
+      "n_rows": 3000
+     }
+    }
    },
    {
     "target": "maintenance_ai4i",
@@ -1168,7 +1520,95 @@
      "speed_phase",
      "torque_phase",
      "tool_wear_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_maintenance_ai4i_gam",
+     "seed": 46,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2894,
+       "fp": 4,
+       "fn": 91,
+       "tp": 11
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_gam_46.npz",
+      "sha256": "21e960663b779dde5067b70b6887d668db836d25d312ce91bd79b1372da6ac13",
+      "n_rows": 3000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_maintenance_ai4i_ga2m",
+     "seed": 46,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2894,
+       "fp": 4,
+       "fn": 91,
+       "tp": 11
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_ga2m_46.npz",
+      "sha256": "541ac6242a7de839a483d5acbf7c24b34df638b4aa234c0e1b1bfd4667ccdbb3",
+      "n_rows": 3000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_maintenance_ai4i_hgb",
+     "seed": 46,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2898,
+       "fp": 0,
+       "fn": 87,
+       "tp": 15
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_hgb_46.npz",
+      "sha256": "04fba413ebf313764299b1f4d1bcd9580740d2bdb22fafa93d3cb3076cedda2a",
+      "n_rows": 3000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_maintenance_ai4i_joint",
+     "seed": 46,
+     "n_test": 3000,
+     "n_positives": 102,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 15,
+      "n_flagged": 15,
+      "confusion": {
+       "tn": 2894,
+       "fp": 4,
+       "fn": 91,
+       "tp": 11
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_maintenance_ai4i_joint_46.npz",
+      "sha256": "cf497a7e0b7ff6d76ec4e4458f5be41b6b1b495b2b5b475835372fa44472ca3c",
+      "n_rows": 3000
+     }
+    }
    }
   ],
   "oilgas_gasturbine": [
@@ -1287,7 +1727,95 @@
      "ah_phase",
      "afdp_phase",
      "gtep_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_oilgas_gasturbine_gam",
+     "seed": 42,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8813,
+       "fp": 3,
+       "fn": 2151,
+       "tp": 53
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_gam_42.npz",
+      "sha256": "683b1ce8166c92ceb3b794ff13c800952e26e86416aaef1de31677a3e11e7cd5",
+      "n_rows": 11020
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_oilgas_gasturbine_ga2m",
+     "seed": 42,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_ga2m_42.npz",
+      "sha256": "143f408cf40a36184d0abe50395ecc720d5ec88838eaacdd30331290a8e7ab89",
+      "n_rows": 11020
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_oilgas_gasturbine_hgb",
+     "seed": 42,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_hgb_42.npz",
+      "sha256": "b92ed20c5043cbbdb0185138ecf5df194e3ed19ffa44502fe22ca5978fef7403",
+      "n_rows": 11020
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_oilgas_gasturbine_joint",
+     "seed": 42,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8815,
+       "fp": 1,
+       "fn": 2149,
+       "tp": 55
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_joint_42.npz",
+      "sha256": "72b38538b102bfafff9f73463908c426f486b9ee6f8b9bc3e570c70e12606d17",
+      "n_rows": 11020
+     }
+    }
    },
    {
     "target": "oilgas_gasturbine",
@@ -1404,7 +1932,95 @@
      "ah_phase",
      "afdp_phase",
      "gtep_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_oilgas_gasturbine_gam",
+     "seed": 43,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8814,
+       "fp": 2,
+       "fn": 2150,
+       "tp": 54
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_gam_43.npz",
+      "sha256": "46f43740a7e2d07051871bf5e5437a86d8a1faea99813163b3429f320b73e126",
+      "n_rows": 11020
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_oilgas_gasturbine_ga2m",
+     "seed": 43,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_ga2m_43.npz",
+      "sha256": "7a284056ad5f279802e695e9a2e68020eb338e64886bf3062b0b11c9efb388fd",
+      "n_rows": 11020
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_oilgas_gasturbine_hgb",
+     "seed": 43,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_hgb_43.npz",
+      "sha256": "13f19c8b314ecee3978c97ec6946165665e344ec5b2b1f9fb1e852f75370af2f",
+      "n_rows": 11020
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_oilgas_gasturbine_joint",
+     "seed": 43,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8815,
+       "fp": 1,
+       "fn": 2149,
+       "tp": 55
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_joint_43.npz",
+      "sha256": "2005a9abe1f2627465a3cc6e46bd616b405628b39432daeec62fe01e3f7260be",
+      "n_rows": 11020
+     }
+    }
    },
    {
     "target": "oilgas_gasturbine",
@@ -1521,7 +2137,95 @@
      "ah_phase",
      "afdp_phase",
      "gtep_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_oilgas_gasturbine_gam",
+     "seed": 44,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8814,
+       "fp": 2,
+       "fn": 2150,
+       "tp": 54
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_gam_44.npz",
+      "sha256": "36d5b6a5eb9e48113edba3c9168e6912f99bd8edc68230d3bd1b10198b24db4d",
+      "n_rows": 11020
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_oilgas_gasturbine_ga2m",
+     "seed": 44,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8815,
+       "fp": 1,
+       "fn": 2149,
+       "tp": 55
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_ga2m_44.npz",
+      "sha256": "639bf430e97439281a586eae3d43b0df7dcd23fb53a283087f1b4dda32324508",
+      "n_rows": 11020
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_oilgas_gasturbine_hgb",
+     "seed": 44,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_hgb_44.npz",
+      "sha256": "b138807556c78fc0778da00d2108dab65b7fd93243cb5403506444abae25b814",
+      "n_rows": 11020
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_oilgas_gasturbine_joint",
+     "seed": 44,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8812,
+       "fp": 4,
+       "fn": 2152,
+       "tp": 52
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_joint_44.npz",
+      "sha256": "fa122e7cabfef99e1e1cb59e9975afdfcd6207433ffce9bbd305178c95e7b104",
+      "n_rows": 11020
+     }
+    }
    },
    {
     "target": "oilgas_gasturbine",
@@ -1638,7 +2342,95 @@
      "ah_phase",
      "afdp_phase",
      "gtep_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_oilgas_gasturbine_gam",
+     "seed": 45,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8812,
+       "fp": 4,
+       "fn": 2152,
+       "tp": 52
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_gam_45.npz",
+      "sha256": "d246f00fb883a7841da3f0eb0a8169fef0e0946a8bb4fded2f13ef18f9a2b198",
+      "n_rows": 11020
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_oilgas_gasturbine_ga2m",
+     "seed": 45,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_ga2m_45.npz",
+      "sha256": "42722d279fce056c1980c1d73ba10a46ff4220c89292baac9268530ce2e18f12",
+      "n_rows": 11020
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_oilgas_gasturbine_hgb",
+     "seed": 45,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_hgb_45.npz",
+      "sha256": "057a9e084d981c8009c21eb419170811bfc1b2e41042a9c8b70c6d70a8d32f03",
+      "n_rows": 11020
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_oilgas_gasturbine_joint",
+     "seed": 45,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_joint_45.npz",
+      "sha256": "9aef450cae2de5f8faa9ecf2ffb2fceb1d54c82d3ec17f430009ab0b716e9155",
+      "n_rows": 11020
+     }
+    }
    },
    {
     "target": "oilgas_gasturbine",
@@ -1755,7 +2547,95 @@
      "ah_phase",
      "afdp_phase",
      "gtep_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_oilgas_gasturbine_gam",
+     "seed": 46,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8812,
+       "fp": 4,
+       "fn": 2152,
+       "tp": 52
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_gam_46.npz",
+      "sha256": "c0458a8092ee0d38319a8081aeb1d96df36214f05e382f12f974635253bf2046",
+      "n_rows": 11020
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_oilgas_gasturbine_ga2m",
+     "seed": 46,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_ga2m_46.npz",
+      "sha256": "91ba573c18c49a1fb28bb157b3ca1fd0e16a9f46b40dec3290171d06ed3c6bf7",
+      "n_rows": 11020
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_oilgas_gasturbine_hgb",
+     "seed": 46,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8816,
+       "fp": 0,
+       "fn": 2148,
+       "tp": 56
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_hgb_46.npz",
+      "sha256": "9bb9a51103448b7e7416b689c7a7c956b00129b34a9638405aa8d627b4b9a792",
+      "n_rows": 11020
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_oilgas_gasturbine_joint",
+     "seed": 46,
+     "n_test": 11020,
+     "n_positives": 2204,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 56,
+      "n_flagged": 56,
+      "confusion": {
+       "tn": 8815,
+       "fp": 1,
+       "fn": 2149,
+       "tp": 55
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_oilgas_gasturbine_joint_46.npz",
+      "sha256": "e4321daf907a1d0eaa74fda132ea01e6f6310d08ad8e941193b5050728b12554",
+      "n_rows": 11020
+     }
+    }
    }
   ],
   "telecom_churn": [
@@ -1874,7 +2754,95 @@
      "frequency_of_sms_phase",
      "distinct_called_numbers_phase",
      "customer_value_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_telecom_churn_gam",
+     "seed": 42,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 794,
+       "fp": 3,
+       "fn": 146,
+       "tp": 2
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_gam_42.npz",
+      "sha256": "98b94e3b5131c9423338ad6c8a6dc5161e8b9112aac3022856f45b5302be2726",
+      "n_rows": 945
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_telecom_churn_ga2m",
+     "seed": 42,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 792,
+       "fp": 5,
+       "fn": 148,
+       "tp": 0
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_ga2m_42.npz",
+      "sha256": "8eb07f67831a01ca32a1dffc986cd70b7b931c92cd76125c433ecb0a0154c7d6",
+      "n_rows": 945
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_telecom_churn_hgb",
+     "seed": 42,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 797,
+       "fp": 0,
+       "fn": 143,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_hgb_42.npz",
+      "sha256": "edcab98d38251d7f662479ab37bb985e5d1ab1378f544947b9899468b413fb8f",
+      "n_rows": 945
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_telecom_churn_joint",
+     "seed": 42,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 795,
+       "fp": 2,
+       "fn": 145,
+       "tp": 3
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_joint_42.npz",
+      "sha256": "ee8044173d4fb4ab74fef510f675a39aed5aa8935c433d9d72f1d0870eeb9749",
+      "n_rows": 945
+     }
+    }
    },
    {
     "target": "telecom_churn",
@@ -1991,7 +2959,95 @@
      "frequency_of_sms_phase",
      "distinct_called_numbers_phase",
      "customer_value_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_telecom_churn_gam",
+     "seed": 43,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 795,
+       "fp": 2,
+       "fn": 145,
+       "tp": 3
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_gam_43.npz",
+      "sha256": "c9f8d2b3a43c8a313101db3ce6601ee516773fa4c92afa4843d5e76e21f4fe5e",
+      "n_rows": 945
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_telecom_churn_ga2m",
+     "seed": 43,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 795,
+       "fp": 2,
+       "fn": 145,
+       "tp": 3
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_ga2m_43.npz",
+      "sha256": "ea7cd9c4761949074a00facb726eb414bffcd5fe150b894d1cb88fa5626732b6",
+      "n_rows": 945
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_telecom_churn_hgb",
+     "seed": 43,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 797,
+       "fp": 0,
+       "fn": 143,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_hgb_43.npz",
+      "sha256": "89ba1cb23c9d285a74a9164a3d8455915c84981f45bae284f55389babfddf29f",
+      "n_rows": 945
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_telecom_churn_joint",
+     "seed": 43,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 797,
+       "fp": 0,
+       "fn": 143,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_joint_43.npz",
+      "sha256": "ba56666933f31f2819ea6c69ef4acf17139b15037c6645d33e30565b310c138f",
+      "n_rows": 945
+     }
+    }
    },
    {
     "target": "telecom_churn",
@@ -2108,7 +3164,95 @@
      "frequency_of_sms_phase",
      "distinct_called_numbers_phase",
      "customer_value_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_telecom_churn_gam",
+     "seed": 44,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 794,
+       "fp": 3,
+       "fn": 146,
+       "tp": 2
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_gam_44.npz",
+      "sha256": "04102d6647ae52a48705380ca59103ccd9c6178dd894df601b97be73f1efec1d",
+      "n_rows": 945
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_telecom_churn_ga2m",
+     "seed": 44,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 794,
+       "fp": 3,
+       "fn": 146,
+       "tp": 2
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_ga2m_44.npz",
+      "sha256": "6bcd1d54bacba50b3f6a51b08668b86d4d64a834d3b66a579ca91e5b05dfdeb4",
+      "n_rows": 945
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_telecom_churn_hgb",
+     "seed": 44,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 797,
+       "fp": 0,
+       "fn": 143,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_hgb_44.npz",
+      "sha256": "7ab2a16659c302b98237f7ed807c054392c3cd7418b2b788ca17d1cd00a937f1",
+      "n_rows": 945
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_telecom_churn_joint",
+     "seed": 44,
+     "n_test": 945,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 797,
+       "fp": 0,
+       "fn": 143,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_joint_44.npz",
+      "sha256": "51f7cb03400ff5f5572d23a2f6d6f40e60d6b3d213544a788f27c5698bbc3fc1",
+      "n_rows": 945
+     }
+    }
    },
    {
     "target": "telecom_churn",
@@ -2225,7 +3369,95 @@
      "frequency_of_sms_phase",
      "distinct_called_numbers_phase",
      "customer_value_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_telecom_churn_gam",
+     "seed": 45,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 792,
+       "fp": 4,
+       "fn": 148,
+       "tp": 1
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_gam_45.npz",
+      "sha256": "477e8904b864212ce91b9ce4e43acb6348501196f833450fbafe62b304074e9d",
+      "n_rows": 945
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_telecom_churn_ga2m",
+     "seed": 45,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 793,
+       "fp": 3,
+       "fn": 147,
+       "tp": 2
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_ga2m_45.npz",
+      "sha256": "a3e124ad26ef8763b379ec5a08aa562b68e203064e5ff238d8edf2c1f1471194",
+      "n_rows": 945
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_telecom_churn_hgb",
+     "seed": 45,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 796,
+       "fp": 0,
+       "fn": 144,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_hgb_45.npz",
+      "sha256": "3677560bbe7d0aaa04f2f7022345403fa0fda2311796bc25814751b915df464b",
+      "n_rows": 945
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_telecom_churn_joint",
+     "seed": 45,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 795,
+       "fp": 1,
+       "fn": 145,
+       "tp": 4
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_joint_45.npz",
+      "sha256": "c46399a92fba9945e41694cc23198e36f5509fd1ec2c1f7441df6dabf1afe1d9",
+      "n_rows": 945
+     }
+    }
    },
    {
     "target": "telecom_churn",
@@ -2342,7 +3574,95 @@
      "frequency_of_sms_phase",
      "distinct_called_numbers_phase",
      "customer_value_phase"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_telecom_churn_gam",
+     "seed": 46,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 792,
+       "fp": 4,
+       "fn": 148,
+       "tp": 1
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_gam_46.npz",
+      "sha256": "0a12f855315e72662ac99356b47419e868871b880e0248e32ded9afc1ff7aceb",
+      "n_rows": 945
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_telecom_churn_ga2m",
+     "seed": 46,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 795,
+       "fp": 1,
+       "fn": 145,
+       "tp": 4
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_ga2m_46.npz",
+      "sha256": "f20cb1d7a9d3654d75b269dc15b079bdc687fe5ba4112323b19ade90cb5515ec",
+      "n_rows": 945
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_telecom_churn_hgb",
+     "seed": 46,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 796,
+       "fp": 0,
+       "fn": 144,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_hgb_46.npz",
+      "sha256": "dc19671ead9459e192f324b05b17c8ff2fc1364f3e5ab1d5ab87fb9e4298f5dc",
+      "n_rows": 945
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_telecom_churn_joint",
+     "seed": 46,
+     "n_test": 945,
+     "n_positives": 149,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 5,
+      "n_flagged": 5,
+      "confusion": {
+       "tn": 796,
+       "fp": 0,
+       "fn": 144,
+       "tp": 5
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_telecom_churn_joint_46.npz",
+      "sha256": "d887997f4270b82ae74a0a90b7eaa9521e3382a486691f6f12d288ac377c441d",
+      "n_rows": 945
+     }
+    }
    }
   ],
   "ulb": [
@@ -2463,7 +3783,95 @@
      "V12",
      "V11",
      "V16"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ulb_gam",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8850,
+       "fp": 2,
+       "fn": 105,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_gam_42.npz",
+      "sha256": "8f7e5e4d63165175c360ab0d00fdbde536439cbb598ee831123044762a410b33",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ulb_ga2m",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8848,
+       "fp": 4,
+       "fn": 107,
+       "tp": 41
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_ga2m_42.npz",
+      "sha256": "9b4a8a468680e4352f4ae86b9129d524dbcb0b872206fe8da872d15fbea52b45",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ulb_hgb",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 47,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 101,
+       "tp": 47
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_hgb_42.npz",
+      "sha256": "71b8247f4db5ab2dd408161cde75f589ac699cc6183f6eedc24e62c6108cd8a7",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ulb_joint",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 104,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_joint_42.npz",
+      "sha256": "a1a305894b907ab7f4702fa639845a400ac51d46b1a1e61af31abfd38c19a9c6",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ulb",
@@ -2582,7 +3990,95 @@
      "V12",
      "V11",
      "V16"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ulb_gam",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_gam_43.npz",
+      "sha256": "3689683aa6acd6e33aa3fd7024fd3cbf5ab9c7aebca3d66f1a2cbf6cb2fc6c48",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ulb_ga2m",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_ga2m_43.npz",
+      "sha256": "837874be00c55d7c4d472455071c896b86a8c09fcba2523e4ca3463ab2287b2b",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ulb_hgb",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_hgb_43.npz",
+      "sha256": "15356c3ade7953c1762f898717b528b20e08673a6547cacd9a2afea787ccfbc2",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ulb_joint",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_joint_43.npz",
+      "sha256": "b741db54f9fe27de20f713aecd1cf8e9426e4925b727f3600287d8a55c3f7bee",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ulb",
@@ -2701,7 +4197,95 @@
      "V12",
      "V11",
      "V16"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ulb_gam",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 104,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_gam_44.npz",
+      "sha256": "a51d38512395177aeed843784a95c9fd26cb9a26b39f23249ae2ffb46817f3f0",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ulb_ga2m",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 104,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_ga2m_44.npz",
+      "sha256": "804c278a9b9d26f0c80ad863f6b4e40513ab39b97c6a6bbf58dcdbe832f6ede2",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ulb_hgb",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 47,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 101,
+       "tp": 47
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_hgb_44.npz",
+      "sha256": "00d99101aa971c8f027f7cac262103c54ff8468c2702ac1803b393374bfa4e69",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ulb_joint",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 46,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_joint_44.npz",
+      "sha256": "b4ffe1c0e7d50f42f1665eff9d3bee2a6b80c15ac107c0f378e9207d0c05a693",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ulb",
@@ -2820,7 +4404,95 @@
      "V12",
      "V11",
      "V16"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ulb_gam",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_gam_45.npz",
+      "sha256": "ac19e10e983cf2963a4dbf7c8e628858926c334569318dd35add92faa6eb2c30",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ulb_ga2m",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_ga2m_45.npz",
+      "sha256": "0fef77c0efc0dd820d5f125608edf6b14bf4b044a90f4103b893d46590040b76",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ulb_hgb",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_hgb_45.npz",
+      "sha256": "b08c8e3ed98bf9c4b2c4fbe5c90070a4f0fc72486336656de28f56b9004d3152",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ulb_joint",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 104,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_joint_45.npz",
+      "sha256": "ed69ebae41781ad8b539e7f563cf4715a43f3fc54d16871ccb6f8ae94161db55",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ulb",
@@ -2939,7 +4611,95 @@
      "V12",
      "V11",
      "V16"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ulb_gam",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_gam_46.npz",
+      "sha256": "5113417ce7bf2a1e4a4e4a236a36e831b0de419ab096262e9d56e9587db4f9f5",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ulb_ga2m",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 104,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_ga2m_46.npz",
+      "sha256": "0af9ee91d64a461d958d65be7326fa5b58a9ff05409a323c587b5bf0d628e486",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ulb_hgb",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8852,
+       "fp": 0,
+       "fn": 103,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_hgb_46.npz",
+      "sha256": "8192140e75058a0df6062106449c060a43d92f459141643f3add86daacce9b0e",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ulb_joint",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 148,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8851,
+       "fp": 1,
+       "fn": 104,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ulb_joint_46.npz",
+      "sha256": "2d530e4f5a214443cd59cbc99e966393969824dfc2e8a8ed194854ad00434d91",
+      "n_rows": 9000
+     }
+    }
    }
   ],
   "ieee_before": [
@@ -3060,7 +4820,95 @@
      "V200",
      "V258",
      "V199"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_before_gam",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8098,
+       "fp": 2,
+       "fn": 857,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_gam_42.npz",
+      "sha256": "3145f7f94b998416522b155f9bf7e930d5676a969b3964fb810ce4660aa5ac66",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_before_ga2m",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8098,
+       "fp": 2,
+       "fn": 857,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_ga2m_42.npz",
+      "sha256": "74586048ee90ca57072b58cd5ba9d4e85c763545373af3361e15a24c817def1d",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_before_hgb",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8098,
+       "fp": 2,
+       "fn": 857,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_hgb_42.npz",
+      "sha256": "cf325da47c429b5ee24fa88b04e23a104e54364818b005eab0b86e25c85df737",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_before_joint",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8098,
+       "fp": 2,
+       "fn": 857,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_joint_42.npz",
+      "sha256": "eb7c1498259c0c908b2f452a7d80d0cefb9805e18c1f204b25ac2fcc7ec8afdf",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_before",
@@ -3179,7 +5027,95 @@
      "V200",
      "V189",
      "V257"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_before_gam",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8099,
+       "fp": 1,
+       "fn": 856,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_gam_43.npz",
+      "sha256": "66abcb67b5958dec0f2bfbf37890e1c9d5ba1df68029d45507dc0478cd861ba4",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_before_ga2m",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8097,
+       "fp": 3,
+       "fn": 858,
+       "tp": 42
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_ga2m_43.npz",
+      "sha256": "5b7cf3ab48e264dc1b490bf91a979147e280cd23ba7232c514a2d185fa71d18a",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_before_hgb",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8099,
+       "fp": 1,
+       "fn": 856,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_hgb_43.npz",
+      "sha256": "1748a229a4a43004b0e3e0c9174cd09cdbde33a788ff34ac4bfc0b909f2c7bf8",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_before_joint",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8098,
+       "fp": 2,
+       "fn": 857,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_joint_43.npz",
+      "sha256": "e894904414b173b6f19caed53b244f3ccd33da185827cf28f19d7f30cfbf2d22",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_before",
@@ -3298,7 +5234,95 @@
      "V246",
      "V200",
      "V243"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_before_gam",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8098,
+       "fp": 2,
+       "fn": 857,
+       "tp": 43
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_gam_44.npz",
+      "sha256": "26f3421cbdbd323ef769b417c8a22289f50ff109846af14bdb8d389d608a55c0",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_before_ga2m",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8097,
+       "fp": 3,
+       "fn": 858,
+       "tp": 42
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_ga2m_44.npz",
+      "sha256": "104869ec7db6f09adb121f6ea95ca401e69b65aa82a340d68073c251bbe821ae",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_before_hgb",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8100,
+       "fp": 0,
+       "fn": 855,
+       "tp": 45
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_hgb_44.npz",
+      "sha256": "b8393046c9ad05ade22050025bf3dbddb766e7c70170e19c0cf30c6eb1bcf49e",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_before_joint",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8097,
+       "fp": 3,
+       "fn": 858,
+       "tp": 42
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_joint_44.npz",
+      "sha256": "ab4e60093c486f502deca398f30e76a8efeef69b4a83fe10fbc4488699f7e819",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_before",
@@ -3417,7 +5441,95 @@
      "V200",
      "V258",
      "V243"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_before_gam",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8094,
+       "fp": 6,
+       "fn": 861,
+       "tp": 39
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_gam_45.npz",
+      "sha256": "91aa9b2b92de96622c2384596dba7933659a72ba9da8a232e8786f3e0e4f8f27",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_before_ga2m",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8094,
+       "fp": 6,
+       "fn": 861,
+       "tp": 39
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_ga2m_45.npz",
+      "sha256": "ced686d63230478279f23229f2bb0d0b0f17564ee3c1082ef6d37edb739fc487",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_before_hgb",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8094,
+       "fp": 6,
+       "fn": 861,
+       "tp": 39
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_hgb_45.npz",
+      "sha256": "d3871098bd571dbd906bed10649e06003c125dcad69574aea6c312e0b05a8f55",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_before_joint",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8094,
+       "fp": 6,
+       "fn": 861,
+       "tp": 39
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_joint_45.npz",
+      "sha256": "f2977ffdd385ba328e7345be8849db5f50e50e4e6d03268fc4d23ed56b85e069",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_before",
@@ -3536,7 +5648,95 @@
      "V246",
      "V201",
      "V200"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_before_gam",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8095,
+       "fp": 5,
+       "fn": 860,
+       "tp": 40
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_gam_46.npz",
+      "sha256": "e2d6683a1b85c988f2424dfe4bb1cb19ddbe9a640e22a7bd682770cc1ec44fd7",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_before_ga2m",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8095,
+       "fp": 5,
+       "fn": 860,
+       "tp": 40
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_ga2m_46.npz",
+      "sha256": "b9e16e12b701d7f338b880d28fb660cba5061c325c66bf3aa67bad7427a3f01a",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_before_hgb",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8095,
+       "fp": 5,
+       "fn": 860,
+       "tp": 40
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_hgb_46.npz",
+      "sha256": "701fa6abecbee7eb429fecf24cba86da6aa7fa0725fd929e24f7d9dc91720d33",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_before_joint",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8097,
+       "fp": 3,
+       "fn": 858,
+       "tp": 42
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_before_joint_46.npz",
+      "sha256": "b4ae21231df52535ac4360f9b23c852ccc24f31aa05833be813d2f139d997f6b",
+      "n_rows": 9000
+     }
+    }
    }
   ],
   "ieee_after": [
@@ -3664,7 +5864,95 @@
      "uid_C13_mean",
      "uid_D10_mean",
      "uid_D15_mean"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_after_gam",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8076,
+       "fp": 24,
+       "fn": 879,
+       "tp": 21
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_gam_42.npz",
+      "sha256": "6172313048256b0c83bc0eb82fba3bba3398691d9e757f8a3c0a9b90660610a8",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_after_ga2m",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8085,
+       "fp": 15,
+       "fn": 870,
+       "tp": 30
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_ga2m_42.npz",
+      "sha256": "90cb5819999c0a6de80d358cbb965bded15b590cf549137db59ecf8754f8c62b",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_after_hgb",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8094,
+       "fp": 6,
+       "fn": 861,
+       "tp": 39
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_hgb_42.npz",
+      "sha256": "e824d4bcf660b50b7a4bba71a4e5a82aa4467fa310011cc42da9aa7413aa0078",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_after_joint",
+     "seed": 42,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8087,
+       "fp": 13,
+       "fn": 868,
+       "tp": 32
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_joint_42.npz",
+      "sha256": "07887bcb4409a19ab4a8b7e1a1e5ab728a35382ce052d8ec4ca641a57905376a",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_after",
@@ -3790,7 +6078,95 @@
      "uid_C13_mean",
      "uid_D15_mean",
      "uid_D10_mean"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_after_gam",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 46,
+      "confusion": {
+       "tn": 8079,
+       "fp": 21,
+       "fn": 875,
+       "tp": 25
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_gam_43.npz",
+      "sha256": "07fb1dbd47da95d85d6c66c0b50ec61d5ad5e5ed78d3a40971bf39416ede2ea1",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_after_ga2m",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8087,
+       "fp": 13,
+       "fn": 868,
+       "tp": 32
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_ga2m_43.npz",
+      "sha256": "ddb8793720a9d382bdab15a75a32d6977eb30f5bbcabc0baf9c4256f62fdfd1a",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_after_hgb",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8092,
+       "fp": 8,
+       "fn": 863,
+       "tp": 37
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_hgb_43.npz",
+      "sha256": "b04e26220e6476bb6c59fcd139ae7fc274542c09be37494b57e52271b0ec6ba4",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_after_joint",
+     "seed": 43,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8091,
+       "fp": 9,
+       "fn": 864,
+       "tp": 36
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_joint_43.npz",
+      "sha256": "cc25467dbbc3a40c49ac8332f8a31c81f92dc2a75a4c60e23e8a2c9e1c18e7c4",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_after",
@@ -3915,7 +6291,95 @@
      "uid_C13_mean",
      "uid_TransactionAmt_mean",
      "uid_D15_mean"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_after_gam",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8081,
+       "fp": 19,
+       "fn": 874,
+       "tp": 26
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_gam_44.npz",
+      "sha256": "d1da7ec2f068eaba140e8c47fbab5b225fbe5ae13c3d8ba665e00bac485db612",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_after_ga2m",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8093,
+       "fp": 7,
+       "fn": 862,
+       "tp": 38
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_ga2m_44.npz",
+      "sha256": "9f5dd6f39b9469181a6be6a6be2dad41b889423fc2edc2ec3d40bd0c867c3663",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_after_hgb",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8099,
+       "fp": 1,
+       "fn": 856,
+       "tp": 44
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_hgb_44.npz",
+      "sha256": "7e585d45f1a75f1edba088048e28496370ee9c65f945394d64cdd17689fcf862",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_after_joint",
+     "seed": 44,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8092,
+       "fp": 8,
+       "fn": 863,
+       "tp": 37
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_joint_44.npz",
+      "sha256": "50f80692c919e292c6138b4c839bb27dc83261d83104af12a1c7be8df4aff48a",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_after",
@@ -4041,7 +6505,95 @@
      "uid_C13_mean",
      "uid_D15_mean",
      "uid_C12_mean"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_after_gam",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8078,
+       "fp": 22,
+       "fn": 877,
+       "tp": 23
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_gam_45.npz",
+      "sha256": "9209defac0dcd98b217a865bde44db1f76c3e303d07ed6dee5767e8c76bb073d",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_after_ga2m",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 46,
+      "confusion": {
+       "tn": 8089,
+       "fp": 11,
+       "fn": 865,
+       "tp": 35
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_ga2m_45.npz",
+      "sha256": "10fd07375651093953ff4a0ca6285f2ab41b3978f037305788cf7fe984ac47bb",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_after_hgb",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8096,
+       "fp": 4,
+       "fn": 859,
+       "tp": 41
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_hgb_45.npz",
+      "sha256": "91175c166af608137d70459b3bedfc4cdb5169008a11a69973b840d44c25a926",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_after_joint",
+     "seed": 45,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8091,
+       "fp": 9,
+       "fn": 864,
+       "tp": 36
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_joint_45.npz",
+      "sha256": "65b315c4928c74fc03855441c3e1fe0041067a1e77e50f009060ae0611532b86",
+      "n_rows": 9000
+     }
+    }
    },
    {
     "target": "ieee_after",
@@ -4167,7 +6719,95 @@
      "uid_TransactionAmt_mean",
      "uid_D15_mean",
      "uid_D10_mean"
-    ]
+    ],
+    "gam_outcome": {
+     "name": "f109_ieee_after_gam",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8081,
+       "fp": 19,
+       "fn": 874,
+       "tp": 26
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_gam_46.npz",
+      "sha256": "8c71d4e302981b3109423503effe3c5534107f0559f64eff897ccc34bcfe5ff0",
+      "n_rows": 9000
+     }
+    },
+    "ga2m_outcome": {
+     "name": "f109_ieee_after_ga2m",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8083,
+       "fp": 17,
+       "fn": 872,
+       "tp": 28
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_ga2m_46.npz",
+      "sha256": "5989dbe7494d4b11dc9a06b92f9ec37f2ecd129b6ec55d59d8df67ea01a22be3",
+      "n_rows": 9000
+     }
+    },
+    "hgb_outcome": {
+     "name": "f109_ieee_after_hgb",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8094,
+       "fp": 6,
+       "fn": 861,
+       "tp": 39
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_hgb_46.npz",
+      "sha256": "490da552cc8e9c87a4d639c061aa95b9aad6723f0360f1a856ebf94e64dbfbae",
+      "n_rows": 9000
+     }
+    },
+    "joint_outcome": {
+     "name": "f109_ieee_after_joint",
+     "seed": 46,
+     "n_test": 9000,
+     "n_positives": 900,
+     "at_budget_on_test": {
+      "budget": 0.005,
+      "n_budget": 45,
+      "n_flagged": 45,
+      "confusion": {
+       "tn": 8089,
+       "fp": 11,
+       "fn": 866,
+       "tp": 34
+      }
+     },
+     "test_scores": {
+      "path": "experiments/phase2/predictions/f109_ieee_after_joint_46.npz",
+      "sha256": "d2e8f6e59cf3ed905814313db336524ec5b9e43bbe2cfdc25007b78e32facc7f",
+      "n_rows": 9000
+     }
+    }
    }
   ]
  },
@@ -4494,5 +7134,871 @@
    "ieee_after": 1
   }
  },
- "elapsed_s": 3700.2
+ "elapsed_s": 3700.2,
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "maintenance_ai4i (seeds 42, 43, 44, 45, 46): gam, ga2m, hgb, joint",
+   "oilgas_gasturbine (seeds 42, 43, 44, 45, 46): gam, ga2m, hgb, joint",
+   "telecom_churn (seeds 42, 43, 44, 45, 46): gam, ga2m, hgb, joint",
+   "ulb (seeds 42, 43, 44, 45, 46): gam, ga2m, hgb, joint",
+   "ieee_before (seeds 42, 43, 44, 45, 46): gam, ga2m, hgb, joint",
+   "ieee_after (seeds 42, 43, 44, 45, 46): gam, ga2m, hgb, joint"
+  ],
+  "uncovered_lanes": {
+   "energy_steel": "rows copied from f103_tier1.json (cited); their blocks are there"
+  },
+  "n_blocks": 120,
+  "metric_check": {
+   "n_checks": 2180,
+   "all_within_tolerance": true,
+   "max_abs_diff": 4.873949579831116e-05,
+   "not_identical": [
+    {
+     "label": "datasets.maintenance_ai4i.0.gam AUC from the block's scores",
+     "stored": 0.8957,
+     "recomputed": 0.8956785612795843,
+     "abs_diff": 2.143872041571182e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.0.ga2m AUC from the block's scores",
+     "stored": 0.9211,
+     "recomputed": 0.9211220720172125,
+     "abs_diff": 2.20720172124933e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.0.hgb AUC from the block's scores",
+     "stored": 0.954,
+     "recomputed": 0.9540047903219259,
+     "abs_diff": 4.790321925907115e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.0.joint AUC from the block's scores",
+     "stored": 0.9226,
+     "recomputed": 0.9226241221126132,
+     "abs_diff": 2.4122112613267355e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.1.gam AUC from the block's scores",
+     "stored": 0.8957,
+     "recomputed": 0.8957056252452673,
+     "abs_diff": 5.625245267260048e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.1.ga2m AUC from the block's scores",
+     "stored": 0.918,
+     "recomputed": 0.9180029499722594,
+     "abs_diff": 2.9499722593584465e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.1.hgb AUC from the block's scores",
+     "stored": 0.9541,
+     "recomputed": 0.9541164291803678,
+     "abs_diff": 1.6429180367816265e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.1.joint AUC from the block's scores",
+     "stored": 0.9087,
+     "recomputed": 0.9087098607558965,
+     "abs_diff": 9.860755896595741e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.2.gam AUC from the block's scores",
+     "stored": 0.9077,
+     "recomputed": 0.9076780470642363,
+     "abs_diff": 2.1952935763680514e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.2.ga2m AUC from the block's scores",
+     "stored": 0.9207,
+     "recomputed": 0.9206958145577071,
+     "abs_diff": 4.1854422928588875e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.2.hgb AUC from the block's scores",
+     "stored": 0.9482,
+     "recomputed": 0.9482063356743664,
+     "abs_diff": 6.335674366364508e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.2.joint AUC from the block's scores",
+     "stored": 0.9245,
+     "recomputed": 0.9245084507232846,
+     "abs_diff": 8.450723284592065e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.3.gam AUC from the block's scores",
+     "stored": 0.8869,
+     "recomputed": 0.8868827724326446,
+     "abs_diff": 1.7227567355448947e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.3.ga2m AUC from the block's scores",
+     "stored": 0.8966,
+     "recomputed": 0.8965818211342508,
+     "abs_diff": 1.8178865749174378e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.3.hgb AUC from the block's scores",
+     "stored": 0.9501,
+     "recomputed": 0.9501346432292723,
+     "abs_diff": 3.464322927237973e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.3.joint AUC from the block's scores",
+     "stored": 0.9014,
+     "recomputed": 0.9014262709914883,
+     "abs_diff": 2.6270991488330786e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.4.gam AUC from the block's scores",
+     "stored": 0.8718,
+     "recomputed": 0.8718487394957983,
+     "abs_diff": 4.873949579831116e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.4.ga2m AUC from the block's scores",
+     "stored": 0.9118,
+     "recomputed": 0.9118289828008498,
+     "abs_diff": 2.8982800849730594e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.4.hgb AUC from the block's scores",
+     "stored": 0.942,
+     "recomputed": 0.9420222195158257,
+     "abs_diff": 2.221951582570547e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.maintenance_ai4i.4.joint AUC from the block's scores",
+     "stored": 0.9058,
+     "recomputed": 0.9058106334321169,
+     "abs_diff": 1.0633432116824437e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.0.gam AUC from the block's scores",
+     "stored": 0.9219,
+     "recomputed": 0.9219267743683321,
+     "abs_diff": 2.6774368332094234e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.0.ga2m AUC from the block's scores",
+     "stored": 0.9402,
+     "recomputed": 0.9402449679019503,
+     "abs_diff": 4.4967901950299094e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.0.hgb AUC from the block's scores",
+     "stored": 0.9588,
+     "recomputed": 0.9588339990233894,
+     "abs_diff": 3.39990233894083e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.0.joint AUC from the block's scores",
+     "stored": 0.9467,
+     "recomputed": 0.946670393460496,
+     "abs_diff": 2.9606539504012375e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.1.gam AUC from the block's scores",
+     "stored": 0.9192,
+     "recomputed": 0.9191722853350286,
+     "abs_diff": 2.7714664971423275e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.1.ga2m AUC from the block's scores",
+     "stored": 0.9399,
+     "recomputed": 0.9399321601378124,
+     "abs_diff": 3.2160137812486944e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.1.hgb AUC from the block's scores",
+     "stored": 0.9575,
+     "recomputed": 0.9575442974496132,
+     "abs_diff": 4.4297449613206474e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.1.joint AUC from the block's scores",
+     "stored": 0.9457,
+     "recomputed": 0.9456576538779518,
+     "abs_diff": 4.2346122048231294e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.2.gam AUC from the block's scores",
+     "stored": 0.912,
+     "recomputed": 0.9119673621793075,
+     "abs_diff": 3.263782069251597e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.2.ga2m AUC from the block's scores",
+     "stored": 0.9355,
+     "recomputed": 0.9354543463295576,
+     "abs_diff": 4.565367044240265e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.2.hgb AUC from the block's scores",
+     "stored": 0.9562,
+     "recomputed": 0.9562015091353454,
+     "abs_diff": 1.5091353453566825e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.2.joint AUC from the block's scores",
+     "stored": 0.9421,
+     "recomputed": 0.9420548577738544,
+     "abs_diff": 4.514222614560026e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.3.gam AUC from the block's scores",
+     "stored": 0.9137,
+     "recomputed": 0.9136765853867411,
+     "abs_diff": 2.3414613258831984e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.3.ga2m AUC from the block's scores",
+     "stored": 0.935,
+     "recomputed": 0.9349690774239874,
+     "abs_diff": 3.092257601267079e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.3.hgb AUC from the block's scores",
+     "stored": 0.9544,
+     "recomputed": 0.9543763854532757,
+     "abs_diff": 2.3614546724282093e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.3.joint AUC from the block's scores",
+     "stored": 0.9408,
+     "recomputed": 0.9407726959067987,
+     "abs_diff": 2.7304093201285795e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.4.gam AUC from the block's scores",
+     "stored": 0.9163,
+     "recomputed": 0.9163261361128587,
+     "abs_diff": 2.6136112858732297e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.4.ga2m AUC from the block's scores",
+     "stored": 0.9384,
+     "recomputed": 0.9383634894153842,
+     "abs_diff": 3.651058461584533e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.4.hgb AUC from the block's scores",
+     "stored": 0.9566,
+     "recomputed": 0.9565694107973952,
+     "abs_diff": 3.058920260479159e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.oilgas_gasturbine.4.joint AUC from the block's scores",
+     "stored": 0.9447,
+     "recomputed": 0.9446667356991577,
+     "abs_diff": 3.326430084227283e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.0.gam AUC from the block's scores",
+     "stored": 0.8603,
+     "recomputed": 0.8603292753230019,
+     "abs_diff": 2.927532300189828e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.0.ga2m AUC from the block's scores",
+     "stored": 0.8862,
+     "recomputed": 0.886186374580352,
+     "abs_diff": 1.3625419648000126e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.0.hgb AUC from the block's scores",
+     "stored": 0.9548,
+     "recomputed": 0.954839092542982,
+     "abs_diff": 3.909254298206655e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.0.joint AUC from the block's scores",
+     "stored": 0.9246,
+     "recomputed": 0.9245735698056903,
+     "abs_diff": 2.643019430970117e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.1.gam AUC from the block's scores",
+     "stored": 0.8664,
+     "recomputed": 0.8664078130828444,
+     "abs_diff": 7.813082844476682e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.1.ga2m AUC from the block's scores",
+     "stored": 0.8813,
+     "recomputed": 0.8813201532774932,
+     "abs_diff": 2.0153277493273336e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.1.hgb AUC from the block's scores",
+     "stored": 0.9422,
+     "recomputed": 0.9422326969378413,
+     "abs_diff": 3.269693784124783e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.1.joint AUC from the block's scores",
+     "stored": 0.9138,
+     "recomputed": 0.9138068432296789,
+     "abs_diff": 6.843229678921148e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.2.gam AUC from the block's scores",
+     "stored": 0.8525,
+     "recomputed": 0.8524958459086439,
+     "abs_diff": 4.154091356123324e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.2.ga2m AUC from the block's scores",
+     "stored": 0.8829,
+     "recomputed": 0.8828885347078572,
+     "abs_diff": 1.1465292142798233e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.2.hgb AUC from the block's scores",
+     "stored": 0.9486,
+     "recomputed": 0.9486079555088337,
+     "abs_diff": 7.95550883370133e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.2.joint AUC from the block's scores",
+     "stored": 0.9307,
+     "recomputed": 0.9306944962528401,
+     "abs_diff": 5.503747159907313e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.3.gam AUC from the block's scores",
+     "stored": 0.8343,
+     "recomputed": 0.8343057569727834,
+     "abs_diff": 5.756972783377279e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.3.ga2m AUC from the block's scores",
+     "stored": 0.8613,
+     "recomputed": 0.8612778658392634,
+     "abs_diff": 2.2134160736597686e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.3.hgb AUC from the block's scores",
+     "stored": 0.9352,
+     "recomputed": 0.9351623891268424,
+     "abs_diff": 3.7610873157678526e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.3.joint AUC from the block's scores",
+     "stored": 0.8843,
+     "recomputed": 0.8842703450136589,
+     "abs_diff": 2.9654986341109968e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.4.gam AUC from the block's scores",
+     "stored": 0.8427,
+     "recomputed": 0.8427456072307848,
+     "abs_diff": 4.560723078483875e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.4.ga2m AUC from the block's scores",
+     "stored": 0.8801,
+     "recomputed": 0.8801473812013086,
+     "abs_diff": 4.738120130864942e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.4.hgb AUC from the block's scores",
+     "stored": 0.9399,
+     "recomputed": 0.9398924150956123,
+     "abs_diff": 7.58490438768078e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.telecom_churn.4.joint AUC from the block's scores",
+     "stored": 0.8926,
+     "recomputed": 0.8925921554079119,
+     "abs_diff": 7.844592088024349e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.0.gam AUC from the block's scores",
+     "stored": 0.9328,
+     "recomputed": 0.9327682856828813,
+     "abs_diff": 3.171431711868067e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.0.ga2m AUC from the block's scores",
+     "stored": 0.9429,
+     "recomputed": 0.9428522795276072,
+     "abs_diff": 4.772047239276489e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.0.hgb AUC from the block's scores",
+     "stored": 0.9607,
+     "recomputed": 0.9607063146517507,
+     "abs_diff": 6.314651750716216e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.0.joint AUC from the block's scores",
+     "stored": 0.952,
+     "recomputed": 0.9520432090472758,
+     "abs_diff": 4.320904727583841e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.1.gam AUC from the block's scores",
+     "stored": 0.9297,
+     "recomputed": 0.9297456064288419,
+     "abs_diff": 4.560642884188226e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.1.ga2m AUC from the block's scores",
+     "stored": 0.9369,
+     "recomputed": 0.9369015705719275,
+     "abs_diff": 1.5705719275116437e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.1.hgb AUC from the block's scores",
+     "stored": 0.9707,
+     "recomputed": 0.9706987121554451,
+     "abs_diff": 1.2878445548869522e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.1.joint AUC from the block's scores",
+     "stored": 0.9568,
+     "recomputed": 0.956814615112175,
+     "abs_diff": 1.4615112175042633e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.2.gam AUC from the block's scores",
+     "stored": 0.9385,
+     "recomputed": 0.9384930569973498,
+     "abs_diff": 6.943002650250385e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.2.ga2m AUC from the block's scores",
+     "stored": 0.9383,
+     "recomputed": 0.9382762789902418,
+     "abs_diff": 2.372100975822633e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.2.hgb AUC from the block's scores",
+     "stored": 0.9597,
+     "recomputed": 0.9596861604035124,
+     "abs_diff": 1.3839596487597028e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.2.joint AUC from the block's scores",
+     "stored": 0.939,
+     "recomputed": 0.9390098130213358,
+     "abs_diff": 9.81302133584716e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.3.gam AUC from the block's scores",
+     "stored": 0.9144,
+     "recomputed": 0.9143894798549115,
+     "abs_diff": 1.0520145088510624e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.3.ga2m AUC from the block's scores",
+     "stored": 0.9459,
+     "recomputed": 0.9459207569521624,
+     "abs_diff": 2.0756952162415132e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.3.hgb AUC from the block's scores",
+     "stored": 0.9554,
+     "recomputed": 0.9553551800784064,
+     "abs_diff": 4.481992159366399e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.3.joint AUC from the block's scores",
+     "stored": 0.9462,
+     "recomputed": 0.9462382909344048,
+     "abs_diff": 3.829093440477216e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.4.gam AUC from the block's scores",
+     "stored": 0.9193,
+     "recomputed": 0.9193181263052479,
+     "abs_diff": 1.8126305247889718e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.4.ga2m AUC from the block's scores",
+     "stored": 0.9476,
+     "recomputed": 0.947647347980606,
+     "abs_diff": 4.7347980606016193e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.4.hgb AUC from the block's scores",
+     "stored": 0.9551,
+     "recomputed": 0.9550548204101074,
+     "abs_diff": 4.5179589892585525e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ulb.4.joint AUC from the block's scores",
+     "stored": 0.9569,
+     "recomputed": 0.9568817857622647,
+     "abs_diff": 1.8214237735292294e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.0.gam AUC from the block's scores",
+     "stored": 0.678,
+     "recomputed": 0.6779735939643348,
+     "abs_diff": 2.640603566528288e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.0.ga2m AUC from the block's scores",
+     "stored": 0.6869,
+     "recomputed": 0.6868708504801098,
+     "abs_diff": 2.9149519890192543e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.0.hgb AUC from the block's scores",
+     "stored": 0.7665,
+     "recomputed": 0.7664964334705076,
+     "abs_diff": 3.5665294924047686e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.0.joint AUC from the block's scores",
+     "stored": 0.7255,
+     "recomputed": 0.7255213991769548,
+     "abs_diff": 2.139917695476168e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.0.gam AUC from the block's scores",
+     "stored": 0.7015,
+     "recomputed": 0.7014877914951989,
+     "abs_diff": 1.220850480110336e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.0.ga2m AUC from the block's scores",
+     "stored": 0.7332,
+     "recomputed": 0.7331868998628257,
+     "abs_diff": 1.3100137174260063e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.0.hgb AUC from the block's scores",
+     "stored": 0.8105,
+     "recomputed": 0.8105296982167354,
+     "abs_diff": 2.9698216735374316e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.0.joint AUC from the block's scores",
+     "stored": 0.7465,
+     "recomputed": 0.746547256515775,
+     "abs_diff": 4.7256515774973806e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.1.gam AUC from the block's scores",
+     "stored": 0.677,
+     "recomputed": 0.6769560356652949,
+     "abs_diff": 4.396433470510441e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.1.ga2m AUC from the block's scores",
+     "stored": 0.697,
+     "recomputed": 0.6970248285322359,
+     "abs_diff": 2.482853223595427e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.1.hgb AUC from the block's scores",
+     "stored": 0.7489,
+     "recomputed": 0.7489023319615913,
+     "abs_diff": 2.331961591273135e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.1.joint AUC from the block's scores",
+     "stored": 0.7003,
+     "recomputed": 0.7002596021947874,
+     "abs_diff": 4.039780521258862e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.1.gam AUC from the block's scores",
+     "stored": 0.7021,
+     "recomputed": 0.702081207133059,
+     "abs_diff": 1.8792866940953168e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.1.ga2m AUC from the block's scores",
+     "stored": 0.7286,
+     "recomputed": 0.7286305212620028,
+     "abs_diff": 3.05212620027584e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.1.hgb AUC from the block's scores",
+     "stored": 0.8107,
+     "recomputed": 0.8107130315500686,
+     "abs_diff": 1.3031550068598463e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.1.joint AUC from the block's scores",
+     "stored": 0.7295,
+     "recomputed": 0.7294585733882029,
+     "abs_diff": 4.142661179717955e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.2.gam AUC from the block's scores",
+     "stored": 0.6922,
+     "recomputed": 0.692163854595336,
+     "abs_diff": 3.614540466401195e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.2.ga2m AUC from the block's scores",
+     "stored": 0.6902,
+     "recomputed": 0.6901562414266118,
+     "abs_diff": 4.375857338823064e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.2.hgb AUC from the block's scores",
+     "stored": 0.7596,
+     "recomputed": 0.7596253086419753,
+     "abs_diff": 2.53086419752524e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.2.joint AUC from the block's scores",
+     "stored": 0.7195,
+     "recomputed": 0.7195020576131688,
+     "abs_diff": 2.0576131687377597e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.2.gam AUC from the block's scores",
+     "stored": 0.6949,
+     "recomputed": 0.6948644718792867,
+     "abs_diff": 3.55281207132796e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.2.ga2m AUC from the block's scores",
+     "stored": 0.7604,
+     "recomputed": 0.7604196159122085,
+     "abs_diff": 1.9615912208559294e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.2.hgb AUC from the block's scores",
+     "stored": 0.8258,
+     "recomputed": 0.8258098765432099,
+     "abs_diff": 9.876543209941246e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.2.joint AUC from the block's scores",
+     "stored": 0.7625,
+     "recomputed": 0.7625063100137174,
+     "abs_diff": 6.310013717425456e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.3.gam AUC from the block's scores",
+     "stored": 0.6608,
+     "recomputed": 0.660841769547325,
+     "abs_diff": 4.176954732493243e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.3.ga2m AUC from the block's scores",
+     "stored": 0.6858,
+     "recomputed": 0.6857575445816187,
+     "abs_diff": 4.245541838121536e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.3.hgb AUC from the block's scores",
+     "stored": 0.7604,
+     "recomputed": 0.7603993141289438,
+     "abs_diff": 6.85871056171905e-07,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.3.joint AUC from the block's scores",
+     "stored": 0.7046,
+     "recomputed": 0.7045565843621399,
+     "abs_diff": 4.3415637860144685e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.3.gam AUC from the block's scores",
+     "stored": 0.7287,
+     "recomputed": 0.7286755829903978,
+     "abs_diff": 2.441700960220672e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.3.ga2m AUC from the block's scores",
+     "stored": 0.7165,
+     "recomputed": 0.7164759259259259,
+     "abs_diff": 2.4074074074120766e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.3.hgb AUC from the block's scores",
+     "stored": 0.8198,
+     "recomputed": 0.8197912894375857,
+     "abs_diff": 8.710562414249168e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.3.joint AUC from the block's scores",
+     "stored": 0.6935,
+     "recomputed": 0.6935320301783264,
+     "abs_diff": 3.203017832642541e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.4.gam AUC from the block's scores",
+     "stored": 0.6856,
+     "recomputed": 0.6856355967078189,
+     "abs_diff": 3.55967078189412e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.4.ga2m AUC from the block's scores",
+     "stored": 0.7069,
+     "recomputed": 0.7068783264746228,
+     "abs_diff": 2.167352537718603e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.4.hgb AUC from the block's scores",
+     "stored": 0.7549,
+     "recomputed": 0.7548597393689986,
+     "abs_diff": 4.0260631001376446e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_before.4.joint AUC from the block's scores",
+     "stored": 0.7168,
+     "recomputed": 0.7168033607681756,
+     "abs_diff": 3.360768175642015e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.4.gam AUC from the block's scores",
+     "stored": 0.6914,
+     "recomputed": 0.6913728395061728,
+     "abs_diff": 2.7160493827227405e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.4.ga2m AUC from the block's scores",
+     "stored": 0.7166,
+     "recomputed": 0.7166144032921811,
+     "abs_diff": 1.4403292181053295e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.4.hgb AUC from the block's scores",
+     "stored": 0.8138,
+     "recomputed": 0.8138410150891632,
+     "abs_diff": 4.101508916320995e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "datasets.ieee_after.4.joint AUC from the block's scores",
+     "stored": 0.7393,
+     "recomputed": 0.7392858710562414,
+     "abs_diff": 1.412894375851792e-05,
+     "tolerance": 5.0000000050000005e-05
+    }
+   ]
+  },
+  "row_check": "every stored leaf of each target row except the seconds was rebuilt by the generator's own functions and compared",
+  "metric": "the file's lane scores are test AUROC, stored rounded to 4 decimals"
+ }
 }

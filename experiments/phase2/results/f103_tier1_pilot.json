@@ -153,6 +153,94 @@
    "g4_joint_minus_ga2m": -0.0032,
    "g4_pass": false,
    "tier1": "refuse"
+  },
+  "gam_outcome": {
+   "name": "f103_pilot_permuted_gam",
+   "seed": 42,
+   "n_test": 10512,
+   "n_positives": 2182,
+   "at_budget_on_test": {
+    "budget": 0.005,
+    "n_budget": 53,
+    "n_flagged": 53,
+    "confusion": {
+     "tn": 8284,
+     "fp": 46,
+     "fn": 2175,
+     "tp": 7
+    }
+   },
+   "test_scores": {
+    "path": "experiments/phase2/predictions/f103_pilot_permuted_gam_42.npz",
+    "sha256": "b25ee27a05ba39d48e62bfd6c32e680515090f091683f0504d5d3593e93ff67f",
+    "n_rows": 10512
+   }
+  },
+  "ga2m_outcome": {
+   "name": "f103_pilot_permuted_ga2m",
+   "seed": 42,
+   "n_test": 10512,
+   "n_positives": 2182,
+   "at_budget_on_test": {
+    "budget": 0.005,
+    "n_budget": 53,
+    "n_flagged": 53,
+    "confusion": {
+     "tn": 8289,
+     "fp": 41,
+     "fn": 2170,
+     "tp": 12
+    }
+   },
+   "test_scores": {
+    "path": "experiments/phase2/predictions/f103_pilot_permuted_ga2m_42.npz",
+    "sha256": "4adc61d839f640adcffa2fa74e0a4f568cd47b3dd3f6618bfc1a4634481d1949",
+    "n_rows": 10512
+   }
+  },
+  "hgb_outcome": {
+   "name": "f103_pilot_permuted_hgb",
+   "seed": 42,
+   "n_test": 10512,
+   "n_positives": 2182,
+   "at_budget_on_test": {
+    "budget": 0.005,
+    "n_budget": 53,
+    "n_flagged": 54,
+    "confusion": {
+     "tn": 8286,
+     "fp": 44,
+     "fn": 2172,
+     "tp": 10
+    }
+   },
+   "test_scores": {
+    "path": "experiments/phase2/predictions/f103_pilot_permuted_hgb_42.npz",
+    "sha256": "418bb54f48f9ce7511086fb784887bce72316e2bf13df763c48cf873944b7279",
+    "n_rows": 10512
+   }
+  },
+  "joint_outcome": {
+   "name": "f103_pilot_permuted_joint",
+   "seed": 42,
+   "n_test": 10512,
+   "n_positives": 2182,
+   "at_budget_on_test": {
+    "budget": 0.005,
+    "n_budget": 53,
+    "n_flagged": 53,
+    "confusion": {
+     "tn": 8288,
+     "fp": 42,
+     "fn": 2171,
+     "tp": 11
+    }
+   },
+   "test_scores": {
+    "path": "experiments/phase2/predictions/f103_pilot_permuted_joint_42.npz",
+    "sha256": "407bf821eb0f1543415750fe50cf345004a8385132b6d6a142b1826f415a7dc2",
+    "n_rows": 10512
+   }
   }
  },
  "real": [
@@ -266,6 +354,138 @@
     "g4_joint_minus_ga2m": 0.0648,
     "g4_pass": true,
     "tier1": "candidate"
+   },
+   "gam_outcome": {
+    "name": "f103_pilot_real_gam",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 2182,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 8317,
+      "fp": 13,
+      "fn": 2142,
+      "tp": 40
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_real_gam_42.npz",
+     "sha256": "ae45a19036becf9f16ae93b778989ea8340b867a6a0f7b306264454d67a01859",
+     "n_rows": 10512
+    }
+   },
+   "gam_2_harmonics_outcome": {
+    "name": "f103_pilot_real_gam_2_harmonics",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 2182,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 8325,
+      "fp": 5,
+      "fn": 2134,
+      "tp": 48
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_real_gam_2_harmonics_42.npz",
+     "sha256": "63c2091f44152f6bc1cd4faec88b8981d91e831e1ada01b322e8f8dfc3466eb8",
+     "n_rows": 10512
+    }
+   },
+   "gam_3_harmonics_outcome": {
+    "name": "f103_pilot_real_gam_3_harmonics",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 2182,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 8330,
+      "fp": 0,
+      "fn": 2129,
+      "tp": 53
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_real_gam_3_harmonics_42.npz",
+     "sha256": "ccf1296c69d3df7bd75c431ec65b393b13ce1cab4ad8f7f268b34887bf617040",
+     "n_rows": 10512
+    }
+   },
+   "ga2m_outcome": {
+    "name": "f103_pilot_real_ga2m",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 2182,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 8323,
+      "fp": 7,
+      "fn": 2136,
+      "tp": 46
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_real_ga2m_42.npz",
+     "sha256": "13b8ce4594ed391712e230eda2e8f6047e5f1fe0fe19b95d70e43787957f43f1",
+     "n_rows": 10512
+    }
+   },
+   "hgb_outcome": {
+    "name": "f103_pilot_real_hgb",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 2182,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 58,
+     "confusion": {
+      "tn": 8330,
+      "fp": 0,
+      "fn": 2124,
+      "tp": 58
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_real_hgb_42.npz",
+     "sha256": "400a734ff174457fd650c51e6433e4793b60824ccf69e793a8dd22fd7d35471f",
+     "n_rows": 10512
+    }
+   },
+   "joint_outcome": {
+    "name": "f103_pilot_real_joint",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 2182,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 8330,
+      "fp": 0,
+      "fn": 2129,
+      "tp": 53
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_real_joint_42.npz",
+     "sha256": "9794957624b67026fb013cd73d6bf91bfcf7e8af3db8237c41e14dd754efa232",
+     "n_rows": 10512
+    }
    }
   }
  ],
@@ -400,6 +620,94 @@
     ],
     "max_abs_error": 0.0,
     "within_tolerance": true
+   },
+   "gam_outcome": {
+    "name": "f103_pilot_sparse_gam",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 5255,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 5225,
+      "fp": 32,
+      "fn": 5234,
+      "tp": 21
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_sparse_gam_42.npz",
+     "sha256": "30894d95c3392f698a7b9d7d1f4c73f81c8f42e2bf0484c39bbcda6392767e0d",
+     "n_rows": 10512
+    }
+   },
+   "ga2m_outcome": {
+    "name": "f103_pilot_sparse_ga2m",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 5255,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 5236,
+      "fp": 21,
+      "fn": 5223,
+      "tp": 32
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_sparse_ga2m_42.npz",
+     "sha256": "ef591cfb5b820c5f9d97894432b36eb4e4c689fd26f09c6c8b5817bc8e9f62fc",
+     "n_rows": 10512
+    }
+   },
+   "hgb_outcome": {
+    "name": "f103_pilot_sparse_hgb",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 5255,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 59,
+     "confusion": {
+      "tn": 5256,
+      "fp": 1,
+      "fn": 5197,
+      "tp": 58
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_sparse_hgb_42.npz",
+     "sha256": "430fa9a585bae48de198f55e798f8f626bc65032766d29acb7acc276ac7b9bd0",
+     "n_rows": 10512
+    }
+   },
+   "joint_outcome": {
+    "name": "f103_pilot_sparse_joint",
+    "seed": 42,
+    "n_test": 10512,
+    "n_positives": 5255,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 53,
+     "n_flagged": 53,
+     "confusion": {
+      "tn": 5257,
+      "fp": 0,
+      "fn": 5202,
+      "tp": 53
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_sparse_joint_42.npz",
+     "sha256": "c1832a5ddae06627b80362b121e32e5563abbc008d9405ddb3fe9cb3774f2e24",
+     "n_rows": 10512
+    }
    }
   }
  ],
@@ -514,6 +822,94 @@
     "g4_joint_minus_ga2m": 0.2638,
     "g4_pass": true,
     "tier1": "candidate"
+   },
+   "gam_outcome": {
+    "name": "f103_pilot_dense_gam",
+    "seed": 42,
+    "n_test": 1800,
+    "n_positives": 900,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 9,
+     "n_flagged": 9,
+     "confusion": {
+      "tn": 898,
+      "fp": 2,
+      "fn": 893,
+      "tp": 7
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_dense_gam_42.npz",
+     "sha256": "8a41855f7fc0d5fa7bf81eeec4972858892abb243e3c085d85ae4874ad7b7c10",
+     "n_rows": 1800
+    }
+   },
+   "ga2m_outcome": {
+    "name": "f103_pilot_dense_ga2m",
+    "seed": 42,
+    "n_test": 1800,
+    "n_positives": 900,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 9,
+     "n_flagged": 9,
+     "confusion": {
+      "tn": 893,
+      "fp": 7,
+      "fn": 898,
+      "tp": 2
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_dense_ga2m_42.npz",
+     "sha256": "13eedc040cc012bdbebc6bd3c37e3d4bd2e945f9739141578976d7f7bc0f24e3",
+     "n_rows": 1800
+    }
+   },
+   "hgb_outcome": {
+    "name": "f103_pilot_dense_hgb",
+    "seed": 42,
+    "n_test": 1800,
+    "n_positives": 900,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 9,
+     "n_flagged": 9,
+     "confusion": {
+      "tn": 898,
+      "fp": 2,
+      "fn": 893,
+      "tp": 7
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_dense_hgb_42.npz",
+     "sha256": "0ca0885c3f02e1e90b1e4e7f1f74ae2550317c0ff3faa5b091481b89c7592129",
+     "n_rows": 1800
+    }
+   },
+   "joint_outcome": {
+    "name": "f103_pilot_dense_joint",
+    "seed": 42,
+    "n_test": 1800,
+    "n_positives": 900,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 9,
+     "n_flagged": 9,
+     "confusion": {
+      "tn": 900,
+      "fp": 0,
+      "fn": 891,
+      "tp": 9
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f103_pilot_dense_joint_42.npz",
+     "sha256": "9d52da5565980a0063d92188ad454c27f2104880874c37b7d179aafaae9614cf",
+     "n_rows": 1800
+    }
    }
   }
  ],
@@ -549,5 +945,153 @@
   },
   "task_g_runs": true
  },
- "elapsed_s": 322.3
+ "elapsed_s": 322.3,
+ "outcome_backfill": {
+  "date": "2026-10-23",
+  "generator": "experiments/phase2/src/backfill_outcomes.py",
+  "decision": "Sprint 28 Manual Validation DV4",
+  "covered_lanes": [
+   "permuted reference (seed 42): gam, ga2m, hgb, joint",
+   "real (seeds 42): gam, gam_2_harmonics, gam_3_harmonics, ga2m, hgb, joint",
+   "sparse (seeds 42): gam, ga2m, hgb, joint",
+   "dense (seeds 42): gam, ga2m, hgb, joint"
+  ],
+  "uncovered_lanes": {},
+  "n_blocks": 18,
+  "metric_check": {
+   "n_checks": 282,
+   "all_within_tolerance": true,
+   "max_abs_diff": 4.6962764703062376e-05,
+   "not_identical": [
+    {
+     "label": "permuted_reference.gam AUC from the block's scores",
+     "stored": 0.5104,
+     "recomputed": 0.5104085263803047,
+     "abs_diff": 8.526380304685333e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "permuted_reference.ga2m AUC from the block's scores",
+     "stored": 0.4985,
+     "recomputed": 0.49845307508888065,
+     "abs_diff": 4.6924911119350377e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "permuted_reference.hgb AUC from the block's scores",
+     "stored": 0.4952,
+     "recomputed": 0.4951737890389887,
+     "abs_diff": 2.621096101129705e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "permuted_reference.joint AUC from the block's scores",
+     "stored": 0.4953,
+     "recomputed": 0.49527735933970296,
+     "abs_diff": 2.264066029705747e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "real.0.gam AUC from the block's scores",
+     "stored": 0.9167,
+     "recomputed": 0.9167348699333079,
+     "abs_diff": 3.486993330792387e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "real.0.gam_2_harmonics AUC from the block's scores",
+     "stored": 0.9279,
+     "recomputed": 0.9278743578091181,
+     "abs_diff": 2.5642190881858262e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "real.0.gam_3_harmonics AUC from the block's scores",
+     "stored": 0.9404,
+     "recomputed": 0.940376847347555,
+     "abs_diff": 2.315265244501319e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "real.0.ga2m AUC from the block's scores",
+     "stored": 0.9289,
+     "recomputed": 0.9288809015815309,
+     "abs_diff": 1.9098418469032374e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "real.0.hgb AUC from the block's scores",
+     "stored": 1.0,
+     "recomputed": 0.9999869608705076,
+     "abs_diff": 1.3039129492353752e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "real.0.joint AUC from the block's scores",
+     "stored": 0.9937,
+     "recomputed": 0.9936700252970115,
+     "abs_diff": 2.997470298848892e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "sparse.0.gam AUC from the block's scores",
+     "stored": 0.6499,
+     "recomputed": 0.6499368609512902,
+     "abs_diff": 3.6860951290185184e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "sparse.0.ga2m AUC from the block's scores",
+     "stored": 0.6549,
+     "recomputed": 0.654853037235297,
+     "abs_diff": 4.6962764703062376e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "sparse.0.hgb AUC from the block's scores",
+     "stored": 0.7853,
+     "recomputed": 0.7852893708664828,
+     "abs_diff": 1.0629133517237044e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "sparse.0.joint AUC from the block's scores",
+     "stored": 0.9636,
+     "recomputed": 0.9635956552515635,
+     "abs_diff": 4.344748436468926e-06,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "dense.0.gam AUC from the block's scores",
+     "stored": 0.5765,
+     "recomputed": 0.5765444444444444,
+     "abs_diff": 4.444444444440254e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "dense.0.ga2m AUC from the block's scores",
+     "stored": 0.5766,
+     "recomputed": 0.5766197530864197,
+     "abs_diff": 1.975308641966045e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "dense.0.hgb AUC from the block's scores",
+     "stored": 0.7603,
+     "recomputed": 0.7603382716049383,
+     "abs_diff": 3.8271604938300285e-05,
+     "tolerance": 5.0000000050000005e-05
+    },
+    {
+     "label": "dense.0.joint AUC from the block's scores",
+     "stored": 0.8404,
+     "recomputed": 0.8403703703703704,
+     "abs_diff": 2.9629629629601695e-05,
+     "tolerance": 5.0000000050000005e-05
+    }
+   ]
+  },
+  "row_check": "every stored leaf of each target row except 'lane_seconds' was rebuilt by f103_tier1.run_target and compared",
+  "metric": "the file's lane scores are test AUROC, stored rounded to 4 decimals"
+ }
 }

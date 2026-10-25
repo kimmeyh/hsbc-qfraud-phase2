@@ -19,7 +19,9 @@ validated by QCi. (Source: the correspondence in `docs/qci_package/`,
 gitignored.)
 
 **Sent to QCi: the questions in section 4 only, on 2026-10-18** (the team
-lead's email, filed in `docs/qci_package/`). Nothing else in this file has
+lead's email, filed in `docs/qci_package/`). **QCi answered A1-A12 and P2
+on 2026-10-20, and P1 on 2026-10-21**; on 2026-10-21 QCi also raised the
+integer solver to 954 levels (section 4). Nothing else in this file has
 been sent. Sending is the team lead's action. Anything sent is filed in
 `docs/qci_package/`, and its status is updated here.
 
@@ -290,14 +292,19 @@ and `6ad05b47358b23d0cb3727b4`, 2026-10-15. Write-up:
   (Client docs, through the site sweep; not re-checked.)
 - **Ceilings**: the base module equals Dirac-3 (949, 135, 39, 19). With one
   expansion module: 9,980, 580, 145 and 55. (Guide Table 2; EDB:
-  `dirac3s-variable-ceiling-by-configuration`)
+  `dirac3s-variable-ceiling-by-configuration`) **Updated 2026-10-21**: the
+  integer solver now has 954 levels on both devices, and Dirac-3S moves to
+  9,980 levels "in the coming weeks" (section 4, "QCi's answers,
+  2026-10-21").
 - **Resolution**: the same 23 dB maximum and the same about 200:1 sentence
   as the Dirac-3 guide. (EDB: `dirac3s-analog-resolution-about-200-to-1`)
 - **It is not an exact solver**; the best returned sample is the answer.
   (EDB: `dirac3s-not-an-exact-solver`)
 - **"Error correction" is a post-processing step** on the returned
-  samples; raw values come back too. (EDB:
-  `dirac3s-error-correction-is-a-post-processing-step`)
+  samples. (EDB: `dirac3s-error-correction-is-a-post-processing-step`)
+  **Corrected 2026-10-21**: this item also said "raw values come back
+  too". QCi's 2026-10-20 answer (A6b) is that cloud outputs are post
+  error correction and raw values are not yet offered on the cloud.
 - **The same four relaxation schedules.** Per-sample times for one
   50-variable problem: 0.236, 0.420, 1.093 and 1.278 s for schedules 1 to
   4. (Guide Table 4; EDB: `dirac3s-time-per-sample-by-schedule`)
@@ -352,17 +359,18 @@ three network calls replaced. Tests: `test_response_serialization.py`,
 
 ### Not known, and what settles each
 
-- **Which configuration serves the cloud queue.** Only QCi can say
-  (question A1). It decides whether F143 (987 variables) can run.
-- **Cost and billing at our sizes.** Measured at 91, 560 and 833
-  variables, schedule 2 only (6.0, 21-22 and 31.0 s). Billing matched the
-  Dirac-3 rule on four jobs; QCi's own statement is question A3.
-- **Effective resolution, and whether returned values are raw.** F142's
-  returned values are far finer than the stated 200:1 step and agree
-  across samples to 0.0000005; only QCi can say whether that is the device
-  or post-processing (question A6).
-- **Queue hours for the "special queues".** Question A5; F142 records the
-  waits.
+- ~~Which configuration serves the cloud queue.~~ Answered 2026-10-20
+  (A1): base unit plus expansion. See section 4.
+- **Cost at our sizes beyond schedule 2.** Measured at 91, 560 and 833
+  variables, schedule 2 only (6.0, 21-22 and 31.0 s). The billing rule is
+  answered (A3: the same as Dirac-3, one pool); schedules 3 and 4 are
+  unmeasured on Dirac-3S.
+- **Raw device values.** Answered in part 2026-10-20 (A6, A6a, A6b): the
+  resolution is the same about 200:1, cloud outputs are post error
+  correction, and raw values are not offered on the cloud yet. What the
+  device returns before correction stays unknown until QCi offers it.
+- ~~Queue hours for the "special queues".~~ Answered 2026-10-20 (A5): both
+  devices run 24x7.
 
 ### Inferred: what Dirac-3S changes for us
 
@@ -436,7 +444,7 @@ installed (F141): both still hold.
 
 ## 4. Questions for QCi
 
-### Asked 2026-09-25, under QCi review; followed up 2026-10-18
+### Asked 2026-09-25, followed up 2026-10-18; both answered (P2 2026-10-20, P1 2026-10-21)
 
 - **P1.** Is our reading of the Hamiltonian correct: `J = HH^T + lambda*I`,
   `C = -2Hy`, sum constraint 1.0, `w >= 0`?
@@ -444,11 +452,13 @@ installed (F141): both still hold.
 
 Do not ask these again. The 2026-10-18 email followed up on both.
 
-### Sent 2026-10-18, no answer yet
+### Sent 2026-10-18; answered 2026-10-20
 
 The email numbered P1-P2 as 1-2 and A1-A12 as 3-14, in order. It split
 A6 into 8, 8a and 8b, and A7 into 9 and 9a. The wording is otherwise as
-drafted.
+drafted. The team lead sent it again to QCi support on 2026-10-19, and a
+QCi field service engineer answered on that thread on 2026-10-20 (filed
+in `docs/qci_package/`). The answers are under "QCi's answers" below.
 
 From F138 (`docs/phase2/DIRAC_3S_RESEARCH.md`, questions (a) to (f)):
 
@@ -477,6 +487,92 @@ New:
 - **A11.** Is the cloud cap still 100 samples per job on `dirac-3s`?
 - **A12.** Can a job be repeated with the same sampling seed, or is every
   run's randomness fixed by the hardware?
+
+### QCi's answers, 2026-10-20
+
+Each answer is **QCi states**, quoted or closely paraphrased from the
+reply. Where it changes something we hold, the consequence follows it,
+labeled.
+
+- **A1. Base unit plus expansion module** serves the cloud `dirac-3s`
+  queue. Under guide Table 2 that configuration's ceiling is 9,980
+  continuous variables. **Inferred**: F143's 987 variables fit; F143's
+  hold condition asked for a confirmed figure above 949, and the reply
+  names the configuration, not a number.
+- **A2. `dirac-3` on the cloud "has not been altered"** by Dirac-3S's
+  release. Our Phase 1 and Sprint 26 Dirac-3 rows describe the same
+  hardware.
+- **A3. Billing is the same** on both devices, from **one pool** of
+  seconds. This matches what F142 measured.
+- **A4. 16 levels per variable** (values 0 to 15, guide section 2). QCi
+  wrote "I assume", so the answer is hedged. The sum-of-levels budget was
+  not answered directly.
+- **A5. Both devices run 24x7** as separate devices; an account enabled
+  for Dirac-3 can use either. There are no special-queue hours.
+- **A6. The effective resolution is the same as Dirac-3's** ("the same
+  math logic / physical parameters"). The extra decimals in the output
+  are not guaranteed accuracy. **Consequence (Inferred)**: F142's
+  "structure below the 200:1 step" readings describe returned values, not
+  guaranteed device resolution; A31's limit applies to Dirac-3S as
+  written.
+- **A6a. Cloud outputs are returned after built-in error correction.**
+  This supports the F142 reading that the 1e-7 grid and the sample
+  agreement weigh toward post-processing.
+- **A6b. Raw values are not offered on the cloud yet**; QCi is working on
+  it. This contradicts the section 2 item that "raw values come back too"
+  (an earlier reading of QCi's documents), which is corrected here.
+- **A7. The 200:1 is relative to the ratio of the maximum and minimum
+  linear contributions** in the guide's section 2 equation, with
+  resolution from the difference between them (guide section 5.3). **The
+  Hamiltonian is scaled** to support the problem's dynamic range.
+  **Unverified**: whether this matches A31's reading and F104's gate,
+  which measure each coefficient spread against max |coefficient| / 200
+  over J and C together. Settled by re-reading guide section 5.3 against
+  `device_resolution.resolution_gate`.
+- **A8. Dirac-3S is planned to replace Dirac-3 eventually**, but the two
+  names stay distinct. Our published `dirac-3` results keep their
+  meaning.
+- **A9. Table 4 was measured on-premises on a Dirac-3S system**, and it
+  times computation only, without pre-processing, post-processing or
+  queue. Every result in the guide is on-premises.
+- **A10. "Much better results"** means faster computation, larger scale
+  and better solution quality. No comparison or problem class was named.
+- **A11. Yes**: the cloud cap is 100 samples per job on `dirac-3s`.
+- **A12. Not seedable.** Randomness comes from measuring the quantum
+  state; each sample is computed the same way.
+- **P1. Not answered**: referred to QCi's eqc-models contact. Answered by
+  that contact on 2026-10-21; see below.
+- **P2. "Consistent with our estimate from the user guide"**, and QCi
+  offered to review our report. The resolution finding has not been
+  shown wrong; QCi has not validated our reading either, so it stays our
+  independent finding (the 2026-09-25 condition above).
+
+### QCi's answers, 2026-10-21
+
+Two replies on the same thread, both filed in `docs/qci_package/` (files
+dated 20261021). Each item is **QCi states**.
+
+- **P1. Confirmed** by QCi's eqc-models contact: the Hamiltonian that
+  `eqc_models.ml.classifierqboost` constructs "follows the formula
+  described" (`J = HH^T + lambda*I`, `C = -2Hy`, sum constraint 1.0,
+  `w >= 0`). This agrees with the offline check in section 2 (F141), where
+  the J and C a fit sends equal the proxy's. P1 is closed. The reply
+  assumed the question was about our `eqc_submit` module; the confirmation
+  is of the library's construction, which is what P1 asked.
+- **The integer solver now has 954 levels**, on both Dirac-3 and Dirac-3S.
+  **Dirac-3S moves to 9,980 levels "in the coming weeks."** This matches
+  the team lead's Decision 7 reading (expansion installed, not yet fully
+  implemented). **Inferred**: the guide gives the same 949 figure for the
+  continuous ceiling and for the integer level budget, so the continuous
+  ceiling may now also be 954. **Unverified**: QCi named levels, not
+  continuous variables. **Consequence for F155** (Inferred): a 950-variable
+  probe can no longer tell the old limit from the new one. If the
+  continuous ceiling is now 954, a job at 950 is accepted while the
+  9,980 configuration is still not live. The probe size is a Manual
+  Validation decision (Sprint 28).
+- **Consequence for F115** (Inferred): F115's sizing points sit at level
+  budgets at or below 949, so its fit is unaffected. A budget between 950
+  and 954 is newly reachable and unmeasured.
 
 ---
 
@@ -507,3 +603,5 @@ Each update adds a row to the revision log and moves items between labels
 | 2026-10-16 | 26 | Decision 11: Dirac-3S is the default device for Phase 2 runs; section 2 states it and its basis |
 | 2026-10-18 | 27 | F146 update (Task L): the two pending questions (P1, P2) and the twelve unsent ones (A1-A12) drafted as one message for the team lead to send, in the gitignored `docs/qci_package/`; none dropped, and A3, A6 and A12 now cite what F142 measured. Not sent |
 | 2026-10-19 | 27 | The team lead sent P1-P2 (follow-up) and A1-A12 on 2026-10-18; section 4 headings updated; the email is filed in `docs/qci_package/` |
+| 2026-10-21 | 28 | QCi's answers of 2026-10-20 recorded (section 4, "QCi's answers"): A1-A12 and P2 answered, P1 referred to the eqc-models contact. Section 2's "raw values come back too" corrected (A6b); "Not known" items updated; A7's reference for the 200:1 flagged against A31 and F104's gate, unverified |
+| 2026-10-22 | 28 | QCi's two replies of 2026-10-21 recorded (section 4, "QCi's answers, 2026-10-21"): P1 confirmed by the eqc-models contact and closed; integer solver at 954 levels on both devices, Dirac-3S to 9,980 levels in the coming weeks; the consequence for F155's 950-variable probe flagged. Missed in the 2026-10-21 update, which recorded only the 2026-10-20 reply; found by the team lead's check |

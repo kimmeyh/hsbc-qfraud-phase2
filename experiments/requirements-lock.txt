@@ -25,6 +25,11 @@
 # sources are identical between the two versions, and
 # test_proxy_hamiltonian_is_the_one_eqc_models_sends holds the proxy's
 # Hamiltonian equal to the library's.
+#
+# 2026-10-22 (Sprint 28 Task L, Decision 6): pypdf 6.20.0 -> 6.21.1 for
+# CVE-2026-113792 and CVE-2026-113793 (fixed in 6.20.1) and CVE-2026-113786
+# (fixed in 6.21.1), found by pip-audit. This repository reads only its own
+# rendered PDFs with pypdf; no tracked PDF was rebuilt.
 
 numpy==1.26.4
 pandas==2.3.3
@@ -45,6 +50,6 @@ statsmodels==0.15.0
 joblib==1.5.3
 matplotlib==3.11.1
 python-dotenv==1.2.3
-pypdf==6.20.0
+pypdf==6.21.1
 pyscipopt==6.2.1
 pytest==9.1.1

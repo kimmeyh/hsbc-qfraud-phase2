@@ -31,7 +31,9 @@ HGB):
   [-0.1249, -0.0943]. **Moves up.**
 - ULB (`free`, k = 13, schedule 2, 78 learners, full split): 0.7772,
   +0.0095 [+0.0015, +0.0165]. **Moves up.** The comparison against HGB
-  is void; see below. This setup is not the EvidenceBasedDB record's
+  is void; see below. **Restated 2026-10-22 (F151, Sprint 28 Task A)**:
+  against the stable HGB (`l2_regularization=1.0`), this cell is BELOW
+  HGB by 0.027 [-0.046, -0.008]; `docs/phase2/F151_HGB_COMPARATOR.md`. This setup is not the EvidenceBasedDB record's
   (SMOTE, 70/30, 10 seeds), so 0.7772 is not a test of its 0.8108 claim.
 
 **Rank 5, the phase block** (cyclic columns phase-encoded and whitened on
