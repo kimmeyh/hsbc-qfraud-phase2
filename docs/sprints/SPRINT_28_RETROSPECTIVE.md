@@ -248,10 +248,10 @@ after the work, closed at once, and its time is recorded as not measured.
 
 | # | Decision | Where |
 |---|---|---|
-| IMP-1 | **now** | See the commit for IMP-1 under #61 |
-| IMP-2 | **now** | See the commit for IMP-2 under #61 |
+| IMP-1 | **now** | 181b123: `experiments/src/frozen_list.py`; all six lists in the outcome and device-store guards pinned by content; four device-store holes closed; `test_frozen_lists_pinned.py` fails an unpinned list. Each hole proven red |
+| IMP-2 | **now** | 9993ab6: `experiments/src/source_scan.py`; both text guards match calls in code only; `docs/TROUBLESHOOTING.md` entry. Blanking proven red |
 | IMP-3 | **skip** | The team lead's reason: CI checks are covered sufficiently |
-| IMP-4 | **now** | See the commit for IMP-4 under #61 |
-| IMP-5 | **now** | See the commit for IMP-5 under #61 |
-| IMP-6 | **now** | Not the recommended backlog; built this sprint under #61 |
+| IMP-4 | **now** | a8b5ade: `.githooks/commit-msg` and `scripts/check_commit_issue.py`; checklist Phase 4 names it. The live hook refused this sprint's first attempt at that commit, which lacked the issue number. D4's issue #60 opened and closed; D4's time is not measured |
+| IMP-5 | **now** | 132c8ec: `SPRINT_PLANNING.md` (extends Sprint 25 IMP-2 to the tests) and a Phase 5 gate in `SPRINT_CHECKLIST.md` |
+| IMP-6 | **now** | de15d6c: `provenance.write_result` and `test_result_writer_required.py`; 43 direct JSON writes in 33 existing modules frozen. Built now, not the recommended backlog. F163 was reserved for it and is not used |
 | IMP-7 | **backlog** | F164 in `ALL_SPRINTS_MASTER_PLAN.md`, priority 25 |

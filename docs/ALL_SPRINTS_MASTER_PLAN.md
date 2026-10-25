@@ -672,6 +672,14 @@ value. Removed from candidates.)
 - **2026-10-23 (Sprint 28 Task M, #59): entry written before any score** (Phase 2 draft section 6, "F162"). Two changes from the card, made in the entry: seeds 42-51 (ten; eight if seed 42's time projects ten above 120 minutes), because six primary tests need eight seeds for the Wilcoxon test to reach 0.05 / 6; and XGBoost at library defaults, because the Phase 1 tuned parameters were tuned on ULB
 - **2026-10-23 (Sprint 28 Task M): result, ten seeds.** No cell reads "proxy above"; the falsifier fires on all three. Inside the pocket XGBoost beats the proxy reliably on energy_steel (-0.024, p = 0.0020) and oilgas_gasturbine (-0.011, p = 0.0059); telecom_churn favors the proxy on average (+0.013 against HGB, +0.033 against XGBoost) without a reliable difference. The FourierWall2 single-run wins do not repeat. No device block is justified (`docs/phase2/F162_IN_POCKET.md`)
 
+**F164. Phase 2 document figures resolve to evidence (~3h [no-history], zero metered) Priority 25**
+- Phase: Phase 2 preparation, tooling (added 2026-10-24 by the team lead, Sprint 28 retrospective IMP-7, backlog)
+- Platform: tests, this machine
+- Source: seven PR #46 findings were figures or labels in `docs/phase2/` and the validation document that the result files do not support (F111's unrecorded 95-minute wall clock, F110's clamp cause, the "776 of 950" denominator label, F151's second failing reason, F114's scope, F146 P1 listed open, a range endpoint 0.829 for 0.828). `test_document_figures_resolve.py` (F44) checks only `docs/paper/`
+- Scope: extend F44's check to `docs/phase2/*.md`: every decimal resolves to a value in `experiments/phase2/results/` or `experiments/results/` at the quoted rounding, or is registered once with a reason (derived ratios, dataset properties, citations); an unregistered number that matches nothing fails. F44's stated limit stays: a figure that exists somewhere but is quoted in the wrong place is not caught, which needs per-claim provenance (F39)
+- Acceptance: the seven figures above, put back, each fail (proven red with `assert_can_fail`); the registry starts with every current figure either resolved or registered
+- Depends on: nothing; size the registry at refinement by counting the decimals in `docs/phase2/`
+
 **F110. Experiment 6 scaling claim: end-to-end training time against sample count (~100m [no-history], proxy only) Priority 28**
 - Phase: Phase 2 preparation, Experiment 6
 - Platform: classical proxy first; Dirac-3 only under F102 and per-block approval
