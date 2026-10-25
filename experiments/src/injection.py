@@ -67,6 +67,13 @@ def _drop_bytecode(path: Path) -> None:
     script on disk read 2 and the imported module read 1, and the next run's
     baseline failed. Removing the cache makes every import read the bytes
     on disk.
+
+    Pytest keeps a second cache for a test module it rewrites for
+    assertions (`<name>.cpython-312-pytest-<version>.pyc`), validated the
+    same way. Sprint 28: a same-size mutation of a TEST module left that
+    cache stale, so CI ran the mutated test after the restore and three
+    proofs reported "did not return to GREEN". Every `<name>.*.pyc` beside
+    the module is removed.
     """
     if path.suffix != ".py":
         return
@@ -77,6 +84,8 @@ def _drop_bytecode(path: Path) -> None:
         return                          # no cache tag: nothing is cached
     try:
         cached.unlink(missing_ok=True)
+        for other in cached.parent.glob(f"{path.stem}.*.pyc"):
+            other.unlink(missing_ok=True)
     except OSError as exc:
         # A cache that cannot be removed (a locked file on Windows) leaves
         # the defect this function exists for in place, so the injection's

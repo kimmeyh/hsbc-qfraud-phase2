@@ -285,6 +285,39 @@ def test_a_same_size_mutation_is_seen_by_a_reload_and_so_is_the_restore(
         sys.modules.pop("same_size_target", None)
 
 
+def test_pytests_rewrite_cache_is_dropped_too(tmp_path):
+    """Sprint 28: pytest's assertion-rewrite cache for a test module is a
+    second .pyc beside the normal one; a stale one ran a mutated test after
+    its restore in CI. Both must go after every write."""
+    import importlib.util
+    import injection as inj
+    mod = tmp_path / "test_target.py"
+    mod.write_text("V = 2\n", encoding="utf-8")
+    normal = Path(importlib.util.cache_from_source(str(mod)))
+    normal.parent.mkdir(exist_ok=True)
+    rewrite = normal.parent / "test_target.cpython-312-pytest-8.4.2.pyc"
+    keep = normal.parent / "test_target_other.cpython-312.pyc"
+    for p in (normal, rewrite, keep):
+        p.write_bytes(b"stale")
+    inj._drop_bytecode(mod)
+    assert not normal.exists() and not rewrite.exists()
+    assert keep.exists(), "another module's cache was removed"
+
+
+def test_the_rewrite_cache_drop_can_fail():
+    import injection as inj
+    root = Path(__file__).resolve().parents[2]
+    inj.assert_can_fail(
+        [Mutation(Path(inj.__file__),
+                  '        for other in cached.parent.glob(f"{path.stem}.*.pyc"):\n'
+                  "            other.unlink(missing_ok=True)\n",
+                  "", expect_occurrences=1)],
+        lambda: inj.run_pytest(
+            "experiments/src/test_injection.py::"
+            "test_pytests_rewrite_cache_is_dropped_too", root),
+        "pytest's rewrite cache kept")
+
+
 def test_a_cache_that_cannot_be_dropped_aborts_the_injection(tmp_path,
                                                              monkeypatch):
     """PR #21 review: swallowing the unlink error left the stale bytecode
