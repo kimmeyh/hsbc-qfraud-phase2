@@ -444,6 +444,48 @@ design only; the device arm is F25 and needs its own per-block approval.
   arm's family is set in F25's amendment to this entry before its run.
 - **Recording**: test AUPRC rows carry outcome blocks (section 2,
   "Outcomes recorded").
+- **Amendment, 2026-10-26 (Sprint 29 Task E, F160, #68), written before
+  its module exists or any IEEE-CIS pool is built.** The design failed on
+  ULB (`docs/phase2/F153_EXP3_DESIGN.md`). This amendment asks whether
+  the room the falsifier requires exists on a second dataset. The rule,
+  sweep, ridge choice, floor, resolution checks and controls above are
+  unchanged.
+  - **Why another dataset, stated before any run (inferred).** The data
+    term is `||H'w - y||^2 / n`. Learners that predict "legitimate" on
+    every row reach `4 x fraud rate`. On ULB (fraud rate about 0.17%)
+    that is about 0.007, below the 0.01 the falsifier requires, which
+    fits F153's largest recorded gap (0.0026). On IEEE-CIS (about 3.5%)
+    it is about 0.14, so the rule can pass there in principle.
+  - **Positive control, first.** At both instance sizes and on each
+    IEEE-CIS instance's own labels, H from learners with random signs
+    (seeded), so no subset fits the labels. The greedy gap should be far
+    above 0.01. If the control shows no room on every instance, the rule
+    cannot pass, and no IEEE-CIS reading is made.
+  - **Data**: IEEE-CIS train, deduplicated (`ieee_loader.dedupe_ieee`);
+    the first rolling-origin fold of `ieee_harness.folds_for`; its
+    features from `ieee_harness.build_fold` (fit on the training months
+    only), numeric, missing values filled with the training medians.
+  - **Features**: the top k by mutual information (`data.top_k_features`)
+    on a stratified 50,000-row subsample of the fold's training rows,
+    drawn with the seed; k = 13 (`free`) and 17 (`mid`), as F94's configs.
+  - **Pools**: `qubo_proxy.build_pool`, sequential, `dct`, with
+    `seeded_weak_params(seed)`, on all the fold's training rows. The
+    instances are F94's sizes (the first 60 `free` learners choose 10;
+    the first 136 `mid` learners choose 25); a smaller pool is refused
+    and recorded. H on the evaluation month's rows (held out), with their
+    labels in {-1, +1}. Seeds 42-44.
+  - **Methods at the chosen weight**: greedy and SCIP (300 s cap), the
+    floor, and both resolution checks. Annealing is dropped to fit the
+    sprint; the falsifier reads greedy alone.
+  - **Consequence, set here**: if the design does not fail on IEEE-CIS
+    (greedy's gap at least 0.01 on some instance, and a chosen
+    Hamiltonian passing a resolution check), F25's design reopens on
+    IEEE-CIS as a new card, not in this sprint. If it fails, Experiment
+    3's proxy design has no room on either dataset, recorded on F25.
+  - **Reported whatever the result**: per instance, the fraud rate, the
+    ridge sweep, the chosen weight, each method's objective, the floor,
+    both gaps, the data share, both resolution checks, and run times.
+    No test score is computed, so no outcome block is needed.
 
 ### Experiment 4 (F111): the CVQBoost-KNN lane under the source protocol and ours
 
@@ -1430,3 +1472,6 @@ part of this draft.
   Task D): the Henze-Penrose bound with the containment and width terms,
   and the arithmetic showing the two cannot both hold here, written
   before its module exists.
+- 2026-10-26: the Experiment 3 entry gains a dated amendment (F160,
+  Sprint 29 Task E): the room check on IEEE-CIS with a positive control
+  first, written before its module exists.
