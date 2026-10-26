@@ -1,10 +1,10 @@
 # Sprint 29 Plan: Make the Tools Repeatable, Then Find the Best Each Model Can Do
 
 **Sprint**: 29 | **Branch**: `feature/20261025_Sprint_29`
-**Planned**: 2026-10-25 | **Status**: DRAFT, Decisions 1-3 open; approval
-is asked after them, because its total depends on them
+**Planned**: 2026-10-25 | **Status**: DRAFT, Decisions 1-3 answered
+2026-10-26 (option 1 each); Decision 4, approval, open
 **Scope**: F159, F164, F156, F160, F166, F158, F165 and F167 (team lead
-selection, 2026-10-25)
+selection, 2026-10-25), and the pypdf bump (Decision 2, 2026-10-26)
 **Metered Dirac seconds**: **0**. No task calls a device or a paid
 service.
 
@@ -191,8 +191,8 @@ corrected in the same commit as the task that meets it.
 
 ## Tasks
 
-The table shows Decisions 1-3 at the recommended options; the
-alternatives are stated under each decision.
+The table shows Decisions 1-3 as answered (option 1 each, team lead,
+2026-10-26); the alternatives not taken stay stated under each decision.
 
 | Task | Card | What | Est | Runtime | Depends on |
 |---|---|---|---|---|---|
@@ -206,11 +206,9 @@ alternatives are stated under each decision.
 | H | F167 | `docs/phase2/PHASE2_POC_PLAN_DRAFT.md` | 60 | - | - |
 | I | none (Decision 2) | pypdf 6.21.1 to 6.21.2 in the lock and both venvs, with the lock header line; the PDF tests before and after | 45 | - | - |
 
-**Derived total at the recommended options: 1,050 minutes of work**, the
+**Derived total as answered: 1,050 minutes of work**, the
 sum of the nine task estimates (60 + 60 + 270 + 90 + 75 + 240 + 150 + 60 +
-45). With Decision 1 option 2 it is 870 (C at 90); with option 3 it is
-780 (C removed). With Decision 2 option 2, subtract 45. Decision 3 changes
-runtime only. One conditional addition is not in the total: if G's step 1
+45). Decision 3 changes runtime only. One conditional addition is not in the total: if G's step 1
 shows a gain, step 2 adds about 60.
 
 Runtime is separate. B's, D's, E's, F's and G's runs go to the
@@ -348,6 +346,10 @@ not dominate.
 
 ## Decisions
 
+**Answered 2026-10-26 by the team lead: Decision 1 option 1, Decision 2
+option 1, Decision 3 option 1** ("D1 1 d2 1 d3 1"). The options are kept
+below as asked.
+
 **Decision 1. F164's scope** (the approved stopping rule fired at
 planning: 211 distinct values unresolved under per-document pools, above
 200).
@@ -379,8 +381,8 @@ not change).
 2. Ten seeds (42-51) in the background whatever the time, so the Wilcoxon
    test can reach its alpha; about 250 minutes of runtime (inferred).
 
-**Decision 4. The plan** is asked after Decisions 1-3 are answered,
-because its total depends on them.
+**Decision 4. The plan**: approve Tasks A-I at 1,050 minutes, zero
+metered seconds. Open.
 
 ## Risks
 

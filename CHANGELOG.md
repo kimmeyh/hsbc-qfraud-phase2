@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-26
+
+- **docs**: Sprint 29 Decisions 1-3 answered by the team lead (option 1 each): F164 checks each document against the result files it names; the pypdf 6.21.2 bump is Task I; F166 runs seed 42 first and sets the seed count under a 120-minute cap. Plan total 1,050 minutes; approval (Decision 4) open. New card F168, assigned to Sprint 30: agent work and long runs survive a usage limit, and a restart knows what was done (kept launch prompts with a restart section, per-unit checkpoints, no repeated metered call, a status script, an hourly wake-up prompt, two guards).
+
 ### 2026-10-25
 
 - **docs**: Sprint 29 planning. Selection recorded in the master plan (F159, F164, F156, F160, F166, F158, F165, and new card F167, a copy of F13 that drafts the full PoC plan now). `docs/sprints/SPRINT_28_SUMMARY.md` written and linked (three-doc rule). Draft `docs/sprints/SPRINT_29_PLAN.md` with the plan-to-branch-state verification: F164's global value pool accepts almost any figure quoted to 1-3 places, so its stopping rule fires (Decision 1); F156's interval rule passes a trivial interval without a width term; F159's equality check must compare held-out rows; F160 adds a positive control; F158's simulator hides terminal fraud from its features. F146's card corrected: P1 was answered and closed on 2026-10-21.
