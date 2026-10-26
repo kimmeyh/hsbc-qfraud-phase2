@@ -959,6 +959,49 @@ transaction is generated.
   - **Reported whatever the result**: per seed and arm, the Bayes error,
     the calibrated and uncalibrated estimates, recovered or not, and the
     run time.
+- **Amendment, 2026-10-26 (Sprint 29 Task D, F156), written before its
+  module exists or any bound is computed.** One estimator not tied to a
+  fitted model, on F108's generator, posterior, splits, seeds, arms and
+  margin, all unchanged (`f108_ceiling` is imported, not edited):
+  - **Estimator**: the Henze-Penrose bound of Berisha, Wisler, Hero and
+    Spanias (IEEE TSP 2016, arXiv:1412.6534, Theorems 1 and 2, checked
+    against the paper 2026-10-26). On a Euclidean minimum spanning tree
+    of the pooled rows, C is the number of edges joining a fraud row to a
+    legitimate row; with m fraud rows and n legitimate rows,
+    D = 1 - C (m + n) / (2 m n), p = m / (m + n), q = 1 - p, and
+    u = 4 p q D + (p - q)^2. The bound is
+    [1/2 - sqrt(u)/2, 1/2 - u/2].
+  - **Subsample**: the tree is built on a stratified random subsample of
+    the training rows that keeps the class share, because the theorem's
+    prior p is the sample's share (the Sprint 29 plan said "all training
+    positives and a stated number of negatives"; that would bound the
+    error at a different prior, so it is not used). Size: 60,000 rows,
+    drawn with the seed. Features standardized with the training means
+    and SDs, as F108's Cover-Hart method does. The tree is exact: it is
+    taken from the edges of the Delaunay triangulation (which contains
+    every Euclidean minimum spanning tree), with `scipy`.
+  - **Pilot first**: seed 42, main arm, to time the build; if one seed
+    takes over 10 minutes, the size is halved before any other seed and
+    the change is recorded.
+  - **Rule, both terms, main no-noise arm, 4 of 5 seeds**: (1) the
+    interval contains the true Bayes error; (2) its width is at most
+    2 x max(0.0005, 0.10 x Bayes error), twice F108's point margin (the
+    Sprint 29 plan's width term: without it, the trivial interval
+    [0, fraud rate] passes F108's containment rule on 5 of 5 seeds).
+  - **Shown before any bound is computed: the two terms cannot both hold
+    for this bound here.** With d = 1 - u, the upper end is d/2 and the
+    lower end is (1 - sqrt(1 - d))/2, which is at most d/4 + d^2/8 for
+    small d. So the width is at least d/4 - d^2/8. Containment needs
+    d/2 >= Bayes error, about 0.0060-0.0063 on the main arm
+    (`f108_ceiling.json`), so the width is at least about 0.0030; the
+    width cap is about 0.0012-0.0013. **The rule therefore fails whatever
+    the data**, and F114 stays blocked by this estimator. The run is kept
+    because it is cheap and answers a separate question, reported and not
+    decisive: is the bound valid (term 1) at a 0.8% fraud rate on 60,000
+    rows, so that its upper end could serve as a conservative ceiling?
+  - **Reported whatever the result**: per seed and arm, m, n, C, D, u,
+    both ends, width, the Bayes error, each term's outcome, and the run
+    time.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -1383,3 +1426,7 @@ part of this draft.
   (PR review). The section 6 status date updated.
 - 2026-10-23: section 6 gains the F162 entry (Sprint 28 Task M, #59),
   written before any score, and its table row.
+- 2026-10-26: the F108 entry gains a dated amendment (F156, Sprint 29
+  Task D): the Henze-Penrose bound with the containment and width terms,
+  and the arithmetic showing the two cannot both hold here, written
+  before its module exists.
