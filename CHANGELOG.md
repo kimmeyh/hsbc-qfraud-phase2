@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-26
 
+- **docs**: Sprint 29 plan approved by the team lead (Decision 4). Issues #64-#72 for Tasks A-I recorded in `sprint_status.json`; status `phase_4_execution`.
 - **docs**: Sprint 29 Decisions 1-3 answered by the team lead (option 1 each): F164 checks each document against the result files it names; the pypdf 6.21.2 bump is Task I; F166 runs seed 42 first and sets the seed count under a 120-minute cap. Plan total 1,050 minutes; approval (Decision 4) open. New card F168, assigned to Sprint 30: agent work and long runs survive a usage limit, and a restart knows what was done (kept launch prompts with a restart section, per-unit checkpoints, no repeated metered call, a status script, an hourly wake-up prompt, two guards).
 
 ### 2026-10-25

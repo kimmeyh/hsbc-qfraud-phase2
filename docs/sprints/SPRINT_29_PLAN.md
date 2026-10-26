@@ -1,8 +1,9 @@
 # Sprint 29 Plan: Make the Tools Repeatable, Then Find the Best Each Model Can Do
 
 **Sprint**: 29 | **Branch**: `feature/20261025_Sprint_29`
-**Planned**: 2026-10-25 | **Status**: DRAFT, Decisions 1-3 answered
-2026-10-26 (option 1 each); Decision 4, approval, open
+**Planned**: 2026-10-25 | **Status**: APPROVED 2026-10-26 by the team
+lead (Decisions 1-3 option 1 each; Decision 4 approved as amended).
+Issues #64-#72 (Tasks A-I)
 **Scope**: F159, F164, F156, F160, F166, F158, F165 and F167 (team lead
 selection, 2026-10-25), and the pypdf bump (Decision 2, 2026-10-26)
 **Metered Dirac seconds**: **0**. No task calls a device or a paid
@@ -382,7 +383,9 @@ not change).
    test can reach its alpha; about 250 minutes of runtime (inferred).
 
 **Decision 4. The plan**: approve Tasks A-I at 1,050 minutes, zero
-metered seconds. Open.
+metered seconds. **Approved 2026-10-26** ("Sprint plan approved as
+amended ... proceed with execution"). Issues: A #64, B #65, C #66, D #67,
+E #68, F #69, G #70, H #71, I #72.
 
 ## Risks
 
