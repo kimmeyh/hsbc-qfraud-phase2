@@ -239,6 +239,7 @@ on 2026-10-23:
 | - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
 | - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
 | - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
+| - | Fraud types: per-type detectors against one model, on F108's simulator | F158 | none | Written 2026-10-26, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -1371,6 +1372,66 @@ part of this draft.
   points. Result `experiments/phase2/results/f162_in_pocket.json`
   (evidence tag `SIM`), generator `experiments/phase2/src/f162_in_pocket.py`.
 
+### F158: fraud types, per-type detectors against one model
+
+Written 2026-10-26 (Sprint 29 Task G, #70), before any model below is
+fit. Not filed; part of this draft. No device.
+
+- **ID and card**: unnumbered analysis entry; F158.
+- **Question**: if each fraud type gets its own detector, do the
+  detectors together catch more fraud than one model on everything, at
+  the same alert budget?
+- **Hypothesis and prediction**: none directional. Gradient boosting
+  already concentrates on hard rows, so the gain may be small (the
+  card's named risk).
+- **Data**: F108's generator (`f108_ceiling.generate`, imported, not
+  edited), main labels, no noise; train days 28-119, test days 120-182.
+  The generator records each fraud's type: S2 (a compromised terminal)
+  and S3 (a compromised customer, amount x5). Every fraud is S2, S3 or
+  both, so after both types are found no untyped fraud remains: on the
+  simulator the cascade is the two detectors, and "predict the rest"
+  has nothing to predict. A row of both types is positive for both.
+- **Features, the same for every model**: amount, the customer's mean
+  amount and the time of day (F108's three), the amount over the
+  customer's mean, the customer's transaction count on the previous day,
+  and, with a 7-day label delay (the Fraud Detection Handbook's
+  convention: a label is known 7 days after its day), the terminal's
+  known-fraud count and transaction count over days d-14 to d-8 and
+  d-35 to d-8, and the customer's known-fraud count over d-35 to d-8.
+  F108's three features cannot see terminal fraud, so F108's Bayes
+  posterior does not bound these models and is not used.
+- **Models**, each `HistGradientBoostingClassifier(l2_regularization=
+  1.0, random_state=seed)` (F151's setting), fit on the training days:
+  - **single**: target fraud (S2 or S3);
+  - **cascade**: one detector with target S2, one with target S3; a row's
+    score is the larger of the two probabilities;
+  - **shuffled reference**: the cascade with the type labels shuffled
+    among the training frauds (fraud labels unchanged; seed-drawn). It
+    should not beat the single model; if it does, a gain is not from the
+    types.
+- **Alert budget**: the top 0.5% of test rows by score. **Primary metric**:
+  recall of all test fraud within the budget.
+- **Seeds**: 42-49 (8), one simulated world each. One primary test, so
+  an exact two-sided Wilcoxon test on 8 paired seeds can reach 0.05
+  (smallest p 0.0078, section 2).
+- **Primary test**: cascade minus single, recall at the budget, per seed;
+  exact two-sided Wilcoxon at 0.05, with the mean difference and its 95%
+  t interval beside it. "Cascade above" or "below" only if the test
+  rejects and the interval excludes zero on the same side; otherwise "no
+  reliable difference".
+- **Secondary, uncorrected**: shuffled reference minus single, the same
+  way; AUPRC per model; recall per type within the budget.
+- **Step 2 (ULB and IEEE-CIS clustering)**: run only if the primary test
+  reads "cascade above" and the shuffled reference does not; otherwise
+  not run, with the reason recorded.
+- **Step 3, descriptive**: the ULB test frauds that every model in F154's
+  stored set misses at the 0.5% budget, counted per seed and compared
+  with the caught frauds feature by feature (mean and SD), from F154's
+  stored per-row scores. No test.
+- **Recording**: every model and seed carries an outcome block (section
+  2). Result `experiments/phase2/results/f158_fraud_types.json` (evidence
+  tag `SIM`), generator `experiments/phase2/src/f158_fraud_types.py`.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -1475,3 +1536,5 @@ part of this draft.
 - 2026-10-26: the Experiment 3 entry gains a dated amendment (F160,
   Sprint 29 Task E): the room check on IEEE-CIS with a positive control
   first, written before its module exists.
+- 2026-10-26: section 6 gains the F158 entry (Sprint 29 Task G), written
+  before any model is fit, and its table row.
