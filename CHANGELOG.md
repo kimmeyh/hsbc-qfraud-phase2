@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-28
 
+- **feat**: F159 result, the parallel pool build timed (Sprint 29 Task B, #65). `experiments/phase2/results/f159_parallel_pool.json`: every parallel pool equals the serial one on the validation rows; at full ULB rows 32 workers built the pool in 45.8 s against 730.3 s serial. F166 may use the parallel build.
 - **fix**: F159's run gives each parallel build a time budget of 2 times its fraction's serial build, and records a build past it as failed (Sprint 29 Task B, #65). The resumed run hung for 9 hours at 32 workers on the 0.5 fraction: one worker raised `MemoryError` while it unpickled its start-up data, and the pool did not detect it. The cause of that `MemoryError` is unverified; the machine's commit limit is 99.7 GB. The build runs in a watchdog thread, its live children are killed when the budget ends, and the run then exits with `os._exit` so a wedged pool cannot hold the process open. Proven red.
 
 ### 2026-10-27
