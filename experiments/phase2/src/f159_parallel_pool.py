@@ -47,6 +47,9 @@ CELL = "full"                      # qubo_proxy config: 833 variables
 SEED = 42
 FRACTIONS = (0.10, 0.25, 0.50, 1.00)   # F110's
 WORKERS = (1, 4, 8, 16, 32)
+# A parallel build's budget, as a multiple of its fraction's serial build.
+# Not 1: one worker measured 0.88-0.95 of the serial speed.
+BUDGET_X = 2.0
 
 # Set once per worker by the initializer, so each task sends only indices.
 _W: dict = {}
@@ -91,6 +94,49 @@ def build_parallel(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
     return clf, [s for _, s in out]
 
 
+class BuildTimeout(Exception):
+    """A parallel build that did not finish within its budget."""
+
+
+# Set when a watchdog abandons a build; `main` then leaves by os._exit,
+# because the executor's atexit handler joins its manager thread, which a
+# wedged pool never releases.
+_ABANDONED = False
+
+
+def _kill_pool_children() -> None:
+    for p in mp.active_children():
+        p.kill()
+
+
+def build_with_budget(budget_s: float, *args, **kwargs):
+    """`build_parallel` in a daemon thread, abandoned after `budget_s`.
+    `ex.map(timeout=)` does not cover a worker that wedges at start-up (the
+    resumed run hung 9 hours at 32 workers on the 0.5 fraction after one
+    worker raised MemoryError while unpickling its start-up data), and
+    `shutdown()` on such an executor can deadlock, so the build is left and
+    its live children are killed."""
+    import threading
+    global _ABANDONED
+    box: dict = {}
+
+    def target():
+        try:
+            box["out"] = build_parallel(*args, **kwargs)
+        except BaseException as exc:          # re-raised in the caller
+            box["exc"] = exc
+    t = threading.Thread(target=target, daemon=True)
+    t.start()
+    t.join(budget_s)
+    if t.is_alive():
+        _ABANDONED = True
+        _kill_pool_children()
+        raise BuildTimeout(f"no result in {budget_s:.0f} s")
+    if "exc" in box:
+        raise box["exc"]
+    return box["out"]
+
+
 def h_sha256(clf, X) -> str:
     import qubo_proxy as qp
     H = np.ascontiguousarray(qp.h_matrix(clf, X))
@@ -106,8 +152,10 @@ def _data(frac: float):
     return c["schedule"], Xtr[idx], y_pm1[idx], Xva
 
 
-def time_unit(frac: float, build: str) -> dict:
-    """One build: "serial" (`build_full`) or a worker count as text."""
+def time_unit(frac: float, build: str, budget_s: float | None = None) -> dict:
+    """One build: "serial" (`build_full`) or a worker count as text. A
+    parallel build gets `budget_s` (BUDGET_X times the fraction's serial
+    build); past it the unit is recorded as failed."""
     import full_pair_pool as fpp
     import qubo_proxy as qp
     schedule, X, y, Xva = _data(frac)
@@ -119,15 +167,23 @@ def time_unit(frac: float, build: str) -> dict:
     else:
         from concurrent.futures.process import BrokenProcessPool
         try:
-            clf, per = build_parallel(X, y, schedule, "dct", SEED,
-                                      workers=int(build))
-        except (MemoryError, BrokenProcessPool) as exc:
-            # A worker count that does not fit in memory is a result of
-            # the measurement, recorded as such (first run: 32 workers at
-            # the 0.5 fraction, 64 GB machine); it is never retimed.
-            return {"fraction": frac, "build": build, "rows": int(len(y)),
-                    "failed": type(exc).__name__,
-                    "seconds_to_failure": round(time.perf_counter() - t0, 3)}
+            if budget_s is None:
+                clf, per = build_parallel(X, y, schedule, "dct", SEED,
+                                          workers=int(build))
+            else:
+                clf, per = build_with_budget(budget_s, X, y, schedule, "dct",
+                                             SEED, workers=int(build))
+        except (MemoryError, BrokenProcessPool, BuildTimeout) as exc:
+            # A worker count that does not fit in memory, or does not
+            # finish in its budget, is a result of the measurement,
+            # recorded as such (first run: 32 workers at the 0.5 fraction,
+            # 64 GB machine); it is never retimed.
+            row = {"fraction": frac, "build": build, "rows": int(len(y)),
+                   "failed": type(exc).__name__,
+                   "seconds_to_failure": round(time.perf_counter() - t0, 3)}
+            if budget_s is not None:
+                row["budget_s"] = round(budget_s, 3)
+            return row
     secs = time.perf_counter() - t0
     row = {"fraction": frac, "build": build, "rows": int(len(y)),
            "n_learners": len(clf.h_list), "build_s": round(secs, 3),
@@ -170,6 +226,9 @@ def _doc(units: list[dict]) -> dict:
             "metered_seconds": 0, "cell": CELL, "seed": SEED,
             "cpu_count": os.cpu_count(), "fractions": list(FRACTIONS),
             "workers": list(WORKERS), "start_method": "spawn",
+            "budget": f"a parallel build is stopped and recorded as failed "
+                      f"after {BUDGET_X:g} times its fraction's serial "
+                      "build_s",
             "equality": "H on the validation rows, SHA-256 of the bytes, "
                         "against the serial build_full pool",
             "units": units, "analysis": analyze(units)}
@@ -189,11 +248,18 @@ def main(argv=None) -> int:
             for build in ("serial", *map(str, WORKERS)):
                 if (frac, build) in done:
                     continue           # resume: never time a unit twice
-                u = time_unit(frac, build)
+                serial = [u for u in units if u["fraction"] == frac
+                          and u["build"] == "serial"]
+                budget = BUDGET_X * serial[0]["build_s"] \
+                    if serial and build != "serial" else None
+                u = time_unit(frac, build, budget)
                 units.append(u)
                 provenance.write_result(OUT, _doc(units), __file__, [SEED], rid)
                 print(json.dumps(u), flush=True)
         print("complete", flush=True)
+        if _ABANDONED:
+            sys.stdout.flush()
+            os._exit(0)                # see _ABANDONED
     elif mode == "analyze":
         print(json.dumps(analyze(json.loads(
             OUT.read_text(encoding="utf-8"))["units"]), indent=1))

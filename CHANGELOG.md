@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-28
+
+- **fix**: F159's run gives each parallel build a time budget of 2 times its fraction's serial build, and records a build past it as failed (Sprint 29 Task B, #65). The resumed run hung for 9 hours at 32 workers on the 0.5 fraction: one worker raised `MemoryError` while it unpickled its start-up data, and the pool did not detect it. The cause of that `MemoryError` is unverified; the machine's commit limit is 99.7 GB. The build runs in a watchdog thread, its live children are killed when the budget ends, and the run then exits with `os._exit` so a wedged pool cannot hold the process open. Proven red.
+
 ### 2026-10-27
 
 - **feat**: F166 code, best achievable result per algorithm on ULB (Sprint 29 Task F, #69). `experiments/phase2/src/f166_ulb_algorithms.py` tunes HGB, LightGBM, XGBoost, CatBoost, logistic regression and a linear SVM over the entry's eight configurations each, and the CVQBoost proxy over its three, per seed on the validation fold; scores each chosen configuration once on the test fold with `metrics.summarize`, the floor-normalized AUPRC, specificity, MCC and balanced accuracy at both validation-chosen operating points, recall at the 0.5% budget and the train-test gap, with an outcome block each; tries an RBF SVM on a 20,000-row subsample as the SVM's alternative; uses F159's parallel build for the full cell only if F159's result is complete with equal pools; sets the seed count from seed 42's time (`min(10, floor(120 / t42))`, at least 3); and ranks adjacent algorithms by the test the seed count selects. The seed rule, the selection, the test choice and the parallel gate are proven red. `test_phase2_figures_resolve.py` also reads `docs/phase2/` subfolders, where F166's documents go.

@@ -90,6 +90,48 @@ def test_the_failed_build_exclusion_can_fail():
         "a failed build compared")
 
 
+def test_a_build_past_its_budget_is_recorded_as_failed(monkeypatch):
+    import time
+    X, y, X_held = _data()
+    monkeypatch.setattr(f159, "_data", lambda frac: (2, X, y, X_held))
+    monkeypatch.setattr(f159, "build_parallel",
+                        lambda *a, **k: time.sleep(5))
+    monkeypatch.setattr(f159, "_ABANDONED", False)
+    t0 = time.perf_counter()
+    row = f159.time_unit(0.1, "32", budget_s=0.2)
+    assert time.perf_counter() - t0 < 3
+    assert row["failed"] == "BuildTimeout"
+    assert row["budget_s"] == 0.2 and row["rows"] == 300
+    assert f159._ABANDONED is True
+    a = f159.analyze([_unit(0.1, "serial", "a", 8.0), row])
+    assert a["0.1"]["failed"] == {"32": "BuildTimeout"}
+    assert a["0.1"]["speedup"] == {}
+
+
+def test_a_build_within_its_budget_returns_its_result(monkeypatch):
+    monkeypatch.setattr(f159, "build_parallel", lambda *a, **k: ("clf", [1]))
+    assert f159.build_with_budget(5, 1, 2) == ("clf", [1])
+
+    def boom(*a, **k):
+        raise MemoryError
+    monkeypatch.setattr(f159, "build_parallel", boom)
+    import pytest
+    with pytest.raises(MemoryError):
+        f159.build_with_budget(5)
+
+
+def test_the_budget_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail(
+        [Mutation(PHASE2 / "f159_parallel_pool.py",
+                  "        raise BuildTimeout(f\"no result in {budget_s:.0f} s\")\n",
+                  "        pass\n", expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_a_build_past_its_budget_is_recorded_as_failed",
+            ROOT),
+        "a build past its budget not stopped")
+
+
 def test_the_complete_marker_needs_every_unit():
     units = [_unit(f, b, "a", 1.0) for f in f159.FRACTIONS
              for b in ("serial", *map(str, f159.WORKERS))]
