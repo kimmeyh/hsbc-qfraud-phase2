@@ -664,6 +664,7 @@ value. Removed from candidates.)
 - This enables: resumable Phase 2 runs (as F162's and F111's were) that record a resume as a resume. This prevents: a copied id silently overwriting a recorded result
 - Acceptance: a resume in a new process continues its file with no `replace=`; a copied id with no sidecar is refused; each term proven red with `assert_can_fail`
 - Depends on: nothing
+- **Done 2026-10-26 (Sprint 29 Task A, #64)**: `provenance.run_id_for(path)` keeps the id in a gitignored `<result>.run_id` sidecar and `run_id_for(path, resume=True)` reads it back; `write_result` records the resumes and refuses an id this process did not make or resume. Resume in two real processes, copied-id refusal, new start and ignore rule each proven red
 
 **F166. F157 part 1: best achievable result per algorithm on ULB, classical and proxy lanes (~240m [no-history], zero metered) Priority 30**
 - Phase: Phase 2 (split from F157 at the 2026-10-25 refinement, as F157 directs)

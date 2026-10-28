@@ -17,6 +17,11 @@ it takes the result's place. f110, f111 and f152 each overwrote or
 duplicated recorded output in a default mode, and the backfill replaced a
 file before checking it (PR #46 review); each was fixed one module at a
 time. `test_result_writer_required.py` routes new modules here.
+
+F165 (Sprint 29 Task A): a resumable run takes its id from `run_id_for`,
+which keeps it in a gitignored sidecar beside the result, so a resume in a
+new process is the same run and is recorded as a resume; an id copied out
+of a recorded result is refused.
 """
 from __future__ import annotations
 
@@ -72,14 +77,66 @@ def record(generator, seeds) -> dict:
             "versions": versions()}
 
 
+# Ids this process made or resumed. `write_result` lets a run rewrite its
+# own file only with one of these, so an id copied out of a recorded result
+# cannot replace it (F165, Sprint 29 Task A).
+_ISSUED: set[str] = set()
+
+
 def new_run_id() -> str:
     """One per run, made fresh when the run starts. Every write of that run
-    passes the same id, so the run may rewrite its own file. The refusal
-    holds only while each run makes its own id: `write_result` refuses an
-    id that is not 32 hex characters, so a constant name cannot switch it
-    off, but a caller that copies the id out of a recorded result can.
-    A resumed run in a new process is a new run and states `replace=`."""
-    return uuid.uuid4().hex
+    passes the same id, so the run may rewrite its own file. `write_result`
+    refuses an id that is not 32 hex characters, and an id this process
+    did not make or resume, so neither a constant name nor a copied id
+    switches the refusal off. A run that may stop and resume in a new
+    process takes its id from `run_id_for` instead."""
+    rid = uuid.uuid4().hex
+    _ISSUED.add(rid)
+    return rid
+
+
+def sidecar(path) -> Path:
+    """Where `run_id_for` keeps a result's run id: `<result>.run_id`,
+    gitignored, plain text (the id, then one line per resume)."""
+    path = Path(path)
+    return path.with_name(path.name + ".run_id")
+
+
+def run_id_for(path, resume: bool = False) -> str:
+    """The run's id for the result at `path`, kept in its sidecar so a
+    resume in a new process is the same run (F165, Sprint 29 Task A).
+
+    A start (`resume=False`) makes a new id and writes the sidecar before
+    any result exists, so a rerun is a new run: replacing a recorded
+    result still needs `replace=`. A resume reads the id back, refusing
+    when there is no sidecar, and adds a line; `write_result` records how
+    many resumes the run had."""
+    side = sidecar(path)
+    if not resume:
+        rid = new_run_id()
+        side.write_text(rid + "\n", encoding="utf-8", newline="\n")
+        return rid
+    if not side.exists():
+        raise FileNotFoundError(f"{side.name} not found: no started run to "
+                                "resume; start with resume=False")
+    lines = side.read_text(encoding="utf-8").splitlines()
+    rid = lines[0].strip() if lines else ""
+    if not RUN_ID.fullmatch(rid):
+        raise ValueError(f"{side.name} does not start with a run id")
+    with side.open("a", encoding="utf-8", newline="\n") as f:
+        f.write("resumed\n")
+    _ISSUED.add(rid)
+    return rid
+
+
+def _resumes(path, run_id: str) -> int:
+    side = sidecar(path)
+    if not side.exists():
+        return 0
+    lines = side.read_text(encoding="utf-8").splitlines()
+    if not lines or lines[0].strip() != run_id:
+        return 0
+    return sum(1 for ln in lines[1:] if ln.strip() == "resumed")
 
 
 def write_result(path, doc: dict, generator, seeds, run_id: str,
@@ -89,6 +146,8 @@ def write_result(path, doc: dict, generator, seeds, run_id: str,
       - a file there from another run (or from before this rule), unless
         `replace` states why; the reason and the replaced run's id are
         recorded in the block;
+      - a file there from this id when this process did not make or
+        resume the id (`new_run_id`, `run_id_for`): a copied id;
       - a file that does not read back equal to what was meant.
     The temporary file sits beside the result, so the final step is one
     `os.replace` on the same volume."""
@@ -100,6 +159,9 @@ def write_result(path, doc: dict, generator, seeds, run_id: str,
         raise ValueError("replace must state why the recorded result goes")
     block = record(generator, seeds)
     block["run_id"] = run_id
+    resumes = _resumes(path, run_id)
+    if resumes:
+        block["resumed"] = resumes
     if path.exists():
         try:
             old = json.loads(path.read_text(encoding="utf-8"))
@@ -115,8 +177,14 @@ def write_result(path, doc: dict, generator, seeds, run_id: str,
                     "replace it")
             block["replaces"] = {"reason": str(replace),
                                  "previous_run_id": old_run}
-        elif isinstance(old, dict) and "replaces" in old.get("provenance", {}):
-            block["replaces"] = old["provenance"]["replaces"]
+        else:
+            if run_id not in _ISSUED:
+                raise FileExistsError(
+                    f"{path.name} holds run {run_id}, and this process did "
+                    "not make or resume that id; resume a run with "
+                    "run_id_for(path, resume=True)")
+            if "replaces" in old.get("provenance", {}):
+                block["replaces"] = old["provenance"]["replaces"]
     out = {**doc, "provenance": block}
     text = json.dumps(out, indent=1, default=strict_json.numpy_scalar) + "\n"
     tmp = path.with_name(path.name + ".tmp")

@@ -23,6 +23,8 @@ experiments/results/pools/*
 experiments/phase2/results/pools/
 # Progress lines written while a long run is going (F105); not evidence.
 experiments/phase2/results/*.heartbeat
+# A run's id, kept beside its result so a resume is the same run (F165).
+experiments/phase2/results/**/*.run_id
 docs/source/*.pdf
 docs/papers/*.pdf
 .secrets-patterns.txt

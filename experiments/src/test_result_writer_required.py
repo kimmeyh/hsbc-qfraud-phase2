@@ -158,7 +158,8 @@ def test_the_scan_flags_a_new_writer(tmp_path):
 
 
 # ------------------------------------------------------------ write_result
-RUN1, RUN2 = "a" * 32, "b" * 32
+# Made by new_run_id, so this process may rewrite with them (F165).
+RUN1, RUN2 = prov.new_run_id(), prov.new_run_id()
 
 
 def _write(tmp_path, run, replace=None, doc=None):
@@ -223,6 +224,72 @@ def test_a_constant_run_id_is_refused(tmp_path):
     assert prov.RUN_ID.fullmatch(prov.new_run_id())
 
 
+# ------------------------------------------- run id kept for resume (F165)
+_RESUME_SCRIPT = """\
+import sys
+sys.path.insert(0, {phase2!r})
+import provenance as prov
+path = {path!r}
+rid = prov.run_id_for(path, resume={resume})
+prov.write_result(path, {{"auprc": {auprc}}}, {generator!r}, [42], rid)
+print(rid)
+"""
+
+
+def _run_process(tmp_path, resume, auprc):
+    import subprocess
+    script = _RESUME_SCRIPT.format(phase2=str(PHASE2),
+                                   path=str(tmp_path / "r.json"),
+                                   resume=resume, auprc=auprc,
+                                   generator=str(GENERATOR))
+    return subprocess.run([sys.executable, "-c", script], capture_output=True,
+                          text=True, cwd=str(ROOT))
+
+
+def test_a_resume_in_a_new_process_continues_its_own_file(tmp_path):
+    first = _run_process(tmp_path, False, 0.5)
+    assert first.returncode == 0, first.stderr
+    again = _run_process(tmp_path, True, 0.6)
+    assert again.returncode == 0, again.stderr
+    back = json.loads((tmp_path / "r.json").read_text(encoding="utf-8"))
+    assert again.stdout.strip() == first.stdout.strip()
+    assert back["auprc"] == 0.6
+    assert back["provenance"]["run_id"] == first.stdout.strip()
+    assert back["provenance"]["resumed"] == 1
+    assert "replaces" not in back["provenance"]
+
+
+def test_a_copied_id_is_refused(tmp_path, monkeypatch):
+    rid = prov.run_id_for(tmp_path / "r.json")
+    _write(tmp_path, rid)
+    before = (tmp_path / "r.json").read_bytes()
+    copied = json.loads(before)["provenance"]["run_id"]
+    (tmp_path / "r.json.run_id").unlink()
+    monkeypatch.setattr(prov, "_ISSUED", set())      # a new process
+    with pytest.raises(FileExistsError, match="did not make or resume"):
+        _write(tmp_path, copied, doc={"auprc": 0.1})
+    assert (tmp_path / "r.json").read_bytes() == before
+
+
+def test_a_new_start_is_a_new_run_and_a_resume_needs_a_start(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        prov.run_id_for(tmp_path / "r.json", resume=True)
+    first = prov.run_id_for(tmp_path / "r.json")
+    _write(tmp_path, first)
+    second = prov.run_id_for(tmp_path / "r.json")
+    assert second != first
+    with pytest.raises(FileExistsError, match="another run"):
+        _write(tmp_path, second, doc={"auprc": 0.1})
+
+
+def test_the_sidecar_is_ignored():
+    import subprocess
+    out = subprocess.run(["git", "check-ignore", "-q",
+                          "experiments/phase2/results/x.json.run_id"],
+                         cwd=str(ROOT))
+    assert out.returncode == 0, "a run-id sidecar would be committed"
+
+
 def test_an_unknown_type_stops_the_write(tmp_path):
     with pytest.raises(TypeError):
         _write(tmp_path, RUN1, doc={"x": object()})
@@ -274,6 +341,33 @@ def test_the_read_back_check_can_fail():
            "        if False:\n",
            "test_a_file_that_does_not_read_back_is_refused",
            "a file that does not read back")
+
+
+def test_the_copied_id_refusal_can_fail():
+    _fails(WRITER, "            if run_id not in _ISSUED:\n",
+           "            if False:\n",
+           "test_a_copied_id_is_refused", "a copied id accepted")
+
+
+def test_the_resume_can_fail():
+    _fails(WRITER, "    _ISSUED.add(rid)\n    return rid\n\n\ndef _resumes",
+           "    return rid\n\n\ndef _resumes",
+           "test_a_resume_in_a_new_process_continues_its_own_file",
+           "a resumed id not accepted")
+
+
+def test_the_new_start_can_fail():
+    _fails(WRITER, "    if not resume:\n",
+           "    if not resume and not side.exists():\n",
+           "test_a_new_start_is_a_new_run_and_a_resume_needs_a_start",
+           "a rerun silently resuming the last run")
+
+
+def test_the_ignore_rule_can_fail():
+    _fails(ROOT / ".gitignore",
+           "experiments/phase2/results/**/*.run_id",
+           "experiments/phase2/results/**/*.not_a_sidecar",
+           "test_the_sidecar_is_ignored", "the sidecar not ignored")
 
 
 def test_the_module_scan_can_fail():
