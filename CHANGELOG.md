@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-28
 
+- **fix**: pypdf 6.21.1 -> 6.21.2 in `experiments/requirements-lock.txt` and the venv, for CVE-2026-115572, CVE-2026-115585 and CVE-2026-115580, with a dated line in the lock's header (Sprint 29 Task I, #72). pip-audit found the three on 6.21.1 and none on 6.21.2. The PDF tests ran before and after; no tracked PDF was rebuilt.
 - **feat**: F166 result and documents, the best achievable result per algorithm on ULB (Sprint 29 Task F, #69). `experiments/phase2/results/f166_ulb_algorithms.json` over seeds 42-51; one document per algorithm and `ULB_COMPARISON.md` in `docs/phase2/algorithms/`. Two adjacent pairs differ reliably: the CVQBoost proxy above the linear SVM, and the SVM above logistic regression.
 - **feat**: F160 result, Experiment 3's room check passes on IEEE-CIS (Sprint 29 Task E, #68). `experiments/phase2/results/f160_room_ieee.json`: the greedy-to-floor gap is about 0.1 on every instance against the 0.01 rule, so F25's design reopens; SCIP found nothing below greedy within its 300 s cap, so the room is unconfirmed below the floor bound.
 - **feat**: F158 result, per-type detectors in a cascade catch fewer frauds than one model on F108's simulator (Sprint 29 Task G, #70). `experiments/phase2/results/f158_fraud_types.json`: reading "below" over seeds 42-49, so step 2 did not run; step 3 lists the ULB frauds every stored model misses.
