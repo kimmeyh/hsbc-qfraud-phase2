@@ -680,6 +680,7 @@ value. Removed from candidates.)
 - This enables: a per-dataset reference that every later Phase 2 claim on ULB is read against. This prevents: comparing a tuned lane against an untuned one, as F151 and F162 each found
 - Acceptance: entry before any score; seven algorithm documents and the comparison page; each figure resolves to a result file
 - Depends on: F102 for reporting (the draft's section 2 standard applies)
+- **Done 2026-10-28 (Sprint 29 Task F, #69)**: entry in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6 (15775da); `experiments/phase2/src/f166_ulb_algorithms.py`, result `experiments/phase2/results/f166_ulb_algorithms.json` (complete, seeds 42-51; seed 42 took 11.48 minutes, so the rule gave 10). Eight documents in `docs/phase2/algorithms/`: one per algorithm and `ULB_COMPARISON.md`, each figure resolved by F164's check. By mean test AUPRC: CatBoost, LightGBM, XGBoost, HGB, the CVQBoost proxy, the linear SVM, logistic regression. Under the entry's Wilcoxon test at Bonferroni 0.05 / 6, two adjacent pairs differ: the proxy above the SVM and the SVM above logistic regression; the order among the four boosting libraries and the proxy is not established. The RBF SVM alternative was dropped (better on 2 of 10 seeds)
 
 **F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)
