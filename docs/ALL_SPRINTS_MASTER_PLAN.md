@@ -775,6 +775,7 @@ not a sweep correction.
 - Platform: docs
 - A draft of the plan F13 will hold after notification, written now so the team lead can see its shape: the PoC window split into sprints, each experiment placed with its entry, its device block (if any) and the decision that releases it, and the items that wait for the brief. Every assumption about the brief (data, metrics, compute, confidentiality, device seconds) labeled as an assumption
 - Output: a new file, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. The skeleton (`PHASE2_POC_PLAN.md`) and F13 stay as they are; on notification F13 replaces the assumptions with the brief's terms
+- **Done 2026-10-26 (Sprint 29 Task H, #71)**: the draft splits the PoC window into five stages, places each experiment with its entry, device and releasing decision, names Experiment 3's proxy design as the critical path with a proposed deadline, and lists eight labeled assumptions
 - Acceptance: every date sourced; every assumption labeled; no figure restated that another file owns
 - Depends on: nothing
 
