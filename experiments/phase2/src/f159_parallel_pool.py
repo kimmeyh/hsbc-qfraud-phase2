@@ -117,8 +117,17 @@ def time_unit(frac: float, build: str) -> dict:
                              weak_params=qp.seeded_weak_params(SEED))
         per = None
     else:
-        clf, per = build_parallel(X, y, schedule, "dct", SEED,
-                                  workers=int(build))
+        from concurrent.futures.process import BrokenProcessPool
+        try:
+            clf, per = build_parallel(X, y, schedule, "dct", SEED,
+                                      workers=int(build))
+        except (MemoryError, BrokenProcessPool) as exc:
+            # A worker count that does not fit in memory is a result of
+            # the measurement, recorded as such (first run: 32 workers at
+            # the 0.5 fraction, 64 GB machine); it is never retimed.
+            return {"fraction": frac, "build": build, "rows": int(len(y)),
+                    "failed": type(exc).__name__,
+                    "seconds_to_failure": round(time.perf_counter() - t0, 3)}
     secs = time.perf_counter() - t0
     row = {"fraction": frac, "build": build, "rows": int(len(y)),
            "n_learners": len(clf.h_list), "build_s": round(secs, 3),
@@ -136,9 +145,11 @@ def analyze(units: list[dict]) -> dict:
         if "serial" not in rows:
             continue
         ref = rows["serial"]
-        par = [rows[str(w)] for w in WORKERS if str(w) in rows]
+        built = [rows[str(w)] for w in WORKERS if str(w) in rows]
+        par = [u for u in built if "failed" not in u]
         out[str(frac)] = {
             "rows": ref["rows"], "serial_s": ref["build_s"],
+            "failed": {u["build"]: u["failed"] for u in built if "failed" in u},
             "equal_on_validation": {u["build"]: u["h_validation_sha256"]
                                     == ref["h_validation_sha256"] for u in par},
             "speedup": {u["build"]: round(ref["build_s"] / u["build_s"], 2)

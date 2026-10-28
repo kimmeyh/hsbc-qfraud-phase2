@@ -68,6 +68,28 @@ def test_analyze_reads_speedup_and_flags_a_mismatch():
     assert f159.analyze([])["all_equal"] is False
 
 
+def test_a_failed_build_is_recorded_and_left_out_of_the_comparison():
+    units = [_unit(0.1, "serial", "a", 8.0), _unit(0.1, "4", "a", 2.0),
+             {"fraction": 0.1, "build": "32", "rows": 10,
+              "failed": "MemoryError", "seconds_to_failure": 3.0}]
+    a = f159.analyze(units)
+    assert a["0.1"]["failed"] == {"32": "MemoryError"}
+    assert a["0.1"]["speedup"] == {"4": 4.0}
+    assert a["all_equal"] is True
+
+
+def test_the_failed_build_exclusion_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail(
+        [Mutation(PHASE2 / "f159_parallel_pool.py",
+                  "        par = [u for u in built if \"failed\" not in u]\n",
+                  "        par = built\n", expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_a_failed_build_is_recorded_and_left_out_of_the_comparison",
+            ROOT),
+        "a failed build compared")
+
+
 def test_the_complete_marker_needs_every_unit():
     units = [_unit(f, b, "a", 1.0) for f in f159.FRACTIONS
              for b in ("serial", *map(str, f159.WORKERS))]
