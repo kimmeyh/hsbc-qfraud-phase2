@@ -175,3 +175,6 @@ Read `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
    minutes, zero metered), for a later sprint's refinement.
 3. Close F114 and F156 as not achievable with the methods tried, with
    that reason on both cards.
+
+**Answer (team lead, 2026-10-28): 2.** F169 added to
+`docs/ALL_SPRINTS_MASTER_PLAN.md`; the F156 and F114 cards point to it.

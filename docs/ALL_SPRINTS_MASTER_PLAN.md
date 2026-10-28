@@ -609,7 +609,7 @@ value. Removed from candidates.)
 - F108 and F114 found that every plug-in estimate tried overstates the Bayes error, and calibration does not move it. F108's four methods, its Cover-Hart nearest-neighbor bound among them, all failed. Candidates named in `F108_CEILING_VALIDATION.md`: a Bayes-error estimator not tied to one fitted model (for example a divergence-based bound such as Henze-Penrose; the choice is made in the entry), and an HGB set for extreme imbalance. Entry first, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm)
 - Scope note (team lead's question, 2026-10-23): the ceiling is a property of the data, not of the algorithm, so one validated estimate bounds every model, ML or QML (kernels, QNN, CVQBoost). A transform of the same features, quantum feature maps included, cannot lower it; synthetic or augmented rows cannot either. Only new information (new features or sources) can
 - Depends on: nothing. Enables: F114
-- **Done 2026-10-28 (Sprint 29 Task D, #67): fails.** Entry: the 2026-10-26 amendment to F108 in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6 (a4df8a2). `experiments/phase2/src/f156_hp_bound.py`, results `experiments/phase2/results/f156_hp_bound_pilot.json` and `f156_hp_bound.json` (complete). Henze-Penrose bound on a 60,000-row subsample, F108's generator, seeds 42-46 and arms. On the main arm the interval contained the true Bayes error on 2 of 5 seeds and was narrow on none, so neither term reached 4 of 5; the entry had shown before the run that both terms cannot hold together here. Where it missed, the lower end sat just above the true value. F114 stays blocked; the next estimator is a team-lead choice
+- **Done 2026-10-28 (Sprint 29 Task D, #67): fails.** Entry: the 2026-10-26 amendment to F108 in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6 (a4df8a2). `experiments/phase2/src/f156_hp_bound.py`, results `experiments/phase2/results/f156_hp_bound_pilot.json` and `f156_hp_bound.json` (complete). Henze-Penrose bound on a 60,000-row subsample, F108's generator, seeds 42-46 and arms. On the main arm the interval contained the true Bayes error on 2 of 5 seeds and was narrow on none, so neither term reached 4 of 5; the entry had shown before the run that both terms cannot hold together here. Where it missed, the lower end sat just above the true value. F114 stays blocked; the next estimator is a team-lead choice. **Decided 2026-10-28 (team lead, Sprint 29 Decision D1 option 2): F169 carries the second candidate, an HGB set for extreme imbalance**
 
 **F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 30**
 - Phase: Phase 2 (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F151 and F152)
@@ -686,7 +686,7 @@ value. Removed from candidates.)
 - Phase: Phase 2 preparation (ceiling methodology)
 - Platform: ULB, IEEE-CIS
 - Fit `a*N^(-b) + c` against N_positives within a fixed time window; confident learning with the diagonal-dominance condition tested and reported when it fails. Report intervals, not points
-- Depends on: a ceiling method that passes F108's harness (corrected 2026-10-19, Pass 1: F108 shipped in Sprint 27 and validated none, so this card is blocked, not ready). F156 is the candidate (corrected 2026-10-25, Pass 1: the calibrated plug-in failed in Sprint 28)
+- Depends on: a ceiling method that passes F108's harness (corrected 2026-10-19, Pass 1: F108 shipped in Sprint 27 and validated none, so this card is blocked, not ready). F156 is the candidate (corrected 2026-10-25, Pass 1: the calibrated plug-in failed in Sprint 28). **2026-10-28: F156 failed (Sprint 29 Task D); F169 is the next candidate (team lead, Sprint 29 Decision D1 option 2)**
 - **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods on its main arm, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
 - **2026-10-22 (Sprint 28 Task G)**: an isotonic-calibrated plug-in on F151's stable HGB, under a dated F108 amendment, recovers 2 of 5 seeds on the main arm, the same as F108's default plug-in; calibration does not move the estimate. **Still blocked.** The next candidate is a different estimator, not a re-scaled one (`docs/phase2/F114_CALIBRATED_PLUGIN.md`)
 
@@ -802,6 +802,13 @@ not a sweep correction.
 - Acceptance: the seven parts above; each new test and the hash lookup proven red; a run stopped mid-way in a test resumes and skips its finished units; the report names each file changed, each red proof, the wake-up job id and expiry, and anything not done
 - Boundaries: EvidenceBasedDB is not written from here; Phase 1 evidence in `experiments/results/` is never written
 - Depends on: F165 (Sprint 29 Task A) for the run id
+
+**F169. Ceiling estimator, second candidate: an HGB set for extreme imbalance on F108's harness (~90m [no-history], zero metered) Priority 45**
+- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation, Decision D1 option 2)
+- Platform: F108's simulator first; ULB and IEEE-CIS only after a pass
+- F156 (Sprint 29 Task D) failed: the Henze-Penrose interval contained the true Bayes error on 2 of 5 seeds on the main arm. This is the other candidate named in `F108_CEILING_VALIDATION.md` ("What follows"): an HGB with `max_bins` and early stopping set for extreme imbalance, under the plug-in. Entry first, as a dated F108 amendment, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm). The settings are chosen in the entry, before the run
+- Refinement: a later sprint's
+- Depends on: nothing. Enables: F114
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
