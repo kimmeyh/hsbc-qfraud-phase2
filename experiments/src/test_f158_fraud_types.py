@@ -63,6 +63,44 @@ def test_a_fraud_any_family_catches_is_not_missed():
     assert m.tolist() == [False, False, True, False]
 
 
+UP = [0.01, 0.02, 0.015, 0.03, 0.012, 0.022, 0.018, 0.025]
+FLAT = [0.0] * 8
+
+
+def _rows(cascade, shuffled):
+    return [{"models": {"single": {"recall_at_budget": 0.5},
+                        "cascade": {"recall_at_budget": 0.5 + c},
+                        "shuffled": {"recall_at_budget": 0.5 + s}}}
+            for c, s in zip(cascade, shuffled)]
+
+
+def test_step2_needs_the_cascade_above():
+    assert ft.summarize(_rows(FLAT, FLAT))["step2_condition_met"] is False
+
+
+def test_step2_needs_the_shuffled_reference_not_above():
+    assert ft.summarize(_rows(UP, UP))["step2_condition_met"] is False
+
+
+def test_step2_runs_when_both_terms_hold():
+    assert ft.summarize(_rows(UP, FLAT))["step2_condition_met"] is True
+
+
+STEP2 = ("    go = primary[\"reading\"] == \"above\" and "
+         "shuffled[\"reading\"] != \"above\"\n")
+
+
+def test_the_step2_cascade_term_can_fail():
+    _fails(STEP2, "    go = shuffled[\"reading\"] != \"above\"\n",
+           "test_step2_needs_the_cascade_above", "cascade term dropped")
+
+
+def test_the_step2_shuffled_term_can_fail():
+    _fails(STEP2, "    go = primary[\"reading\"] == \"above\"\n",
+           "test_step2_needs_the_shuffled_reference_not_above",
+           "shuffled term dropped")
+
+
 def _fails(old, new, node, label):
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail([Mutation(PHASE2 / "f158_fraud_types.py", old, new,
