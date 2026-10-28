@@ -106,6 +106,12 @@ def test_the_primary_choice_can_fail():
            "test_the_primary_test_is_chosen_by_seed_count", "Wilcoxon at any n")
 
 
+def test_the_parallel_gate_complete_term_can_fail():
+    _fails("    if not doc.get(\"complete\"):\n", "    if False:\n",
+           "test_the_parallel_build_needs_a_complete_equal_f159",
+           "an incomplete F159 accepted")
+
+
 def test_the_parallel_gate_can_fail():
     _fails("    if not a.get(\"all_equal\"):\n", "    if False:\n",
            "test_the_parallel_build_needs_a_complete_equal_f159",

@@ -4,7 +4,7 @@
 
 - **Card**: F166 (Sprint 29 Task F, #69), the ULB part of F157.
 - **Entry**: `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6, "F166", written before any score.
-- **Evidence**: `experiments/phase2/results/f166_ulb_algorithms.json` (evidence tag SIM, zero metered seconds), generator `experiments/phase2/src/f166_ulb_algorithms.py`. Every figure below comes from that file. The per-row test scores and the outcome block for each seed are in the file's rows.
+- **Evidence**: `experiments/phase2/results/f166_ulb_algorithms.json` (evidence tag SIM, zero metered seconds), generator `experiments/phase2/src/f166_ulb_algorithms.py`. Every figure below comes from that file. Each seed's outcome block is in the file's rows; the per-row test scores it names are in `experiments/phase2/predictions/` (gitignored, kept on this machine), each recorded with its SHA-256.
 - **Data**: ULB with duplicates dropped, `data.stratified_split` (60/20/20). Tuning reads the training and validation folds; every score here is on the test fold.
 - **Setup**: `XGBClassifier`, `random_state=seed`, all 30 columns; the library default (depth 6, rate 0.3, 100 trees) is one of the grid.
 

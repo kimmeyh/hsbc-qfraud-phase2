@@ -32,8 +32,8 @@ Card Done line in `docs/ALL_SPRINTS_MASTER_PLAN.md`; result
   learners.
 - **Finding to confirm**: the first run stopped with a `MemoryError` at
   32 workers on the 0.5 fraction; its resume then hung for 9 hours
-  (12:10am to 8:58am) because a worker died at start-up and the pool did
-  not see it. The cause of the `MemoryError` is **unverified**: the
+  (12:10am to 8:58am). One worker's log shows a `MemoryError` at start-up;
+  that the pool then waited on the dead worker is inferred, not shown. The cause of the `MemoryError` is **unverified**: the
   machine's commit limit is 99.7 GB, so "out of memory" is not shown.
   Two fixes (`e02fa18`, `94f079e`): a failed build is recorded, not
   fatal, and each parallel build is stopped after 2 times its fraction's
@@ -75,7 +75,9 @@ reopened design.
 
 - The positive control passed first. On IEEE-CIS (seeds 42-44, 60 and 136
   variables), greedy ends 0.096-0.099 above the floor on every instance,
-  against the 0.01 rule; F104's resolution gate passes.
+  against the 0.01 rule; F104's resolution gate passes. The guide-based
+  resolution check fails on every instance, as it does on the control;
+  the falsifier needs both checks to fail, so it does not fire.
 - **Caveat**: SCIP stopped at its 300 s cap on every instance without
   beating greedy. Its dual bound puts the true optimum between greedy and
   about 0.08-0.18 below it. No solver has yet been shown to beat greedy.
@@ -136,6 +138,30 @@ Read `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
 - E (53 min) and G (6 min) were started only when their runs began;
   their code was written earlier with no timer running.
 - F 158 min and I 17 min are as measured.
+
+## V11. Acceptance walk, evidence per task
+
+- A: three terms each proven red (`test_result_writer_required.py`);
+  `git check-ignore` matches the sidecar (`.gitignore` line 27); the
+  `CLAUDE.md` provenance bullet names `run_id_for(path, resume=True)`.
+- B: equality on validation rows at every fraction, proven red; speed-up
+  and longest learner in the result's `analysis`.
+- C: 0.829 put back fails, proven red; stale-registry check proven red;
+  the six non-decimal findings named in the test's docstring.
+- D: one test per term (`test_term_1_can_fail`, `test_term_2_can_fail`);
+  fail recorded on the main arm, 4 of 5 rule.
+- E: control first, then the gap per instance under F153's rule; F25's
+  card records the reopened design.
+- F: seven algorithm documents and the comparison page; every figure
+  resolves (`test_phase2_figures_resolve.py`); rankings only under the
+  entry's paired test. F166's parallel gate now has a red proof per term.
+- G: step 3 characterization; step 1 with its interval and the shuffled
+  reference; step 2 not run, with the reason.
+- H: assumptions labeled `[Assumption An]` with a register at the end;
+  dates sourced in the document. Not machine-checked; please read.
+- I: PDF tests before and after; pip-audit clean; `git status --short`
+  on `docs/paper` and `docs/submission` is empty, so no tracked PDF
+  changed.
 
 ---
 
