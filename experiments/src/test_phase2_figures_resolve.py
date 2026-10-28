@@ -152,7 +152,9 @@ def unresolved(doc: str, text: str) -> list[str]:
 
 
 def _docs() -> list[str]:
-    return sorted(p.name for p in DOCS.glob("*.md"))
+    # Subfolders too (F166's docs/phase2/algorithms/), keyed by the path
+    # under docs/phase2, so a top-level document keeps its bare name.
+    return sorted(p.relative_to(DOCS).as_posix() for p in DOCS.rglob("*.md"))
 
 
 @pytest.mark.parametrize("doc", _docs())
