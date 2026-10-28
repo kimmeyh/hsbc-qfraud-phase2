@@ -240,6 +240,7 @@ on 2026-10-23:
 | - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
 | - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
 | - | Fraud types: per-type detectors against one model, on F108's simulator | F158 | none | Written 2026-10-26, below |
+| - | Best achievable result per algorithm on ULB, classical and proxy lanes | F166 (F157 part 1) | none | Written 2026-10-27, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -1432,6 +1433,90 @@ fit. Not filed; part of this draft. No device.
   2). Result `experiments/phase2/results/f158_fraud_types.json` (evidence
   tag `SIM`), generator `experiments/phase2/src/f158_fraud_types.py`.
 
+### F166: best achievable result per algorithm on ULB (F157 part 1)
+
+Written 2026-10-27 (Sprint 29 Task F, #69), before any score below.
+Not filed; part of this draft. No device. Descriptive: no pass or fail.
+
+- **ID and card**: unnumbered analysis entry; F166, the ULB part of F157.
+  Device lanes (CVQBoost on hardware, QSVM) and QNN are out of this part.
+- **Question**: tuned under one protocol, how well does each of seven
+  algorithms do on ULB, and which differences between them are reliable?
+- **Data and split**: ULB, duplicates dropped (`data.load_ulb().
+  drop_duplicates()`), `data.stratified_split(df, seed)` (60/20/20), the
+  split every Phase 2 ULB result uses. Tuning reads the training and
+  validation folds only; every reported score is on the test fold, so no
+  score comes from the rows that chose its configuration (section 2).
+- **Features**: the classical lanes use all 30 columns; logistic
+  regression and the SVM standardize them on the training fold. The proxy
+  uses each configuration's own top-k features (`qubo_proxy._prep`).
+- **The seven algorithms and their configurations**, named before any
+  score. Selection per seed: the configuration with the highest
+  validation AUPRC (ties: the first listed).
+  - **HGB** (`HistGradientBoostingClassifier`, `random_state=seed`):
+    `l2_regularization` {0, 1} x `learning_rate` {0.05, 0.1} x
+    `max_leaf_nodes` {15, 31}. 8.
+  - **LightGBM** (`LGBMClassifier`, 300 trees, `random_state=seed`):
+    `num_leaves` {15, 63} x `learning_rate` {0.05, 0.1} x `reg_lambda`
+    {0, 1}. 8.
+  - **XGBoost** (`XGBClassifier`, `random_state=seed`): `max_depth` {3, 6}
+    x `learning_rate` {0.1, 0.3} x `n_estimators` {100, 300}; the library
+    default (6, 0.3, 100) is one of the 8.
+  - **CatBoost** (`CatBoostClassifier`, 500 iterations,
+    `random_seed=seed`): `depth` {4, 6} x `learning_rate` {0.05, 0.1} x
+    `l2_leaf_reg` {3, 10}. 8.
+  - **Logistic regression** (`LogisticRegression`, `max_iter=2000`):
+    `C` {0.01, 0.1, 1, 10} x `class_weight` {none, balanced}. 8.
+  - **SVM**: a linear SVM (`LinearSVC`, scores from
+    `decision_function`) on all training rows, `C` {0.001, 0.01, 0.1, 1}
+    x `class_weight` {none, balanced}. 8. **Alternative tried**: an RBF
+    SVM (`SVC`, `gamma="scale"`, `C` {1, 10}) on a stratified 20,000-row
+    subsample of the training fold, because an RBF kernel on about
+    170,000 rows is quadratic. It is kept as the lane's form only if its
+    best validation AUPRC beats the linear form's on a majority of seeds;
+    the reason either way is recorded.
+  - **CVQBoost proxy**: the three `qubo_proxy` configurations, free
+    (k 13, order 2), mid (k 17, order 2) and full (k 17, order 3), with
+    the full-pair pool, dct learners seeded by
+    `qubo_proxy.seeded_weak_params(seed)` and `lambda = 2 x n_train`.
+    **3 configurations, the stated exception to 8**: the proxy's design
+    space is the frozen ladder. The full cell uses F159's parallel build
+    only if F159's result records equal pools on held-out rows at every
+    fraction; otherwise the serial build.
+- **Metrics, test fold, for each algorithm's chosen configuration**:
+  `metrics.summarize` (AUPRC and ROC-AUC with BCa intervals, and the two
+  validation-chosen operating points: the max-F1 threshold and the 0.5%
+  alert budget); AUPRC normalized by its floor; at each operating point
+  TP, FP, TN, FN, precision, recall, specificity, F1, MCC and balanced
+  accuracy (sklearn's `matthews_corrcoef` and `balanced_accuracy_score`);
+  recall at the 0.5% budget on the test fold; the train-test AUPRC gap.
+  Every chosen configuration and seed carries an outcome block (section
+  2) with its validation scores; every tried configuration records its
+  validation AUPRC and fit seconds.
+- **Seeds, from seed 42's time** (Decision 3, option 1): seed 42 runs
+  first, all seven algorithms, timed as `t42` minutes. The seed count is
+  `n = min(10, floor(120 / t42))`, at least 3, seeds 42 to 41 + n. Below
+  5 seeds the headline figures fall short of section 2's five-seed
+  standard, and every page says so; a run that the minimum of 3 takes
+  past 120 minutes records the overrun.
+- **Intervals over seeds**: mean, SD and a 95% t interval of each metric.
+- **Rankings** (the comparison page): algorithms are listed by mean test
+  AUPRC. "A above B" is written only for an adjacent pair in that order
+  whose primary test rejects at Bonferroni 0.05 / 6 (6 adjacent pairs).
+  The primary test is chosen by n before any score: at 8 seeds or more,
+  the exact two-sided Wilcoxon signed-rank test on per-seed AUPRC
+  differences (the smallest p at 8 seeds, 0.0078, is below 0.0083); below
+  8, a paired bootstrap of the seed-mean AUPRC difference (test rows
+  resampled within each seed, stratified, the same rows for both
+  algorithms, 2,000 draws, percentile interval at 1 - 0.05 / 6) rejects
+  when its interval excludes zero, with the Wilcoxon result secondary.
+  Otherwise the pair reads "no reliable difference".
+- **Output**: `experiments/phase2/results/f166_ulb_algorithms.json`
+  (evidence tag `SIM`), generator `experiments/phase2/src/f166_ulb_algorithms.py`,
+  resumable by seed. One document per algorithm under
+  `docs/phase2/algorithms/` and one ULB comparison page, each naming the
+  result file, so `test_phase2_figures_resolve.py` checks their figures.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -1538,3 +1623,5 @@ fit. Not filed; part of this draft. No device.
   first, written before its module exists.
 - 2026-10-26: section 6 gains the F158 entry (Sprint 29 Task G), written
   before any model is fit, and its table row.
+- 2026-10-27: section 6 gains the F166 entry (Sprint 29 Task F), written
+  before any score, and its table row.
