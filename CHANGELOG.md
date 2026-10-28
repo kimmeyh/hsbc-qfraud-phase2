@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-27
+
+- **feat**: F159 code, the parallel weak-learner pool build (Sprint 29 Task B, #65). `experiments/phase2/src/f159_parallel_pool.py`: `build_parallel` trains `full_pair_pool.build_full`'s learners across spawned worker processes (each task sends only its feature indices), with `qubo_proxy.seeded_weak_params(seed)` as the learners' params, and returns the same classifier the serial build makes; `time_unit` and `analyze` time serial against 1, 4, 8, 16 and 32 workers at F110's four fractions on the 833-variable cell and compare H on the validation rows by SHA-256. `full_pair_pool.build_full` gains an opt-in `indices=` (default unchanged). Resumable via `provenance.run_id_for`. The equality check is proven red. The run follows from this commit.
+
 ### 2026-10-26
 
 - **feat**: F165, a resumed run keeps its own id (Sprint 29 Task A, #64). `provenance.run_id_for(path)` makes the run's id at its start and keeps it in a gitignored `<result>.run_id` sidecar; `run_id_for(path, resume=True)` reads it back in a new process, refuses when no run was started, and adds a line, and `write_result` records the count as `resumed`. A start always makes a new id, so a rerun is a new run and still needs `replace=` to replace a recorded result. `write_result` lets a run rewrite its own file only with an id this process made or resumed, so an id copied out of a recorded result is refused. The resume (run in two real processes), the copied-id refusal, the new start and the ignore rule each have a test proven red. CLAUDE.md's provenance rule names the resume path. Existing writer tests now use ids from `new_run_id`.

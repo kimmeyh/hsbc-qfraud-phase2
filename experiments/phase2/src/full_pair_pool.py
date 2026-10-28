@@ -39,8 +39,10 @@ def learner_indices(n_dims: int, schedule: int) -> list[list[int]]:
 
 def build_full(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
                weak_type: str, weak_params: dict | None = None,
-               lambda_coef: float | None = None):
-    """`qubo_proxy.build_pool(..., pair_build="full")`, without `fork`."""
+               lambda_coef: float | None = None, indices=None):
+    """`qubo_proxy.build_pool(..., pair_build="full")`, without `fork`.
+    `indices` (default: the full-pair order) lets F159's parallel build
+    take the classifier from here with no learners (`indices=[]`)."""
     from eqc_models.ml.classifierqboost import QBoostClassifier, WeakClassifier
     import qubo_proxy as qp
     n = X_tr.shape[1]
@@ -56,7 +58,7 @@ def build_full(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
     for k, v in cfg.items():   # qubo_proxy's F18 silent-kwarg-drop guard
         assert getattr(clf, k) == v, f"constructed attr mismatch: {k}"
     clf.h_list, clf.ind_list = [], []
-    for idx in learner_indices(n, schedule):
+    for idx in (learner_indices(n, schedule) if indices is None else indices):
         wc = WeakClassifier(X_tr[:, idx], y_pm1, weak_type, cfg["weak_cls_params"])
         wc.train()
         clf.ind_list.append(idx)
