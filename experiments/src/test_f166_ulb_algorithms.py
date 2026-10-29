@@ -52,16 +52,50 @@ def test_the_parallel_build_needs_a_complete_equal_f159(tmp_path):
     f = tmp_path / "f159.json"
     assert not fu.parallel_ok(f)["use"]
     doc = {"complete": True, "analysis": {"all_equal": True,
-                                           "1.0": {"speedup": {"4": 2.0, "8": 3.5}}}}
+                                           "1.0": {"serial_s": 700.0,
+                                                   "speedup": {"4": 2.0, "8": 3.5}}}}
     f.write_text(json.dumps(doc), encoding="utf-8")
     ok = fu.parallel_ok(f)
     assert ok["use"] and ok["workers"] == 8
+    import f159_parallel_pool as f159
+    assert ok["budget_s"] == f159.BUDGET_X * 700.0
+    doc["analysis"]["1.0"]["speedup"] = {}
+    f.write_text(json.dumps(doc), encoding="utf-8")
+    assert not fu.parallel_ok(f)["use"]
+    doc["analysis"]["1.0"]["speedup"] = {"4": 2.0, "8": 3.5}
     doc["analysis"]["all_equal"] = False
     f.write_text(json.dumps(doc), encoding="utf-8")
     assert not fu.parallel_ok(f)["use"]
     doc["analysis"]["all_equal"], doc["complete"] = True, False
     f.write_text(json.dumps(doc), encoding="utf-8")
     assert not fu.parallel_ok(f)["use"]
+
+
+def test_the_bootstrap_rejects_when_its_interval_excludes_zero():
+    # Below 8 seeds the bootstrap decides (PR 63 review).
+    assert fu.pair_test([0.01] * 4, np.full(2000, 0.01), 4)["reading"] == "above"
+
+
+def test_the_bootstrap_interval_is_bonferroni_corrected():
+    # 1.5% of draws below zero: outside a 95% interval, inside 99.17%.
+    draws = np.r_[np.full(30, -0.01), np.full(1970, 0.01)]
+    out = fu.pair_test([0.01] * 4, draws, 4)
+    assert out["bootstrap"]["level"] == 1 - fu.ALPHA / fu.N_PAIRS
+    assert out["reading"] == "no reliable difference"
+
+
+def test_the_wilcoxon_level_is_bonferroni_corrected():
+    # p 0.0156: below 0.05, above 0.05 / 6.
+    out = fu.pair_test([0.01] * 7 + [-0.001], np.zeros(2000), 8)
+    assert 0.0083 < out["wilcoxon"]["p"] < 0.05
+    assert out["reading"] == "no reliable difference"
+
+
+def test_a_kept_rbf_svm_stops_the_run():
+    import pytest
+    fu.rbf_kept({"svm_form": {"kept": "linear"}})
+    with pytest.raises(RuntimeError, match="not marked complete"):
+        fu.rbf_kept({"svm_form": {"kept": "rbf"}})
 
 
 def test_operating_point_metrics():
@@ -104,6 +138,39 @@ def test_the_primary_choice_can_fail():
     _fails("    primary = \"wilcoxon\" if n >= WILCOXON_MIN_SEEDS else \"bootstrap\"\n",
            "    primary = \"wilcoxon\"\n",
            "test_the_primary_test_is_chosen_by_seed_count", "Wilcoxon at any n")
+
+
+def test_the_bootstrap_rejection_can_fail():
+    _fails("            \"rejects\": bool(lo > 0 or hi < 0)}\n",
+           "            \"rejects\": False}\n",
+           "test_the_bootstrap_rejects_when_its_interval_excludes_zero",
+           "the bootstrap never rejects")
+
+
+def test_the_bootstrap_correction_can_fail():
+    _fails("    level = 1 - ALPHA / N_PAIRS\n", "    level = 1 - ALPHA\n",
+           "test_the_bootstrap_interval_is_bonferroni_corrected",
+           "an uncorrected bootstrap interval")
+
+
+def test_the_wilcoxon_correction_can_fail():
+    _fails("        wil = {\"p\": p, \"rejects\": p < ALPHA / N_PAIRS}\n",
+           "        wil = {\"p\": p, \"rejects\": p < ALPHA}\n",
+           "test_the_wilcoxon_level_is_bonferroni_corrected",
+           "an uncorrected Wilcoxon level")
+
+
+def test_the_rbf_stop_can_fail():
+    _fails("    if analysis[\"svm_form\"][\"kept\"] == \"rbf\":\n",
+           "    if False:\n", "test_a_kept_rbf_svm_stops_the_run",
+           "a kept RBF ranked as linear")
+
+
+def test_the_parallel_budget_can_fail():
+    _fails("            \"budget_s\": f159.BUDGET_X * a[\"1.0\"][\"serial_s\"],\n",
+           "            \"budget_s\": None,\n",
+           "test_the_parallel_build_needs_a_complete_equal_f159",
+           "a parallel build with no budget")
 
 
 def test_the_parallel_gate_complete_term_can_fail():

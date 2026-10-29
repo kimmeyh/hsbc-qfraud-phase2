@@ -48,7 +48,7 @@ SEED = 42
 FRACTIONS = (0.10, 0.25, 0.50, 1.00)   # F110's
 WORKERS = (1, 4, 8, 16, 32)
 # A parallel build's budget, as a multiple of its fraction's serial build.
-# Not 1: one worker measured 0.88-0.95 of the serial speed.
+# Not 1: one worker measured 0.88-0.98 of the serial speed.
 BUDGET_X = 2.0
 
 # Set once per worker by the initializer, so each task sends only indices.
@@ -175,11 +175,15 @@ def time_unit(frac: float, build: str, budget_s: float | None = None) -> dict:
                                              SEED, workers=int(build))
         except (MemoryError, BrokenProcessPool, BuildTimeout) as exc:
             # A worker count that does not fit in memory, or does not
-            # finish in its budget, is a result of the measurement,
-            # recorded as such (first run: 32 workers at the 0.5 fraction,
-            # 64 GB machine); it is never retimed.
+            # finish in its budget, is recorded as failed and not retimed
+            # on a resume. The row keeps the message and stderr the
+            # traceback, because BrokenProcessPool also follows a worker
+            # that died for another reason (an import error, a crash in a
+            # learner): the type alone does not show the cause.
+            import traceback
+            traceback.print_exc()
             row = {"fraction": frac, "build": build, "rows": int(len(y)),
-                   "failed": type(exc).__name__,
+                   "failed": type(exc).__name__, "error": str(exc),
                    "seconds_to_failure": round(time.perf_counter() - t0, 3)}
             if budget_s is not None:
                 row["budget_s"] = round(budget_s, 3)
@@ -212,10 +216,40 @@ def analyze(units: list[dict]) -> dict:
                         for u in par},
             "longest_learner_s": max((u["longest_learner_s"] for u in par),
                                      default=None)}
+    # Each fraction needs at least one compared pool: a fraction whose
+    # parallel builds all failed compared nothing (PR 63 review).
     out["all_equal"] = bool(out) and all(
-        all(v["equal_on_validation"].values())
+        bool(v["equal_on_validation"]) and all(v["equal_on_validation"].values())
         for k, v in out.items() if k != "all_equal")
     return out
+
+
+def budget_for(units: list[dict], frac: float, build: str) -> float | None:
+    """A parallel build's budget: BUDGET_X times its fraction's recorded
+    serial build. None for the serial build, and refused for a parallel
+    build with no serial row to scale (the 9-hour wedge had no budget)."""
+    if build == "serial":
+        return None
+    serial = [u for u in units if u["fraction"] == frac
+              and u["build"] == "serial"]
+    if not serial:
+        raise ValueError(f"no serial build at fraction {frac} to set the "
+                         f"budget of the {build}-worker build")
+    return BUDGET_X * serial[0]["build_s"]
+
+
+def leave_if_abandoned(failed: bool) -> None:
+    """After a watchdog abandoned a build, leave by os._exit (see
+    _ABANDONED), on success and on an error alike: a traceback followed by
+    a normal exit would hang at shutdown, unseen (PR 63 review). Exit
+    status 1 after an error, 0 otherwise."""
+    if _ABANDONED:
+        if failed:
+            import traceback
+            traceback.print_exc()
+        sys.stdout.flush()
+        sys.stderr.flush()
+        os._exit(1 if failed else 0)
 
 
 def _doc(units: list[dict]) -> dict:
@@ -243,22 +277,23 @@ def main(argv=None) -> int:
         units = json.loads(OUT.read_text(encoding="utf-8"))["units"] \
             if resume else []
         done = {(u["fraction"], u["build"]) for u in units}
-        for frac in FRACTIONS:
-            for build in ("serial", *map(str, WORKERS)):
-                if (frac, build) in done:
-                    continue           # resume: never time a unit twice
-                serial = [u for u in units if u["fraction"] == frac
-                          and u["build"] == "serial"]
-                budget = BUDGET_X * serial[0]["build_s"] \
-                    if serial and build != "serial" else None
-                u = time_unit(frac, build, budget)
-                units.append(u)
-                provenance.write_result(OUT, _doc(units), __file__, [SEED], rid)
-                print(json.dumps(u), flush=True)
+        try:
+            for frac in FRACTIONS:
+                for build in ("serial", *map(str, WORKERS)):
+                    if (frac, build) in done:
+                        continue       # resume: never time a unit twice
+                    u = time_unit(frac, build, budget_for(units, frac, build))
+                    units.append(u)
+                    provenance.write_result(OUT, _doc(units), __file__,
+                                            [SEED], rid)
+                    print(json.dumps(u), flush=True)
+        except BaseException:
+            leave_if_abandoned(failed=True)
+            raise
+        failed = sum(1 for u in units if "failed" in u)
+        print(f"{failed} failed unit(s)", flush=True)
         print("complete", flush=True)
-        if _ABANDONED:
-            sys.stdout.flush()
-            os._exit(0)                # see _ABANDONED
+        leave_if_abandoned(failed=False)
     elif mode == "analyze":
         print(json.dumps(analyze(json.loads(
             OUT.read_text(encoding="utf-8"))["units"]), indent=1))

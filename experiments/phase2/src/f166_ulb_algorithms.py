@@ -160,7 +160,14 @@ def parallel_ok(path: Path = F159) -> dict:
         return {"use": False, "why": "F159 records an unequal pool"}
     full = a.get("1.0", {}).get("speedup", {})
     best = max(full, key=full.get) if full else None
-    return {"use": best is not None, "workers": int(best) if best else None,
+    if best is None:
+        return {"use": False, "why": "F159 records no parallel speed-up at "
+                                     "full rows"}
+    import f159_parallel_pool as f159
+    # The build runs under F159's watchdog, at F159's budget for full rows
+    # (PR 63 review: the 32-worker pool once wedged for 9 hours).
+    return {"use": True, "workers": int(best),
+            "budget_s": f159.BUDGET_X * a["1.0"]["serial_s"],
             "why": "F159 complete with equal pools at every fraction"}
 
 
@@ -173,8 +180,10 @@ def fit_proxy(config: str, seed: int, par: dict) -> dict:
     lam = qp.LAMBDA_MULT * len(y_pm1)
     if config == "full" and par["use"]:
         import f159_parallel_pool as f159
-        clf, _ = f159.build_parallel(Xtr, y_pm1, c["schedule"], "dct", seed,
-                                     workers=par["workers"], lambda_coef=lam)
+        clf, _ = f159.build_with_budget(par["budget_s"], Xtr, y_pm1,
+                                        c["schedule"], "dct", seed,
+                                        workers=par["workers"],
+                                        lambda_coef=lam)
         build = f"parallel, {par['workers']} workers"
     else:
         clf = fpp.build_full(Xtr, y_pm1, c["schedule"], "dct",
@@ -435,14 +444,32 @@ def run() -> None:
                                 [r["seed"] for r in rows], rid)
     doc = _doc(rows, plan, par, complete=True)
     doc["analysis"] = analyze(rows, load_scores(rows))
+    rbf_kept(doc["analysis"])
     provenance.write_result(OUT, doc, __file__, [r["seed"] for r in rows], rid)
     print("complete", flush=True)
+
+
+def rbf_kept(analysis: dict) -> None:
+    """The entry keeps the RBF form as the SVM lane's if it wins on most
+    seeds. The lane scores LinearSVC only, so a kept RBF would rank the
+    linear SVM under an RBF label (PR 63 review). Stop before `complete`
+    instead; the seeds stay recorded for a lane that scores RBF."""
+    if analysis["svm_form"]["kept"] == "rbf":
+        raise RuntimeError(
+            "the RBF SVM won on most seeds, and the svm lane scores the "
+            "linear SVM only; the run is not marked complete")
 
 
 def main(argv=None) -> int:
     mode = (argv or sys.argv[1:] or [""])[0]
     if mode == "run":
-        run()
+        import f159_parallel_pool as f159
+        try:
+            run()
+        except BaseException:
+            f159.leave_if_abandoned(failed=True)    # a watchdog fired
+            raise
+        f159.leave_if_abandoned(failed=False)
     elif mode == "analyze":
         doc = json.loads(OUT.read_text(encoding="utf-8"))
         print(json.dumps(analyze(doc["rows"], load_scores(doc["rows"])), indent=1))

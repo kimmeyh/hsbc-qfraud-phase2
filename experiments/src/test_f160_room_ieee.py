@@ -56,6 +56,77 @@ def test_the_falsifier_reads_greedy_and_the_floor():
     assert out["floor"] == -0.8
 
 
+def test_the_falsifier_reads_both_resolution_checks():
+    rows = [{"chosen": {"greedy": {"objective": -0.5}, "floor": -0.8,
+                        "f104_gate": {"pass": False},
+                        "guide_check": {"pass": False}}}]
+    out = fr.falsifier_rows(rows)[0]
+    assert out["f104_gate"] == {"pass": False}
+    assert out["guide_check"] == {"pass": False}
+
+
+def _control(gap, resolves):
+    return {"rows": [{"chosen": {"greedy": {"objective": gap - 1.0},
+                                 "floor": -1.0,
+                                 "f104_gate": {"pass": resolves},
+                                 "guide_check": {"pass": resolves}}}]}
+
+
+def test_ieee_is_read_only_after_a_control_with_room():
+    reads = []
+    doc = {}
+    fr.gate(doc, _control(0.0, True), lambda: reads.append(1) or {"x": 1})
+    assert reads == [] and "no IEEE-CIS pool built" in doc["stopped"]
+    doc = {}
+    fr.gate(doc, _control(0.5, True), lambda: reads.append(1) or {"x": 1})
+    assert reads == [1] and doc["ieee"] == {"x": 1}
+
+
+def test_unresolvable_control_rows_do_not_stop_the_reading():
+    # Room, but both resolution checks fail: the entry's gate is room alone.
+    assert not fr.no_room(_control(0.5, False))
+    assert fr.no_room(_control(0.0, True))
+
+
+def test_a_refused_pool_is_recorded():
+    meta = {(42, "free"): {"pool_size": 50, "refused": "pool has 50 "
+                           "learners, instance needs 60"}}
+    out = fr.read_instances({}, meta)
+    assert out["refused"] == {"42/free": meta[(42, "free")]}
+    assert out["design_fails"] is None
+
+
+def test_the_order_gate_can_fail():
+    _fails("    if no_room(control):\n", "    if not no_room(control):\n",
+           "test_ieee_is_read_only_after_a_control_with_room",
+           "IEEE-CIS read after a control with no room")
+
+
+def test_the_room_only_gate_can_fail():
+    _fails("    return all(r[\"methods\"][\"greedy\"][\"objective\"] - "
+           "r[\"floor\"] < fd.GAP_MIN\n",
+           "    return fd.design_fails(falsifier_rows(res[\"rows\"])) or all("
+           "r[\"methods\"][\"greedy\"][\"objective\"] - r[\"floor\"] < fd.GAP_MIN\n",
+           "test_unresolvable_control_rows_do_not_stop_the_reading",
+           "the gate read as design_fails")
+
+
+def test_the_resolution_passthrough_can_fail():
+    _fails("             \"floor\": r[\"chosen\"][\"floor\"], \"f104_gate\": "
+           "r[\"chosen\"][\"f104_gate\"],\n",
+           "             \"floor\": r[\"chosen\"][\"floor\"], \"f104_gate\": "
+           "{\"pass\": True},\n",
+           "test_the_falsifier_reads_both_resolution_checks",
+           "the F104 gate hardcoded to pass")
+
+
+def _fails(old, new, node, label):
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(PHASE2 / "f160_room_ieee.py", old, new,
+                              expect_occurrences=1)],
+                    lambda: run_pytest(f"{THIS}::{node}", ROOT), label)
+
+
 def test_the_room_reading_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail(

@@ -7,14 +7,16 @@ and resolution checks are imported from `f153_exp3_design`, unchanged;
 F94's objective and controls from `exp3_controls`.
 
 Order: the positive control (random-sign learners on each instance's own
-labels) first; IEEE-CIS is read only if the control shows the rule can
-pass.
+labels) first. The control uses the IEEE-CIS fold's evaluation labels, so
+the fold is loaded first; the IEEE-CIS pools are built and read only if
+the control shows room on some instance (`gate`).
 
     <venv python> experiments/phase2/src/f160_room_ieee.py
 
 Zero metered seconds. Writes `experiments/phase2/results/f160_room_ieee.json`
 through `provenance.write_result`: once after the control, and again,
-with `complete` true, at the end. Not resumable; a rerun is a new run.
+with `complete` true, at the end. Not resumable; a rerun over the recorded
+result is refused before any work (`provenance.start`).
 """
 from __future__ import annotations
 
@@ -80,6 +82,24 @@ def falsifier_rows(rows: list[dict]) -> list[dict]:
     return [{"methods": {"greedy": {"objective": r["chosen"]["greedy"]["objective"]}},
              "floor": r["chosen"]["floor"], "f104_gate": r["chosen"]["f104_gate"],
              "guide_check": r["chosen"]["guide_check"]} for r in rows]
+
+
+def no_room(res: dict) -> bool:
+    """The control's gate as the entry sets it: no room on every instance.
+    Not `design_fails`, which also fires when both resolution checks fail
+    on every instance; that term must not stop the IEEE-CIS reading
+    (PR 63 review)."""
+    return all(r["methods"]["greedy"]["objective"] - r["floor"] < fd.GAP_MIN
+               for r in falsifier_rows(res["rows"]))
+
+
+def gate(doc: dict, control: dict, read_ieee) -> None:
+    """IEEE-CIS is built and read only after a control with room."""
+    if no_room(control):
+        doc["stopped"] = ("the positive control shows no room on every "
+                          "instance; no IEEE-CIS pool built")
+    else:
+        doc["ieee"] = read_ieee()
 
 
 def evaluate(instances: dict, scip: bool) -> dict:
@@ -148,11 +168,29 @@ def ieee_instances(fold, seeds=SEEDS) -> tuple[dict, dict]:
                                 "dct", "sequential",
                                 weak_params=qp.seeded_weak_params(seed))
             H = qp.h_matrix(clf, Xev[cols].to_numpy(np.float32))
-            out[(seed, cfg)] = (ec._first(H, n), y_ev, m)
             meta[(seed, cfg)] = {"eval_month": em, "features": list(cols),
                                  "pool_size": int(H.shape[0]),
                                  "build_s": round(time.perf_counter() - t0, 1)}
+            if H.shape[0] < n:
+                # The entry: a smaller pool is refused and recorded.
+                meta[(seed, cfg)]["refused"] = (
+                    f"pool has {H.shape[0]} learners, instance needs {n}")
+                continue
+            out[(seed, cfg)] = (ec._first(H, n), y_ev, m)
     return out, meta
+
+
+def read_instances(inst: dict, meta: dict) -> dict:
+    """The IEEE-CIS reading: the instances that were built, with each
+    refused pool recorded beside them."""
+    refused = {f"{s}/{c}": m for (s, c), m in meta.items() if "refused" in m}
+    if not inst:
+        return {"rows": [], "refused": refused, "design_fails": None,
+                "note": "every pool was refused; no reading"}
+    res = evaluate(inst, scip=True)
+    for r in res["rows"]:
+        r.update(meta[(r["seed"], r["instance"])])
+    return {**res, "rows": _rows(res), "refused": refused}
 
 
 def _rows(res: dict) -> list:
@@ -182,16 +220,10 @@ def main(argv=None) -> int:
                        **control, "rows": _rows(control)},
            "complete": False}
     provenance.write_result(OUT, doc, __file__, list(SEEDS), rid)
-    print("control design_fails", control["design_fails"], flush=True)
-    if control["design_fails"]:
-        doc["stopped"] = "the positive control shows no room; IEEE-CIS not read"
-    else:
-        inst, meta = ieee_instances(fold)
-        res = evaluate(inst, scip=True)
-        for r in res["rows"]:
-            r.update(meta[(r["seed"], r["instance"])])
-        doc["ieee"] = {**res, "rows": _rows(res)}
-        print("ieee design_fails", res["design_fails"], flush=True)
+    print("control no room", no_room(control), flush=True)
+    gate(doc, control, lambda: read_instances(*ieee_instances(fold)))
+    if "ieee" in doc:
+        print("ieee design_fails", doc["ieee"]["design_fails"], flush=True)
     doc["wall_seconds"] = round(time.time() - t0, 1)
     doc["complete"] = True
     provenance.write_result(OUT, doc, __file__, list(SEEDS), rid)

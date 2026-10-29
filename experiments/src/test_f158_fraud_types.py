@@ -63,6 +63,21 @@ def test_a_fraud_any_family_catches_is_not_missed():
     assert m.tolist() == [False, False, True, False]
 
 
+def test_above_needs_the_wilcoxon_rejection_too():
+    # Interval above zero, Wilcoxon p 0.109: the rejection term alone
+    # decides (PR 63 review).
+    out = ft.paired_test([0.03] * 5 + [-0.001, -0.002, -0.003])
+    assert out["t_interval"]["low"] > 0 and out["wilcoxon"]["p"] > 0.05
+    assert out["reading"] == "no reliable difference"
+
+
+def test_a_family_off_this_split_is_left_out():
+    y = np.array([0, 1, 0, 1])
+    assert ft.on_split([0, 1, 0, 1], y)
+    assert not ft.on_split([1, 0, 0, 1], y)        # same count, other rows
+    assert not ft.on_split([0, 1, 0], y)
+
+
 UP = [0.01, 0.02, 0.015, 0.03, 0.012, 0.022, 0.018, 0.025]
 FLAT = [0.0] * 8
 
@@ -124,6 +139,20 @@ def test_the_reading_can_fail():
     _fails("    if rejects and ci[\"low\"] > 0:\n",
            "    if rejects and ci[\"low\"] > 1:\n",
            "test_eight_positive_seeds_read_above", "above never read")
+
+
+def test_the_rejection_term_can_fail():
+    _fails("    if rejects and ci[\"low\"] > 0:\n",
+           "    if ci[\"low\"] > 0:\n",
+           "test_above_needs_the_wilcoxon_rejection_too",
+           "above read without the rejection")
+
+
+def test_the_split_check_can_fail():
+    _fails("    return len(ys) == len(y) and bool(np.array_equal(ys, y))\n",
+           "    return len(ys) == len(y)\n",
+           "test_a_family_off_this_split_is_left_out",
+           "a family on other rows OR'd in")
 
 
 def test_the_missed_count_can_fail():

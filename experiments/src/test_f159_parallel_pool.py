@@ -78,6 +78,74 @@ def test_a_failed_build_is_recorded_and_left_out_of_the_comparison():
     assert a["all_equal"] is True
 
 
+def test_a_fraction_with_no_compared_pool_is_not_all_equal():
+    # Every parallel build at 0.1 failed: nothing was compared there
+    # (PR 63 review), so the pools are not shown equal at every fraction.
+    units = [_unit(0.1, "serial", "a", 8.0),
+             {"fraction": 0.1, "build": "4", "rows": 10,
+              "failed": "MemoryError", "seconds_to_failure": 3.0}]
+    a = f159.analyze(units)
+    assert a["0.1"]["equal_on_validation"] == {}
+    assert a["all_equal"] is False
+
+
+def test_the_compared_pool_term_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail(
+        [Mutation(PHASE2 / "f159_parallel_pool.py",
+                  "        bool(v[\"equal_on_validation\"]) and "
+                  "all(v[\"equal_on_validation\"].values())\n",
+                  "        all(v[\"equal_on_validation\"].values())\n",
+                  expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_a_fraction_with_no_compared_pool_is_not_all_equal",
+            ROOT),
+        "a fraction with nothing compared read as equal")
+
+
+def test_each_parallel_build_gets_its_budget():
+    import pytest
+    units = [_unit(0.25, "serial", "a", 30.0)]
+    assert f159.budget_for(units, 0.25, "serial") is None
+    assert f159.budget_for(units, 0.25, "32") == f159.BUDGET_X * 30.0
+    with pytest.raises(ValueError):
+        f159.budget_for(units, 0.5, "32")
+
+
+def test_the_budget_derivation_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail(
+        [Mutation(PHASE2 / "f159_parallel_pool.py",
+                  "    return BUDGET_X * serial[0][\"build_s\"]\n",
+                  "    return None\n", expect_occurrences=1)],
+        lambda: run_pytest(f"{THIS}::test_each_parallel_build_gets_its_budget",
+                           ROOT),
+        "a parallel build with no budget")
+
+
+def test_an_abandoned_build_leaves_with_its_status(monkeypatch):
+    codes = []
+    monkeypatch.setattr(f159.os, "_exit", codes.append)
+    monkeypatch.setattr(f159, "_ABANDONED", False)
+    f159.leave_if_abandoned(failed=True)
+    assert codes == []                 # nothing abandoned: a normal exit
+    monkeypatch.setattr(f159, "_ABANDONED", True)
+    f159.leave_if_abandoned(failed=True)
+    f159.leave_if_abandoned(failed=False)
+    assert codes == [1, 0]
+
+
+def test_the_exit_status_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail(
+        [Mutation(PHASE2 / "f159_parallel_pool.py",
+                  "        os._exit(1 if failed else 0)\n",
+                  "        os._exit(0)\n", expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_an_abandoned_build_leaves_with_its_status", ROOT),
+        "an error after a timeout exits 0")
+
+
 def test_the_failed_build_exclusion_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail(
@@ -101,6 +169,7 @@ def test_a_build_past_its_budget_is_recorded_as_failed(monkeypatch):
     row = f159.time_unit(0.1, "32", budget_s=0.2)
     assert time.perf_counter() - t0 < 3
     assert row["failed"] == "BuildTimeout"
+    assert row["error"].startswith("no result in")
     assert row["budget_s"] == 0.2 and row["rows"] == 300
     assert f159._ABANDONED is True
     a = f159.analyze([_unit(0.1, "serial", "a", 8.0), row])

@@ -62,7 +62,7 @@ def _per_day(ent: np.ndarray, day: np.ndarray, w: np.ndarray, n_ent: int,
 def _window(c: np.ndarray, ent: np.ndarray, day: np.ndarray, lo: int,
             hi: int) -> np.ndarray:
     """Per row, the entity's total over days day-lo .. day-hi, inclusive,
-    clipped at day 0 (lo > hi >= 1)."""
+    clipped at day 0 (lo >= hi >= 1)."""
     a = np.clip(day - lo, 0, None)
     b = np.clip(day - hi + 1, 0, None)
     return c[ent, b] - c[ent, a]
@@ -199,6 +199,13 @@ def missed_by_all(y, flags: list) -> np.ndarray:
     return y & ~caught
 
 
+def on_split(ys, y) -> bool:
+    """A stored family's test labels are this seed's test rows, in order;
+    a family that is not is left out, never OR'd in on misaligned rows."""
+    ys, y = np.asarray(ys).astype(int), np.asarray(y).astype(int)
+    return len(ys) == len(y) and bool(np.array_equal(ys, y))
+
+
 def step3() -> dict:
     import data
     import f154_confusion as fcf
@@ -212,8 +219,7 @@ def step3() -> dict:
         flags = []
         for fam in fams:
             st = fcf.load(fam, seed)
-            ys = np.asarray(st["y_test"]).astype(int)
-            if len(ys) != len(y) or not np.array_equal(ys, y):
+            if not on_split(st["y_test"], y):
                 off_split.setdefault(fam, []).append(seed)
                 continue
             flags.append(orec.flagged_at_budget(st["p_test"], orec.ALERT_BUDGET))
