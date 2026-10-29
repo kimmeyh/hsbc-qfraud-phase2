@@ -22,7 +22,13 @@ RULES.
   ("section 5.3"). Wall-clock keys are not evidence (F44's timing rule).
 - A figure resolves when a pool value rounds to it at its quoted places,
   half up or as Python formats it. A figure written with "%" also resolves
-  when figure / 100 does.
+  when figure / 100 does. A figure written with a minus sign resolves only
+  to a negative value; an unsigned one to either sign (prose states
+  magnitudes).
+- A document whose result file holds other documents' numbers draws only
+  on its own part of it (SCOPES in the registry; F166's eight documents).
+- From Sprint 29, each sprint's validation document is checked too
+  (key "sprints/<name>"). (Last three rules: PR 63 review.)
 - Anything else is REGISTERED once per document with a reason: a quote
   from an outside source, a figure derived from stored values (the reason
   says how, and the derived ones were recomputed when registered,
@@ -60,7 +66,7 @@ NOT_FIGURES = (
     re.compile(r"\b(?:sections?|tables?)\s+\d+\.\d+", re.I),
 )
 
-from phase2_figure_registry import REGISTERED, SOURCES  # noqa: E402
+from phase2_figure_registry import REGISTERED, SCOPES, SOURCES  # noqa: E402
 
 
 @functools.lru_cache(maxsize=1)
@@ -69,7 +75,9 @@ def _tracked() -> dict[str, list[Path]]:
                           "experiments/phase2/results"],
                          capture_output=True, text=True, cwd=str(ROOT))
     if out.returncode != 0:
-        pytest.skip(f"cannot enumerate tracked files (git exited "
+        # Fail, not skip: a skip reads as green with the check gone
+        # (PR 63 review).
+        pytest.fail(f"cannot enumerate tracked files (git exited "
                     f"{out.returncode}): {out.stderr.strip()[:200]}")
     files: dict[str, list[Path]] = {}
     for line in out.stdout.splitlines():
@@ -78,8 +86,25 @@ def _tracked() -> dict[str, list[Path]]:
     return files
 
 
+def _select(o, spec: tuple):
+    """The parts of `o` at the key path `spec`; "*" is any list item or
+    dict key."""
+    if not spec:
+        yield o
+        return
+    head, rest = spec[0], spec[1:]
+    if head == "*":
+        items = o if isinstance(o, list) else \
+            o.values() if isinstance(o, dict) else ()
+        for v in items:
+            yield from _select(v, rest)
+    elif isinstance(o, dict) and head in o:
+        yield from _select(o[head], rest)
+
+
 @functools.lru_cache(maxsize=None)
-def _values(path: Path) -> tuple[float, ...]:
+def _values(path: Path, scope: tuple | None = None) -> tuple[float, ...]:
+    """Every number in the file, or only under the key paths in `scope`."""
     vals: list[float] = []
 
     def walk(o):
@@ -92,11 +117,15 @@ def _values(path: Path) -> tuple[float, ...]:
                 walk(v)
         elif isinstance(o, (int, float)) and not isinstance(o, bool):
             if abs(float(o)) < 1e12:
-                vals.append(abs(float(o)))
+                vals.append(float(o))
     try:
-        walk(json.loads(path.read_text(encoding="utf-8")))
-    except ValueError:
-        pass
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        # Name the file: an empty pool would blame the figures instead.
+        raise AssertionError(f"{path} is not valid JSON: {exc}") from exc
+    for spec in (scope or ((),)):
+        for part in _select(doc, spec):
+            walk(part)
     return tuple(vals)
 
 
@@ -108,13 +137,26 @@ def _prose(text: str) -> str:
     return text
 
 
+def _negative(prose: str, start: int) -> bool:
+    """A minus sign right before the figure, itself after a space, the
+    start or an opening mark. A hyphen after anything else joins words or
+    a range ("0.683-0.828", "2.3x-5.3x", "dirac-3.2")."""
+    return (start > 0 and prose[start - 1] in "-−"
+            and (start == 1 or prose[start - 2].isspace()
+                 or prose[start - 2] in "([=:,/"))
+
+
 def figures(text: str) -> dict[str, bool]:
     """Each figure, as written without its comma, and whether it is ever
-    written with "%"."""
+    written with "%". A figure written with a minus sign keeps it: "-0.07"
+    resolves only to a negative value, while an unsigned figure resolves to
+    a value of either sign, since prose states magnitudes ("below by 0.07")
+    (PR 63 review: the sign had been dropped on both sides)."""
     out: dict[str, bool] = {}
     prose = _prose(text)
     for m in NUMBER.finditer(prose):
-        fig = f"{m.group(1).replace(',', '')}.{m.group(2)}"
+        sign = "-" if _negative(prose, m.start()) else ""
+        fig = f"{sign}{m.group(1).replace(',', '')}.{m.group(2)}"
         pct = prose[m.end():m.end() + 2].lstrip().startswith("%")
         out[fig] = out.get(fig, False) or pct
     return out
@@ -128,12 +170,16 @@ def _rounds_to(v: float, fig: str) -> bool:
 
 
 def resolves(fig: str, pct: bool, pool) -> bool:
-    if any(_rounds_to(v, fig) for v in pool):
+    neg = fig.startswith("-")
+    mag = fig.lstrip("-")
+    # A signed figure needs a negative value; an unsigned one either sign.
+    vals = [-v for v in pool if v < 0] if neg else [abs(v) for v in pool]
+    if any(_rounds_to(v, mag) for v in vals):
         return True
     if pct:
-        places = len(fig.split(".")[1]) + 2
-        frac = f"{Decimal(fig) / 100:.{places}f}"
-        return any(_rounds_to(v, frac) for v in pool)
+        places = len(mag.split(".")[1]) + 2
+        frac = f"{Decimal(mag) / 100:.{places}f}"
+        return any(_rounds_to(v, frac) for v in vals)
     return False
 
 
@@ -141,8 +187,9 @@ def pool_for(doc: str, text: str) -> list[float]:
     files = _tracked()
     names = {n for n in NAME.findall(text) if n in files}
     names |= set(SOURCES.get(doc, {}))
+    scopes = SCOPES.get(doc, {})
     return [v for n in sorted(names) for p in files.get(n, ())
-            for v in _values(p)]
+            for v in _values(p, scopes.get(n))]
 
 
 def unresolved(doc: str, text: str) -> list[str]:
@@ -151,15 +198,31 @@ def unresolved(doc: str, text: str) -> list[str]:
                    if not resolves(f, pct, pool)), key=float)
 
 
+# Sprint validation documents quote Phase 2 figures too; from Sprint 29 on
+# they are checked (PR 63 review: F156's, F158's and F160's figures sat
+# there unchecked). Keyed "sprints/<name>".
+FIRST_CHECKED_VALIDATION = 29
+VALIDATION = re.compile(r"SPRINT_(\d+)_VALIDATION\.md")
+
+
+def _path(doc: str) -> Path:
+    return ROOT / "docs" / doc if doc.startswith("sprints/") else DOCS / doc
+
+
 def _docs() -> list[str]:
     # Subfolders too (F166's docs/phase2/algorithms/), keyed by the path
     # under docs/phase2, so a top-level document keeps its bare name.
-    return sorted(p.relative_to(DOCS).as_posix() for p in DOCS.rglob("*.md"))
+    out = [p.relative_to(DOCS).as_posix() for p in DOCS.rglob("*.md")]
+    for p in (ROOT / "docs" / "sprints").glob("SPRINT_*_VALIDATION.md"):
+        m = VALIDATION.fullmatch(p.name)
+        if m and int(m.group(1)) >= FIRST_CHECKED_VALIDATION:
+            out.append(f"sprints/{p.name}")
+    return sorted(out)
 
 
 @pytest.mark.parametrize("doc", _docs())
 def test_every_figure_resolves_or_is_registered(doc):
-    text = (DOCS / doc).read_text(encoding="utf-8")
+    text = _path(doc).read_text(encoding="utf-8")
     reg = REGISTERED.get(doc, {})
     bad = [f for f in unresolved(doc, text) if f not in reg]
     assert not bad, (
@@ -182,7 +245,7 @@ def stale_entries(registered: dict, texts: dict[str, str]) -> list[str]:
 
 
 def test_the_registry_holds_only_live_unresolved_figures():
-    texts = {d: (DOCS / d).read_text(encoding="utf-8") for d in _docs()}
+    texts = {d: _path(d).read_text(encoding="utf-8") for d in _docs()}
     stale = stale_entries(REGISTERED, texts)
     assert not stale, ("registered figures that are no longer quoted, or "
                        f"that now resolve; remove them: {stale}")
@@ -190,7 +253,7 @@ def test_the_registry_holds_only_live_unresolved_figures():
 
 def test_a_registered_figure_that_resolves_is_stale():
     doc = "F111_LOKE_PROTOCOL.md"
-    texts = {doc: (DOCS / doc).read_text(encoding="utf-8")}
+    texts = {doc: _path(doc).read_text(encoding="utf-8")}
     assert stale_entries({doc: {"0.828": "resolves in its own pool"}},
                          texts) == [f"{doc}: 0.828"]
     assert stale_entries({"NOPE.md": {}}, texts) == ["NOPE.md: no such document"]
@@ -212,7 +275,7 @@ def test_the_wrong_endpoint_fails():
     """F164's motivating finding, put back. 0.828 resolves in F111's own
     pool; 0.829 does not, though it resolves in a pool of every file."""
     doc = "F111_LOKE_PROTOCOL.md"
-    text = (DOCS / doc).read_text(encoding="utf-8")
+    text = _path(doc).read_text(encoding="utf-8")
     assert "0.683-0.828" in text
     assert "0.828" not in unresolved(doc, text)
     broken = text.replace("0.683-0.828", "0.683-0.829", 1)
@@ -234,6 +297,37 @@ def test_extraction_rules():
     assert not resolves("0.829", False, [0.82849])
 
 
+def test_a_minus_sign_is_kept():
+    f = figures("mean -0.07 (0.683-0.828, 2.3x-5.3x, dirac-3.2, [-0.04, 0.1])")
+    assert f == {"-0.07": False, "0.683": False, "0.828": False, "2.3": False,
+                 "5.3": False, "3.2": False, "-0.04": False, "0.1": False}
+    assert not resolves("-0.07", False, [0.07])     # the wrong sign
+    assert resolves("-0.07", False, [-0.0701])
+    assert resolves("0.07", False, [-0.0701])       # a stated magnitude
+
+
+def test_an_algorithm_document_draws_on_its_own_part():
+    # XGBoost's ten-seed mean is in the file, not in HGB's part of it.
+    doc = "algorithms/ULB_HGB.md"
+    text = _path(doc).read_text(encoding="utf-8") + "\nXGBoost 0.8229\n"
+    assert "0.8229" in unresolved(doc, text)
+    whole = _values(_tracked()["f166_ulb_algorithms.json"][0])
+    assert resolves("0.8229", False, whole)
+
+
+def test_a_corrupt_result_file_is_named(tmp_path):
+    bad = tmp_path / "broken.json"
+    bad.write_text("{not json", encoding="utf-8")
+    with pytest.raises(AssertionError, match="broken.json is not valid JSON"):
+        _values(bad)
+
+
+def test_sprint_validation_documents_are_checked_from_29():
+    docs = _docs()
+    assert "sprints/SPRINT_29_VALIDATION.md" in docs
+    assert "sprints/SPRINT_28_VALIDATION.md" not in docs
+
+
 def _fails(path, old, new, node, label):
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail([Mutation(path, old, new, expect_occurrences=1)],
@@ -245,6 +339,38 @@ def test_the_per_document_pool_can_fail():
            "    names = {n for n in NAME.findall(text) if n in files}\n",
            "    names = set(files)\n",
            "test_the_wrong_endpoint_fails", "a global pool")
+
+
+def test_the_sign_check_can_fail():
+    _fails(Path(__file__),
+           "    vals = [-v for v in pool if v < 0] if neg else "
+           "[abs(v) for v in pool]\n",
+           "    vals = [abs(v) for v in pool]\n",
+           "test_a_minus_sign_is_kept", "a wrong sign resolved")
+
+
+def test_the_scope_can_fail():
+    _fails(Path(__file__),
+           "            for v in _values(p, scopes.get(n))]\n",
+           "            for v in _values(p)]\n",
+           "test_an_algorithm_document_draws_on_its_own_part",
+           "another algorithm's figure resolved")
+
+
+def test_the_corrupt_file_check_can_fail():
+    _fails(Path(__file__),
+           "        raise AssertionError(f\"{path} is not valid JSON: {exc}\") "
+           "from exc\n",
+           "        return ()\n",
+           "test_a_corrupt_result_file_is_named", "a corrupt file read as empty")
+
+
+def test_the_validation_scope_can_fail():
+    _fails(Path(__file__),
+           "        if m and int(m.group(1)) >= FIRST_CHECKED_VALIDATION:\n",
+           "        if False:\n",
+           "test_sprint_validation_documents_are_checked_from_29",
+           "the validation document unchecked")
 
 
 def test_the_stale_registry_check_can_fail():

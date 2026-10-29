@@ -28,8 +28,11 @@ Card Done line in `docs/ALL_SPRINTS_MASTER_PLAN.md`; result
   all four row fractions and all five worker counts.
 - Full ULB rows: serial 730.3 s; 32 workers 45.8 s; 16 workers 11.24
   times faster than serial. The longest single learner took 2.0 s, so
-  process start-up and copying the rows limit the speed-up, not the
-  learners.
+  one learner does not set the floor. Per-learner time rose with the
+  worker count (summed learner time 738.6 s at 1 worker, 1101.6 s at
+  32); what takes the rest of the wall time is not measured. (Corrected
+  2026-10-28, PR 63 review: this item had named process start-up and
+  copying the rows, which the result does not show.)
 - **Finding to confirm**: the first run stopped with a `MemoryError` at
   32 workers on the 0.5 fraction; its resume then hung for 9 hours
   (12:10am to 8:58am). One worker's log shows a `MemoryError` at start-up;
@@ -74,7 +77,8 @@ Card Done line; result `f160_room_ieee.json`. F25's card records the
 reopened design.
 
 - The positive control passed first. On IEEE-CIS (seeds 42-44, 60 and 136
-  variables), greedy ends 0.096-0.099 above the floor on every instance,
+  variables), greedy ends 0.096-0.098 above the floor on every instance
+  (corrected 2026-10-28 from 0.096-0.099: the largest gap is 0.0985),
   against the 0.01 rule; F104's resolution gate passes. The guide-based
   resolution check fails on every instance, as it does on the control;
   the falsifier needs both checks to fail, so it does not fire.
@@ -107,9 +111,13 @@ Card Done line; result `f158_fraud_types.json`.
   cascade is **below** one model. The shuffled-type reference was also
   below, by less.
 - Step 2 did not run (its condition is a cascade above).
-- Step 3: 106 of 950 ULB test frauds were missed by all twelve stored
-  model families; on V1-V8 they sit near zero, where the caught frauds
-  do not.
+- Step 3: 106 of 950 (seed, test fraud) pairs, 95 test frauds on each
+  of seeds 42-51, were missed by all twelve on-split stored model
+  families (a thirteenth is off-split and left out); on V1-V8 they sit
+  near zero, where the caught frauds do not. A fraud on more than one
+  seed's test fold counts once per seed; the number of distinct frauds
+  is not recorded. (Corrected 2026-10-28, PR 63 review: this item said
+  "106 of 950 ULB test frauds".)
 - Added at Phase 5: one test per term of step 2's two-term condition,
   each proven red.
 

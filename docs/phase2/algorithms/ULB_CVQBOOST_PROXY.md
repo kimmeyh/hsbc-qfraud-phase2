@@ -73,7 +73,7 @@ TP, FP, TN and FN at each validation-chosen threshold.
 
 ## Limits
 
-- Each validation fold holds about 95 frauds, so validation AUPRC is noisy and the chosen configuration changes between seeds.
+- Each validation fold holds about 95 frauds, so validation AUPRC is noisy. Here the same configuration (`full`) was chosen on every seed.
 - One protocol and one grid per algorithm. A larger grid may do better; this is the best of the configurations named in the entry, not the best possible.
 - Device lanes (CVQBoost on hardware, QSVM) and QNN are outside this part of F157.
 

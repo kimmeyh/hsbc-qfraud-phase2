@@ -26,7 +26,8 @@ Rules for this draft:
 - **Only one experiment is planned to need the integer device:
   Experiment 3.** Its proxy design failed its falsifier in Sprint 28
   (`docs/phase2/F153_EXP3_DESIGN.md`), so it has no ready device block
-  today. Getting it ready (F25, F160) is the critical path. If no design
+  today. Getting it ready (F25, now on IEEE-CIS after F160) is the
+  critical path. If no design
   passes by the end of the first PoC month, the plan runs without a
   device experiment and says so.
 - Experiments 1, 2, 4 and 6 have proxy or classical results already. In
@@ -79,9 +80,10 @@ device block, and the decision that releases it.
 ### Experiment 3 (F153, F25, F160): cardinality-constrained selection
 
 - Entry: written 2026-10-22 (design). State: the proxy design fails the
-  entry's falsifier (`docs/phase2/F153_EXP3_DESIGN.md`). F160 (this
-  sprint) checks whether the room the falsifier requires exists on a
-  second dataset.
+  entry's falsifier (`docs/phase2/F153_EXP3_DESIGN.md`). F160 (Sprint
+  29) found the room on IEEE-CIS: greedy ends 0.096-0.098 above the
+  floor on every instance (`f160_room_ieee.json`), so F25's design
+  reopens there. No solver has yet been shown to beat greedy.
 - PoC work, in order:
   1. A design that passes the falsifier on the proxy. This is the
      critical path. Deadline: end of PoC week 4 **[A8]**.
@@ -145,7 +147,8 @@ device block, and the decision that releases it.
 
 The skeleton's list stands. This draft adds:
 
-- F25 and F160: a design for Experiment 3 that passes on the proxy,
+- F25: a design for Experiment 3 that passes on the proxy, on IEEE-CIS
+  where F160 found the room,
   started before the window so stage 2 does not start from zero.
 - F166 and F157: the per-algorithm reference on ULB, so stage 1 compares
   against tuned lanes.

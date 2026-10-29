@@ -31,6 +31,40 @@ SOURCES: dict[str, dict[str, str]] = {
     "DIRAC_3S_RESEARCH.md": {
         "f17_emulator_validation.json": "the F17 cost model it quotes",
     },
+    "sprints/SPRINT_29_VALIDATION.md": {
+        "f108_ceiling.json": "the F108 plug-in ratios corrected in V3",
+        "f160_room_ieee.json": "F160's gaps in V5",
+        "f162_in_pocket.json": "F162's lane times in V3",
+        "f166_ulb_algorithms.json": "F166's means and seed time in V6",
+    },
+}
+
+# A document whose result file holds every algorithm's numbers draws only
+# on its own part (PR 63 review: one pool for F166's eight documents
+# covered 74.7% of the 3-place grid). Key paths; "*" is any item.
+_F166 = "f166_ulb_algorithms.json"
+_F166_SHARED = (("analysis", "adjacent_pairs"), ("seed_plan",), ("seeds",))
+
+
+def _f166_algo(algo: str, *extra: tuple) -> dict:
+    return {_F166: (("analysis", "per_algorithm", algo),
+                    ("rows", "*", "lanes", algo), ("grids", algo),
+                    *_F166_SHARED, *extra)}
+
+
+SCOPES: dict[str, dict[str, tuple]] = {
+    "algorithms/ULB_HGB.md": _f166_algo("hgb"),
+    "algorithms/ULB_LIGHTGBM.md": _f166_algo("lightgbm"),
+    "algorithms/ULB_XGBOOST.md": _f166_algo("xgboost"),
+    "algorithms/ULB_CATBOOST.md": _f166_algo("catboost"),
+    "algorithms/ULB_LOGISTIC_REGRESSION.md": _f166_algo("logreg"),
+    "algorithms/ULB_SVM.md": _f166_algo(
+        "svm", ("svm_rbf_grid",), ("rbf_rows",),
+        ("rows", "*", "svm_rbf_alternative"), ("analysis", "svm_form")),
+    "algorithms/ULB_CVQBOOST_PROXY.md": _f166_algo("proxy", ("proxy_build",)),
+    "algorithms/ULB_COMPARISON.md": {
+        _F166: (("analysis",), *_F166_SHARED, ("rbf_rows",),
+                ("rows", "*", "svm_rbf_alternative"))},
 }
 
 _UG3S = "QCi's Dirac-3S user guide, quoted; not a result of ours"
@@ -92,6 +126,9 @@ REGISTERED: dict[str, dict[str, str]] = {
         "600.0": "the client documentation's allocation example (item F41)",
     },
     "DIRAC_UNDERSTANDINGS.md": {
+        "-0.0032": "a CI endpoint quoted from QCI_EQC_MODELS_FEEDBACK.md "
+                   "section 5; unsigned, it had matched 1/315 by chance "
+                   "(PR 63 review); " + _NOT,
         "0.420": _UG3S_T4, "1.093": _UG3S_T4, "1.278": _UG3S_T4,
         "0.7926": "deep proxy ten-seed mean from results.json; matches "
                   "F144_PROXY_TWIN.md; not recomputed here",
@@ -162,6 +199,7 @@ REGISTERED: dict[str, dict[str, str]] = {
         "0.944": "oilgas lane seed mean; " + _NOT,
     },
     "F110_SCALING.md": {
+        "-0.2": "the P2 band's lower edge, a setting",
         "2.7": "2 to the build slope (1.437 at 833 variables gives 2.71); "
                "recomputed 2026-10-26",
         "82.4": "total_s of the 833-variable runs, seeds 43-46, in minutes; "
@@ -207,9 +245,9 @@ REGISTERED: dict[str, dict[str, str]] = {
         "1.025": "tied weight times n, by seed; " + _NOT,
     },
     "F130_LEVER_SCREENS.md": {
-        "0.008": "F151's interval endpoint, quoted from F151_HGB_COMPARATOR.md",
+        "-0.008": "F151's interval endpoint, quoted from F151_HGB_COMPARATOR.md",
         "0.027": "F151's difference, quoted from F151_HGB_COMPARATOR.md",
-        "0.046": "F151's interval endpoint, quoted from F151_HGB_COMPARATOR.md",
+        "-0.046": "F151's interval endpoint, quoted from F151_HGB_COMPARATOR.md",
         "0.8108": "the source paper's published KNN AUC-PR, quoted",
         "0.99": "a feature AUC range, quoted from F101_IN_POCKET_PROVENANCE.md",
     },
@@ -230,6 +268,9 @@ REGISTERED: dict[str, dict[str, str]] = {
         "4.5": "Dirac-3 B1 cost per fit, 99 s over 22 fits; arithmetic",
     },
     "F144_PROXY_TWIN.md": {
+        "-0.0003": "the ten-seed mean of device minus same-pool solve over "
+                   "results.json's hw_b2_full rows; unsigned, it had matched "
+                   "an unrelated 0.00026 by chance (PR 63 review); " + _NOT,
         "0.7678": "stored free proxy floor-normalized AUPRC, ten-seed mean "
                   "of f144_proxy_twin.json ref_stored; recomputed 2026-10-26",
         "0.7682": "Phase 1 mid cell ten-seed mean (results.json); " + _NOT,
@@ -281,7 +322,22 @@ REGISTERED: dict[str, dict[str, str]] = {
         "0.99999999999994": "minimum cosine_to_full, floored; recomputed "
                             "2026-10-26",
     },
+    "sprints/SPRINT_29_VALIDATION.md": {
+        **{f: "a corrected F108 plug-in ratio or range end, as registered "
+              "for F108_CEILING_VALIDATION.md; recomputed 2026-10-26"
+           for f in ("1.106", "1.116", "1.119", "1.076", "1.097")},
+        **{f: "a superseded F108 value V3 quotes as what was corrected; "
+              "wrong by design"
+           for f in ("1.105", "1.114", "1.118", "1.075", "1.098")},
+        "20.5": "F162's lane seconds summed, in minutes, as registered for "
+                "F162_IN_POCKET.md; recomputed 2026-10-26",
+        "28.5": "F162's superseded wall time, quoted as what was corrected",
+        "99.7": "this machine's commit limit in GB, read from Windows; "
+                "not a result",
+    },
     "F6_GATE_BASED_ARM.md": {
+        "-0.005": "the dequantization threshold, the negative of the 0.005 "
+                  "setting",
         "0.000425": _BRAKET, "0.00145": _BRAKET, "0.0235": _BRAKET,
         "0.075": _BRAKET, "0.08": _BRAKET, "0.30": _BRAKET,
         "0.00375": "SV1's 3-second minimum at $0.075 a minute; arithmetic",
