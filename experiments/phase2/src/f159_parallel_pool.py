@@ -239,8 +239,7 @@ def main(argv=None) -> int:
     import provenance
     mode = (argv or sys.argv[1:] or ["run"])[0]
     if mode == "run":
-        resume = provenance.sidecar(OUT).exists() and OUT.exists()
-        rid = provenance.run_id_for(OUT, resume=resume)
+        rid, resume = provenance.start(OUT)
         units = json.loads(OUT.read_text(encoding="utf-8"))["units"] \
             if resume else []
         done = {(u["fraction"], u["build"]) for u in units}

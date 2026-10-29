@@ -22,6 +22,11 @@ F165 (Sprint 29 Task A): a resumable run takes its id from `run_id_for`,
 which keeps it in a gitignored sidecar beside the result, so a resume in a
 new process is the same run and is recorded as a resume; an id copied out
 of a recorded result is refused.
+
+PR 63 review: a module takes its id from `start`, which refuses a rerun
+over a recorded result before any work, not after it.
+`test_result_writer_required.py` fails a module that calls `new_run_id` or
+`run_id_for` itself.
 """
 from __future__ import annotations
 
@@ -106,9 +111,9 @@ def run_id_for(path, resume: bool = False) -> str:
     """The run's id for the result at `path`, kept in its sidecar so a
     resume in a new process is the same run (F165, Sprint 29 Task A).
 
+    A module calls `start`, which decides between the two before any work.
     A start (`resume=False`) makes a new id and writes the sidecar before
-    any result exists, so a rerun is a new run: replacing a recorded
-    result still needs `replace=`. A resume reads the id back, refusing
+    any result exists. A resume reads the id back, refusing
     when there is no sidecar, and adds a line; `write_result` records how
     many resumes the run had."""
     side = sidecar(path)
@@ -127,6 +132,49 @@ def run_id_for(path, resume: bool = False) -> str:
         f.write("resumed\n")
     _ISSUED.add(rid)
     return rid
+
+
+def _first_line(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    lines = path.read_text(encoding="utf-8").splitlines()
+    return lines[0].strip() if lines else ""
+
+
+def start(path, resumable: bool = True) -> tuple[str, bool]:
+    """A run's id and whether it resumes, decided before any work (PR 63
+    review). Each module had decided `resume` from the sidecar's presence
+    alone, so a run on a fresh clone (no sidecar) or a rerun after a
+    complete run computed in full and was then refused by `write_result`,
+    leaving a sidecar that a second try resumed into the same refusal.
+
+    No result at `path`: a new run (sidecar written when `resumable`).
+    A result there resumes only when it is not `complete` and its recorded
+    run id is the sidecar's. Any other result there (complete, from another
+    run, or with no sidecar) is refused now, with nothing computed and
+    nothing written. Replacing it is a deliberate act: `write_result`'s
+    `replace=` in code, or moving the recorded file aside."""
+    path = Path(path)
+    if path.exists():
+        try:
+            old = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError:
+            old = None
+        old_run = (old.get("provenance") or {}).get("run_id") \
+            if isinstance(old, dict) else None
+        complete = isinstance(old, dict) and old.get("complete") is True
+        if resumable and not complete and old_run \
+                and _first_line(sidecar(path)) == old_run:
+            return run_id_for(path, resume=True), True
+        state = "a complete result" if complete else "a recorded result"
+        raise FileExistsError(
+            f"{path.name} holds {state} from run {old_run or '(no run id)'} "
+            "that this run cannot resume; nothing was computed. Write to "
+            "another path, or replace it deliberately (write_result's "
+            "replace=)")
+    if resumable:
+        return run_id_for(path), False
+    return new_run_id(), False
 
 
 def _resumes(path, run_id: str) -> int:

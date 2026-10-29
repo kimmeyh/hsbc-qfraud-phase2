@@ -162,7 +162,7 @@ def _rows(res: dict) -> list:
 def main(argv=None) -> int:
     import json
     import provenance
-    rid = provenance.new_run_id()
+    rid, _ = provenance.start(OUT, resumable=False)
     t0 = time.time()
     fold = ieee_fold()
     em, _, ytr, _, yev = fold

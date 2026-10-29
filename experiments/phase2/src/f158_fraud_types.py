@@ -250,8 +250,7 @@ def _doc(rows, extra=None):
 
 def main(argv=None) -> int:
     import provenance
-    resume = provenance.sidecar(OUT).exists() and OUT.exists()
-    rid = provenance.run_id_for(OUT, resume=resume)
+    rid, resume = provenance.start(OUT)
     rows = json.loads(OUT.read_text(encoding="utf-8"))["rows"] if resume else []
     done = {r["seed"] for r in rows}
     for seed in SEEDS:

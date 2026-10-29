@@ -413,8 +413,7 @@ def _doc(rows, plan, par, complete=False):
 
 def run() -> None:
     import provenance
-    resume = provenance.sidecar(OUT).exists() and OUT.exists()
-    rid = provenance.run_id_for(OUT, resume=resume)
+    rid, resume = provenance.start(OUT)
     prior = json.loads(OUT.read_text(encoding="utf-8")) if resume else {}
     rows, plan = prior.get("rows", []), prior.get("seed_plan")
     par = prior.get("proxy_build") or parallel_ok()

@@ -176,7 +176,7 @@ def main(argv=None) -> int:
     import provenance
     mode = (argv or sys.argv[1:] or ["pilot"])[0]
     if mode == "pilot":
-        rid = provenance.new_run_id()
+        rid, _ = provenance.start(OUT_PILOT, resumable=False)
         row = seed_run(fc.SEEDS[0], SUBSAMPLE, arms=(DECIDING_ARM,))
         secs = row["arms"][DECIDING_ARM]["bound_seconds"]
         size = SUBSAMPLE if secs <= PILOT_CAP_S else SUBSAMPLE // 2
@@ -187,8 +187,7 @@ def main(argv=None) -> int:
     elif mode == "run":
         pilot = json.loads(OUT_PILOT.read_text(encoding="utf-8"))
         size = pilot["size_for_run"]
-        resume = provenance.sidecar(OUT).exists() and OUT.exists()
-        rid = provenance.run_id_for(OUT, resume=resume)
+        rid, resume = provenance.start(OUT)
         rows = json.loads(OUT.read_text(encoding="utf-8"))["rows"] \
             if resume else []
         done = {r["seed"] for r in rows}

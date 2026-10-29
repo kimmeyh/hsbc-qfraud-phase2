@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-28
 
+- **fix**: a rerun over a recorded result is refused before any work, not after it (PR 63 review). `provenance.start(path)` decides a new run, a resume of the run's own unfinished result (its recorded id matches the sidecar), or a refusal, with nothing computed or written. f156, f158, f159, f160 and f166 had each decided `resume` from the sidecar's presence alone, so a run on a fresh clone or after a complete run computed in full, was refused by `write_result`, and left a sidecar that a second try resumed into the same refusal. `test_result_writer_required.py` fails a module that calls `new_run_id` or `run_id_for` itself; each term of `start` proven red. CLAUDE.md's provenance rule names `start`.
 - **docs**: F170 (nearest-neighbor check on the 106 ULB frauds every model missed) and F171 (F158 step 3 on IEEE-CIS) carded, from Sprint 29 Manual Validation (PR #63).
 - **docs**: Sprint 29 Decision D1 answered 2: F169 carded, F108's second ceiling candidate (an HGB set for extreme imbalance) on F108's harness, for a later sprint's refinement; the F156 and F114 cards and `SPRINT_29_VALIDATION.md` record the answer (PR #63).
 - **test**: F158's step 2 condition gets one test per term (cascade above; shuffled reference not above), each proven red (Sprint 29 Phase 5, #70). F25's card records the design reopened by F160. `docs/sprints/SPRINT_29_VALIDATION.md` added.

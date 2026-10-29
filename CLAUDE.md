@@ -73,11 +73,13 @@ The one field filled from memory was the one that was wrong.)
   it adds the block, refuses to replace another run's result unless
   `replace=` states why, and checks the file before it replaces
   anything (Sprint 28 IMP-6; `test_result_writer_required.py`).
-  A run that may stop and resume in a new process takes its id from
-  `provenance.run_id_for(path)` at its start and
-  `run_id_for(path, resume=True)` on resume: the id is kept in a
+  A module takes its id from `provenance.start(path)` (`resumable=False`
+  for a run that cannot resume), which decides before any work: a new
+  run, a resume of its own unfinished run, or a refusal of a recorded
+  result, with nothing computed (PR 63 review). The id is kept in a
   gitignored `<result>.run_id` sidecar, the block records the resumes,
-  and an id copied out of a recorded result is refused (F165, Sprint 29). Device runs also
+  and an id copied out of a recorded result is refused (F165, Sprint 29).
+  No module calls `new_run_id` or `run_id_for` itself. Device runs also
   store their full response through `experiments/phase2/src/device_store.py`
   (`test_device_store_required.py`).
 - **US English, always.** The team lead writes and expects US English, even though
