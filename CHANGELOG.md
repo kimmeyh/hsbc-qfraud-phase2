@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-28
 
+- **docs**: F170 (nearest-neighbor check on the 106 ULB frauds every model missed) and F171 (F158 step 3 on IEEE-CIS) carded, from Sprint 29 Manual Validation (PR #63).
 - **docs**: Sprint 29 Decision D1 answered 2: F169 carded, F108's second ceiling candidate (an HGB set for extreme imbalance) on F108's harness, for a later sprint's refinement; the F156 and F114 cards and `SPRINT_29_VALIDATION.md` record the answer (PR #63).
 - **test**: F158's step 2 condition gets one test per term (cascade above; shuffled reference not above), each proven red (Sprint 29 Phase 5, #70). F25's card records the design reopened by F160. `docs/sprints/SPRINT_29_VALIDATION.md` added.
 - **fix**: pypdf 6.21.1 -> 6.21.2 in `experiments/requirements-lock.txt` and the venv, for CVE-2026-115572, CVE-2026-115585 and CVE-2026-115580, with a dated line in the lock's header (Sprint 29 Task I, #72). pip-audit found the three on 6.21.1 and none on 6.21.2. The PDF tests ran before and after; no tracked PDF was rebuilt.
