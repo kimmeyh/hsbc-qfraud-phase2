@@ -1,0 +1,81 @@
+{
+ "card": "F156",
+ "sprint": 29,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "mode": "pilot",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, amendment 2026-10-26 (a4df8a2)",
+ "estimator": "Henze-Penrose bound, Berisha et al. 2016 (arXiv:1412.6534), exact EMST via Delaunay",
+ "subsample": 60000,
+ "seeds": [
+  42
+ ],
+ "rows": [
+  {
+   "seed": 42,
+   "subsample": 60000,
+   "generator_check": {
+    "bayes_error": 0.006099614366235471,
+    "bayes_classifier_error": 0.006092816778555104,
+    "sd_error": 9.892164329545072e-05,
+    "fraud_rate": 0.008288894700337696,
+    "mean_eta": 0.008320739525776335,
+    "sd_rate": 9.892164329545072e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006099614366235471,
+     "m": 507,
+     "n": 59493,
+     "cross_edges": 757,
+     "D": 0.2470895835092528,
+     "u": 0.9747666666666669,
+     "lower": 0.006348638544704577,
+     "upper": 0.012616666666666554,
+     "width": 0.006268028121961977,
+     "contains": false,
+     "width_cap": 0.0012199228732470944,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    }
+   },
+   "seconds": 5.6
+  }
+ ],
+ "summary": {
+  "deciding_arm": "none",
+  "n_seeds": 1,
+  "contains": 0,
+  "narrow": 0,
+  "both": 0,
+  "passes": false,
+  "term1_alone_4_of_5": false
+ },
+ "complete": true,
+ "size_for_run": 60000,
+ "provenance": {
+  "generator": "experiments/phase2/src/f156_hp_bound.py",
+  "generator_commit": "8c822e220b7f244248ec2731f8ab65fff90be0e0",
+  "generator_clean": true,
+  "seeds": [
+   42
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "12a1dbba4bbf4f15bfe88a856cff3815"
+ }
+}

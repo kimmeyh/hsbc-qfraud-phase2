@@ -30,6 +30,10 @@
 # CVE-2026-113792 and CVE-2026-113793 (fixed in 6.20.1) and CVE-2026-113786
 # (fixed in 6.21.1), found by pip-audit. This repository reads only its own
 # rendered PDFs with pypdf; no tracked PDF was rebuilt.
+#
+# 2026-10-28 (Sprint 29 Task I, Decision 2): pypdf 6.21.1 -> 6.21.2 for
+# CVE-2026-115572, CVE-2026-115585 and CVE-2026-115580 (all fixed in
+# 6.21.2), found by pip-audit. No tracked PDF was rebuilt.
 
 numpy==1.26.4
 pandas==2.3.3
@@ -50,6 +54,6 @@ statsmodels==0.15.0
 joblib==1.5.3
 matplotlib==3.11.1
 python-dotenv==1.2.3
-pypdf==6.21.1
+pypdf==6.21.2
 pyscipopt==6.2.1
 pytest==9.1.1

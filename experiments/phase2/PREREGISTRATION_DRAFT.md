@@ -239,6 +239,8 @@ on 2026-10-23:
 | - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
 | - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
 | - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
+| - | Fraud types: per-type detectors against one model, on F108's simulator | F158 | none | Written 2026-10-26, below |
+| - | Best achievable result per algorithm on ULB, classical and proxy lanes | F166 (F157 part 1) | none | Written 2026-10-27, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -444,6 +446,48 @@ design only; the device arm is F25 and needs its own per-block approval.
   arm's family is set in F25's amendment to this entry before its run.
 - **Recording**: test AUPRC rows carry outcome blocks (section 2,
   "Outcomes recorded").
+- **Amendment, 2026-10-26 (Sprint 29 Task E, F160, #68), written before
+  its module exists or any IEEE-CIS pool is built.** The design failed on
+  ULB (`docs/phase2/F153_EXP3_DESIGN.md`). This amendment asks whether
+  the room the falsifier requires exists on a second dataset. The rule,
+  sweep, ridge choice, floor, resolution checks and controls above are
+  unchanged.
+  - **Why another dataset, stated before any run (inferred).** The data
+    term is `||H'w - y||^2 / n`. Learners that predict "legitimate" on
+    every row reach `4 x fraud rate`. On ULB (fraud rate about 0.17%)
+    that is about 0.007, below the 0.01 the falsifier requires, which
+    fits F153's largest recorded gap (0.0026). On IEEE-CIS (about 3.5%)
+    it is about 0.14, so the rule can pass there in principle.
+  - **Positive control, first.** At both instance sizes and on each
+    IEEE-CIS instance's own labels, H from learners with random signs
+    (seeded), so no subset fits the labels. The greedy gap should be far
+    above 0.01. If the control shows no room on every instance, the rule
+    cannot pass, and no IEEE-CIS reading is made.
+  - **Data**: IEEE-CIS train, deduplicated (`ieee_loader.dedupe_ieee`);
+    the first rolling-origin fold of `ieee_harness.folds_for`; its
+    features from `ieee_harness.build_fold` (fit on the training months
+    only), numeric, missing values filled with the training medians.
+  - **Features**: the top k by mutual information (`data.top_k_features`)
+    on a stratified 50,000-row subsample of the fold's training rows,
+    drawn with the seed; k = 13 (`free`) and 17 (`mid`), as F94's configs.
+  - **Pools**: `qubo_proxy.build_pool`, sequential, `dct`, with
+    `seeded_weak_params(seed)`, on all the fold's training rows. The
+    instances are F94's sizes (the first 60 `free` learners choose 10;
+    the first 136 `mid` learners choose 25); a smaller pool is refused
+    and recorded. H on the evaluation month's rows (held out), with their
+    labels in {-1, +1}. Seeds 42-44.
+  - **Methods at the chosen weight**: greedy and SCIP (300 s cap), the
+    floor, and both resolution checks. Annealing is dropped to fit the
+    sprint; the falsifier reads greedy alone.
+  - **Consequence, set here**: if the design does not fail on IEEE-CIS
+    (greedy's gap at least 0.01 on some instance, and a chosen
+    Hamiltonian passing a resolution check), F25's design reopens on
+    IEEE-CIS as a new card, not in this sprint. If it fails, Experiment
+    3's proxy design has no room on either dataset, recorded on F25.
+  - **Reported whatever the result**: per instance, the fraud rate, the
+    ridge sweep, the chosen weight, each method's objective, the floor,
+    both gaps, the data share, both resolution checks, and run times.
+    No test score is computed, so no outcome block is needed.
 
 ### Experiment 4 (F111): the CVQBoost-KNN lane under the source protocol and ours
 
@@ -959,6 +1003,49 @@ transaction is generated.
   - **Reported whatever the result**: per seed and arm, the Bayes error,
     the calibrated and uncalibrated estimates, recovered or not, and the
     run time.
+- **Amendment, 2026-10-26 (Sprint 29 Task D, F156), written before its
+  module exists or any bound is computed.** One estimator not tied to a
+  fitted model, on F108's generator, posterior, splits, seeds, arms and
+  margin, all unchanged (`f108_ceiling` is imported, not edited):
+  - **Estimator**: the Henze-Penrose bound of Berisha, Wisler, Hero and
+    Spanias (IEEE TSP 2016, arXiv:1412.6534, Theorems 1 and 2, checked
+    against the paper 2026-10-26). On a Euclidean minimum spanning tree
+    of the pooled rows, C is the number of edges joining a fraud row to a
+    legitimate row; with m fraud rows and n legitimate rows,
+    D = 1 - C (m + n) / (2 m n), p = m / (m + n), q = 1 - p, and
+    u = 4 p q D + (p - q)^2. The bound is
+    [1/2 - sqrt(u)/2, 1/2 - u/2].
+  - **Subsample**: the tree is built on a stratified random subsample of
+    the training rows that keeps the class share, because the theorem's
+    prior p is the sample's share (the Sprint 29 plan said "all training
+    positives and a stated number of negatives"; that would bound the
+    error at a different prior, so it is not used). Size: 60,000 rows,
+    drawn with the seed. Features standardized with the training means
+    and SDs, as F108's Cover-Hart method does. The tree is exact: it is
+    taken from the edges of the Delaunay triangulation (which contains
+    every Euclidean minimum spanning tree), with `scipy`.
+  - **Pilot first**: seed 42, main arm, to time the build; if one seed
+    takes over 10 minutes, the size is halved before any other seed and
+    the change is recorded.
+  - **Rule, both terms, main no-noise arm, 4 of 5 seeds**: (1) the
+    interval contains the true Bayes error; (2) its width is at most
+    2 x max(0.0005, 0.10 x Bayes error), twice F108's point margin (the
+    Sprint 29 plan's width term: without it, the trivial interval
+    [0, fraud rate] passes F108's containment rule on 5 of 5 seeds).
+  - **Shown before any bound is computed: the two terms cannot both hold
+    for this bound here.** With d = 1 - u, the upper end is d/2 and the
+    lower end is (1 - sqrt(1 - d))/2, which is at most d/4 + d^2/8 for
+    small d. So the width is at least d/4 - d^2/8. Containment needs
+    d/2 >= Bayes error, about 0.0060-0.0063 on the main arm
+    (`f108_ceiling.json`), so the width is at least about 0.0030; the
+    width cap is about 0.0012-0.0013. **The rule therefore fails whatever
+    the data**, and F114 stays blocked by this estimator. The run is kept
+    because it is cheap and answers a separate question, reported and not
+    decisive: is the bound valid (term 1) at a 0.8% fraud rate on 60,000
+    rows, so that its upper end could serve as a conservative ceiling?
+  - **Reported whatever the result**: per seed and arm, m, n, C, D, u,
+    both ends, width, the Bayes error, each term's outcome, and the run
+    time.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -1286,6 +1373,150 @@ part of this draft.
   points. Result `experiments/phase2/results/f162_in_pocket.json`
   (evidence tag `SIM`), generator `experiments/phase2/src/f162_in_pocket.py`.
 
+### F158: fraud types, per-type detectors against one model
+
+Written 2026-10-26 (Sprint 29 Task G, #70), before any model below is
+fit. Not filed; part of this draft. No device.
+
+- **ID and card**: unnumbered analysis entry; F158.
+- **Question**: if each fraud type gets its own detector, do the
+  detectors together catch more fraud than one model on everything, at
+  the same alert budget?
+- **Hypothesis and prediction**: none directional. Gradient boosting
+  already concentrates on hard rows, so the gain may be small (the
+  card's named risk).
+- **Data**: F108's generator (`f108_ceiling.generate`, imported, not
+  edited), main labels, no noise; train days 28-119, test days 120-182.
+  The generator records each fraud's type: S2 (a compromised terminal)
+  and S3 (a compromised customer, amount x5). Every fraud is S2, S3 or
+  both, so after both types are found no untyped fraud remains: on the
+  simulator the cascade is the two detectors, and "predict the rest"
+  has nothing to predict. A row of both types is positive for both.
+- **Features, the same for every model**: amount, the customer's mean
+  amount and the time of day (F108's three), the amount over the
+  customer's mean, the customer's transaction count on the previous day,
+  and, with a 7-day label delay (the Fraud Detection Handbook's
+  convention: a label is known 7 days after its day), the terminal's
+  known-fraud count and transaction count over days d-14 to d-8 and
+  d-35 to d-8, and the customer's known-fraud count over d-35 to d-8.
+  F108's three features cannot see terminal fraud, so F108's Bayes
+  posterior does not bound these models and is not used.
+- **Models**, each `HistGradientBoostingClassifier(l2_regularization=
+  1.0, random_state=seed)` (F151's setting), fit on the training days:
+  - **single**: target fraud (S2 or S3);
+  - **cascade**: one detector with target S2, one with target S3; a row's
+    score is the larger of the two probabilities;
+  - **shuffled reference**: the cascade with the type labels shuffled
+    among the training frauds (fraud labels unchanged; seed-drawn). It
+    should not beat the single model; if it does, a gain is not from the
+    types.
+- **Alert budget**: the top 0.5% of test rows by score. **Primary metric**:
+  recall of all test fraud within the budget.
+- **Seeds**: 42-49 (8), one simulated world each. One primary test, so
+  an exact two-sided Wilcoxon test on 8 paired seeds can reach 0.05
+  (smallest p 0.0078, section 2).
+- **Primary test**: cascade minus single, recall at the budget, per seed;
+  exact two-sided Wilcoxon at 0.05, with the mean difference and its 95%
+  t interval beside it. "Cascade above" or "below" only if the test
+  rejects and the interval excludes zero on the same side; otherwise "no
+  reliable difference".
+- **Secondary, uncorrected**: shuffled reference minus single, the same
+  way; AUPRC per model; recall per type within the budget.
+- **Step 2 (ULB and IEEE-CIS clustering)**: run only if the primary test
+  reads "cascade above" and the shuffled reference does not; otherwise
+  not run, with the reason recorded.
+- **Step 3, descriptive**: the ULB test frauds that every model in F154's
+  stored set misses at the 0.5% budget, counted per seed and compared
+  with the caught frauds feature by feature (mean and SD), from F154's
+  stored per-row scores. No test.
+- **Recording**: every model and seed carries an outcome block (section
+  2). Result `experiments/phase2/results/f158_fraud_types.json` (evidence
+  tag `SIM`), generator `experiments/phase2/src/f158_fraud_types.py`.
+
+### F166: best achievable result per algorithm on ULB (F157 part 1)
+
+Written 2026-10-27 (Sprint 29 Task F, #69), before any score below.
+Not filed; part of this draft. No device. Descriptive: no pass or fail.
+
+- **ID and card**: unnumbered analysis entry; F166, the ULB part of F157.
+  Device lanes (CVQBoost on hardware, QSVM) and QNN are out of this part.
+- **Question**: tuned under one protocol, how well does each of seven
+  algorithms do on ULB, and which differences between them are reliable?
+- **Data and split**: ULB, duplicates dropped (`data.load_ulb().
+  drop_duplicates()`), `data.stratified_split(df, seed)` (60/20/20), the
+  split every Phase 2 ULB result uses. Tuning reads the training and
+  validation folds only; every reported score is on the test fold, so no
+  score comes from the rows that chose its configuration (section 2).
+- **Features**: the classical lanes use all 30 columns; logistic
+  regression and the SVM standardize them on the training fold. The proxy
+  uses each configuration's own top-k features (`qubo_proxy._prep`).
+- **The seven algorithms and their configurations**, named before any
+  score. Selection per seed: the configuration with the highest
+  validation AUPRC (ties: the first listed).
+  - **HGB** (`HistGradientBoostingClassifier`, `random_state=seed`):
+    `l2_regularization` {0, 1} x `learning_rate` {0.05, 0.1} x
+    `max_leaf_nodes` {15, 31}. 8.
+  - **LightGBM** (`LGBMClassifier`, 300 trees, `random_state=seed`):
+    `num_leaves` {15, 63} x `learning_rate` {0.05, 0.1} x `reg_lambda`
+    {0, 1}. 8.
+  - **XGBoost** (`XGBClassifier`, `random_state=seed`): `max_depth` {3, 6}
+    x `learning_rate` {0.1, 0.3} x `n_estimators` {100, 300}; the library
+    default (6, 0.3, 100) is one of the 8.
+  - **CatBoost** (`CatBoostClassifier`, 500 iterations,
+    `random_seed=seed`): `depth` {4, 6} x `learning_rate` {0.05, 0.1} x
+    `l2_leaf_reg` {3, 10}. 8.
+  - **Logistic regression** (`LogisticRegression`, `max_iter=2000`):
+    `C` {0.01, 0.1, 1, 10} x `class_weight` {none, balanced}. 8.
+  - **SVM**: a linear SVM (`LinearSVC`, scores from
+    `decision_function`) on all training rows, `C` {0.001, 0.01, 0.1, 1}
+    x `class_weight` {none, balanced}. 8. **Alternative tried**: an RBF
+    SVM (`SVC`, `gamma="scale"`, `C` {1, 10}) on a stratified 20,000-row
+    subsample of the training fold, because an RBF kernel on about
+    170,000 rows is quadratic. It is kept as the lane's form only if its
+    best validation AUPRC beats the linear form's on a majority of seeds;
+    the reason either way is recorded.
+  - **CVQBoost proxy**: the three `qubo_proxy` configurations, free
+    (k 13, order 2), mid (k 17, order 2) and full (k 17, order 3), with
+    the full-pair pool, dct learners seeded by
+    `qubo_proxy.seeded_weak_params(seed)` and `lambda = 2 x n_train`.
+    **3 configurations, the stated exception to 8**: the proxy's design
+    space is the frozen ladder. The full cell uses F159's parallel build
+    only if F159's result records equal pools on held-out rows at every
+    fraction; otherwise the serial build.
+- **Metrics, test fold, for each algorithm's chosen configuration**:
+  `metrics.summarize` (AUPRC and ROC-AUC with BCa intervals, and the two
+  validation-chosen operating points: the max-F1 threshold and the 0.5%
+  alert budget); AUPRC normalized by its floor; at each operating point
+  TP, FP, TN, FN, precision, recall, specificity, F1, MCC and balanced
+  accuracy (sklearn's `matthews_corrcoef` and `balanced_accuracy_score`);
+  recall at the 0.5% budget on the test fold; the train-test AUPRC gap.
+  Every chosen configuration and seed carries an outcome block (section
+  2) with its validation scores; every tried configuration records its
+  validation AUPRC and fit seconds.
+- **Seeds, from seed 42's time** (Decision 3, option 1): seed 42 runs
+  first, all seven algorithms, timed as `t42` minutes. The seed count is
+  `n = min(10, floor(120 / t42))`, at least 3, seeds 42 to 41 + n. Below
+  5 seeds the headline figures fall short of section 2's five-seed
+  standard, and every page says so; a run that the minimum of 3 takes
+  past 120 minutes records the overrun.
+- **Intervals over seeds**: mean, SD and a 95% t interval of each metric.
+- **Rankings** (the comparison page): algorithms are listed by mean test
+  AUPRC. "A above B" is written only for an adjacent pair in that order
+  whose primary test rejects at Bonferroni 0.05 / 6 (6 adjacent pairs).
+  The primary test is chosen by n before any score: at 8 seeds or more,
+  the exact two-sided Wilcoxon signed-rank test on per-seed AUPRC
+  differences (the smallest p at 8 seeds, 0.0078, is below 0.0083); below
+  8, a paired bootstrap of the seed-mean AUPRC difference (test rows
+  resampled within each seed, stratified, the same rows for both
+  algorithms, 2,000 draws, percentile interval at 1 - 0.05 / 6) rejects
+  when its interval excludes zero, with the Wilcoxon result secondary.
+  Otherwise the pair reads "no reliable difference".
+- **Output**: `experiments/phase2/results/f166_ulb_algorithms.json`
+  (evidence tag `SIM`), generator `experiments/phase2/src/f166_ulb_algorithms.py`,
+  resumable by seed. One document per algorithm under
+  `docs/phase2/algorithms/` and one ULB comparison page, each naming the
+  result file, so `test_phase2_figures_resolve.py` checks their figures.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -1383,3 +1614,14 @@ part of this draft.
   (PR review). The section 6 status date updated.
 - 2026-10-23: section 6 gains the F162 entry (Sprint 28 Task M, #59),
   written before any score, and its table row.
+- 2026-10-26: the F108 entry gains a dated amendment (F156, Sprint 29
+  Task D): the Henze-Penrose bound with the containment and width terms,
+  and the arithmetic showing the two cannot both hold here, written
+  before its module exists.
+- 2026-10-26: the Experiment 3 entry gains a dated amendment (F160,
+  Sprint 29 Task E): the room check on IEEE-CIS with a positive control
+  first, written before its module exists.
+- 2026-10-26: section 6 gains the F158 entry (Sprint 29 Task G), written
+  before any model is fit, and its table row.
+- 2026-10-27: section 6 gains the F166 entry (Sprint 29 Task F), written
+  before any score, and its table row.

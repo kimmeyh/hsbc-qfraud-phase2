@@ -245,6 +245,16 @@ seeds, because a range above 0.10 forces the SD above its 0.03 bar; and
 F152's bootstrap was tested only against itself, so its "no difference"
 half could not fail.
 
+**And write those tests in the commit that adds the rule (Sprint 29
+IMP-1).** The per-term tests and their red proofs land in the same commit
+as the rule, at Phase 4. Phase 5 then checks that this was done; it is not
+where the tests are first written. Sprint 29 walked the gate at Phase 5
+only: it found two rules there (92d89b6, a14c644), and the PR review found
+eight more terms with no test after their commit (F166's bootstrap
+rejection and both Bonferroni corrections, F158's Wilcoxon term and
+off-split check, F160's order gate and resolution pass-through, F159's
+budget derivation).
+
 ### A verification sprint GENERATES work; budget for it (Sprint 13 improvement 2)
 
 A sprint whose tasks are "check that X is true" produces a second body of work
