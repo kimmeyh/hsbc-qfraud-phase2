@@ -32,7 +32,7 @@ The entry's test: with 10 seeds (8 or more), the exact two-sided Wilcoxon signed
 
 ## Notes
 
-- The proxy's train-test AUPRC gap has the largest mean (0.2075); logistic regression's and the SVM's are the smallest (0.0291 and 0.0190).
+- The proxy's train-test AUPRC gap has the largest mean (0.2075); the SVM's and logistic regression's are the smallest (0.0190 and 0.0291).
 - HGB against the proxy has the smallest p among the pairs read "no reliable difference", but it is above the Bonferroni level of 0.05 / 6, so the entry does not write "above".
 - At the 0.5% alert budget, mean recall on the test fold lies between 0.8305 and 0.8589 for all seven, a narrower spread than AUPRC's.
 - The SVM lane keeps its linear form; the RBF alternative beat it on validation on 2 of 10 seeds ([ULB_SVM.md](ULB_SVM.md)).
