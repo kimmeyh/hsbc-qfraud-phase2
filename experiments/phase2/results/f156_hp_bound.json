@@ -1,0 +1,376 @@
+{
+ "card": "F156",
+ "sprint": 29,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "mode": "run",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, amendment 2026-10-26 (a4df8a2)",
+ "estimator": "Henze-Penrose bound, Berisha et al. 2016 (arXiv:1412.6534), exact EMST via Delaunay",
+ "subsample": 60000,
+ "seeds": [
+  42,
+  43,
+  44,
+  45,
+  46
+ ],
+ "rows": [
+  {
+   "seed": 42,
+   "subsample": 60000,
+   "generator_check": {
+    "bayes_error": 0.006099614366235471,
+    "bayes_classifier_error": 0.006092816778555104,
+    "sd_error": 9.892164329545072e-05,
+    "fraud_rate": 0.008288894700337696,
+    "mean_eta": 0.008320739525776335,
+    "sd_rate": 9.892164329545072e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006099614366235471,
+     "m": 507,
+     "n": 59493,
+     "cross_edges": 757,
+     "D": 0.2470895835092528,
+     "u": 0.9747666666666669,
+     "lower": 0.006348638544704577,
+     "upper": 0.012616666666666554,
+     "width": 0.006268028121961977,
+     "contains": false,
+     "width_cap": 0.0012199228732470944,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "flip": {
+     "bayes_error": 0.006405274729778547,
+     "m": 511,
+     "n": 59489,
+     "cross_edges": 771,
+     "D": 0.2391166792696533,
+     "u": 0.9743000000000003,
+     "lower": 0.006466819757779518,
+     "upper": 0.012849999999999862,
+     "width": 0.006383180242220343,
+     "contains": false,
+     "width_cap": 0.0012810549459557096,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "m": 32,
+     "n": 59968,
+     "cross_edges": 10,
+     "D": 0.8436666221985059,
+     "u": 0.9996666666666665,
+     "lower": 8.334027893547313e-05,
+     "upper": 0.00016666666666675933,
+     "width": 8.33263877312862e-05,
+     "contains": false,
+     "width_cap": 0.001,
+     "narrow": true,
+     "pass": false,
+     "bound_seconds": 3.8
+    }
+   },
+   "seconds": 13.4
+  },
+  {
+   "seed": 43,
+   "subsample": 60000,
+   "generator_check": {
+    "bayes_error": 0.006256330713384506,
+    "bayes_classifier_error": 0.006272515714415855,
+    "sd_error": 0.0001011438222682125,
+    "fraud_rate": 0.008455556567756255,
+    "mean_eta": 0.00846660110734864,
+    "sd_rate": 0.0001011438222682125,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006256330713384506,
+     "m": 492,
+     "n": 59508,
+     "cross_edges": 734,
+     "D": 0.2478978026319888,
+     "u": 0.9755333333333334,
+     "lower": 0.0061545450919555655,
+     "upper": 0.012233333333333318,
+     "width": 0.006078788241377753,
+     "contains": true,
+     "width_cap": 0.0012512661426769013,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "flip": {
+     "bayes_error": 0.006553617231673909,
+     "m": 498,
+     "n": 59502,
+     "cross_edges": 763,
+     "D": 0.22752419378026378,
+     "u": 0.9745666666666667,
+     "lower": 0.006399284171237585,
+     "upper": 0.012716666666666654,
+     "width": 0.006317382495429069,
+     "contains": true,
+     "width_cap": 0.0013107234463347818,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "m": 31,
+     "n": 59969,
+     "cross_edges": 6,
+     "D": 0.9031757806049254,
+     "u": 0.9997999999999998,
+     "lower": 5.0002500250057036e-05,
+     "upper": 0.00010000000000010001,
+     "width": 4.999749975004297e-05,
+     "contains": false,
+     "width_cap": 0.001,
+     "narrow": true,
+     "pass": false,
+     "bound_seconds": 3.9
+    }
+   },
+   "seconds": 13.6
+  },
+  {
+   "seed": 44,
+   "subsample": 60000,
+   "generator_check": {
+    "bayes_error": 0.006208546065179572,
+    "bayes_classifier_error": 0.006227397597277461,
+    "sd_error": 0.0001002372204012521,
+    "fraud_rate": 0.008577637459510436,
+    "mean_eta": 0.008571484340145522,
+    "sd_rate": 0.0001002372204012521,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006208546065179572,
+     "m": 515,
+     "n": 59485,
+     "cross_edges": 754,
+     "D": 0.2616234328471484,
+     "u": 0.9748666666666664,
+     "lower": 0.006323317679813256,
+     "upper": 0.012566666666666781,
+     "width": 0.006243348986853525,
+     "contains": false,
+     "width_cap": 0.0012417092130359146,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 4.0
+    },
+    "flip": {
+     "bayes_error": 0.006515885580583689,
+     "m": 520,
+     "n": 59480,
+     "cross_edges": 766,
+     "D": 0.2570223992550825,
+     "u": 0.9744666666666665,
+     "lower": 0.0064246089332789524,
+     "upper": 0.01276666666666676,
+     "width": 0.006342057733387807,
+     "contains": true,
+     "width_cap": 0.0013031771161167377,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "m": 33,
+     "n": 59967,
+     "cross_edges": 10,
+     "D": 0.8484014692929596,
+     "u": 0.9996666666666665,
+     "lower": 8.334027893547313e-05,
+     "upper": 0.00016666666666675933,
+     "width": 8.33263877312862e-05,
+     "contains": false,
+     "width_cap": 0.001,
+     "narrow": true,
+     "pass": false,
+     "bound_seconds": 4.0
+    }
+   },
+   "seconds": 13.7
+  },
+  {
+   "seed": 45,
+   "subsample": 60000,
+   "generator_check": {
+    "bayes_error": 0.006039362363182529,
+    "bayes_classifier_error": 0.006019925127080118,
+    "sd_error": 9.8246568712195e-05,
+    "fraud_rate": 0.008139275279317407,
+    "mean_eta": 0.008151475872763759,
+    "sd_rate": 9.8246568712195e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006039362363182529,
+     "m": 479,
+     "n": 59521,
+     "cross_edges": 697,
+     "D": 0.26658751236690936,
+     "u": 0.9767666666666667,
+     "lower": 0.005842467762893766,
+     "upper": 0.011616666666666664,
+     "width": 0.005774198903772898,
+     "contains": true,
+     "width_cap": 0.001207872472636506,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 4.0
+    },
+    "flip": {
+     "bayes_error": 0.006342994004676264,
+     "m": 488,
+     "n": 59512,
+     "cross_edges": 758,
+     "D": 0.2169921922345459,
+     "u": 0.9747333333333333,
+     "lower": 0.006357079121625253,
+     "upper": 0.01263333333333333,
+     "width": 0.006276254211708077,
+     "contains": false,
+     "width_cap": 0.001268598800935253,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "m": 34,
+     "n": 59966,
+     "cross_edges": 11,
+     "D": 0.8381435754770841,
+     "u": 0.9996333333333332,
+     "lower": 9.1675070985342e-05,
+     "upper": 0.00018333333333342416,
+     "width": 9.165826234808216e-05,
+     "contains": false,
+     "width_cap": 0.001,
+     "narrow": true,
+     "pass": false,
+     "bound_seconds": 3.9
+    }
+   },
+   "seconds": 13.6
+  },
+  {
+   "seed": 46,
+   "subsample": 60000,
+   "generator_check": {
+    "bayes_error": 0.006026596882732953,
+    "bayes_classifier_error": 0.006033562938391614,
+    "sd_error": 9.936072712069097e-05,
+    "fraud_rate": 0.008262131427462004,
+    "mean_eta": 0.008245475862870152,
+    "sd_rate": 9.936072712069097e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "bayes_error": 0.006026596882732953,
+     "m": 506,
+     "n": 59494,
+     "cross_edges": 779,
+     "D": 0.2236902754733563,
+     "u": 0.9740333333333334,
+     "lower": 0.00653436458722545,
+     "upper": 0.012983333333333291,
+     "width": 0.0064489687461078415,
+     "contains": false,
+     "width_cap": 0.0012053193765465906,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "flip": {
+     "bayes_error": 0.0063359471318471545,
+     "m": 511,
+     "n": 59489,
+     "cross_edges": 760,
+     "D": 0.24997234273013813,
+     "u": 0.9746666666666669,
+     "lower": 0.006373960708446091,
+     "upper": 0.012666666666666548,
+     "width": 0.006292705958220457,
+     "contains": false,
+     "width_cap": 0.001267189426369431,
+     "narrow": false,
+     "pass": false,
+     "bound_seconds": 3.9
+    },
+    "reference": {
+     "bayes_error": 0.0,
+     "m": 35,
+     "n": 59965,
+     "cross_edges": 9,
+     "D": 0.8713535276530358,
+     "u": 0.9996999999999998,
+     "lower": 7.50056258439491e-05,
+     "upper": 0.0001500000000000945,
+     "width": 7.49943741561454e-05,
+     "contains": false,
+     "width_cap": 0.001,
+     "narrow": true,
+     "pass": false,
+     "bound_seconds": 3.8
+    }
+   },
+   "seconds": 13.4
+  }
+ ],
+ "summary": {
+  "deciding_arm": "none",
+  "n_seeds": 5,
+  "contains": 2,
+  "narrow": 0,
+  "both": 0,
+  "passes": false,
+  "term1_alone_4_of_5": false
+ },
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f156_hp_bound.py",
+  "generator_commit": "8c822e220b7f244248ec2731f8ab65fff90be0e0",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "5cdc64aa4cbf4e86935288da7a85d7a0"
+ }
+}

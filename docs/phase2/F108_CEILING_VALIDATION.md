@@ -42,7 +42,10 @@ plug-in meets 4 of 5 on the noise arm (5 of 5) and on the reference arm
 
 - **Main, no noise**:
   - plug-in 0.0064-0.0070 against 0.0060-0.0063, ratios 1.053, 1.097,
-    1.105, 1.114 and 1.118: **2 of 5** within the 10% margin.
+    1.106, 1.116 and 1.119: **2 of 5** within the 10% margin.
+    (Corrected 2026-10-26, F164: the last three read 1.105, 1.114 and
+    1.118; recomputed from the rows as the plug-in estimate over the
+    Bayes error. The count is unchanged.)
   - learning-curve floor on error 0.0064-0.0071: **1 of 5**.
   - learning-curve floor on AUPRC, ceiling 0.255-0.312 on four seeds
     and 0.87 on seed 43 (true 0.300), against 0.296-0.318: **1 of 5**. The full-data HGB
@@ -51,7 +54,8 @@ plug-in meets 4 of 5 on the noise arm (5 of 5) and on the reference arm
   - Cover-Hart interval: **3 of 5**; its lower bound sits just above the
     truth on the other two.
 - **Main, with label noise (0.05 and 0.0005)**: plug-in **5 of 5**
-  (ratios 1.075-1.098); floor on error 3 of 5; floor on AUPRC 0 of 5
+  (ratios 1.076-1.097; corrected 2026-10-26, F164, from 1.075-1.098,
+  recomputed from the rows); floor on error 3 of 5; floor on AUPRC 0 of 5
   (0.98 on seed 43, true 0.272); Cover-Hart 2 of 5.
 - **Zero-ceiling reference (scenario 1, fraud iff amount > 220)**:
   plug-in 5 of 5, but only through the absolute margin (0.0003-0.0004

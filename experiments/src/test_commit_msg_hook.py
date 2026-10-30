@@ -24,7 +24,9 @@ import check_commit_issue as cci  # noqa: E402
 
 BRANCH = "feature/20261019_Sprint_28"
 STATUS = {"current_sprint": {"branch": BRANCH, "pr": 46,
-                             "github_issues": [59, 60, 61]}}
+                             "github_issues": [59, 60, 61],
+                             "task_started": {"A": "t0", "B": "t1"},
+                             "task_actuals": {"A": 5}}}
 
 
 def test_a_feature_commit_without_its_issue_is_refused():
@@ -70,6 +72,33 @@ def test_comment_lines_are_not_the_message():
                        "#61 in the diff below\n", BRANCH, STATUS)
 
 
+def _with(**fields):
+    return {"current_sprint": {**STATUS["current_sprint"], **fields}}
+
+
+def test_a_commit_with_no_timer_running_is_refused():
+    # Sprint 29 IMP-4: Task C's work was committed with no timer.
+    msg = "feat: h (#61)\n"
+    assert cci.problem(msg, BRANCH, _with(task_started={})) is not None
+    assert cci.problem(msg, BRANCH,
+                       _with(task_actuals={"A": 5, "B": 7})) is not None
+    assert cci.problem(msg, BRANCH,
+                       _with(task_paused={"B": "t2"})) is not None
+    assert cci.problem(msg, BRANCH, _with(task_started=[])) is not None
+    assert "timer" in cci.problem(msg, BRANCH, _with(task_started={}))
+
+
+def test_the_timer_rule_holds_for_the_pr_review_too():
+    assert cci.problem("fix: PR 46 review\n", BRANCH,
+                       _with(task_started={})) is not None
+
+
+def test_a_running_timer_admits_and_other_types_need_none():
+    assert cci.timed(STATUS["current_sprint"]) == ["B"]
+    assert cci.problem("feat: h (#61)\n", BRANCH, STATUS) is None
+    assert cci.problem("docs: i\n", BRANCH, _with(task_started={})) is None
+
+
 def test_a_body_line_naming_the_issue_is_kept():
     # git commit -m "feat: x" -m "#61 is the task" keeps that line.
     assert cci.problem("feat: x\n\n#61 is the task\n", BRANCH, STATUS) is None
@@ -105,8 +134,9 @@ def test_the_real_hook_refuses_and_admits(tmp_path):
 
 def test_the_rule_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
-    assert_can_fail([Mutation(SCRIPT, "    if named & issues:\n",
-                              "    if True:\n", expect_occurrences=1)],
+    assert_can_fail([Mutation(SCRIPT,
+                              "    if not (named & issues or review):\n",
+                              "    if False:\n", expect_occurrences=1)],
                     lambda: run_pytest(
                         f"{THIS}::test_a_feature_commit_without_its_issue_"
                         "is_refused", ROOT),
@@ -126,3 +156,16 @@ def test_the_rule_can_fail():
                         f"{THIS}::test_a_body_line_naming_the_issue_is_kept",
                         ROOT),
                     "an issue line dropped as a comment")
+    assert_can_fail([Mutation(SCRIPT, "    if not timed(cur):\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_a_commit_with_no_timer_running_is_"
+                        "refused", ROOT),
+                    "a commit with no timer running")
+    assert_can_fail([Mutation(SCRIPT,
+                              '                  and t not in part("task_paused"))\n',
+                              "                  )\n", expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_a_commit_with_no_timer_running_is_"
+                        "refused", ROOT),
+                    "a paused timer counted as running")

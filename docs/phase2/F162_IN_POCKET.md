@@ -36,7 +36,9 @@ before any score (`9b7f770`). Result:
 
 Ten seeds (42-51): seed 42 took 3.1 minutes on the three cells, which
 projected 31 minutes against the 120-minute cap (`seed_choice`). 90 rows,
-each with an outcome block. Recorded wall time 28.5 minutes.
+each with an outcome block. Wall time about 28.5 minutes, **unverified**:
+the result file does not record it (corrected 2026-10-26, F164: this
+said "Recorded"). The rows' `seconds` sum to 20.5 minutes of lane time.
 
 **Primary: in-pocket AUPRC, proxy minus each classical model** (mean over
 ten seeds; Wilcoxon exact two-sided; t interval at 99.17%, the family

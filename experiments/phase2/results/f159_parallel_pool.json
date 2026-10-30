@@ -1,0 +1,366 @@
+{
+ "card": "F159",
+ "sprint": 29,
+ "evidence_tag": "SIM",
+ "complete": true,
+ "metered_seconds": 0,
+ "cell": "full",
+ "seed": 42,
+ "cpu_count": 32,
+ "fractions": [
+  0.1,
+  0.25,
+  0.5,
+  1.0
+ ],
+ "workers": [
+  1,
+  4,
+  8,
+  16,
+  32
+ ],
+ "start_method": "spawn",
+ "budget": "a parallel build is stopped and recorded as failed after 2 times its fraction's serial build_s",
+ "equality": "H on the validation rows, SHA-256 of the bytes, against the serial build_full pool",
+ "units": [
+  {
+   "fraction": 0.1,
+   "build": "serial",
+   "rows": 17023,
+   "n_learners": 833,
+   "build_s": 25.468,
+   "h_validation_sha256": "a38cc94f0b5718085972aab60bf3f331dd2221c25c36746973125bbcd7c417ed"
+  },
+  {
+   "fraction": 0.1,
+   "build": "1",
+   "rows": 17023,
+   "n_learners": 833,
+   "build_s": 26.894,
+   "h_validation_sha256": "a38cc94f0b5718085972aab60bf3f331dd2221c25c36746973125bbcd7c417ed",
+   "longest_learner_s": 0.0614,
+   "sum_learner_s": 23.584
+  },
+  {
+   "fraction": 0.1,
+   "build": "4",
+   "rows": 17023,
+   "n_learners": 833,
+   "build_s": 9.699,
+   "h_validation_sha256": "a38cc94f0b5718085972aab60bf3f331dd2221c25c36746973125bbcd7c417ed",
+   "longest_learner_s": 0.0601,
+   "sum_learner_s": 24.403
+  },
+  {
+   "fraction": 0.1,
+   "build": "8",
+   "rows": 17023,
+   "n_learners": 833,
+   "build_s": 7.088,
+   "h_validation_sha256": "a38cc94f0b5718085972aab60bf3f331dd2221c25c36746973125bbcd7c417ed",
+   "longest_learner_s": 0.0659,
+   "sum_learner_s": 23.853
+  },
+  {
+   "fraction": 0.1,
+   "build": "16",
+   "rows": 17023,
+   "n_learners": 833,
+   "build_s": 8.052,
+   "h_validation_sha256": "a38cc94f0b5718085972aab60bf3f331dd2221c25c36746973125bbcd7c417ed",
+   "longest_learner_s": 0.0707,
+   "sum_learner_s": 26.981
+  },
+  {
+   "fraction": 0.1,
+   "build": "32",
+   "rows": 17023,
+   "n_learners": 833,
+   "build_s": 12.041,
+   "h_validation_sha256": "a38cc94f0b5718085972aab60bf3f331dd2221c25c36746973125bbcd7c417ed",
+   "longest_learner_s": 0.0941,
+   "sum_learner_s": 30.009
+  },
+  {
+   "fraction": 0.25,
+   "build": "serial",
+   "rows": 42559,
+   "n_learners": 833,
+   "build_s": 117.607,
+   "h_validation_sha256": "5b8f35d0e0cd9781bfc3ae8749adafb644f8983678a250606deca94397a02355"
+  },
+  {
+   "fraction": 0.25,
+   "build": "1",
+   "rows": 42559,
+   "n_learners": 833,
+   "build_s": 131.365,
+   "h_validation_sha256": "5b8f35d0e0cd9781bfc3ae8749adafb644f8983678a250606deca94397a02355",
+   "longest_learner_s": 0.3246,
+   "sum_learner_s": 127.465
+  },
+  {
+   "fraction": 0.25,
+   "build": "4",
+   "rows": 42559,
+   "n_learners": 833,
+   "build_s": 40.968,
+   "h_validation_sha256": "5b8f35d0e0cd9781bfc3ae8749adafb644f8983678a250606deca94397a02355",
+   "longest_learner_s": 0.3476,
+   "sum_learner_s": 146.4
+  },
+  {
+   "fraction": 0.25,
+   "build": "8",
+   "rows": 42559,
+   "n_learners": 833,
+   "build_s": 24.28,
+   "h_validation_sha256": "5b8f35d0e0cd9781bfc3ae8749adafb644f8983678a250606deca94397a02355",
+   "longest_learner_s": 0.3421,
+   "sum_learner_s": 152.437
+  },
+  {
+   "fraction": 0.25,
+   "build": "16",
+   "rows": 42559,
+   "n_learners": 833,
+   "build_s": 16.358,
+   "h_validation_sha256": "5b8f35d0e0cd9781bfc3ae8749adafb644f8983678a250606deca94397a02355",
+   "longest_learner_s": 0.3569,
+   "sum_learner_s": 160.308
+  },
+  {
+   "fraction": 0.25,
+   "build": "32",
+   "rows": 42559,
+   "n_learners": 833,
+   "build_s": 17.34,
+   "h_validation_sha256": "5b8f35d0e0cd9781bfc3ae8749adafb644f8983678a250606deca94397a02355",
+   "longest_learner_s": 0.6597,
+   "sum_learner_s": 185.586
+  },
+  {
+   "fraction": 0.5,
+   "build": "serial",
+   "rows": 85118,
+   "n_learners": 833,
+   "build_s": 333.69,
+   "h_validation_sha256": "b889b03250411d85627a3923a98930a8a20d5e06244b40f5df4ebc1fb1137994"
+  },
+  {
+   "fraction": 0.5,
+   "build": "1",
+   "rows": 85118,
+   "n_learners": 833,
+   "build_s": 378.454,
+   "h_validation_sha256": "b889b03250411d85627a3923a98930a8a20d5e06244b40f5df4ebc1fb1137994",
+   "longest_learner_s": 0.8133,
+   "sum_learner_s": 371.273
+  },
+  {
+   "fraction": 0.5,
+   "build": "4",
+   "rows": 85118,
+   "n_learners": 833,
+   "build_s": 92.907,
+   "h_validation_sha256": "b889b03250411d85627a3923a98930a8a20d5e06244b40f5df4ebc1fb1137994",
+   "longest_learner_s": 0.6908,
+   "sum_learner_s": 346.251
+  },
+  {
+   "fraction": 0.5,
+   "build": "8",
+   "rows": 85118,
+   "n_learners": 833,
+   "build_s": 49.92,
+   "h_validation_sha256": "b889b03250411d85627a3923a98930a8a20d5e06244b40f5df4ebc1fb1137994",
+   "longest_learner_s": 0.7123,
+   "sum_learner_s": 350.274
+  },
+  {
+   "fraction": 0.5,
+   "build": "16",
+   "rows": 85118,
+   "n_learners": 833,
+   "build_s": 30.397,
+   "h_validation_sha256": "b889b03250411d85627a3923a98930a8a20d5e06244b40f5df4ebc1fb1137994",
+   "longest_learner_s": 0.7208,
+   "sum_learner_s": 374.286
+  },
+  {
+   "fraction": 0.5,
+   "build": "32",
+   "rows": 85118,
+   "n_learners": 833,
+   "build_s": 24.509,
+   "h_validation_sha256": "b889b03250411d85627a3923a98930a8a20d5e06244b40f5df4ebc1fb1137994",
+   "longest_learner_s": 0.8701,
+   "sum_learner_s": 432.843
+  },
+  {
+   "fraction": 1.0,
+   "build": "serial",
+   "rows": 170235,
+   "n_learners": 833,
+   "build_s": 730.313,
+   "h_validation_sha256": "6b668ee5f666113f6af8205c2d546ece2de1b819e3da429c2c91c38459868584"
+  },
+  {
+   "fraction": 1.0,
+   "build": "1",
+   "rows": 170235,
+   "n_learners": 833,
+   "build_s": 745.82,
+   "h_validation_sha256": "6b668ee5f666113f6af8205c2d546ece2de1b819e3da429c2c91c38459868584",
+   "longest_learner_s": 1.3713,
+   "sum_learner_s": 738.628
+  },
+  {
+   "fraction": 1.0,
+   "build": "4",
+   "rows": 170235,
+   "n_learners": 833,
+   "build_s": 189.793,
+   "h_validation_sha256": "6b668ee5f666113f6af8205c2d546ece2de1b819e3da429c2c91c38459868584",
+   "longest_learner_s": 1.3344,
+   "sum_learner_s": 720.29
+  },
+  {
+   "fraction": 1.0,
+   "build": "8",
+   "rows": 170235,
+   "n_learners": 833,
+   "build_s": 98.837,
+   "h_validation_sha256": "6b668ee5f666113f6af8205c2d546ece2de1b819e3da429c2c91c38459868584",
+   "longest_learner_s": 1.3662,
+   "sum_learner_s": 727.928
+  },
+  {
+   "fraction": 1.0,
+   "build": "16",
+   "rows": 170235,
+   "n_learners": 833,
+   "build_s": 64.947,
+   "h_validation_sha256": "6b668ee5f666113f6af8205c2d546ece2de1b819e3da429c2c91c38459868584",
+   "longest_learner_s": 1.7651,
+   "sum_learner_s": 897.799
+  },
+  {
+   "fraction": 1.0,
+   "build": "32",
+   "rows": 170235,
+   "n_learners": 833,
+   "build_s": 45.785,
+   "h_validation_sha256": "6b668ee5f666113f6af8205c2d546ece2de1b819e3da429c2c91c38459868584",
+   "longest_learner_s": 2.0003,
+   "sum_learner_s": 1101.564
+  }
+ ],
+ "analysis": {
+  "0.1": {
+   "rows": 17023,
+   "serial_s": 25.468,
+   "failed": {},
+   "equal_on_validation": {
+    "1": true,
+    "4": true,
+    "8": true,
+    "16": true,
+    "32": true
+   },
+   "speedup": {
+    "1": 0.95,
+    "4": 2.63,
+    "8": 3.59,
+    "16": 3.16,
+    "32": 2.12
+   },
+   "longest_learner_s": 0.0941
+  },
+  "0.25": {
+   "rows": 42559,
+   "serial_s": 117.607,
+   "failed": {},
+   "equal_on_validation": {
+    "1": true,
+    "4": true,
+    "8": true,
+    "16": true,
+    "32": true
+   },
+   "speedup": {
+    "1": 0.9,
+    "4": 2.87,
+    "8": 4.84,
+    "16": 7.19,
+    "32": 6.78
+   },
+   "longest_learner_s": 0.6597
+  },
+  "0.5": {
+   "rows": 85118,
+   "serial_s": 333.69,
+   "failed": {},
+   "equal_on_validation": {
+    "1": true,
+    "4": true,
+    "8": true,
+    "16": true,
+    "32": true
+   },
+   "speedup": {
+    "1": 0.88,
+    "4": 3.59,
+    "8": 6.68,
+    "16": 10.98,
+    "32": 13.61
+   },
+   "longest_learner_s": 0.8701
+  },
+  "1.0": {
+   "rows": 170235,
+   "serial_s": 730.313,
+   "failed": {},
+   "equal_on_validation": {
+    "1": true,
+    "4": true,
+    "8": true,
+    "16": true,
+    "32": true
+   },
+   "speedup": {
+    "1": 0.98,
+    "4": 3.85,
+    "8": 7.39,
+    "16": 11.24,
+    "32": 15.95
+   },
+   "longest_learner_s": 2.0003
+  },
+  "all_equal": true
+ },
+ "provenance": {
+  "generator": "experiments/phase2/src/f159_parallel_pool.py",
+  "generator_commit": "94f079ebc78975fb7b4f2bf41a6fd96f475a437d",
+  "generator_clean": true,
+  "seeds": [
+   42
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "6b5b57ee3c5f4aa2bc68596d106df195",
+  "resumed": 2
+ }
+}

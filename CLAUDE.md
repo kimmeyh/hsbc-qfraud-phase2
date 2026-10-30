@@ -72,7 +72,14 @@ The one field filled from memory was the one that was wrong.)
   run_id)`, with `run_id` from `provenance.new_run_id()` at the run's start;
   it adds the block, refuses to replace another run's result unless
   `replace=` states why, and checks the file before it replaces
-  anything (Sprint 28 IMP-6; `test_result_writer_required.py`). Device runs also
+  anything (Sprint 28 IMP-6; `test_result_writer_required.py`).
+  A module takes its id from `provenance.start(path)` (`resumable=False`
+  for a run that cannot resume), which decides before any work: a new
+  run, a resume of its own unfinished run, or a refusal of a recorded
+  result, with nothing computed (PR 63 review). The id is kept in a
+  gitignored `<result>.run_id` sidecar, the block records the resumes,
+  and an id copied out of a recorded result is refused (F165, Sprint 29).
+  No module calls `new_run_id` or `run_id_for` itself. Device runs also
   store their full response through `experiments/phase2/src/device_store.py`
   (`test_device_store_required.py`).
 - **US English, always.** The team lead writes and expects US English, even though
@@ -139,6 +146,22 @@ only in memory.
   bolded paragraphs with a recommendation and no tool at all. This repository's
   CLAUDE.md never carried the rule, which is how it failed to reach
   EvidenceBasedDB when that repo was seeded from this one.)
+  - **And write the decision in full to `docs/sprints/SPRINT_n_DECISIONS.md`
+    BEFORE it is shown.** Each entry has a stable ID (D1, D2, ...) and:
+    **What** (the problem or choice); **Why it matters** (the cost of
+    leaving it, and what each option gains); **Kind** per option,
+    Prevention (stops this and similar problems recurring; preferred) or
+    Workaround (gets past the current problem only); **Cost** per option
+    (minutes, metered seconds, files touched); a **Recommendation** with
+    its reason, and if it is a Workaround, why Prevention is not chosen;
+    and the numbered **Options**. A decision shown again is pasted from
+    the file unchanged: same ID, wording and option numbers. If facts
+    change after asking, a dated "Changed since asked" note goes below the
+    original; the original is never edited. The answer is recorded under
+    the entry. The file is committed with the next commit. (Team lead,
+    2026-10-30, Sprint 29: a decision kept only in scrollback can be lost
+    or shortened when it is asked again, and one asked without its value
+    and kind cannot be answered well.)
 
 - **Don't put two decisions in one question.** Each question gets one
   unambiguous answer form. Never write a question where "yes" maps to two
