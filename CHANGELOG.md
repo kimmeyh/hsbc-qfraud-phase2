@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-30
 
+- **fix**: the commit-msg hook refuses a `feat:` or `fix:` commit on a sprint branch when no task timer is running, a task started and not finished or paused (Sprint 29 IMP-4, PR 63 review retrospective). Sprint 29's Task C had no timer and E and G were started only when their runs began, so effort accuracy was unmeasured for a second sprint. `check_commit_issue.timed` reads the same rule as `update_sprint_status.open_tasks`. Proven red, the paused case included.
 - **process**: every decision asked of the team lead is first written in full to `docs/sprints/SPRINT_n_DECISIONS.md`, with a stable ID, what it is, why it matters, each option's kind (Prevention, preferred, or Workaround) and cost, and a recommendation with its reason; a decision asked again is pasted from the file unchanged, with changed facts as a dated note below it (team lead, Sprint 29, PR #63). `CLAUDE.md` and `docs/SPRINT_EXECUTION_WORKFLOW.md` (invariant 11) carry the rule. `docs/sprints/SPRINT_29_DECISIONS.md` added, with D1 and the retrospective disposition D2.
 
 ### 2026-10-28
