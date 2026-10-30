@@ -527,11 +527,17 @@ stable HGB, F154's outcome rule). See SPRINT_28_PLAN.md,
 SPRINT_28_VALIDATION.md, SPRINT_28_RETROSPECTIVE.md and CHANGELOG.md.
 Removed from candidates per convention (Pass 1, 2026-10-25).)
 
-**Selected for Sprint 29** (team lead, 2026-10-25): F159 (assigned
-2026-10-23), F164, F156, F160, F166, F158 and F165, and F167, a copy of
-F13 for drafting the full PoC plan now. Zero metered. F155, F102, F157's
-other datasets, F161, F95 and F13 itself not selected. Plan:
-`docs/sprints/SPRINT_29_PLAN.md`.
+(F165 a resumed run keeps its id, F159 the parallel pool build, F164
+Phase 2 figures resolve, F156 the Henze-Penrose bound, F160 Experiment
+3's room on IEEE-CIS, F166 F157 part 1 on ULB, F158 fraud types and F167
+the PoC plan draft: COMPLETED in Sprint 29, merged via PR #63 (main PR
+#73), zero metered seconds. Findings that bind other cards are recorded
+on them: F114 and F169 (F156 fails), F25 (F160 reopens its design on
+IEEE-CIS), F157 (F166 is part 1), F170 and F171 (F158 step 3), F13
+(F167's draft), F168 (F165 spent). F172 and F173 carded by the
+retrospective. See SPRINT_29_PLAN.md, SPRINT_29_VALIDATION.md,
+SPRINT_29_DECISIONS.md, SPRINT_29_RETROSPECTIVE.md and CHANGELOG.md.
+Removed from candidates per convention (Pass 1, 2026-10-30).)
 
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
@@ -620,14 +626,6 @@ value. Removed from candidates.)
 - **2026-10-23 (team lead, Sprint 28 Manual Validation, DV1): the probe is 1,300 variables**, above both 954 and F143's 987, so an accepted job shows the queue has moved past both. `qpu_cost_model.quote(1300, 1)` gives 4 s from one Dirac-3S anchor (833, the only one within 2x); above that anchor, 4 s is a floor, not a bound. The run still needs its own per-block approval (Criterion H)
 - **2026-10-23 (Sprint 28 D4, storage prevention)**: the probe runs from a new runner under `experiments/phase2/src`, through `device_store.saving` with a `hamiltonian` declaration, so the full response and the problem's arrays are stored. `probe_variable_ceiling.py` is a frozen Phase 1 module and is not reused for it (`test_device_store_required.py`)
 
-**F156. Ceiling estimator that does not go through one model: F114's unblocker (~90m on F108's harness [no-history], zero metered) Priority 45**
-- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-23 by the team lead, Sprint 28 Manual Validation)
-- Platform: F108's simulator first; ULB and IEEE-CIS only after a pass
-- F108 and F114 found that every plug-in estimate tried overstates the Bayes error, and calibration does not move it. F108's four methods, its Cover-Hart nearest-neighbor bound among them, all failed. Candidates named in `F108_CEILING_VALIDATION.md`: a Bayes-error estimator not tied to one fitted model (for example a divergence-based bound such as Henze-Penrose; the choice is made in the entry), and an HGB set for extreme imbalance. Entry first, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm)
-- Scope note (team lead's question, 2026-10-23): the ceiling is a property of the data, not of the algorithm, so one validated estimate bounds every model, ML or QML (kernels, QNN, CVQBoost). A transform of the same features, quantum feature maps included, cannot lower it; synthetic or augmented rows cannot either. Only new information (new features or sources) can
-- Depends on: nothing. Enables: F114
-- **Done 2026-10-28 (Sprint 29 Task D, #67): fails.** Entry: the 2026-10-26 amendment to F108 in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6 (a4df8a2). `experiments/phase2/src/f156_hp_bound.py`, results `experiments/phase2/results/f156_hp_bound_pilot.json` and `f156_hp_bound.json` (complete). Henze-Penrose bound on a 60,000-row subsample, F108's generator, seeds 42-46 and arms. On the main arm the interval contained the true Bayes error on 2 of 5 seeds and was narrow on none, so neither term reached 4 of 5; the entry had shown before the run that both terms cannot hold together here. Where it missed, the lower end sat just above the true value. F114 stays blocked; the next estimator is a team-lead choice. **Decided 2026-10-28 (team lead, Sprint 29 Decision D1 option 2): F169 carries the second candidate, an HGB set for extreme imbalance**
-
 **F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 30**
 - Phase: Phase 2 (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F151 and F152)
 - Platform: ULB, IEEE-CIS, then the other datasets already used
@@ -635,29 +633,7 @@ value. Removed from candidates.)
 - Output: one document per dataset per algorithm under `docs/phase2/algorithms/`, plus one comparison page per dataset that references them (numbers live in the result files, per the official-record rule)
 - Split at refinement into one card per dataset; device lanes need per-block approval (Criterion H)
 - Depends on: F102 for reporting; the F154 outcome rule supplies the confusion counts (corrected 2026-10-25, Pass 1: F154 is spent, shipped in Sprint 28 as a standing rule in CLAUDE.md)
-
-**F158. Fraud types: find, remove, then predict the rest (~150m exploration on the simulator [no-history], zero metered) Priority 35**
-- Phase: Phase 2 exploration (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F154)
-- Platform: F108's simulator (its fraud scenarios are known, so types are ground truth), then ULB and IEEE-CIS
-- Question: if each fraud type can be found by its own detector and its rows removed, does a model on the remaining rows catch more of the remaining fraud than one model on everything, at the same alert budget? The team lead's 2001 neural-network work used this approach
-- Steps: (1) on the simulator, per-type detectors in a cascade against one model, end to end on the same test rows; (2) on ULB and IEEE-CIS, which carry no type labels, candidate types from clustering the training frauds (features, or model explanations), kept only if stable across seeds; (3) the frauds every stored model misses (F154) characterized first. Entry before any run, with the comparison as the primary result
-- Risk named in advance: gradient boosting already concentrates on hard rows, so the gain may be small; removing a type also removes its legitimate look-alikes' context
-- Depends on: nothing
-- **Done 2026-10-28 (Sprint 29 Task G, #70): the cascade is below one model.** `experiments/phase2/src/f158_fraud_types.py`, result `experiments/phase2/results/f158_fraud_types.json` (complete). Step 1, seeds 42-49 on F108's simulator with a 7-day label delay: recall at the 0.5% budget, cascade minus single model, mean -0.069 (95% interval -0.126 to -0.013, exact Wilcoxon p 0.016), so the reading is "below"; the shuffled-type reference was also below the single model, by less (mean -0.007). Step 2 did not run (its condition is a cascade above). Step 3: across F154's twelve on-split families (a thirteenth is off-split on every seed and left out), 106 of 950 (seed, test fraud) pairs over seeds 42-51, 95 test frauds per seed, were missed by every stored model; a fraud on more than one seed's test fold counts once per seed, so the number of distinct frauds is not recorded (corrected 2026-10-28, PR 63 review); on V1-V8 their means sit near zero (the PCA features' center, which legitimate rows dominate) while the caught frauds' are far from it
-
-**F159. Parallel weak-learner pool build: measure the speed-up (~60m [no-history], zero metered) Priority 50; assigned to Sprint 29 (team lead, 2026-10-23)**
-- Phase: Phase 2 preparation (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F110)
-- Platform: this machine first
-- F110 found the serial pool build is the cost (about 13 minutes at 833 learners and full ULB rows). The learners are independent, so the build splits across processes. Build them with a process pool that works on Windows (no `fork`), check the pool equals `full_pair_pool.build_full`'s, and time it at 1, 4, 8, 16 and 32 workers at F110's four row fractions. Report the speed-up against workers and the longest single learner (the floor any number of processors reaches)
-- Depends on: nothing
-- **Done 2026-10-28 (Sprint 29 Task B, #65)**: `experiments/phase2/src/f159_parallel_pool.py`, result `experiments/phase2/results/f159_parallel_pool.json` (complete, all 24 units). Every parallel pool's H on the validation rows equals the serial pool's. At full ULB rows the serial build took 730.3 s and 32 workers 45.8 s (speed-up 15.95); 16 workers gave 11.24. The longest single learner was 2.0 s, so one learner does not set the floor. Per-learner time rose with the worker count (summed learner time 738.6 s at 1 worker, 1101.6 s at 32), so contention is part of the gap; what takes the rest of the wall time is not measured (corrected 2026-10-28, PR 63 review: this line had named process start-up and copying the rows, which the result does not show). The first run stopped at 32 workers on the 0.5 fraction with a `MemoryError` (cause unverified), and its resume hung 9 hours; the run now records such a build as failed and stops it after 2 times its fraction's serial build. On the final resume that build finished (24.5 s)
-
-**F160. Experiment 3 room check on a second dataset (~45m [no-history], zero metered) Priority 70**
-- Phase: Phase 2 preparation (added 2026-10-23 by the team lead's question, Sprint 28 Manual Validation, after F153)
-- Platform: IEEE-CIS, classical proxy, greedy and SCIP
-- F94 and F153 tested only ULB. Repeat F153's gap check (greedy against the floor, threshold 0.01) on IEEE-CIS pools. The problem size is set by the number of learners, not rows, so more rows alone are not expected to open room (inferred); different learners or data might
-- Depends on: nothing; a pass reopens F25's design
-- **Done 2026-10-28 (Sprint 29 Task E, #68): passes on IEEE-CIS; F25's design reopens.** Entry: the 2026-10-26 amendment to Experiment 3 in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6 (52454e2). `experiments/phase2/src/f160_room_ieee.py`, result `experiments/phase2/results/f160_room_ieee.json` (complete). The positive control (random-sign learners) passed first. On IEEE-CIS, seeds 42-44, both instance sizes (60 and 136 variables), the chosen ridge weight 2.0: the gap from greedy to the floor is 0.096-0.098 on every instance (rule: 0.01; corrected 2026-10-28 from 0.096-0.099, PR 63 review: the largest gap is 0.0985), and F104's resolution gate passes, so F153's falsifier does not fire (it needs both resolution checks to fail; the guide-based check fails on every instance, as it does on the control). Caveat for the next step: the room is measured to the floor, a bound. SCIP stopped at its 300 s cap on every instance without beating greedy, and its dual bound leaves the true optimum somewhere between greedy and about 0.08-0.18 below it. Whether a solver, Dirac-3 included, can reach below greedy is not shown
+- **Pass 1 (2026-10-30)**: part 1, ULB, shipped as F166 in Sprint 29 (`docs/phase2/algorithms/`, pages from `scripts/f166_docs.py`). The next part is split at Pass 2
 
 **F161. B4 re-run on Dirac-3S, all ten cells (~60m plus device time, about 210-310 metered s) Priority 90, low; decide near the end of Phase 2**
 - Phase: Phase 2, late (added 2026-10-23 by the team lead, Sprint 28 Phase 6)
@@ -668,37 +644,6 @@ value. Removed from candidates.)
 - Depends on: per-block approval (Criterion H); the run condition above
 - **Pass 1 (2026-10-25)**: F162 (Sprint 28) found the proxy not reliably above HGB or XGBoost inside the pocket on any cell, and its card said a null justifies no device block (`docs/phase2/F162_IN_POCKET.md`). Run condition (1) is judged against that result
 
-**F164. Phase 2 document figures resolve to evidence (~3h [no-history], zero metered) Priority 25**
-- Phase: Phase 2 preparation, tooling (added 2026-10-24 by the team lead, Sprint 28 retrospective IMP-7, backlog)
-- Platform: tests, this machine
-- Source: seven PR #46 findings were figures or labels in `docs/phase2/` and the validation document that the result files do not support (F111's unrecorded 95-minute wall clock, F110's clamp cause, the "776 of 950" denominator label, F151's second failing reason, F114's scope, F146 P1 listed open, a range endpoint 0.829 for 0.828). `test_document_figures_resolve.py` (F44) checks only `docs/paper/`
-- Scope: extend F44's check to `docs/phase2/*.md`: every decimal resolves to a value in `experiments/phase2/results/` or `experiments/results/` at the quoted rounding, or is registered once with a reason (derived ratios, dataset properties, citations); an unregistered number that matches nothing fails. F44's stated limit stays: a figure that exists somewhere but is quoted in the wrong place is not caught, which needs per-claim provenance (F39)
-- Acceptance: the seven figures above, put back, each fail (proven red with `assert_can_fail`); the registry starts with every current figure either resolved or registered
-- Depends on: nothing; size the registry at refinement by counting the decimals in `docs/phase2/`
-- **Sized at Pass 2 (2026-10-25)**: 1,631 decimals, 837 distinct values, in 34 documents. How many resolve to a result file is unmeasured, so the registry's size is unknown; the ~3h estimate assumes most resolve
-- **Done 2026-10-26 (Sprint 29 Task C, #66; Decision 1 option 1)**: `experiments/src/test_phase2_figures_resolve.py` resolves each `docs/phase2/*.md` figure against the result files its own document names (one global pool accepted almost any 1-3 place figure, 0.829 included); a "%" figure also resolves as a fraction; versions, arXiv identifiers and section numbers are not figures. `experiments/src/phase2_figure_registry.py` registers the rest with a reason each, saying which derived figures were recomputed. 0.829 put back fails, and the per-document pool and stale-entry checks are proven red. Two documents corrected: F108's plug-in ratios (three of five, and the noise row's range) and F162's "recorded" wall time. The other six motivating findings are out of a figure check's reach (named in the test's docstring)
-
-**F165. Result writer: a resumed run keeps its own id (~60m [no-history], zero metered) Priority 40**
-- Phase: Phase 2 preparation, tooling (added 2026-10-25, Pass 2 after Sprint 28: the stronger option of review finding 3 on the Sprint 28 improvement commits, left open by `fb56862`)
-- Platform: tests, this machine
-- `provenance.write_result` refuses to replace a result from another run, and the refusal holds only while each run makes its own id. Two gaps remain, both stated in `new_run_id`'s docstring: a caller that copies the id out of a recorded result switches the refusal off, and a resumed run in a new process must pass `replace=` to continue its own file, so a resume and a real replacement look the same in the record
-- Work: the run's id is kept beside the result at the run's start (a gitignored sidecar), a resume reads it from there, and `write_result` refuses an id that matches the recorded result but not the sidecar
-- This enables: resumable Phase 2 runs (as F162's and F111's were) that record a resume as a resume. This prevents: a copied id silently overwriting a recorded result
-- Acceptance: a resume in a new process continues its file with no `replace=`; a copied id with no sidecar is refused; each term proven red with `assert_can_fail`
-- Depends on: nothing
-- **Done 2026-10-26 (Sprint 29 Task A, #64)**: `provenance.run_id_for(path)` keeps the id in a gitignored `<result>.run_id` sidecar and `run_id_for(path, resume=True)` reads it back; `write_result` records the resumes and refuses an id this process did not make or resume. Resume in two real processes, copied-id refusal, new start and ignore rule each proven red
-
-**F166. F157 part 1: best achievable result per algorithm on ULB, classical and proxy lanes (~240m [no-history], zero metered) Priority 30**
-- Phase: Phase 2 (split from F157 at the 2026-10-25 refinement, as F157 directs)
-- Platform: ULB, classical proxy
-- F157's scope for one dataset: HGB, LightGBM, XGBoost, CatBoost, logistic regression, SVM and the CVQBoost proxy, each tuned under one protocol, with the alternatives tried and why each was kept or dropped. Every result carries the F154 outcome block and the metrics F157 names, with intervals over seeds. Device lanes (CVQBoost device, QSVM) and QNN are out of this part
-- Output: one document per algorithm under `docs/phase2/algorithms/` and one ULB comparison page that references them; the numbers live in the result files
-- Starting points already measured: F151's stable HGB (`l2_regularization=1.0`), F111's ULB lanes, Phase 1's tuned XGBoost
-- This enables: a per-dataset reference that every later Phase 2 claim on ULB is read against. This prevents: comparing a tuned lane against an untuned one, as F151 and F162 each found
-- Acceptance: entry before any score; seven algorithm documents and the comparison page; each figure resolves to a result file
-- Depends on: F102 for reporting (the draft's section 2 standard applies)
-- **Done 2026-10-28 (Sprint 29 Task F, #69)**: entry in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6 (15775da); `experiments/phase2/src/f166_ulb_algorithms.py`, result `experiments/phase2/results/f166_ulb_algorithms.json` (complete, seeds 42-51; seed 42 took 11.48 minutes, so the rule gave 10). Eight documents in `docs/phase2/algorithms/`: one per algorithm and `ULB_COMPARISON.md`, each figure resolved by F164's check. By mean test AUPRC: CatBoost, LightGBM, XGBoost, HGB, the CVQBoost proxy, the linear SVM, logistic regression. Under the entry's Wilcoxon test at Bonferroni 0.05 / 6, two adjacent pairs differ: the proxy above the SVM and the SVM above logistic regression; the order among the four boosting libraries and the proxy is not established. The RBF SVM alternative was dropped (better on 2 of 10 seeds)
-
 **F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140, blocked**
 - Phase: Phase 2 preparation (ceiling methodology)
 - Platform: ULB, IEEE-CIS
@@ -706,6 +651,68 @@ value. Removed from candidates.)
 - Depends on: a ceiling method that passes F108's harness (corrected 2026-10-19, Pass 1: F108 shipped in Sprint 27 and validated none, so this card is blocked, not ready). F156 is the candidate (corrected 2026-10-25, Pass 1: the calibrated plug-in failed in Sprint 28). **2026-10-28: F156 failed (Sprint 29 Task D); F169 is the next candidate (team lead, Sprint 29 Decision D1 option 2)**
 - **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods on its main arm, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
 - **2026-10-22 (Sprint 28 Task G)**: an isotonic-calibrated plug-in on F151's stable HGB, under a dated F108 amendment, recovers 2 of 5 seeds on the main arm, the same as F108's default plug-in; calibration does not move the estimate. **Still blocked.** The next candidate is a different estimator, not a re-scaled one (`docs/phase2/F114_CALIBRATED_PLUGIN.md`)
+
+**F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 180**
+- **2026-10-22 (Sprint 28 Task J, #56)**: skeleton written, `docs/phase2/PHASE2_POC_PLAN.md`. Dates now sourced: program roadmap page, team lead's screenshot of 2026-10-22 (PoC 17 Nov 2026 - 28 Feb 2027; Review and Close 1 Mar - 30 Apr 2027). The content after notification stays open
+- Phase: Phase 2 (Nov 17 - Feb 28, if selected)
+- Platform: All
+- Braket hardware validation, IEEE-CIS at scale, calibrated deployment per the routing architecture; plan built on acceptance
+- **OFF HOLD 2026-10-05 (team lead): waiting is no longer a HOLD reason for Phase 2 work.** Scored 180, last in the numeric set, because the *content* of the plan still depends on finalist notification --- but the card is now schedulable rather than parked, and much of the preparation it names is already carded (F102 preregistration framework, F6 Braket, F105 IEEE-CIS at scale, F118-F120 deployment)
+- Depends on: nothing to start the skeleton; the dataset-specific content needs finalist notification
+- **Pass 1 (2026-10-30)**: F167 (Sprint 29) wrote the full plan on labeled assumptions, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. On notification this card replaces those assumptions with the brief's terms; the skeleton is unchanged
+
+**F168. Agent work and long runs survive a usage limit, and a restart knows what was done (~240m [no-history], zero metered) Priority 20; assigned to Sprint 30 (team lead, 2026-10-26)**
+- Phase: Phase 2 preparation, tooling (added 2026-10-26 by the team lead from a prompt written in an EvidenceBasedDB session, Sprint 13 Task G). The team lead's request, quoted: "can we make future agent runs setup to not loose anything if we cross current or weekly session limits and can re-start them so that they know what was done and what was not done and can pickup with minimal interruption"
+- Platform: process docs, scripts, tests, this machine
+- What is known (stated in the source prompt, **unverified** here; check the docs named at execution): interactive sessions from Claude Code 2.1.234 wait for a usage limit and continue when the reset is under 24 hours away (`autoContinueAtUsageLimit`, on by default, re-armed at most twice); background sessions and `-p` runs do not wait; nothing continues across a weekly reset. A limit stops Claude, not a Python process Claude started. Checked 2026-10-26: this machine has 2.1.310, and neither the user nor the project settings file sets `autoContinueAtUsageLimit`, so the default holds
+- Work, seven parts:
+  1. A "Progress and restart" section in every subagent launch prompt: the agent reads its progress files in a scratch folder outside the results tree first, skips finished units, saves each unit when checked, and says in its final reply what it resumed and from where. **Found at carding: the repository keeps no launch prompts**; the CI-fix agent (3.3.2), reviews and the fresh-eyes review (`SPRINT_EXECUTION_WORKFLOW.md`) are written inline at launch. So this part first adds kept templates (one file per agent kind) that the process docs point to
+  2. Long classical or simulated runs checkpoint per unit (seed, fold, lane, block) to a scratch folder, and a rerun skips finished units. Only the final result goes to `experiments/phase2/results/`, through `provenance.write_result` with the outcome block. The run id is kept with the checkpoints, so a resumed run is the same run and its provenance says it resumed. Builds on F165 (Sprint 29 Task A), which keeps the id in a sidecar; F162 and F110 already resume and are the pattern
+  3. A resume never repeats a metered call. Before any device call after a stop, the saved responses in `device_store.py` are checked for that block's problem hash; a block with a saved response is never sent again; a block without one is re-approved by the team lead with its count and seconds (Criterion H unchanged). **Found at carding: `device_store.py` can save and check a response but has no lookup by problem hash**; this part adds one
+  4. A status check reads a run's own completion marker, never the result file's presence alone (CLAUDE.md, Sprint 13)
+  5. `scripts/agent_status.py` (name to confirm at planning), computed from files only, storing nothing: each agent task's state (not started, started with nothing saved, in progress and how far, finished), each run's checkpoints and completion marker, device blocks with a saved response, and the sprint phase
+  6. A recurring wake-up prompt in the coordinating session (CronCreate, hourly at an off-minute such as :53): idle if a turn is running; resume each agent that stopped without its final report; report runs that finished or died; continue the phase's next action; never send a device call; one line when nothing stalled; end with the status footer. The 7-day expiry is from the source prompt, **unverified**; the job id and expiry are reported when it is made. It lives in the session, not the repository
+  7. Two tests, each proven red with `assert_can_fail`: one fails when a kept launch prompt loses its restart section; one fails when a long-run module writes a result without the checkpoint-and-resume path. "Long-run module" needs a definition the test can read (a declared marker, set at planning)
+- Records: the sprint process doc, CHANGELOG and this card, dated, with the request quoted above
+- This enables: work stopped by a 5-hour or weekly limit resumed by the same agent, a new agent or a new session, with finished units kept. This prevents: lost agent work, a rerun that overwrites its own partial evidence, and a metered block sent twice
+- Acceptance: the seven parts above; each new test and the hash lookup proven red; a run stopped mid-way in a test resumes and skips its finished units; the report names each file changed, each red proof, the wake-up job id and expiry, and anything not done
+- Boundaries: EvidenceBasedDB is not written from here; Phase 1 evidence in `experiments/results/` is never written
+- Depends on: F165 for the run id (spent, Pass 1 2026-10-30: shipped in Sprint 29)
+
+**F169. Ceiling estimator, second candidate: an HGB set for extreme imbalance on F108's harness (~90m [no-history], zero metered) Priority 45**
+- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation, Decision D1 option 2)
+- Platform: F108's simulator first; ULB and IEEE-CIS only after a pass
+- F156 (Sprint 29 Task D) failed: the Henze-Penrose interval contained the true Bayes error on 2 of 5 seeds on the main arm. This is the other candidate named in `F108_CEILING_VALIDATION.md` ("What follows"): an HGB with `max_bins` and early stopping set for extreme imbalance, under the plug-in. Entry first, as a dated F108 amendment, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm). The settings are chosen in the entry, before the run
+- Depends on: nothing. Enables: F114 (corrected 2026-10-30, Pass 1: an unfinished line, "Refinement: a later sprint's", removed)
+
+**F170. ULB frauds missed by every model: are their nearest neighbors legitimate? (~30m [no-history], zero metered) Priority 50**
+- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation)
+- Platform: ULB, F158's split and seeds 42-51
+- F158 step 3 (Sprint 29 Task G) found 106 of 950 (seed, test fraud) pairs over seeds 42-51 missed at the 0.5% budget by all twelve on-split families, with V1-V8 means near the PCA center where legitimate rows dominate. That compares group means only. This card tests the reading row by row: for each test fraud, the share of legitimate rows among its k nearest training neighbors (k and the distance set in the entry, before the run), missed against caught, with a paired-free test named in the entry. It also records each missed row's identity, so the distinct frauds are counted (step 3 recorded pair counts only)
+- Reading: if missed frauds' neighbors are mostly legitimate and caught frauds' are not, the missed group is consistent with ULB's information limit (the ceiling F169 estimates); if not, a model weakness remains open
+- Depends on: nothing. Informs: F169, F114
+
+**F171. F158 step 3 on IEEE-CIS: do richer features shrink the group every model misses? (~60m [no-history], zero metered) Priority 50**
+- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation)
+- Platform: IEEE-CIS, the on-split model families stored for it
+- ULB holds 28 anonymized PCA components plus Time and Amount and cannot take new features. IEEE-CIS carries raw card, address, device and email-domain fields. This card runs F158's step 3 there: the share of test frauds missed at the 0.5% budget by every stored family, and the missed against caught profile. Which families are stored on-split for IEEE-CIS is checked at refinement. **Checked 2026-10-30 (Pass 1)**: `experiments/phase2/results/f152_exp2.json` stores four families (xgboost, lightgbm, hgb, logistic) on F152's rolling-origin folds 4, 5 and 6, seeds 42-46, each with an outcome block; all 60 per-row score files exist under `experiments/phase2/predictions/`. That is four families on temporal folds, against ULB's twelve on F158's split, so the share is read with that difference stated
+- Reading: a share well below ULB's 11% of (seed, test fraud) pairs, counted the same way, is consistent with richer information catching frauds a transform of ULB's features cannot; the two datasets differ in more than feature richness, so the comparison is descriptive, not causal
+- Depends on: nothing. Informs: F169, F114
+
+**F172. Tests for the Sprint 29 review's coverage gaps (~90m [no-history], zero metered) Priority 40**
+- Phase: Phase 2 preparation (test coverage; added 2026-10-30 by the team lead, Sprint 29 retrospective, Decision D2 option 1, IMP-5)
+- Platform: none; tests only. No recorded result changes
+- The PR 63 review found branches that no test makes fail visibly (`docs/sprints/SPRINT_29_RETROSPECTIVE.md`, "Review findings not fixed"). One test each, each proven red: F166's validation and training label checks against the classical lanes' (only the test labels are checked), the "below" reading, the `svm_form` majority rule and `t42_min <= 0`; F156's `summarize` pass term and the single-class refusal (the key `term1_alone_4_of_5` keeps its name: it is in the recorded result); F160's SCIP best-found minimum; F159's MemoryError and broken-pool path end to end, and `test_the_budget_can_fail` made to go red through its timing assertion, not a KeyError; each module's "never redo a seed" resume loop at module level (`provenance.start` covers the decision, not the loop)
+- Kind: detection for this code only (Workaround in the Sprint 29 decision format); the prevention for new rules is Sprint 29 IMP-1
+- Depends on: nothing
+
+**F173. The commit-msg hook checks the commit's OWN task timer, not any timer (~45m [no-history], zero metered) Priority 40**
+- Phase: Phase 2 preparation (process tooling; added 2026-10-30 from the review of the Sprint 29 improvement commits)
+- Platform: none
+- Sprint 29 IMP-4 (baa1555) refuses a `feat:` or `fix:` commit when no task timer runs, but accepts any running timer. The review of the improvement commits showed it would have admitted the case it cites: Task C's commit 5348add (#66, 2026-10-27 23:33) was made while D's and H's timers ran. The status file does not map issues to tasks, so the hook cannot tell which task a commit belongs to
+- Work: record each task's issue in `sprint_status.json` (for example a `task_issues` map set by `update_sprint_status.py` when the issue is added), and refuse a commit whose named issue's task is not being timed. "PR n review" commits need a stated rule (for example, the review-fix task's timer)
+- Acceptance: a commit naming #66 while only D's and H's timers run is refused; each term proven red
+- Depends on: nothing
 
 ### Paper (Stages 4-6)
 
@@ -784,77 +791,6 @@ not a sweep correction.
 - **The team lead's intent for this card**: enqueue 4 or more jobs at once so they run CONSECUTIVELY, raising the odds they execute back to back rather than each paying a fresh queue wait. That is a different and stronger value case than the throughput argument below
 - Value was judged to arrive with Phase 2 volume (81+ fit grids), and that judgment was made against a free tier with 163 spent seconds. With 3,000 granted seconds (F46) and queue wait as the binding cost rather than device seconds, the case is stronger: whenever a session needs more than one or two fits, serial submission wastes most of the wall clock. Still not recommended BEFORE submission, on calendar grounds alone
 - Depends on: nothing to build; live vetting needs F141, spent (corrected 2026-10-18, Pass 1: shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate and the F124 rank-1-first gate are both spent); live vetting needs team-lead approval (Criterion H)
-
-**F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 180**
-- **2026-10-22 (Sprint 28 Task J, #56)**: skeleton written, `docs/phase2/PHASE2_POC_PLAN.md`. Dates now sourced: program roadmap page, team lead's screenshot of 2026-10-22 (PoC 17 Nov 2026 - 28 Feb 2027; Review and Close 1 Mar - 30 Apr 2027). The content after notification stays open
-- Phase: Phase 2 (Nov 17 - Feb 28, if selected)
-- Platform: All
-- Braket hardware validation, IEEE-CIS at scale, calibrated deployment per the routing architecture; plan built on acceptance
-- **OFF HOLD 2026-10-05 (team lead): waiting is no longer a HOLD reason for Phase 2 work.** Scored 180, last in the numeric set, because the *content* of the plan still depends on finalist notification --- but the card is now schedulable rather than parked, and much of the preparation it names is already carded (F102 preregistration framework, F6 Braket, F105 IEEE-CIS at scale, F118-F120 deployment)
-- Depends on: nothing to start the skeleton; the dataset-specific content needs finalist notification
-
-**F167. F13 copy: the full PoC plan drafted now, on stated assumptions (~60m [no-history], zero metered) Priority 30; selected for Sprint 29**
-- Phase: Phase 2 (added 2026-10-25 by the team lead at Sprint 29 selection: "Make a copy so that we can draft what this will look like and assign to this sprint")
-- Platform: docs
-- A draft of the plan F13 will hold after notification, written now so the team lead can see its shape: the PoC window split into sprints, each experiment placed with its entry, its device block (if any) and the decision that releases it, and the items that wait for the brief. Every assumption about the brief (data, metrics, compute, confidentiality, device seconds) labeled as an assumption
-- Output: a new file, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. The skeleton (`PHASE2_POC_PLAN.md`) and F13 stay as they are; on notification F13 replaces the assumptions with the brief's terms
-- **Done 2026-10-26 (Sprint 29 Task H, #71)**: the draft splits the PoC window into five stages, places each experiment with its entry, device and releasing decision, names Experiment 3's proxy design as the critical path with a proposed deadline, and lists eight labeled assumptions
-- Acceptance: every date sourced; every assumption labeled; no figure restated that another file owns
-- Depends on: nothing
-
-**F168. Agent work and long runs survive a usage limit, and a restart knows what was done (~240m [no-history], zero metered) Priority 20; assigned to Sprint 30 (team lead, 2026-10-26)**
-- Phase: Phase 2 preparation, tooling (added 2026-10-26 by the team lead from a prompt written in an EvidenceBasedDB session, Sprint 13 Task G). The team lead's request, quoted: "can we make future agent runs setup to not loose anything if we cross current or weekly session limits and can re-start them so that they know what was done and what was not done and can pickup with minimal interruption"
-- Platform: process docs, scripts, tests, this machine
-- What is known (stated in the source prompt, **unverified** here; check the docs named at execution): interactive sessions from Claude Code 2.1.234 wait for a usage limit and continue when the reset is under 24 hours away (`autoContinueAtUsageLimit`, on by default, re-armed at most twice); background sessions and `-p` runs do not wait; nothing continues across a weekly reset. A limit stops Claude, not a Python process Claude started. Checked 2026-10-26: this machine has 2.1.310, and neither the user nor the project settings file sets `autoContinueAtUsageLimit`, so the default holds
-- Work, seven parts:
-  1. A "Progress and restart" section in every subagent launch prompt: the agent reads its progress files in a scratch folder outside the results tree first, skips finished units, saves each unit when checked, and says in its final reply what it resumed and from where. **Found at carding: the repository keeps no launch prompts**; the CI-fix agent (3.3.2), reviews and the fresh-eyes review (`SPRINT_EXECUTION_WORKFLOW.md`) are written inline at launch. So this part first adds kept templates (one file per agent kind) that the process docs point to
-  2. Long classical or simulated runs checkpoint per unit (seed, fold, lane, block) to a scratch folder, and a rerun skips finished units. Only the final result goes to `experiments/phase2/results/`, through `provenance.write_result` with the outcome block. The run id is kept with the checkpoints, so a resumed run is the same run and its provenance says it resumed. Builds on F165 (Sprint 29 Task A), which keeps the id in a sidecar; F162 and F110 already resume and are the pattern
-  3. A resume never repeats a metered call. Before any device call after a stop, the saved responses in `device_store.py` are checked for that block's problem hash; a block with a saved response is never sent again; a block without one is re-approved by the team lead with its count and seconds (Criterion H unchanged). **Found at carding: `device_store.py` can save and check a response but has no lookup by problem hash**; this part adds one
-  4. A status check reads a run's own completion marker, never the result file's presence alone (CLAUDE.md, Sprint 13)
-  5. `scripts/agent_status.py` (name to confirm at planning), computed from files only, storing nothing: each agent task's state (not started, started with nothing saved, in progress and how far, finished), each run's checkpoints and completion marker, device blocks with a saved response, and the sprint phase
-  6. A recurring wake-up prompt in the coordinating session (CronCreate, hourly at an off-minute such as :53): idle if a turn is running; resume each agent that stopped without its final report; report runs that finished or died; continue the phase's next action; never send a device call; one line when nothing stalled; end with the status footer. The 7-day expiry is from the source prompt, **unverified**; the job id and expiry are reported when it is made. It lives in the session, not the repository
-  7. Two tests, each proven red with `assert_can_fail`: one fails when a kept launch prompt loses its restart section; one fails when a long-run module writes a result without the checkpoint-and-resume path. "Long-run module" needs a definition the test can read (a declared marker, set at planning)
-- Records: the sprint process doc, CHANGELOG and this card, dated, with the request quoted above
-- This enables: work stopped by a 5-hour or weekly limit resumed by the same agent, a new agent or a new session, with finished units kept. This prevents: lost agent work, a rerun that overwrites its own partial evidence, and a metered block sent twice
-- Acceptance: the seven parts above; each new test and the hash lookup proven red; a run stopped mid-way in a test resumes and skips its finished units; the report names each file changed, each red proof, the wake-up job id and expiry, and anything not done
-- Boundaries: EvidenceBasedDB is not written from here; Phase 1 evidence in `experiments/results/` is never written
-- Depends on: F165 (Sprint 29 Task A) for the run id
-
-**F169. Ceiling estimator, second candidate: an HGB set for extreme imbalance on F108's harness (~90m [no-history], zero metered) Priority 45**
-- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation, Decision D1 option 2)
-- Platform: F108's simulator first; ULB and IEEE-CIS only after a pass
-- F156 (Sprint 29 Task D) failed: the Henze-Penrose interval contained the true Bayes error on 2 of 5 seeds on the main arm. This is the other candidate named in `F108_CEILING_VALIDATION.md` ("What follows"): an HGB with `max_bins` and early stopping set for extreme imbalance, under the plug-in. Entry first, as a dated F108 amendment, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm). The settings are chosen in the entry, before the run
-- Refinement: a later sprint's
-- Depends on: nothing. Enables: F114
-
-**F170. ULB frauds missed by every model: are their nearest neighbors legitimate? (~30m [no-history], zero metered) Priority 50**
-- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation)
-- Platform: ULB, F158's split and seeds 42-51
-- F158 step 3 (Sprint 29 Task G) found 106 of 950 (seed, test fraud) pairs over seeds 42-51 missed at the 0.5% budget by all twelve on-split families, with V1-V8 means near the PCA center where legitimate rows dominate. That compares group means only. This card tests the reading row by row: for each test fraud, the share of legitimate rows among its k nearest training neighbors (k and the distance set in the entry, before the run), missed against caught, with a paired-free test named in the entry. It also records each missed row's identity, so the distinct frauds are counted (step 3 recorded pair counts only)
-- Reading: if missed frauds' neighbors are mostly legitimate and caught frauds' are not, the missed group is consistent with ULB's information limit (the ceiling F169 estimates); if not, a model weakness remains open
-- Depends on: nothing. Informs: F169, F114
-
-**F171. F158 step 3 on IEEE-CIS: do richer features shrink the group every model misses? (~60m [no-history], zero metered) Priority 50**
-- Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation)
-- Platform: IEEE-CIS, the on-split model families stored for it
-- ULB holds 28 anonymized PCA components plus Time and Amount and cannot take new features. IEEE-CIS carries raw card, address, device and email-domain fields. This card runs F158's step 3 there: the share of test frauds missed at the 0.5% budget by every stored family, and the missed against caught profile. Which families are stored on-split for IEEE-CIS is checked at refinement (**unverified**)
-- Reading: a share well below ULB's 11% of (seed, test fraud) pairs, counted the same way, is consistent with richer information catching frauds a transform of ULB's features cannot; the two datasets differ in more than feature richness, so the comparison is descriptive, not causal
-- Depends on: nothing. Informs: F169, F114
-
-**F172. Tests for the Sprint 29 review's coverage gaps (~90m [no-history], zero metered) Priority 40**
-- Phase: Phase 2 preparation (test coverage; added 2026-10-30 by the team lead, Sprint 29 retrospective, Decision D2 option 1, IMP-5)
-- Platform: none; tests only. No recorded result changes
-- The PR 63 review found branches that no test makes fail visibly (`docs/sprints/SPRINT_29_RETROSPECTIVE.md`, "Review findings not fixed"). One test each, each proven red: F166's validation and training label checks against the classical lanes' (only the test labels are checked), the "below" reading, the `svm_form` majority rule and `t42_min <= 0`; F156's `summarize` pass term and the single-class refusal (the key `term1_alone_4_of_5` keeps its name: it is in the recorded result); F160's SCIP best-found minimum; F159's MemoryError and broken-pool path end to end, and `test_the_budget_can_fail` made to go red through its timing assertion, not a KeyError; each module's "never redo a seed" resume loop at module level (`provenance.start` covers the decision, not the loop)
-- Kind: detection for this code only (Workaround in the Sprint 29 decision format); the prevention for new rules is Sprint 29 IMP-1
-- Depends on: nothing
-
-**F173. The commit-msg hook checks the commit's OWN task timer, not any timer (~45m [no-history], zero metered) Priority 40**
-- Phase: Phase 2 preparation (process tooling; added 2026-10-30 from the review of the Sprint 29 improvement commits)
-- Platform: none
-- Sprint 29 IMP-4 (baa1555) refuses a `feat:` or `fix:` commit when no task timer runs, but accepts any running timer. The review of the improvement commits showed it would have admitted the case it cites: Task C's commit 5348add (#66, 2026-10-27 23:33) was made while D's and H's timers ran. The status file does not map issues to tasks, so the hook cannot tell which task a commit belongs to
-- Work: record each task's issue in `sprint_status.json` (for example a `task_issues` map set by `update_sprint_status.py` when the issue is added), and refuse a commit whose named issue's task is not being timed. "PR n review" commits need a stated rule (for example, the review-fix task's timer)
-- Acceptance: a commit naming #66 while only D's and H's timers run is refused; each term proven red
-- Depends on: nothing
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
 - Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
