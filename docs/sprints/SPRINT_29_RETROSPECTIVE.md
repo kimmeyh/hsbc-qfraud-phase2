@@ -181,7 +181,7 @@ feedback, recorded verbatim under each of the three roles.
 - **Scrum Master**: none
 - **Lead Developer**: none
 - **Claude Code Development Team**: F169, F170 and F171, carded at
-  Manual Validation; IMP-5 below if disposed to the backlog.
+  Manual Validation; F172 (IMP-5), carded at the retrospective.
 
 ### 15. Assigned Coding Agents Quality
 - **Product Owner**: Very Good
@@ -248,4 +248,26 @@ exists unless it says "new".
 
 ## Improvement Decisions
 
-Pending the team lead's disposition (step 6).
+Team lead, 2026-10-30: option 1, as recommended (Decision D2, in full in
+`SPRINT_29_DECISIONS.md`). Applied on this branch, timed as task K:
+
+- **IMP-1, applied.** `SPRINT_CHECKLIST.md` Phase 4 requires a compound
+  rule's per-term tests, each proven red, in the commit that adds the
+  rule; Phase 5 now checks that this was done. `SPRINT_PLANNING.md`
+  records the reason.
+- **IMP-2, applied.** `scripts/f166_docs.py` renders the eight F166 pages
+  from the result. Each statement in its fixed text is computed from the
+  result, or refused (`ClaimError`) when the result does not support it.
+  `test_f166_docs.py` fails when a committed page differs from the
+  render. One sentence changed on rendering: the comparison page now
+  lists the two smallest train-test gaps in ascending order.
+- **IMP-3, applied.** `f159.build_parallel` requires `budget_s`, a
+  positive number of seconds, and runs under the watchdog. The build
+  without a limit is private (`_build_unbudgeted`), and a test fails any
+  other module that calls it. F166 calls `build_parallel`.
+- **IMP-4, applied.** `check_commit_issue.py` refuses a feat or fix commit
+  on a sprint branch when no task timer is running (started, not
+  finished, not paused).
+- **IMP-5, to the backlog** as F172, priority 40.
+
+Each new rule is proven red with `assert_can_fail`.

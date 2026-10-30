@@ -25,6 +25,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 ## Phase 4: Execution (auto-advance window: no permission-asking)
 - [ ] Tasks in plan order; tests after each change; commits reference issue #N
 - [ ] ACTUAL minutes recorded in `sprint_status.json` `task_actuals` as each task completes (not reconstructed at the retrospective): `update_sprint_status.py --start-task X` when it begins, `--finish-task X` when it ends. `--pause-task X` / `--resume-task X` around an approval wait; `--parallel` only when tasks truly run at once. A task added mid-sprint (including at Manual Validation) starts its timer with the tool before its first file; the status file is never written by hand or by a one-off script (Sprint 26 IMP-2). Such a task also gets its issue first (`gh issue create`, then `update_sprint_status.py --add-issue N`): `.githooks/commit-msg` refuses a `feat:` or `fix:` commit on a sprint branch that names neither an issue from `github_issues` nor `PR <n> review` (Sprint 28 IMP-4)
+- [ ] A commit that adds a compound decision rule carries one test per term in which only that term fails, each proven red, in THAT commit, not later (`SPRINT_PLANNING.md`, Sprint 28 IMP-5, moved to Phase 4 by Sprint 29 IMP-1). The commit-msg hook also refuses a `feat:` or `fix:` commit when no task timer is running (Sprint 29 IMP-4)
 - [ ] `git status --short` before every staging; every entry accounted for; 0* files committed neutrally, never read
 - [ ] Results only via frozen protocol; every metric -> results.json with evidence tag
 - [ ] HARDWARE: any metered run stops for approval (Criterion H), always
@@ -32,7 +33,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 ## Phase 5: Review & Validation
 - [ ] Full suite green; no unamended drift from prereg-freeze in analysis code
 - [ ] Plan acceptance criteria walked line by line WITH EVIDENCE
-- [ ] Every compound decision rule added this sprint has one test per term in which only that term fails, each proven red (`SPRINT_PLANNING.md`, Sprint 28 IMP-5)
+- [ ] Check: every compound decision rule added this sprint got its per-term tests, each proven red, in the commit that added it (Phase 4 item; a rule found here without them is a Phase 4 miss, recorded for the retrospective)
 - [ ] OUTWARD documents pass `scripts/outward_readability.py` BEFORE handover (IMP-5: the QCi package needed a revision round purely to strip tokens a vendor reader cannot resolve, after the team lead had already reviewed it)
 - [ ] **The validation items are LISTED TO THE SCREEN as the last step before handover** (team lead, 2026-10-03). Writing them to a file and pointing at the file is not the handover; it is the same referring-back failure in another form. The file is the durable copy, the screen list is the handover
 - [ ] Handed to team lead for manual validation (questions correct from here)

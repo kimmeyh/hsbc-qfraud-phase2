@@ -92,4 +92,5 @@ recorded result, and it is the largest cost.
    backlog as F172-F174, priority 40.
 4. All five to the backlog as F172-F176, priority 40; nothing applied now.
 
-**Answer:** pending.
+**Answer (team lead, 2026-10-30): 1.** IMP-1 to IMP-4 applied on this
+branch (timed as task K); IMP-5 carded as F172, priority 40.
