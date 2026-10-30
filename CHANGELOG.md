@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-30
+
+- **process**: every decision asked of the team lead is first written in full to `docs/sprints/SPRINT_n_DECISIONS.md`, with a stable ID, what it is, why it matters, each option's kind (Prevention, preferred, or Workaround) and cost, and a recommendation with its reason; a decision asked again is pasted from the file unchanged, with changed facts as a dated note below it (team lead, Sprint 29, PR #63). `CLAUDE.md` and `docs/SPRINT_EXECUTION_WORKFLOW.md` (invariant 11) carry the rule. `docs/sprints/SPRINT_29_DECISIONS.md` added, with D1 and the retrospective disposition D2.
+
 ### 2026-10-28
 
 - **fix**: the Phase 2 figure check reads signs, scopes and the sprint validation document (PR 63 review). A figure written with a minus sign resolves only to a negative value (a hyphen in a range or a word is not a sign); this exposed four signed figures that had resolved to unrelated values by chance, now registered with their sources. F166's eight documents each draw only on their own algorithm's part of `f166_ulb_algorithms.json` (`SCOPES` in `phase2_figure_registry.py`), which cuts each pool from 74.7% of the 3-place grid to 27-33%. From Sprint 29, `docs/sprints/SPRINT_n_VALIDATION.md` is checked. A git failure fails the check instead of skipping it, and a corrupt result file is named. Each rule proven red. Documents corrected from the same review: F158's step 3 counts (seed, test fraud) pairs, not distinct frauds, over twelve on-split families with a thirteenth left out (F158 Done line, V7, F170 and F171); F159's speed-up attribution states what the result shows (V2 and the Done line); the CVQBoost proxy page's limits line; the PoC plan draft's Experiment 3 state after F160. F160's gap range was stated as 0.096-0.099 in its Done line and V5; the largest gap is 0.0985, so the range is 0.096-0.098 (found when the PoC draft named its result file and 0.099 did not resolve there).

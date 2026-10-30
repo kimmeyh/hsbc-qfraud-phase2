@@ -146,6 +146,22 @@ only in memory.
   bolded paragraphs with a recommendation and no tool at all. This repository's
   CLAUDE.md never carried the rule, which is how it failed to reach
   EvidenceBasedDB when that repo was seeded from this one.)
+  - **And write the decision in full to `docs/sprints/SPRINT_n_DECISIONS.md`
+    BEFORE it is shown.** Each entry has a stable ID (D1, D2, ...) and:
+    **What** (the problem or choice); **Why it matters** (the cost of
+    leaving it, and what each option gains); **Kind** per option,
+    Prevention (stops this and similar problems recurring; preferred) or
+    Workaround (gets past the current problem only); **Cost** per option
+    (minutes, metered seconds, files touched); a **Recommendation** with
+    its reason, and if it is a Workaround, why Prevention is not chosen;
+    and the numbered **Options**. A decision shown again is pasted from
+    the file unchanged: same ID, wording and option numbers. If facts
+    change after asking, a dated "Changed since asked" note goes below the
+    original; the original is never edited. The answer is recorded under
+    the entry. The file is committed with the next commit. (Team lead,
+    2026-10-30, Sprint 29: a decision kept only in scrollback can be lost
+    or shortened when it is asked again, and one asked without its value
+    and kind cannot be answered well.)
 
 - **Don't put two decisions in one question.** Each question gets one
   unambiguous answer form. Never write a question where "yes" maps to two
