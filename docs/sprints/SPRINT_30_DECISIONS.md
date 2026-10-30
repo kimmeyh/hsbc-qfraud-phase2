@@ -91,3 +91,7 @@ card writes its own entry, and the filing date is the team lead's.
    before it runs).
 4. A different set: reply 4 followed by the F numbers to include (F168
    is included in any set).
+
+**Answer (team lead, 2026-10-30): 1.** Sprint 30 is F168, F173, F175,
+F172, F176, F169, F170, F171 and F174 (945 minutes by card estimate, 0
+metered seconds).
