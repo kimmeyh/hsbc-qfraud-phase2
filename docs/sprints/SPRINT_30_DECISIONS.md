@@ -95,3 +95,141 @@ card writes its own entry, and the filing date is the team lead's.
 **Answer (team lead, 2026-10-30): 1.** Sprint 30 is F168, F173, F175,
 F172, F176, F169, F170, F171 and F174 (945 minutes by card estimate, 0
 metered seconds).
+
+---
+
+## D2. F168 part 2: where does a long run keep its finished units?
+
+Asked 2026-10-30 at Phase 3 planning (plan verification).
+
+**What.** F168's card says a long run checkpoints each finished unit to a
+scratch folder, and only the final result goes to
+`experiments/phase2/results/`. The repository already does it another
+way: F110, F162, F166 and every Sprint 29 module keep their finished units
+in the result file itself, marked `complete: false`. `provenance.start`
+resumes only such a file, and only when its run id matches the sidecar.
+
+**Why it matters.** Two patterns for one job means every new module
+chooses, and a guard (F168 part 7) can only check one. The in-file
+pattern is already guarded by `provenance.start` and
+`test_result_writer_required.py`. The scratch-folder pattern keeps
+partial results out of the results tree, so nothing half-done is ever
+committed by mistake.
+
+**Options, with Kind and Cost.**
+- Option 1: Kind Prevention (one pattern, already guarded, extended to
+  every long run). Cost: about 240 minutes (the card's), 0 metered
+  seconds, about 10 files.
+- Option 2: Kind Prevention (one new pattern), with every existing module
+  left on the old one until it is next changed. Cost: about 300 minutes
+  (the card's plus about 60 for a second writer path and its guard), 0
+  metered seconds, about 12 files.
+- Option 3: Kind Workaround (both patterns allowed; the guard accepts
+  either). Cost: about 260 minutes, 0 metered seconds, about 11 files.
+
+**Recommendation: 1.** It makes the pattern the repository already uses,
+and already guards, the standard. A partial result is safe in the tree:
+its `complete: false` flag and run id stop it from being read as a
+result or replaced by another run. Option 2 adds a second writer path for
+no new protection. Option 3 is a workaround: the guard could not tell a
+module with no resume from one with either.
+
+**Options.**
+
+1. The in-file pattern is the standard: finished units go into the
+   result file with `complete: false`, resumed through
+   `provenance.start`. Part 2 writes this into the process docs and part
+   7's guard checks it. Task C stays 240 minutes.
+2. The card as written: checkpoints in a gitignored scratch folder, only
+   the final result in `experiments/phase2/results/`; existing modules
+   unchanged. Task C becomes 300 minutes; the sprint 1,035.
+3. Both patterns allowed; part 7's guard accepts either. Task C becomes
+   260 minutes; the sprint 995.
+
+---
+
+## D3. F169: HGB cannot take more bins. What does the entry test?
+
+Asked 2026-10-30 at Phase 3 planning (plan verification).
+
+**What.** F169 tests "an HGB with `max_bins` and early stopping set for
+extreme imbalance" under F108's plug-in. In scikit-learn 1.9.0, HGB's
+`max_bins` accepts 2-255, and 255 is already the default (probed: 256
+raises an error). F108's inferred cause of HGB's failure on its reference
+arm is that 255 quantile bins put a top-0.05% threshold inside one bin.
+HGB can turn early stopping off; it cannot add bins. LightGBM's
+`max_bin` has no such limit.
+
+**Why it matters.** As carded, the run would test early stopping only,
+under a title that says bins. F114 waits on a validated estimator, so a
+run that cannot test the inferred cause spends a sprint slot and leaves
+F114 blocked for an untested reason.
+
+**Options, with Kind and Cost.** Kind does not apply: each is a
+measurement design for one card, not a fix to a recurring problem.
+- Option 1: two arms, each an F108 plug-in: HGB with early stopping off,
+  and LightGBM with `max_bin` raised (the value set in the entry) and
+  early stopping off. 120 minutes, 0 metered seconds, about 4 files.
+- Option 2: LightGBM with `max_bin` raised and early stopping off only.
+  90 minutes, 0 metered seconds, about 4 files.
+- Option 3: HGB with early stopping off only, as close to the card as
+  scikit-learn allows. 90 minutes, 0 metered seconds, about 4 files.
+
+**Recommendation: 1.** It tests both parts of the inferred cause and can
+attribute a pass: if only LightGBM passes, bins mattered; if both pass,
+early stopping did. The cost is 30 minutes more than either single arm.
+
+**Options.**
+
+1. Two arms, HGB with early stopping off and LightGBM with `max_bin`
+   raised and early stopping off, each under F108's pass rule. Task F is
+   120 minutes; the sprint 975.
+2. LightGBM with `max_bin` raised and early stopping off only. Task F is
+   90 minutes; the sprint 945.
+3. HGB with early stopping off only. Task F is 90 minutes; the sprint
+   945.
+
+---
+
+## D4. F174: how many seeds on IEEE-CIS?
+
+Asked 2026-10-30 at Phase 3 planning (plan verification).
+
+**What.** F166 set its seed count from seed 42's time under a 120-minute
+cap (Sprint 29 Decision 3). On ULB that gave 10 seeds. IEEE-CIS trains
+on 410,600 rows and 181 features against ULB's about 170,000 and 30.
+Scaled from F166's lane times (inferred, not timed), seed 42 takes about
+30-35 minutes, so the same cap gives 3 seeds. Section 2's Wilcoxon test
+needs 8 seeds to reach 0.05 / 6.
+
+**Why it matters.** With 3 seeds no pair can be called different by the
+primary test, so the IEEE-CIS page could rank nothing that Experiments 2
+and 3 and F171 are meant to read against. Runtime runs in the background
+and does not change the work estimate.
+
+**Options, with Kind and Cost.** Kind does not apply: each is a runtime
+rule for one run.
+- Option 1: 8 seeds minimum, 10 if seed 42 takes 30 minutes or less;
+  about 4-6 hours of background runtime (inferred), 0 metered seconds,
+  no added work minutes.
+- Option 2: F166's rule unchanged (120-minute cap, at least 3 seeds);
+  about 2 hours of runtime; the paired bootstrap is primary and the
+  Wilcoxon test cannot reach its level.
+- Option 3: 8 seeds on a stated stratified subsample of the training rows
+  (about half), about 2-3 hours; the IEEE-CIS page then is not on the
+  same rows as F152's lanes.
+
+**Recommendation: 1.** It keeps F166's protocol and test, so the two
+datasets' pages are read the same way, and its cost is background time
+only. Seed 42 is timed first; if it takes more than 45 minutes, the run
+stops before seed 43 and the count is asked again with the measured time.
+
+**Options.**
+
+1. Seed 42 timed first; then 10 seeds if it took 30 minutes or less, 8
+   if it took up to 45; if it took more than 45 minutes, the run stops
+   and this decision is asked again with the measured time.
+2. F166's rule: the seed count from seed 42's time under a 120-minute
+   cap, at least 3 seeds; the paired bootstrap is primary.
+3. 8 seeds on a stratified half of each seed's training rows, stated in
+   the entry.
