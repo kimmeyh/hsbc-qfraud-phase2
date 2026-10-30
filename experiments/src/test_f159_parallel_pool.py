@@ -33,7 +33,8 @@ def test_the_parallel_pool_equals_the_serial_pool_on_held_out_rows():
     X, y, X_held = _data()
     params = qp.seeded_weak_params(42)
     serial = fpp.build_full(X, y, 2, "dct", weak_params=params)
-    par, per = f159.build_parallel(X, y, 2, "dct", 42, workers=2)
+    par, per = f159.build_parallel(X, y, 2, "dct", 42, budget_s=600,
+                                   workers=2)
     assert par.ind_list == serial.ind_list
     assert len(per) == len(serial.h_list) == 21
     assert np.array_equal(qp.h_matrix(par, X_held), qp.h_matrix(serial, X_held))
@@ -162,7 +163,7 @@ def test_a_build_past_its_budget_is_recorded_as_failed(monkeypatch):
     import time
     X, y, X_held = _data()
     monkeypatch.setattr(f159, "_data", lambda frac: (2, X, y, X_held))
-    monkeypatch.setattr(f159, "build_parallel",
+    monkeypatch.setattr(f159, "_build_unbudgeted",
                         lambda *a, **k: time.sleep(5))
     monkeypatch.setattr(f159, "_ABANDONED", False)
     t0 = time.perf_counter()
@@ -178,15 +179,61 @@ def test_a_build_past_its_budget_is_recorded_as_failed(monkeypatch):
 
 
 def test_a_build_within_its_budget_returns_its_result(monkeypatch):
-    monkeypatch.setattr(f159, "build_parallel", lambda *a, **k: ("clf", [1]))
-    assert f159.build_with_budget(5, 1, 2) == ("clf", [1])
+    monkeypatch.setattr(f159, "_build_unbudgeted",
+                        lambda *a, **k: ("clf", [1]))
+    assert f159.build_parallel(1, 2, 3, "dct", 42, budget_s=5) == ("clf", [1])
 
     def boom(*a, **k):
         raise MemoryError
-    monkeypatch.setattr(f159, "build_parallel", boom)
+    monkeypatch.setattr(f159, "_build_unbudgeted", boom)
     import pytest
     with pytest.raises(MemoryError):
-        f159.build_with_budget(5)
+        f159.build_parallel(1, 2, 3, "dct", 42, budget_s=5)
+
+
+def test_the_parallel_build_needs_a_budget(monkeypatch):
+    # Sprint 29 IMP-3: F166 called the build without the time limit.
+    import pytest
+    calls = []
+    monkeypatch.setattr(f159, "_build_unbudgeted",
+                        lambda *a, **k: calls.append(1) or ("clf", []))
+    with pytest.raises(TypeError):
+        f159.build_parallel(1, 2, 3, "dct", 42)
+    for bad in (None, 0, -1, float("nan"), float("inf"), True, "60"):
+        with pytest.raises(ValueError, match="nothing was built"):
+            f159.build_parallel(1, 2, 3, "dct", 42, budget_s=bad)
+    assert calls == []
+
+
+def test_no_module_calls_the_unbudgeted_build():
+    import re
+    pattern = re.compile(r"\b_build_unbudgeted\b")
+    callers = sorted(p.name for d in (PHASE2, ROOT / "experiments" / "src",
+                                      ROOT / "scripts")
+                     for p in d.glob("*.py")
+                     if not p.name.startswith("test_")
+                     and p.name != "f159_parallel_pool.py"
+                     and pattern.search(p.read_text(encoding="utf-8")))
+    assert callers == []
+
+
+def test_the_budget_requirement_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail(
+        [Mutation(PHASE2 / "f159_parallel_pool.py",
+                  "            or not math.isfinite(budget_s) or budget_s <= 0):\n",
+                  "            and False):\n", expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_the_parallel_build_needs_a_budget", ROOT),
+        "a build with no valid budget")
+    assert_can_fail(
+        [Mutation(PHASE2 / "f166_ulb_algorithms.py",
+                  "        clf, _ = f159.build_parallel(",
+                  "        clf, _ = f159._build_unbudgeted(",
+                  expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_no_module_calls_the_unbudgeted_build", ROOT),
+        "a module calling the unbudgeted build")
 
 
 def test_the_budget_can_fail():

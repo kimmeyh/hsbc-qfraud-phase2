@@ -68,12 +68,13 @@ def _train(idx):
     return wc, time.perf_counter() - t0
 
 
-def build_parallel(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
-                   weak_type: str, seed: int, workers: int = 4,
-                   lambda_coef: float | None = None):
+def _build_unbudgeted(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
+                      weak_type: str, seed: int, workers: int = 4,
+                      lambda_coef: float | None = None):
     """`full_pair_pool.build_full` across `workers` spawned processes, with
     `qubo_proxy.seeded_weak_params(seed)` (F145) as the learners' params.
-    Returns (classifier, seconds of each learner's training, in order)."""
+    Returns (classifier, seconds of each learner's training, in order).
+    Private: it has no time limit, so callers use `build_parallel`."""
     import full_pair_pool as fpp
     import qubo_proxy as qp
     # An empty build gives the classifier, its arguments and their check
@@ -109,20 +110,32 @@ def _kill_pool_children() -> None:
         p.kill()
 
 
-def build_with_budget(budget_s: float, *args, **kwargs):
-    """`build_parallel` in a daemon thread, abandoned after `budget_s`.
-    `ex.map(timeout=)` does not cover a worker that wedges at start-up (the
-    resumed run hung 9 hours at 32 workers on the 0.5 fraction after one
-    worker raised MemoryError while unpickling its start-up data), and
-    `shutdown()` on such an executor can deadlock, so the build is left and
-    its live children are killed."""
+def build_parallel(X_tr: np.ndarray, y_pm1: np.ndarray, schedule: int,
+                   weak_type: str, seed: int, *, budget_s: float,
+                   workers: int = 4, lambda_coef: float | None = None):
+    """The parallel pool build in a daemon thread, abandoned after
+    `budget_s` seconds. `budget_s` is required and must be a positive
+    number (Sprint 29 IMP-3: the limit was applied at F159's call site
+    only, and F166 called the build without it). `ex.map(timeout=)` does
+    not cover a worker that wedges at start-up (the resumed run hung 9
+    hours at 32 workers on the 0.5 fraction after one worker raised
+    MemoryError while unpickling its start-up data), and `shutdown()` on
+    such an executor can deadlock, so the build is left and its live
+    children are killed."""
+    import math
     import threading
     global _ABANDONED
+    if (isinstance(budget_s, bool) or not isinstance(budget_s, (int, float))
+            or not math.isfinite(budget_s) or budget_s <= 0):
+        raise ValueError(f"budget_s must be a positive number of seconds, "
+                         f"got {budget_s!r}; nothing was built")
     box: dict = {}
 
     def target():
         try:
-            box["out"] = build_parallel(*args, **kwargs)
+            box["out"] = _build_unbudgeted(X_tr, y_pm1, schedule, weak_type,
+                                           seed, workers=workers,
+                                           lambda_coef=lambda_coef)
         except BaseException as exc:          # re-raised in the caller
             box["exc"] = exc
     t = threading.Thread(target=target, daemon=True)
@@ -167,12 +180,8 @@ def time_unit(frac: float, build: str, budget_s: float | None = None) -> dict:
     else:
         from concurrent.futures.process import BrokenProcessPool
         try:
-            if budget_s is None:
-                clf, per = build_parallel(X, y, schedule, "dct", SEED,
-                                          workers=int(build))
-            else:
-                clf, per = build_with_budget(budget_s, X, y, schedule, "dct",
-                                             SEED, workers=int(build))
+            clf, per = build_parallel(X, y, schedule, "dct", SEED,
+                                      budget_s=budget_s, workers=int(build))
         except (MemoryError, BrokenProcessPool, BuildTimeout) as exc:
             # A worker count that does not fit in memory, or does not
             # finish in its budget, is recorded as failed and not retimed

@@ -180,10 +180,9 @@ def fit_proxy(config: str, seed: int, par: dict) -> dict:
     lam = qp.LAMBDA_MULT * len(y_pm1)
     if config == "full" and par["use"]:
         import f159_parallel_pool as f159
-        clf, _ = f159.build_with_budget(par["budget_s"], Xtr, y_pm1,
-                                        c["schedule"], "dct", seed,
-                                        workers=par["workers"],
-                                        lambda_coef=lam)
+        clf, _ = f159.build_parallel(Xtr, y_pm1, c["schedule"], "dct", seed,
+                                     budget_s=par["budget_s"],
+                                     workers=par["workers"], lambda_coef=lam)
         build = f"parallel, {par['workers']} workers"
     else:
         clf = fpp.build_full(Xtr, y_pm1, c["schedule"], "dct",
