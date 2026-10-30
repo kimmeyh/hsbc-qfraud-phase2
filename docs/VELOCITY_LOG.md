@@ -114,6 +114,17 @@
 | 28 | Task M (F162) in-pocket head-to-head | research+code | 90m | 39m | 0.43 | measured; a 28.5-minute run inside it |
 | 28 | D4 storage prevention (#60) | tooling | none | not measured | n/a | added at Manual Validation; no timer or issue until the retrospective (IMP-4) |
 | 28 | Task R retrospective IMP-1, 2, 4, 5, 6 | tooling | 195m | 16m | 0.08 | measured |
+| 29 | Task A (F165) resumed run keeps its id | tooling | 60m | 2042m | n/a | measured elapsed, not work: the timer ran across the overnight breaks |
+| 29 | Task B (F159) parallel pool build timed | research+code | 60m | 622m | n/a | measured elapsed, not work: includes the 9-hour hang (12:10am to 8:58am) |
+| 29 | Task C (F164) Phase 2 figures resolve | tooling | 270m | not measured | n/a | timer never started (IMP-4; F173) |
+| 29 | Task D (F156) Henze-Penrose bound | research+code | 90m | 2647m | n/a | measured elapsed, not work: across the overnight breaks |
+| 29 | Task E (F160) Experiment 3 room on IEEE-CIS | research+code | 75m | 53m | n/a | measured from the run's start only; code written earlier with no timer |
+| 29 | Task F (F166) best result per algorithm on ULB | research+code | 240m | 158m | 0.66 | measured; overlapped E and G |
+| 29 | Task G (F158) fraud types | research+code | 150m | 6m | n/a | measured from the run's start only; code written earlier with no timer |
+| 29 | Task H (F167) PoC plan draft | docs | 60m | 2036m | n/a | measured elapsed, not work: across the overnight breaks |
+| 29 | Task I pypdf 6.21.1 to 6.21.2 | tooling | 45m | 17m | 0.38 | measured |
+| 29 | Task J PR 63 review fixes | tooling | none | 69m | n/a | measured; not planned |
+| 29 | Task K retrospective IMP-1 to IMP-4 and their review fixes | tooling | 125m | 55m | 0.44 | measured; two full suite runs inside it |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

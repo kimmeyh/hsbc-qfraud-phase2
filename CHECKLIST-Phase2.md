@@ -86,6 +86,9 @@ Nothing in this stage is time-bound. Schedule on value.
         3, 4 and 6 and for F162 written before their first scores, each with
         its result recorded after (F152, F153, F111, F110, F162). Open: the
         filing date (team lead)
+      - **Progress 2026-10-26/28** (Sprint 29): entries for F156, F160,
+        F166 and F158 written before their first scores, each with its
+        result recorded after. Open: the filing date (team lead)
 - [x] **C**: F154 every saved test result's confusion counts, and where
       each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
       the standing rule that every result records its outcomes (CLAUDE.md),
@@ -99,7 +102,9 @@ Nothing in this stage is time-bound. Schedule on value.
       `docs/phase2/F6_GATE_BASED_ARM.md` (pursue narrowly, simulation only),
       `F106_DEQUANTIZATION.md`, `F107_SHOT_BUDGET.md`
 - [x] **C**: F108 ceiling validation harness.
-      Sprint 27: `docs/phase2/F108_CEILING_VALIDATION.md`; no method validated
+      Sprint 27: `docs/phase2/F108_CEILING_VALIDATION.md`; no method validated.
+      Sprint 29 (F156): the Henze-Penrose bound fails on the harness too;
+      F169 tries the second named candidate
 - [x] **C**: F109 SPECTRA domain ladder and aggregation experiments.
       Sprint 27: `docs/phase2/F109_TIER1_LADDER.md`
 - [x] **H**: Goal ordering for prioritization: field advancement leads if it
@@ -125,6 +130,9 @@ Nothing in this stage is time-bound. Schedule on value.
       - **Progress 2026-10-22** (Sprint 28 Task J): skeleton
         `docs/phase2/PHASE2_POC_PLAN.md`, dates cited to the program
         roadmap; the content after notification stays open
+      - **Progress 2026-10-27** (Sprint 29, F167): a draft of the full plan
+        on labeled assumptions, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; F13
+        replaces each assumption with the brief's terms on notification
 
 ## The six experiments, in the order the proposal commits to (section 5)
 
@@ -173,6 +181,11 @@ Nothing in this stage is time-bound. Schedule on value.
         below 0.01, and both resolution checks fail
         (`docs/phase2/F153_EXP3_DESIGN.md`). F160 repeats the room check on
         a second dataset
+      - **Progress 2026-10-28** (Sprint 29, F160): on IEEE-CIS the room
+        check passes after its positive control, so F25's design reopens
+        there (`experiments/phase2/results/f160_room_ieee.json`). SCIP did
+        not beat greedy within its cap, so no solver has yet been shown to
+        beat greedy
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours
@@ -205,6 +218,10 @@ Nothing in this stage is time-bound. Schedule on value.
         833 variables and fails under the rule at 91, where the subtracted
         J build exceeds the solve (`docs/phase2/F110_SCALING.md`). Device
         arm not run
+      - **Progress 2026-10-28** (Sprint 29, F159): the pool build runs in
+        parallel and gives the same pool as the serial build on the
+        validation rows at every fraction and worker count
+        (`experiments/phase2/results/f159_parallel_pool.json`)
 
 ## Other commitments in the proposal
 
