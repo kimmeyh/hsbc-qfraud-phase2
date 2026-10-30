@@ -341,9 +341,32 @@ def comparison(res):
     return "\n".join(L)
 
 
+def check_fixed_text(res: dict) -> None:
+    """The fixed text states the evidence tag SIM, zero metered seconds,
+    the linear SVM (`SETUP`), the Wilcoxon test as primary with 8 or more
+    seeds, and a Bonferroni divisor of 6; refuse a result that differs."""
+    A = res["analysis"]
+    pairs = A["adjacent_pairs"]
+    wrong = []
+    if res.get("evidence_tag") != "SIM":
+        wrong.append(f"evidence tag {res.get('evidence_tag')!r}, not SIM")
+    if res.get("metered_seconds") != 0:
+        wrong.append(f"metered seconds {res.get('metered_seconds')!r}, not 0")
+    if A["svm_form"]["kept"] != "linear":
+        wrong.append(f"SVM form {A['svm_form']['kept']!r}, not linear")
+    if A["n_seeds"] < 8 or any(p["primary"] != "wilcoxon" for p in pairs):
+        wrong.append("a primary test that is not Wilcoxon, or fewer than "
+                     "8 seeds")
+    if len(pairs) != N_PAIRS_TESTED:
+        wrong.append(f"{len(pairs)} adjacent pairs, not {N_PAIRS_TESTED}")
+    if wrong:
+        raise ClaimError("the fixed text does not hold: " + "; ".join(wrong))
+
+
 def render(res: dict) -> dict[str, str]:
     """Every page's text, keyed by file name. Raises ClaimError before
     returning anything if a statement does not hold."""
+    check_fixed_text(res)
     pages = {name: algo_doc(res, a) for a, name in FILES.items()}
     pages[COMPARISON] = comparison(res)
     return pages

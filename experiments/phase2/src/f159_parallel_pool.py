@@ -167,8 +167,10 @@ def _data(frac: float):
 
 def time_unit(frac: float, build: str, budget_s: float | None = None) -> dict:
     """One build: "serial" (`build_full`) or a worker count as text. A
-    parallel build gets `budget_s` (BUDGET_X times the fraction's serial
-    build); past it the unit is recorded as failed."""
+    parallel build needs `budget_s` (BUDGET_X times the fraction's serial
+    build, from `budget_for`); past it the unit is recorded as failed. A
+    parallel build with no budget raises ValueError from `build_parallel`
+    and is not recorded: None is the default only for the serial build."""
     import full_pair_pool as fpp
     import qubo_proxy as qp
     schedule, X, y, Xva = _data(frac)

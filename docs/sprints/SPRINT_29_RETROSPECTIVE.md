@@ -271,3 +271,27 @@ Team lead, 2026-10-30: option 1, as recommended (Decision D2, in full in
 - **IMP-5, to the backlog** as F172, priority 40.
 
 Each new rule is proven red with `assert_can_fail`.
+
+## Review of the improvement commits
+
+One short review of eaed56f, baa1555, 6cd51ad, 3846b20 and c6201f4 (no
+second round). Five findings:
+
+- **IMP-4 accepts any running timer, not the commit's own task's.** It
+  would have admitted Task C's commit 5348add, because D's and H's timers
+  were running. The wording now says so (the hook's docstring and
+  message); the stronger check needs an issue-to-task map and is carded as
+  F173, priority 40.
+- **The F166 generator still fixed some text without checking it**: the
+  linear SVM, Wilcoxon as primary, the Bonferroni divisor, the evidence
+  tag and the metered seconds. Fixed: `check_fixed_text` refuses a result
+  that differs on any of them.
+- **No test reached the BLUF order refusal**: the order case was refused
+  first by the pair-order check. Fixed: both refusals are tested by their
+  message, and the BLUF check has its own red proof.
+- **A red proof failed through a TypeError**, not through the missing
+  refusal. Fixed: the mutation now makes the claim be written with no
+  refusal.
+- **`time_unit`'s `budget_s=None` default** reads as allowed for a
+  parallel build. Fixed: its docstring says a parallel build with no
+  budget raises.

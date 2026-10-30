@@ -45,7 +45,24 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 28: Experiment Entries First, Then Their First Measurements**
+**Sprint 29: Make the Tools Repeatable, Then Find the Best Each Model Can Do**
+(Oct 25 - Oct 30, 2026; PR #63). Delivered **F165, F159, F164, F156,
+F160, F166, F158, F167** and the pypdf bump, the PR 63 review fixes
+(`provenance.start` refuses a rerun over a recorded result before any
+work), the decisions file rule (`SPRINT_n_DECISIONS.md`) and retrospective
+IMP-1 to IMP-4 (F172 carded). F169, F170 and F171 carded at Manual
+Validation. Zero metered seconds. F159: every parallel pool equals the
+serial pool on the validation rows. F156: the Henze-Penrose bound fails,
+so F114 stays blocked (F169 next). F160: Experiment 3 has room on
+IEEE-CIS, so F25's design reopens there; no solver has yet beaten greedy.
+F166: on ULB two adjacent pairs differ reliably (the CVQBoost proxy above
+the linear SVM, the SVM above logistic regression). F158: the per-type
+cascade is below one model. Records: `SPRINT_29_PLAN.md`,
+`SPRINT_29_VALIDATION.md`, `SPRINT_29_DECISIONS.md`,
+`SPRINT_29_RETROSPECTIVE.md`, `SPRINT_29_SUMMARY.md` (written at Sprint 30
+planning).
+
+### Sprint 28: Experiment Entries First, Then Their First Measurements
 (Oct 22 - Oct 25, 2026; PR #46). Delivered **F154, F115, F151, F13
 (skeleton), F114, F152, F153, F110, F111, F162**, F146 and F150 drafts,
 the pypdf bump, D4 (every device job stored in full, every new result with
@@ -829,6 +846,14 @@ not a sweep correction.
 - Platform: none; tests only. No recorded result changes
 - The PR 63 review found branches that no test makes fail visibly (`docs/sprints/SPRINT_29_RETROSPECTIVE.md`, "Review findings not fixed"). One test each, each proven red: F166's validation and training label checks against the classical lanes' (only the test labels are checked), the "below" reading, the `svm_form` majority rule and `t42_min <= 0`; F156's `summarize` pass term and the single-class refusal (the key `term1_alone_4_of_5` keeps its name: it is in the recorded result); F160's SCIP best-found minimum; F159's MemoryError and broken-pool path end to end, and `test_the_budget_can_fail` made to go red through its timing assertion, not a KeyError; each module's "never redo a seed" resume loop at module level (`provenance.start` covers the decision, not the loop)
 - Kind: detection for this code only (Workaround in the Sprint 29 decision format); the prevention for new rules is Sprint 29 IMP-1
+- Depends on: nothing
+
+**F173. The commit-msg hook checks the commit's OWN task timer, not any timer (~45m [no-history], zero metered) Priority 40**
+- Phase: Phase 2 preparation (process tooling; added 2026-10-30 from the review of the Sprint 29 improvement commits)
+- Platform: none
+- Sprint 29 IMP-4 (baa1555) refuses a `feat:` or `fix:` commit when no task timer runs, but accepts any running timer. The review of the improvement commits showed it would have admitted the case it cites: Task C's commit 5348add (#66, 2026-10-27 23:33) was made while D's and H's timers ran. The status file does not map issues to tasks, so the hook cannot tell which task a commit belongs to
+- Work: record each task's issue in `sprint_status.json` (for example a `task_issues` map set by `update_sprint_status.py` when the issue is added), and refuse a commit whose named issue's task is not being timed. "PR n review" commits need a stated rule (for example, the review-fix task's timer)
+- Acceptance: a commit naming #66 while only D's and H's timers run is refused; each term proven red
 - Depends on: nothing
 
 **F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**

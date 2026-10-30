@@ -73,9 +73,30 @@ def test_the_comparison_statements_follow_the_result():
     order = res["analysis"]["order_by_mean_test_auprc"]
     swapped = copy.deepcopy(res)
     a = swapped["analysis"]
-    a["order_by_mean_test_auprc"] = order[:4] + ["svm", "proxy", "logreg"]
-    with pytest.raises(fd.ClaimError):
+    a["order_by_mean_test_auprc"] = new = order[:4] + ["svm", "proxy", "logreg"]
+    with pytest.raises(fd.ClaimError, match="not the result's order"):
         fd.comparison(swapped)
+    # With the pairs following the new order, the BLUF's own check refuses.
+    for p, (x, y) in zip(a["adjacent_pairs"], zip(new, new[1:])):
+        p["a"], p["b"] = x, y
+    with pytest.raises(fd.ClaimError, match="BLUF"):
+        fd.comparison(swapped)
+
+
+@pytest.mark.parametrize("change, match", [
+    (lambda r: r.update(evidence_tag="HW"), "evidence tag"),
+    (lambda r: r.update(metered_seconds=4), "metered seconds"),
+    (lambda r: r["analysis"]["svm_form"].update(kept="rbf"), "SVM form"),
+    (lambda r: r["analysis"]["adjacent_pairs"][0].update(primary="bootstrap"),
+     "Wilcoxon"),
+    (lambda r: r["analysis"].update(n_seeds=5), "Wilcoxon"),
+])
+def test_a_fixed_statement_the_result_does_not_support_is_refused(change,
+                                                                  match):
+    res = _res()
+    change(res)
+    with pytest.raises(fd.ClaimError, match=match):
+        fd.render(res)
     near = copy.deepcopy(res)
     near["analysis"]["adjacent_pairs"][3]["wilcoxon"]["p"] = 0.001
     with pytest.raises(fd.ClaimError, match="Bonferroni"):
@@ -103,10 +124,29 @@ def test_the_page_check_can_fail():
             ROOT),
         "a committed page that differs from the render")
     assert_can_fail(
-        [Mutation(SCRIPT, "    if only is None:\n        raise ClaimError",
-                  "    if False:\n        raise ClaimError",
+        # One choice read as "every seed" when the seeds chose more than one:
+        # the claim is then written with no refusal.
+        [Mutation(SCRIPT, "    return json.loads(next(iter(counts))) if "
+                  "len(counts) == 1 else None\n",
+                  "    return json.loads(next(iter(counts)))\n",
                   expect_occurrences=1)],
         lambda: run_pytest(
             f"{THIS}::test_a_proxy_statement_the_result_does_not_support_"
             "is_refused", ROOT),
         "a proxy claim the result does not support")
+    assert_can_fail(
+        [Mutation(SCRIPT, "    if wrong:\n        raise ClaimError",
+                  "    if False:\n        raise ClaimError",
+                  expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_a_fixed_statement_the_result_does_not_support_"
+            "is_refused", ROOT),
+        "a fixed statement the result does not support")
+    assert_can_fail(
+        [Mutation(SCRIPT, "            and order[len(BOOSTING):] == "
+                  "[\"proxy\", \"svm\", \"logreg\"]):\n",
+                  "            or True):\n", expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_the_comparison_statements_follow_the_result",
+            ROOT),
+        "a BLUF order the result does not have")

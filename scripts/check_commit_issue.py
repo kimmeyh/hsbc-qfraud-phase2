@@ -8,10 +8,15 @@ relied on memory. This makes the issue a condition of the commit.
 On a branch named `*Sprint_<n>*`, a commit whose subject starts `feat` or
 `fix` must name, anywhere in its message, either an issue `#N` listed in
 `.claude/sprint_status.json` `current_sprint.github_issues`, or the sprint
-PR's review as `PR <pr> review`; and a task's timer must be running, a
+PR's review as `PR <pr> review`; and some task timer must be running, a
 task in `task_started` with no `task_actuals` entry and not in
 `task_paused` (Sprint 29 IMP-4: Task C's timer was never started, and E
-and G were started only when their runs began). Other types (docs, chore, test, process),
+and G were started only when their runs began). It does not check that
+the running timer is the commit's own task: the status file does not map
+issues to tasks, so a commit made while another task's timer runs passes.
+Task C's commit 5348add would have passed that way (D and H were being
+timed); F173 carries the stronger check. Other types (docs, chore, test,
+process),
 merges and reverts pass. A status file that is missing, unreadable or for
 another branch blocks: "could not tell" is not a pass. No override flag.
 """
@@ -67,7 +72,7 @@ def problem(message: str, branch: str, status) -> str | None:
                 "(gh issue create) and scripts/update_sprint_status.py "
                 "--add-issue N first")
     if not timed(cur):
-        return ("a feat or fix commit on a sprint branch needs its task's "
+        return ("a feat or fix commit on a sprint branch needs a task "
                 "timer running: scripts/update_sprint_status.py "
                 "--start-task X (or --resume-task X) first")
     return None
