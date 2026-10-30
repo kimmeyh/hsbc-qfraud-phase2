@@ -633,7 +633,7 @@ value. Removed from candidates.)
 - Output: one document per dataset per algorithm under `docs/phase2/algorithms/`, plus one comparison page per dataset that references them (numbers live in the result files, per the official-record rule)
 - Split at refinement into one card per dataset; device lanes need per-block approval (Criterion H)
 - Depends on: F102 for reporting; the F154 outcome rule supplies the confusion counts (corrected 2026-10-25, Pass 1: F154 is spent, shipped in Sprint 28 as a standing rule in CLAUDE.md)
-- **Pass 1 (2026-10-30)**: part 1, ULB, shipped as F166 in Sprint 29 (`docs/phase2/algorithms/`, pages from `scripts/f166_docs.py`). The next part is split at Pass 2
+- **Pass 1 (2026-10-30)**: part 1, ULB, shipped as F166 in Sprint 29 (`docs/phase2/algorithms/`, pages from `scripts/f166_docs.py`). Part 2, IEEE-CIS, carded at Pass 2 as F174
 
 **F161. B4 re-run on Dirac-3S, all ten cells (~60m plus device time, about 210-310 metered s) Priority 90, low; decide near the end of Phase 2**
 - Phase: Phase 2, late (added 2026-10-23 by the team lead, Sprint 28 Phase 6)
@@ -679,20 +679,21 @@ value. Removed from candidates.)
 - Boundaries: EvidenceBasedDB is not written from here; Phase 1 evidence in `experiments/results/` is never written
 - Depends on: F165 for the run id (spent, Pass 1 2026-10-30: shipped in Sprint 29)
 
-**F169. Ceiling estimator, second candidate: an HGB set for extreme imbalance on F108's harness (~90m [no-history], zero metered) Priority 45**
+**F169. Ceiling estimator, second candidate: an HGB set for extreme imbalance on F108's harness (~90m [no-history], zero metered) Priority 50**
 - Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation, Decision D1 option 2)
 - Platform: F108's simulator first; ULB and IEEE-CIS only after a pass
 - F156 (Sprint 29 Task D) failed: the Henze-Penrose interval contained the true Bayes error on 2 of 5 seeds on the main arm. This is the other candidate named in `F108_CEILING_VALIDATION.md` ("What follows"): an HGB with `max_bins` and early stopping set for extreme imbalance, under the plug-in. Entry first, as a dated F108 amendment, on F108's harness, generator, seeds and margin; pass rule unchanged (4 of 5 on the main arm). The settings are chosen in the entry, before the run
 - Depends on: nothing. Enables: F114 (corrected 2026-10-30, Pass 1: an unfinished line, "Refinement: a later sprint's", removed)
+- **Pass 2 (2026-10-30)**: F169, F170 and F171 re-prioritized 50, 52 and 54 (were 45, 50 and 50), so the three ceiling cards sprint together
 
-**F170. ULB frauds missed by every model: are their nearest neighbors legitimate? (~30m [no-history], zero metered) Priority 50**
+**F170. ULB frauds missed by every model: are their nearest neighbors legitimate? (~30m [no-history], zero metered) Priority 52**
 - Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation)
 - Platform: ULB, F158's split and seeds 42-51
 - F158 step 3 (Sprint 29 Task G) found 106 of 950 (seed, test fraud) pairs over seeds 42-51 missed at the 0.5% budget by all twelve on-split families, with V1-V8 means near the PCA center where legitimate rows dominate. That compares group means only. This card tests the reading row by row: for each test fraud, the share of legitimate rows among its k nearest training neighbors (k and the distance set in the entry, before the run), missed against caught, with a paired-free test named in the entry. It also records each missed row's identity, so the distinct frauds are counted (step 3 recorded pair counts only)
 - Reading: if missed frauds' neighbors are mostly legitimate and caught frauds' are not, the missed group is consistent with ULB's information limit (the ceiling F169 estimates); if not, a model weakness remains open
 - Depends on: nothing. Informs: F169, F114
 
-**F171. F158 step 3 on IEEE-CIS: do richer features shrink the group every model misses? (~60m [no-history], zero metered) Priority 50**
+**F171. F158 step 3 on IEEE-CIS: do richer features shrink the group every model misses? (~60m [no-history], zero metered) Priority 54**
 - Phase: Phase 2 preparation (ceiling methodology; added 2026-10-28 by the team lead, Sprint 29 Manual Validation)
 - Platform: IEEE-CIS, the on-split model families stored for it
 - ULB holds 28 anonymized PCA components plus Time and Amount and cannot take new features. IEEE-CIS carries raw card, address, device and email-domain fields. This card runs F158's step 3 there: the share of test frauds missed at the 0.5% budget by every stored family, and the missed against caught profile. Which families are stored on-split for IEEE-CIS is checked at refinement. **Checked 2026-10-30 (Pass 1)**: `experiments/phase2/results/f152_exp2.json` stores four families (xgboost, lightgbm, hgb, logistic) on F152's rolling-origin folds 4, 5 and 6, seeds 42-46, each with an outcome block; all 60 per-row score files exist under `experiments/phase2/predictions/`. That is four families on temporal folds, against ULB's twelve on F158's split, so the share is read with that difference stated
@@ -706,13 +707,41 @@ value. Removed from candidates.)
 - Kind: detection for this code only (Workaround in the Sprint 29 decision format); the prevention for new rules is Sprint 29 IMP-1
 - Depends on: nothing
 
-**F173. The commit-msg hook checks the commit's OWN task timer, not any timer (~45m [no-history], zero metered) Priority 40**
+**F173. The commit-msg hook checks the commit's OWN task timer, not any timer (~45m [no-history], zero metered) Priority 42**
 - Phase: Phase 2 preparation (process tooling; added 2026-10-30 from the review of the Sprint 29 improvement commits)
 - Platform: none
 - Sprint 29 IMP-4 (baa1555) refuses a `feat:` or `fix:` commit when no task timer runs, but accepts any running timer. The review of the improvement commits showed it would have admitted the case it cites: Task C's commit 5348add (#66, 2026-10-27 23:33) was made while D's and H's timers ran. The status file does not map issues to tasks, so the hook cannot tell which task a commit belongs to
 - Work: record each task's issue in `sprint_status.json` (for example a `task_issues` map set by `update_sprint_status.py` when the issue is added), and refuse a commit whose named issue's task is not being timed. "PR n review" commits need a stated rule (for example, the review-fix task's timer)
 - Acceptance: a commit naming #66 while only D's and H's timers run is refused; each term proven red
 - Depends on: nothing
+- **Pass 2 (2026-10-30)**: priority 40 to 42, to sprint with F175 (same files)
+
+**F174. F157 part 2: best achievable result per algorithm on IEEE-CIS, classical and proxy lanes (~240m [no-history], zero metered) Priority 30**
+- Phase: Phase 2 (split from F157 at the 2026-10-30 refinement, as F157 directs)
+- Platform: IEEE-CIS, classical proxy
+- F166's scope and protocol on IEEE-CIS: HGB, LightGBM, XGBoost, CatBoost, logistic regression, SVM and the CVQBoost proxy, each tuned under one protocol, with the alternatives tried and why each was kept or dropped. Every result carries the F154 outcome block and F157's metrics with intervals over seeds. Device lanes and QNN are out of this part
+- Output: one page per algorithm and an IEEE-CIS comparison page under `docs/phase2/algorithms/`, rendered by a tracked generator as `scripts/f166_docs.py` renders ULB's (Sprint 29 IMP-2)
+- Starting points already measured: F105's harness, F152's four IEEE-CIS lanes, F160's IEEE-CIS pools
+- Estimate basis: F166 took 158m against its 240m on ULB. IEEE-CIS has more rows, so the seed count is set from a timed seed-42 pilot, as F166's was
+- This enables: an IEEE-CIS reference that Experiment 2, Experiment 3 and F171 are read against. This prevents: a tuned lane compared against an untuned one on the second dataset
+- Acceptance: entry before any score; the pages and the comparison page; each figure resolves (F164's check); the pages regenerate from the result
+- Depends on: F102 for reporting (the draft's section 2 standard)
+
+**F175. Task timers stop counting breaks: an actual is work, not elapsed time (~60m [no-history], zero metered) Priority 44**
+- Phase: Phase 2 preparation (process tooling; added 2026-10-30 at Pass 2, from the Sprint 29 retrospective, category 3)
+- Platform: N/A (scripts and tests)
+- Sprint 29's actuals for four of nine tasks are elapsed time, not work: the timers ran across the overnight breaks and the F159 hang (`docs/VELOCITY_LOG.md`, Sprint 29 rows). Sprint 29 IMP-4 and F173 make sure a timer runs; nothing stops one when work stops, so the estimates calibrated from these rows rest on three usable ratios
+- Work, chosen at planning: for example, `--finish-task` refuses an actual above a stated multiple of the task's estimate unless a reason is recorded, or the timers pause when a session ends and resume on the next turn's first task action
+- Acceptance: a timer left running over a simulated 8-hour gap does not record the gap as work; each term proven red
+- Depends on: nothing; sprints with F173 (same files)
+
+**F176. Experiment 3 on IEEE-CIS: can a classical solver get below greedy? (~90m [no-history], zero metered) Priority 34**
+- Phase: Phase 2 preparation (Experiment 3 design; added 2026-10-30 at Pass 2, from F160's caveat and F167's critical path)
+- Platform: IEEE-CIS, classical proxy
+- F160 measured the room only to the floor, a bound: greedy ends 0.096-0.098 above it on all six instances, and SCIP stopped at its 300 s cap on every instance without beating greedy. F167's draft names a proxy design that passes the falsifier as Experiment 3's critical path. This card asks whether any classical method finds a selection below greedy on F160's six instances: for example SCIP with a longer cap and a local search started from greedy (methods and caps set in the entry, before the run)
+- Reading: a selection below greedy shows the room can be reached, and the device question becomes whether Dirac-3S reaches it faster or further; none within the caps leaves the room unshown, and is reported as that
+- Acceptance: entry before the run, as a dated amendment to Experiment 3; each instance's best selection found, with its gap to greedy and to the floor, in a result file with the provenance block
+- Depends on: nothing. Informs: F25, whose HOLD reason (F102 not filed) is about the device run and is unchanged
 
 ### Paper (Stages 4-6)
 
