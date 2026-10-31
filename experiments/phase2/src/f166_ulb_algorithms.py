@@ -197,6 +197,7 @@ def fit_proxy(config: str, seed: int, par: dict) -> dict:
         return np.clip((w @ qp.h_matrix(clf, X) + 1.0) / 2.0, 0.0, 1.0)
 
     return {"p_tr": score(Xtr), "p_va": score(Xva), "p_te": score(Xte),
+            "ytr": split.y_train.to_numpy().astype(int),
             "yva": split.y_val.to_numpy().astype(int),
             "yte": split.y_test.to_numpy().astype(int),
             "features": list(cols), "build": build,
@@ -251,8 +252,13 @@ def lane(algo: str, seed: int, d: dict, par: dict) -> tuple[dict, np.ndarray]:
         if algo == "proxy":
             f = fit_proxy(params["config"], seed, par)
             yva = f["yva"]
-            if not np.array_equal(f["yte"], d["yte"]):
-                raise ValueError("the proxy's test rows are not the split's")
+            # The proxy builds its own split; each of its three label
+            # sets must be the classical lanes', in order (F172).
+            for part, name in (("ytr", "training"), ("yva", "validation"),
+                               ("yte", "test")):
+                if not np.array_equal(f[part], d[part]):
+                    raise ValueError(f"the proxy's {name} rows are not the "
+                                     "split's")
         else:
             f = fit_classical(algo, params, seed, d)
             yva = d["yva"]
