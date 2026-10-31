@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-31
 
+- **docs**: F176 result (Sprint 30 Task E, #79). New `docs/phase2/F176_BELOW_GREEDY.md`: a selection below greedy on 3 of F160's 6 IEEE-CIS instances, each by under 2e-05, far smaller than the room bound; SCIP did not beat greedy at its 1,200 s cap. The exact check fired, and it also shows the swap search can miss the optimum (3 of 7 cases). The result file is committed and the card gains its result line.
+
 - **ci**: the CI job's time limit is 20 minutes, not 10 (Sprint 30). The tests step took 8:15 on 88eb3ba, and Sprint 30's added injection proofs took the job past 10 minutes, so every run after 73a976e was canceled with no verdict. The only failures CI did report on this branch were the two guards fixed in 98f05e5.
 
 - **test**: two guards the full suite caught in Sprint 30's own changes (#76, #77). `test_task_activity.py` imported the activity hook by name, which `test_requirements_complete.py` read as an undeclared package; it now loads the hook by path, as `test_hooklib.py` does. `docs/agent_prompts/ci_fix.md` named the Windows interpreter path, which `test_interpreter_paths.py` refuses; it now refers to `docs/ENVIRONMENT.md`.

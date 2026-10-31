@@ -753,6 +753,7 @@ value. Removed from candidates.)
 - Reading: a selection below greedy shows the room can be reached, and the device question becomes whether Dirac-3S reaches it faster or further; none within the caps leaves the room unshown, and is reported as that
 - Acceptance: entry before the run, as a dated amendment to Experiment 3; each instance's best selection found, with its gap to greedy and to the floor, in a result file with the provenance block
 - Depends on: nothing. Informs: F25, whose HOLD reason (F102 not filed) is about the device run and is unchanged
+- **Sprint 30 Task E (2026-10-31, #79)**: below greedy on 3 of 6 instances (42/free, 42/mid, 43/free), each by under 2e-05 against a room bound near 0.08-0.097; SCIP did not beat greedy at 1,200 s, and its dual bound tightens the bound only on the `mid` instances. The exact check fired, but the swap search missed the optimum on 3 of the 7 cases where greedy is not optimal, so "nothing below greedy" on the other three instances does not show greedy is optimal. `docs/phase2/F176_BELOW_GREEDY.md`
 
 ### Paper (Stages 4-6)
 
