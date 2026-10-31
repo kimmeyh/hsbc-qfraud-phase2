@@ -1,0 +1,161 @@
+# Sprint 30 Manual Validation
+
+**Sprint**: 30
+**Branch**: `feature/20261030_Sprint_30` | **PR**: #74 (draft)
+**Scope**: F173 (A), F175 (B), F168 (C), F174 (D), F176 (E), F169 (F),
+F170 (G), F171 (H), F172 (I). Issues #75-83.
+**Metered seconds**: 0. No Dirac, Braket or other paid service was called.
+
+This file is the durable copy. The same items are listed to the screen at
+handover: a pointer to a file is not a handover.
+
+---
+
+## V1. Task A (F173): a commit needs its OWN task's timer
+
+- `update_sprint_status.py --add-issue N --task X` records each issue's
+  task in `task_issues`; the commit-msg hook refuses a `feat:` or `fix:`
+  commit whose named issue's task is not being timed. A "PR n review"
+  commit needs `--review-task X`.
+- The card's case is a test: a commit naming #66 while only D's and H's
+  timers run is refused; with C's timer it is accepted. Each term proven
+  red (`test_commit_msg_hook.py`).
+- Used all sprint: every Sprint 30 `feat:` and `fix:` commit passed it.
+- **Gap found in use**: the hook checks `feat:` and `fix:` only. The
+  `docs:`, `test:` and `ci:` commits this sprint passed with no timer.
+
+## V2. Task B (F175): an actual is work, not elapsed time
+
+- A PostToolUse hook (`.claude/hooks/log_task_activity.py`) appends a
+  timestamp per tool call to `.claude/activity.log` (gitignored) while a
+  timer runs. `--finish-task` subtracts gaps over 30 minutes and pause
+  spans, and records `task_actuals` (active) and `task_elapsed`.
+- **Finding, please read**: Sprint 30's actuals are now too LOW, not too
+  high. E (2 active, 143 elapsed), F (2 active, 41 elapsed) and G (6
+  active, 40 elapsed) were measured correctly, but their result write-ups
+  were done while no timer ran (or while another task's ran), so that
+  work is in no task's actual. The hook measures what is timed; it cannot
+  time what is not started. See V11.
+
+## V3. Task C (F168): agent work and long runs survive a usage limit
+
+- Kept agent prompts in `docs/agent_prompts/`, each with a "Progress and
+  restart" section; progress files in `.claude/agent_progress/`
+  (gitignored).
+- `device_store` writes an intent before it sends and refuses a problem
+  hash that has an intent or a response, so a resume never repeats a
+  metered call. No metered call was made this sprint.
+- Every module that calls `provenance.start` declares `LONG_RUN`; a True
+  module must be resumable (`test_long_run_resume.py`).
+- `scripts/agent_status.py` and the hourly wake-up (CronCreate ef02e6ad,
+  session-only, expires after 7 days). Two wake-ups ran this session and
+  reported correctly.
+- **Gap found in use**: `agent_status.py` lists a run only once its
+  result file exists. F174 wrote nothing for its first 65 minutes, so a
+  death in that window would not have shown; its process was checked
+  directly instead.
+
+## V4. Task D (F174): best achievable result per algorithm on IEEE-CIS
+
+PENDING: the run is still going (10 seeds, about 65 minutes each). This
+item is completed from `experiments/phase2/results/f174_ieee_algorithms.json`
+and the pages `scripts/f174_docs.py` renders, once the run's final
+`complete` line is written.
+
+- The generator `scripts/f174_docs.py` is committed (7bbfb79). It refuses
+  a result its fixed text does not describe, each refusal proven red.
+- **Runtime finding**: seed 42 took 65 minutes, against the plan's
+  inferred 30-35. The SVM lane took 31 minutes and the proxy 20.
+
+## V5. Task E (F176): can a classical solver get below greedy?
+
+`docs/phase2/F176_BELOW_GREEDY.md`; result
+`experiments/phase2/results/f176_below_greedy.json`.
+
+- Below greedy on 3 of 6 instances (42/free, 42/mid, 43/free), each by
+  under 2e-05. SCIP did not beat greedy at its 1,200 s cap on any
+  instance.
+- **Finding to confirm**: the exact check fired (4 cases), but the swap
+  search stayed at greedy on 3 of the 7 small cases where greedy is not
+  optimal. So "nothing below greedy" on the other three IEEE-CIS
+  instances does not show greedy is optimal. The module read the
+  amendment's "the swap search must reach it" as "on at least one case".
+- The found gains are far smaller than the room bound (about 0.081 to
+  0.097). Whether the device resolves differences that small is not
+  tested (F104).
+
+## V6. Task F (F169): the F108 plug-in passes
+
+`docs/phase2/F169_PLUGIN_BINS.md`; result
+`experiments/phase2/results/f169_plugin_bins.json`.
+
+- Both arms pass F108's rule on the main arm: LightGBM with 4,095 bins
+  on 5 of 5 seeds on every arm; HGB without early stopping on 4 of 5.
+- **Please read the attribution caveat**: the preset reading is "early
+  stopping, not bins, was the cause", but HGB without early stopping
+  still failed reference seed 44 (estimate 0.00431, Bayes error 0).
+- F114's dependency is met; the document recommends LightGBM with 4,095
+  bins as F114's plug-in.
+
+## V7. Task G (F170): missed ULB frauds sit among legitimate rows
+
+`docs/phase2/F170_MISSED_NEIGHBORS.md`; result
+`experiments/phase2/results/f170_missed_neighbors.json`.
+
+- The simulator check fired first, so the ULB reading was made.
+- All 36 distinct frauds missed by every family have mostly legitimate
+  neighbors, against 16.2% of the 370 caught; Mann-Whitney U rejects.
+  Consistent with ULB's information limit, measured in the models' own
+  30 features; not proof that no model could catch them.
+
+## V8. Task H (F171) and Decision D7: the missed group on IEEE-CIS
+
+`docs/phase2/F171_MISSED_IEEE.md`; results
+`experiments/phase2/results/f171_missed_ieee.json` and
+`experiments/phase2/results/f171_budgets.json`.
+
+- At the preregistered 0.5% budget: 81.5% of IEEE-CIS pairs missed by
+  all, against 11.2% on ULB. That budget alone forces 42.3% on IEEE-CIS.
+- Decision D7 option 1 (post hoc, labeled exploratory): at 3.5%, 38.1%
+  against 5.4%; at three times each fold's fraud rate, 18.2% against
+  11.2%. The entry's reading (a share well below ULB's) is not met.
+- ULB has 12 families and IEEE-CIS 4; a 4-family ULB count was not made.
+- D7's figure 426 alerts was 427 (the budget rounds up); a dated note
+  under D7 records it.
+
+## V9. Task I (F172): the Sprint 29 review's coverage gaps
+
+- Each item from the Sprint 29 retrospective's "Review findings not
+  fixed" has a test, each proven red.
+- **One code change, please confirm**: F166's proxy now checks its
+  training and validation labels against the classical lanes', as it
+  checked its test labels. Checked equal on seeds 42 and 43 before the
+  change; no recorded result changes.
+- `test_the_budget_can_fail` now goes red through its timing assertion,
+  and its proof refuses a red for any other reason.
+- New `test_resume_loops.py`: F156's, F158's, F159's, F166's, F169's and
+  F174's resume loops skip recorded units, at module level.
+
+## V10. CI
+
+- **CI was not green from 5719211 (Task B) to 4b19944.** The real
+  failures were two guards in Sprint 30's own changes (a hook import and
+  an interpreter path in an agent prompt), fixed in 98f05e5. From
+  73a976e every run was canceled at the job's 10-minute limit, which
+  reads as neither red nor green, so I missed it until the wake-up check.
+- **Change to confirm**: `.github/workflows/ci.yml` raises the job's
+  limit from 10 to 20 minutes (88bec13), with the reason in the file.
+  The test step now takes about 11 minutes.
+- The local full suite had two injection proofs that did not return to
+  green (F166's bootstrap rejection, the figure registry); both pass
+  alone. The final suite on a quiet tree settles it (V12).
+
+## V11. Timers
+
+- A 10, B 11, C 15, I 14 and H 13 active minutes.
+- E 2, F 2 and G 6 active minutes are undercounts; see V2.
+- D's actual is recorded when its run and pages are done.
+
+## V12. Acceptance walk, evidence per task
+
+Completed at handover, after D's run and the final suite.
