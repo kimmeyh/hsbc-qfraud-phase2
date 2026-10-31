@@ -70,7 +70,7 @@ Consult this line at the START and END of every phase; state which steps were do
 - 3.3 Branch `feature/YYYYMMDD_Sprint_N` -- normally ALREADY CREATED by the previous sprint's 6.6 carry-forward; verify, do not duplicate.
 - 3.3.1 **Draft PR immediately after the plan is drafted, before approval. The PR STAYS DRAFT through Phase 7.7.** Draft status suppresses Copilot per-commit reviews; marking ready early = review noise on every push. `gh pr ready` happens at exactly one place: end of 7.7.
 - 3.3.2 **CI checkpoint, ~5 minutes after the draft PR exists**: `scripts/check_ci_status.py --after 300`. The delay is the point -- a check run the instant the PR opens finds no workflow run at all, which reads exactly like a clean one. If it is RED, **hand the failure to a background agent and CONTINUE the sprint**; a broken CI is not a reason to stop executing approved work, and the agent fixes it in parallel. (Sprint 18 ran red from its first push to its last because nobody looked once. One look, early, is the whole mechanism.)
-- 3.4 One GitHub issue per task (`sprint` label), created in the SAME turn as approval acknowledgment, before any task file is touched. 3.4.1 Verify each issue is still real. 3.5 All cards OPEN.
+- 3.4 One GitHub issue per task (`sprint` label), created in the SAME turn as approval acknowledgment, before any task file is touched, and recorded with its task (`update_sprint_status.py --add-issue N --task X`; the commit-msg hook admits a feat or fix commit only while its issue's task is timed, F173). 3.4.1 Verify each issue is still real. 3.5 All cards OPEN.
 - 3.7 Explicit approval; update PR body to approved plan (keep draft).
 
 ### Phase 4: Execution

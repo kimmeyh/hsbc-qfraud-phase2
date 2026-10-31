@@ -17,11 +17,19 @@ Usage:
         --plan-doc docs/sprints/SPRINT_17_PLAN.md
     python scripts/update_sprint_status.py --start-task C
     python scripts/update_sprint_status.py --finish-task C
-    python scripts/update_sprint_status.py --add-issue 19
+    python scripts/update_sprint_status.py --add-issue 19 --task C
+    python scripts/update_sprint_status.py --review-task J
 
 `--add-issue` appends an issue number to `github_issues`, once, keeping the
 list sorted (Sprint 25 IMP-4: a task added at Manual Validation opened #19,
 and `--set` cannot append to a list, so the file fell out of step).
+With `--task X` it also records the issue under task X in `task_issues`,
+which `.githooks/commit-msg` reads: a feat or fix commit is admitted only
+while the task that owns its named issue is timed (F173, Sprint 30: the
+hook accepted any running timer, so Task C's commit 5348add, #66, would
+have passed while only D's and H's timers ran). `--review-task X` names
+the task whose timer a "PR n review" commit needs, as Sprint 29's Task J
+was.
 
 `--pause-task X` and `--resume-task X` keep a wait, such as a metered stop
 awaiting approval, out of the actual. `--start-task` refuses while another
@@ -100,15 +108,31 @@ def apply_set(doc: dict, assignment: str) -> str:
     return f"  {section_name}.{key}: {before!r} -> {section[key]!r}"
 
 
-def add_issue(doc: dict, number: int) -> str:
+def add_issue(doc: dict, number: int, task: str = "") -> str:
     if number <= 0:
         raise SystemExit(f"Issue number must be positive, got {number}.")
-    issues = doc.setdefault("current_sprint", {}).setdefault("github_issues", [])
+    cur = doc.setdefault("current_sprint", {})
+    issues = cur.setdefault("github_issues", [])
     if number in issues:
-        return f"  current_sprint.github_issues: #{number} already listed"
-    issues.append(number)
-    issues.sort()
-    return f"  current_sprint.github_issues: added #{number} -> {issues}"
+        line = f"  current_sprint.github_issues: #{number} already listed"
+    else:
+        issues.append(number)
+        issues.sort()
+        line = f"  current_sprint.github_issues: added #{number} -> {issues}"
+    if task:
+        owners = cur.setdefault("task_issues", {})
+        other = [t for t, ns in owners.items() if number in ns and t != task]
+        if other:
+            # One owner per issue, or the hook cannot tell whose timer a
+            # commit naming it needs.
+            raise SystemExit(f"Issue #{number} already belongs to task "
+                             f"{other[0]}.")
+        mine = owners.setdefault(task, [])
+        if number not in mine:
+            mine.append(number)
+            mine.sort()
+        line += f"; task_issues.{task}: {mine}"
+    return line
 
 
 def open_tasks(cur: dict) -> list[str]:
@@ -227,6 +251,10 @@ def main(argv: list[str] | None = None,
                     help="restart a paused task's clock")
     ap.add_argument("--add-issue", type=int, action="append", default=[],
                     metavar="N", help="append an issue number; repeatable")
+    ap.add_argument("--task", default="", metavar="TASK",
+                    help="with --add-issue: the task that owns the issue(s)")
+    ap.add_argument("--review-task", default="", metavar="TASK",
+                    help="the task a 'PR n review' commit is timed against")
     ap.add_argument("--path", default=str(STATUS),
                     help="status file (tests override this)")
     args = ap.parse_args(argv)
@@ -267,14 +295,27 @@ def main(argv: list[str] | None = None,
             "task_actuals": {},
             # F136 (Sprint 23 IMP-3): the start stamps the actuals come from.
             "task_started": {},
+            # F173 (Sprint 30): the issues each task owns, and the task a
+            # "PR n review" commit is timed against.
+            "task_issues": {},
+            "review_task": None,
         }
         changes.append(f"  rolled to sprint {args.new_sprint} "
                        f"(previous: {doc['last_completed_sprint']['number']})")
 
     for assignment in args.set:
         changes.append(apply_set(doc, assignment))
+    if args.task and not args.add_issue:
+        raise SystemExit("--task names the owner of an --add-issue issue; "
+                         "pass --add-issue N with it")
     for number in args.add_issue:
-        changes.append(add_issue(doc, number))
+        changes.append(add_issue(doc, number, args.task))
+    if args.review_task:
+        cur = doc["current_sprint"]
+        before = cur.get("review_task")
+        cur["review_task"] = args.review_task
+        changes.append(f"  current_sprint.review_task: {before!r} -> "
+                       f"{args.review_task!r}")
 
     clock = now or datetime.now().astimezone()
     if args.pause_task:

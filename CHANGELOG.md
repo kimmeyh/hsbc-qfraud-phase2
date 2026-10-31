@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-31
 
+- **fix**: the commit-msg hook checks the commit's OWN task timer, not any timer (F173, Sprint 30 Task A, #75). `update_sprint_status.py --add-issue N --task X` records each issue's task in `task_issues` (one owner per issue), and `--review-task X` names the task a "PR n review" commit is timed against. `check_commit_issue.py` refuses a feat or fix commit whose named issue has no task, whose review commit has no review task, or whose task is not being timed; the shape of Task C's commit 5348add (#66 while only D's and H's timers ran) is now refused. One test per term, each proven red. Sprint 30's issues #75-#83 are mapped to Tasks A-I. `SPRINT_CHECKLIST.md` and `SPRINT_EXECUTION_WORKFLOW.md` name the new flag.
+
 - **docs**: Sprint 30 Decisions D2, D3 and D4 answered (`SPRINT_30_DECISIONS.md`). D2 1: a long run keeps its finished units in the result file, resumed through `provenance.start`. D3 1: F169 runs two arms, HGB and LightGBM, both with early stopping off. D4: no time cap on F174's run; the seed count is asked as D5. D5 1: 10 seeds, 42-51. D6 1: the plan is approved; issues #75-#83, one per task, and the approval are recorded in the status file.
 
 ### 2026-10-30

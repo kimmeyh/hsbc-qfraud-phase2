@@ -24,15 +24,19 @@ import check_commit_issue as cci  # noqa: E402
 
 BRANCH = "feature/20261019_Sprint_28"
 STATUS = {"current_sprint": {"branch": BRANCH, "pr": 46,
-                             "github_issues": [59, 60, 61],
+                             "github_issues": [58, 59, 60, 61],
+                             "task_issues": {"A": [58], "B": [59, 60, 61]},
+                             "review_task": "B",
                              "task_started": {"A": "t0", "B": "t1"},
                              "task_actuals": {"A": 5}}}
 
 
 def test_a_feature_commit_without_its_issue_is_refused():
     # The shape of 39f9943, D4 part 1.
-    assert cci.problem("feat: device_store, every device job stored\n",
-                       BRANCH, STATUS)
+    why = cci.problem("feat: device_store, every device job stored\n",
+                      BRANCH, STATUS)
+    # Refused for the missing issue, not later by the own-task rule.
+    assert why is not None and "names its task issue" in why
 
 
 def test_an_issue_or_the_pr_review_admits_it():
@@ -104,6 +108,52 @@ def test_a_body_line_naming_the_issue_is_kept():
     assert cci.problem("feat: x\n\n#61 is the task\n", BRANCH, STATUS) is None
 
 
+# F173 (Sprint 30): the running timer must be the commit's own task's.
+S29 = {"current_sprint": {"branch": BRANCH, "pr": 63,
+                          "github_issues": [66, 67, 71],
+                          "task_issues": {"C": [66], "D": [67], "H": [71]},
+                          "task_started": {"D": "t0", "H": "t1"},
+                          "task_actuals": {}}}
+
+
+def _s29(**fields):
+    return {"current_sprint": {**S29["current_sprint"], **fields}}
+
+
+def test_a_commit_while_only_other_tasks_are_timed_is_refused():
+    # The shape of 5348add: Task C's work (#66), D's and H's timers running.
+    why = cci.problem("feat: f165 (#66)\n", BRANCH, S29)
+    assert why is not None and "['C']" in why
+
+
+def test_the_same_commit_with_its_own_task_timed_passes():
+    timed_c = _s29(task_started={"C": "t2", "D": "t0", "H": "t1"},
+                   task_parallel={"C": ["D", "H"]})
+    assert cci.problem("feat: f165 (#66)\n", BRANCH, timed_c) is None
+    # Naming two issues: one owned by a timed task is enough.
+    assert cci.problem("feat: f (#66, #67)\n", BRANCH, S29) is None
+
+
+def test_an_issue_with_no_task_is_refused():
+    why = cci.problem("feat: f (#71)\n", BRANCH,
+                      _s29(task_issues={"C": [66], "D": [67]}))
+    assert why is not None and "--task" in why
+    assert cci.problem("feat: f (#71)\n", BRANCH,
+                       _s29(task_issues=None)) is not None
+
+
+def test_a_review_commit_needs_the_review_task_set():
+    why = cci.problem("fix: PR 63 review\n", BRANCH, S29)
+    assert why is not None and "--review-task" in why
+
+
+def test_a_review_commit_needs_the_review_task_timed():
+    assert cci.problem("fix: PR 63 review\n", BRANCH,
+                       _s29(review_task="J")) is not None
+    assert cci.problem("fix: PR 63 review\n", BRANCH,
+                       _s29(review_task="D")) is None
+
+
 @pytest.mark.skipif(shutil.which("git") is None, reason="git is not installed")
 def test_the_real_hook_refuses_and_admits(tmp_path):
     def git(*a):
@@ -156,7 +206,7 @@ def test_the_rule_can_fail():
                         f"{THIS}::test_a_body_line_naming_the_issue_is_kept",
                         ROOT),
                     "an issue line dropped as a comment")
-    assert_can_fail([Mutation(SCRIPT, "    if not timed(cur):\n",
+    assert_can_fail([Mutation(SCRIPT, "    if not running:\n",
                               "    if False:\n", expect_occurrences=1)],
                     lambda: run_pytest(
                         f"{THIS}::test_a_commit_with_no_timer_running_is_"
@@ -169,3 +219,31 @@ def test_the_rule_can_fail():
                         f"{THIS}::test_a_commit_with_no_timer_running_is_"
                         "refused", ROOT),
                     "a paused timer counted as running")
+
+
+def test_the_own_task_rule_can_fail():
+    # F173: one mutation per term, each run against its own test.
+    from injection import Mutation, assert_can_fail, run_pytest
+
+    def test(name):
+        return lambda: run_pytest(f"{THIS}::{name}", ROOT)
+    assert_can_fail([Mutation(SCRIPT, "    if not own & set(running):\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_a_commit_while_only_other_tasks_are_timed_"
+                         "is_refused"),
+                    "another task's timer admitting the commit")
+    assert_can_fail([Mutation(SCRIPT, "    if unowned:\n", "    if False:\n",
+                              expect_occurrences=1)],
+                    test("test_an_issue_with_no_task_is_refused"),
+                    "an issue with no task admitted")
+    assert_can_fail([Mutation(SCRIPT,
+                              '        if not cur.get("review_task"):\n',
+                              "        if False:\n", expect_occurrences=1)],
+                    test("test_a_review_commit_needs_the_review_task_set"),
+                    "a review commit with no review task")
+    assert_can_fail([Mutation(SCRIPT,
+                              '        own.add(cur["review_task"])\n',
+                              "        own.update(running)\n",
+                              expect_occurrences=1)],
+                    test("test_a_review_commit_needs_the_review_task_timed"),
+                    "a review commit admitted by any timer")
