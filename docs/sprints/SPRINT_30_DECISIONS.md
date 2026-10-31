@@ -290,3 +290,35 @@ interrupted, it resumes through `provenance.start` (D2).
 
 **Answer (team lead, 2026-10-31): 1.** 10 seeds, 42-51, no time cap.
 Task D stays 240 minutes.
+
+---
+
+## D6. Is the Sprint 30 plan approved?
+
+Asked 2026-10-31 at Phase 3 planning, after D2-D5.
+
+**What.** `SPRINT_30_PLAN.md` at `bfd73fc`: Tasks A-I (F173, F175,
+F168, F174, F176, F169, F170, F171, F172), 975 minutes of work, 0
+metered seconds, in the order A, B, C, D (seed 42 timed, then the run in
+the background), E-H while D runs, then I.
+
+**Why it matters.** Execution starts only on approval. On approval, one
+GitHub issue per task is created and mapped to its task, the approval is
+recorded in the status file, and the draft PR body is updated; the two
+Phase 3 checks now red in CI then pass.
+
+**Options, with Kind and Cost.** Kind does not apply: this is an
+approval, not a fix.
+- Option 1: about 10 minutes of records (9 issues, status, PR body), then
+  975 minutes of work, 0 metered seconds.
+- Option 2: no cost until the changes are named.
+
+**Recommendation: 1.** Each card was checked against the repository, and
+each card that could not run as carded was decided (D2-D5).
+
+**Options.**
+
+1. Approved as written: create the 9 issues, record the approval, start
+   Task A.
+2. Not approved: reply 2 followed by the change wanted; the plan is
+   revised and this decision is asked again.
