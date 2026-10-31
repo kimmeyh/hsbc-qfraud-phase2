@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-31
 
+- **ci**: the CI job's time limit is 20 minutes, not 10 (Sprint 30). The tests step took 8:15 on 88eb3ba, and Sprint 30's added injection proofs took the job past 10 minutes, so every run after 73a976e was cancelled with no verdict. The only failures CI did report on this branch were the two guards fixed in 98f05e5.
+
 - **test**: two guards the full suite caught in Sprint 30's own changes (#76, #77). `test_task_activity.py` imported the activity hook by name, which `test_requirements_complete.py` read as an undeclared package; it now loads the hook by path, as `test_hooklib.py` does. `docs/agent_prompts/ci_fix.md` named the Windows interpreter path, which `test_interpreter_paths.py` refuses; it now refers to `docs/ENVIRONMENT.md`.
 
 - **feat**: F174's page generator, `scripts/f174_docs.py` (Sprint 30 Task D, #78), written while the run continues. It renders one page per algorithm and `IEEE_COMPARISON.md` under `docs/phase2/algorithms/`, beside F166's ULB pages, reusing `scripts/f166_docs.py`'s dataset-free helpers unchanged. It refuses a result its fixed text does not describe: not IEEE-CIS, not complete, an RBF SVM kept, fewer than 8 seeds or a non-Wilcoxon primary test, or a proxy pool not built serially. New `experiments/src/test_f174_docs.py` renders a synthetic result and proves the refusals red. The pages follow when the run is complete.

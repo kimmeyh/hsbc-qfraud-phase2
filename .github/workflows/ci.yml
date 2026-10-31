@@ -19,7 +19,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # 10 until Sprint 30. The tests step took 8:15 on 88eb3ba, and the
+    # sprint's added injection proofs took the job past 10 minutes, so
+    # every run after 73a976e was cancelled with no verdict. A cancelled
+    # run reads as neither red nor green. 20 keeps a stop for a hung job.
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
