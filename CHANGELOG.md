@@ -6,7 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-31
 
-- **docs**: Sprint 30 Decisions D2, D3 and D4 answered (`SPRINT_30_DECISIONS.md`). D2 1: a long run keeps its finished units in the result file, resumed through `provenance.start`. D3 1: F169 runs two arms, HGB and LightGBM, both with early stopping off. D4: no time cap on F174's run; the seed count is asked as D5. D5 1: 10 seeds, 42-51. The plan records D2-D5 and awaits approval; the master plan pointer is updated.
+- **docs**: Sprint 30 Decisions D2, D3 and D4 answered (`SPRINT_30_DECISIONS.md`). D2 1: a long run keeps its finished units in the result file, resumed through `provenance.start`. D3 1: F169 runs two arms, HGB and LightGBM, both with early stopping off. D4: no time cap on F174's run; the seed count is asked as D5. D5 1: 10 seeds, 42-51. D6 1: the plan is approved; issues #75-#83, one per task, and the approval are recorded in the status file.
 
 ### 2026-10-30
 

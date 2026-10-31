@@ -1,8 +1,9 @@
 # Sprint 30 Plan: Measure the Work, Survive the Limits, Then Test the Ceiling and the Room
 
 **Sprint**: 30 | **Branch**: `feature/20261030_Sprint_30`
-**Planned**: 2026-10-30 | **Status**: DRAFT, D2-D5 answered
-(`SPRINT_30_DECISIONS.md`), awaiting approval
+**Planned**: 2026-10-30 | **Status**: APPROVED 2026-10-31 (D6;
+D2-D5 in `SPRINT_30_DECISIONS.md`). Issues: A #75, B #76, C #77, D #78,
+E #79, F #80, G #81, H #82, I #83
 **Scope**: F168, F173, F175, F172, F176, F169, F170, F171 and F174 (team
 lead selection, 2026-10-30, D1 option 1)
 **Metered Dirac seconds**: **0**. No task calls a device or a paid
