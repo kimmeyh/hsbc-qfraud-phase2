@@ -133,6 +133,16 @@ says **measured**. Every earlier row, and any later row whose Note does not
 say measured, is an actual judged at completion. A `~` before an actual
 marks a judged value that was also approximate.
 
+**Active and elapsed minutes (F175, Sprint 30).** From Sprint 30 on,
+`--finish-task` records the actual as ACTIVE minutes in `task_actuals`:
+elapsed time less pauses and less every gap of more than 30 minutes with
+no tool call in `.claude/activity.log` (written by
+`.claude/hooks/log_task_activity.py` while a timer runs). The elapsed
+minutes are kept in `task_elapsed`. A row's Note says **measured, active**
+and gives the elapsed minutes beside it, so Sprint 30 rows compare with
+earlier ones. A finish with no activity log falls back to elapsed less
+pauses and says so; such a row's Note says **measured, elapsed**.
+
 **Pattern, recomputed at the Sprint 22 retrospective.** Tooling cards land
 near their estimate (ratio 0.95-1.4 in Sprints 20-22; a wrong diagnosis
 doubles one). Research and analysis cards marked `[no-history]` ran at

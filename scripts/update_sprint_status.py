@@ -192,18 +192,63 @@ def resume_task(doc: dict, task: str, now: datetime) -> str:
     paused = cur.get("task_paused", {})
     if task not in paused:
         raise SystemExit(f"Task {task} is not paused.")
-    gap = (now - datetime.fromisoformat(paused.pop(task))).total_seconds()
+    began = paused.pop(task)
+    gap = (now - datetime.fromisoformat(began)).total_seconds()
     if gap < 0:
         raise SystemExit(f"Task {task} resumes before it paused.")
     total = cur.setdefault("task_paused_s", {})
     total[task] = total.get(task, 0) + int(gap)
+    # The span itself, so --finish-task does not subtract a pause twice
+    # when it also has no activity (F175).
+    cur.setdefault("task_pause_spans", {}).setdefault(task, []).append(
+        [began, now.isoformat(timespec="seconds")])
     return (f"  current_sprint.task_paused_s.{task}: {total[task]} s paused "
             "in all")
 
 
-def finish_task(doc: dict, task: str, now: datetime) -> str:
+IDLE_GAP_S = 30 * 60
+
+
+def activity(log: Path) -> list[datetime] | None:
+    """The activity log's timestamps, or None when there is no log."""
+    if not log.exists():
+        return None
+    out = []
+    for line in log.read_text(encoding="utf-8").splitlines():
+        try:
+            out.append(datetime.fromisoformat(line.strip()))
+        except ValueError:
+            continue
+    return out
+
+
+def idle_seconds(points: list[datetime], start: datetime, end: datetime,
+                 pauses: list[tuple[datetime, datetime]]) -> int:
+    """Seconds of [start, end] that are not work: every gap of more than
+    IDLE_GAP_S between activity points (the start and end count as points),
+    and every recorded pause. Their union, so a pause with no tool calls in
+    it is subtracted once."""
+    pts = [start, *sorted(p for p in points if start < p < end), end]
+    spans = [(a, b) for a, b in zip(pts, pts[1:])
+             if (b - a).total_seconds() > IDLE_GAP_S]
+    spans += [(max(a, start), min(b, end)) for a, b in pauses
+              if min(b, end) > max(a, start)]
+    total, reach = 0.0, None
+    for a, b in sorted(spans):
+        if reach is not None and a < reach:
+            a = reach
+        if b > a:
+            total += (b - a).total_seconds()
+        reach = b if reach is None else max(reach, b)
+    return int(total)
+
+
+def finish_task(doc: dict, task: str, now: datetime,
+                log: Path | None = None) -> str:
     """Compute the actual from the recorded start, in whole minutes, less
-    any time paused."""
+    any time paused and, when there is an activity log, any gap of more
+    than 30 minutes with no tool call (F175, Sprint 30). The elapsed
+    minutes are kept beside it in `task_elapsed`."""
     cur = doc["current_sprint"]
     stamp = cur.get("task_started", {}).get(task)
     if not stamp:
@@ -217,13 +262,26 @@ def finish_task(doc: dict, task: str, now: datetime) -> str:
     if task in cur.get("task_paused", {}):
         raise SystemExit(f"Task {task} is paused; --resume-task it first, so "
                          "the pause is measured rather than guessed.")
-    elapsed = (now - datetime.fromisoformat(stamp)).total_seconds()
+    start = datetime.fromisoformat(stamp)
+    elapsed = (now - start).total_seconds()
     if elapsed < 0:
         raise SystemExit(f"Task {task} finishes before it started ({stamp}).")
-    elapsed -= cur.get("task_paused_s", {}).get(task, 0)
-    actuals[task] = max(1, math.ceil(elapsed / 60))
+    paused_s = cur.get("task_paused_s", {}).get(task, 0)
+    points = activity(log) if log is not None else None
+    if points is None:
+        idle, how = paused_s, "no activity log: elapsed less pauses"
+    else:
+        spans = [(datetime.fromisoformat(a), datetime.fromisoformat(b))
+                 for a, b in cur.get("task_pause_spans", {}).get(task, [])]
+        idle = idle_seconds(points, start, now, spans)
+        # A pause recorded before spans were kept is still subtracted.
+        idle = max(idle, paused_s)
+        how = "gaps over 30 min and pauses subtracted"
+    actuals[task] = max(1, math.ceil((elapsed - idle) / 60))
+    cur.setdefault("task_elapsed", {})[task] = max(1, math.ceil(elapsed / 60))
     return (f"  current_sprint.task_actuals.{task}: {actuals[task]} min "
-            f"(from {stamp})")
+            f"active, {cur['task_elapsed'][task]} elapsed (from {stamp}; "
+            f"{how})")
 
 
 def main(argv: list[str] | None = None,
@@ -325,7 +383,8 @@ def main(argv: list[str] | None = None,
     if args.start_task:
         changes.append(start_task(doc, args.start_task, clock, args.parallel))
     if args.finish_task:
-        changes.append(finish_task(doc, args.finish_task, clock))
+        changes.append(finish_task(doc, args.finish_task, clock,
+                                   path.parent / "activity.log"))
 
     if not changes:
         print("nothing to do; pass --set or --new-sprint")

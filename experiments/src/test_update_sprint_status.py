@@ -172,8 +172,8 @@ def test_timer_guards_can_fail(tmp_path):
 
     try:
         assert_can_fail(
-            [Mutation(src, "    elapsed -= cur.get(\"task_paused_s\", {})"
-                      ".get(task, 0)\n", "", expect_occurrences=1)],
+            [Mutation(src, "        idle, how = paused_s, ",
+                      "        idle, how = 0, ", expect_occurrences=1)],
             run, "the pause counted as work")
         assert_can_fail(
             [Mutation(src, "    if running and not parallel:\n",
