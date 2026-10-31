@@ -1,9 +1,8 @@
 # Sprint 30 Plan: Measure the Work, Survive the Limits, Then Test the Ceiling and the Room
 
 **Sprint**: 30 | **Branch**: `feature/20261030_Sprint_30`
-**Planned**: 2026-10-30 | **Status**: DRAFT. D2 and D3 answered 1;
-D4 answered "no time cap"; D5 (F174's seed count) open
-(`SPRINT_30_DECISIONS.md`), then approval
+**Planned**: 2026-10-30 | **Status**: DRAFT, D2-D5 answered
+(`SPRINT_30_DECISIONS.md`), awaiting approval
 **Scope**: F168, F173, F175, F172, F176, F169, F170, F171 and F174 (team
 lead selection, 2026-10-30, D1 option 1)
 **Metered Dirac seconds**: **0**. No task calls a device or a paid
@@ -29,6 +28,12 @@ algorithm on IEEE-CIS.
 - **Scope**: as above, 945 minutes by card estimate (D1 option 1,
   2026-10-30). F155, F102, F161, F95, F114 and F13 were not selected.
 - **F168**: assigned to Sprint 30 on 2026-10-26.
+- **D2 (2026-10-31): 1.** A long run keeps its finished units in the
+  result file (`complete: false`), resumed through `provenance.start`.
+- **D3 (2026-10-31): 1.** F169 runs two arms: HGB with early stopping
+  off, and LightGBM with `max_bin` raised and early stopping off.
+- **D4 and D5 (2026-10-31).** F174 runs 10 seeds, 42-51, with no time
+  cap. Seed 42's time is measured and reported; it does not stop the run.
 
 ## Pre-kickoff (Phase 2)
 
@@ -136,15 +141,14 @@ evidence. **Three cards cannot run as carded**; each is a decision
 
 ## Tasks
 
-Estimates assume D2-D4 as recommended; the other options' effect is
-stated under each decision.
+Estimates follow the answers to D2-D5.
 
 | Task | Card | What | Est | Runtime | Depends on |
 |---|---|---|---|---|---|
 | A | F173 | `task_issues` map set with `--add-issue N --task X`; the hook refuses a commit whose named issue's task is not timed; the review-commit rule; one test per term, each proven red | 45 | - | - |
 | B | F175 | Activity log hook (gitignored); `--finish-task` subtracts gaps over 30 minutes and records elapsed and active; tests proven red | 60 | - | A |
 | C | F168 | The seven parts; part 2 per D2; part 3 with the intent record; the two guard tests and the hash lookup proven red | 240 | - | A, B |
-| D | F174 | Entry; IEEE-CIS data from `ieee_harness`; the seven lanes on F166's grids; seed count per D4; tracked page generator; pages | 240 | per D4: seed 42 first (~30-35, inferred), then about 4-6 hours in the background | C |
+| D | F174 | Entry; IEEE-CIS data from `ieee_harness`; the seven lanes on F166's grids; 10 seeds, 42-51, no time cap (D4, D5); tracked page generator; pages | 240 | seed 42 first (~30-35, inferred), then about 5-6 hours in the background | C |
 | E | F176 | Entry (dated Experiment 3 amendment); the six instances rebuilt and greedy checked; SCIP with a longer cap and a local search from greedy; the n = 20 enumeration check first | 90 | ~2 hours (SCIP 6 x up to 20 min) | C |
 | F | F169 | Entry (dated F108 amendment) per D3; F108's harness, seeds 42-46, margin and pass rule unchanged | 120 | ~20 | C |
 | G | F170 | Entry; k nearest training neighbors per ULB test fraud, seeds 42-51; the simulator check first; distinct missed frauds counted | 30 | ~10 | C |

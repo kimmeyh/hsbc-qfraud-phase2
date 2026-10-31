@@ -544,7 +544,7 @@ Removed from candidates per convention (Pass 1, 2026-10-30).)
 (assigned 2026-10-26), F173, F175, F172, F176, F169, F170, F171 and F174.
 945 minutes by card estimate, zero metered. F155, F102, F161, F95, F114
 and F13 not selected. Record: `docs/sprints/SPRINT_30_DECISIONS.md`.
-Plan: `docs/sprints/SPRINT_30_PLAN.md` (draft; D5 open).
+Plan: `docs/sprints/SPRINT_30_PLAN.md` (draft; D2-D5 answered, awaiting approval).
 
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)

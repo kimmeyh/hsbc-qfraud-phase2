@@ -287,3 +287,6 @@ interrupted, it resumes through `provenance.start` (D2).
 
 1. 10 seeds, 42-51, no time cap. Task D stays 240 minutes.
 2. 8 seeds, 42-49, no time cap. Task D stays 240 minutes.
+
+**Answer (team lead, 2026-10-31): 1.** 10 seeds, 42-51, no time cap.
+Task D stays 240 minutes.
