@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     # 10 until Sprint 30. The tests step took 8:15 on 88eb3ba, and the
     # sprint's added injection proofs took the job past 10 minutes, so
-    # every run after 73a976e was cancelled with no verdict. A cancelled
+    # every run after 73a976e was canceled with no verdict. A canceled
     # run reads as neither red nor green. 20 keeps a stop for a hung job.
     timeout-minutes: 20
 
