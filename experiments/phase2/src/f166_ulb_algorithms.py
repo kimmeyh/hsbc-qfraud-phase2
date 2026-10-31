@@ -33,6 +33,8 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f166_ulb_algorithms.json"
+# F168 part 7: a long run resumes through provenance.start.
+LONG_RUN = True
 F159 = ROOT / "experiments" / "phase2" / "results" / "f159_parallel_pool.json"
 ALGOS = ("hgb", "lightgbm", "xgboost", "catboost", "logreg", "svm", "proxy")
 FIRST_SEED = 42

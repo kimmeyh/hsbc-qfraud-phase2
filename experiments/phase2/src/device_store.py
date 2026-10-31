@@ -100,6 +100,15 @@ def check_problem(problem: dict) -> None:
 INTENTS = "intents"
 
 
+def _store(path: Path, doc: dict) -> None:
+    """Write one store record atomically: a temporary file, then a replace.
+    A store record is not a result, so it does not go through
+    `provenance.write_result`."""
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(doc, indent=1), encoding="utf-8")
+    tmp.replace(path)
+
+
 def lookup(problem_hash: str, store_dir: Path | None = None) -> dict:
     """Every record of `problem_hash` in the store: {"responses": [...],
     "intents": [...]}, paths sorted. An intent with no response is a job
@@ -168,13 +177,9 @@ def saving(card: str, unit: str, device_type: str, problem_hash: str,
                 # after the job returns.
                 intent = out / INTENTS / f"{problem_hash}_{card.lower()}_{unit}.json"
                 intent.parent.mkdir(parents=True, exist_ok=True)
-                tmp = intent.with_suffix(".tmp")
-                tmp.write_text(json.dumps(
-                    {"problem_sha256": problem_hash, "card": card,
-                     "unit": unit, "device_type": device_type,
-                     "sending": time.strftime("%Y-%m-%dT%H:%M:%S")},
-                    indent=1), encoding="utf-8")
-                tmp.replace(intent)
+                _store(intent, {"problem_sha256": problem_hash, "card": card,
+                                "unit": unit, "device_type": device_type,
+                                "sending": time.strftime("%Y-%m-%dT%H:%M:%S")})
                 return super().solve(model, *a, **kw)
 
             def makeResults(self, model, response):
@@ -194,9 +199,7 @@ def saving(card: str, unit: str, device_type: str, problem_hash: str,
                     np.savez_compressed(arrays, *[np.asarray(a) for a in
                                                   problem["arrays"]])
                     doc["arrays_file"] = arrays.name
-                tmp = path.with_suffix(".tmp")
-                tmp.write_text(json.dumps(doc, indent=1), encoding="utf-8")
-                tmp.replace(path)
+                _store(path, doc)
                 saved["path"], saved["job_id"] = path, job_id
                 return super().makeResults(model, response)
         return Stored

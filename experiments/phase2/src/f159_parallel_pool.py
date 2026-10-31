@@ -43,6 +43,8 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f159_parallel_pool.json"
+# F168 part 7: a long run resumes through provenance.start.
+LONG_RUN = True
 CELL = "full"                      # qubo_proxy config: 833 variables
 SEED = 42
 FRACTIONS = (0.10, 0.25, 0.50, 1.00)   # F110's

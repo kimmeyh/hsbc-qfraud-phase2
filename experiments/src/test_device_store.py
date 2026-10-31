@@ -169,8 +169,8 @@ def test_the_resend_refusal_can_fail():
                     test("test_a_job_whose_process_stopped_is_not_sent_"
                          "again"),
                     "an intent with no response ignored")
-    assert_can_fail([Mutation(src, "                tmp.replace(intent)\n",
-                              "                tmp.unlink()\n",
+    assert_can_fail([Mutation(src, "                _store(intent, {",
+                              "                (intent, {",
                               expect_occurrences=1)],
                     test("test_a_job_whose_process_stopped_is_not_sent_"
                          "again"),
