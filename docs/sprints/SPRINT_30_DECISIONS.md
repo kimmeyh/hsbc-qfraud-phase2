@@ -146,6 +146,9 @@ module with no resume from one with either.
 3. Both patterns allowed; part 7's guard accepts either. Task C becomes
    260 minutes; the sprint 995.
 
+**Answer (team lead, 2026-10-31): 1.** The in-file pattern is the
+standard. Task C stays 240 minutes.
+
 ---
 
 ## D3. F169: HGB cannot take more bins. What does the entry test?
@@ -188,6 +191,10 @@ early stopping did. The cost is 30 minutes more than either single arm.
    90 minutes; the sprint 945.
 3. HGB with early stopping off only. Task F is 90 minutes; the sprint
    945.
+
+**Answer (team lead, 2026-10-31): 1.** Two arms, HGB with early stopping
+off and LightGBM with `max_bin` raised and early stopping off. Task F is
+120 minutes.
 
 ---
 
@@ -233,3 +240,50 @@ stops before seed 43 and the count is asked again with the measured time.
    cap, at least 3 seeds; the paired bootstrap is primary.
 3. 8 seeds on a stratified half of each seed's training rows, stated in
    the entry.
+
+**Answer (team lead, 2026-10-31): none of the listed options.** Verbatim:
+"whatever seeds are needed, no time cap". Recorded as: no time cap on
+F174's run. "Needed" does not name a count, so the count is asked as D5.
+
+---
+
+## D5. F174: with no time cap, how many seeds on IEEE-CIS?
+
+Asked 2026-10-31 at Phase 3 planning, after D4's answer.
+
+**What.** D4's answer removes the time cap and asks for the seeds that
+are needed. Two counts meet a stated need. 8 is the smallest count at
+which section 2's Wilcoxon signed-rank test can reach 0.05 / 6 = 0.0083:
+with 8 seeds that all agree, the exact two-sided p is 2 / 2^8 = 0.0078;
+with 7 it is 2 / 2^7 = 0.0156, which can never pass. 10 is the count F166
+used on ULB.
+
+**Why it matters.** With 8 seeds, a pair is called different only if all
+8 seeds agree, so one disagreeing seed hides a real difference. With 10
+seeds, one seed can disagree and the pair can still be called different,
+if that seed's difference is one of the two smallest (exact rank sum 2 or
+less; p = 2 x 3 / 2^10 = 0.0059). The IEEE-CIS page then also has the same seeds (42-51) as the
+ULB page, so the two are read the same way. Each extra seed costs only
+background runtime (inferred about 30-35 minutes per seed, not timed).
+
+**Options, with Kind and Cost.** Kind does not apply: each is a sample
+size for one run.
+- Option 1: 10 seeds, 42-51. About 5-6 hours of background runtime
+  (inferred), 0 metered seconds, no added work minutes (Task D stays
+  240).
+- Option 2: 8 seeds, 42-49. About 4-5 hours of background runtime
+  (inferred), 0 metered seconds, no added work minutes.
+
+**Recommendation: 1.** It matches F166's ULB seeds, so the two datasets'
+pages compare seed for seed, and it lets the test tolerate one
+disagreeing seed with a small difference. The extra cost is about one hour of background time
+and no work.
+
+In both options there is no time cap. Seed 42 is still timed first and
+its time is reported, but the time does not stop the run. If the run is
+interrupted, it resumes through `provenance.start` (D2).
+
+**Options.**
+
+1. 10 seeds, 42-51, no time cap. Task D stays 240 minutes.
+2. 8 seeds, 42-49, no time cap. Task D stays 240 minutes.

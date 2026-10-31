@@ -1,7 +1,8 @@
 # Sprint 30 Plan: Measure the Work, Survive the Limits, Then Test the Ceiling and the Room
 
 **Sprint**: 30 | **Branch**: `feature/20261030_Sprint_30`
-**Planned**: 2026-10-30 | **Status**: DRAFT, awaiting Decisions D2-D4
+**Planned**: 2026-10-30 | **Status**: DRAFT. D2 and D3 answered 1;
+D4 answered "no time cap"; D5 (F174's seed count) open
 (`SPRINT_30_DECISIONS.md`), then approval
 **Scope**: F168, F173, F175, F172, F176, F169, F170, F171 and F174 (team
 lead selection, 2026-10-30, D1 option 1)

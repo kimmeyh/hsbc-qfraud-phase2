@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-10-31
+
+- **docs**: Sprint 30 Decisions D2, D3 and D4 answered (`SPRINT_30_DECISIONS.md`). D2 1: a long run keeps its finished units in the result file, resumed through `provenance.start`. D3 1: F169 runs two arms, HGB and LightGBM, both with early stopping off. D4: no time cap on F174's run; the seed count is asked as D5. Plan status and the master plan pointer updated.
+
 ### 2026-10-30
 
 - **docs**: Sprint 30 plan draft and Sprint 29 summary. `docs/sprints/SPRINT_30_PLAN.md`, Tasks A-I (F173, F175, F168, F174, F176, F169, F170, F171, F172), zero metered. The plan's verification found three cards that cannot run as carded, written as D2-D4 in `SPRINT_30_DECISIONS.md`: F168's checkpoint location conflicts with the in-file resume pattern every module uses; scikit-learn's HGB accepts at most 255 bins, its default, so F169's "max_bins" setting cannot add bins; F166's 120-minute seed cap gives about 3 seeds on IEEE-CIS (inferred), too few for the Wilcoxon test. Also corrected: F168's hash lookup needs an intent record before a send, because a response is saved only after a job returns. `docs/sprints/SPRINT_29_SUMMARY.md` written and linked; status set to Phase 3.
