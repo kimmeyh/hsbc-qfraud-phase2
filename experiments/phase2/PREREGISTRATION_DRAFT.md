@@ -1713,6 +1713,28 @@ any count is made. Not filed. No device. Descriptive: no test.
   generator `experiments/phase2/src/f171_missed_ieee.py`. No new test
   score is computed, so no outcome block is needed.
 
+**Amendment 2026-10-31 (Sprint 30 Decision D7, option 1). POST HOC:
+written after the 0.5% result above was seen.** The 0.5% count stays
+F171's recorded result and is not replaced. At 0.5% one IEEE-CIS family
+has 426 alerts for a month's 2,962 frauds, so the count measures the
+budget more than the models; on ULB the same budget is about 3.0 times
+the test frauds. Added, as exploratory figures:
+
+- **Budgets**: `fixed_3.5`, a 3.5% budget (about IEEE-CIS's fraud
+  rate); and `matched`, 3.0 times each fold's own test fraud rate (about
+  10.4% on IEEE-CIS, 0.5% on ULB).
+- **Data**: IEEE-CIS on this entry's families, months, seeds and checks;
+  ULB on F158 step 3's on-split families and seeds.
+- **Check first**: the 0.5% count is recomputed on both datasets and must
+  equal the recorded F171 and F158 step 3 counts, or the run stops.
+- **Also reported**: the capacity floor, the frauds that f families with
+  k alerts each cannot flag (frauds - f x k, at least 0), so a share is
+  read against what the budget allows.
+- **Reading**: descriptive, no test. Only the `matched` budget compares
+  the datasets at the same strictness.
+- **Output**: `experiments/phase2/results/f171_budgets.json`, generator
+  `experiments/phase2/src/f171_budgets.py`.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -1827,3 +1849,6 @@ any count is made. Not filed. No device. Descriptive: no test.
   G and H) and their table rows; the F108 entry gains its F169
   amendment (Task F) and the Experiment 3 entry its F176 amendment
   (Task E); each written before its module exists.
+- 2026-10-31: the F171 entry gains a post hoc budget amendment (Sprint 30
+  Decision D7), written after F171's 0.5% result was seen and before the
+  new budgets were counted.

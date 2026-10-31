@@ -326,3 +326,79 @@ each card that could not run as carded was decided (D2-D5).
 **Answer (team lead, 2026-10-31): 1.** "Sprint plan approved as amended
 (with any comments I provided), proceed with execution. All Sprint tasks
 and sub-tasks are approved."
+
+---
+
+## D7. F171: which alert budget does the IEEE-CIS missed-by-all count use?
+
+Asked 2026-10-31 at Phase 4 execution, after F171's run. The team lead's
+words: "can we change the 0.5% budget to 3.5% - the resulting user can
+always lower, but I think we want to consider higher for our
+investigations. What do you think?"
+
+**What.** F171's entry, written before the run, counts a fraud as missed
+by all when no family flags it at the 0.5% alert budget (F154's standard
+budget). The run is recorded: 81.5% of IEEE-CIS (month, seed, fraud)
+pairs are missed by all four families, against 11.2% on ULB (F158 step 3).
+The budget explains much of that gap:
+- ULB test split (seed 42): 56,746 rows and 95 frauds (0.167%). A 0.5%
+  budget is 284 alerts, about 3.0 times the frauds.
+- IEEE-CIS month 4: 85,302 rows and 2,962 frauds (3.47%). A 0.5% budget
+  is 426 alerts, 0.14 times the frauds. One family can flag at most 14%
+  of the frauds. Four families with no overlap can flag at most 1,704,
+  so at least 1,258 frauds (42%) are missed by all before any model is
+  scored.
+
+**Why it matters.** At 0.5% the IEEE-CIS count measures mostly the
+budget, not the models, so F171's question (do richer features shrink the
+missed group?) is not answered by it. The 0.5% figure was preregistered
+and has been seen, so replacing it now would change a rule after its
+result is known. A second budget added as a dated, post hoc amendment
+keeps the recorded result and labels the new figures as exploratory.
+Two higher budgets answer different questions:
+- 3.5%: about IEEE-CIS's fraud rate, one alert per fraud. On ULB 3.5% is
+  about 21 times the frauds, so it is not the same strictness there.
+- Prevalence-matched: each dataset's budget is 3.0 times its own test
+  fraud rate, the ratio ULB's 0.5% has. About 10.4% on IEEE-CIS and 0.5%
+  on ULB. Only this one makes the ULB comparison like for like.
+
+**Options, with Kind and Cost.**
+- Option 1: keep 0.5% as F171's recorded result. Add a dated post hoc
+  amendment to the F171 entry and a new module
+  `f171_budgets.py` writing `f171_budgets.json`: missed-by-all on both
+  datasets at 3.5% and at 3.0 times each test fraud rate. Kind:
+  Prevention (cross-dataset reads use a budget tied to the base rate).
+  Cost: about 30 minutes, 0 metered seconds, 4 files (entry, module,
+  test, result), plus the F171 write-up.
+- Option 2: keep 0.5% as recorded; add only 3.5%, on both datasets, by
+  the same amendment route. Kind: Workaround (one more fixed budget; the
+  ULB comparison stays unmatched). Cost: about 20 minutes, 0 metered
+  seconds, 4 files.
+- Option 3: replace 0.5% with 3.5% as F171's primary budget and rerun F171
+  over its recorded result (`replace=` with the reason). Kind:
+  Workaround. Cost: about 15 minutes, 0 metered seconds, 3 files. It
+  changes a preregistered rule after its result is seen.
+- Option 4: no change. The F171 write-up states the budget's capacity
+  limit with the figures above. Kind: Workaround. Cost: no added minutes.
+
+**Recommendation: 1.** It keeps the preregistered figure, adds the 3.5%
+the team lead asked for, and adds the one budget that makes the ULB
+comparison fair. Option 3 is not chosen because it would edit a
+preregistered rule after its result was seen. The repository-wide 0.5%
+in every outcome block (F154) is a separate rule and is not changed by
+any option here.
+
+**Options.**
+
+1. Keep 0.5% as recorded; add a post hoc amendment and `f171_budgets.py`
+   with 3.5% and 3.0 times each test fraud rate (about 10.4% on IEEE-CIS,
+   0.5% on ULB), on both datasets. About 30 minutes.
+2. Keep 0.5% as recorded; add a post hoc amendment and `f171_budgets.py`
+   with 3.5% only, on both datasets. About 20 minutes.
+3. Replace 0.5% with 3.5% as F171's primary and rerun F171 over its
+   recorded result. About 15 minutes.
+4. No change; the write-up states the capacity limit. No added minutes.
+
+**Answer (team lead, 2026-10-31): 1.** Keep 0.5% as recorded; add a post
+hoc amendment and `f171_budgets.py` with 3.5% and 3.0 times each test
+fraud rate (about 10.4% on IEEE-CIS, 0.5% on ULB), on both datasets.
