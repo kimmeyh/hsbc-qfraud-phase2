@@ -20,6 +20,17 @@ solver class directly):
   declaration and the hash to disk, then hands the response on. A write
   failure raises; it is never swallowed.
 - `require_saved(saved)` raises when a job returned and nothing was saved.
+- A resume never repeats a metered call (F168 part 3, Sprint 30). The
+  wrapped `solve` writes an intent record, `intents/<hash>_<card>_<unit>.json`,
+  BEFORE it sends, because the response is saved only in `makeResults`,
+  after the job returns: a process stopped between the two would otherwise
+  leave no trace of a job that was sent. `saving(...)` refuses a problem
+  hash that already has an intent or a response (`lookup`), before any
+  solver exists. A response file with no `problem_sha256` (the Phase 1
+  backfills) cannot be matched; `unhashed()` lists them, so the lookup
+  says what it cannot cover instead of matching nothing silently. A block
+  refused here is re-approved by the team lead with its count and seconds
+  (Criterion H), after the vendor's job list shows whether it ran.
 
 `test_device_store_required.py` fails a Phase 2 module that submits to a
 device without `saving` and `require_saved`.
@@ -86,6 +97,42 @@ def check_problem(problem: dict) -> None:
         raise ValueError(f"unknown problem kind {kind!r}")
 
 
+INTENTS = "intents"
+
+
+def lookup(problem_hash: str, store_dir: Path | None = None) -> dict:
+    """Every record of `problem_hash` in the store: {"responses": [...],
+    "intents": [...]}, paths sorted. An intent with no response is a job
+    that may have been sent and whose process stopped before it returned."""
+    out = Path(store_dir or STORE_DIR)
+    responses = []
+    for path in sorted(out.glob("*.json")):
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if isinstance(doc, dict) and doc.get("problem_sha256") == problem_hash:
+            responses.append(path)
+    intents = sorted((out / INTENTS).glob(f"{problem_hash}_*.json"))
+    return {"responses": responses, "intents": intents}
+
+
+def unhashed(store_dir: Path | None = None) -> list[Path]:
+    """Response files with no problem hash, which `lookup` cannot match."""
+    out = Path(store_dir or STORE_DIR)
+    found = []
+    for path in sorted(out.glob("*.json")):
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            found.append(path)
+            continue
+        if not (isinstance(doc, dict) and _SHA.match(
+                str(doc.get("problem_sha256", "")))):
+            found.append(path)
+    return found
+
+
 def saving(card: str, unit: str, device_type: str, problem_hash: str,
            problem: dict, store_dir: Path | None = None):
     """(wrap, saved): `wrap(cls)` returns a solver subclass that checks the
@@ -99,6 +146,14 @@ def saving(card: str, unit: str, device_type: str, problem_hash: str,
             problem_sha256(problem["arrays"]) != problem_hash:
         raise ValueError("the arrays do not hash to problem_hash")
     out = Path(store_dir or STORE_DIR)
+    found = lookup(problem_hash, out)
+    if found["responses"] or found["intents"]:
+        names = [p.name for p in found["responses"] + found["intents"]]
+        raise ValueError(
+            f"problem {problem_hash[:12]} was already sent ({names}); a "
+            "resume never repeats a metered call. Check the vendor's job "
+            "list, then ask the team lead to re-approve the block with its "
+            "count and seconds (Criterion H)")
     saved: dict = {}
     declared = {k: v for k, v in problem.items() if k != "arrays"}
 
@@ -109,6 +164,17 @@ def saving(card: str, unit: str, device_type: str, problem_hash: str,
                     raise eqc_submit.NoRetry(
                         "pre-submit: the model differs from the declared "
                         "problem; nothing sent")
+                # Written before the send: the response is saved only
+                # after the job returns.
+                intent = out / INTENTS / f"{problem_hash}_{card.lower()}_{unit}.json"
+                intent.parent.mkdir(parents=True, exist_ok=True)
+                tmp = intent.with_suffix(".tmp")
+                tmp.write_text(json.dumps(
+                    {"problem_sha256": problem_hash, "card": card,
+                     "unit": unit, "device_type": device_type,
+                     "sending": time.strftime("%Y-%m-%dT%H:%M:%S")},
+                    indent=1), encoding="utf-8")
+                tmp.replace(intent)
                 return super().solve(model, *a, **kw)
 
             def makeResults(self, model, response):

@@ -102,3 +102,76 @@ def test_a_hamiltonian_job_stores_its_arrays(tmp_path):
     back = np.load(tmp_path / doc["arrays_file"])
     assert ds.problem_sha256((back["arr_0"], back["arr_1"])) == HASH
     assert "arrays" not in doc["problem"]
+
+
+# F168 part 3 (Sprint 30): a resume never repeats a metered call.
+
+class StoppedSolver(FakeSolver):
+    """Sends, then the process stops before the job returns."""
+
+    def solve(self, model, **kw):
+        FakeSolver.sent += 1
+        raise KeyboardInterrupt("stopped before the response returned")
+
+
+def test_a_job_whose_process_stopped_is_not_sent_again(tmp_path):
+    wrap, saved = ds.saving("F999", "u1", "dirac-3s", HASH, POOL, tmp_path)
+    with pytest.raises(KeyboardInterrupt):
+        wrap(StoppedSolver)().solve(Model(J, C))
+    assert not saved, "no response was saved"
+    found = ds.lookup(HASH, tmp_path)
+    assert found["responses"] == [] and len(found["intents"]) == 1
+    with pytest.raises(ValueError, match="already sent"):
+        ds.saving("F999", "u1", "dirac-3s", HASH, POOL, tmp_path)
+
+
+def test_a_job_with_a_saved_response_is_not_sent_again(tmp_path):
+    wrap, _ = ds.saving("F999", "u1", "dirac-3s", HASH, POOL, tmp_path)
+    wrap(FakeSolver)().solve(Model(J, C))
+    for p in (tmp_path / ds.INTENTS).glob("*.json"):
+        p.unlink()                      # the response alone must refuse
+    assert len(ds.lookup(HASH, tmp_path)["responses"]) == 1
+    with pytest.raises(ValueError, match="already sent"):
+        ds.saving("F999", "u2", "dirac-3s", HASH, POOL, tmp_path)
+
+
+def test_a_new_problem_is_not_refused(tmp_path):
+    wrap, _ = ds.saving("F999", "u1", "dirac-3s", HASH, POOL, tmp_path)
+    wrap(FakeSolver)().solve(Model(J, C))
+    other = ds.problem_sha256((J * 3, C))
+    ds.saving("F999", "u3", "dirac-3s", other, POOL, tmp_path)
+
+
+def test_files_without_a_hash_are_listed_not_matched(tmp_path):
+    (tmp_path / "b4_backfill_42.json").write_text(
+        json.dumps({"job_id": "x", "response": {}}), encoding="utf-8")
+    assert ds.lookup(HASH, tmp_path) == {"responses": [], "intents": []}
+    assert [p.name for p in ds.unhashed(tmp_path)] == ["b4_backfill_42.json"]
+
+
+def test_the_resend_refusal_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = ROOT / "experiments" / "phase2" / "src" / "device_store.py"
+    this = Path(__file__).relative_to(ROOT).as_posix()
+
+    def test(name):
+        return lambda: run_pytest(f"{this}::{name}", ROOT)
+    assert_can_fail([Mutation(src, '    if found["responses"] or '
+                              'found["intents"]:\n', "    if False:\n",
+                              expect_occurrences=1)],
+                    test("test_a_job_with_a_saved_response_is_not_sent_"
+                         "again"),
+                    "a saved response sent again")
+    assert_can_fail([Mutation(src, '    if found["responses"] or '
+                              'found["intents"]:\n',
+                              '    if found["responses"]:\n',
+                              expect_occurrences=1)],
+                    test("test_a_job_whose_process_stopped_is_not_sent_"
+                         "again"),
+                    "an intent with no response ignored")
+    assert_can_fail([Mutation(src, "                tmp.replace(intent)\n",
+                              "                tmp.unlink()\n",
+                              expect_occurrences=1)],
+                    test("test_a_job_whose_process_stopped_is_not_sent_"
+                         "again"),
+                    "no intent written before the send")
