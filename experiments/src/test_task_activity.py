@@ -20,10 +20,22 @@ HOOK = ROOT / ".claude" / "hooks" / "log_task_activity.py"
 SCRIPT = ROOT / "scripts" / "update_sprint_status.py"
 THIS = Path(__file__).relative_to(ROOT).as_posix()
 sys.path.insert(0, str(ROOT / "scripts"))
-sys.path.insert(0, str(HOOK.parent))
 
-import log_task_activity as lta  # noqa: E402
 import update_sprint_status as uss  # noqa: E402
+
+
+def _load_hook():
+    # Loaded by path, as test_hooklib.py loads hooklib: a hook is not a
+    # module on any import path, and an `import` of it reads to
+    # test_requirements_complete.py as an undeclared package.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("log_task_activity", HOOK)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+lta = _load_hook()
 
 T0 = datetime(2026, 10, 31, 9, 0, 0, tzinfo=timezone(timedelta(hours=-4)))
 

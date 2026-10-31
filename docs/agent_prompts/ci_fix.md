@@ -10,7 +10,8 @@ you work; do not edit a file named in the sprint's current task
 (<task files>).
 
 - Read the failed job's log: `gh run view <run id> --log-failed`.
-- Run the failed tests locally with `.venv/Scripts/python.exe -m pytest`.
+- Run the failed tests locally with `<venv python> -m pytest`; the
+  interpreter for this OS is in `docs/ENVIRONMENT.md`.
 - A test that cannot fail locally (for example one that depends on the
   branch name or the OS) is fixed so it can, and proven red with
   `injection.assert_can_fail`.
