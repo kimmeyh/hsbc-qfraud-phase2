@@ -1,0 +1,742 @@
+{
+ "card": "F171",
+ "sprint": 30,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "post_hoc": true,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F171, amendment 2026-10-31 (Decision D7)",
+ "budgets": {
+  "recorded_0.5": 0.005,
+  "fixed_3.5": 0.035,
+  "matched": "3.0 x the fold's test fraud rate"
+ },
+ "ieee": {
+  "per_fold": [
+   {
+    "eval_month": 4,
+    "seed": 42,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 427,
+     "frauds": 2962,
+     "missed_by_all": 2401,
+     "capacity_floor": 1254
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 2986,
+     "frauds": 2962,
+     "missed_by_all": 1104,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10417106281212633,
+     "alerts_per_family": 8886,
+     "frauds": 2962,
+     "missed_by_all": 524,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 4,
+    "seed": 43,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 427,
+     "frauds": 2962,
+     "missed_by_all": 2391,
+     "capacity_floor": 1254
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 2986,
+     "frauds": 2962,
+     "missed_by_all": 1114,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10417106281212633,
+     "alerts_per_family": 8886,
+     "frauds": 2962,
+     "missed_by_all": 509,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 4,
+    "seed": 44,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 427,
+     "frauds": 2962,
+     "missed_by_all": 2398,
+     "capacity_floor": 1254
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 2986,
+     "frauds": 2962,
+     "missed_by_all": 1122,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10417106281212633,
+     "alerts_per_family": 8886,
+     "frauds": 2962,
+     "missed_by_all": 539,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 4,
+    "seed": 45,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 427,
+     "frauds": 2962,
+     "missed_by_all": 2395,
+     "capacity_floor": 1254
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 2986,
+     "frauds": 2962,
+     "missed_by_all": 1074,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10417106281212633,
+     "alerts_per_family": 8886,
+     "frauds": 2962,
+     "missed_by_all": 517,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 4,
+    "seed": 46,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 427,
+     "frauds": 2962,
+     "missed_by_all": 2407,
+     "capacity_floor": 1254
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 2986,
+     "frauds": 2962,
+     "missed_by_all": 1112,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10417106281212633,
+     "alerts_per_family": 8886,
+     "frauds": 2962,
+     "missed_by_all": 514,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 5,
+    "seed": 42,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 433,
+     "frauds": 2943,
+     "missed_by_all": 2409,
+     "capacity_floor": 1211
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 3029,
+     "frauds": 2943,
+     "missed_by_all": 1147,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10204105219361104,
+     "alerts_per_family": 8830,
+     "frauds": 2943,
+     "missed_by_all": 580,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 5,
+    "seed": 43,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 433,
+     "frauds": 2943,
+     "missed_by_all": 2401,
+     "capacity_floor": 1211
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 3029,
+     "frauds": 2943,
+     "missed_by_all": 1151,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10204105219361104,
+     "alerts_per_family": 8830,
+     "frauds": 2943,
+     "missed_by_all": 563,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 5,
+    "seed": 44,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 433,
+     "frauds": 2943,
+     "missed_by_all": 2414,
+     "capacity_floor": 1211
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 3029,
+     "frauds": 2943,
+     "missed_by_all": 1137,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10204105219361104,
+     "alerts_per_family": 8830,
+     "frauds": 2943,
+     "missed_by_all": 551,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 5,
+    "seed": 45,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 433,
+     "frauds": 2943,
+     "missed_by_all": 2409,
+     "capacity_floor": 1211
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 3029,
+     "frauds": 2943,
+     "missed_by_all": 1171,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10204105219361104,
+     "alerts_per_family": 8830,
+     "frauds": 2943,
+     "missed_by_all": 546,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 5,
+    "seed": 46,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 433,
+     "frauds": 2943,
+     "missed_by_all": 2415,
+     "capacity_floor": 1211
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 3029,
+     "frauds": 2943,
+     "missed_by_all": 1149,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.10204105219361104,
+     "alerts_per_family": 8830,
+     "frauds": 2943,
+     "missed_by_all": 572,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 6,
+    "seed": 42,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 41,
+     "frauds": 339,
+     "missed_by_all": 281,
+     "capacity_floor": 175
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 284,
+     "frauds": 339,
+     "missed_by_all": 119,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.1253852792504007,
+     "alerts_per_family": 1017,
+     "frauds": 339,
+     "missed_by_all": 53,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 6,
+    "seed": 43,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 41,
+     "frauds": 339,
+     "missed_by_all": 277,
+     "capacity_floor": 175
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 284,
+     "frauds": 339,
+     "missed_by_all": 122,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.1253852792504007,
+     "alerts_per_family": 1017,
+     "frauds": 339,
+     "missed_by_all": 50,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 6,
+    "seed": 44,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 41,
+     "frauds": 339,
+     "missed_by_all": 282,
+     "capacity_floor": 175
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 284,
+     "frauds": 339,
+     "missed_by_all": 127,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.1253852792504007,
+     "alerts_per_family": 1017,
+     "frauds": 339,
+     "missed_by_all": 52,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 6,
+    "seed": 45,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 41,
+     "frauds": 339,
+     "missed_by_all": 283,
+     "capacity_floor": 175
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 284,
+     "frauds": 339,
+     "missed_by_all": 125,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.1253852792504007,
+     "alerts_per_family": 1017,
+     "frauds": 339,
+     "missed_by_all": 50,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "eval_month": 6,
+    "seed": 46,
+    "families": 4,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 41,
+     "frauds": 339,
+     "missed_by_all": 281,
+     "capacity_floor": 175
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 284,
+     "frauds": 339,
+     "missed_by_all": 125,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.1253852792504007,
+     "alerts_per_family": 1017,
+     "frauds": 339,
+     "missed_by_all": 55,
+     "capacity_floor": 0
+    }
+   }
+  ],
+  "totals": {
+   "recorded_0.5": {
+    "missed": 25444,
+    "frauds": 31220,
+    "share": 0.8149903907751441,
+    "capacity_floor_share": 0.4228058936579116,
+    "mean_budget": 0.005
+   },
+   "fixed_3.5": {
+    "missed": 11899,
+    "frauds": 31220,
+    "share": 0.3811338885329917,
+    "capacity_floor_share": 0.0,
+    "mean_budget": 0.03500000000000002
+   },
+   "matched": {
+    "missed": 5675,
+    "frauds": 31220,
+    "share": 0.18177450352338245,
+    "capacity_floor_share": 0.0,
+    "mean_budget": 0.11053246475204602
+   }
+  }
+ },
+ "ulb": {
+  "per_fold": [
+   {
+    "seed": 42,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 9,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 4,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 9,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 43,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 9,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 4,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 9,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 44,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 10,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 6,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 10,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 45,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 9,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 5,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 9,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 46,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 11,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 7,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 11,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 47,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 12,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 8,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 12,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 48,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 6,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 1,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 6,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 49,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 10,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 5,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 10,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 50,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 16,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 5,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 16,
+     "capacity_floor": 0
+    }
+   },
+   {
+    "seed": 51,
+    "families": 12,
+    "recorded_0.5": {
+     "budget": 0.005,
+     "alerts_per_family": 284,
+     "frauds": 95,
+     "missed_by_all": 14,
+     "capacity_floor": 0
+    },
+    "fixed_3.5": {
+     "budget": 0.035,
+     "alerts_per_family": 1987,
+     "frauds": 95,
+     "missed_by_all": 6,
+     "capacity_floor": 0
+    },
+    "matched": {
+     "budget": 0.005022380432100941,
+     "alerts_per_family": 285,
+     "frauds": 95,
+     "missed_by_all": 14,
+     "capacity_floor": 0
+    }
+   }
+  ],
+  "totals": {
+   "recorded_0.5": {
+    "missed": 106,
+    "frauds": 950,
+    "share": 0.11157894736842106,
+    "capacity_floor_share": 0.0,
+    "mean_budget": 0.004999999999999999
+   },
+   "fixed_3.5": {
+    "missed": 51,
+    "frauds": 950,
+    "share": 0.05368421052631579,
+    "capacity_floor_share": 0.0,
+    "mean_budget": 0.03500000000000001
+   },
+   "matched": {
+    "missed": 106,
+    "frauds": 950,
+    "share": 0.11157894736842106,
+    "capacity_floor_share": 0.0,
+    "mean_budget": 0.00502238043210094
+   }
+  }
+ },
+ "test": "none (descriptive)",
+ "seconds": 29.0,
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f171_budgets.py",
+  "generator_commit": "f2bf34a6d9edbc782cadb6f8bfc02e7af20559ad",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "1e6f8a5256984f6eadb8ae6dd660fd65"
+ }
+}

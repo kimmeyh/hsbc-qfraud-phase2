@@ -1716,7 +1716,7 @@ any count is made. Not filed. No device. Descriptive: no test.
 **Amendment 2026-10-31 (Sprint 30 Decision D7, option 1). POST HOC:
 written after the 0.5% result above was seen.** The 0.5% count stays
 F171's recorded result and is not replaced. At 0.5% one IEEE-CIS family
-has 426 alerts for a month's 2,962 frauds, so the count measures the
+has 427 alerts (426 when written; the budget rounds up, corrected after the run) for a month's 2,962 frauds, so the count measures the
 budget more than the models; on ULB the same budget is about 3.0 times
 the test frauds. Added, as exploratory figures:
 

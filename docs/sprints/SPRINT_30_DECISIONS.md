@@ -402,3 +402,9 @@ any option here.
 **Answer (team lead, 2026-10-31): 1.** Keep 0.5% as recorded; add a post
 hoc amendment and `f171_budgets.py` with 3.5% and 3.0 times each test
 fraud rate (about 10.4% on IEEE-CIS, 0.5% on ULB), on both datasets.
+
+**Changed since asked (2026-10-31, after the budget run).** The budget
+rounds up: a 0.5% budget on month 4's 85,302 rows is 427 alerts, not
+426. Four families can then flag at most 1,708 frauds, so the capacity
+floor is 1,254 (42%), not 1,258. The reading and the recommendation do
+not change.

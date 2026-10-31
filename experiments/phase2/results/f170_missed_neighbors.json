@@ -1,0 +1,241 @@
+{
+ "card": "F170",
+ "sprint": 30,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F170",
+ "k": 10,
+ "distance": "Euclidean on features standardized on the training rows",
+ "alpha": 0.05,
+ "test": "two-sided Mann-Whitney U, distinct frauds",
+ "simulator_check": {
+  "seed": 42,
+  "frauds": 5103,
+  "below_bayes_boundary": 3720,
+  "n_missed": 3720,
+  "n_caught": 1383,
+  "missed_median": 1.0,
+  "caught_median": 0.0,
+  "missed_mean": 0.991263440860215,
+  "caught_mean": 0.06529284164859002,
+  "missed_share_majority_legit": 0.9991935483870967,
+  "caught_share_majority_legit": 0.05061460592913955,
+  "u": 5124679.5,
+  "p": 0.0,
+  "rejects": true,
+  "direction": "higher",
+  "fires": true
+ },
+ "ulb": {
+  "families": [
+   "catboost_96edd44681bc126b",
+   "catboost_b5f3e83942b2fe09",
+   "cvqboost_hw_None",
+   "cvqboost_proxy_1e6bf03caab3676b",
+   "cvqboost_proxy_47012b1404d5d4de",
+   "cvqboost_proxy_640ed4cf9c46ea4b",
+   "lightgbm_32fa6bebdc801759",
+   "lightgbm_f217e1a7df5aee9c",
+   "logistic_16b8cfbadff72d4c",
+   "logistic_d668c046ae975659",
+   "xgboost_03999a57a5107f44",
+   "xgboost_d68789d82137da1d"
+  ],
+  "off_split_families": {
+   "cvqboost_hw_mixed_6e69c57361c937d6": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+   ]
+  },
+  "per_seed": [
+   {
+    "seed": 42,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 9
+   },
+   {
+    "seed": 43,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 9
+   },
+   {
+    "seed": 44,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 10
+   },
+   {
+    "seed": 45,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 9
+   },
+   {
+    "seed": 46,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 11
+   },
+   {
+    "seed": 47,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 12
+   },
+   {
+    "seed": 48,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 6
+   },
+   {
+    "seed": 49,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 10
+   },
+   {
+    "seed": 50,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 16
+   },
+   {
+    "seed": 51,
+    "families": 12,
+    "frauds": 95,
+    "missed_by_all": 14
+   }
+  ],
+  "pairs_missed": 106,
+  "pairs_total": 950,
+  "distinct_missed_rows": [
+   616,
+   10456,
+   20129,
+   27256,
+   29566,
+   39018,
+   50317,
+   52289,
+   55164,
+   56464,
+   57009,
+   58177,
+   58516,
+   67805,
+   68371,
+   72475,
+   79569,
+   91350,
+   95175,
+   95972,
+   101128,
+   102396,
+   112392,
+   117841,
+   119245,
+   130779,
+   147044,
+   150512,
+   153692,
+   156978,
+   157311,
+   175384,
+   190568,
+   191982,
+   212341,
+   214018,
+   218250,
+   221612,
+   237582,
+   244437,
+   244645,
+   248322,
+   253404,
+   253455,
+   273358,
+   274961,
+   275040,
+   280611
+  ],
+  "distinct": {
+   "missed": 36,
+   "caught": 370,
+   "mixed": 12
+  },
+  "primary": {
+   "n_missed": 36,
+   "n_caught": 370,
+   "missed_median": 1.0,
+   "caught_median": 0.1,
+   "missed_mean": 0.9993055555555556,
+   "caught_mean": 0.2246891891891892,
+   "missed_share_majority_legit": 1.0,
+   "caught_share_majority_legit": 0.16216216216216217,
+   "u": 12950.0,
+   "p": 1.6036915261248431e-21,
+   "rejects": true,
+   "direction": "higher"
+  },
+  "secondary_pairs": {
+   "n_missed": 106,
+   "n_caught": 844,
+   "missed_median": 1.0,
+   "caught_median": 0.1,
+   "missed_mean": 0.9981132075471698,
+   "caught_mean": 0.2311611374407583,
+   "missed_share_majority_legit": 1.0,
+   "caught_share_majority_legit": 0.1670616113744076,
+   "u": 86423.0,
+   "p": 1.9691325415140762e-58,
+   "rejects": true,
+   "direction": "higher"
+  }
+ },
+ "reading": "missed frauds sit among mostly legitimate rows, more than caught frauds: consistent with ULB's information limit",
+ "complete": true,
+ "seconds": 26.7,
+ "provenance": {
+  "generator": "experiments/phase2/src/f170_missed_neighbors.py",
+  "generator_commit": "544f7aafbc5f10bcea25593d2f498d95b82e2a97",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "569d914c66484e2887b1e95a8f687c7b"
+ }
+}
