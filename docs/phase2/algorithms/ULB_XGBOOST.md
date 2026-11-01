@@ -59,20 +59,20 @@ At the 0.5% alert-budget threshold chosen on validation:
 
 ## Confusion counts per seed, test fold
 
-TP, FP, TN and FN at each validation-chosen threshold.
+TP, FP, TN and FN at each validation-chosen threshold, and at the test fold's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | learning_rate 0.1, max_depth 6, n_estimators 300 | 77 / 4 / 56647 / 18 | 86 / 213 / 56438 / 9 |
-| 43 | learning_rate 0.1, max_depth 6, n_estimators 300 | 67 / 4 / 56647 / 28 | 78 / 177 / 56474 / 17 |
-| 44 | learning_rate 0.1, max_depth 6, n_estimators 300 | 67 / 4 / 56647 / 28 | 82 / 185 / 56466 / 13 |
-| 45 | learning_rate 0.1, max_depth 6, n_estimators 300 | 70 / 1 / 56650 / 25 | 83 / 211 / 56440 / 12 |
-| 46 | learning_rate 0.1, max_depth 3, n_estimators 300 | 73 / 9 / 56642 / 22 | 81 / 210 / 56441 / 14 |
-| 47 | learning_rate 0.1, max_depth 3, n_estimators 300 | 75 / 7 / 56644 / 20 | 81 / 195 / 56456 / 14 |
-| 48 | learning_rate 0.1, max_depth 6, n_estimators 300 | 80 / 4 / 56647 / 15 | 85 / 227 / 56424 / 10 |
-| 49 | learning_rate 0.1, max_depth 3, n_estimators 300 | 74 / 3 / 56648 / 21 | 81 / 187 / 56464 / 14 |
-| 50 | learning_rate 0.1, max_depth 6, n_estimators 100 | 71 / 4 / 56647 / 24 | 76 / 186 / 56465 / 19 |
-| 51 | learning_rate 0.1, max_depth 6, n_estimators 300 | 69 / 5 / 56646 / 26 | 80 / 200 / 56451 / 15 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | learning_rate 0.1, max_depth 6, n_estimators 300 | 77 / 4 / 56647 / 18 | 86 / 213 / 56438 / 9 | 86 / 198 / 56453 / 9 |
+| 43 | learning_rate 0.1, max_depth 6, n_estimators 300 | 67 / 4 / 56647 / 28 | 78 / 177 / 56474 / 17 | 79 / 205 / 56446 / 16 |
+| 44 | learning_rate 0.1, max_depth 6, n_estimators 300 | 67 / 4 / 56647 / 28 | 82 / 185 / 56466 / 13 | 84 / 200 / 56451 / 11 |
+| 45 | learning_rate 0.1, max_depth 6, n_estimators 300 | 70 / 1 / 56650 / 25 | 83 / 211 / 56440 / 12 | 83 / 201 / 56450 / 12 |
+| 46 | learning_rate 0.1, max_depth 3, n_estimators 300 | 73 / 9 / 56642 / 22 | 81 / 210 / 56441 / 14 | 81 / 203 / 56448 / 14 |
+| 47 | learning_rate 0.1, max_depth 3, n_estimators 300 | 75 / 7 / 56644 / 20 | 81 / 195 / 56456 / 14 | 81 / 203 / 56448 / 14 |
+| 48 | learning_rate 0.1, max_depth 6, n_estimators 300 | 80 / 4 / 56647 / 15 | 85 / 227 / 56424 / 10 | 85 / 199 / 56452 / 10 |
+| 49 | learning_rate 0.1, max_depth 3, n_estimators 300 | 74 / 3 / 56648 / 21 | 81 / 187 / 56464 / 14 | 81 / 203 / 56448 / 14 |
+| 50 | learning_rate 0.1, max_depth 6, n_estimators 100 | 71 / 4 / 56647 / 24 | 76 / 186 / 56465 / 19 | 76 / 208 / 56443 / 19 |
+| 51 | learning_rate 0.1, max_depth 6, n_estimators 300 | 69 / 5 / 56646 / 26 | 80 / 200 / 56451 / 15 | 80 / 204 / 56447 / 15 |
 
 ## Limits
 

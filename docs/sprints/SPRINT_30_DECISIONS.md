@@ -469,3 +469,17 @@ comparison page, which buries the ranking the page exists to show.
 3. Comparison page: a second table with each algorithm's counts for every
    seed (70 rows per dataset) at the test fold's own 0.5% budget; each
    algorithm page: the per-seed column as in option 1. Both datasets.
+
+**Answer (team lead, 2026-11-01): 1.** Comparison table: add TP, FP, TN
+and FN columns at the test fold's own 0.5% budget, each the minimum to the
+maximum over the 10 seeds; each algorithm page: add a "0.5% budget on the
+test fold" column with the per-seed counts to its confusion table; a note
+where the proxy's tied scores flag more rows than the budget. Both
+datasets.
+
+**Changed since asked (2026-11-01, after the render).** The tie figures in
+option 1 came from the first three seeds only. Over all 10 seeds, the
+proxy flags up to 297 rows against ULB's budget of 284 (7 of 10 seeds),
+not 291, and up to 442 against IEEE-CIS's 427 (8 of 10 seeds). HGB on
+IEEE-CIS also flags 428 on 1 of 10 seeds. The pages state the figures
+computed from all seeds. The answer and the work do not change.

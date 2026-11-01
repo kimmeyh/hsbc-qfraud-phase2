@@ -65,20 +65,20 @@ On the test month this threshold flags 470 of 85,302 test rows; the month's own 
 
 ## Confusion counts per seed, test month
 
-TP, FP, TN and FN at each threshold chosen on the validation month.
+TP, FP, TN and FN at each threshold chosen on the validation month, and at the test month's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 43 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 44 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 45 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 46 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 47 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 48 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 49 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 50 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
-| 51 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test month: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 43 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 44 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 45 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 46 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 47 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 48 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 49 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 50 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
+| 51 | C 0.1, class_weight None | 853 / 641 / 81699 / 2109 | 392 / 78 / 82262 / 2570 | 360 / 67 / 82273 / 2602 |
 
 ## Limits
 

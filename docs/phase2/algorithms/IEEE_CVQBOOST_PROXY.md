@@ -58,20 +58,20 @@ On the test month this threshold flags 748 to 1,035 of 85,302 test rows; the mon
 
 ## Confusion counts per seed, test month
 
-TP, FP, TN and FN at each threshold chosen on the validation month.
+TP, FP, TN and FN at each threshold chosen on the validation month, and at the test month's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | config full | 1400 / 1288 / 81052 / 1562 | 919 / 116 / 82224 / 2043 |
-| 43 | config full | 1416 / 1378 / 80962 / 1546 | 832 / 96 / 82244 / 2130 |
-| 44 | config full | 1423 / 1231 / 81109 / 1539 | 906 / 102 / 82238 / 2056 |
-| 45 | config full | 1507 / 1019 / 81321 / 1455 | 849 / 79 / 82261 / 2113 |
-| 46 | config full | 1406 / 1183 / 81157 / 1556 | 817 / 80 / 82260 / 2145 |
-| 47 | config full | 1367 / 801 / 81539 / 1595 | 689 / 59 / 82281 / 2273 |
-| 48 | config full | 1457 / 1305 / 81035 / 1505 | 832 / 79 / 82261 / 2130 |
-| 49 | config full | 1442 / 1272 / 81068 / 1520 | 826 / 81 / 82259 / 2136 |
-| 50 | config full | 1428 / 1263 / 81077 / 1534 | 833 / 86 / 82254 / 2129 |
-| 51 | config full | 1482 / 1039 / 81301 / 1480 | 819 / 86 / 82254 / 2143 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test month: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | config full | 1400 / 1288 / 81052 / 1562 | 919 / 116 / 82224 / 2043 | 400 / 27 / 82313 / 2562 |
+| 43 | config full | 1416 / 1378 / 80962 / 1546 | 832 / 96 / 82244 / 2130 | 413 / 29 / 82311 / 2549 |
+| 44 | config full | 1423 / 1231 / 81109 / 1539 | 906 / 102 / 82238 / 2056 | 402 / 25 / 82315 / 2560 |
+| 45 | config full | 1507 / 1019 / 81321 / 1455 | 849 / 79 / 82261 / 2113 | 402 / 28 / 82312 / 2560 |
+| 46 | config full | 1406 / 1183 / 81157 / 1556 | 817 / 80 / 82260 / 2145 | 412 / 30 / 82310 / 2550 |
+| 47 | config full | 1367 / 801 / 81539 / 1595 | 689 / 59 / 82281 / 2273 | 405 / 26 / 82314 / 2557 |
+| 48 | config full | 1457 / 1305 / 81035 / 1505 | 832 / 79 / 82261 / 2130 | 416 / 23 / 82317 / 2546 |
+| 49 | config full | 1442 / 1272 / 81068 / 1520 | 826 / 81 / 82259 / 2136 | 405 / 27 / 82313 / 2557 |
+| 50 | config full | 1428 / 1263 / 81077 / 1534 | 833 / 86 / 82254 / 2129 | 406 / 27 / 82313 / 2556 |
+| 51 | config full | 1482 / 1039 / 81301 / 1480 | 819 / 86 / 82254 / 2143 | 417 / 25 / 82315 / 2545 |
 
 ## Limits
 

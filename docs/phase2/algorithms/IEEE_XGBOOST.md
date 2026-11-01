@@ -63,20 +63,20 @@ On the test month this threshold flags 256 of 85,302 test rows; the month's own 
 
 ## Confusion counts per seed, test month
 
-TP, FP, TN and FN at each threshold chosen on the validation month.
+TP, FP, TN and FN at each threshold chosen on the validation month, and at the test month's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 43 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 44 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 45 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 46 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 47 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 48 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 49 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 50 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
-| 51 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test month: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 43 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 44 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 45 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 46 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 47 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 48 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 49 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 50 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
+| 51 | learning_rate 0.1, max_depth 6, n_estimators 300 | 1136 / 370 / 81970 / 1826 | 250 / 6 / 82334 / 2712 | 404 / 23 / 82317 / 2558 |
 
 ## Limits
 

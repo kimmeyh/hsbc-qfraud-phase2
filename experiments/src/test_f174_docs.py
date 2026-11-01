@@ -33,7 +33,15 @@ def _result(n: int = 8) -> dict:
     for i in range(n):
         lanes = {}
         for j, a in enumerate(fu.ALGOS):
+            # The test month's own budget is 450 rows; the proxy's ties
+            # flag 455 on the first seed.
+            flag = 455 if a == "proxy" and i == 0 else 450
+            tp = 100 + 10 * j + (0 if a in CONSTANT else i)
+            budget = {"budget": 0.005, "n_budget": 450, "n_flagged": flag,
+                      "confusion": {"tp": tp, "fp": flag - tp,
+                                    "tn": 86850 - (flag - tp), "fn": 3150 - tp}}
             lanes[a] = {"seed": 42 + i,
+                        "outcome": {"at_budget_on_test": budget},
                         "tried": [{"params": g, "val_auprc": 0.1}
                                   for g in fu.GRIDS[a]],
                         "chosen_params": fu.GRIDS[a][0],
@@ -166,6 +174,52 @@ def test_the_flagged_volume_ties_and_drift_are_stated():
     assert ("on the tuning fold it stopped at its cap of 20 rounds" in comp
             and "on the scored fold it converged within 20 rounds" in comp)
     assert "The tuning fold keeps 171 features and the scored fold 181." in comp
+
+
+def _row(page, name):
+    return next(ln for ln in page.splitlines() if f"| {name} |" in ln)
+
+
+def test_the_confusion_counts_at_the_test_months_budget_are_stated():
+    # Sprint 30 D8: each count's range over seeds on the comparison page,
+    # each seed's counts on the algorithm page, and the tie note.
+    res = _result()
+    pages = f174d.render(res)
+    comp = pages["IEEE_COMPARISON.md"]
+    tp = 100 + 10 * fu.ALGOS.index("hgb")
+    assert (f"| {tp} to {tp + 7} | {450 - tp - 7} to {450 - tp} | "
+            f"{86850 - 450 + tp:,} to {86850 - 450 + tp + 7:,} | "
+            f"{3150 - tp - 7:,} to {3150 - tp:,} |" in _row(comp, "HGB"))
+    k = 100 + 10 * fu.ALGOS.index("svm")
+    assert f"| {k} to {k} | {450 - k} to {450 - k} |" in _row(comp, "SVM")
+    assert (f"| 43 | {f174d.fd.params(fu.GRIDS['hgb'][0])} "
+            f"| 1 / 2 / 3 / 4 | 1 / 2 / 3 / 4 | {tp + 1} / {450 - tp - 1} / "
+            f"{86850 - 450 + tp + 1} / {3150 - tp - 1} |" in pages["IEEE_HGB.md"])
+    assert ("so a lane can flag more rows than the budget: the proxy on 1 of "
+            "8 seeds, up to 455 rows against a budget of 450. The counts "
+            "include those rows." in comp)
+    for r in res["rows"]:
+        r["lanes"]["proxy"]["outcome"]["at_budget_on_test"]["n_flagged"] = 450
+    assert "can flag more rows" not in f174d.render(res)["IEEE_COMPARISON.md"]
+
+
+def test_the_confusion_counts_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    node = f"{THIS}::test_the_confusion_counts_at_the_test_months_budget_are_stated"
+    shared = ROOT / "scripts" / "f166_docs.py"
+    for path, old, new, label in (
+            (shared, "        out.append(f\"{min(v):,} to {max(v):,}\")\n",
+             "        out.append(f\"{min(v):,} to {min(v):,}\")\n",
+             "a range over seeds that drops its maximum"),
+            (shared, "                if b[\"n_flagged\"] > b[\"n_budget\"]]\n",
+             "                if b[\"n_flagged\"] >= b[\"n_budget\"]]\n",
+             "a lane at the budget named as over it"),
+            (ROOT / "scripts" / "f174_docs.py",
+             "{fd.counts_cell(fd.at_budget(ln)['confusion'])} |\")\n",
+             "{cells[1]} |\")\n",
+             "the validation threshold's counts shown as the budget's")):
+        assert_can_fail([Mutation(path, old, new, expect_occurrences=1)],
+                        lambda: run_pytest(node, ROOT), label)
 
 
 def test_the_new_statements_can_fail():

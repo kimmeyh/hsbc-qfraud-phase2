@@ -251,3 +251,14 @@ Each line is the plan's task line, then where its evidence is.
 3. Confirm the CI limit change (V10) and F166's added label check (V9).
 4. Optional: run `<venv python> scripts/f174_docs.py --check` and
    `<venv python> scripts/agent_status.py`.
+
+## Results (team lead, 2026-11-01)
+
+- V4, V5, V6, V8 and V9: accepted. V5's lenient reading of F176's exact
+  check stands.
+- V10: the CI job's limit is 13 minutes, not 20 (4306791).
+- `IEEE_COMPARISON.md` and `ULB_COMPARISON.md` showed no TP, FP, TN or
+  FN. Decision D8, answer 1: the comparison table gives each count at
+  the test fold's own 0.5% budget as its range over the seeds, each
+  algorithm page gives them per seed, and a note names the lanes whose
+  tied scores flag more rows than the budget. Task K, #85.

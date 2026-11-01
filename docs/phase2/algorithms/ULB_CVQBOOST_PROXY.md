@@ -56,20 +56,20 @@ At the 0.5% alert-budget threshold chosen on validation:
 
 ## Confusion counts per seed, test fold
 
-TP, FP, TN and FN at each validation-chosen threshold.
+TP, FP, TN and FN at each validation-chosen threshold, and at the test fold's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | config full | 76 / 7 / 56644 / 19 | 81 / 224 / 56427 / 14 |
-| 43 | config full | 69 / 6 / 56645 / 26 | 76 / 148 / 56503 / 19 |
-| 44 | config full | 71 / 8 / 56643 / 24 | 80 / 202 / 56449 / 15 |
-| 45 | config full | 75 / 7 / 56644 / 20 | 78 / 160 / 56491 / 17 |
-| 46 | config full | 79 / 12 / 56639 / 16 | 82 / 207 / 56444 / 13 |
-| 47 | config full | 74 / 12 / 56639 / 21 | 78 / 218 / 56433 / 17 |
-| 48 | config full | 80 / 15 / 56636 / 15 | 85 / 212 / 56439 / 10 |
-| 49 | config full | 70 / 4 / 56647 / 25 | 77 / 199 / 56452 / 18 |
-| 50 | config full | 70 / 9 / 56642 / 25 | 76 / 202 / 56449 / 19 |
-| 51 | config full | 70 / 14 / 56637 / 25 | 76 / 186 / 56465 / 19 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | config full | 76 / 7 / 56644 / 19 | 81 / 224 / 56427 / 14 | 81 / 210 / 56441 / 14 |
+| 43 | config full | 69 / 6 / 56645 / 26 | 76 / 148 / 56503 / 19 | 76 / 209 / 56442 / 19 |
+| 44 | config full | 71 / 8 / 56643 / 24 | 80 / 202 / 56449 / 15 | 80 / 204 / 56447 / 15 |
+| 45 | config full | 75 / 7 / 56644 / 20 | 78 / 160 / 56491 / 17 | 78 / 207 / 56444 / 17 |
+| 46 | config full | 79 / 12 / 56639 / 16 | 82 / 207 / 56444 / 13 | 82 / 207 / 56444 / 13 |
+| 47 | config full | 74 / 12 / 56639 / 21 | 78 / 218 / 56433 / 17 | 78 / 212 / 56439 / 17 |
+| 48 | config full | 80 / 15 / 56636 / 15 | 85 / 212 / 56439 / 10 | 85 / 199 / 56452 / 10 |
+| 49 | config full | 70 / 4 / 56647 / 25 | 77 / 199 / 56452 / 18 | 77 / 220 / 56431 / 18 |
+| 50 | config full | 70 / 9 / 56642 / 25 | 76 / 202 / 56449 / 19 | 76 / 210 / 56441 / 19 |
+| 51 | config full | 70 / 14 / 56637 / 25 | 76 / 186 / 56465 / 19 | 76 / 208 / 56443 / 19 |
 
 ## Limits
 

@@ -21,7 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-import f166_docs as fd  # noqa: E402  (F166's helpers; not edited)
+import f166_docs as fd  # noqa: E402  (F166's helpers)
 
 RESULT = ROOT / "experiments" / "phase2" / "results" / "f174_ieee_algorithms.json"
 DOCS = fd.DOCS
@@ -245,14 +245,16 @@ def algo_doc(res, a) -> str:
         if op == BUDGET_OP:
             L += [flagged_line(res, lanes), ""]
     L += ["## Confusion counts per seed, test month", "",
-          "TP, FP, TN and FN at each threshold chosen on the validation month.", "",
-          "| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |",
-          "|---|---|---|---|"]
+          "TP, FP, TN and FN at each threshold chosen on the validation "
+          "month, and at the test month's own 0.5% budget (the comparison "
+          "page's recall).", "",
+          "| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test month: TP / FP / TN / FN |",
+          "|---|---|---|---|---|"]
     for ln in lanes:
         ops = {o["operating_point"]: o["confusion"] for o in ln["test"]["operating_points"]}
-        cells = [" / ".join(str(ops[op][k]) for k in ("tp", "fp", "tn", "fn"))
-                 for op, _ in fd.OPS]
-        L.append(f"| {ln['seed']} | {fd.params(ln['chosen_params'])} | {cells[0]} | {cells[1]} |")
+        cells = [fd.counts_cell(ops[op]) for op, _ in fd.OPS]
+        L.append(f"| {ln['seed']} | {fd.params(ln['chosen_params'])} | {cells[0]} | "
+                 f"{cells[1]} | {fd.counts_cell(fd.at_budget(ln)['confusion'])} |")
     L.append("")
     ties = ties_line(lanes, a)
     L += ["## Limits", "",
@@ -312,15 +314,16 @@ def comparison(res) -> str:
           f"Seed 42 took {R[0]['minutes']} minutes for all {count} algorithms.",
           f"- **ULB**: the same algorithms and grids on ULB are on "
           f"[{fd.COMPARISON}]({fd.COMPARISON}).", ""]
-    L += ["## Mean test AUPRC, in order", "",
-          "| Order | Algorithm | Mean | 95% t interval | Recall at the 0.5% budget, mean | Document |",
-          "|---|---|---|---|---|---|"]
+    L += ["## Mean test AUPRC, in order", "", fd.counts_intro("test month", N), "",
+          "| Order | Algorithm | Mean | 95% t interval | Recall at the 0.5% budget, mean | TP | FP | TN | FN | Document |",
+          "|---|---|---|---|---|---|---|---|---|---|"]
     for i, a in enumerate(order, 1):
         s = A["per_algorithm"][a]
         lo, hi = s["auprc"]["t95"]
+        tp, fp, tn, fn = fd.count_ranges([r["lanes"][a] for r in R])
         L.append(f"| {i} | {NAMES[a]} | {fd.f4(s['auprc']['mean'])} | {fd.f4(lo)} "
                  f"to {fd.f4(hi)} | {fd.f4(s['recall_at_budget_on_test']['mean'])} "
-                 f"| [{FILES[a]}]({FILES[a]}) |")
+                 f"| {tp} | {fp} | {tn} | {fn} | [{FILES[a]}]({FILES[a]}) |")
     L.append("")
     L += ["## Adjacent pairs", "",
           f"The entry's test: with {N} seeds (8 or more), the exact two-sided "
@@ -351,6 +354,7 @@ def comparison(res) -> str:
     per = A["per_algorithm"]
     rec = [per[a]["recall_at_budget_on_test"]["mean"] for a in order]
     vol = [v for a in order for v in flagged([r["lanes"][a] for r in R])]
+    over = fd.over_budget_line(R, order, "test month")
     L += ["## Notes", "",
           f"- At the test month's own 0.5% alert budget "
           f"({budget_rows(res):,} rows), mean recall lies between "
@@ -362,6 +366,7 @@ def comparison(res) -> str:
           f"{span(vol)} test rows across algorithms and seeds, so the "
           "per-page tables at that threshold compare different alert "
           "volumes. The recall column above uses the test month's own budget.",
+          *([over] if over else []),
           drift_line(res),
           f"- The SVM lane keeps its {A['svm_form']['kept']} form; the RBF "
           f"alternative beat it on validation on "

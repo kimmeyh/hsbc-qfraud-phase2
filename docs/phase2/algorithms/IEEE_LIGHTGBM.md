@@ -61,20 +61,20 @@ On the test month this threshold flags 311 to 410 of 85,302 test rows; the month
 
 ## Confusion counts per seed, test month
 
-TP, FP, TN and FN at each threshold chosen on the validation month.
+TP, FP, TN and FN at each threshold chosen on the validation month, and at the test month's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1353 / 540 / 81800 / 1609 | 373 / 10 / 82330 / 2589 |
-| 43 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1398 / 534 / 81806 / 1564 | 397 / 13 / 82327 / 2565 |
-| 44 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1424 / 499 / 81841 / 1538 | 346 / 9 / 82331 / 2616 |
-| 45 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1357 / 444 / 81896 / 1605 | 345 / 8 / 82332 / 2617 |
-| 46 | learning_rate 0.05, num_leaves 63, reg_lambda 0.0 | 1258 / 416 / 81924 / 1704 | 356 / 11 / 82329 / 2606 |
-| 47 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1361 / 466 / 81874 / 1601 | 304 / 7 / 82333 / 2658 |
-| 48 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1418 / 610 / 81730 / 1544 | 345 / 19 / 82321 / 2617 |
-| 49 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1364 / 438 / 81902 / 1598 | 337 / 8 / 82332 / 2625 |
-| 50 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1443 / 491 / 81849 / 1519 | 327 / 7 / 82333 / 2635 |
-| 51 | learning_rate 0.05, num_leaves 63, reg_lambda 0.0 | 1404 / 579 / 81761 / 1558 | 353 / 7 / 82333 / 2609 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test month: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1353 / 540 / 81800 / 1609 | 373 / 10 / 82330 / 2589 | 415 / 12 / 82328 / 2547 |
+| 43 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1398 / 534 / 81806 / 1564 | 397 / 13 / 82327 / 2565 | 413 / 14 / 82326 / 2549 |
+| 44 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1424 / 499 / 81841 / 1538 | 346 / 9 / 82331 / 2616 | 412 / 15 / 82325 / 2550 |
+| 45 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1357 / 444 / 81896 / 1605 | 345 / 8 / 82332 / 2617 | 412 / 15 / 82325 / 2550 |
+| 46 | learning_rate 0.05, num_leaves 63, reg_lambda 0.0 | 1258 / 416 / 81924 / 1704 | 356 / 11 / 82329 / 2606 | 412 / 15 / 82325 / 2550 |
+| 47 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1361 / 466 / 81874 / 1601 | 304 / 7 / 82333 / 2658 | 412 / 15 / 82325 / 2550 |
+| 48 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1418 / 610 / 81730 / 1544 | 345 / 19 / 82321 / 2617 | 400 / 27 / 82313 / 2562 |
+| 49 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 1364 / 438 / 81902 / 1598 | 337 / 8 / 82332 / 2625 | 412 / 15 / 82325 / 2550 |
+| 50 | learning_rate 0.1, num_leaves 63, reg_lambda 1.0 | 1443 / 491 / 81849 / 1519 | 327 / 7 / 82333 / 2635 | 409 / 18 / 82322 / 2553 |
+| 51 | learning_rate 0.05, num_leaves 63, reg_lambda 0.0 | 1404 / 579 / 81761 / 1558 | 353 / 7 / 82333 / 2609 | 416 / 11 / 82329 / 2546 |
 
 ## Limits
 

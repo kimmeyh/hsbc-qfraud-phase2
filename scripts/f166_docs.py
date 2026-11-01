@@ -59,6 +59,7 @@ OPS = [("max_f1_on_val", "max-F1 threshold chosen on validation"),
 OP_METRICS = ["precision", "recall", "specificity", "f1", "mcc", "balanced_accuracy"]
 OP_LABEL = {"precision": "Precision", "recall": "Recall", "specificity": "Specificity",
             "f1": "F1", "mcc": "MCC", "balanced_accuracy": "Balanced accuracy"}
+COUNTS = ("tp", "fp", "tn", "fn")
 NO_DIFF = "no reliable difference"
 N_PAIRS_TESTED = 6          # the entry's Bonferroni divisor, 0.05 / 6
 
@@ -84,6 +85,50 @@ def pair_text(p):
     w = p["wilcoxon"]["p"]
     return (f"{NAMES[p['a']]} against {NAMES[p['b']]}: mean difference "
             f"{f4(p['mean_diff'])}, Wilcoxon p {w:.4f}; reading: {p['reading']}")
+
+
+def at_budget(lane):
+    """The lane's outcome block at the test fold's own 0.5% budget (F154)."""
+    return lane["outcome"]["at_budget_on_test"]
+
+
+def counts_cell(c):
+    return " / ".join(str(c[k]) for k in COUNTS)
+
+
+def count_ranges(lanes):
+    """Each count at the test fold's own budget, the minimum to the maximum
+    over seeds (Sprint 30 D8: whole numbers, not a mean or a sum)."""
+    out = []
+    for k in COUNTS:
+        v = [at_budget(ln)["confusion"][k] for ln in lanes]
+        out.append(f"{min(v):,} to {max(v):,}")
+    return out
+
+
+def counts_intro(fold, n):
+    return (f"TP, FP, TN and FN are at the {fold}'s own 0.5% budget, each "
+            f"the minimum to the maximum over the {n} seeds; each algorithm "
+            "page gives them per seed.")
+
+
+def over_budget_line(rows, order, fold):
+    """The lanes whose tied scores at the budget's last place flag more
+    rows than the budget (`outcome_record.at_budget`), or None."""
+    named = []
+    for a in order:
+        over = [b for b in (at_budget(r["lanes"][a]) for r in rows)
+                if b["n_flagged"] > b["n_budget"]]
+        if over:
+            top = max(over, key=lambda b: b["n_flagged"] - b["n_budget"])
+            named.append(f"{INNER[a]} on {len(over)} of {len(rows)} seeds, "
+                         f"up to {top['n_flagged']:,} rows against a budget "
+                         f"of {top['n_budget']:,}")
+    if not named:
+        return None
+    return (f"- At the {fold}'s own budget, scores tied at the budget's last "
+            "place are all flagged, so a lane can flag more rows than the "
+            "budget: " + "; ".join(named) + ". The counts include those rows.")
 
 
 def chosen_counts(rows, a):
@@ -212,14 +257,15 @@ def algo_doc(res, a):
         L += [stat_row(OP_LABEL[m], s[op][m]) for m in OP_METRICS]
         L.append("")
     L += ["## Confusion counts per seed, test fold", "",
-          "TP, FP, TN and FN at each validation-chosen threshold.", "",
-          "| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |",
-          "|---|---|---|---|"]
+          "TP, FP, TN and FN at each validation-chosen threshold, and at "
+          "the test fold's own 0.5% budget (the comparison page's recall).", "",
+          "| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |",
+          "|---|---|---|---|---|"]
     for l in lanes:
         ops = {o["operating_point"]: o["confusion"] for o in l["test"]["operating_points"]}
-        cells = [" / ".join(str(ops[op][k]) for k in ("tp", "fp", "tn", "fn"))
-                 for op, _ in OPS]
-        L.append(f"| {l['seed']} | {params(l['chosen_params'])} | {cells[0]} | {cells[1]} |")
+        cells = [counts_cell(ops[op]) for op, _ in OPS]
+        L.append(f"| {l['seed']} | {params(l['chosen_params'])} | {cells[0]} | "
+                 f"{cells[1]} | {counts_cell(at_budget(l)['confusion'])} |")
     L.append("")
     L += ["## Limits", "",
           limits_line(R, a),
@@ -289,15 +335,16 @@ def comparison(res):
           "Every figure below comes from that file.",
           f"- **Seeds**: seed 42 took {R[0]['minutes']} minutes for all {count} "
           f"algorithms, so the entry's rule gave {N} seeds.", ""]
-    L += ["## Mean test AUPRC, in order", "",
-          "| Order | Algorithm | Mean | 95% t interval | Recall at the 0.5% budget, mean | Document |",
-          "|---|---|---|---|---|---|"]
+    L += ["## Mean test AUPRC, in order", "", counts_intro("test fold", N), "",
+          "| Order | Algorithm | Mean | 95% t interval | Recall at the 0.5% budget, mean | TP | FP | TN | FN | Document |",
+          "|---|---|---|---|---|---|---|---|---|---|"]
     for i, a in enumerate(order, 1):
         s = A["per_algorithm"][a]
         lo, hi = s["auprc"]["t95"]
+        tp, fp, tn, fn = count_ranges([r["lanes"][a] for r in R])
         L.append(f"| {i} | {NAMES[a]} | {f4(s['auprc']['mean'])} | {f4(lo)} to "
                  f"{f4(hi)} | {f4(s['recall_at_budget_on_test']['mean'])} | "
-                 f"[{FILES[a]}]({FILES[a]}) |")
+                 f"{tp} | {fp} | {tn} | {fn} | [{FILES[a]}]({FILES[a]}) |")
     L.append("")
     L += ["## Adjacent pairs", "",
           f"The entry's test: with {N} seeds (8 or more), the exact two-sided "
@@ -321,6 +368,7 @@ def comparison(res):
     auprc = [per[a]["auprc"]["mean"] for a in order]
     spread = ("narrower" if max(rec) - min(rec) < max(auprc) - min(auprc)
               else "wider")
+    over = over_budget_line(R, order, "test fold")
     L += ["## Notes", "",
           f"- {poss[top][0].upper() + poss[top][1:]} train-test AUPRC gap has "
           f"the largest mean ({f4(per[top]['train_test_auprc_gap']['mean'])}); "
@@ -334,6 +382,7 @@ def comparison(res):
           "- At the 0.5% alert budget, mean recall on the test fold lies "
           f"between {f4(min(rec))} and {f4(max(rec))} for all {count}, a "
           f"{spread} spread than AUPRC's.",
+          *([over] if over else []),
           f"- The SVM lane keeps its {A['svm_form']['kept']} form; the RBF "
           f"alternative beat it on validation on "
           f"{A['svm_form']['rbf_beats_linear_seeds']} of {N} seeds "

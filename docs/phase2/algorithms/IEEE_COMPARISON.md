@@ -10,15 +10,17 @@
 
 ## Mean test AUPRC, in order
 
-| Order | Algorithm | Mean | 95% t interval | Recall at the 0.5% budget, mean | Document |
-|---|---|---|---|---|---|
-| 1 | LightGBM | 0.5785 | 0.5706 to 0.5864 | 0.1389 | [IEEE_LIGHTGBM.md](IEEE_LIGHTGBM.md) |
-| 2 | HGB | 0.5211 | 0.5171 to 0.5250 | 0.1357 | [IEEE_HGB.md](IEEE_HGB.md) |
-| 3 | CatBoost | 0.5114 | 0.5069 to 0.5158 | 0.1388 | [IEEE_CATBOOST.md](IEEE_CATBOOST.md) |
-| 4 | XGBoost | 0.4960 | 0.4960 to 0.4960 | 0.1364 | [IEEE_XGBOOST.md](IEEE_XGBOOST.md) |
-| 5 | CVQBoost proxy | 0.4862 | 0.4751 to 0.4973 | 0.1377 | [IEEE_CVQBOOST_PROXY.md](IEEE_CVQBOOST_PROXY.md) |
-| 6 | SVM | 0.3612 | 0.3612 to 0.3612 | 0.1256 | [IEEE_SVM.md](IEEE_SVM.md) |
-| 7 | Logistic regression | 0.3564 | 0.3564 to 0.3564 | 0.1215 | [IEEE_LOGISTIC_REGRESSION.md](IEEE_LOGISTIC_REGRESSION.md) |
+TP, FP, TN and FN are at the test month's own 0.5% budget, each the minimum to the maximum over the 10 seeds; each algorithm page gives them per seed.
+
+| Order | Algorithm | Mean | 95% t interval | Recall at the 0.5% budget, mean | TP | FP | TN | FN | Document |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | LightGBM | 0.5785 | 0.5706 to 0.5864 | 0.1389 | 400 to 416 | 11 to 27 | 82,313 to 82,329 | 2,546 to 2,562 | [IEEE_LIGHTGBM.md](IEEE_LIGHTGBM.md) |
+| 2 | HGB | 0.5211 | 0.5171 to 0.5250 | 0.1357 | 393 to 411 | 16 to 34 | 82,306 to 82,324 | 2,551 to 2,569 | [IEEE_HGB.md](IEEE_HGB.md) |
+| 3 | CatBoost | 0.5114 | 0.5069 to 0.5158 | 0.1388 | 405 to 415 | 12 to 22 | 82,318 to 82,328 | 2,547 to 2,557 | [IEEE_CATBOOST.md](IEEE_CATBOOST.md) |
+| 4 | XGBoost | 0.4960 | 0.4960 to 0.4960 | 0.1364 | 404 to 404 | 23 to 23 | 82,317 to 82,317 | 2,558 to 2,558 | [IEEE_XGBOOST.md](IEEE_XGBOOST.md) |
+| 5 | CVQBoost proxy | 0.4862 | 0.4751 to 0.4973 | 0.1377 | 400 to 417 | 23 to 30 | 82,310 to 82,317 | 2,545 to 2,562 | [IEEE_CVQBOOST_PROXY.md](IEEE_CVQBOOST_PROXY.md) |
+| 6 | SVM | 0.3612 | 0.3612 to 0.3612 | 0.1256 | 372 to 372 | 55 to 55 | 82,285 to 82,285 | 2,590 to 2,590 | [IEEE_SVM.md](IEEE_SVM.md) |
+| 7 | Logistic regression | 0.3564 | 0.3564 to 0.3564 | 0.1215 | 360 to 360 | 67 to 67 | 82,273 to 82,273 | 2,602 to 2,602 | [IEEE_LOGISTIC_REGRESSION.md](IEEE_LOGISTIC_REGRESSION.md) |
 
 ## Adjacent pairs
 
@@ -42,5 +44,6 @@ Pairs with a lane whose test AUPRC is the same on every seed (the month folds ar
 
 - At the test month's own 0.5% alert budget (427 rows), mean recall lies between 0.1215 and 0.1389. The month's fraud rate is 3.47%, so the budget can catch at most 427 of its 2,962 frauds (F171).
 - The 0.5% thresholds chosen on the validation month flag 256 to 1,035 test rows across algorithms and seeds, so the per-page tables at that threshold compare different alert volumes. The recall column above uses the test month's own budget.
+- At the test month's own budget, scores tied at the budget's last place are all flagged, so a lane can flag more rows than the budget: HGB on 1 of 10 seeds, up to 428 rows against a budget of 427; the proxy on 8 of 10 seeds, up to 442 rows against a budget of 427. The counts include those rows.
 - F152's adversarial drift control: on the tuning fold it stopped at its cap of 20 rounds, with a final adversarial AUC of 0.9906; on the scored fold it stopped at its cap of 20 rounds, with a final adversarial AUC of 0.9450. An AUC near 1 means a classifier still tells the training months from the scored month. The tuning fold keeps 171 features and the scored fold 181.
 - The SVM lane keeps its linear form; the RBF alternative beat it on validation on 0 of 10 seeds ([IEEE_SVM.md](IEEE_SVM.md)).

@@ -61,20 +61,20 @@ On the test month this threshold flags 305 to 405 of 85,302 test rows; the month
 
 ## Confusion counts per seed, test month
 
-TP, FP, TN and FN at each threshold chosen on the validation month.
+TP, FP, TN and FN at each threshold chosen on the validation month, and at the test month's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | l2_regularization 0.0, learning_rate 0.1, max_leaf_nodes 31 | 1274 / 693 / 81647 / 1688 | 362 / 22 / 82318 / 2600 |
-| 43 | l2_regularization 0.0, learning_rate 0.1, max_leaf_nodes 31 | 1333 / 759 / 81581 / 1629 | 298 / 7 / 82333 / 2664 |
-| 44 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1259 / 667 / 81673 / 1703 | 376 / 29 / 82311 / 2586 |
-| 45 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1252 / 620 / 81720 / 1710 | 350 / 11 / 82329 / 2612 |
-| 46 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1269 / 756 / 81584 / 1693 | 380 / 18 / 82322 / 2582 |
-| 47 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1320 / 653 / 81687 / 1642 | 366 / 24 / 82316 / 2596 |
-| 48 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1245 / 652 / 81688 / 1717 | 360 / 14 / 82326 / 2602 |
-| 49 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1322 / 825 / 81515 / 1640 | 384 / 12 / 82328 / 2578 |
-| 50 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1324 / 771 / 81569 / 1638 | 365 / 14 / 82326 / 2597 |
-| 51 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1252 / 656 / 81684 / 1710 | 328 / 10 / 82330 / 2634 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test month: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | l2_regularization 0.0, learning_rate 0.1, max_leaf_nodes 31 | 1274 / 693 / 81647 / 1688 | 362 / 22 / 82318 / 2600 | 397 / 30 / 82310 / 2565 |
+| 43 | l2_regularization 0.0, learning_rate 0.1, max_leaf_nodes 31 | 1333 / 759 / 81581 / 1629 | 298 / 7 / 82333 / 2664 | 407 / 20 / 82320 / 2555 |
+| 44 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1259 / 667 / 81673 / 1703 | 376 / 29 / 82311 / 2586 | 393 / 34 / 82306 / 2569 |
+| 45 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1252 / 620 / 81720 / 1710 | 350 / 11 / 82329 / 2612 | 404 / 23 / 82317 / 2558 |
+| 46 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1269 / 756 / 81584 / 1693 | 380 / 18 / 82322 / 2582 | 403 / 24 / 82316 / 2559 |
+| 47 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1320 / 653 / 81687 / 1642 | 366 / 24 / 82316 / 2596 | 399 / 28 / 82312 / 2563 |
+| 48 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1245 / 652 / 81688 / 1717 | 360 / 14 / 82326 / 2602 | 397 / 30 / 82310 / 2565 |
+| 49 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1322 / 825 / 81515 / 1640 | 384 / 12 / 82328 / 2578 | 411 / 16 / 82324 / 2551 |
+| 50 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1324 / 771 / 81569 / 1638 | 365 / 14 / 82326 / 2597 | 402 / 25 / 82315 / 2560 |
+| 51 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 1252 / 656 / 81684 / 1710 | 328 / 10 / 82330 / 2634 | 406 / 22 / 82318 / 2556 |
 
 ## Limits
 
