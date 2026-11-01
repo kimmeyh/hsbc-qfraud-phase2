@@ -1,11 +1,13 @@
 """F174's page generator (`scripts/f174_docs.py`): it renders the eight
 IEEE-CIS pages from a result, and refuses one that its fixed text does
-not describe. Each refusal is proven red. A synthetic result only; the
-committed pages are checked against the recorded result once it exists.
+not describe. Each refusal is proven red, on a synthetic result. The
+committed pages are checked against the recorded result: a committed page
+that differs from the render fails.
 """
 from __future__ import annotations
 
 import copy
+import json
 import sys
 from pathlib import Path
 
@@ -112,3 +114,22 @@ def test_the_pages_do_not_alter_a_copy_of_the_result():
     before = copy.deepcopy(res)
     f174d.render(res)
     assert res == before
+
+
+def test_the_committed_pages_are_what_the_generator_renders():
+    res = json.loads(f174d.RESULT.read_text(encoding="utf-8"))
+    assert f174d.fd.differing(f174d.render(res), f174d.DOCS) == []
+
+
+def test_the_page_check_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    page = f174d.DOCS / "IEEE_CVQBOOST_PROXY.md"
+    assert_can_fail(
+        [Mutation(page, "Here the same configuration (`full`) was chosen on "
+                  "every seed.",
+                  "and the chosen configuration changes between seeds.",
+                  expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_the_committed_pages_are_what_the_generator_renders",
+            ROOT),
+        "a committed IEEE-CIS page that differs from the render")

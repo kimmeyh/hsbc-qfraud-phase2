@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-31
 
+- **feat**: F174 result and pages (Sprint 30 Task D, #78). The run finished 10 seeds (42-51) with no time cap. `scripts/f174_docs.py` renders `docs/phase2/algorithms/IEEE_COMPARISON.md` and one page per algorithm, beside F166's ULB pages. By mean test AUPRC on month 4 the order is LightGBM, HGB, CatBoost, XGBoost, the proxy, SVM, logistic regression; four of the six adjacent pairs differ reliably, and HGB against CatBoost and XGBoost against the proxy do not. `test_f174_docs.py` now fails a committed page that differs from the render, proven red. The result file is committed and the F174 card gains its result line. Zero metered seconds.
+
 - **docs**: F176 result (Sprint 30 Task E, #79). New `docs/phase2/F176_BELOW_GREEDY.md`: a selection below greedy on 3 of F160's 6 IEEE-CIS instances, each by under 2e-05, far smaller than the room bound; SCIP did not beat greedy at its 1,200 s cap. The exact check fired, and it also shows the swap search can miss the optimum (3 of 7 cases). The result file is committed and the card gains its result line.
 
 - **ci**: the CI job's time limit is 20 minutes, not 10 (Sprint 30). The tests step took 8:15 on 88eb3ba, and Sprint 30's added injection proofs took the job past 10 minutes, so every run after 73a976e was canceled with no verdict. The only failures CI did report on this branch were the two guards fixed in 98f05e5.

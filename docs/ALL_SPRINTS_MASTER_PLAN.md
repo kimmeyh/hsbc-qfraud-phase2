@@ -737,6 +737,7 @@ value. Removed from candidates.)
 - This enables: an IEEE-CIS reference that Experiment 2, Experiment 3 and F171 are read against. This prevents: a tuned lane compared against an untuned one on the second dataset
 - Acceptance: entry before any score; the pages and the comparison page; each figure resolves (F164's check); the pages regenerate from the result
 - Depends on: F102 for reporting (the draft's section 2 standard)
+- **Sprint 30 Task D (2026-10-31, #78)**: 10 seeds (42-51). By mean test AUPRC on month 4: LightGBM, HGB, CatBoost, XGBoost, the proxy, SVM, logistic regression. Four of the six adjacent pairs differ reliably under the exact Wilcoxon test at Bonferroni 0.05 / 6; HGB against CatBoost and XGBoost against the proxy do not. The proxy chose its `full` configuration on every seed. Seed 42 took 65.42 minutes. `docs/phase2/algorithms/IEEE_COMPARISON.md` and its seven pages
 
 **F175. Task timers stop counting breaks: an actual is work, not elapsed time (~60m [no-history], zero metered) Priority 44**
 - Phase: Phase 2 preparation (process tooling; added 2026-10-30 at Pass 2, from the Sprint 29 retrospective, category 3)
