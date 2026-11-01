@@ -408,3 +408,64 @@ rounds up: a 0.5% budget on month 4's 85,302 rows is 427 alerts, not
 426. Four families can then flag at most 1,708 frauds, so the capacity
 floor is 1,254 (42%), not 1,258. The reading and the recommendation do
 not change.
+
+## D8. How do the comparison pages show TP, FP, TN and FN?
+
+Asked 2026-11-01 at Manual Validation. The team lead's words: "In this
+doc, the following does not show TP/TN/FP/FN (confusion matrix) - thought
+we added them to all measurements and recording of values?" (on
+`IEEE_COMPARISON.md`'s table; "Same observation in ULB_COMPARISON.md").
+
+**What.** The counts are recorded: every lane and seed in
+`f174_ieee_algorithms.json` and `f166_ulb_algorithms.json` carries F154's
+outcome block, with the confusion counts at the test fold's own 0.5%
+budget and at each validation-chosen threshold. Each algorithm page shows
+the counts per seed at the two validation-chosen thresholds. Two gaps:
+- The comparison pages show no counts at all.
+- The comparison table's recall column uses the test fold's own budget,
+  and the counts behind it appear on NO page. For example, IEEE-CIS
+  LightGBM seed 42 flags 427 rows: TP 415, FP 12, TN 82,328, FN 2,547.
+
+The comparison table has one row per algorithm and 10 seeds behind each
+row, so the counts need a form that stays whole numbers. A mean of counts
+is a derived decimal. A sum over seeds adds the same IEEE-CIS test month
+10 times, and on ULB it adds different test folds.
+
+**Why it matters.** A recall of 0.1389 does not show that the budget lets
+an algorithm flag only 427 of 2,962 frauds; the counts do. Without them
+the reader cannot check the rate. Each option below adds the same counts;
+they differ in how much the comparison table carries.
+
+**Kind and cost.**
+- Option 1: Prevention. The two generators render the counts, and each
+  generator's test fails a page without them, proven red. About 40
+  minutes. Files: `scripts/f174_docs.py`, `scripts/f166_docs.py`, their
+  two tests, the 16 pages they render, `CHANGELOG.md`, the validation
+  document.
+- Option 2: Prevention, the same guard. About 30 minutes, the same files
+  except the algorithm pages do not change.
+- Option 3: Prevention, the same guard. About 40 minutes, the same files
+  as option 1.
+
+**Recommendation: 1.** The comparison row gives each count's range over
+the 10 seeds (for example TP 400 to 416), which stays whole numbers and
+shows at once where a lane is the same on every seed (XGBoost: 404 to
+404). The per-seed counts at the test fold's own budget then go on each
+algorithm page, next to the two thresholds it already shows, so every
+figure in the row traces to a seed. Option 2 leaves the per-seed counts
+behind the recall column on no page. Option 3 puts 70 rows on each
+comparison page, which buries the ranking the page exists to show.
+
+**Options.**
+
+1. Comparison table: add TP, FP, TN and FN columns at the test fold's own
+   0.5% budget, each the minimum to the maximum over the 10 seeds; each
+   algorithm page: add a "0.5% budget on the test fold" column with the
+   per-seed counts to its confusion table; a note where the proxy's tied
+   scores flag more rows than the budget (IEEE-CIS up to 442 of 427, ULB
+   up to 291 of 284). Both datasets.
+2. Comparison table only: the same four range columns and the tie note.
+   The algorithm pages do not change. Both datasets.
+3. Comparison page: a second table with each algorithm's counts for every
+   seed (70 rows per dataset) at the test fold's own 0.5% budget; each
+   algorithm page: the per-seed column as in option 1. Both datasets.
