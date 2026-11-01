@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-01
+
+- **docs**: F177 carded for Sprint 31 (team lead, 2026-11-01): the full suite in about 5 minutes, with no guard lost. A timed run of the Sprint 30 final HEAD shows red proofs are 72% of its time, each starting a nested pytest; the card sets five levers, each with what it gives up, and a reproducible timing report as acceptance.
+
 ### 2026-10-31
 
 - **fix**: the Phase 5 fresh-eyes review of Sprint 30's evidence (Sprint 30 Task J, #84). `scripts/f174_docs.py` now states when a lane's test AUPRC is the same on every seed (XGBoost, SVM and logistic regression on IEEE-CIS's fixed months), so its seeds are one result, and qualifies each reliable pair that rests on one, in the BLUF and under the pairs; each page gives the test rows its validation-chosen 0.5% threshold flags against the 427-row budget; the proxy page gives its tie share and score-health warnings; the comparison page gives the budget's ceiling and the drift control's round cap. Each new statement has a test in `test_f174_docs.py`, proven red. `F169_PLUGIN_BINS.md`: LightGBM's reference-arm passes are degenerate, so F114's recommendation rests on the main and flip arms. `F170_MISSED_NEIGHBORS.md`: "supports" becomes "consistent with". `F171_MISSED_IEEE.md`: the headline is "Not shown", because 4 families are compared with 12. The master-plan cards for F169, F171 and F174 are marked corrected, and `SPRINT_30_VALIDATION.md` V4-V8 and V12 are updated. No result file changed.
