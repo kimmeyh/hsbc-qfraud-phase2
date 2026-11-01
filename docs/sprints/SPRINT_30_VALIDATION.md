@@ -57,15 +57,28 @@ handover: a pointer to a file is not a handover.
 
 ## V4. Task D (F174): best achievable result per algorithm on IEEE-CIS
 
-PENDING: the run is still going (10 seeds, about 65 minutes each). This
-item is completed from `experiments/phase2/results/f174_ieee_algorithms.json`
-and the pages `scripts/f174_docs.py` renders, once the run's final
-`complete` line is written.
+`docs/phase2/algorithms/IEEE_COMPARISON.md` and its seven pages; result
+`experiments/phase2/results/f174_ieee_algorithms.json` (82a418d).
 
-- The generator `scripts/f174_docs.py` is committed (7bbfb79). It refuses
-  a result its fixed text does not describe, each refusal proven red.
+- All 10 seeds (42-51) finished, with no time cap (D4, D5).
+- By mean test AUPRC on month 4: LightGBM, HGB, CatBoost, XGBoost, the
+  proxy, SVM, logistic regression.
+- Four of the six adjacent pairs differ reliably (exact Wilcoxon,
+  Bonferroni 0.05 / 6). HGB against CatBoost and XGBoost against the
+  proxy do not, so those two orders are not established.
+- **Please read**: at the 0.5% budget every algorithm's test recall is
+  between 0.1215 and 0.1389. The budget, not the model, sets most of
+  that figure on IEEE-CIS (see V8).
+- XGBoost, SVM and logistic regression have the same test AUPRC on every
+  seed: each picked the same configuration and is deterministic given
+  it. Their intervals have zero width; that is not an error.
+- The proxy chose its `full` configuration on every seed.
+- Each page regenerates from the result: `scripts/f174_docs.py --check`,
+  and `test_f174_docs.py` fails a committed page that differs, proven
+  red. The generator refuses a result its fixed text does not describe.
 - **Runtime finding**: seed 42 took 65 minutes, against the plan's
-  inferred 30-35. The SVM lane took 31 minutes and the proxy 20.
+  inferred 30-35. Later seeds took 56 to 60. The SVM lane took about 26
+  minutes per seed and the proxy 16-20.
 
 ## V5. Task E (F176): can a classical solver get below greedy?
 
@@ -154,8 +167,42 @@ and the pages `scripts/f174_docs.py` renders, once the run's final
 
 - A 10, B 11, C 15, I 14 and H 13 active minutes.
 - E 2, F 2 and G 6 active minutes are undercounts; see V2.
-- D's actual is recorded when its run and pages are done.
+- D 31 active minutes. Its run ran in the background with D's timer
+  paused, so the run's hours are not in the actual, by design.
 
 ## V12. Acceptance walk, evidence per task
 
-Completed at handover, after D's run and the final suite.
+Each line is the plan's task line, then where its evidence is.
+
+- **A (F173)**: `task_issues` and the hook rule; `test_commit_msg_hook.py`,
+  each term proven red. Closed #75.
+- **B (F175)**: the activity hook and `--finish-task`'s active and
+  elapsed figures; `test_task_activity.py`, proven red. Closed #76.
+- **C (F168)**: the seven parts, D2's resume through `provenance.start`,
+  the intent record; `test_agent_prompts.py`, `test_long_run_resume.py`,
+  `device_store` tests, each proven red. Closed #77.
+- **D (F174)**: entry (f74125d) before any score; 10 seeds; the tracked
+  generator and eight pages (82a418d). Closed #78.
+- **E (F176)**: dated Experiment 3 amendment (f74125d); the six instances
+  rebuilt and greedy matched; the n = 20 check run first; SCIP at
+  1,200 s and the local searches (76bb6f2). Closed #79.
+- **F (F169)**: dated F108 amendment per D3 (f74125d); F108's harness,
+  seeds, margin and pass rule; both arms (356893d). Closed #80.
+- **G (F170)**: entry (f74125d); the simulator check fired first;
+  distinct missed frauds counted (544f7aa, 356893d). Closed #81.
+- **H (F171)**: entry (f74125d); F152's four families, months 4-6, seeds
+  42-46 (fc966f4); D7's amendment (f2bf34a). Closed #82.
+- **I (F172)**: each Sprint 29 gap has a test proven red (73a976e).
+  Closed #83.
+- **Not met as planned**: the actuals for E, F and G undercount (V2), and
+  D's runtime was about double its inferred estimate (V4).
+
+## How to validate (recommended)
+
+1. Read V4, V5, V6, V8 and V9's items marked "please read" or "to
+   confirm". These are the findings that change how a result is used.
+2. Open `docs/phase2/algorithms/IEEE_COMPARISON.md` and compare it with
+   `ULB_COMPARISON.md`.
+3. Confirm the CI limit change (V10) and F166's added label check (V9).
+4. Optional: run `<venv python> scripts/f174_docs.py --check` and
+   `<venv python> scripts/agent_status.py`.

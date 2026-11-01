@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-10-31
 
+- **docs**: `docs/sprints/SPRINT_30_VALIDATION.md`, the Sprint 30 Manual Validation items V1-V12: each task's evidence and the findings to read or confirm (the hook checks only feat and fix commits, `agent_status.py` cannot see a run before its first write, three actuals undercount, CI ran red or canceled from 5719211 to 4b19944, the CI limit change), F174's result (V4), the acceptance walk (V12) and the recommended steps.
+
 - **feat**: F174 result and pages (Sprint 30 Task D, #78). The run finished 10 seeds (42-51) with no time cap. `scripts/f174_docs.py` renders `docs/phase2/algorithms/IEEE_COMPARISON.md` and one page per algorithm, beside F166's ULB pages. By mean test AUPRC on month 4 the order is LightGBM, HGB, CatBoost, XGBoost, the proxy, SVM, logistic regression; four of the six adjacent pairs differ reliably, and HGB against CatBoost and XGBoost against the proxy do not. `test_f174_docs.py` now fails a committed page that differs from the render, proven red. The result file is committed and the F174 card gains its result line. Zero metered seconds.
 
 - **docs**: F176 result (Sprint 30 Task E, #79). New `docs/phase2/F176_BELOW_GREEDY.md`: a selection below greedy on 3 of F160's 6 IEEE-CIS instances, each by under 2e-05, far smaller than the room bound; SCIP did not beat greedy at its 1,200 s cap. The exact check fired, and it also shows the swap search can miss the optimum (3 of 7 cases). The result file is committed and the card gains its result line.
