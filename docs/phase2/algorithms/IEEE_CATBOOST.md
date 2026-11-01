@@ -57,6 +57,8 @@ At the 0.5% alert-budget threshold chosen on the validation month:
 | MCC | 0.3447 | 0.0184 | 0.3315 to 0.3579 |
 | Balanced accuracy | 0.5637 | 0.0069 | 0.5587 to 0.5686 |
 
+On the test month this threshold flags 318 to 451 of 85,302 test rows; the month's own 0.5% budget is 427 rows. The threshold is chosen on the validation month, so its alert volume on the test month is not the budget. The row "Recall at the 0.5% budget, test fold" above uses the test month's own budget.
+
 ## Confusion counts per seed, test month
 
 TP, FP, TN and FN at each threshold chosen on the validation month.

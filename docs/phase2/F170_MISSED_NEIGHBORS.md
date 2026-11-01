@@ -42,6 +42,9 @@ seeds 42-51, are compared.
 ## What it changes
 
 - F158 step 3 compared group means. Here the comparison is per row and
-  tested. It supports reading ULB's missed-by-all group as a data limit
-  rather than a weakness of the models tried. F171 asks the same
+  tested. The result is consistent with reading ULB's missed-by-all
+  group as a data limit, not proof of it. The neighbor share is in
+  effect a 10-nearest-neighbor score in the same 30 features the models
+  use, so the result also fits "every model in this feature space misses
+  the same frauds" (inferred). F171 asks the same
   question on IEEE-CIS, which has richer raw fields.

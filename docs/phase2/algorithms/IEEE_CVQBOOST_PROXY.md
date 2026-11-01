@@ -54,6 +54,8 @@ At the 0.5% alert-budget threshold chosen on the validation month:
 | MCC | 0.4963 | 0.0169 | 0.4842 to 0.5084 |
 | Balanced accuracy | 0.6400 | 0.0103 | 0.6326 to 0.6473 |
 
+On the test month this threshold flags 748 to 1,035 of 85,302 test rows; the month's own 0.5% budget is 427 rows. The threshold is chosen on the validation month, so its alert volume on the test month is not the budget. The row "Recall at the 0.5% budget, test fold" above uses the test month's own budget.
+
 ## Confusion counts per seed, test month
 
 TP, FP, TN and FN at each threshold chosen on the validation month.
@@ -74,6 +76,7 @@ TP, FP, TN and FN at each threshold chosen on the validation month.
 ## Limits
 
 - The validation month holds about 3,849 frauds, so validation AUPRC is less noisy than on ULB. Here the same configuration (`full`) was chosen on every seed.
+- The proxy's test scores are heavily tied: the tie fraction is 0.9365 to 0.9631, and the most common score covers a share of 0.8434 to 0.9111 of test rows. The score-health check warns on seeds 42 and 44. A threshold moves every row with a tied score at once, so a chosen threshold can flag many more rows than intended.
 - One protocol and one grid per algorithm, F166's. A larger grid may do better; this is the best of the configurations named in the entry, not the best possible.
 - One test month. Month-to-month drift is outside this result; F152 scores months 4-6.
 - Device lanes (CVQBoost on hardware, QSVM) and QNN are outside this part of F157.

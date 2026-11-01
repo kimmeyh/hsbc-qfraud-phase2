@@ -37,6 +37,8 @@ Mean, SD and 95% t interval over 10 seeds, each seed at its own chosen configura
 | Recall at the 0.5% budget, test fold | 0.1215 | 0.0000 | 0.1215 to 0.1215 |
 | Train-test AUPRC gap | 0.0465 | 0.0000 | 0.0465 to 0.0465 |
 
+Logistic regression gives the same test AUPRC on every seed. It chose the same configuration on every seed, and the months are fixed, so the seed does not change the result. The SD is 0 and the interval has no width: the 10 seeds are one result.
+
 At the max-F1 threshold chosen on the validation month:
 
 | Metric | Mean | SD | 95% t interval |
@@ -58,6 +60,8 @@ At the 0.5% alert-budget threshold chosen on the validation month:
 | F1 | 0.2284 | 0.0000 | 0.2284 to 0.2284 |
 | MCC | 0.3250 | 0.0000 | 0.3250 to 0.3250 |
 | Balanced accuracy | 0.5657 | 0.0000 | 0.5657 to 0.5657 |
+
+On the test month this threshold flags 470 of 85,302 test rows; the month's own 0.5% budget is 427 rows. The threshold is chosen on the validation month, so its alert volume on the test month is not the budget. The row "Recall at the 0.5% budget, test fold" above uses the test month's own budget.
 
 ## Confusion counts per seed, test month
 

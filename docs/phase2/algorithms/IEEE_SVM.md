@@ -41,6 +41,8 @@ Mean, SD and 95% t interval over 10 seeds, each seed at its own chosen configura
 | Recall at the 0.5% budget, test fold | 0.1256 | 0.0000 | 0.1256 to 0.1256 |
 | Train-test AUPRC gap | 0.0363 | 0.0000 | 0.0363 to 0.0363 |
 
+SVM gives the same test AUPRC on every seed. It chose the same configuration on every seed, and the months are fixed, so the seed does not change the result. The SD is 0 and the interval has no width: the 10 seeds are one result.
+
 At the max-F1 threshold chosen on the validation month:
 
 | Metric | Mean | SD | 95% t interval |
@@ -62,6 +64,8 @@ At the 0.5% alert-budget threshold chosen on the validation month:
 | F1 | 0.2516 | 0.0000 | 0.2516 to 0.2516 |
 | MCC | 0.3497 | 0.0000 | 0.3497 to 0.3497 |
 | Balanced accuracy | 0.5732 | 0.0000 | 0.5732 to 0.5732 |
+
+On the test month this threshold flags 504 of 85,302 test rows; the month's own 0.5% budget is 427 rows. The threshold is chosen on the validation month, so its alert volume on the test month is not the budget. The row "Recall at the 0.5% budget, test fold" above uses the test month's own budget.
 
 ## Confusion counts per seed, test month
 

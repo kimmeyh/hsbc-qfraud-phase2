@@ -1,6 +1,6 @@
 # IEEE-CIS: seven algorithms compared (F174)
 
-**BLUF.** Over 10 seeds (42-51), the order by mean test AUPRC is LightGBM, HGB, CatBoost, XGBoost, the proxy, SVM and logistic regression. Of the six adjacent pairs, 4 differ reliably under the entry's test: LightGBM above HGB; CatBoost above XGBoost; CVQBoost proxy above SVM; SVM above logistic regression. No other adjacent pair differs reliably, so the order among HGB and CatBoost; XGBoost and the proxy is not established.
+**BLUF.** Over 10 seeds (42-51), the order by mean test AUPRC is LightGBM, HGB, CatBoost, XGBoost, the proxy, SVM and logistic regression. Of the six adjacent pairs, 4 differ reliably under the entry's test: LightGBM above HGB; CatBoost above XGBoost; CVQBoost proxy above SVM; SVM above logistic regression. Of these, CatBoost above XGBoost; CVQBoost proxy above SVM; SVM above logistic regression rest on a lane whose test AUPRC is the same on every seed, so the seeds are not independent evidence there (see the adjacent pairs). No other adjacent pair differs reliably, so the order among HGB and CatBoost; XGBoost and the proxy is not established.
 
 - **Card**: F174 (Sprint 30 Task D, #78), the IEEE-CIS part of F157.
 - **Entry**: `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6, "F174", written before any score.
@@ -31,7 +31,16 @@ The entry's test: with 10 seeds (8 or more), the exact two-sided Wilcoxon signed
 - CVQBoost proxy against SVM: mean difference 0.1250, Wilcoxon p 0.0020; reading: above
 - SVM against Logistic regression: mean difference 0.0048, Wilcoxon p 0.0020; reading: above
 
+Pairs with a lane whose test AUPRC is the same on every seed (the month folds are fixed, so a deterministic lane at one configuration gives one result):
+
+- CatBoost against XGBoost: XGBoost is the same on every seed, so the test compares CatBoost's seeds with one fixed value.
+- XGBoost against the proxy: XGBoost is the same on every seed, so the test compares the proxy's seeds with one fixed value.
+- CVQBoost proxy against SVM: SVM is the same on every seed, so the test compares the proxy's seeds with one fixed value.
+- SVM against logistic regression: both lanes are the same on every seed, so the 10 differences are one difference repeated. The p value comes from the repeats; the evidence is one test month.
+
 ## Notes
 
-- At the 0.5% alert budget, mean recall on the test month lies between 0.1215 and 0.1389. The month's fraud rate is 3.47%, so a 0.5% budget cannot flag most frauds (F171).
+- At the test month's own 0.5% alert budget (427 rows), mean recall lies between 0.1215 and 0.1389. The month's fraud rate is 3.47%, so the budget can catch at most 427 of its 2,962 frauds (F171).
+- The 0.5% thresholds chosen on the validation month flag 256 to 1,035 test rows across algorithms and seeds, so the per-page tables at that threshold compare different alert volumes. The recall column above uses the test month's own budget.
+- F152's adversarial drift control: on the tuning fold it stopped at its cap of 20 rounds, with a final adversarial AUC of 0.9906; on the scored fold it stopped at its cap of 20 rounds, with a final adversarial AUC of 0.9450. An AUC near 1 means a classifier still tells the training months from the scored month. The tuning fold keeps 171 features and the scored fold 181.
 - The SVM lane keeps its linear form; the RBF alternative beat it on validation on 0 of 10 seeds ([IEEE_SVM.md](IEEE_SVM.md)).

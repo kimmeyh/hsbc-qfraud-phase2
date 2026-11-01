@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -32,6 +33,7 @@ ClaimError = fd.ClaimError
 NO_DIFF = fd.NO_DIFF
 N_PAIRS_TESTED = fd.N_PAIRS_TESTED
 IMPUTED = {"logreg", "svm"}
+BUDGET, BUDGET_OP = 0.005, fd.OPS[1][0]
 SETUP = {
     "hgb": "`HistGradientBoostingClassifier`, `random_state=seed`, every column the fold keeps",
     "lightgbm": "`LGBMClassifier`, 300 trees, `random_state=seed`, every column the fold keeps",
@@ -73,6 +75,89 @@ def limits_line(res, rows, a) -> str:
     shown = f"`{only['config']}`" if list(only) == ["config"] else fd.params(only)
     return first + (f". Here the same configuration ({shown}) was chosen on "
                     "every seed.")
+
+
+def same_every_seed(rows, a) -> bool:
+    """True when the lane's test AUPRC is identical on every seed. The month
+    folds are fixed, so a deterministic model at one configuration gives
+    one result however many seeds are run (Sprint 30 fresh-eyes review)."""
+    return len({r["lanes"][a]["test"]["auprc"] for r in rows}) == 1
+
+
+def same_line(rows, a, n) -> str | None:
+    if not same_every_seed(rows, a):
+        return None
+    why = (" It chose the same configuration on every seed, and the months "
+           "are fixed, so the seed does not change the result."
+           if fd.one_choice(rows, a) is not None else "")
+    return (f"{NAMES[a]} gives the same test AUPRC on every seed.{why} The SD "
+            f"is 0 and the interval has no width: the {n} seeds are one result.")
+
+
+def budget_rows(res) -> int:
+    return math.ceil(BUDGET * res["folds"]["test"]["n_eval"])
+
+
+def test_frauds(res) -> int:
+    t = res["folds"]["test"]
+    return round(t["n_eval"] * t["prevalence_eval"])
+
+
+def flagged(lanes) -> list[int]:
+    """Rows each seed's validation-chosen 0.5% threshold flags on the test
+    month."""
+    out = []
+    for ln in lanes:
+        c = {o["operating_point"]: o["confusion"]
+             for o in ln["test"]["operating_points"]}[BUDGET_OP]
+        out.append(c["tp"] + c["fp"])
+    return out
+
+
+def span(vals, fmt="{:,}") -> str:
+    lo, hi = min(vals), max(vals)
+    return fmt.format(lo) if lo == hi else f"{fmt.format(lo)} to {fmt.format(hi)}"
+
+
+def flagged_line(res, lanes) -> str:
+    return (f"On the test month this threshold flags {span(flagged(lanes))} of "
+            f"{res['folds']['test']['n_eval']:,} test rows; the month's own "
+            f"0.5% budget is {budget_rows(res):,} rows. The threshold is "
+            "chosen on the validation month, so its alert volume on the test "
+            "month is not the budget. The row \"Recall at the 0.5% budget, "
+            "test fold\" above uses the test month's own budget.")
+
+
+def ties_line(lanes, a) -> str | None:
+    warned = [ln["seed"] for ln in lanes if ln["test"]["score_health"]["warn"]]
+    if not warned:
+        return None
+    tf = [ln["test"]["tie_fraction"] for ln in lanes]
+    ms = [ln["test"]["score_health"]["mode_share"] for ln in lanes]
+    seeds = " and ".join(str(s) for s in warned)
+    whose = POSSESSIVE.get(a, NAMES[a] + "'s")
+    return (f"- {whose[0].upper() + whose[1:]} test scores are heavily tied: the tie fraction is "
+            f"{span(tf, '{:.4f}')}, and the most common score covers a share "
+            f"of {span(ms, '{:.4f}')} of test rows. The score-health check "
+            f"warns on seed{'s' if len(warned) > 1 else ''} {seeds}. A "
+            "threshold moves every row with a tied score at once, so a chosen "
+            "threshold can flag many more rows than intended.")
+
+
+def drift_line(res) -> str:
+    parts = []
+    for name, key in (("tuning", "validation"), ("scored", "test")):
+        c = res["folds"][key]["controls"]
+        how = ("stopped at its cap of" if c["adversarial_hit_round_cap"]
+               else "converged within")
+        parts.append(f"on the {name} fold it {how} {c['adversarial_rounds']} "
+                     f"rounds, with a final adversarial AUC of "
+                     f"{fd.f4(c['final_adversarial_auc'])}")
+    v, t = res["folds"]["validation"], res["folds"]["test"]
+    return ("- F152's adversarial drift control: " + "; ".join(parts)
+            + ". An AUC near 1 means a classifier still tells the training "
+            f"months from the scored month. The tuning fold keeps "
+            f"{v['n_features']} features and the scored fold {t['n_features']}.")
 
 
 def proxy_paragraph(rows) -> str:
@@ -149,11 +234,16 @@ def algo_doc(res, a) -> str:
           "| Metric | Mean | SD | 95% t interval |", "|---|---|---|---|"]
     L += [fd.stat_row(lab, s[k]) for lab, k in fd.ROWS]
     L.append("")
+    same = same_line(R, a, N)
+    if same:
+        L += [same, ""]
     for op, desc in fd.OPS:
         L += [f"At the {desc.replace('validation', 'the validation month')}:", "",
               "| Metric | Mean | SD | 95% t interval |", "|---|---|---|---|"]
         L += [fd.stat_row(fd.OP_LABEL[m], s[op][m]) for m in fd.OP_METRICS]
         L.append("")
+        if op == BUDGET_OP:
+            L += [flagged_line(res, lanes), ""]
     L += ["## Confusion counts per seed, test month", "",
           "TP, FP, TN and FN at each threshold chosen on the validation month.", "",
           "| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |",
@@ -164,8 +254,10 @@ def algo_doc(res, a) -> str:
                  for op, _ in fd.OPS]
         L.append(f"| {ln['seed']} | {fd.params(ln['chosen_params'])} | {cells[0]} | {cells[1]} |")
     L.append("")
+    ties = ties_line(lanes, a)
     L += ["## Limits", "",
           limits_line(res, R, a),
+          *([ties] if ties else []),
           "- One protocol and one grid per algorithm, F166's. A larger grid "
           "may do better; this is the best of the configurations named in "
           "the entry, not the best possible.",
@@ -196,6 +288,16 @@ def comparison(res) -> str:
         bluf += ": " + "; ".join(f"{NAMES[p['a']]} above {INNER[p['b']]}"
                                  for p in reliable)
     bluf += "."
+    same = {a for a in order if same_every_seed(R, a)}
+    repeated = [p for p in pairs if {p["a"], p["b"]} & same]
+    rel_rep = [p for p in reliable if p in repeated]
+    if rel_rep:
+        bluf += (" Of these, " + "; ".join(
+            f"{NAMES[p['a']]} above {INNER[p['b']]}" for p in rel_rep)
+            + (" rests" if len(rel_rep) == 1 else " rest")
+            + " on a lane whose test AUPRC is the same on every seed, so the "
+            "seeds are not independent evidence there (see the adjacent "
+            "pairs).")
     if runs:
         bluf += (" No other adjacent pair differs reliably, so the order "
                  "among " + "; ".join(fd.names(r) for r in runs)
@@ -228,13 +330,39 @@ def comparison(res) -> str:
           "non-adjacent statement is not made here.", ""]
     L += [f"- {fd.pair_text(p)}" for p in pairs]
     L.append("")
+    if repeated:
+        L += ["Pairs with a lane whose test AUPRC is the same on every seed "
+              "(the month folds are fixed, so a deterministic lane at one "
+              "configuration gives one result):", ""]
+        for p in repeated:
+            head = f"- {NAMES[p['a']]} against {INNER[p['b']]}: "
+            if {p["a"], p["b"]} <= same:
+                L.append(head + f"both lanes are the same on every seed, so "
+                         f"the {N} differences are one difference repeated. "
+                         "The p value comes from the repeats; the evidence "
+                         "is one test month.")
+            else:
+                c = p["a"] if p["a"] in same else p["b"]
+                o = p["b"] if c == p["a"] else p["a"]
+                L.append(head + f"{INNER[c]} is the same on every seed, so "
+                         f"the test compares {INNER[o]}'s seeds with one "
+                         "fixed value.")
+        L.append("")
     per = A["per_algorithm"]
     rec = [per[a]["recall_at_budget_on_test"]["mean"] for a in order]
+    vol = [v for a in order for v in flagged([r["lanes"][a] for r in R])]
     L += ["## Notes", "",
-          "- At the 0.5% alert budget, mean recall on the test month lies "
-          f"between {fd.f4(min(rec))} and {fd.f4(max(rec))}. The month's fraud "
-          f"rate is {res['folds']['test']['prevalence_eval']:.2%}, so a 0.5% "
-          "budget cannot flag most frauds (F171).",
+          f"- At the test month's own 0.5% alert budget "
+          f"({budget_rows(res):,} rows), mean recall lies between "
+          f"{fd.f4(min(rec))} and {fd.f4(max(rec))}. The month's fraud rate "
+          f"is {res['folds']['test']['prevalence_eval']:.2%}, so the budget "
+          f"can catch at most {budget_rows(res):,} of its "
+          f"{test_frauds(res):,} frauds (F171).",
+          f"- The 0.5% thresholds chosen on the validation month flag "
+          f"{span(vol)} test rows across algorithms and seeds, so the "
+          "per-page tables at that threshold compare different alert "
+          "volumes. The recall column above uses the test month's own budget.",
+          drift_line(res),
           f"- The SVM lane keeps its {A['svm_form']['kept']} form; the RBF "
           f"alternative beat it on validation on "
           f"{A['svm_form']['rbf_beats_linear_seeds']} of {N} seeds "

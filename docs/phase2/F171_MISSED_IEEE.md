@@ -14,9 +14,15 @@ was seen and before the new budgets were counted.
 
 ## Result
 
-**No. At every budget, a larger share of IEEE-CIS frauds is missed by all
-families than of ULB frauds.** The entry's reading ("a share well below
-ULB's is consistent with richer information catching frauds") is not met.
+**Not shown. At every budget, a larger share of IEEE-CIS frauds is
+missed by all families than of ULB frauds, but the counts compare 4
+IEEE-CIS families with 12 ULB families.** The entry's reading ("a share
+well below ULB's is consistent with richer information catching
+frauds") is not met. More families flag more distinct frauds, so the
+gap is not shown to come from the data. The like-for-like row is the
+matched budget, 18.2% against 11.2%. The 3.5% row is about one times
+IEEE-CIS's fraud rate and many times ULB's, so it is tight on one
+dataset and loose on the other.
 
 Share of (fold, seed, test fraud) pairs that no family flags. IEEE-CIS:
 F152's 4 families, months 4-6, seeds 42-46, 31,220 pairs. ULB: F158 step
