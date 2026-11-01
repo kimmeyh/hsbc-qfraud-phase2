@@ -483,3 +483,53 @@ proxy flags up to 297 rows against ULB's budget of 284 (7 of 10 seeds),
 not 291, and up to 442 against IEEE-CIS's 427 (8 of 10 seeds). HGB on
 IEEE-CIS also flags 428 on 1 of 10 seeds. The pages state the figures
 computed from all seeds. The answer and the work do not change.
+
+## D9. The 13-minute CI limit canceled a run whose steps all passed
+
+Asked 2026-11-01 at Manual Validation, after the first runs under the
+13-minute limit that the team lead set at V10.
+
+**What.** The three runs on this branch since the change:
+- 45a77ee (before the change, 20-minute limit): job 12:36, tests step
+  11:36. Success.
+- f5313e9 (13-minute limit, a docs-only commit): job 13:02, tests step
+  11:59. Every step passed, then the job was canceled at the limit.
+- a3a0af3 (13-minute limit, with Task K's five added red proofs): job
+  12:48, tests step 11:47. Success.
+
+The job is about 50 seconds of setup and install plus the tests step. A
+docs-only commit took longer than the commit that added tests, so the
+spread is the runner's speed, not this sprint's changes. At 13 minutes
+the margin is a few seconds, and one of the two runs was canceled. A
+canceled run reads as neither red nor green, which is the state that hid
+CI from 73a976e to 4b19944 (V10).
+
+**Why it matters.** Each canceled run is a commit with no CI verdict.
+The close-out hook blocks the completion claim when CI is not green, so
+a cancel at the final HEAD also stops the PR going ready until a rerun
+passes.
+
+**Kind and cost.**
+- Option 1: Workaround. One line in `.github/workflows/ci.yml` and a
+  CHANGELOG entry, about 5 minutes. About 2 minutes of margin on the
+  runs seen.
+- Option 2: Workaround. The same files, about 5 minutes. About 1 minute
+  of margin.
+- Option 3: Workaround. No change. Cancels continue at about the rate
+  seen until F177 (Sprint 31) cuts the suite.
+- The Prevention is F177, the full suite in about 5 minutes. It is
+  carded for Sprint 31, not this sprint, because it is about 240 minutes
+  of work.
+
+**Recommendation: 1.** It keeps a stop for a hung job well under the
+earlier 20 minutes, and its margin covers the spread seen. F177 then
+sets the limit to its new suite time. Option 2's minute is about the
+spread already seen between two runs, so it would still cancel
+sometimes.
+
+**Options.**
+
+1. Set the CI job's limit to 15 minutes until F177 lands; F177's
+   acceptance sets it from the new suite time.
+2. Set the CI job's limit to 14 minutes until F177 lands.
+3. Keep 13 minutes; rerun a canceled run by hand until F177 lands.
