@@ -22,8 +22,10 @@ jobs:
     # 10 until Sprint 30. The tests step took 8:15 on 88eb3ba, and the
     # sprint's added injection proofs took the job past 10 minutes, so
     # every run after 73a976e was canceled with no verdict. A canceled
-    # run reads as neither red nor green. 20 keeps a stop for a hung job.
-    timeout-minutes: 20
+    # run reads as neither red nor green. 13 (team lead, Sprint 30 Manual
+    # Validation, 2026-11-01) is the tests step's 11 minutes with a small
+    # margin; F177 sets the suite's time target.
+    timeout-minutes: 13
 
     steps:
       - uses: actions/checkout@v4
