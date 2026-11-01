@@ -3,7 +3,8 @@
 **Sprint**: 30
 **Branch**: `feature/20261030_Sprint_30` | **PR**: #74 (draft)
 **Scope**: F173 (A), F175 (B), F168 (C), F174 (D), F176 (E), F169 (F),
-F170 (G), F171 (H), F172 (I). Issues #75-83.
+F170 (G), F171 (H), F172 (I), and the Phase 5 review fixes (J).
+Issues #75-84.
 **Metered seconds**: 0. No Dirac, Braket or other paid service was called.
 
 This file is the durable copy. The same items are listed to the screen at
@@ -204,6 +205,7 @@ handover: a pointer to a file is not a handover.
 
 - A 10, B 11, C 15, I 14 and H 13 active minutes.
 - E 2, F 2 and G 6 active minutes are undercounts; see V2.
+- J (the review fixes, added at Phase 5) 12 active minutes.
 - D 31 active minutes. Its run ran in the background with D's timer
   paused, so the run's hours are not in the actual, by design.
 
