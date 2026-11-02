@@ -114,16 +114,20 @@ def lookup(problem_hash: str, store_dir: Path | None = None) -> dict:
     "intents": [...]}, paths sorted. An intent with no response is a job
     that may have been sent and whose process stopped before it returned."""
     out = Path(store_dir or STORE_DIR)
-    responses = []
+    responses, unreadable = [], []
     for path in sorted(out.glob("*.json")):
         try:
             doc = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError):
+            # It may be this problem's response; `saving` refuses on it
+            # (PR 74 review: it was skipped, so a resend could pass).
+            unreadable.append(path)
             continue
         if isinstance(doc, dict) and doc.get("problem_sha256") == problem_hash:
             responses.append(path)
     intents = sorted((out / INTENTS).glob(f"{problem_hash}_*.json"))
-    return {"responses": responses, "intents": intents}
+    return {"responses": responses, "intents": intents,
+            "unreadable": unreadable}
 
 
 def unhashed(store_dir: Path | None = None) -> list[Path]:
@@ -156,6 +160,12 @@ def saving(card: str, unit: str, device_type: str, problem_hash: str,
         raise ValueError("the arrays do not hash to problem_hash")
     out = Path(store_dir or STORE_DIR)
     found = lookup(problem_hash, out)
+    if found["unreadable"]:
+        raise ValueError(
+            f"the store holds unreadable response files "
+            f"({[p.name for p in found['unreadable']]}); one may be this "
+            "problem's, so a send cannot be shown to be the first. Repair "
+            "or move them, then retry")
     if found["responses"] or found["intents"]:
         names = [p.name for p in found["responses"] + found["intents"]]
         raise ValueError(

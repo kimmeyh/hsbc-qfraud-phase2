@@ -145,8 +145,17 @@ def test_a_new_problem_is_not_refused(tmp_path):
 def test_files_without_a_hash_are_listed_not_matched(tmp_path):
     (tmp_path / "b4_backfill_42.json").write_text(
         json.dumps({"job_id": "x", "response": {}}), encoding="utf-8")
-    assert ds.lookup(HASH, tmp_path) == {"responses": [], "intents": []}
+    assert ds.lookup(HASH, tmp_path) == {"responses": [], "intents": [],
+                                         "unreadable": []}
     assert [p.name for p in ds.unhashed(tmp_path)] == ["b4_backfill_42.json"]
+
+
+def test_an_unreadable_response_file_refuses_the_send(tmp_path):
+    # PR 74 review: lookup skipped a corrupt file that may be this
+    # problem's response, so the send passed.
+    (tmp_path / "f999_u1_job.json").write_text("{trunc", encoding="utf-8")
+    with pytest.raises(ValueError, match="unreadable response files"):
+        ds.saving("F999", "u1", "dirac-3s", HASH, POOL, tmp_path)
 
 
 def test_the_resend_refusal_can_fail():
@@ -175,3 +184,8 @@ def test_the_resend_refusal_can_fail():
                     test("test_a_job_whose_process_stopped_is_not_sent_"
                          "again"),
                     "no intent written before the send")
+    assert_can_fail([Mutation(src, '    if found["unreadable"]:\n',
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_an_unreadable_response_file_refuses_the_"
+                         "send"),
+                    "an unreadable response file skipped")

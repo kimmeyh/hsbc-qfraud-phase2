@@ -209,17 +209,18 @@ def resume_task(doc: dict, task: str, now: datetime) -> str:
 IDLE_GAP_S = 30 * 60
 
 
-def activity(log: Path) -> list[datetime] | None:
-    """The activity log's timestamps, or None when there is no log."""
+def activity(log: Path) -> tuple[list[datetime], int] | None:
+    """The activity log's timestamps and the count of lines that are not
+    one, or None when there is no log."""
     if not log.exists():
         return None
-    out = []
+    out, dropped = [], 0
     for line in log.read_text(encoding="utf-8").splitlines():
         try:
             out.append(datetime.fromisoformat(line.strip()))
         except ValueError:
-            continue
-    return out
+            dropped += 1
+    return out, dropped
 
 
 def idle_seconds(points: list[datetime], start: datetime, end: datetime,
@@ -267,9 +268,16 @@ def finish_task(doc: dict, task: str, now: datetime,
     if elapsed < 0:
         raise SystemExit(f"Task {task} finishes before it started ({stamp}).")
     paused_s = cur.get("task_paused_s", {}).get(task, 0)
-    points = activity(log) if log is not None else None
+    read = activity(log) if log is not None else None
+    points, dropped = read if read is not None else (None, 0)
     if points is None:
         idle, how = paused_s, "no activity log: elapsed less pauses"
+    elif not any(start < p < now for p in points):
+        # A log with nothing inside the task (the hook unregistered, broken
+        # or failing) would make the whole task one idle gap: an actual of
+        # 1 minute, silently (PR 74 review).
+        idle, how = paused_s, ("no activity logged during the task: elapsed "
+                               "less pauses; check the activity hook")
     else:
         spans = [(datetime.fromisoformat(a), datetime.fromisoformat(b))
                  for a, b in cur.get("task_pause_spans", {}).get(task, [])]
@@ -277,6 +285,15 @@ def finish_task(doc: dict, task: str, now: datetime,
         # A pause recorded before spans were kept is still subtracted.
         idle = max(idle, paused_s)
         how = "gaps over 30 min and pauses subtracted"
+        if idle - paused_s > elapsed / 2:
+            how += ("; over half the elapsed time had no tool call, and a "
+                    "background wait with none counts as idle")
+    if dropped:
+        how += f"; {dropped} unreadable line(s) in the activity log"
+    err = log.parent / "activity.err" if log is not None else None
+    if err is not None and err.exists() and err.read_text(encoding="utf-8").strip():
+        how += f"; the activity hook recorded errors in {err.name}"
+    cur.setdefault("task_actual_method", {})[task] = how
     actuals[task] = max(1, math.ceil((elapsed - idle) / 60))
     cur.setdefault("task_elapsed", {})[task] = max(1, math.ceil(elapsed / 60))
     return (f"  current_sprint.task_actuals.{task}: {actuals[task]} min "

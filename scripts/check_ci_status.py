@@ -160,8 +160,10 @@ def runs_for(sha: str) -> list[dict]:
     return [r for r in allruns if r.get("headSha") == sha]
 
 
-def evaluate(sha: str) -> tuple[int, list[str]]:
-    """(exit code, human-readable lines). Never returns OK on a guess."""
+def evaluate(sha: str, require_job: str = "") -> tuple[int, list[str]]:
+    """(exit code, human-readable lines). Never returns OK on a guess.
+    With `require_job`, OK also needs a job of that name to have succeeded
+    on the commit (the full job, which alone runs the red proofs)."""
     runs = runs_for(sha)
     if not runs:
         raise Undetermined(
@@ -233,10 +235,43 @@ def evaluate(sha: str) -> tuple[int, list[str]]:
             "test result was read. A workflow gated behind a path filter looks "
             "exactly like this. That is not a pass.")
 
+    if require_job and not job_succeeded(
+            [r for r in runs if r.get("status") == "completed"
+             and r.get("conclusion") == "success"], require_job):
+        # PR 74 review: after `gh pr ready` the green push run is listed
+        # before the ready-for-review run exists, so "green" was read from a
+        # run with no red proofs in it. Not a pass until the job has run.
+        lines.append("")
+        lines.append(f"No successful '{require_job}' job on {sha[:7]} yet; "
+                     "the runs above do not include it. Not a pass. Wait for "
+                     "it, or re-run with --wait.")
+        return PENDING, lines
+
     lines.append("")
     lines.append(f"CI is green on {sha[:7]} ({len(runs)} run(s), "
-                 f"{len(succeeded)} succeeded).")
+                 f"{len(succeeded)} succeeded"
+                 + (f", '{require_job}' job included" if require_job else "")
+                 + ").")
     return OK, lines
+
+
+def job_succeeded(runs: list[dict], name: str) -> bool:
+    """True if a job called `name` succeeded in one of these runs."""
+    for r in runs:
+        rc, out, err = _run(["gh", "run", "view", str(r.get("databaseId")),
+                             "--json", "jobs"])
+        if rc != 0:
+            raise Undetermined(f"gh run view failed: {err.strip()[:200]}")
+        try:
+            jobs = json.loads(out or "{}").get("jobs")
+        except (ValueError, AttributeError) as exc:
+            raise Undetermined(f"gh returned unreadable jobs: {exc}") from exc
+        if not isinstance(jobs, list):
+            raise Undetermined("gh returned no job list for a run")
+        if any(isinstance(j, dict) and j.get("name") == name
+               and j.get("conclusion") == "success" for j in jobs):
+            return True
+    return False
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -253,6 +288,9 @@ def main(argv: list[str] | None = None) -> int:
                          "all, which is indistinguishable from a clean one.")
     ap.add_argument("--timeout", type=int, default=1800,
                     help="seconds to wait with --wait (default 1800)")
+    ap.add_argument("--require-job", default="", metavar="NAME",
+                    help="also require a job of this name to have succeeded "
+                         "on the commit (Phase 7: `full`, the red proofs)")
     args = ap.parse_args(argv)
     _cli["on"] = True               # no hook budget here (IMP-4); see _run
 
@@ -267,7 +305,7 @@ def main(argv: list[str] | None = None) -> int:
         sha = head_sha(args.sha)
         deadline = time.time() + args.timeout
         while True:
-            rc, lines = evaluate(sha)
+            rc, lines = evaluate(sha, args.require_job)
             if rc != PENDING or not args.wait or time.time() > deadline:
                 break
             time.sleep(30)

@@ -583,3 +583,44 @@ def test_the_command_line_wait_can_fail(ci, monkeypatch):
                         run, "the hook path given the long wait")
     finally:
         importlib.reload(ci)
+
+
+def _with_jobs(ci, monkeypatch, jobs: list[dict]) -> None:
+    monkeypatch.setattr(ci, "runs_for", lambda sha: [
+        {**_runs("completed", "success")[0], "databaseId": 7}])
+    monkeypatch.setattr(ci, "_run", lambda args, timeout=3: (
+        0, json.dumps({"jobs": jobs}), ""))
+
+
+def test_a_required_job_must_have_succeeded(ci, monkeypatch):
+    # PR 74 review: after `gh pr ready` the green push run is listed before
+    # the ready-for-review run exists, so green was read with no red proofs
+    # run. With --require-job full that is pending, not a pass.
+    _with_jobs(ci, monkeypatch, [{"name": "test", "conclusion": "success"},
+                                 {"name": "full", "conclusion": "skipped"}])
+    assert ci.evaluate("deadbee", "full")[0] == ci.PENDING
+    assert ci.evaluate("deadbee")[0] == ci.OK
+    _with_jobs(ci, monkeypatch, [{"name": "full", "conclusion": "success"}])
+    assert ci.evaluate("deadbee", "full")[0] == ci.OK
+
+
+def test_the_required_job_can_fail(ci, monkeypatch):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+
+    def run() -> bool:
+        mod = importlib.reload(ci)
+        with pytest.MonkeyPatch.context() as mp:
+            _with_jobs(mod, mp, [{"name": "full", "conclusion": "skipped"}])
+            return mod.evaluate("deadbee", "full")[0] == mod.PENDING
+
+    try:
+        assert_can_fail([Mutation(SCRIPT,
+                                  "               and j.get(\"conclusion\") "
+                                  "== \"success\" for j in jobs):\n",
+                                  "               for j in jobs):\n",
+                                  expect_occurrences=1)],
+                        run, "a skipped full job read as a pass")
+    finally:
+        importlib.reload(ci)

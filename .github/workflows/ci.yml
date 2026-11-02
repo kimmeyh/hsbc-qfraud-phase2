@@ -26,17 +26,19 @@ on:
 #         guard's test in a nested pytest, which was most of the
 #         suite's time. It proves the guard CAN fail, which changes only
 #         when the guard or its test changes, so it does not need every push.
-#   full  when the PR is marked ready for review, and on demand
-#         (workflow_dispatch). Every test, proofs included: the replacement
-#         for the proofs the push job leaves out. The local Phase 5 full
-#         suite also runs them every sprint.
+#   full  whenever the PR is not a draft (marked ready for review, and every
+#         push after that), and on demand (workflow_dispatch). Every test,
+#         proofs included: the replacement for the proofs the push job
+#         leaves out, so a commit pushed after ready for review still runs
+#         them (PR 74 review). The local Phase 5 full suite also runs them.
+#         `check_ci_status.py --require-job full` reads it at Phase 7.
 #
 # `conftest.py` marks a proof from its source, so a new proof leaves the
 # push job and stays in the full job with nothing to remember.
 # `test_ci_workflow.py` fails if either job's selection changes.
 jobs:
   test:
-    if: github.event.action != 'ready_for_review'
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft
     runs-on: ubuntu-latest
     # 10 until Sprint 30, then 20, then 13 (D9). Without the proofs the
     # job took 3:08 on 0fc2004 (tests 2:04, install 0:46); 6 stops a hung
@@ -123,7 +125,7 @@ jobs:
           echo "Working tree clean after the test run."
 
   full:
-    if: github.event.action == 'ready_for_review' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     # The whole suite took about 12 minutes in one job before Task L.
     timeout-minutes: 20

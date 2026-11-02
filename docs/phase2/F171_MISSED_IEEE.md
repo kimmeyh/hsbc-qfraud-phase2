@@ -50,7 +50,12 @@ F152's 4 families, months 4-6, seeds 42-46, 31,220 pairs. ULB: F158 step
 ## Profile (0.5% budget, as preregistered)
 
 Missed against caught frauds on raw fields; 5,264 distinct rows are
-missed in some seed:
+missed in some seed. The caught group is the rows caught in some seed,
+and the months are fixed across seeds, so a row missed in one seed and
+caught in another is in BOTH groups: the two are not disjoint, and the
+result records neither group's size nor the overlap (PR 74 review).
+F170's rule (missed in every seed against caught in every seed, mixed
+rows left out) was not applied here:
 - ProductCD W: 53.0% of missed rows, 7.5% of caught rows. ProductCD C:
   32.5% against 73.2%.
 - DeviceType missing: 55.4% of missed, 8.5% of caught. Desktop: 21.0%

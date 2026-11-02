@@ -45,10 +45,15 @@ def test_the_full_job_runs_the_proofs_on_ready_for_review():
     jobs = _jobs()
     assert _pytest_lines(jobs["full"]) == [
         'run: pytest -m "not slow" -q --durations=25']
-    assert ("if: github.event.action == 'ready_for_review' || "
-            "github.event_name == 'workflow_dispatch'" in jobs["full"])
-    text = WORKFLOW.read_text(encoding="utf-8")
+    # Every non-draft event, so a push after ready for review runs the
+    # proofs too (PR 74 review); the push job only on a draft.
+    assert ("if: github.event_name == 'workflow_dispatch' || "
+            "!github.event.pull_request.draft" in jobs["full"])
+    assert ("if: github.event_name == 'pull_request' && "
+            "github.event.pull_request.draft" in jobs["test"])
+    text = WORKFLOW.read_text(encoding="utf-8").replace("\r\n", "\n")
     assert "types: [opened, synchronize, reopened, ready_for_review]" in text
+    assert "\n  workflow_dispatch:\n" in text.split("\njobs:", 1)[0]
     assert "Test run must leave the tree clean" in jobs["full"]
 
 
@@ -72,21 +77,38 @@ def test_a_proof_is_marked_directly_and_through_a_helper():
     assert not is_proof(item(orr.test_the_exempt_list_only_shrinks))
 
 
+def test_a_test_named_like_a_helper_is_not_a_proof():
+    # PR 74 review: a substring match found the helper `_fails(` in
+    # `def test_the_wrong_endpoint_fails():` and dropped a regular guard
+    # from the push job.
+    import test_phase2_figures_resolve as pfr
+    is_proof = _conftest().is_proof
+    assert not is_proof(SimpleNamespace(
+        function=pfr.test_the_wrong_endpoint_fails))
+    assert is_proof(SimpleNamespace(
+        function=pfr.test_the_per_document_pool_can_fail))
+
+
 def test_the_selection_and_marking_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     node = f"{THIS}::test_a_proof_is_marked_directly_and_through_a_helper"
-    for path, old, new, label in (
-            (CONFTEST, '                if f"{n}(" not in calls and any(c in src for c in calls):\n',
-             '                if False:\n',
-             "a proof behind a helper left unmarked"),
-            (CONFTEST, 'PROOF_CALLS = ("assert_can_fail(", "run_pytest(")\n',
-             'PROOF_CALLS = ()\n',
-             "no direct call marks a proof"),
-            (CONFTEST, "    return any(call in src\n",
-             "    return True or any(call in src\n",
-             "every test marked a proof")):
+    named = f"{THIS}::test_a_test_named_like_a_helper_is_not_a_proof"
+    for path, old, new, label, target in (
+            (CONFTEST, "                if n not in calls and called & calls:\n",
+             "                if False:\n",
+             "a proof behind a helper left unmarked", node),
+            (CONFTEST, 'PROOF_CALLS = frozenset({"assert_can_fail", "run_pytest"})\n',
+             "PROOF_CALLS = frozenset()\n",
+             "no direct call marks a proof", node),
+            (CONFTEST, "    return bool(_called(fn) & _proof_calls(inspect.getmodule(fn)))\n",
+             "    return True\n",
+             "every test marked a proof", node),
+            (CONFTEST, "    return bool(_called(fn) & _proof_calls(inspect.getmodule(fn)))\n",
+             "    return any(c + '(' in inspect.getsource(fn)\n"
+             "               for c in _proof_calls(inspect.getmodule(fn)))\n",
+             "a test named like a helper marked by substring", named)):
         assert_can_fail([Mutation(path, old, new, expect_occurrences=1)],
-                        lambda: run_pytest(node, ROOT), label)
+                        lambda target=target: run_pytest(target, ROOT), label)
     for old, new, test, label in (
             ('pytest -m "not proof and not slow" -q',
              'pytest -m "not proof and not slow and not hook" -q',
@@ -94,7 +116,12 @@ def test_the_selection_and_marking_can_fail():
              "the push job leaves out more than the proofs"),
             ('pytest -m "not slow" -q', 'pytest -m "not proof and not slow" -q',
              "test_the_full_job_runs_the_proofs_on_ready_for_review",
-             "the full job leaves out the proofs")):
+             "the full job leaves out the proofs"),
+            ("    if: github.event_name == 'workflow_dispatch' || "
+             "!github.event.pull_request.draft\n",
+             "    if: github.event.action == 'ready_for_review'\n",
+             "test_the_full_job_runs_the_proofs_on_ready_for_review",
+             "a push after ready for review skips the proofs")):
         assert_can_fail([Mutation(WORKFLOW, old, new, expect_occurrences=1)],
                         lambda test=test: run_pytest(f"{THIS}::{test}", ROOT),
                         label)

@@ -110,6 +110,15 @@ def test_a_result_the_text_does_not_describe_is_refused():
     _refused(lambda r: r["analysis"]["svm_form"].update(kept="rbf"), "not linear")
     _refused(lambda r: [ln["lanes"]["proxy"].update(build="parallel, 8 workers")
                         for ln in r["rows"]], "built serially")
+    # PR 74 review: these refusals had no test.
+    _refused(lambda r: r.update(evidence_tag="HW"), "not SIM")
+    _refused(lambda r: r.update(metered_seconds=4), "not 0")
+    _refused(lambda r: r["analysis"]["adjacent_pairs"][0].update(
+        primary="welch"), "not Wilcoxon")
+    _refused(lambda r: r["analysis"]["adjacent_pairs"].pop(), "adjacent pairs, "
+             "not")
+    _refused(lambda r: r["analysis"]["adjacent_pairs"].reverse(),
+             "not the result's order")
     small = _result(4)
     with pytest.raises(f174d.ClaimError, match="fewer than 8"):
         f174d.render(small)
@@ -125,7 +134,19 @@ def test_the_refusals_can_fail():
             ("    if not res.get(\"complete\"):\n", "    if False:\n",
              "an incomplete run rendered"),
             ("    if builds != {\"serial\"}:\n", "    if False:\n",
-             "a parallel build described as serial")):
+             "a parallel build described as serial"),
+            ("    if res.get(\"evidence_tag\") != \"SIM\":\n", "    if False:\n",
+             "a hardware result rendered as SIM"),
+            ("    if res.get(\"metered_seconds\") != 0:\n", "    if False:\n",
+             "a metered run rendered as zero seconds"),
+            ("    if A[\"n_seeds\"] < 8 or any(p[\"primary\"] != \"wilcoxon\" "
+             "for p in pairs):\n", "    if A[\"n_seeds\"] < 8:\n",
+             "a non-Wilcoxon primary test rendered"),
+            ("    if len(pairs) != N_PAIRS_TESTED:\n", "    if False:\n",
+             "a missing pair rendered under the full divisor"),
+            ("    if [(p[\"a\"], p[\"b\"]) for p in pairs] != list(zip(order, "
+             "order[1:])):\n", "    if False:\n",
+             "pairs out of the result's order rendered")):
         assert_can_fail([Mutation(src, old, new, expect_occurrences=1)],
                         lambda: run_pytest(node, ROOT), label)
 

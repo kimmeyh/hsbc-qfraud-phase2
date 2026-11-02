@@ -78,7 +78,12 @@ def plugin(arm: str, name: str, seed: int, Xtr, ytr, Xte, yte, eta_te) -> dict:
 
 
 def labels(d: dict, eta: np.ndarray) -> dict:
-    """F108's three arms, drawn as F108 draws them (noise stream seed + 7)."""
+    """F108's three arms at F108's noise rates, from F108's noise stream
+    (seed + 7). The flip arm's labels are a new draw, not F108's: F108's
+    `seed_run` takes a Cover-Hart subsample from the same stream between
+    the two noise arms, and this does not (PR 74 review). The `none` arm,
+    which decides the reading, has no noise, and the Bayes errors are
+    exact, so the reading does not depend on it."""
     X = np.column_stack([d["amount"], d["mu"], d["time"]])
     rng = np.random.default_rng(d["seed"] + 7)
     out = {}

@@ -18,8 +18,11 @@ On 43/mid, 44/free and 44/mid nothing beat greedy.
   any instance is under 2e-05, less than a five-thousandth of the gap between greedy and
   the floor.
 - **Which methods did it.** Simulated annealing from greedy on both
-  `free` instances (m 10, 60 learners); the swap search on 42/mid (m 25,
-  136 learners).
+  `free` instances (m 10, 60 learners); on 42/mid (m 25, 136 learners)
+  the swap search and simulated annealing from greedy (SA seed 42) reached
+  the same objective, -0.8215201929. The result's `best_method` names
+  the first of tied methods, the swap search (corrected after the PR 74
+  review).
 - **SCIP did not beat greedy anywhere.** It stopped at its 1,200 s cap on
   all six, with a selection above greedy's (for example -0.701759 on
   42/free).

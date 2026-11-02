@@ -126,6 +126,29 @@ def test_f174_resumes_at_its_first_unrecorded_seed(monkeypatch, tmp_path):
     assert ran == seeds[2:]
 
 
+def test_f176_resumes_at_its_first_unrecorded_instance(monkeypatch, tmp_path):
+    # PR 74 review: F176's loop had no resume test.
+    import f160_room_ieee as f160
+    import f176_below_greedy as m
+    keys = [(42, "a"), (42, "b"), (43, "a")]
+    _resume(monkeypatch, m, tmp_path, {"check": {"can_fire": True}, "rows": [
+        {"seed": s, "instance": c} for s, c in keys[:2]]})
+    monkeypatch.setattr(m, "f160_record",
+                        lambda: {"lam_mult": 1.0, "rows": dict.fromkeys(keys)})
+    monkeypatch.setattr(f160, "ieee_fold", lambda: None)
+    monkeypatch.setattr(f160, "ieee_instances", lambda fold: (
+        {k: (f"{k[0]}/{k[1]}", None, 1) for k in keys}, {}))
+    ran = []
+
+    def problem(H, y, lam):
+        ran.append(H)
+        raise _Done
+    monkeypatch.setattr(m.ec, "problem", problem)
+    with pytest.raises(_Done):
+        m.run()
+    assert ran == ["43/a"]
+
+
 LOOPS = {
     "f156_hp_bound.py": ("                continue           # resume: never redo a seed\n",
                          "f156"),
@@ -139,6 +162,8 @@ LOOPS = {
                             "f169"),
     "f174_ieee_algorithms.py": ("            continue           # resume: never refit a seed\n",
                                 "f174"),
+    "f176_below_greedy.py": ("            continue           # resume: never resolve "
+                             "an instance\n", "f176"),
 }
 
 

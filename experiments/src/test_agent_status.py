@@ -45,6 +45,11 @@ def _tree(tmp_path: Path) -> Path:
                       "legacy.json": {"rows": []}}.items():
         (res / name).write_text(json.dumps(doc), encoding="utf-8")
     (res / "running.json.run_id").write_text(RID + "\n", encoding="utf-8")
+    # A sidecar holding another run's id, a run with a sidecar and no
+    # result yet, and an unreadable result (PR 74 review).
+    (res / "orphan.json.run_id").write_text("1" * 32 + "\n", encoding="utf-8")
+    (res / "early.json.run_id").write_text(RID + "\n", encoding="utf-8")
+    (res / "broken.json").write_text("{trunc", encoding="utf-8")
     (res / "device_samples" / "intents" / f"{SHA}_f999_u1.json").write_text(
         "{}", encoding="utf-8")
     (res / "device_samples" / "b4_backfill.json").write_text(
@@ -67,6 +72,25 @@ def test_each_state_is_reported(tmp_path):
     assert "runs: 1 complete" in text
     assert f"device {SHA}_f999_u1.json: sent, NO response saved" in text
     assert "1 response file(s) with no problem hash" in text
+    assert "run early.json: started, nothing saved" in text
+    assert "run broken.json: UNREADABLE result file" in text
+    assert ags.main(["--root", str(tmp_path)]) == 1
+
+
+def test_a_clean_tree_exits_zero(tmp_path):
+    root = _tree(tmp_path)
+    res = root / "experiments" / "phase2" / "results"
+    for name in ("running.json", "orphan.json", "broken.json",
+                 "running.json.run_id", "orphan.json.run_id",
+                 "early.json.run_id"):
+        (res / name).unlink()
+    for intent in (res / "device_samples" / "intents").glob("*.json"):
+        intent.unlink()
+    for name in ("bare", "half"):
+        prog = root / ".claude" / "agent_progress" / name / "progress.md"
+        prog.write_text("started t\nDONE\n", encoding="utf-8")
+    (root / ".claude" / "agent_progress" / "fresh").rmdir()
+    assert ags.main(["--root", str(root)]) == 0
 
 
 def test_a_saved_response_clears_its_intent(tmp_path):
@@ -108,3 +132,16 @@ def test_the_states_can_fail():
     assert_can_fail([Mutation(SCRIPT, "        if sha not in hashed:\n",
                               "        if False:\n", expect_occurrences=1)],
                     run, "a sent job with no response not reported")
+    assert_can_fail([Mutation(SCRIPT, "        if doc is None:\n",
+                              "        if False:\n", expect_occurrences=1)],
+                    run, "an unreadable result skipped")
+    assert_can_fail([Mutation(SCRIPT,
+                              "        if not side.with_name(side.name"
+                              "[:-len(\".run_id\")]).exists():\n",
+                              "        if False:\n", expect_occurrences=1)],
+                    run, "a run with nothing saved left out")
+    assert_can_fail([Mutation(SCRIPT,
+                              "    return 1 if any(p in line for line in "
+                              "lines for p in PROBLEMS) else 0\n",
+                              "    return 0\n", expect_occurrences=1)],
+                    run, "a report with problems exiting 0")

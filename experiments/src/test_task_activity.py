@@ -110,6 +110,33 @@ def test_no_activity_log_falls_back_to_elapsed_and_says_so(tmp_path, capsys):
     assert "no activity log" in capsys.readouterr().out
 
 
+def test_a_log_with_nothing_in_the_task_falls_back_and_says_so(tmp_path,
+                                                               capsys):
+    # PR 74 review: a log that exists but holds nothing inside the task (the
+    # hook unregistered or failing) made a 3-hour task an actual of 1 minute.
+    p = _status(tmp_path)
+    _run(p, ["--start-task", "C"], 0)
+    _log(p, [-24 * 60])
+    _run(p, ["--finish-task", "C"], 180)
+    cur = _cur(p)
+    assert cur["task_actuals"]["C"] == 180
+    assert "no activity logged during the task" in capsys.readouterr().out
+    assert "no activity logged" in cur["task_actual_method"]["C"]
+
+
+def test_a_mostly_idle_task_and_unreadable_lines_are_flagged(tmp_path):
+    p = _status(tmp_path)
+    _run(p, ["--start-task", "C"], 0)
+    (p.parent / "activity.log").write_text(
+        "not a time\n" + "".join((T0 + timedelta(minutes=m)).isoformat() + "\n"
+                                 for m in (0, 10, 170, 180)),
+        encoding="utf-8")
+    _run(p, ["--finish-task", "C"], 180)
+    how = _cur(p)["task_actual_method"]["C"]
+    assert "over half the elapsed time had no tool call" in how
+    assert "1 unreadable line(s)" in how
+
+
 def test_the_hook_logs_only_while_a_timer_runs(tmp_path):
     log = tmp_path / ".claude" / "activity.log"
     _status(tmp_path, task_started={"A": "t"}, task_actuals={"A": 5})
@@ -129,6 +156,9 @@ def test_the_hook_never_blocks(tmp_path):
                        capture_output=True, text=True)
     assert r.returncode == 0
     assert not (tmp_path / ".claude" / "activity.log").exists()
+    # The error is kept, so --finish-task can say the log may be short.
+    assert "FileNotFoundError" in (
+        tmp_path / ".claude" / "activity.err").read_text(encoding="utf-8")
 
 
 def test_the_gap_rule_can_fail():
@@ -157,3 +187,23 @@ def test_the_gap_rule_can_fail():
                               "    if False:\n", expect_occurrences=1)],
                     test("test_the_hook_logs_only_while_a_timer_runs"),
                     "the hook logging with no timer running")
+    assert_can_fail([Mutation(SCRIPT,
+                              "    elif not any(start < p < now for p in points):\n",
+                              "    elif False:\n", expect_occurrences=1)],
+                    test("test_a_log_with_nothing_in_the_task_falls_back_"
+                         "and_says_so"),
+                    "a stale log making a task one idle gap")
+    assert_can_fail([Mutation(SCRIPT,
+                              "        if idle - paused_s > elapsed / 2:\n",
+                              "        if False:\n", expect_occurrences=1)],
+                    test("test_a_mostly_idle_task_and_unreadable_lines_are_"
+                         "flagged"),
+                    "a mostly idle task left unflagged")
+    assert_can_fail([Mutation(HOOK,
+                              "            with open(root / \".claude\" / "
+                              "\"activity.err\", \"a\",\n",
+                              "            with open(root / \".claude\" / "
+                              "\"activity.nul\", \"a\",\n",
+                              expect_occurrences=1)],
+                    test("test_the_hook_never_blocks"),
+                    "a hook error left unrecorded")

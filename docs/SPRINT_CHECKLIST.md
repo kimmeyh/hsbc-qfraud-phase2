@@ -52,7 +52,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
 - [ ] CI checked on the final HEAD (`scripts/check_ci_status.py`, no waiting). If it is still running or RED, arm the watcher and hand the result to an agent; the close-out hook blocks the completion claim until it is green
 - [ ] `gh pr ready` (ONLY here); final gate; team lead notified for approval
-- [ ] After `gh pr ready`: `scripts/check_ci_status.py --wait`. Ready for review starts CI's full job, the only CI run of the red proofs (Sprint 30 Task L); the completion claim waits for it to be green
+- [ ] After `gh pr ready`: `scripts/check_ci_status.py --wait --require-job full`. Ready for review starts CI's full job, the only CI run of the red proofs (Sprint 30 Task L); without `--require-job` the earlier green push run reads as a pass before the full job is listed (PR 74 review). The completion claim waits for it to be green
 
 ## Phase 8: Delivery Cycle (after develop merge)
 - [ ] Team lead merges develop->main (parallel; do not block on it)

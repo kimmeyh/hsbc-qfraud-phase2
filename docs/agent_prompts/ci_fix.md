@@ -15,8 +15,15 @@ you work; do not edit a file named in the sprint's current task
 - A test that cannot fail locally (for example one that depends on the
   branch name or the OS) is fixed so it can, and proven red with
   `injection.assert_can_fail`.
-- Commit each fix with `fix: ... (PR <pr> review)` after
-  `scripts/update_sprint_status.py --review-task <task>` names your task.
+- Commit each fix with `fix: ... (PR <pr> review)`. The commit-msg hook
+  admits it only while the sprint's review task, <task>, is timed. The
+  main session sets `--review-task <task>` before it launches you; do not
+  run `--review-task` yourself, because it is one field for the whole
+  sprint and yours would replace the main session's. Before your first
+  commit, run `scripts/update_sprint_status.py --start-task <task>
+  --parallel` if <task> has no start, or `--resume-task <task>` if it is
+  paused (PR 74 review: the earlier wording named no timer, so an agent
+  that followed it exactly was refused).
 - Do not review or edit `experiments/results/*.json`,
   `experiments/results/gate_report.md` or
   `experiments/phase2/results/**/*.json`.

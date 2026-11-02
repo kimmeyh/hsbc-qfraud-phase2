@@ -81,8 +81,19 @@ def agents(root: Path) -> list[str]:
 def runs(root: Path) -> list[str]:
     results = root / "experiments" / "phase2" / "results"
     out, complete = [], 0
+    # A run killed before its first save has a sidecar and no result
+    # (PR 74 review: it was invisible here).
+    for side in sorted(results.glob("*.json.run_id")):
+        if not side.with_name(side.name[:-len(".run_id")]).exists():
+            out.append(f"run {side.name[:-len('.run_id')]}: started, "
+                       "nothing saved (a sidecar and no result); rerun its "
+                       "module to resume")
     for path in sorted(results.glob("*.json")):
         doc = _json(path)
+        if doc is None:
+            # Unreadable is not "not a run" (PR 74 review).
+            out.append(f"run {path.name}: UNREADABLE result file")
+            continue
         if not isinstance(doc, dict) or "complete" not in doc:
             continue
         if doc.get("complete") is True:
@@ -121,6 +132,11 @@ def device(root: Path) -> list[str]:
                   "(not covered by the resend check)"]
 
 
+# The report's phrases that need action; main() exits 1 on any of them.
+PROBLEMS = ("NOT resumable", "NO response saved", "UNREADABLE",
+            "nothing saved", "in progress")
+
+
 def report(root: Path) -> list[str]:
     return sprint(root) + agents(root) + runs(root) + device(root)
 
@@ -130,9 +146,12 @@ def main(argv: list[str] | None = None) -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root", default=str(ROOT))
     args = ap.parse_args(argv)
-    for line in report(Path(args.root)):
+    lines = report(Path(args.root))
+    for line in lines:
         print(line)
-    return 0
+    # Nonzero when something needs action, so a caller reading only the
+    # exit code does not take a stopped run as clean (PR 74 review).
+    return 1 if any(p in line for line in lines for p in PROBLEMS) else 0
 
 
 if __name__ == "__main__":

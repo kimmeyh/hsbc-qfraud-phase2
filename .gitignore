@@ -134,6 +134,9 @@ docs/thesis-candidates.md
 # F175 (Sprint 30): tool-call timestamps written while a task timer runs,
 # read by update_sprint_status.py --finish-task. Local working state.
 .claude/activity.log
+# The activity hook's own errors, kept so --finish-task can say the log may
+# be short (PR 74 review).
+.claude/activity.err
 # F168 (Sprint 30): each agent's progress file, read on a restart.
 .claude/agent_progress/
 

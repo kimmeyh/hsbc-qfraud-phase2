@@ -49,9 +49,18 @@ def log(root: Path, now: datetime) -> bool:
 def main() -> int:
     try:
         sys.stdin.read()
-        log(repo_root(), datetime.now().astimezone())
-    except Exception:  # noqa: BLE001 -- a logging hook never blocks a tool
-        pass
+        root = repo_root()
+        log(root, datetime.now().astimezone())
+    except Exception as exc:  # noqa: BLE001 -- a logging hook never blocks a tool
+        # Kept, so `--finish-task` can say the log may be incomplete
+        # (PR 74 review: a swallowed error was invisible).
+        try:
+            with open(root / ".claude" / "activity.err", "a",
+                      encoding="utf-8") as f:
+                f.write(f"{datetime.now().astimezone().isoformat()} "
+                        f"{type(exc).__name__}: {exc}\n")
+        except Exception:  # noqa: BLE001
+            pass
     return 0
 
 
