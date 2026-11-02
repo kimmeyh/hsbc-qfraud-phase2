@@ -23,7 +23,7 @@ on:
 #
 #   test  every push. Every test except the red proofs (`-m "not proof and
 #         not slow"`). A red proof breaks a guarded file and reruns the
-#         guard's test in a nested pytest, about 150 tests and most of the
+#         guard's test in a nested pytest, which was most of the
 #         suite's time. It proves the guard CAN fail, which changes only
 #         when the guard or its test changes, so it does not need every push.
 #   full  when the PR is marked ready for review, and on demand
@@ -38,9 +38,10 @@ jobs:
   test:
     if: github.event.action != 'ready_for_review'
     runs-on: ubuntu-latest
-    # 10 until Sprint 30, then 20, then 13 (D9). To be set from the push
-    # job's measured time now that the proofs have left it.
-    timeout-minutes: 13
+    # 10 until Sprint 30, then 20, then 13 (D9). Without the proofs the
+    # job took 3:08 on 0fc2004 (tests 2:04, install 0:46); 6 stops a hung
+    # run with margin for a slow runner.
+    timeout-minutes: 6
 
     steps:
       - uses: actions/checkout@v4

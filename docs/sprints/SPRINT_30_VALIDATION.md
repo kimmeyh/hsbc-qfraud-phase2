@@ -262,3 +262,9 @@ Each line is the plan's task line, then where its evidence is.
   the test fold's own 0.5% budget as its range over the seeds, each
   algorithm page gives them per seed, and a note names the lanes whose
   tied scores flag more rows than the budget. Task K, #85.
+- V10 again, Decision D9: the 13-minute limit canceled 2 of 3 runs. The
+  team lead's answer: remove what does not need to be in CI, target under
+  5 minutes. Task L, #86: the per-push job leaves out the red proofs,
+  which a new full job runs when the PR is marked ready for review (and
+  the local Phase 5 suite every sprint). The push job took 3:08 on
+  0fc2004, against 12:48 to 13:16 before; its limit is now 6 minutes.

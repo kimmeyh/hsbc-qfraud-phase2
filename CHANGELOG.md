@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-02
+
+- **ci**: The push job's limit is 6 minutes, set from its measured time without the red proofs: 3:08 on 0fc2004 (tests 2:04, install 0:46), against 12:48 to 13:16 before. (Issue #86)
+
 ### 2026-11-01
 
 - **ci**: CI has two jobs (team lead, Sprint 30 D9: "find what does not need to be in there and remove it ... Target is < 5 minutes"). The per-push job leaves out the red proofs (`-m "not proof and not slow"`); the new full job runs every test, proofs included, when the PR is marked ready for review and on demand. The root `conftest.py` marks a proof from its source, following module helpers. `test_ci_workflow.py` pins both selections, each proven red. The Phase 5 and Phase 7 checklist items say which suite runs when. (Issue #86)
