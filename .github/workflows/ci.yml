@@ -15,16 +15,31 @@ name: CI
 on:
   pull_request:
     branches: [develop]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
 
+# TWO JOBS (Sprint 30 Task L, team lead D9, 2026-11-01: "find what does not
+# need to be in there and remove it ... Target is < 5 minutes").
+#
+#   test  every push. Every test except the red proofs (`-m "not proof and
+#         not slow"`). A red proof breaks a guarded file and reruns the
+#         guard's test in a nested pytest, about 150 tests and most of the
+#         suite's time. It proves the guard CAN fail, which changes only
+#         when the guard or its test changes, so it does not need every push.
+#   full  when the PR is marked ready for review, and on demand
+#         (workflow_dispatch). Every test, proofs included: the replacement
+#         for the proofs the push job leaves out. The local Phase 5 full
+#         suite also runs them every sprint.
+#
+# `conftest.py` marks a proof from its source, so a new proof leaves the
+# push job and stays in the full job with nothing to remember.
+# `test_ci_workflow.py` fails if either job's selection changes.
 jobs:
   test:
+    if: github.event.action != 'ready_for_review'
     runs-on: ubuntu-latest
-    # 10 until Sprint 30. The tests step took 8:15 on 88eb3ba, and the
-    # sprint's added injection proofs took the job past 10 minutes, so
-    # every run after 73a976e was canceled with no verdict. A canceled
-    # run reads as neither red nor green. 13 (team lead, Sprint 30 Manual
-    # Validation, 2026-11-01) is the tests step's 11 minutes with a small
-    # margin; F177 sets the suite's time target.
+    # 10 until Sprint 30, then 20, then 13 (D9). To be set from the push
+    # job's measured time now that the proofs have left it.
     timeout-minutes: 13
 
     steps:
@@ -37,7 +52,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r experiments/requirements.txt
           pip install ruff
 
@@ -48,11 +62,11 @@ jobs:
         continue-on-error: true
         run: ruff check experiments/src scripts || true
 
-      # `-m "not slow"` excludes the 89-second live-pipeline test, which is the
-      # one test that deliberately runs a real fit. The full suite still runs
-      # locally and pre-merge.
+      # `slow` is the live-pipeline test, which needs the raw IEEE-CIS data
+      # CI does not have. `--durations` prints the slowest tests, so the
+      # next cut is chosen from CI's own times.
       - name: Tests
-        run: pytest -m "not slow" -q
+        run: pytest -m "not proof and not slow" -q --durations=25
 
       # F78, Sprint 16. Until this step existed, every guard in this
       # repository was WINDOWS-ONLY protection: the hooks were PowerShell and
@@ -101,6 +115,38 @@ jobs:
             echo "::error::writes to the repository is a defect even when its"
             echo "::error::assertions pass -- Sprint 8 lost an evidence file"
             echo "::error::exactly this way. Files changed:"
+            git status --porcelain
+            git diff --stat
+            exit 1
+          fi
+          echo "Working tree clean after the test run."
+
+  full:
+    if: github.event.action == 'ready_for_review' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # The whole suite took about 12 minutes in one job before Task L.
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r experiments/requirements.txt
+
+      - name: Tests, red proofs included
+        run: pytest -m "not slow" -q --durations=25
+
+      # A red proof breaks a file and restores it; this catches one that
+      # did not restore.
+      - name: Test run must leave the tree clean
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::The test run modified tracked files:"
             git status --porcelain
             git diff --stat
             exit 1

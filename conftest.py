@@ -58,6 +58,7 @@ out of scope by design.
 from __future__ import annotations
 
 import hashlib
+import inspect
 import os
 import subprocess
 import sys
@@ -199,6 +200,58 @@ def pytest_sessionfinish(session, exitstatus):
         _fail(session)
         sys.stderr.write("\nTHE SUITE CHANGED COMMITTED EVIDENCE (IMP-3): "
                          + ", ".join(_CHANGED[:10]) + "\n")
+
+
+# A red proof breaks a guarded file and runs the guard's test in a nested
+# pytest, so each costs a process start and most of the suite's time.
+# Marked here from the test's own source, in one place, so a new proof is
+# marked with nothing to remember. The per-push CI job runs
+# `-m "not proof and not slow"`; the full CI job (ready for review) and the
+# local Phase 5 full suite run every proof (Sprint 30 Task L, D9).
+PROOF_CALLS = ("assert_can_fail(", "run_pytest(")
+_PROOF_CALLS_BY_MODULE: dict[str, tuple[str, ...]] = {}
+
+
+def _source(obj) -> str:
+    try:
+        return inspect.getsource(obj)
+    except (OSError, TypeError):
+        return ""
+
+
+def _proof_calls(module) -> tuple[str, ...]:
+    """PROOF_CALLS plus a call to each of the module's own helpers that
+    makes one, such as `_proof(...)`, followed through helpers of helpers."""
+    name = getattr(module, "__name__", "")
+    if name not in _PROOF_CALLS_BY_MODULE:
+        helpers = {n: _source(f) for n, f in inspect.getmembers(
+                       module, inspect.isfunction)
+                   if f.__module__ == name and not n.startswith("test")}
+        calls = set(PROOF_CALLS)
+        grew = True
+        while grew:
+            grew = False
+            for n, src in helpers.items():
+                if f"{n}(" not in calls and any(c in src for c in calls):
+                    calls.add(f"{n}(")
+                    grew = True
+        _PROOF_CALLS_BY_MODULE[name] = tuple(sorted(calls))
+    return _PROOF_CALLS_BY_MODULE[name]
+
+
+def is_proof(item) -> bool:
+    fn = getattr(item, "function", None)
+    if fn is None:
+        return False
+    src = _source(fn)
+    return any(call in src
+               for call in _proof_calls(inspect.getmodule(fn)))
+
+
+def pytest_collection_modifyitems(config, items):
+    for item in items:
+        if is_proof(item):
+            item.add_marker(pytest.mark.proof)
 
 
 def pytest_terminal_summary(terminalreporter):

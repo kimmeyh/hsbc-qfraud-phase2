@@ -533,3 +533,10 @@ sometimes.
    acceptance sets it from the new suite time.
 2. Set the CI job's limit to 14 minutes until F177 lands.
 3. Keep 13 minutes; rerun a canceled run by hand until F177 lands.
+
+**Answer (team lead, 2026-11-01): none of the options.** The team lead's
+words: "There is WAY TOO MUCH going on in the CI if it is taking > 13
+minutes. The D9 answer is find what does not need to be in there and
+remove it, then optimize everything in there so that it runs as fast as
+possible. Target is < 5 minutes." This brings F177's CI part into Sprint
+30 as Task L (#86).

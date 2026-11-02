@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-01
 
+- **ci**: CI has two jobs (team lead, Sprint 30 D9: "find what does not need to be in there and remove it ... Target is < 5 minutes"). The per-push job leaves out the red proofs (`-m "not proof and not slow"`); the new full job runs every test, proofs included, when the PR is marked ready for review and on demand. The root `conftest.py` marks a proof from its source, following module helpers. `test_ci_workflow.py` pins both selections, each proven red. The Phase 5 and Phase 7 checklist items say which suite runs when. (Issue #86)
+- **docs**: F178 carded, ongoing: three learning documents (lay reader, ML expert, QC expert), versioned and updated every sprint before Manual Validation (team lead, 2026-11-01).
 - **fix**: The F166 and F174 comparison pages show TP, FP, TN and FN at the test fold's own 0.5% budget, each as its range over the seeds, and each algorithm page shows them per seed (team lead, Sprint 30 Manual Validation; Decision D8). The counts were recorded in every outcome block but the comparison's recall had none on any page. A note names the lanes whose tied scores flag more rows than the budget. Each statement has a test, proven red. (Issue #85)
 - **ci**: The CI job's limit is 13 minutes, not 20 (team lead, Sprint 30 Manual Validation). (Issue #85)
 - **docs**: F177 carded for Sprint 31 (team lead, 2026-11-01): the full suite in about 5 minutes, with no guard lost. A timed run of the Sprint 30 final HEAD shows red proofs are 72% of its time, each starting a nested pytest; the card sets five levers, each with what it gives up, and a reproducible timing report as acceptance.

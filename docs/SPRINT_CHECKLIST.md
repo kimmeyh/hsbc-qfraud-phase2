@@ -31,7 +31,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] HARDWARE: any metered run stops for approval (Criterion H), always
 
 ## Phase 5: Review & Validation
-- [ ] Full suite green; no unamended drift from prereg-freeze in analysis code
+- [ ] Full suite green, every red proof included (`pytest experiments/src -q`; CI's push job leaves the proofs out, Sprint 30 Task L); no unamended drift from prereg-freeze in analysis code
 - [ ] Plan acceptance criteria walked line by line WITH EVIDENCE
 - [ ] Check: every compound decision rule added this sprint got its per-term tests, each proven red, in the commit that added it (Phase 4 item; a rule found here without them is a Phase 4 miss, recorded for the retrospective)
 - [ ] OUTWARD documents pass `scripts/outward_readability.py` BEFORE handover (IMP-5: the QCi package needed a revision round purely to strip tokens a vendor reader cannot resolve, after the team lead had already reviewed it)
@@ -52,6 +52,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
 - [ ] CI checked on the final HEAD (`scripts/check_ci_status.py`, no waiting). If it is still running or RED, arm the watcher and hand the result to an agent; the close-out hook blocks the completion claim until it is green
 - [ ] `gh pr ready` (ONLY here); final gate; team lead notified for approval
+- [ ] After `gh pr ready`: `scripts/check_ci_status.py --wait`. Ready for review starts CI's full job, the only CI run of the red proofs (Sprint 30 Task L); the completion claim waits for it to be green
 
 ## Phase 8: Delivery Cycle (after develop merge)
 - [ ] Team lead merges develop->main (parallel; do not block on it)
