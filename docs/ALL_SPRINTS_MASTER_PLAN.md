@@ -677,7 +677,8 @@ value. Removed from candidates.)
 - Depends on: per-block approval (Criterion H); the run condition above
 - **Pass 1 (2026-10-25)**: F162 (Sprint 28) found the proxy not reliably above HGB or XGBoost inside the pocket on any cell, and its card said a null justifies no device block (`docs/phase2/F162_IN_POCKET.md`). Run condition (1) is judged against that result
 
-**F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 140**
+**F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 16**
+- **Pass 2 (2026-11-04)**: priority 140 to 16. 140 was its blocked priority; unblocked, it is the payoff of the F169-F171 ceiling work, with 90m left
 - **Pass 1 (2026-11-04): unblocked.** F169 (Sprint 30 Task F) is the first method to pass F108's rule on the main arm: LightGBM with 4,095 bins on 5 of 5 seeds, HGB without early stopping on 4 of 5. LightGBM's reference-arm passes are degenerate, so the method rests on the main and flip arms (`docs/phase2/F169_PLUGIN_BINS.md`). The 60m "validate one method" step is spent; the 90m real-data step is what remains. F170 found ULB's frauds missed by every model have mostly legitimate neighbors (consistent with an information limit); F171 did not show a smaller missed group on IEEE-CIS (4 families against ULB's 12). Both are read beside this card's result
 - Phase: Phase 2 preparation (ceiling methodology)
 - Platform: ULB, IEEE-CIS
@@ -697,6 +698,7 @@ value. Removed from candidates.)
 
 **F177. The full suite in about 5 minutes, with no guard lost (~240m [no-history], zero metered) Priority 10**
 - Phase: tooling (added 2026-11-01 at Sprint 30 Phase 5, team lead: "full suite testing needs to be effective yet as efficient as reasonably possible. 40 minutes is way too long as it should be taking about 5 minutes"). For Sprint 31
+- Platform: N/A (tests, CI and process docs)
 - Measured 2026-11-01 (one local run on the Sprint 30 final HEAD, `--durations=0 --junitxml`, 32 cores, run serially): 48.9 minutes wall, 48.7 summed per test
   - **Red proofs are 72% of the time (34.9 min).** Tests named as proofs (`*_can_fail` and similar) run `injection.assert_can_fail`, which starts a new pytest process per mutation. A nested start costs about 3 s before the target runs (pytest start-up, then `conftest.py`'s evidence check: list, dirty check and SHA-256 of the 277 tracked evidence files, at start and again at finish, about 0.7 s). Several targets are slow themselves: `test_outcome_record_required`'s targets parse every result file, so each of its proofs takes 16-70 s. Proofs not named as proofs (`_proof(...)` in `test_outcome_record_required`) add about 2 more minutes
   - **The rest is 13.8 min.** Tests under 2 s each take 2.4 min in total. 13 tests of 10 s or more take 7.9 min, led by real-pipeline runs: `test_ieee_runner_correctness` shuffled-label control (95 s), `test_run_hardware_b5` dry run (78 s), two `test_render_all` renders (45 s each), `test_integer_probe` (29 s and 19 s), `test_f160_room_ieee` (23 s), F159's pool equality (15 s)
@@ -715,6 +717,7 @@ value. Removed from candidates.)
 
 **F178. Three learning documents, versioned and updated every sprint (~180m first versions [no-history], then ~30-60m per sprint, zero metered) Priority 12, ONGOING**
 - Phase: knowledge record (added 2026-11-01 by the team lead, Sprint 30 Manual Validation)
+- Platform: docs
 - Goal: a reader can come to this repository and learn what we have learned; we record our knowledge over time; it is a faster resource when the work continues. Aim: any advantage, quantum or classical, for credit card fraud detection (more true positives, fewer false negatives)
 - **Doc 1**, "ML QML and QC Understandings about Quantum Advantage - Laymen terms.md": 10th-grade level, for readers familiar with math, science, physics, computer science, ML and QC but expert in none. Appendices: definitions, acronyms, Quantum Computing, Machine Learning, Quantum Machine Learning. Each acronym is spelled out at its first use, is in the acronym appendix, and links to it at every use. Each technical term links to its appendix entry. Examples use credit card fraud ML first, other ML or QC where needed
 - **Doc 2**, "ML QML and QC Understandings about Quantum Advantage - ML Expert.md": for readers with undergraduate-or-above or professional ML and data-science experience. Links to Doc 1 for acronyms, terms and phrases; its own appendices only for what Doc 1 does not have
@@ -729,6 +732,7 @@ value. Removed from candidates.)
 
 **F180. Deep analysis of all testing: effective, as efficient and as quick as reasonably possible (~180m [no-history], zero metered) Priority 9**
 - Phase: tooling and process (added 2026-11-04 by the team lead after Sprint 30's retrospective improvements: "backlog deep analysis of all testing for next sprint - effective while as efficient as reasonably possible and as quickly as reasonably possible"). For Sprint 31, before F177's levers are chosen
+- Platform: N/A (tests, hooks, CI and process docs)
 - Why, measured in Sprint 30 (team lead, 2026-11-04: from an improvement's approval, the time should be its development time plus about 15 minutes; it was about 87 minutes from the D10 answer to `gh pr ready`):
   - Local runs dominate: Task N's eight non-proof test files took 13:18 and its five proofs 17:41; Task M's four proofs took 41 minutes and four more 1:43; CI's push job runs the whole non-proof suite in 3:08 (0fc2004). The local slowness is not explained
   - Steps ran one after another: write, local tests, local proofs, commit, review, fix, CI. The review (14 minutes, uncapped brief), the tests and CI could overlap
@@ -751,8 +755,10 @@ value. Removed from candidates.)
 - Acceptance: the inventory covers every test file (a test fails a new test file missing from it); each timing is measured, not estimated; the Sprint 30 timeline is reconstructed from `sprint_status.json`, the CI runs and the commit times; target stated: an approved small change verified and committed in its development time plus about 15 minutes
 - Depends on: nothing. Informs: F177, every sprint's Phase 4 to 7
 
-**F179. The status file's update cannot lose another's change; the review task follows finish and pause (~45m [no-history], zero metered) Priority 40**
+**F179. The status file's update cannot lose another's change; the review task follows finish and pause (~45m [no-history], zero metered) Priority 14**
 - Phase: tooling (added 2026-11-04, Sprint 30 Task O, from the one short review of the retrospective improvement commit d792731)
+- Platform: N/A (scripts and tests)
+- **Pass 2 (2026-11-04)**: priority 40 to 14, to sprint with F180 and F177 (process tooling the team lead's cycle-time target depends on)
 - `scripts/update_sprint_status.py` refuses a write when the status file changed after it was read, through a per-process temporary file and `os.replace`. That narrows the window and does not close it: two updates can both pass the check before either replaces, and the second wins silently. On Windows, `os.replace` raises `PermissionError` while a reader holds the file open, so the user sees a traceback, not the refusal
 - `--review-task` is evaluated before `--pause-task` and `--finish-task` in the same command, so `--finish-task J --review-task M` is refused although J finishes in that command. Fail-safe; it costs a second command
 - Acceptance: an exclusive lock (an `O_CREAT | O_EXCL` lock file beside the status file, with a stale-lock message naming the file) around the whole read, change and write; a test with two processes in which neither change is lost, proven red; a `PermissionError` on replace reported as a refusal; `--review-task` applied after pause and finish, with a test of the one-command case
