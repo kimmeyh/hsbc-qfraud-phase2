@@ -540,3 +540,54 @@ minutes. The D9 answer is find what does not need to be in there and
 remove it, then optimize everything in there so that it runs as fast as
 possible. Target is < 5 minutes." This brings F177's CI part into Sprint
 30 as Task L (#86).
+
+## D10. Sprint 30 retrospective: how is each improvement disposed?
+
+Asked 2026-11-03, retrospective step 6. The proposals are in full in
+`SPRINT_30_RETROSPECTIVE.md`, "Improvements proposed".
+
+**What.** Five improvements from the combined feedback and the PR 74
+review findings:
+
+- IMP-1: the close-out hook requires CI's full job green, not only the
+  push job (`verify_closeout_complete.py` calls `ci.evaluate(sha,
+  require_job="full")`; one more `gh` call, 31s worst case to 34s inside
+  its 35s budget). Prevention. 30 minutes.
+- IMP-2: the Phase 4 and Phase 5 per-term items in `SPRINT_CHECKLIST.md`
+  name every refusal and every reported state as a term, not only
+  compound decision rules. Prevention. 10 minutes.
+- IMP-3: `--finish-task` flags an active actual under a fifth of the
+  task's estimate, so a low reading is checked when it is recorded.
+  Detection, because the cause of A-C's low readings is unverified.
+  20 minutes.
+- IMP-4: the Phase 5 full-suite item says the output goes to a file with
+  `-rf`, never to a tail, with a `docs/TROUBLESHOOTING.md` entry.
+  Prevention. 10 minutes.
+- IMP-5: the deferred review findings (provenance commit on resume, the
+  status-file lock and shared `review_task`, the two tests rated 3) go
+  to the backlog as F179, priority 40. Prevention. About 90 minutes.
+
+**Why it matters.** IMP-1 closes the one review finding that lets the
+sprint be called complete before the red proofs have run on CI. IMP-2
+and IMP-4 stop two recurring classes at the point they start. IMP-3
+makes a wrong actual visible when it is written, not at the
+retrospective. Applying IMP-1 to IMP-4 now costs about 70 minutes and
+one CI run; deferring them leaves each class open for Sprint 31.
+
+**Kind and cost.** As listed per improvement above. All four now-items
+touch 4 files: the close-out hook and its test, `update_sprint_status.py`
+and its test, `SPRINT_CHECKLIST.md` and `TROUBLESHOOTING.md`. Zero
+metered seconds.
+
+**Recommendation: 1.** IMP-1 to IMP-4 are small and each extends an
+existing prevention. IMP-5 is larger and changes no current result, so
+it waits for refinement.
+
+**Options.**
+
+1. As recommended: IMP-1, IMP-2, IMP-3 and IMP-4 now, timed as task N;
+   IMP-5 to the backlog as F179, priority 40.
+2. All five to the backlog: IMP-1 to IMP-4 as F179, IMP-5 as F180, both
+   priority 40; nothing applied this sprint.
+3. IMP-1 now, timed as task N; IMP-2, IMP-3, IMP-4 and IMP-5 to the
+   backlog as F179, priority 40.
