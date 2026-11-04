@@ -591,3 +591,9 @@ it waits for refinement.
    priority 40; nothing applied this sprint.
 3. IMP-1 now, timed as task N; IMP-2, IMP-3, IMP-4 and IMP-5 to the
    backlog as F179, priority 40.
+
+**Changed since asked (2026-11-03).** "Kind and cost" says the four
+now-items touch 4 files and then lists 6. The count is 6: the close-out
+hook and its test, `update_sprint_status.py` and its test,
+`SPRINT_CHECKLIST.md` and `docs/TROUBLESHOOTING.md`. The options are
+unchanged.
