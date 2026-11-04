@@ -11,13 +11,15 @@ On a branch named `*Sprint_<n>*`, a commit whose subject starts `feat` or
 PR's review as `PR <pr> review`; and some task timer must be running, a
 task in `task_started` with no `task_actuals` entry and not in
 `task_paused` (Sprint 29 IMP-4: Task C's timer was never started, and E
-and G were started only when their runs began). It does not check that
-the running timer is the commit's own task: the status file does not map
-issues to tasks, so a commit made while another task's timer runs passes.
-Task C's commit 5348add would have passed that way (D and H were being
-timed); F173 carries the stronger check. Other types (docs, chore, test,
-process),
-merges and reverts pass. A status file that is missing, unreadable or for
+and G were started only when their runs began). The running timer must
+be the commit's OWN task's (F173, Sprint 30): each named issue's task is
+read from `task_issues` (set by `update_sprint_status.py --add-issue N
+--task X`), and a "PR n review" commit's task from `review_task`
+(`--review-task X`). Any running timer used to pass, so Task C's commit
+5348add (#66) would have passed while only D's and H's timers ran. A
+named sprint issue with no task, or a review commit with no review task,
+blocks. Other types (docs, chore, test, process), merges and reverts
+pass. A status file that is missing, unreadable or for
 another branch blocks: "could not tell" is not a pass. No override flag.
 """
 from __future__ import annotations
@@ -71,11 +73,41 @@ def problem(message: str, branch: str, status) -> str | None:
                 f"'PR {pr} review'. A task added mid-sprint gets an issue "
                 "(gh issue create) and scripts/update_sprint_status.py "
                 "--add-issue N first")
-    if not timed(cur):
+    running = timed(cur)
+    if not running:
         return ("a feat or fix commit on a sprint branch needs a task "
                 "timer running: scripts/update_sprint_status.py "
                 "--start-task X (or --resume-task X) first")
+    owner = owners(cur)
+    unowned = sorted(n for n in named & issues if n not in owner)
+    if unowned:
+        return (f"issue(s) {unowned} belong to no task in task_issues; "
+                "record the owner with scripts/update_sprint_status.py "
+                "--add-issue N --task X")
+    own = {owner[n] for n in named & issues}
+    if review:
+        if not cur.get("review_task"):
+            return (f"a 'PR {pr} review' commit is timed against the review "
+                    "task, and none is set: scripts/update_sprint_status.py "
+                    "--review-task X")
+        # .get, not [], so the proof of the check above goes red through
+        # the refusal, not a KeyError (PR 74 review, Sprint 30 IMP-5).
+        own.add(cur.get("review_task"))
+    if not own & set(running):
+        return (f"this commit's task(s) {sorted(own)} are not being timed "
+                f"(timed: {running}); --start-task or --resume-task the "
+                "commit's own task first")
     return None
+
+
+def owners(cur: dict) -> dict[int, str]:
+    """Issue number -> the task that owns it, from `task_issues`."""
+    value = cur.get("task_issues")
+    out: dict[int, str] = {}
+    for task, numbers in (value.items() if isinstance(value, dict) else ()):
+        for n in numbers if isinstance(numbers, list) else ():
+            out[int(n)] = task
+    return out
 
 
 def timed(cur: dict) -> list[str]:

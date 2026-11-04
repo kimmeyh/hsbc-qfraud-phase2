@@ -34,6 +34,8 @@ import exp3_controls as ec  # noqa: E402  (Phase 2, F94; not edited)
 import f153_exp3_design as fd  # noqa: E402  (Phase 2, F153; not edited)
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f160_room_ieee.json"
+# F168 part 7: one build, not resumable (resumable=False).
+LONG_RUN = False
 SEEDS = (42, 43, 44)
 CONFIG_K = {"free": 13, "mid": 17}
 MI_ROWS = 50_000

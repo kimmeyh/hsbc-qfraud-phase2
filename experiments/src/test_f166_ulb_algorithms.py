@@ -115,6 +115,48 @@ def test_svm_margins_are_mapped_into_the_unit_interval():
     assert np.all((s >= 0) & (s <= 1)) and np.all(np.diff(s) > 0)
 
 
+def test_a_seed_42_time_of_zero_runs_the_most_seeds():
+    # F172: t42_min <= 0 takes the cap's division out, not the seed count.
+    assert fu.choose_seeds(0.0)["n_seeds"] == fu.MAX_SEEDS
+
+
+def test_a_rejected_negative_difference_reads_below():
+    assert fu.pair_test([-0.01] * 8, np.zeros(2000), 8)["reading"] == "below"
+
+
+def _analysis_rows(rbf_wins: list[bool]) -> list[dict]:
+    op = {k: 0.5 for k in ("precision", "recall", "specificity", "f1", "mcc",
+                           "balanced_accuracy")}
+    test = {"auprc": 0.5, "auprc_floor_normalized": 0.5, "auc_roc": 0.5,
+            "recall_at_budget_on_test": 0.5, "train_test_auprc_gap": 0.0,
+            "operating_points": [{"operating_point": "a", **op},
+                                 {"operating_point": "b", **op}]}
+    return [{"seed": 42 + i, "lanes": {a: {"test": test} for a in fu.ALGOS},
+             "svm_rbf_alternative": {"beats_linear_on_validation": w}}
+            for i, w in enumerate(rbf_wins)]
+
+
+def test_the_svm_form_needs_a_strict_majority():
+    assert fu.analyze(_analysis_rows([True, True, False, False]), {}
+                      )["svm_form"]["kept"] == "linear"
+    assert fu.analyze(_analysis_rows([True, True, True, False]), {}
+                      )["svm_form"]["kept"] == "rbf"
+
+
+def test_the_proxys_label_sets_must_be_the_splits(monkeypatch):
+    import pytest
+    y = np.array([0, 1, 0, 1])
+    d = {"ytr": y, "yva": y, "yte": y}
+    monkeypatch.setitem(fu.GRIDS, "proxy", [{"config": "free"}])
+    for part, name in (("ytr", "training"), ("yva", "validation"),
+                       ("yte", "test")):
+        f = {"ytr": y, "yva": y, "yte": y, "p_va": y / 2, "fit_s": 0.0,
+             part: y[::-1]}
+        monkeypatch.setattr(fu, "fit_proxy", lambda c, s, p, f=f: f)
+        with pytest.raises(ValueError, match=f"proxy's {name} rows"):
+            fu.lane("proxy", 42, d, {"use": False})
+
+
 def _fails(old, new, node, label):
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail([Mutation(PHASE2 / "f166_ulb_algorithms.py", old, new,
@@ -183,3 +225,36 @@ def test_the_parallel_gate_can_fail():
     _fails("    if not a.get(\"all_equal\"):\n", "    if False:\n",
            "test_the_parallel_build_needs_a_complete_equal_f159",
            "unequal pools accepted")
+
+
+def test_the_zero_time_branch_can_fail():
+    _fails("if t42_min > 0 else MAX_SEEDS\n", "if t42_min > 0 else MIN_SEEDS\n",
+           "test_a_seed_42_time_of_zero_runs_the_most_seeds",
+           "a zero seed-42 time runs the fewest seeds")
+
+
+def test_the_below_reading_can_fail():
+    _fails("            \"reading\": (\"above\" if rejects and v.mean() > 0 else\n",
+           "            \"reading\": (\"above\" if rejects else\n",
+           "test_a_rejected_negative_difference_reads_below",
+           "a negative difference read as above")
+
+
+def test_the_svm_majority_can_fail():
+    _fails("                         \"kept\": \"rbf\" if rbf_wins > n / 2 else \"linear\"}}\n",
+           "                         \"kept\": \"rbf\" if rbf_wins >= n / 2 else \"linear\"}}\n",
+           "test_the_svm_form_needs_a_strict_majority", "a tie keeps the RBF")
+
+
+def test_the_training_label_check_can_fail():
+    _fails("            for part, name in ((\"ytr\", \"training\"), (\"yva\", \"validation\"),\n",
+           "            for part, name in ((\"yva\", \"validation\"),\n",
+           "test_the_proxys_label_sets_must_be_the_splits",
+           "the proxy's training labels unchecked")
+
+
+def test_the_validation_label_check_can_fail():
+    _fails("            for part, name in ((\"ytr\", \"training\"), (\"yva\", \"validation\"),\n",
+           "            for part, name in ((\"ytr\", \"training\"),\n",
+           "test_the_proxys_label_sets_must_be_the_splits",
+           "the proxy's validation labels unchecked")

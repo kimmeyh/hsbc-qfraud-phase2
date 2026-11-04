@@ -59,20 +59,20 @@ At the 0.5% alert-budget threshold chosen on validation:
 
 ## Confusion counts per seed, test fold
 
-TP, FP, TN and FN at each validation-chosen threshold.
+TP, FP, TN and FN at each validation-chosen threshold, and at the test fold's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | depth 6, l2_leaf_reg 10, learning_rate 0.1 | 79 / 6 / 56645 / 16 | 86 / 182 / 56469 / 9 |
-| 43 | depth 4, l2_leaf_reg 10, learning_rate 0.1 | 72 / 3 / 56648 / 23 | 78 / 187 / 56464 / 17 |
-| 44 | depth 4, l2_leaf_reg 3, learning_rate 0.1 | 78 / 14 / 56637 / 17 | 83 / 190 / 56461 / 12 |
-| 45 | depth 6, l2_leaf_reg 3, learning_rate 0.1 | 75 / 1 / 56650 / 20 | 83 / 209 / 56442 / 12 |
-| 46 | depth 6, l2_leaf_reg 10, learning_rate 0.1 | 75 / 7 / 56644 / 20 | 81 / 190 / 56461 / 14 |
-| 47 | depth 4, l2_leaf_reg 3, learning_rate 0.1 | 75 / 6 / 56645 / 20 | 80 / 178 / 56473 / 15 |
-| 48 | depth 6, l2_leaf_reg 3, learning_rate 0.1 | 81 / 8 / 56643 / 14 | 86 / 205 / 56446 / 9 |
-| 49 | depth 6, l2_leaf_reg 10, learning_rate 0.1 | 69 / 1 / 56650 / 26 | 80 / 170 / 56481 / 15 |
-| 50 | depth 4, l2_leaf_reg 10, learning_rate 0.1 | 75 / 10 / 56641 / 20 | 79 / 241 / 56410 / 16 |
-| 51 | depth 6, l2_leaf_reg 3, learning_rate 0.05 | 70 / 7 / 56644 / 25 | 77 / 187 / 56464 / 18 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | depth 6, l2_leaf_reg 10, learning_rate 0.1 | 79 / 6 / 56645 / 16 | 86 / 182 / 56469 / 9 | 86 / 198 / 56453 / 9 |
+| 43 | depth 4, l2_leaf_reg 10, learning_rate 0.1 | 72 / 3 / 56648 / 23 | 78 / 187 / 56464 / 17 | 79 / 205 / 56446 / 16 |
+| 44 | depth 4, l2_leaf_reg 3, learning_rate 0.1 | 78 / 14 / 56637 / 17 | 83 / 190 / 56461 / 12 | 83 / 201 / 56450 / 12 |
+| 45 | depth 6, l2_leaf_reg 3, learning_rate 0.1 | 75 / 1 / 56650 / 20 | 83 / 209 / 56442 / 12 | 83 / 201 / 56450 / 12 |
+| 46 | depth 6, l2_leaf_reg 10, learning_rate 0.1 | 75 / 7 / 56644 / 20 | 81 / 190 / 56461 / 14 | 81 / 203 / 56448 / 14 |
+| 47 | depth 4, l2_leaf_reg 3, learning_rate 0.1 | 75 / 6 / 56645 / 20 | 80 / 178 / 56473 / 15 | 80 / 204 / 56447 / 15 |
+| 48 | depth 6, l2_leaf_reg 3, learning_rate 0.1 | 81 / 8 / 56643 / 14 | 86 / 205 / 56446 / 9 | 86 / 198 / 56453 / 9 |
+| 49 | depth 6, l2_leaf_reg 10, learning_rate 0.1 | 69 / 1 / 56650 / 26 | 80 / 170 / 56481 / 15 | 81 / 203 / 56448 / 14 |
+| 50 | depth 4, l2_leaf_reg 10, learning_rate 0.1 | 75 / 10 / 56641 / 20 | 79 / 241 / 56410 / 16 | 79 / 205 / 56446 / 16 |
+| 51 | depth 6, l2_leaf_reg 3, learning_rate 0.05 | 70 / 7 / 56644 / 25 | 77 / 187 / 56464 / 18 | 77 / 207 / 56444 / 18 |
 
 ## Limits
 

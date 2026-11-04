@@ -66,8 +66,9 @@ def _run(args: list[str], timeout: int = 3) -> tuple[int, str, str]:
     """Run a command, mapping every non-answer to Undetermined.
 
     THE DEFAULT IS 3s, NOT 60s, BECAUSE THIS RUNS INSIDE A STOP HOOK. That
-    hook has a budget in settings.json, and THREE calls are made from here --
-    head_sha, _require_gh and runs_for -- not two. The first version of this
+    hook has a budget in settings.json, and FOUR calls are made from here --
+    head_sha, _require_gh, runs_for and, since the hook requires the full
+    job (Sprint 30 IMP-1), job_succeeded's one check-runs call. The first version of this
     docstring said two, and so did the test enforcing the budget, so the guard
     passed on its own undercount. Corrected 2026-10-03 after two PR #146
     reviewers found it independently.
@@ -160,8 +161,10 @@ def runs_for(sha: str) -> list[dict]:
     return [r for r in allruns if r.get("headSha") == sha]
 
 
-def evaluate(sha: str) -> tuple[int, list[str]]:
-    """(exit code, human-readable lines). Never returns OK on a guess."""
+def evaluate(sha: str, require_job: str = "") -> tuple[int, list[str]]:
+    """(exit code, human-readable lines). Never returns OK on a guess.
+    With `require_job`, OK also needs a job of that name to have succeeded
+    on the commit (the full job, which alone runs the red proofs)."""
     runs = runs_for(sha)
     if not runs:
         raise Undetermined(
@@ -233,10 +236,44 @@ def evaluate(sha: str) -> tuple[int, list[str]]:
             "test result was read. A workflow gated behind a path filter looks "
             "exactly like this. That is not a pass.")
 
+    if require_job and not job_succeeded(sha, require_job):
+        # PR 74 review: after `gh pr ready` the green push run is listed
+        # before the ready-for-review run exists, so "green" was read from a
+        # run with no red proofs in it. Not a pass until the job has run.
+        lines.append("")
+        lines.append(f"No successful '{require_job}' job on {sha[:7]} yet; "
+                     "the runs above do not include it. Not a pass. Wait for "
+                     "it, or re-run with --wait.")
+        return PENDING, lines
+
     lines.append("")
     lines.append(f"CI is green on {sha[:7]} ({len(runs)} run(s), "
-                 f"{len(succeeded)} succeeded).")
+                 f"{len(succeeded)} succeeded"
+                 + (f", '{require_job}' job included" if require_job else "")
+                 + ").")
     return OK, lines
+
+
+def job_succeeded(sha: str, name: str) -> bool:
+    """True if a GitHub Actions job called `name` succeeded on `sha`.
+
+    ONE call for every run on the commit (the check-runs list), not one
+    `gh run view` per run: the close-out hook makes this call inside its
+    budget, so its cost must not grow with the number of runs (Sprint 30
+    IMP-1)."""
+    rc, out, err = _run(["gh", "api", f"repos/{{owner}}/{{repo}}/commits/"
+                         f"{sha}/check-runs?per_page=100"])
+    if rc != 0:
+        raise Undetermined(f"gh api check-runs failed: {err.strip()[:200]}")
+    try:
+        jobs = json.loads(out or "{}").get("check_runs")
+    except (ValueError, AttributeError) as exc:
+        raise Undetermined(f"gh returned unreadable check runs: {exc}") from exc
+    if not isinstance(jobs, list):
+        raise Undetermined("gh returned no check-run list for the commit")
+    return any(isinstance(j, dict) and j.get("name") == name
+               and (j.get("app") or {}).get("slug") == "github-actions"
+               and j.get("conclusion") == "success" for j in jobs)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -253,6 +290,9 @@ def main(argv: list[str] | None = None) -> int:
                          "all, which is indistinguishable from a clean one.")
     ap.add_argument("--timeout", type=int, default=1800,
                     help="seconds to wait with --wait (default 1800)")
+    ap.add_argument("--require-job", default="", metavar="NAME",
+                    help="also require a job of this name to have succeeded "
+                         "on the commit (Phase 7: `full`, the red proofs)")
     args = ap.parse_args(argv)
     _cli["on"] = True               # no hook budget here (IMP-4); see _run
 
@@ -267,7 +307,7 @@ def main(argv: list[str] | None = None) -> int:
         sha = head_sha(args.sha)
         deadline = time.time() + args.timeout
         while True:
-            rc, lines = evaluate(sha)
+            rc, lines = evaluate(sha, args.require_job)
             if rc != PENDING or not args.wait or time.time() > deadline:
                 break
             time.sleep(30)

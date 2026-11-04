@@ -231,8 +231,24 @@ def write_result(path, doc: dict, generator, seeds, run_id: str,
                     f"{path.name} holds run {run_id}, and this process did "
                     "not make or resume that id; resume a run with "
                     "run_id_for(path, resume=True)")
-            if "replaces" in old.get("provenance", {}):
-                block["replaces"] = old["provenance"]["replaces"]
+            prior = old.get("provenance") or {}
+            if "replaces" in prior:
+                block["replaces"] = prior["replaces"]
+            # The run's first commit stays the block's commit; a resume at
+            # another commit is added to `later_commits`, so a result built
+            # under two commits says so (PR 74 review: a resume re-stamped
+            # the commit and hid the first, Sprint 30 IMP-5).
+            later = list(prior.get("later_commits", []))
+            now_at = {"generator_commit": block["generator_commit"],
+                      "generator_clean": block["generator_clean"]}
+            if "generator_commit" in prior:
+                first = {"generator_commit": prior["generator_commit"],
+                         "generator_clean": prior.get("generator_clean")}
+                if now_at != first and now_at not in later:
+                    later.append(now_at)
+                block.update(first)
+            if later:
+                block["later_commits"] = later
     out = {**doc, "provenance": block}
     text = json.dumps(out, indent=1, default=strict_json.numpy_scalar) + "\n"
     tmp = path.with_name(path.name + ".tmp")

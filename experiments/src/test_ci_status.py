@@ -171,7 +171,8 @@ runpy.run_path(hook, run_name="__main__")
 """
 
 
-def _hook_with_ci(monkeypatched_source: str) -> tuple[int, str]:
+def _hook_with_ci(monkeypatched_source: str,
+                  full_job: bool = True) -> tuple[int, str]:
     """Run the hook with the CI checker stubbed to a fixed state.
 
     HERMETIC (F131, Sprint 24). The first version wrote the stub over the
@@ -192,6 +193,9 @@ def _hook_with_ci(monkeypatched_source: str) -> tuple[int, str]:
     # The checker derives ROOT from its own location and runs git there; the
     # copy lives in a temporary directory, so point it back at this clone.
     stub += f"\nROOT = Path({str(ROOT)!r})\nSTUBBED_BY_TEST = True\n"
+    # The hook requires the full job (Sprint 30 IMP-1); its check is stubbed
+    # too, so no test reads the live check-runs list.
+    stub += f"\ndef job_succeeded(sha, name):\n    return {full_job!r}\n"
     with tempfile.TemporaryDirectory() as tmp:
         stub_path = Path(tmp) / "check_ci_status.py"
         stub_path.write_text(stub, encoding="utf-8")
@@ -266,6 +270,31 @@ def test_the_hook_raises_no_ci_violation_when_ci_is_green():
     # And the hook must not have crashed: rc is 0 (allow) or 2 (block on some
     # OTHER violation), never a traceback.
     assert rc in (0, 2), f"the hook errored rather than deciding: {err[-400:]}"
+
+
+def test_the_hook_blocks_a_green_push_job_without_the_full_job():
+    """The push job leaves the red proofs out; only the full job runs them.
+    A close-out over the push job's green alone is not complete (PR 74
+    review, Sprint 30 IMP-1)."""
+    rc, err = _hook_with_ci(
+        '    return [{"name": "CI", "status": "completed", '
+        '"conclusion": "success", "headSha": sha, "url": ""}]',
+        full_job=False)
+    assert rc != 0, "a close-out passed with no full job run"
+    assert "full job" in err
+
+
+def test_the_hook_full_job_requirement_can_fail():
+    from injection import Mutation, assert_can_fail
+    assert_can_fail([Mutation(HOOK, 'ci.evaluate(sha, require_job="full")',
+                              "ci.evaluate(sha)", expect_occurrences=1)],
+                    # The phrase, not the exit code: another close-out check
+                    # can block for its own reason (F97; Task O review).
+                    lambda: "full job" in _hook_with_ci(
+                        '    return [{"name": "CI", "status": "completed", '
+                        '"conclusion": "success", "headSha": sha, '
+                        '"url": ""}]', full_job=False)[1],
+                    "a close-out over the push job alone")
 
 
 def test_the_early_checkpoint_waits_before_looking(ci, monkeypatch):
@@ -441,7 +470,10 @@ def test_the_hook_timeout_budget_covers_its_own_subprocess_calls():
     assert count_calls >= 1, "no _count call sites found"
     extra_count_calls = (count_calls - 1) * int(m_count.group(1))
 
-    worst = sum(hook_timeouts) + extra_count_calls + 3 * ci_default
+    # A FOURTH _run call when the hook requires a job: job_succeeded's one
+    # check-runs call (Sprint 30 IMP-1).
+    ci_calls = 3 + ("require_job=" in hook_src)
+    worst = sum(hook_timeouts) + extra_count_calls + ci_calls * ci_default
     assert worst <= budget, (
         f"worst-case internal timeouts total {worst}s against a {budget}s "
         f"hook budget. A killed hook cannot block, so exceeding the budget "
@@ -581,5 +613,69 @@ def test_the_command_line_wait_can_fail(ci, monkeypatch):
         assert_can_fail([Mutation(SCRIPT, "    if _cli[\"on\"]:",
                                   "    if True:", expect_occurrences=1)],
                         run, "the hook path given the long wait")
+    finally:
+        importlib.reload(ci)
+
+
+def _with_jobs(ci, monkeypatch, jobs: list[dict],
+               app: str = "github-actions") -> None:
+    monkeypatch.setattr(ci, "runs_for", lambda sha: [
+        {**_runs("completed", "success")[0], "databaseId": 7}])
+    monkeypatch.setattr(ci, "_run", lambda args, timeout=3: (
+        0, json.dumps({"check_runs": [{**j, "app": {"slug": app}}
+                                      for j in jobs]}), ""))
+
+
+def test_a_required_job_from_another_app_is_not_a_pass(ci, monkeypatch):
+    # The check-runs list holds every app's checks; only an Actions job
+    # named `full` is CI's full job (Sprint 30 IMP-1).
+    _with_jobs(ci, monkeypatch, [{"name": "full", "conclusion": "success"}],
+               app="some-other-app")
+    assert ci.evaluate("deadbee", "full")[0] == ci.PENDING
+
+
+def test_a_required_job_must_have_succeeded(ci, monkeypatch):
+    # PR 74 review: after `gh pr ready` the green push run is listed before
+    # the ready-for-review run exists, so green was read with no red proofs
+    # run. With --require-job full that is pending, not a pass.
+    _with_jobs(ci, monkeypatch, [{"name": "test", "conclusion": "success"},
+                                 {"name": "full", "conclusion": "skipped"}])
+    assert ci.evaluate("deadbee", "full")[0] == ci.PENDING
+    assert ci.evaluate("deadbee")[0] == ci.OK
+    _with_jobs(ci, monkeypatch, [{"name": "full", "conclusion": "success"}])
+    assert ci.evaluate("deadbee", "full")[0] == ci.OK
+
+
+def test_the_required_job_can_fail(ci, monkeypatch):
+    import importlib
+
+    from injection import Mutation, assert_can_fail
+
+    def run() -> bool:
+        mod = importlib.reload(ci)
+        with pytest.MonkeyPatch.context() as mp:
+            _with_jobs(mod, mp, [{"name": "full", "conclusion": "skipped"}])
+            return mod.evaluate("deadbee", "full")[0] == mod.PENDING
+
+    try:
+        assert_can_fail([Mutation(SCRIPT,
+                                  "               and j.get(\"conclusion\") "
+                                  "== \"success\" for j in jobs)\n",
+                                  "               for j in jobs)\n",
+                                  expect_occurrences=1)],
+                        run, "a skipped full job read as a pass")
+
+        def other_app() -> bool:
+            mod = importlib.reload(ci)
+            with pytest.MonkeyPatch.context() as mp:
+                _with_jobs(mod, mp, [{"name": "full",
+                                      "conclusion": "success"}],
+                           app="some-other-app")
+                return mod.evaluate("deadbee", "full")[0] == mod.PENDING
+        assert_can_fail([Mutation(SCRIPT,
+                                  "               and (j.get(\"app\") or {})"
+                                  ".get(\"slug\") == \"github-actions\"\n",
+                                  "", expect_occurrences=1)],
+                        other_app, "another app's check read as the full job")
     finally:
         importlib.reload(ci)

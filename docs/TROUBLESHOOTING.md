@@ -91,6 +91,19 @@ bytecode's mtime and size, so a reload ran the mutated module.
 → From the command line it is 20 s with one retry (Sprint 26 IMP-4; the
 docstring of `_run` in `scripts/check_ci_status.py`).
 
+**Symptom: a suite run reports "1 failed" and no test name.** The output
+was piped to a tail, which cut off the `FAILED` line. Sprint 30: a full
+run had 1 failure, a rerun of the affected files passed, and the
+test was never identified.
+→ `SPRINT_CHECKLIST.md` Phase 5, the full-suite item: run with `-rf`,
+write the whole output to a file, then read its summary (Sprint 30 IMP-4).
+
+**Symptom: a `fix:` or `feat:` commit is BLOCKED with "needs a task timer
+running" right after the task was finished.** The timer was finished
+before the commit. Commit first, then `--finish-task`; a finished task
+cannot be resumed. → `scripts/check_commit_issue.py` (Sprint 29 IMP-4,
+F173); Sprint 30 Task N.
+
 ---
 
 ## Escapes eaten in transit

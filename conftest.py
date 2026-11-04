@@ -57,8 +57,11 @@ out of scope by design.
 """
 from __future__ import annotations
 
+import ast
 import hashlib
+import inspect
 import os
+import textwrap
 import subprocess
 import sys
 from pathlib import Path
@@ -199,6 +202,70 @@ def pytest_sessionfinish(session, exitstatus):
         _fail(session)
         sys.stderr.write("\nTHE SUITE CHANGED COMMITTED EVIDENCE (IMP-3): "
                          + ", ".join(_CHANGED[:10]) + "\n")
+
+
+# A red proof breaks a guarded file and runs the guard's test in a nested
+# pytest, so each costs a process start and most of the suite's time.
+# Marked here from the test's own source, in one place, so a new proof is
+# marked with nothing to remember. The per-push CI job runs
+# `-m "not proof and not slow"`; the full CI job (ready for review) and the
+# local Phase 5 full suite run every proof (Sprint 30 Task L, D9).
+# Calls are read from the syntax tree, not by substring: a substring test
+# matched the helper `_fails(` inside `def test_the_wrong_endpoint_fails():`
+# and took a regular guard out of the push job (PR 74 review).
+PROOF_CALLS = frozenset({"assert_can_fail", "run_pytest"})
+_PROOF_CALLS_BY_MODULE: dict[str, frozenset[str]] = {}
+
+
+def _called(fn) -> set[str]:
+    """The names `fn`'s body calls (`f(...)` and `x.f(...)`); empty when
+    its source cannot be read, so the test stays in the push job."""
+    try:
+        tree = ast.parse(textwrap.dedent(inspect.getsource(fn)))
+    except (OSError, TypeError, SyntaxError):
+        return set()
+    out = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            f = node.func
+            if isinstance(f, ast.Name):
+                out.add(f.id)
+            elif isinstance(f, ast.Attribute):
+                out.add(f.attr)
+    return out
+
+
+def _proof_calls(module) -> frozenset[str]:
+    """PROOF_CALLS plus each of the module's own helpers that makes one,
+    such as `_proof(...)`, followed through helpers of helpers."""
+    name = getattr(module, "__name__", "")
+    if name not in _PROOF_CALLS_BY_MODULE:
+        helpers = {n: _called(f) for n, f in inspect.getmembers(
+                       module, inspect.isfunction)
+                   if f.__module__ == name and not n.startswith("test")}
+        calls = set(PROOF_CALLS)
+        grew = True
+        while grew:
+            grew = False
+            for n, called in helpers.items():
+                if n not in calls and called & calls:
+                    calls.add(n)
+                    grew = True
+        _PROOF_CALLS_BY_MODULE[name] = frozenset(calls)
+    return _PROOF_CALLS_BY_MODULE[name]
+
+
+def is_proof(item) -> bool:
+    fn = getattr(item, "function", None)
+    if fn is None:
+        return False
+    return bool(_called(fn) & _proof_calls(inspect.getmodule(fn)))
+
+
+def pytest_collection_modifyitems(config, items):
+    for item in items:
+        if is_proof(item):
+            item.add_marker(pytest.mark.proof)
 
 
 def pytest_terminal_summary(terminalreporter):

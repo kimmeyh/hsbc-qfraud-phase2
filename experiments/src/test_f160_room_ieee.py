@@ -27,6 +27,26 @@ def _labels(rate: float, seed: int = 0) -> np.ndarray:
     return y
 
 
+def _scip_returns(monkeypatch, objective):
+    monkeypatch.setattr(fr.ec, "ScipSolver", lambda: None)
+    monkeypatch.setattr(fr.ec, "exact_solver_control",
+                        lambda J, C, m, solver, cap: {"objective": objective})
+
+
+def test_best_found_is_the_lower_of_greedy_and_scip(monkeypatch):
+    # F172: SCIP's value is taken only when it is lower, and only when it
+    # has one.
+    rng = np.random.default_rng(1)
+    H, y = rng.choice([-1.0, 1.0], size=(8, 200)), _labels(0.1)[:200]
+    g = fr.chosen(3, H, y, 1.0, scip=False)["greedy"]["objective"]
+    _scip_returns(monkeypatch, g - 1.0)
+    assert fr.chosen(3, H, y, 1.0, scip=True)["best_found"] == g - 1.0
+    _scip_returns(monkeypatch, g + 1.0)
+    assert fr.chosen(3, H, y, 1.0, scip=True)["best_found"] == g
+    _scip_returns(monkeypatch, None)
+    assert fr.chosen(3, H, y, 1.0, scip=True)["best_found"] == g
+
+
 def test_random_sign_learners_leave_room():
     labels = {(42, "free"): (_labels(0.035), 60, 10)}
     res = fr.evaluate(fr.random_sign_instances(labels), scip=False)
@@ -94,6 +114,17 @@ def test_a_refused_pool_is_recorded():
     out = fr.read_instances({}, meta)
     assert out["refused"] == {"42/free": meta[(42, "free")]}
     assert out["design_fails"] is None
+
+
+def test_the_best_found_minimum_can_fail():
+    _fails("            best = min(best, sc[\"objective\"])\n",
+           "            best = sc[\"objective\"]\n",
+           "test_best_found_is_the_lower_of_greedy_and_scip",
+           "a worse SCIP value taken as best found")
+    _fails("        if sc.get(\"objective\") is not None:\n",
+           "        if sc.get(\"objective\") is None:\n",
+           "test_best_found_is_the_lower_of_greedy_and_scip",
+           "SCIP's value ignored")
 
 
 def test_the_order_gate_can_fail():

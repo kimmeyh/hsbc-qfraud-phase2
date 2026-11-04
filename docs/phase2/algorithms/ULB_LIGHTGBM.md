@@ -59,20 +59,20 @@ At the 0.5% alert-budget threshold chosen on validation:
 
 ## Confusion counts per seed, test fold
 
-TP, FP, TN and FN at each validation-chosen threshold.
+TP, FP, TN and FN at each validation-chosen threshold, and at the test fold's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 75 / 6 / 56645 / 20 | 86 / 220 / 56431 / 9 |
-| 43 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 66 / 4 / 56647 / 29 | 81 / 193 / 56458 / 14 |
-| 44 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 69 / 3 / 56648 / 26 | 82 / 206 / 56445 / 13 |
-| 45 | learning_rate 0.1, num_leaves 15, reg_lambda 1.0 | 76 / 3 / 56648 / 19 | 82 / 218 / 56433 / 13 |
-| 46 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 73 / 7 / 56644 / 22 | 81 / 231 / 56420 / 14 |
-| 47 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 74 / 3 / 56648 / 21 | 80 / 196 / 56455 / 15 |
-| 48 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 82 / 12 / 56639 / 13 | 86 / 222 / 56429 / 9 |
-| 49 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 72 / 6 / 56645 / 23 | 80 / 184 / 56467 / 15 |
-| 50 | learning_rate 0.1, num_leaves 15, reg_lambda 1.0 | 73 / 5 / 56646 / 22 | 78 / 186 / 56465 / 17 |
-| 51 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 70 / 6 / 56645 / 25 | 80 / 194 / 56457 / 15 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 75 / 6 / 56645 / 20 | 86 / 220 / 56431 / 9 | 85 / 199 / 56452 / 10 |
+| 43 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 66 / 4 / 56647 / 29 | 81 / 193 / 56458 / 14 | 81 / 203 / 56448 / 14 |
+| 44 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 69 / 3 / 56648 / 26 | 82 / 206 / 56445 / 13 | 82 / 202 / 56449 / 13 |
+| 45 | learning_rate 0.1, num_leaves 15, reg_lambda 1.0 | 76 / 3 / 56648 / 19 | 82 / 218 / 56433 / 13 | 82 / 202 / 56449 / 13 |
+| 46 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 73 / 7 / 56644 / 22 | 81 / 231 / 56420 / 14 | 80 / 204 / 56447 / 15 |
+| 47 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 74 / 3 / 56648 / 21 | 80 / 196 / 56455 / 15 | 80 / 204 / 56447 / 15 |
+| 48 | learning_rate 0.05, num_leaves 63, reg_lambda 1.0 | 82 / 12 / 56639 / 13 | 86 / 222 / 56429 / 9 | 86 / 198 / 56453 / 9 |
+| 49 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 72 / 6 / 56645 / 23 | 80 / 184 / 56467 / 15 | 80 / 204 / 56447 / 15 |
+| 50 | learning_rate 0.1, num_leaves 15, reg_lambda 1.0 | 73 / 5 / 56646 / 22 | 78 / 186 / 56465 / 17 | 78 / 206 / 56445 / 17 |
+| 51 | learning_rate 0.05, num_leaves 15, reg_lambda 1.0 | 70 / 6 / 56645 / 25 | 80 / 194 / 56457 / 15 | 80 / 204 / 56447 / 15 |
 
 ## Limits
 

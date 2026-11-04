@@ -80,6 +80,20 @@ def test_four_of_five_decides():
     assert not hp.summarize([row(True)] * 3 + [row(False)] * 2)["passes"]
 
 
+def test_the_pass_needs_both_terms_not_containment_alone():
+    # F172: every seed contains, none is narrow. Term 1 alone would pass.
+    row = {"arms": {"none": {"contains": True, "narrow": False, "pass": False}}}
+    s = hp.summarize([row] * 5)
+    assert s["term1_alone_4_of_5"] and not s["passes"]
+
+
+def test_one_class_is_refused():
+    X = np.random.default_rng(0).normal(size=(20, 2))
+    for y in (np.zeros(20), np.ones(20)):
+        with pytest.raises(ValueError, match="both classes"):
+            hp.hp_bound(X, y)
+
+
 def _fails(old, new, node, label):
     from injection import Mutation, assert_can_fail, run_pytest
     assert_can_fail([Mutation(PHASE2 / "f156_hp_bound.py", old, new,
@@ -105,3 +119,22 @@ def test_the_exact_tree_can_fail():
     _fails("    t = minimum_spanning_tree(g).tocoo()\n",
            "    t = g.tocoo()\n",
            "test_the_tree_is_the_exact_euclidean_mst", "not a spanning tree")
+
+
+def test_the_summary_pass_term_can_fail():
+    _fails("            \"passes\": sum(a[\"pass\"] for a in arm) >= min(fc.PASS_SEEDS,\n",
+           "            \"passes\": sum(a[\"contains\"] for a in arm) >= min(fc.PASS_SEEDS,\n",
+           "test_the_pass_needs_both_terms_not_containment_alone",
+           "containment alone counted as a pass")
+
+
+def test_the_term1_alone_count_can_fail():
+    _fails("            \"term1_alone_4_of_5\": sum(a[\"contains\"] for a in arm)\n",
+           "            \"term1_alone_4_of_5\": sum(a[\"pass\"] for a in arm)\n",
+           "test_the_pass_needs_both_terms_not_containment_alone",
+           "term 1 alone counted from the pass")
+
+
+def test_the_one_class_refusal_can_fail():
+    _fails("    if m == 0 or n == 0:\n", "    if False:\n",
+           "test_one_class_is_refused", "a one-class bound computed")

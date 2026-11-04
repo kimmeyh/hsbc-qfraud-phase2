@@ -37,6 +37,8 @@ import f108_ceiling as fc  # noqa: E402  (Phase 2, F108; not edited)
 
 OUT = fc.ROOT / "experiments" / "phase2" / "results" / "f156_hp_bound.json"
 OUT_PILOT = OUT.with_name("f156_hp_bound_pilot.json")
+# F168 part 7: a long run resumes through provenance.start (the run).
+LONG_RUN = True
 SUBSAMPLE = 60_000
 PILOT_CAP_S = 600.0
 DECIDING_ARM = "none"

@@ -59,20 +59,20 @@ At the 0.5% alert-budget threshold chosen on validation:
 
 ## Confusion counts per seed, test fold
 
-TP, FP, TN and FN at each validation-chosen threshold.
+TP, FP, TN and FN at each validation-chosen threshold, and at the test fold's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 75 / 5 / 56646 / 20 | 84 / 212 / 56439 / 11 |
-| 43 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 68 / 5 / 56646 / 27 | 79 / 209 / 56442 / 16 |
-| 44 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 68 / 4 / 56647 / 27 | 83 / 192 / 56459 / 12 |
-| 45 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 76 / 10 / 56641 / 19 | 83 / 214 / 56437 / 12 |
-| 46 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 76 / 19 / 56632 / 19 | 80 / 206 / 56445 / 15 |
-| 47 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 73 / 4 / 56647 / 22 | 81 / 222 / 56429 / 14 |
-| 48 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 73 / 4 / 56647 / 22 | 87 / 219 / 56432 / 8 |
-| 49 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 66 / 2 / 56649 / 29 | 80 / 173 / 56478 / 15 |
-| 50 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 15 | 72 / 10 / 56641 / 23 | 78 / 194 / 56457 / 17 |
-| 51 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 73 / 12 / 56639 / 22 | 79 / 207 / 56444 / 16 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 75 / 5 / 56646 / 20 | 84 / 212 / 56439 / 11 | 84 / 200 / 56451 / 11 |
+| 43 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 68 / 5 / 56646 / 27 | 79 / 209 / 56442 / 16 | 79 / 205 / 56446 / 16 |
+| 44 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 68 / 4 / 56647 / 27 | 83 / 192 / 56459 / 12 | 84 / 200 / 56451 / 11 |
+| 45 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 76 / 10 / 56641 / 19 | 83 / 214 / 56437 / 12 | 83 / 201 / 56450 / 12 |
+| 46 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 31 | 76 / 19 / 56632 / 19 | 80 / 206 / 56445 / 15 | 80 / 204 / 56447 / 15 |
+| 47 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 73 / 4 / 56647 / 22 | 81 / 222 / 56429 / 14 | 80 / 204 / 56447 / 15 |
+| 48 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 73 / 4 / 56647 / 22 | 87 / 219 / 56432 / 8 | 86 / 198 / 56453 / 9 |
+| 49 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 66 / 2 / 56649 / 29 | 80 / 173 / 56478 / 15 | 80 / 204 / 56447 / 15 |
+| 50 | l2_regularization 1.0, learning_rate 0.1, max_leaf_nodes 15 | 72 / 10 / 56641 / 23 | 78 / 194 / 56457 / 17 | 78 / 206 / 56445 / 17 |
+| 51 | l2_regularization 1.0, learning_rate 0.05, max_leaf_nodes 31 | 73 / 12 / 56639 / 22 | 79 / 207 / 56444 / 16 | 79 / 205 / 56446 / 16 |
 
 ## Limits
 
