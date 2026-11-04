@@ -38,7 +38,8 @@
       "K": 46,
       "L": 162,
       "M": 156,
-      "N": 60
+      "N": 60,
+      "O": 10
     },
     "task_started": {
       "A": "2026-10-31T10:37:02-04:00",
@@ -117,7 +118,8 @@
       "K": 56,
       "L": 276,
       "M": 285,
-      "N": 60
+      "N": 60,
+      "O": 10
     },
     "task_paused": {},
     "task_paused_s": {
@@ -187,7 +189,8 @@
     "review_task": "M",
     "task_actual_method": {
       "M": "gaps over 30 min and pauses subtracted",
-      "N": "gaps over 30 min and pauses subtracted"
+      "N": "gaps over 30 min and pauses subtracted",
+      "O": "gaps over 30 min and pauses subtracted"
     },
     "task_estimates": {
       "N": 160,
