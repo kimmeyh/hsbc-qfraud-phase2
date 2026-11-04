@@ -131,7 +131,24 @@ def test_the_confusion_counts_at_the_test_folds_budget_are_stated():
             in pages[fd.FILES["proxy"]])
     over = sum(ln["outcome"]["at_budget_on_test"]["n_flagged"]
                > ln["outcome"]["at_budget_on_test"]["n_budget"] for ln in lanes)
-    assert f"the proxy on {over} of {len(lanes)} seeds" in pages[fd.COMPARISON]
+    # Both branches, so the test does not assume the recorded result has
+    # over-budget seeds (PR 74 review, Sprint 30 IMP-5).
+    if over:
+        assert (f"the proxy on {over} of {len(lanes)} seeds"
+                in pages[fd.COMPARISON])
+    else:
+        assert "the proxy on " not in pages[fd.COMPARISON]
+
+
+def test_no_lane_over_its_budget_writes_no_tie_note():
+    within = {"n_flagged": 450, "n_budget": 450}
+    over = {"n_flagged": 455, "n_budget": 450}
+
+    def rows(b):
+        return [{"lanes": {"proxy": {"outcome": {"at_budget_on_test": b}}}}]
+    assert fd.over_budget_line(rows(within), ["proxy"], "test fold") is None
+    assert "on 1 of 1 seeds, up to 455 rows" in fd.over_budget_line(
+        rows(over), ["proxy"], "test fold")
 
 
 def test_the_page_check_can_fail():

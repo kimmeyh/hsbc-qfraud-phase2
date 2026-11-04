@@ -15,6 +15,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 HOOK = ROOT / ".claude" / "hooks" / "log_task_activity.py"
 SCRIPT = ROOT / "scripts" / "update_sprint_status.py"
@@ -137,6 +139,65 @@ def test_a_mostly_idle_task_and_unreadable_lines_are_flagged(tmp_path):
     assert "1 unreadable line(s)" in how
 
 
+def test_an_actual_under_a_fifth_of_its_estimate_is_flagged(tmp_path):
+    # Sprint 30 IMP-3: A-C read 10, 11 and 15 against 45, 60 and 240.
+    p = _status(tmp_path)
+    _run(p, ["--start-task", "C", "--estimate", "240"], 0)
+    _log(p, range(0, 41, 5))
+    _run(p, ["--finish-task", "C"], 40)
+    cur = _cur(p)
+    assert cur["task_estimates"]["C"] == 240
+    assert "under a fifth of its 240-minute estimate" in (
+        cur["task_actual_method"]["C"])
+    # At a fifth or more, nothing is flagged.
+    _run(p, ["--task", "D", "--estimate", "200"], 40)
+    _run(p, ["--start-task", "D"], 40)
+    _log(p, range(40, 81, 5))
+    _run(p, ["--finish-task", "D"], 80)
+    assert "estimate" not in _cur(p)["task_actual_method"]["D"]
+
+
+def test_an_estimate_is_set_once_and_positive(tmp_path):
+    p = _status(tmp_path)
+    _run(p, ["--task", "C", "--estimate", "60"], 0)
+    with pytest.raises(SystemExit, match="already has an estimate"):
+        _run(p, ["--task", "C", "--estimate", "600"], 1)
+    with pytest.raises(SystemExit, match="positive number"):
+        _run(p, ["--task", "D", "--estimate", "-5"], 1)
+    with pytest.raises(SystemExit, match="needs --start-task"):
+        _run(p, ["--estimate", "60"], 1)
+
+
+def test_a_change_made_during_an_update_is_not_overwritten(tmp_path,
+                                                           monkeypatch):
+    # PR 74 review (Sprint 30 IMP-5): two updates at once each wrote the
+    # whole file, so the second lost the first's change.
+    p = _status(tmp_path)
+    other = json.dumps({"current_sprint": {"number": 99, "task_actuals": {},
+                                           "task_started": {"Z": "t"}}})
+    orig = uss.start_task
+
+    def racing(doc, task, now, parallel=False):
+        p.write_text(other, encoding="utf-8")      # another update lands
+        return orig(doc, task, now, parallel)
+    monkeypatch.setattr(uss, "start_task", racing)
+    with pytest.raises(SystemExit, match="changed while this update ran"):
+        _run(p, ["--start-task", "C"], 0)
+    assert p.read_text(encoding="utf-8") == other
+    assert not (p.parent / "sprint_status.json.tmp").exists()
+
+
+def test_the_review_task_does_not_move_off_a_running_task(tmp_path):
+    p = _status(tmp_path, task_started={"J": T0.isoformat()},
+                review_task="J")
+    with pytest.raises(SystemExit, match="still running"):
+        _run(p, ["--review-task", "M"], 10)
+    assert _cur(p)["review_task"] == "J"
+    _run(p, ["--finish-task", "J"], 20)
+    _run(p, ["--review-task", "M"], 20)
+    assert _cur(p)["review_task"] == "M"
+
+
 def test_the_hook_logs_only_while_a_timer_runs(tmp_path):
     log = tmp_path / ".claude" / "activity.log"
     _status(tmp_path, task_started={"A": "t"}, task_actuals={"A": 5})
@@ -207,3 +268,36 @@ def test_the_gap_rule_can_fail():
                               expect_occurrences=1)],
                     test("test_the_hook_never_blocks"),
                     "a hook error left unrecorded")
+    assert_can_fail([Mutation(SCRIPT,
+                              "    if est and actuals[task] * 5 < est:\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_an_actual_under_a_fifth_of_its_estimate_is_"
+                         "flagged"),
+                    "a low actual left unflagged")
+    assert_can_fail([Mutation(SCRIPT, "    if task in estimates:\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_an_estimate_is_set_once_and_positive"),
+                    "an estimate moved after the work")
+    assert_can_fail([Mutation(SCRIPT, "    if minutes <= 0:\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_an_estimate_is_set_once_and_positive"),
+                    "a negative estimate accepted")
+    assert_can_fail([Mutation(SCRIPT, "        if not owner:\n",
+                              "        if False:\n", expect_occurrences=1)],
+                    test("test_an_estimate_is_set_once_and_positive"),
+                    "an estimate with no task accepted")
+    assert_can_fail([Mutation(SCRIPT,
+                              "    if path.read_text(encoding=\"utf-8\") "
+                              "!= raw:\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_a_change_made_during_an_update_is_not_"
+                         "overwritten"),
+                    "a concurrent change overwritten")
+    assert_can_fail([Mutation(SCRIPT,
+                              "        if before and before != "
+                              "args.review_task and before in "
+                              "open_tasks(cur):\n",
+                              "        if False:\n", expect_occurrences=1)],
+                    test("test_the_review_task_does_not_move_off_a_running_"
+                         "task"),
+                    "the review task moved off a running task")

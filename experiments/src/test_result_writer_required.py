@@ -259,6 +259,35 @@ def test_a_resume_in_a_new_process_continues_its_own_file(tmp_path):
     assert "replaces" not in back["provenance"]
 
 
+def _at(monkeypatch, commit: str, clean: bool) -> None:
+    monkeypatch.setattr(prov, "_git", lambda *a: commit if a[0] == "rev-parse"
+                        else ("" if clean else " M generator.py"))
+
+
+def test_a_resume_at_another_commit_keeps_the_first(tmp_path, monkeypatch):
+    # PR 74 review: a resume re-stamped the block's commit, so a result
+    # built under two commits named only the last (Sprint 30 IMP-5).
+    rid = prov.run_id_for(tmp_path / "r.json")
+    _at(monkeypatch, "a" * 40, True)
+    _write(tmp_path, rid, doc={"rows": [1], "complete": False})
+    _write(tmp_path, rid, doc={"rows": [1, 2], "complete": False})
+    block = json.loads((tmp_path / "r.json").read_text(
+        encoding="utf-8"))["provenance"]
+    assert "later_commits" not in block      # one commit, nothing added
+    _at(monkeypatch, "b" * 40, False)
+    _write(tmp_path, rid, doc={"rows": [1, 2, 3], "complete": False})
+    _write(tmp_path, rid, doc={"rows": [1, 2, 3, 4], "complete": False})
+    # A last write back at the first commit keeps the later one listed.
+    _at(monkeypatch, "a" * 40, True)
+    _write(tmp_path, rid, doc={"rows": [1, 2, 3, 4, 5], "complete": True})
+    block = json.loads((tmp_path / "r.json").read_text(
+        encoding="utf-8"))["provenance"]
+    assert block["generator_commit"] == "a" * 40
+    assert block["generator_clean"] is True
+    assert block["later_commits"] == [{"generator_commit": "b" * 40,
+                                       "generator_clean": False}]
+
+
 def test_a_copied_id_is_refused(tmp_path, monkeypatch):
     rid = prov.run_id_for(tmp_path / "r.json")
     _write(tmp_path, rid)
@@ -434,6 +463,19 @@ def test_the_resume_can_fail():
            "    return rid\n\n\ndef _first_line",
            "test_a_resume_in_a_new_process_continues_its_own_file",
            "a resumed id not accepted")
+
+
+def test_the_first_commit_can_fail():
+    node = "test_a_resume_at_another_commit_keeps_the_first"
+    _fails(WRITER, "                block.update(first)\n",
+           "                pass\n", node, "a resume re-stamping the commit")
+    _fails(WRITER, "                if now_at != first and now_at not in "
+                   "later:\n",
+           "                if False:\n", node, "a later commit not recorded")
+    _fails(WRITER, "            later = list(prior.get(\"later_commits\", "
+                   "[]))\n",
+           "            later = []\n", node,
+           "a later commit dropped by the next write")
 
 
 def test_the_new_start_can_fail():

@@ -66,8 +66,9 @@ def _run(args: list[str], timeout: int = 3) -> tuple[int, str, str]:
     """Run a command, mapping every non-answer to Undetermined.
 
     THE DEFAULT IS 3s, NOT 60s, BECAUSE THIS RUNS INSIDE A STOP HOOK. That
-    hook has a budget in settings.json, and THREE calls are made from here --
-    head_sha, _require_gh and runs_for -- not two. The first version of this
+    hook has a budget in settings.json, and FOUR calls are made from here --
+    head_sha, _require_gh, runs_for and, since the hook requires the full
+    job (Sprint 30 IMP-1), job_succeeded's one check-runs call. The first version of this
     docstring said two, and so did the test enforcing the budget, so the guard
     passed on its own undercount. Corrected 2026-10-03 after two PR #146
     reviewers found it independently.
@@ -235,9 +236,7 @@ def evaluate(sha: str, require_job: str = "") -> tuple[int, list[str]]:
             "test result was read. A workflow gated behind a path filter looks "
             "exactly like this. That is not a pass.")
 
-    if require_job and not job_succeeded(
-            [r for r in runs if r.get("status") == "completed"
-             and r.get("conclusion") == "success"], require_job):
+    if require_job and not job_succeeded(sha, require_job):
         # PR 74 review: after `gh pr ready` the green push run is listed
         # before the ready-for-review run exists, so "green" was read from a
         # run with no red proofs in it. Not a pass until the job has run.
@@ -255,23 +254,26 @@ def evaluate(sha: str, require_job: str = "") -> tuple[int, list[str]]:
     return OK, lines
 
 
-def job_succeeded(runs: list[dict], name: str) -> bool:
-    """True if a job called `name` succeeded in one of these runs."""
-    for r in runs:
-        rc, out, err = _run(["gh", "run", "view", str(r.get("databaseId")),
-                             "--json", "jobs"])
-        if rc != 0:
-            raise Undetermined(f"gh run view failed: {err.strip()[:200]}")
-        try:
-            jobs = json.loads(out or "{}").get("jobs")
-        except (ValueError, AttributeError) as exc:
-            raise Undetermined(f"gh returned unreadable jobs: {exc}") from exc
-        if not isinstance(jobs, list):
-            raise Undetermined("gh returned no job list for a run")
-        if any(isinstance(j, dict) and j.get("name") == name
-               and j.get("conclusion") == "success" for j in jobs):
-            return True
-    return False
+def job_succeeded(sha: str, name: str) -> bool:
+    """True if a GitHub Actions job called `name` succeeded on `sha`.
+
+    ONE call for every run on the commit (the check-runs list), not one
+    `gh run view` per run: the close-out hook makes this call inside its
+    budget, so its cost must not grow with the number of runs (Sprint 30
+    IMP-1)."""
+    rc, out, err = _run(["gh", "api", f"repos/{{owner}}/{{repo}}/commits/"
+                         f"{sha}/check-runs?per_page=100"])
+    if rc != 0:
+        raise Undetermined(f"gh api check-runs failed: {err.strip()[:200]}")
+    try:
+        jobs = json.loads(out or "{}").get("check_runs")
+    except (ValueError, AttributeError) as exc:
+        raise Undetermined(f"gh returned unreadable check runs: {exc}") from exc
+    if not isinstance(jobs, list):
+        raise Undetermined("gh returned no check-run list for the commit")
+    return any(isinstance(j, dict) and j.get("name") == name
+               and (j.get("app") or {}).get("slug") == "github-actions"
+               and j.get("conclusion") == "success" for j in jobs)
 
 
 def main(argv: list[str] | None = None) -> int:

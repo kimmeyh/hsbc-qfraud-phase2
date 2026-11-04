@@ -46,7 +46,24 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 29: Make the Tools Repeatable, Then Find the Best Each Model Can Do**
+**Sprint 30: Measure the Work, Survive the Limits, Then Test the Ceiling
+and the Room** (Oct 30 - Nov 4, 2026; PR #74). Delivered **F173, F175,
+F168, F174, F176, F169, F170, F171, F172**, the Phase 5 fresh-eyes fixes,
+the Manual Validation fixes (D8: TP, FP, TN and FN on the comparison
+pages), the CI cut to a 3:08 push job with the red proofs in a full job
+(D9), the PR 74 review fixes and retrospective IMP-1 to IMP-5 (D10, all
+applied). F177 and F178 carded. Zero metered seconds. F174: on IEEE-CIS
+month 4 the order by mean test AUPRC is LightGBM, HGB, CatBoost, XGBoost,
+the proxy, SVM, logistic regression; four of six adjacent pairs differ
+reliably. F176: below greedy on 3 of 6 IEEE-CIS instances, each by under
+2e-05. F169: both plug-ins pass F108's rule. F170: the ULB frauds missed
+by all sit among legitimate rows. F171: not shown, because 4 IEEE-CIS
+families are compared with 12 ULB families. Records: `SPRINT_30_PLAN.md`,
+`SPRINT_30_VALIDATION.md`, `SPRINT_30_DECISIONS.md`,
+`SPRINT_30_RETROSPECTIVE.md`; `SPRINT_30_SUMMARY.md` is written at Sprint
+31 planning.
+
+### Sprint 29: Make the Tools Repeatable, Then Find the Best Each Model Can Do
 (Oct 25 - Oct 30, 2026; PR #63). Delivered **F165, F159, F164, F156,
 F160, F166, F158, F167** and the pypdf bump, the PR 63 review fixes
 (`provenance.start` refuses a rerun over a recorded result before any

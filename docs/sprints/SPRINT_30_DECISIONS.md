@@ -597,3 +597,7 @@ now-items touch 4 files and then lists 6. The count is 6: the close-out
 hook and its test, `update_sprint_status.py` and its test,
 `SPRINT_CHECKLIST.md` and `docs/TROUBLESHOOTING.md`. The options are
 unchanged.
+
+**Answer (team lead, 2026-11-04): none of the listed options.** Verbatim:
+"do imp-1-5 now". IMP-1 to IMP-5 are applied on this branch, timed as
+task N; nothing goes to the backlog.

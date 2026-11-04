@@ -20,7 +20,8 @@
       84,
       85,
       86,
-      87
+      87,
+      88
     ],
     "task_actuals": {
       "A": 10,
@@ -35,7 +36,8 @@
       "J": 12,
       "K": 46,
       "L": 162,
-      "M": 156
+      "M": 156,
+      "N": 60
     },
     "task_started": {
       "A": "2026-10-31T10:37:02-04:00",
@@ -50,7 +52,8 @@
       "J": "2026-10-31T23:12:28-04:00",
       "K": "2026-11-01T14:41:46-05:00",
       "L": "2026-11-01T22:11:50-05:00",
-      "M": "2026-11-02T04:04:09-05:00"
+      "M": "2026-11-02T04:04:09-05:00",
+      "N": "2026-11-04T08:41:10-05:00"
     },
     "task_issues": {
       "A": [
@@ -91,6 +94,9 @@
       ],
       "M": [
         87
+      ],
+      "N": [
+        88
       ]
     },
     "task_elapsed": {
@@ -105,7 +111,8 @@
       "J": 12,
       "K": 56,
       "L": 276,
-      "M": 285
+      "M": 285,
+      "N": 60
     },
     "task_paused": {},
     "task_paused_s": {
@@ -174,7 +181,11 @@
     },
     "review_task": "M",
     "task_actual_method": {
-      "M": "gaps over 30 min and pauses subtracted"
+      "M": "gaps over 30 min and pauses subtracted",
+      "N": "gaps over 30 min and pauses subtracted"
+    },
+    "task_estimates": {
+      "N": 160
     }
   },
   "last_completed_sprint": {
@@ -188,5 +199,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-02"
+  "updated": "2026-11-04"
 }

@@ -81,8 +81,10 @@ not while the reviews ran.
   162 [276], M 156 [285]. D-H's active minutes leave out the hours their
   runs worked in the background with no tool call; that is the F175
   design, and the plan's Runtime column carries run time separately. A,
-  B and C read far under their estimates (10, 11, 15 against 45, 60,
-  240), and C's elapsed equals its active; the cause is **unverified**.
+  B, C and I read far under their estimates (10, 11, 15, 14 against 45,
+  60, 240, 90), and the elapsed of B, C and I equals the active; the
+  cause is **unverified**. (I added 2026-11-04, after the proposals: it
+  meets the same fifth-of-estimate test.)
   One candidate: `finish_task` before M computed a wrong actual when the
   log held no point inside the task (fixed in c116f23).
 
@@ -210,7 +212,7 @@ not while the reviews ran.
   tie, F169 docstring): recurring (Sprints 28 and 29). Fixed in c116f23;
   the generators already refuse their fixed text, and these three were
   hand-written text. Root cause recorded; no new control.
-- **Timing that does not reflect work** (A, B, C): recurring (Sprint 28,
+- **Timing that does not reflect work** (A, B, C, I): recurring (Sprint 28,
   Sprint 29 IMP-4, F175). The stale-log case is fixed in c116f23; IMP-3.
 
 ## Review findings not fixed
@@ -240,4 +242,35 @@ exists unless it says "new".
 
 ## Improvement Decisions
 
-Pending (Decision D10 in `SPRINT_30_DECISIONS.md`).
+Team lead, 2026-11-04 (Decision D10, in full in `SPRINT_30_DECISIONS.md`):
+"do imp-1-5 now". All five are applied on this branch, timed as task N
+(#88):
+
+- **IMP-1, applied.** The close-out hook calls
+  `ci.evaluate(sha, require_job="full")`. `job_succeeded` now makes one
+  check-runs call for the commit, not one `gh run view` per run, and
+  counts only a GitHub Actions job, so the hook's worst case is 34s of
+  its 35s budget. The budget test counts the fourth call.
+- **IMP-2, applied.** The Phase 4 and Phase 5 per-term items name each
+  refusal and each reported state as a term.
+- **IMP-3, applied.** `--start-task X --estimate MIN` (or `--task X
+  --estimate MIN`) records the plan's minutes once; `--finish-task` flags
+  an actual under a fifth of it.
+- **IMP-4, applied.** The Phase 5 full-suite item runs with `-rf` and
+  writes the whole output to a file; `TROUBLESHOOTING.md` has the
+  symptom.
+- **IMP-5, applied.** A resume keeps the run's first commit in the
+  provenance block and lists later ones in `later_commits`. The status
+  file is written through a temporary file and a replace, and an update
+  is refused when the file changed after it was read. `--review-task`
+  refuses to move off a task whose timer runs. The commit-msg check reads
+  `review_task` with `.get`, so its proof goes red through the refusal.
+  The F166 over-budget test checks both branches.
+
+Each new rule has a red proof.
+
+Found while applying them: Task N's timer was finished before its commit,
+so `.githooks/commit-msg` refused the `fix:` commit, as designed. The
+commit went in as `process:` with the reason in its message; the work was
+timed and its actual recorded. Rule: commit, then `--finish-task`.
+`TROUBLESHOOTING.md` has the symptom.

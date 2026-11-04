@@ -125,6 +125,20 @@
 | 29 | Task I pypdf 6.21.1 to 6.21.2 | tooling | 45m | 17m | 0.38 | measured |
 | 29 | Task J PR 63 review fixes | tooling | none | 69m | n/a | measured; not planned |
 | 29 | Task K retrospective IMP-1 to IMP-4 and their review fixes | tooling | 125m | 55m | 0.44 | measured; two full suite runs inside it |
+| 30 | Task A (F173) the commit's own task timer | tooling | 45m | 10m | n/a | measured; finished before F175 kept elapsed; under a fifth of its estimate, cause unverified (retrospective IMP-3) |
+| 30 | Task B (F175) active and elapsed minutes | tooling | 60m | 11m | n/a | measured, active, 11m elapsed; under a fifth of its estimate, cause unverified |
+| 30 | Task C (F168) restarts are safe | tooling | 240m | 15m | n/a | measured, active, 15m elapsed; under a fifth of its estimate, cause unverified |
+| 30 | Task D (F174) best per algorithm on IEEE-CIS | research+code | 240m | 31m | n/a | measured, active, 678m elapsed; the 10-seed run worked in the background with no tool call |
+| 30 | Task E (F176) below greedy on IEEE-CIS | research+code | 90m | 2m | n/a | measured, active, 143m elapsed; the SCIP runs worked in the background |
+| 30 | Task F (F169) plug-in bins | research+code | 120m | 2m | n/a | measured, active, 41m elapsed |
+| 30 | Task G (F170) missed frauds' neighbors | research+code | 30m | 6m | n/a | measured, active, 40m elapsed |
+| 30 | Task H (F171) missed by all on IEEE-CIS | research+code | 60m | 13m | n/a | measured, active, 34m elapsed |
+| 30 | Task I (F172) Sprint 29 coverage tests | tooling | 90m | 14m | n/a | measured, active, 14m elapsed; under a fifth of its estimate, cause unverified |
+| 30 | Task J Phase 5 fresh-eyes fixes | tooling | none | 12m | n/a | measured, active, 12m elapsed; not planned |
+| 30 | Task K Manual Validation fixes and D8 | tooling | none | 46m | n/a | measured, active, 56m elapsed; not planned |
+| 30 | Task L CI under 5 minutes (D9) | tooling | none | 162m | n/a | measured, active, 276m elapsed; not planned |
+| 30 | Task M PR 74 review fixes | tooling | none | 156m | n/a | measured, active, 285m elapsed; not planned; two local proof runs of 41m and 1h43m inside it |
+| 30 | Task N retrospective IMP-1 to IMP-5 (D10) | tooling | 160m | 60m | 0.38 | measured, active, 60m elapsed; the first task with `--estimate` |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

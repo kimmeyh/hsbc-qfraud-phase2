@@ -242,7 +242,7 @@ def test_the_own_task_rule_can_fail():
                     test("test_a_review_commit_needs_the_review_task_set"),
                     "a review commit with no review task")
     assert_can_fail([Mutation(SCRIPT,
-                              '        own.add(cur["review_task"])\n',
+                              '        own.add(cur.get("review_task"))\n',
                               "        own.update(running)\n",
                               expect_occurrences=1)],
                     test("test_a_review_commit_needs_the_review_task_timed"),

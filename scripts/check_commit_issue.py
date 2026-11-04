@@ -90,7 +90,9 @@ def problem(message: str, branch: str, status) -> str | None:
             return (f"a 'PR {pr} review' commit is timed against the review "
                     "task, and none is set: scripts/update_sprint_status.py "
                     "--review-task X")
-        own.add(cur["review_task"])
+        # .get, not [], so the proof of the check above goes red through
+        # the refusal, not a KeyError (PR 74 review, Sprint 30 IMP-5).
+        own.add(cur.get("review_task"))
     if not own & set(running):
         return (f"this commit's task(s) {sorted(own)} are not being timed "
                 f"(timed: {running}); --start-task or --resume-task the "
