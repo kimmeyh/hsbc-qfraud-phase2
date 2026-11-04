@@ -288,10 +288,12 @@ def test_the_hook_full_job_requirement_can_fail():
     from injection import Mutation, assert_can_fail
     assert_can_fail([Mutation(HOOK, 'ci.evaluate(sha, require_job="full")',
                               "ci.evaluate(sha)", expect_occurrences=1)],
-                    lambda: _hook_with_ci(
+                    # The phrase, not the exit code: another close-out check
+                    # can block for its own reason (F97; Task O review).
+                    lambda: "full job" in _hook_with_ci(
                         '    return [{"name": "CI", "status": "completed", '
                         '"conclusion": "success", "headSha": sha, '
-                        '"url": ""}]', full_job=False)[0] != 0,
+                        '"url": ""}]', full_job=False)[1],
                     "a close-out over the push job alone")
 
 

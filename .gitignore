@@ -146,4 +146,4 @@ docs/thesis-candidates.md
 experiments/results/*.dryrun.json
 # update_sprint_status.py writes a temporary file, then replaces the status
 # file with it; one left by a crash is not tracked (Sprint 30 IMP-5).
-.claude/sprint_status.json.tmp
+.claude/sprint_status.json.*.tmp

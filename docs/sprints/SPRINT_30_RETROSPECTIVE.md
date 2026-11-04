@@ -83,8 +83,9 @@ not while the reviews ran.
   design, and the plan's Runtime column carries run time separately. A,
   B, C and I read far under their estimates (10, 11, 15, 14 against 45,
   60, 240, 90), and the elapsed of B, C and I equals the active; the
-  cause is **unverified**. (I added 2026-11-04, after the proposals: it
-  meets the same fifth-of-estimate test.)
+  cause is **unverified**. B, C and I are under a fifth of their
+  estimates; A is 0.22. (I added 2026-11-04, after the proposals;
+  corrected the same day by Task O: A is not under a fifth.)
   One candidate: `finish_task` before M computed a wrong actual when the
   log held no point inside the task (fixed in c116f23).
 
@@ -234,7 +235,7 @@ exists unless it says "new".
 
 | # | Title | Source | Type | Extends | Effort | Recommendation |
 |---|---|---|---|---|---|---|
-| IMP-1 | The close-out hook requires the full job green | Review finding; Cat 9 | Prevention | `verify_closeout_complete.py` and `check_ci_status.evaluate(require_job=)` (c116f23); one `gh run view` call, 31s worst case to 34s inside the hook's 35s budget | 30m | now |
+| IMP-1 | The close-out hook requires the full job green | Review finding; Cat 9 | Prevention | `verify_closeout_complete.py` and `check_ci_status.evaluate(require_job=)` (c116f23); one `gh run view` call (as applied: one `gh api` check-runs call), 31s worst case to 34s inside the hook's 35s budget | 30m | now |
 | IMP-2 | A refusal is a term: the per-term item names refusals and reported states | Cat 2; 9 untested branches | Prevention | `SPRINT_CHECKLIST.md` Phase 4 and Phase 5 per-term items (Sprint 29 IMP-1) | 10m | now |
 | IMP-3 | A task actual that reads under a fifth of its estimate is checked at finish | Cat 3; A, B, C | Detection (prevention is the c116f23 fallback; the cause of A-C is unverified, so a stop is the next control) | `update_sprint_status.py --finish-task` flags (c116f23) | 20m | now |
 | IMP-4 | Suite output goes to a file with `-rf`, never to a tail | Cat 2; a failure name lost | Prevention | `SPRINT_CHECKLIST.md` Phase 5 full-suite item; `docs/TROUBLESHOOTING.md` entry | 10m | now |
@@ -262,7 +263,9 @@ Team lead, 2026-11-04 (Decision D10, in full in `SPRINT_30_DECISIONS.md`):
 - **IMP-5, applied.** A resume keeps the run's first commit in the
   provenance block and lists later ones in `later_commits`. The status
   file is written through a temporary file and a replace, and an update
-  is refused when the file changed after it was read. `--review-task`
+  is refused when the file changed after it was read. That narrows the
+  window for a lost update; it does not close it (Task O review; F179
+  carries the lock). `--review-task`
   refuses to move off a task whose timer runs. The commit-msg check reads
   `review_task` with `.get`, so its proof goes red through the refusal.
   The F166 over-budget test checks both branches.
@@ -274,3 +277,35 @@ so `.githooks/commit-msg` refused the `fix:` commit, as designed. The
 commit went in as `process:` with the reason in its message; the work was
 timed and its actual recorded. Rule: commit, then `--finish-task`.
 `TROUBLESHOOTING.md` has the symptom.
+
+## Review of the improvement commit
+
+One short review of d792731 (no second round). No high findings; two
+medium and four low. Fixed in Task O (#89):
+
+- **The hook proof read the exit code**, so another close-out check
+  blocking for its own reason would have made it report a working guard
+  as vacuous (F97's class). It now checks the "full job" phrase.
+- **The concurrent-update guard narrows the window and does not close
+  it**, and the documents said it closed it. Each process now writes its
+  own temporary file, a failed check cleans up without a traceback, and
+  the documents say "narrows". The lock is carded as F179.
+- **Row A of `VELOCITY_LOG.md` said "under a fifth"**; 10 of 45 is 0.22.
+  Corrected here and in category 3.
+- **`--estimate 0` was dropped silently**, and `--estimate` with
+  `--start-task` and `--task` for two tasks gave it to one. Both are
+  refused, each with a red proof.
+- **The IMP-1 row named `gh run view`**; it is one `gh api` check-runs
+  call as applied.
+
+To F179 (Sprint 31 refinement): the exclusive lock, and `--review-task`
+evaluated after pause and finish in the same command.
+
+**The review took 14 minutes and about 115k tokens.** The team lead
+asked why a "short" review ran over 10 minutes. "Short" in the process
+meant one round over the improvement commits; it set no time limit, and
+the brief asked for six areas, live edge-case probes and permission to
+run tests (the five test files take minutes on this workstation). The
+brief was capped mid-run. Rule now in `SPRINT_CHECKLIST.md` Phase 7:
+the brief states about 10 minutes, the diff only, no test runs and no
+live GitHub calls; the full suite and CI's full job carry the tests.

@@ -350,7 +350,7 @@ def main(argv: list[str] | None = None,
                     metavar="N", help="append an issue number; repeatable")
     ap.add_argument("--task", default="", metavar="TASK",
                     help="with --add-issue: the task that owns the issue(s)")
-    ap.add_argument("--estimate", type=int, default=0, metavar="MIN",
+    ap.add_argument("--estimate", type=int, default=None, metavar="MIN",
                     help="with --start-task or --task: the task's planned "
                          "minutes, so --finish-task can flag a low actual")
     ap.add_argument("--review-task", default="", metavar="TASK",
@@ -406,10 +406,13 @@ def main(argv: list[str] | None = None,
 
     for assignment in args.set:
         changes.append(apply_set(doc, assignment))
-    if args.task and not args.add_issue and not args.estimate:
+    if args.task and not args.add_issue and args.estimate is None:
         raise SystemExit("--task names the owner of an --add-issue issue or "
                          "an --estimate; pass one with it")
-    if args.estimate:
+    if args.estimate is not None:
+        if args.start_task and args.task and args.start_task != args.task:
+            raise SystemExit("--estimate with --start-task and --task names "
+                             "two tasks; give it one")
         owner = args.start_task or args.task
         if not owner:
             raise SystemExit("--estimate needs --start-task X or --task X")
@@ -456,11 +459,14 @@ def main(argv: list[str] | None = None,
     # Two updates at once (a background agent's timer and the main loop's)
     # each read, changed and wrote the whole file, so the second write lost
     # the first's change silently (PR 74 review, Sprint 30 IMP-5). Refuse
-    # when the file changed since it was read; the write is one replace.
-    tmp = path.with_name(path.name + ".tmp")
+    # when the file changed since it was read; the write is one replace,
+    # from a temporary file of this process's own. This NARROWS the window
+    # and does not close it: two updates can both pass the check before
+    # either replaces. An exclusive lock is carded (Sprint 30 Task O).
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
     tmp.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
     if path.read_text(encoding="utf-8") != raw:
-        tmp.unlink()
+        tmp.unlink(missing_ok=True)
         raise SystemExit(f"{path.name} changed while this update ran; "
                          "nothing was written. Run the command again.")
     os.replace(tmp, path)

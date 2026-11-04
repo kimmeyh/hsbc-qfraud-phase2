@@ -48,7 +48,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] 7-step protocol run in order (SPRINT_RETROSPECTIVE.md); 16 categories x 4 roles, verbatim, no placeholders; the review findings are an input
 - [ ] Every RECURRING finding class has an improvement (card acceptance criterion, Phase 5 gate, test or hook); single findings have a root cause recorded
 - [ ] Improvements proposed + dispositioned; now-items committed; backlog-items -> master plan with F#s
-- [ ] ONE short review of the improvement commits only; its trivial findings fixed, the rest to the next sprint's Phase 1 refinement (no second round)
+- [ ] ONE short review of the improvement commits only; its trivial findings fixed, the rest to the next sprint's Phase 1 refinement (no second round). "Short" is a time cap: the brief states about 10 minutes, the diff only, no test runs and no live GitHub calls (the full suite and CI's full job carry the tests; Sprint 30's ran 14 minutes on a brief with none of these limits)
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
 - [ ] CI checked on the final HEAD (`scripts/check_ci_status.py`, no waiting). If it is still running or RED, arm the watcher and hand the result to an agent; the close-out hook blocks the completion claim until it is green
 - [ ] `gh pr ready` (ONLY here); final gate; team lead notified for approval

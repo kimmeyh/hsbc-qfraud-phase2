@@ -805,6 +805,13 @@ value. Removed from candidates.)
 - Acceptance (first version): the three documents exist with version 1.0 and a change list; each acronym and linked term resolves to an appendix anchor (a test fails a broken link or an acronym used before it is spelled out); each experimental claim names a tracked result file or document (the same resolution check as `test_phase2_figures_resolve.py`); `SPRINT_CHECKLIST.md` Phase 5 has the update step
 - Depends on: nothing. Informs: every sprint's Phase 5; the PoC plan
 
+**F179. The status file's update cannot lose another's change; the review task follows finish and pause (~45m [no-history], zero metered) Priority 40**
+- Phase: tooling (added 2026-11-04, Sprint 30 Task O, from the one short review of the retrospective improvement commit d792731)
+- `scripts/update_sprint_status.py` refuses a write when the status file changed after it was read, through a per-process temporary file and `os.replace`. That narrows the window and does not close it: two updates can both pass the check before either replaces, and the second wins silently. On Windows, `os.replace` raises `PermissionError` while a reader holds the file open, so the user sees a traceback, not the refusal
+- `--review-task` is evaluated before `--pause-task` and `--finish-task` in the same command, so `--finish-task J --review-task M` is refused although J finishes in that command. Fail-safe; it costs a second command
+- Acceptance: an exclusive lock (an `O_CREAT | O_EXCL` lock file beside the status file, with a stale-lock message naming the file) around the whole read, change and write; a test with two processes in which neither change is lost, proven red; a `PermissionError` on replace reported as a refusal; `--review-task` applied after pause and finish, with a test of the one-command case
+- Depends on: nothing
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)

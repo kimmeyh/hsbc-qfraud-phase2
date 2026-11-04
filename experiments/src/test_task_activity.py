@@ -164,6 +164,11 @@ def test_an_estimate_is_set_once_and_positive(tmp_path):
         _run(p, ["--task", "C", "--estimate", "600"], 1)
     with pytest.raises(SystemExit, match="positive number"):
         _run(p, ["--task", "D", "--estimate", "-5"], 1)
+    # Zero is refused too, not dropped as "no estimate" (Task O review).
+    with pytest.raises(SystemExit, match="positive number"):
+        _run(p, ["--task", "D", "--estimate", "0"], 1)
+    with pytest.raises(SystemExit, match="names two tasks"):
+        _run(p, ["--start-task", "D", "--task", "E", "--estimate", "60"], 1)
     with pytest.raises(SystemExit, match="needs --start-task"):
         _run(p, ["--estimate", "60"], 1)
 
@@ -184,7 +189,7 @@ def test_a_change_made_during_an_update_is_not_overwritten(tmp_path,
     with pytest.raises(SystemExit, match="changed while this update ran"):
         _run(p, ["--start-task", "C"], 0)
     assert p.read_text(encoding="utf-8") == other
-    assert not (p.parent / "sprint_status.json.tmp").exists()
+    assert not list(p.parent.glob("sprint_status.json*.tmp"))
 
 
 def test_the_review_task_does_not_move_off_a_running_task(tmp_path):
@@ -282,6 +287,17 @@ def test_the_gap_rule_can_fail():
                               "    if False:\n", expect_occurrences=1)],
                     test("test_an_estimate_is_set_once_and_positive"),
                     "a negative estimate accepted")
+    assert_can_fail([Mutation(SCRIPT,
+                              "        if args.start_task and args.task and "
+                              "args.start_task != args.task:\n",
+                              "        if False:\n", expect_occurrences=1)],
+                    test("test_an_estimate_is_set_once_and_positive"),
+                    "an estimate given two tasks")
+    assert_can_fail([Mutation(SCRIPT, "    if args.estimate is not None:\n",
+                              "    if args.estimate:\n",
+                              expect_occurrences=1)],
+                    test("test_an_estimate_is_set_once_and_positive"),
+                    "an estimate of 0 dropped silently")
     assert_can_fail([Mutation(SCRIPT, "        if not owner:\n",
                               "        if False:\n", expect_occurrences=1)],
                     test("test_an_estimate_is_set_once_and_positive"),
