@@ -89,6 +89,10 @@ Nothing in this stage is time-bound. Schedule on value.
       - **Progress 2026-10-26/28** (Sprint 29): entries for F156, F160,
         F166 and F158 written before their first scores, each with its
         result recorded after. Open: the filing date (team lead)
+      - **Progress 2026-10-31** (Sprint 30): entries for F174, F176, F169,
+        F170 and F171 written before their first scores, and F171's budget
+        amendment before its post hoc count (Decision D7). Open: the filing
+        date (team lead)
 - [x] **C**: F154 every saved test result's confusion counts, and where
       each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
       the standing rule that every result records its outcomes (CLAUDE.md),
@@ -104,7 +108,10 @@ Nothing in this stage is time-bound. Schedule on value.
 - [x] **C**: F108 ceiling validation harness.
       Sprint 27: `docs/phase2/F108_CEILING_VALIDATION.md`; no method validated.
       Sprint 29 (F156): the Henze-Penrose bound fails on the harness too;
-      F169 tries the second named candidate
+      F169 tries the second named candidate. Sprint 30 (F169): both
+      plug-ins pass F108's rule; LightGBM's reference-arm passes are
+      degenerate, so the reading rests on the main and flip arms
+      (`docs/phase2/F169_PLUGIN_BINS.md`)
 - [x] **C**: F109 SPECTRA domain ladder and aggregation experiments.
       Sprint 27: `docs/phase2/F109_TIER1_LADDER.md`
 - [x] **H**: Goal ordering for prioritization: field advancement leads if it
@@ -186,6 +193,11 @@ Nothing in this stage is time-bound. Schedule on value.
         there (`experiments/phase2/results/f160_room_ieee.json`). SCIP did
         not beat greedy within its cap, so no solver has yet been shown to
         beat greedy
+      - **Progress 2026-10-31** (Sprint 30, F176): a selection below greedy
+        on 3 of the 6 instances, each by under 2e-05; SCIP did not beat
+        greedy at its 1,200 s cap, and the swap search missed the optimum
+        on 3 of the 7 check cases where greedy is not optimal
+        (`docs/phase2/F176_BELOW_GREEDY.md`)
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours

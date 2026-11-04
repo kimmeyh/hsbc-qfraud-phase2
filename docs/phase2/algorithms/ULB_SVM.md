@@ -65,20 +65,20 @@ At the 0.5% alert-budget threshold chosen on validation:
 
 ## Confusion counts per seed, test fold
 
-TP, FP, TN and FN at each validation-chosen threshold.
+TP, FP, TN and FN at each validation-chosen threshold, and at the test fold's own 0.5% budget (the comparison page's recall).
 
-| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN |
-|---|---|---|---|
-| 42 | C 1.0, class_weight None | 73 / 10 / 56641 / 22 | 83 / 199 / 56452 / 12 |
-| 43 | C 1.0, class_weight None | 69 / 7 / 56644 / 26 | 80 / 193 / 56458 / 15 |
-| 44 | C 1.0, class_weight None | 70 / 10 / 56641 / 25 | 81 / 224 / 56427 / 14 |
-| 45 | C 1.0, class_weight None | 74 / 9 / 56642 / 21 | 81 / 215 / 56436 / 14 |
-| 46 | C 1.0, class_weight None | 76 / 14 / 56637 / 19 | 80 / 185 / 56466 / 15 |
-| 47 | C 1.0, class_weight None | 74 / 18 / 56633 / 21 | 81 / 238 / 56413 / 14 |
-| 48 | C 0.01, class_weight None | 77 / 20 / 56631 / 18 | 88 / 235 / 56416 / 7 |
-| 49 | C 0.01, class_weight None | 73 / 14 / 56637 / 22 | 79 / 219 / 56432 / 16 |
-| 50 | C 0.001, class_weight None | 68 / 12 / 56639 / 27 | 77 / 246 / 56405 / 18 |
-| 51 | C 1.0, class_weight None | 71 / 17 / 56634 / 24 | 77 / 219 / 56432 / 18 |
+| Seed | Chosen configuration | max-F1: TP / FP / TN / FN | 0.5% budget: TP / FP / TN / FN | 0.5% budget on the test fold: TP / FP / TN / FN |
+|---|---|---|---|---|
+| 42 | C 1.0, class_weight None | 73 / 10 / 56641 / 22 | 83 / 199 / 56452 / 12 | 83 / 201 / 56450 / 12 |
+| 43 | C 1.0, class_weight None | 69 / 7 / 56644 / 26 | 80 / 193 / 56458 / 15 | 80 / 204 / 56447 / 15 |
+| 44 | C 1.0, class_weight None | 70 / 10 / 56641 / 25 | 81 / 224 / 56427 / 14 | 81 / 203 / 56448 / 14 |
+| 45 | C 1.0, class_weight None | 74 / 9 / 56642 / 21 | 81 / 215 / 56436 / 14 | 81 / 203 / 56448 / 14 |
+| 46 | C 1.0, class_weight None | 76 / 14 / 56637 / 19 | 80 / 185 / 56466 / 15 | 80 / 204 / 56447 / 15 |
+| 47 | C 1.0, class_weight None | 74 / 18 / 56633 / 21 | 81 / 238 / 56413 / 14 | 81 / 203 / 56448 / 14 |
+| 48 | C 0.01, class_weight None | 77 / 20 / 56631 / 18 | 88 / 235 / 56416 / 7 | 87 / 197 / 56454 / 8 |
+| 49 | C 0.01, class_weight None | 73 / 14 / 56637 / 22 | 79 / 219 / 56432 / 16 | 78 / 206 / 56445 / 17 |
+| 50 | C 0.001, class_weight None | 68 / 12 / 56639 / 27 | 77 / 246 / 56405 / 18 | 77 / 207 / 56444 / 18 |
+| 51 | C 1.0, class_weight None | 71 / 17 / 56634 / 24 | 77 / 219 / 56432 / 18 | 77 / 207 / 56444 / 18 |
 
 ## Limits
 

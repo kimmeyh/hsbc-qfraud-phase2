@@ -111,6 +111,46 @@ def test_the_unestablished_runs_split_at_a_reliable_pair():
     assert fd.unestablished(order, pairs) == [["a", "b"], ["c", "d"]]
 
 
+def test_the_confusion_counts_at_the_test_folds_budget_are_stated():
+    # Sprint 30 D8, on the recorded result: the outcome block's counts at
+    # the test fold's own budget, read here without the generator.
+    res = _res()
+    pages = fd.render(res)
+    lanes = [r["lanes"]["proxy"] for r in res["rows"]]
+    c = [ln["outcome"]["at_budget_on_test"]["confusion"] for ln in lanes]
+    row = next(ln for ln in pages[fd.COMPARISON].splitlines()
+               if "| CVQBoost proxy |" in ln)
+    cells = [x.strip() for x in row.split("|")]
+    want = []
+    for k in ("tp", "fp", "tn", "fn"):
+        v = [x[k] for x in c]
+        want.append(f"{min(v):,} to {max(v):,}")
+    assert cells[6:10] == want
+    first = c[0]
+    assert (f"| {first['tp']} / {first['fp']} / {first['tn']} / {first['fn']} |\n"
+            in pages[fd.FILES["proxy"]])
+    over = sum(ln["outcome"]["at_budget_on_test"]["n_flagged"]
+               > ln["outcome"]["at_budget_on_test"]["n_budget"] for ln in lanes)
+    # Both branches, so the test does not assume the recorded result has
+    # over-budget seeds (PR 74 review, Sprint 30 IMP-5).
+    if over:
+        assert (f"the proxy on {over} of {len(lanes)} seeds"
+                in pages[fd.COMPARISON])
+    else:
+        assert "the proxy on " not in pages[fd.COMPARISON]
+
+
+def test_no_lane_over_its_budget_writes_no_tie_note():
+    within = {"n_flagged": 450, "n_budget": 450}
+    over = {"n_flagged": 455, "n_budget": 450}
+
+    def rows(b):
+        return [{"lanes": {"proxy": {"outcome": {"at_budget_on_test": b}}}}]
+    assert fd.over_budget_line(rows(within), ["proxy"], "test fold") is None
+    assert "on 1 of 1 seeds, up to 455 rows" in fd.over_budget_line(
+        rows(over), ["proxy"], "test fold")
+
+
 def test_the_page_check_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     page = fd.DOCS / "ULB_CVQBOOST_PROXY.md"
@@ -134,6 +174,19 @@ def test_the_page_check_can_fail():
             f"{THIS}::test_a_proxy_statement_the_result_does_not_support_"
             "is_refused", ROOT),
         "a proxy claim the result does not support")
+    for old, new, label in (
+            ("{counts_cell(at_budget(l)['confusion'])} |\")\n",
+             "{cells[1]} |\")\n",
+             "the validation threshold's counts shown as the test fold's"),
+            ("f\"{tp} | {fp} | {tn} | {fn} | [{FILES[a]}]",
+             "f\"{fp} | {tp} | {tn} | {fn} | [{FILES[a]}]",
+             "the comparison's counts in the wrong columns")):
+        assert_can_fail(
+            [Mutation(SCRIPT, old, new, expect_occurrences=1)],
+            lambda: run_pytest(
+                f"{THIS}::test_the_confusion_counts_at_the_test_folds_budget_"
+                "are_stated", ROOT),
+            label)
     assert_can_fail(
         [Mutation(SCRIPT, "    if wrong:\n        raise ClaimError",
                   "    if False:\n        raise ClaimError",

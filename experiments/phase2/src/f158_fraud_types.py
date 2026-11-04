@@ -39,6 +39,8 @@ import f108_ceiling as fc  # noqa: E402  (Phase 2, F108; not edited)
 ROOT = fc.ROOT
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 OUT = ROOT / "experiments" / "phase2" / "results" / "f158_fraud_types.json"
+# F168 part 7: a long run resumes through provenance.start.
+LONG_RUN = True
 SEEDS = tuple(range(42, 50))
 DELAY = 7                      # a label is known 7 days after its day
 ALPHA = 0.05

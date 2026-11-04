@@ -326,6 +326,8 @@ def collect_violations(root: Path, sprint_num: int) -> list[str]:
     #     git rev-parse ref   3s  (check_ci_status.head_sha)
     #   + gh auth status      3s  (check_ci_status._require_gh)
     #   + gh run list         3s  (check_ci_status.runs_for)
+    #   + gh api check-runs   3s  (check_ci_status.job_succeeded, one call
+    #                              for every run; Sprint 30 IMP-1)
     #   + git branch          2s  (_branch, every run: no branch_override
     #                              outside the tests)
     #   + git rev-list       3x2s (origin/develop..HEAD, develop..HEAD, then
@@ -336,8 +338,8 @@ def collect_violations(root: Path, sprint_num: int) -> list[str]:
     #   + gh issue list       4s
     #   + git diff            2s  (no-plan branch: are the commits only
     #                              planning records? F125)
-    #   = 31s worst case, inside the 35s budget (27s before F125 added the
-    #     origin/develop attempt and the no-plan diff).
+    #   = 34s worst case, inside the 35s budget (27s before F125 added the
+    #     origin/develop attempt and the no-plan diff; 31s before IMP-1).
     #
     # Every git call now passes an EXPLICIT timeout so the guard in
     # test_ci_status.py can see it. A default the guard cannot read is a
@@ -375,7 +377,9 @@ def collect_violations(root: Path, sprint_num: int) -> list[str]:
         if ci is None:
             raise _SkipCI
         sha = ci.head_sha("HEAD")
-        rc_ci, lines = ci.evaluate(sha)
+        # The full job alone runs the red proofs; the push job's green is
+        # not a close-out (PR 74 review, Sprint 30 IMP-1).
+        rc_ci, lines = ci.evaluate(sha, require_job="full")
         if rc_ci == ci.FAILED:
             violations.append(
                 f"CI is RED on {sha[:7]}. A close-out cannot be complete over "
@@ -384,8 +388,10 @@ def collect_violations(root: Path, sprint_num: int) -> list[str]:
                 + " ".join(ln.strip() for ln in lines if "http" in ln))
         elif rc_ci == ci.PENDING:
             violations.append(
-                f"CI is still RUNNING on {sha[:7]}. Wait for it before "
-                "claiming close-out; a queued run is not a passing one.")
+                f"CI is still RUNNING on {sha[:7]}, or its full job has not "
+                "succeeded yet (the push job leaves the red proofs out). Wait "
+                "for it before claiming close-out; a queued run is not a "
+                "passing one.")
     except _SkipCI:
         pass                       # already reported by the import handler
     except Exception as exc:                             # noqa: BLE001

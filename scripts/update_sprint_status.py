@@ -17,11 +17,19 @@ Usage:
         --plan-doc docs/sprints/SPRINT_17_PLAN.md
     python scripts/update_sprint_status.py --start-task C
     python scripts/update_sprint_status.py --finish-task C
-    python scripts/update_sprint_status.py --add-issue 19
+    python scripts/update_sprint_status.py --add-issue 19 --task C
+    python scripts/update_sprint_status.py --review-task J
 
 `--add-issue` appends an issue number to `github_issues`, once, keeping the
 list sorted (Sprint 25 IMP-4: a task added at Manual Validation opened #19,
 and `--set` cannot append to a list, so the file fell out of step).
+With `--task X` it also records the issue under task X in `task_issues`,
+which `.githooks/commit-msg` reads: a feat or fix commit is admitted only
+while the task that owns its named issue is timed (F173, Sprint 30: the
+hook accepted any running timer, so Task C's commit 5348add, #66, would
+have passed while only D's and H's timers ran). `--review-task X` names
+the task whose timer a "PR n review" commit needs, as Sprint 29's Task J
+was.
 
 `--pause-task X` and `--resume-task X` keep a wait, such as a metered stop
 awaiting approval, out of the actual. `--start-task` refuses while another
@@ -43,6 +51,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -100,15 +109,31 @@ def apply_set(doc: dict, assignment: str) -> str:
     return f"  {section_name}.{key}: {before!r} -> {section[key]!r}"
 
 
-def add_issue(doc: dict, number: int) -> str:
+def add_issue(doc: dict, number: int, task: str = "") -> str:
     if number <= 0:
         raise SystemExit(f"Issue number must be positive, got {number}.")
-    issues = doc.setdefault("current_sprint", {}).setdefault("github_issues", [])
+    cur = doc.setdefault("current_sprint", {})
+    issues = cur.setdefault("github_issues", [])
     if number in issues:
-        return f"  current_sprint.github_issues: #{number} already listed"
-    issues.append(number)
-    issues.sort()
-    return f"  current_sprint.github_issues: added #{number} -> {issues}"
+        line = f"  current_sprint.github_issues: #{number} already listed"
+    else:
+        issues.append(number)
+        issues.sort()
+        line = f"  current_sprint.github_issues: added #{number} -> {issues}"
+    if task:
+        owners = cur.setdefault("task_issues", {})
+        other = [t for t, ns in owners.items() if number in ns and t != task]
+        if other:
+            # One owner per issue, or the hook cannot tell whose timer a
+            # commit naming it needs.
+            raise SystemExit(f"Issue #{number} already belongs to task "
+                             f"{other[0]}.")
+        mine = owners.setdefault(task, [])
+        if number not in mine:
+            mine.append(number)
+            mine.sort()
+        line += f"; task_issues.{task}: {mine}"
+    return line
 
 
 def open_tasks(cur: dict) -> list[str]:
@@ -148,6 +173,20 @@ def start_task(doc: dict, task: str, now: datetime,
     return line
 
 
+def set_estimate(doc: dict, task: str, minutes: int) -> str:
+    """Record the task's planned minutes. A second estimate is refused:
+    moving it after the work would move the flag (Sprint 30 IMP-3)."""
+    if minutes <= 0:
+        raise SystemExit(f"an estimate is a positive number of minutes, "
+                         f"not {minutes}")
+    estimates = doc["current_sprint"].setdefault("task_estimates", {})
+    if task in estimates:
+        raise SystemExit(f"Task {task} already has an estimate: "
+                         f"{estimates[task]}")
+    estimates[task] = minutes
+    return f"  current_sprint.task_estimates.{task}: {minutes}"
+
+
 def pause_task(doc: dict, task: str, now: datetime) -> str:
     """Stop the clock, for example while a metered stop awaits approval."""
     cur = doc["current_sprint"]
@@ -168,18 +207,64 @@ def resume_task(doc: dict, task: str, now: datetime) -> str:
     paused = cur.get("task_paused", {})
     if task not in paused:
         raise SystemExit(f"Task {task} is not paused.")
-    gap = (now - datetime.fromisoformat(paused.pop(task))).total_seconds()
+    began = paused.pop(task)
+    gap = (now - datetime.fromisoformat(began)).total_seconds()
     if gap < 0:
         raise SystemExit(f"Task {task} resumes before it paused.")
     total = cur.setdefault("task_paused_s", {})
     total[task] = total.get(task, 0) + int(gap)
+    # The span itself, so --finish-task does not subtract a pause twice
+    # when it also has no activity (F175).
+    cur.setdefault("task_pause_spans", {}).setdefault(task, []).append(
+        [began, now.isoformat(timespec="seconds")])
     return (f"  current_sprint.task_paused_s.{task}: {total[task]} s paused "
             "in all")
 
 
-def finish_task(doc: dict, task: str, now: datetime) -> str:
+IDLE_GAP_S = 30 * 60
+
+
+def activity(log: Path) -> tuple[list[datetime], int] | None:
+    """The activity log's timestamps and the count of lines that are not
+    one, or None when there is no log."""
+    if not log.exists():
+        return None
+    out, dropped = [], 0
+    for line in log.read_text(encoding="utf-8").splitlines():
+        try:
+            out.append(datetime.fromisoformat(line.strip()))
+        except ValueError:
+            dropped += 1
+    return out, dropped
+
+
+def idle_seconds(points: list[datetime], start: datetime, end: datetime,
+                 pauses: list[tuple[datetime, datetime]]) -> int:
+    """Seconds of [start, end] that are not work: every gap of more than
+    IDLE_GAP_S between activity points (the start and end count as points),
+    and every recorded pause. Their union, so a pause with no tool calls in
+    it is subtracted once."""
+    pts = [start, *sorted(p for p in points if start < p < end), end]
+    spans = [(a, b) for a, b in zip(pts, pts[1:])
+             if (b - a).total_seconds() > IDLE_GAP_S]
+    spans += [(max(a, start), min(b, end)) for a, b in pauses
+              if min(b, end) > max(a, start)]
+    total, reach = 0.0, None
+    for a, b in sorted(spans):
+        if reach is not None and a < reach:
+            a = reach
+        if b > a:
+            total += (b - a).total_seconds()
+        reach = b if reach is None else max(reach, b)
+    return int(total)
+
+
+def finish_task(doc: dict, task: str, now: datetime,
+                log: Path | None = None) -> str:
     """Compute the actual from the recorded start, in whole minutes, less
-    any time paused."""
+    any time paused and, when there is an activity log, any gap of more
+    than 30 minutes with no tool call (F175, Sprint 30). The elapsed
+    minutes are kept beside it in `task_elapsed`."""
     cur = doc["current_sprint"]
     stamp = cur.get("task_started", {}).get(task)
     if not stamp:
@@ -193,13 +278,49 @@ def finish_task(doc: dict, task: str, now: datetime) -> str:
     if task in cur.get("task_paused", {}):
         raise SystemExit(f"Task {task} is paused; --resume-task it first, so "
                          "the pause is measured rather than guessed.")
-    elapsed = (now - datetime.fromisoformat(stamp)).total_seconds()
+    start = datetime.fromisoformat(stamp)
+    elapsed = (now - start).total_seconds()
     if elapsed < 0:
         raise SystemExit(f"Task {task} finishes before it started ({stamp}).")
-    elapsed -= cur.get("task_paused_s", {}).get(task, 0)
-    actuals[task] = max(1, math.ceil(elapsed / 60))
+    paused_s = cur.get("task_paused_s", {}).get(task, 0)
+    read = activity(log) if log is not None else None
+    points, dropped = read if read is not None else (None, 0)
+    if points is None:
+        idle, how = paused_s, "no activity log: elapsed less pauses"
+    elif not any(start < p < now for p in points):
+        # A log with nothing inside the task (the hook unregistered, broken
+        # or failing) would make the whole task one idle gap: an actual of
+        # 1 minute, silently (PR 74 review).
+        idle, how = paused_s, ("no activity logged during the task: elapsed "
+                               "less pauses; check the activity hook")
+    else:
+        spans = [(datetime.fromisoformat(a), datetime.fromisoformat(b))
+                 for a, b in cur.get("task_pause_spans", {}).get(task, [])]
+        idle = idle_seconds(points, start, now, spans)
+        # A pause recorded before spans were kept is still subtracted.
+        idle = max(idle, paused_s)
+        how = "gaps over 30 min and pauses subtracted"
+        if idle - paused_s > elapsed / 2:
+            how += ("; over half the elapsed time had no tool call, and a "
+                    "background wait with none counts as idle")
+    if dropped:
+        how += f"; {dropped} unreadable line(s) in the activity log"
+    err = log.parent / "activity.err" if log is not None else None
+    if err is not None and err.exists() and err.read_text(encoding="utf-8").strip():
+        how += f"; the activity hook recorded errors in {err.name}"
+    actuals[task] = max(1, math.ceil((elapsed - idle) / 60))
+    est = cur.get("task_estimates", {}).get(task)
+    if est and actuals[task] * 5 < est:
+        # Sprint 30 A-C read 10, 11 and 15 against 45, 60 and 240, and were
+        # found at the retrospective with the cause unverified (IMP-3).
+        how += (f"; under a fifth of its {est}-minute estimate: check the "
+                "timer, the parallel tasks and the activity log before using "
+                "it")
+    cur.setdefault("task_actual_method", {})[task] = how
+    cur.setdefault("task_elapsed", {})[task] = max(1, math.ceil(elapsed / 60))
     return (f"  current_sprint.task_actuals.{task}: {actuals[task]} min "
-            f"(from {stamp})")
+            f"active, {cur['task_elapsed'][task]} elapsed (from {stamp}; "
+            f"{how})")
 
 
 def main(argv: list[str] | None = None,
@@ -227,6 +348,13 @@ def main(argv: list[str] | None = None,
                     help="restart a paused task's clock")
     ap.add_argument("--add-issue", type=int, action="append", default=[],
                     metavar="N", help="append an issue number; repeatable")
+    ap.add_argument("--task", default="", metavar="TASK",
+                    help="with --add-issue: the task that owns the issue(s)")
+    ap.add_argument("--estimate", type=int, default=None, metavar="MIN",
+                    help="with --start-task or --task: the task's planned "
+                         "minutes, so --finish-task can flag a low actual")
+    ap.add_argument("--review-task", default="", metavar="TASK",
+                    help="the task a 'PR n review' commit is timed against")
     ap.add_argument("--path", default=str(STATUS),
                     help="status file (tests override this)")
     args = ap.parse_args(argv)
@@ -235,7 +363,8 @@ def main(argv: list[str] | None = None,
     if not path.exists():
         raise SystemExit(f"{path} does not exist")
 
-    doc = json.loads(path.read_text(encoding="utf-8"))
+    raw = path.read_text(encoding="utf-8")
+    doc = json.loads(raw)
     changes: list[str] = []
 
     if args.new_sprint > 0:
@@ -267,14 +396,43 @@ def main(argv: list[str] | None = None,
             "task_actuals": {},
             # F136 (Sprint 23 IMP-3): the start stamps the actuals come from.
             "task_started": {},
+            # F173 (Sprint 30): the issues each task owns, and the task a
+            # "PR n review" commit is timed against.
+            "task_issues": {},
+            "review_task": None,
         }
         changes.append(f"  rolled to sprint {args.new_sprint} "
                        f"(previous: {doc['last_completed_sprint']['number']})")
 
     for assignment in args.set:
         changes.append(apply_set(doc, assignment))
+    if args.task and not args.add_issue and args.estimate is None:
+        raise SystemExit("--task names the owner of an --add-issue issue or "
+                         "an --estimate; pass one with it")
+    if args.estimate is not None:
+        if args.start_task and args.task and args.start_task != args.task:
+            raise SystemExit("--estimate with --start-task and --task names "
+                             "two tasks; give it one")
+        owner = args.start_task or args.task
+        if not owner:
+            raise SystemExit("--estimate needs --start-task X or --task X")
+        changes.append(set_estimate(doc, owner, args.estimate))
     for number in args.add_issue:
-        changes.append(add_issue(doc, number))
+        changes.append(add_issue(doc, number, args.task))
+    if args.review_task:
+        cur = doc["current_sprint"]
+        before = cur.get("review_task")
+        # One field names the review task, so moving it off a task still
+        # timed would let that task's "PR n review" commits pass under the
+        # new one (PR 74 review, Sprint 30 IMP-5).
+        if before and before != args.review_task and before in open_tasks(cur):
+            raise SystemExit(
+                f"review_task is {before}, whose timer is still running. "
+                f"Finish or --pause-task {before} first, then set "
+                f"{args.review_task}.")
+        cur["review_task"] = args.review_task
+        changes.append(f"  current_sprint.review_task: {before!r} -> "
+                       f"{args.review_task!r}")
 
     clock = now or datetime.now().astimezone()
     if args.pause_task:
@@ -284,7 +442,8 @@ def main(argv: list[str] | None = None,
     if args.start_task:
         changes.append(start_task(doc, args.start_task, clock, args.parallel))
     if args.finish_task:
-        changes.append(finish_task(doc, args.finish_task, clock))
+        changes.append(finish_task(doc, args.finish_task, clock,
+                                   path.parent / "activity.log"))
 
     if not changes:
         print("nothing to do; pass --set or --new-sprint")
@@ -297,7 +456,20 @@ def main(argv: list[str] | None = None,
     # `phase_4_execution` against a sprint with two merged PRs.
     doc["updated"] = date.today().isoformat()
 
-    path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+    # Two updates at once (a background agent's timer and the main loop's)
+    # each read, changed and wrote the whole file, so the second write lost
+    # the first's change silently (PR 74 review, Sprint 30 IMP-5). Refuse
+    # when the file changed since it was read; the write is one replace,
+    # from a temporary file of this process's own. This NARROWS the window
+    # and does not close it: two updates can both pass the check before
+    # either replaces. An exclusive lock is carded (Sprint 30 Task O).
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
+    tmp.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+    if path.read_text(encoding="utf-8") != raw:
+        tmp.unlink(missing_ok=True)
+        raise SystemExit(f"{path.name} changed while this update ran; "
+                         "nothing was written. Run the command again.")
+    os.replace(tmp, path)
 
     # Re-read and re-parse rather than trusting the write.
     json.loads(path.read_text(encoding="utf-8"))

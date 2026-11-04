@@ -241,6 +241,9 @@ on 2026-10-23:
 | - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
 | - | Fraud types: per-type detectors against one model, on F108's simulator | F158 | none | Written 2026-10-26, below |
 | - | Best achievable result per algorithm on ULB, classical and proxy lanes | F166 (F157 part 1) | none | Written 2026-10-27, below |
+| - | Best achievable result per algorithm on IEEE-CIS, classical and proxy lanes | F174 (F157 part 2) | none | Written 2026-10-31, below |
+| - | ULB frauds missed by every model: nearest neighbors | F170 | none | Written 2026-10-31, below |
+| - | F158 step 3 on IEEE-CIS | F171 | none | Written 2026-10-31, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -487,6 +490,40 @@ design only; the device arm is F25 and needs its own per-block approval.
   - **Reported whatever the result**: per instance, the fraud rate, the
     ridge sweep, the chosen weight, each method's objective, the floor,
     both gaps, the data share, both resolution checks, and run times.
+    No test score is computed, so no outcome block is needed.
+- **Amendment, 2026-10-31 (Sprint 30 Task E, F176, #79), written before
+  its module exists or any solver runs.** F160 measured the room only to
+  the floor, a bound: greedy ended about 0.097 above it on all six
+  IEEE-CIS instances, and SCIP stopped at its 300 s cap without beating
+  greedy. This asks whether any classical method finds a selection below
+  greedy on the same six instances.
+  - **Instances**: F160's, rebuilt from its seeded pools with its code
+    (`f160_room_ieee.ieee_fold`, `ieee_instances`), because F160 stored
+    rows, not Hamiltonians. At F160's chosen weight (lambda 2.0). Before
+    any solver runs, each rebuilt greedy objective must match F160's
+    recorded one within 1e-9, or the run stops.
+  - **Check first, that "below greedy" can fire**: instances of 20
+    learners choosing 4 (F94's exact-check size), solved exactly by
+    enumeration: the first 20 learners of each of the six instances, and
+    20 seeded random-sign instances. On a case where greedy is above the
+    exact optimum, the swap search must reach it. If no case has greedy
+    above the optimum, the reading is stated as unable to fire.
+  - **Methods per instance**: greedy; a best-improvement swap search from
+    greedy's support (every swap of one chosen learner for one unchosen,
+    until no swap improves by more than 1e-6, at most 100 passes);
+    simulated annealing from greedy's support (`exp3_controls`, 3,000
+    iterations, seeds 42-44); SCIP with a 1,200 s cap (4 x F160's), with
+    its dual bound.
+  - **Reading**: "below greedy" when the best objective found is more
+    than 1e-6 below greedy's. Below greedy on some instance shows the
+    room can be reached, and the device question becomes whether
+    Dirac-3S reaches it faster or further. None below greedy within the
+    caps leaves the room unshown, and is reported as that. SCIP's dual
+    bound, where above the floor, bounds the room more tightly than the
+    floor; the room bound is greedy minus the larger of the two.
+  - **Reported whatever the result**: per instance, each method's
+    objective, support and time, the best found, its gap to greedy and
+    to the floor, SCIP's status and dual bound; and the check's cases.
     No test score is computed, so no outcome block is needed.
 
 ### Experiment 4 (F111): the CVQBoost-KNN lane under the source protocol and ours
@@ -1046,6 +1083,38 @@ transaction is generated.
   - **Reported whatever the result**: per seed and arm, m, n, C, D, u,
     both ends, width, the Bayes error, each term's outcome, and the run
     time.
+- **Amendment, 2026-10-31 (Sprint 30 Task F, F169, #80; Sprint 30 D3
+  option 1), written before its module exists or any model is fit.** The
+  plug-in with two estimators set for extreme imbalance, on F108's
+  generator, posterior, splits, seeds 42-46, arms and margin, all
+  unchanged (`f108_ceiling` is imported, not edited). Why two: F108's
+  inferred cause of HGB failing the reference arm is that 255 quantile
+  bins put a top-0.05% threshold inside one bin, possibly with early
+  stopping on few positives. In scikit-learn 1.9.0, HGB's `max_bins`
+  accepts 2-255 and 255 is the default (probed 2026-10-30: 256 raises),
+  so HGB cannot take more bins.
+  - **`hgb_no_es`**: `HistGradientBoostingClassifier(random_state=seed,
+    early_stopping=False)`, every other setting F108's. (HGB's default
+    `early_stopping="auto"` is on above 10,000 rows, so it was on in
+    F108.)
+  - **`lgbm_bins`**: `LGBMClassifier` in HGB's shape, 100 trees,
+    learning rate 0.1, 31 leaves, 20 rows per leaf, `max_bin` 4095 (each
+    bin then holds about 0.024% of the rows, under the reference
+    threshold's 0.05%), no early stopping, `random_state=seed`.
+  - **Method**: F108's plug-in, the mean of min(p, 1 - p) on the test
+    window, fitted on the full training window, against the Bayes error.
+    The learning curve and the other methods are not rerun.
+  - **Rule, unchanged**: an estimator passes if its plug-in is recovered
+    (within max(0.0005, 0.10 x Bayes error)) on 4 of 5 seeds on the main,
+    no-noise arm; a stopped seed counts as a miss. The noise and
+    reference arms are reported, not decisive.
+  - **Attribution, set here**: both pass, early stopping was the cause;
+    only `lgbm_bins` passes, the bins mattered; only `hgb_no_es` passes,
+    early stopping alone suffices; neither passes, no plug-in is
+    validated and F114 stays blocked.
+  - **Reported whatever the result**: per seed, arm and estimator, the
+    estimate, the Bayes error, their ratio, recovered or not, the test
+    AUPRC against the Bayes AUPRC, the fit time, and an outcome block.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -1517,6 +1586,155 @@ Not filed; part of this draft. No device. Descriptive: no pass or fail.
   `docs/phase2/algorithms/` and one ULB comparison page, each naming the
   result file, so `test_phase2_figures_resolve.py` checks their figures.
 
+### F174: best achievable result per algorithm on IEEE-CIS (F157 part 2)
+
+Written 2026-10-31 (Sprint 30 Task D, #78), before any score below.
+Not filed; part of this draft. No device. Descriptive: no pass or fail.
+Everything not stated here is as in the F166 entry above.
+
+- **ID and card**: unnumbered analysis entry; F174, the IEEE-CIS part of
+  F157. Device lanes and QNN are out of this part.
+- **Question**: tuned under F166's protocol, how well does each of the
+  same seven algorithms do on IEEE-CIS, and which differences between
+  them are reliable?
+- **Data and folds**: IEEE-CIS training data, exact duplicates removed
+  (`ieee_loader.dedupe_ieee`), the rolling-origin month folds of F105's
+  harness (`ieee_splits.rolling_origin_folds`, the leakage assertion run
+  on every build). IEEE-CIS is split by time, not at random, so the
+  validation and test rows are two months, not a 60/20/20 draw:
+  - **Validation**: the month-3 fold. Every configuration is fitted on
+    months 0-2 and scored on month 3.
+  - **Test**: the month-4 fold, F152's first scored month. Each
+    algorithm's chosen configuration is fitted again on months 0-3 and
+    scored once on month 4. No score comes from rows that chose its
+    configuration (section 2).
+  - Features for each fold come from `ieee_harness.build_fold`, fitted
+    on that fold's training months only, then the item-4 controls
+    (`ieee_controls.apply_item4_controls`, seed 42, as F152), each on its
+    own fold's training rows.
+- **What a seed varies**: the folds are fixed, so a seed changes only
+  each model's random state and the proxy's feature-ranking subsample.
+  The spread over seeds is model randomness, not split randomness, and
+  every page says so. A deterministic configuration gives the same score
+  on every seed; its pair differences can be all zero, which the
+  Wilcoxon test reads as "no reliable difference".
+- **Algorithms and configurations**: F166's seven, with its grids,
+  unchanged. Two changes, both forced by the data:
+  - Logistic regression, the linear SVM, the RBF alternative and the
+    proxy fill missing values with the training months' median
+    (`SimpleImputer`, as F152's logistic lane); the four tree libraries
+    take the missing values as they are.
+  - **The proxy** uses each configuration's own top-k features ranked
+    by `data.top_k_features` on a stratified 50,000-row subsample of the
+    fitting rows (seeded by the seed, as F160), and the serial full-pair
+    build. F159's parallel build is checked on ULB rows only, so it is
+    not used here.
+- **Metrics**: F166's, on the month-4 test rows, with an outcome block
+  per algorithm and seed.
+- **Seeds**: 10, seeds 42-51, with no time cap (Sprint 30 D4 and D5,
+  team lead, 2026-10-31). Seed 42 runs first; its time is recorded and
+  reported, and it does not change the count. At 10 seeds the primary
+  test of an adjacent pair is the exact two-sided Wilcoxon signed-rank
+  test at 0.05 / 6, with F166's bootstrap secondary.
+- **Rankings**: as F166.
+- **Output**: `experiments/phase2/results/f174_ieee_algorithms.json`
+  (evidence tag `SIM`), generator
+  `experiments/phase2/src/f174_ieee_algorithms.py`, resumable by seed
+  (`LONG_RUN`). One page per algorithm and an IEEE-CIS comparison page
+  under `docs/phase2/algorithms/`, from a tracked generator, each naming
+  the result file, so `test_phase2_figures_resolve.py` checks their
+  figures.
+
+### F170: ULB frauds missed by every model, are their nearest neighbors legitimate?
+
+Written 2026-10-31 (Sprint 30 Task G, #81), before its module exists or
+any neighbor is computed. Not filed. No device.
+
+- **Question**: F158 step 3 found 106 of 950 (seed, test fraud) pairs,
+  seeds 42-51, missed at the 0.5% alert budget by every on-split family,
+  comparing group means only. Row by row: do missed frauds sit among
+  more legitimate training rows than caught frauds?
+- **Data**: ULB, duplicates dropped, `data.stratified_split(df, seed)`,
+  seeds 42-51; the stored families and the on-split check of F158 step 3
+  (`f154_confusion.load`, `f158_fraud_types.on_split`), read only from
+  `experiments/results/predictions/`.
+- **Measure**: for each test fraud, the share of legitimate rows among
+  its k = 10 nearest training rows, Euclidean distance on the 30
+  features standardized with the training means and SDs.
+- **Units**: distinct frauds. A row is in several seeds' test folds; its
+  share is the mean over its appearances. It is "missed" if missed in
+  every appearance, "caught" if caught in every one, and "mixed"
+  otherwise (counted, not tested). Each missed row's identity is
+  recorded, so the distinct frauds are counted.
+- **Test**: two-sided Mann-Whitney U, missed against caught, alpha 0.05
+  (two independent groups, no pairing). Secondary: the same test on all
+  (seed, fraud) pairs, reported, not decisive.
+- **Check first, on F108's simulator** (seed 42, main labels, its
+  three features): frauds whose posterior is below 0.5 against the
+  rest, the same measure and test. There the answer is known: frauds the
+  Bayes classifier calls legitimate must sit among more legitimate rows.
+  If the test does not find "higher" there, no ULB reading is made.
+- **Reading, set here**: missed higher than caught, with a median share
+  above 0.5, is consistent with ULB's information limit (the ceiling
+  F169 estimates); otherwise a model weakness remains open.
+- **Output**: `experiments/phase2/results/f170_missed_neighbors.json`,
+  generator `experiments/phase2/src/f170_missed_neighbors.py`. No model
+  is fit and no test score is computed, so no outcome block is needed.
+
+### F171: F158 step 3 on IEEE-CIS, does the group every model misses shrink?
+
+Written 2026-10-31 (Sprint 30 Task H, #82), before its module exists or
+any count is made. Not filed. No device. Descriptive: no test.
+
+- **Question**: ULB's features cannot grow; IEEE-CIS carries raw card,
+  address, device and email fields. Is the share of test frauds missed
+  by every stored family smaller there, counted as F158 step 3 counts?
+- **Data**: F152's four stored families (xgboost, lightgbm, hgb,
+  logistic), its rolling-origin months 4-6, seeds 42-46, from
+  `f152_exp2.json`'s outcome blocks. Each score file must hash to its
+  block's SHA-256, and its labels must equal the fold's own evaluation
+  labels in order (`ieee_harness.folds_for` on the deduplicated data),
+  or the run stops.
+- **Count**: a (month, seed, test fraud) is missed by all when no family
+  flags it at the 0.5% alert budget (`outcome_record.flagged_at_budget`).
+  The share of such pairs, overall and per month, beside F158 step 3's
+  ULB share read from `f158_fraud_types.json`; and the distinct missed
+  rows.
+- **Profile**: missed against caught rows on raw fields: the medians and
+  missing shares of TransactionAmt, dist1, C1, C13 and D1, and the
+  leading values of ProductCD, card4, card6, P_emaildomain and
+  DeviceType. A row missed in one seed and caught in another is in both
+  groups.
+- **Reading, set here**: a share well below ULB's is consistent with
+  richer information catching frauds a transform of ULB's features
+  cannot. The datasets differ in more than feature richness (fraud rate,
+  time split, labeling), so the comparison is descriptive, not causal.
+- **Output**: `experiments/phase2/results/f171_missed_ieee.json`,
+  generator `experiments/phase2/src/f171_missed_ieee.py`. No new test
+  score is computed, so no outcome block is needed.
+
+**Amendment 2026-10-31 (Sprint 30 Decision D7, option 1). POST HOC:
+written after the 0.5% result above was seen.** The 0.5% count stays
+F171's recorded result and is not replaced. At 0.5% one IEEE-CIS family
+has 427 alerts (426 when written; the budget rounds up, corrected after the run) for a month's 2,962 frauds, so the count measures the
+budget more than the models; on ULB the same budget is about 3.0 times
+the test frauds. Added, as exploratory figures:
+
+- **Budgets**: `fixed_3.5`, a 3.5% budget (about IEEE-CIS's fraud
+  rate); and `matched`, 3.0 times each fold's own test fraud rate (about
+  10.4% on IEEE-CIS, 0.5% on ULB).
+- **Data**: IEEE-CIS on this entry's families, months, seeds and checks;
+  ULB on F158 step 3's on-split families and seeds.
+- **Check first**: the 0.5% count is recomputed on both datasets and must
+  equal the recorded F171 and F158 step 3 counts, or the run stops.
+- **Also reported**: the capacity floor, the frauds that f families with
+  k alerts each cannot flag (frauds - f x k, at least 0), so a share is
+  read against what the budget allows.
+- **Reading**: descriptive, no test. Only the `matched` budget compares
+  the datasets at the same strictness.
+- **Output**: `experiments/phase2/results/f171_budgets.json`, generator
+  `experiments/phase2/src/f171_budgets.py`.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -1625,3 +1843,12 @@ Not filed; part of this draft. No device. Descriptive: no pass or fail.
   before any model is fit, and its table row.
 - 2026-10-27: section 6 gains the F166 entry (Sprint 29 Task F), written
   before any score, and its table row.
+- 2026-10-31: section 6 gains the F174 entry (Sprint 30 Task D), written
+  before any score, and its table row.
+- 2026-10-31: section 6 gains the F170 and F171 entries (Sprint 30 Tasks
+  G and H) and their table rows; the F108 entry gains its F169
+  amendment (Task F) and the Experiment 3 entry its F176 amendment
+  (Task E); each written before its module exists.
+- 2026-10-31: the F171 entry gains a post hoc budget amendment (Sprint 30
+  Decision D7), written after F171's 0.5% result was seen and before the
+  new budgets were counted.

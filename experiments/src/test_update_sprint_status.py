@@ -114,7 +114,8 @@ def test_add_issue_guard_can_fail(tmp_path):
                       "    if False:\n", expect_occurrences=1)],
             run, "a duplicate issue is appended twice")
         assert_can_fail(
-            [Mutation(src, "    issues.sort()\n", "", expect_occurrences=1)],
+            [Mutation(src, "        issues.sort()\n", "",
+                      expect_occurrences=1)],
             run, "the list is left unsorted")
         assert_can_fail(
             [Mutation(src, "    if number <= 0:\n", "    if False:\n",
@@ -171,8 +172,9 @@ def test_timer_guards_can_fail(tmp_path):
 
     try:
         assert_can_fail(
-            [Mutation(src, "    elapsed -= cur.get(\"task_paused_s\", {})"
-                      ".get(task, 0)\n", "", expect_occurrences=1)],
+            [Mutation(src, 'idle, how = paused_s, "no activity log:',
+                      'idle, how = 0, "no activity log:',
+                      expect_occurrences=1)],
             run, "the pause counted as work")
         assert_can_fail(
             [Mutation(src, "    if running and not parallel:\n",
@@ -193,3 +195,55 @@ def test_the_clock_cannot_be_set_from_the_command_line():
     src = (ROOT / "scripts" / "update_sprint_status.py").read_text(
         encoding="utf-8")
     assert '"--now"' not in src and "'--now'" not in src
+
+
+# F173 (Sprint 30): each issue's task, read by the commit-msg hook.
+
+def test_add_issue_with_a_task_records_its_owner(status):
+    uss.main(["--path", str(status), "--add-issue", "75", "--add-issue",
+              "84", "--task", "A"], now=T0)
+    cur = _cur(status)
+    assert cur["github_issues"] == [75, 84]
+    assert cur["task_issues"] == {"A": [75, 84]}
+    # An issue already listed can still be given its owner.
+    uss.main(["--path", str(status), "--add-issue", "76"], now=T0)
+    uss.main(["--path", str(status), "--add-issue", "76", "--task", "B"],
+             now=T0)
+    assert _cur(status)["task_issues"]["B"] == [76]
+
+
+def test_an_issue_cannot_have_two_owners(status):
+    uss.main(["--path", str(status), "--add-issue", "75", "--task", "A"],
+             now=T0)
+    with pytest.raises(SystemExit, match="already belongs to task A"):
+        uss.main(["--path", str(status), "--add-issue", "75", "--task", "B"],
+                 now=T0)
+    assert _cur(status)["task_issues"] == {"A": [75]}
+
+
+def test_a_task_without_an_issue_is_refused(status):
+    with pytest.raises(SystemExit, match="--add-issue"):
+        uss.main(["--path", str(status), "--task", "A"], now=T0)
+
+
+def test_the_review_task_is_recorded(status):
+    uss.main(["--path", str(status), "--review-task", "J"], now=T0)
+    assert _cur(status)["review_task"] == "J"
+
+
+def test_a_new_sprint_starts_with_no_owners(status):
+    uss.main(["--path", str(status), "--new-sprint", "100"], now=T0)
+    cur = _cur(status)
+    assert cur["task_issues"] == {} and cur["review_task"] is None
+
+
+def test_the_one_owner_rule_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = ROOT / "scripts" / "update_sprint_status.py"
+    this = Path(__file__).relative_to(ROOT).as_posix()
+    assert_can_fail(
+        [Mutation(src, "        if other:\n", "        if False:\n",
+                  expect_occurrences=1)],
+        lambda: run_pytest(f"{this}::test_an_issue_cannot_have_two_owners",
+                           ROOT),
+        "an issue given a second owner")

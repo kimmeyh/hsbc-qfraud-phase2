@@ -159,16 +159,23 @@ def test_the_failed_build_exclusion_can_fail():
         "a failed build compared")
 
 
+TIMING_MESSAGE = "the budget did not stop the build"
+
+
 def test_a_build_past_its_budget_is_recorded_as_failed(monkeypatch):
     import time
+    from types import SimpleNamespace
     X, y, X_held = _data()
     monkeypatch.setattr(f159, "_data", lambda frac: (2, X, y, X_held))
-    monkeypatch.setattr(f159, "_build_unbudgeted",
-                        lambda *a, **k: time.sleep(5))
+    # A build that would finish, after 5 s: with no budget the unit would
+    # be timed as a success, so only the timing assertion can catch it.
+    monkeypatch.setattr(f159, "_build_unbudgeted", lambda *a, **k: (
+        time.sleep(5), (SimpleNamespace(h_list=[1]), [1.0]))[1])
+    monkeypatch.setattr(f159, "h_sha256", lambda clf, X: "sha")
     monkeypatch.setattr(f159, "_ABANDONED", False)
     t0 = time.perf_counter()
     row = f159.time_unit(0.1, "32", budget_s=0.2)
-    assert time.perf_counter() - t0 < 3
+    assert time.perf_counter() - t0 < 3, TIMING_MESSAGE
     assert row["failed"] == "BuildTimeout"
     assert row["error"].startswith("no result in")
     assert row["budget_s"] == 0.2 and row["rows"] == 300
@@ -236,16 +243,62 @@ def test_the_budget_requirement_can_fail():
         "a module calling the unbudgeted build")
 
 
+def _red_on(node: str, message: str):
+    """Run one test; GREEN is True, and RED counts only when the output
+    carries `message`, so a crash elsewhere cannot pass for the proof."""
+    def run():
+        import subprocess
+        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p",
+                            "no:cacheprovider", f"{THIS}::{node}"],
+                           cwd=ROOT, capture_output=True, text=True)
+        if r.returncode == 0:
+            return True
+        assert message in r.stdout, f"red for another reason:\n{r.stdout[-2000:]}"
+        return False
+    return run
+
+
 def test_the_budget_can_fail():
-    from injection import Mutation, assert_can_fail, run_pytest
+    # F172: the watchdog waits forever, the build finishes in 5 s and is
+    # timed as a success; red through the timing assertion, not a KeyError.
+    from injection import Mutation, assert_can_fail
     assert_can_fail(
         [Mutation(PHASE2 / "f159_parallel_pool.py",
-                  "        raise BuildTimeout(f\"no result in {budget_s:.0f} s\")\n",
-                  "        pass\n", expect_occurrences=1)],
-        lambda: run_pytest(
-            f"{THIS}::test_a_build_past_its_budget_is_recorded_as_failed",
-            ROOT),
+                  "    t.join(budget_s)\n", "    t.join()\n",
+                  expect_occurrences=1)],
+        _red_on("test_a_build_past_its_budget_is_recorded_as_failed",
+                TIMING_MESSAGE),
         "a build past its budget not stopped")
+
+
+def test_a_worker_failure_is_recorded_as_a_failed_unit(monkeypatch):
+    # F172: MemoryError and BrokenProcessPool, end to end through the
+    # watchdog thread and `time_unit`.
+    from concurrent.futures.process import BrokenProcessPool
+    X, y, X_held = _data()
+    monkeypatch.setattr(f159, "_data", lambda frac: (2, X, y, X_held))
+    for exc in (MemoryError("no room"), BrokenProcessPool("worker died")):
+        def boom(*a, exc=exc, **k):
+            raise exc
+        monkeypatch.setattr(f159, "_build_unbudgeted", boom)
+        row = f159.time_unit(0.1, "32", budget_s=5)
+        assert row["failed"] == type(exc).__name__
+        assert row["error"] == str(exc) and row["budget_s"] == 5
+        assert "build_s" not in row
+
+
+def test_the_worker_failure_path_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    node = f"{THIS}::test_a_worker_failure_is_recorded_as_a_failed_unit"
+    for kept, label in (("(BrokenProcessPool, BuildTimeout)", "MemoryError"),
+                        ("(MemoryError, BuildTimeout)", "BrokenProcessPool")):
+        assert_can_fail(
+            [Mutation(PHASE2 / "f159_parallel_pool.py",
+                      "        except (MemoryError, BrokenProcessPool, "
+                      "BuildTimeout) as exc:\n",
+                      f"        except {kept} as exc:\n",
+                      expect_occurrences=1)],
+            lambda: run_pytest(node, ROOT), f"a {label} not recorded")
 
 
 def test_the_complete_marker_needs_every_unit():

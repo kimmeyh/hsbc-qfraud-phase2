@@ -1,0 +1,399 @@
+{
+ "card": "F171",
+ "sprint": 30,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F171",
+ "source": "f152_exp2.json's outcome blocks and score files",
+ "families": [
+  "hgb",
+  "lightgbm",
+  "logistic",
+  "xgboost"
+ ],
+ "per_month_seed": [
+  {
+   "eval_month": 4,
+   "seed": 42,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2962,
+   "missed_by_all": 2401,
+   "share": 0.8106009453072248
+  },
+  {
+   "eval_month": 4,
+   "seed": 43,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2962,
+   "missed_by_all": 2391,
+   "share": 0.8072248480756246
+  },
+  {
+   "eval_month": 4,
+   "seed": 44,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2962,
+   "missed_by_all": 2398,
+   "share": 0.8095881161377447
+  },
+  {
+   "eval_month": 4,
+   "seed": 45,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2962,
+   "missed_by_all": 2395,
+   "share": 0.8085752869682646
+  },
+  {
+   "eval_month": 4,
+   "seed": 46,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2962,
+   "missed_by_all": 2407,
+   "share": 0.812626603646185
+  },
+  {
+   "eval_month": 5,
+   "seed": 42,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2943,
+   "missed_by_all": 2409,
+   "share": 0.81855249745158
+  },
+  {
+   "eval_month": 5,
+   "seed": 43,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2943,
+   "missed_by_all": 2401,
+   "share": 0.8158341828066599
+  },
+  {
+   "eval_month": 5,
+   "seed": 44,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2943,
+   "missed_by_all": 2414,
+   "share": 0.8202514441046551
+  },
+  {
+   "eval_month": 5,
+   "seed": 45,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2943,
+   "missed_by_all": 2409,
+   "share": 0.81855249745158
+  },
+  {
+   "eval_month": 5,
+   "seed": 46,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 2943,
+   "missed_by_all": 2415,
+   "share": 0.8205912334352702
+  },
+  {
+   "eval_month": 6,
+   "seed": 42,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 339,
+   "missed_by_all": 281,
+   "share": 0.8289085545722714
+  },
+  {
+   "eval_month": 6,
+   "seed": 43,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 339,
+   "missed_by_all": 277,
+   "share": 0.8171091445427728
+  },
+  {
+   "eval_month": 6,
+   "seed": 44,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 339,
+   "missed_by_all": 282,
+   "share": 0.831858407079646
+  },
+  {
+   "eval_month": 6,
+   "seed": 45,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 339,
+   "missed_by_all": 283,
+   "share": 0.8348082595870207
+  },
+  {
+   "eval_month": 6,
+   "seed": 46,
+   "families": [
+    "hgb",
+    "lightgbm",
+    "logistic",
+    "xgboost"
+   ],
+   "frauds": 339,
+   "missed_by_all": 281,
+   "share": 0.8289085545722714
+  }
+ ],
+ "by_month": {
+  "4": {
+   "frauds": 14810,
+   "missed": 11992,
+   "share": 0.8097231600270087
+  },
+  "5": {
+   "frauds": 14715,
+   "missed": 12048,
+   "share": 0.818756371049949
+  },
+  "6": {
+   "frauds": 1695,
+   "missed": 1404,
+   "share": 0.8283185840707965
+  }
+ },
+ "pairs": {
+  "missed": 25444,
+  "frauds": 31220,
+  "share": 0.8149903907751441
+ },
+ "distinct_missed_rows": 5264,
+ "ulb_f158_step3": {
+  "missed": 106,
+  "frauds": 950,
+  "share": 0.11157894736842106
+ },
+ "profile": {
+  "TransactionAmt": {
+   "missed_median": 77.0,
+   "caught_median": 49.0,
+   "missed_missing": 0.0,
+   "caught_missing": 0.0
+  },
+  "dist1": {
+   "missed_median": 9.0,
+   "caught_median": 5.0,
+   "missed_missing": 0.7025075987841946,
+   "caught_missing": 0.9303187546330616
+  },
+  "C1": {
+   "missed_median": 2.0,
+   "caught_median": 14.0,
+   "missed_missing": 0.0,
+   "caught_missing": 0.0
+  },
+  "C13": {
+   "missed_median": 1.0,
+   "caught_median": 2.0,
+   "missed_missing": 0.0,
+   "caught_missing": 0.0
+  },
+  "D1": {
+   "missed_median": 0.0,
+   "caught_median": 0.0,
+   "missed_missing": 0.008548632218844984,
+   "caught_missing": 0.0
+  },
+  "ProductCD": {
+   "W": {
+    "missed": 0.5298252279635258,
+    "caught": 0.0748702742772424
+   },
+   "C": {
+    "missed": 0.3246580547112462,
+    "caught": 0.7316530763528539
+   },
+   "R": {
+    "missed": 0.05224164133738602,
+    "caught": 0.10748702742772424
+   },
+   "H": {
+    "missed": 0.050911854103343465,
+    "caught": 0.04966641957005189
+   },
+   "S": {
+    "missed": 0.04236322188449848,
+    "caught": 0.0363232023721275
+   }
+  },
+  "card4": {
+   "visa": {
+    "missed": 0.663563829787234,
+    "caught": 0.6404744255003706
+   },
+   "mastercard": {
+    "missed": 0.28970364741641336,
+    "caught": 0.3402520385470719
+   },
+   "discover": {
+    "missed": 0.0364741641337386,
+    "caught": 0.00815418828762046
+   },
+   "american express": {
+    "missed": 0.0077887537993920975,
+    "caught": 0.008895478131949592
+   },
+   "(missing)": {
+    "missed": 0.0024696048632218844,
+    "caught": 0.002223869532987398
+   }
+  },
+  "card6": {
+   "debit": {
+    "missed": 0.5680091185410334,
+    "caught": 0.4625648628613788
+   },
+   "credit": {
+    "missed": 0.4295212765957447,
+    "caught": 0.5352112676056338
+   },
+   "(missing)": {
+    "missed": 0.0024696048632218844,
+    "caught": 0.002223869532987398
+   }
+  },
+  "P_emaildomain": {
+   "gmail.com": {
+    "missed": 0.4618161094224924,
+    "caught": 0.5744996293550778
+   },
+   "(missing)": {
+    "missed": 0.1580547112462006,
+    "caught": 0.05337286879169755
+   },
+   "yahoo.com": {
+    "missed": 0.11493161094224924,
+    "caught": 0.04447739065974796
+   },
+   "hotmail.com": {
+    "missed": 0.0885258358662614,
+    "caught": 0.18532246108228317
+   },
+   "aol.com": {
+    "missed": 0.03894376899696048,
+    "caught": 0.008895478131949592
+   },
+   "outlook.com": {
+    "missed": 0.015957446808510637,
+    "caught": 0.06449221645663454
+   }
+  },
+  "DeviceType": {
+   "(missing)": {
+    "missed": 0.5535714285714286,
+    "caught": 0.08524833209785027
+   },
+   "mobile": {
+    "missed": 0.2368920972644377,
+    "caught": 0.34544106745737585
+   },
+   "desktop": {
+    "missed": 0.20953647416413373,
+    "caught": 0.5693106004447739
+   }
+  }
+ },
+ "test": "none (descriptive)",
+ "seconds": 30.1,
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f171_missed_ieee.py",
+  "generator_commit": "fc966f43e0fb2a7fe8d0a7d86b47527fdd421584",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "2e78ccc0570347c4973de5b9505fd622"
+ }
+}
