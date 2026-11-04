@@ -139,6 +139,8 @@
 | 30 | Task L CI under 5 minutes (D9) | tooling | none | 162m | n/a | measured, active, 276m elapsed; not planned |
 | 30 | Task M PR 74 review fixes | tooling | none | 156m | n/a | measured, active, 285m elapsed; not planned; two local proof runs of 41m and 1h43m inside it |
 | 30 | Task N retrospective IMP-1 to IMP-5 (D10) | tooling | 160m | 60m | 0.38 | measured, active, 60m elapsed; the first task with `--estimate` |
+| 30 | Task O short review fixes of the improvement commit | tooling | 30m | 10m | 0.33 | measured, active, 10m elapsed |
+| 30 | Task P the timer red proof's duplicate target (CI full job) | tooling | 10m | 2m | 0.20 | measured, active, 2m elapsed; not planned |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start
