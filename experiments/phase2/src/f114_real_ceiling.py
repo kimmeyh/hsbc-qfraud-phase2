@@ -202,6 +202,17 @@ def _doc(state: dict, complete: bool = False) -> dict:
             "complete": complete}
 
 
+def seeds_used(state: dict) -> list[int]:
+    """The seeds a save records. Before any seed row exists, the result
+    holds only the shuffled-label check, which ran on CHECK_SEED; an empty
+    list is refused by `provenance.record` (the first save of 2026-11-05
+    crashed on it after the check had run)."""
+    seeds = sorted({r["seed"] for r in state["rows"]})
+    if state.get("check") is not None and CHECK_SEED not in seeds:
+        seeds = sorted(seeds + [CHECK_SEED])
+    return seeds
+
+
 def main() -> int:
     import provenance
     rid, resume = provenance.start(OUT)
@@ -213,7 +224,7 @@ def main() -> int:
 
     def save():
         provenance.write_result(OUT, _doc(state), __file__,
-                                [r["seed"] for r in state["rows"]], rid)
+                                seeds_used(state), rid)
 
     if state.get("check") is None:
         state["check"] = shuffle_check()
@@ -239,8 +250,7 @@ def main() -> int:
             state["rows"].append(seed_row(ds, seed))
             save()
     doc = _doc(state, complete=True)
-    provenance.write_result(OUT, doc, __file__,
-                            [r["seed"] for r in state["rows"]], rid)
+    provenance.write_result(OUT, doc, __file__, seeds_used(state), rid)
     print(json.dumps(doc["summary"], indent=1))
     print("complete", flush=True)
     return 0

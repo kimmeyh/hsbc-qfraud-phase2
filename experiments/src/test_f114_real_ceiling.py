@@ -60,6 +60,37 @@ def test_a_gap_whose_interval_excludes_zero_is_a_warning():
         "calibration_warning"] is False
 
 
+def test_the_check_is_saved_before_any_seed(tmp_path, monkeypatch):
+    """Through the real writer: the check's save names its seed. The run of
+    2026-11-05 crashed here, because the first save had no seed rows and
+    `provenance.record` refuses an empty seed list."""
+    import json
+
+    monkeypatch.setattr(f114, "OUT", tmp_path / "f114.json")
+    check = {"dataset": "ulb", "seed": 42, "estimate": 0.0011,
+             "test_fraud_rate": 0.0017, "margin": 0.0005, "pass": False}
+    monkeypatch.setattr(f114, "shuffle_check", lambda: dict(check))
+
+    def stop(ds, seed):
+        raise KeyboardInterrupt("stopped after the check")
+    monkeypatch.setattr(f114, "seed_row", stop)
+    try:
+        f114.main()
+    except KeyboardInterrupt:
+        pass
+    doc = json.loads(f114.OUT.read_text(encoding="utf-8"))
+    assert doc["check"] == check and doc["rows"] == []
+    assert doc["provenance"]["seeds"] == [42]
+    assert doc["complete"] is False
+
+
+def test_the_seeds_recorded_include_the_check():
+    assert f114.seeds_used({"rows": [], "check": None}) == []
+    assert f114.seeds_used({"rows": [], "check": {"pass": False}}) == [42]
+    assert f114.seeds_used({"rows": [{"seed": 43}, {"seed": 43}],
+                            "check": {"pass": True}}) == [42, 43]
+
+
 def test_the_rules_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
 
@@ -95,3 +126,9 @@ def test_the_rules_can_fail():
                     test("test_a_gap_whose_interval_excludes_zero_is_a_"
                          "warning"),
                     "a calibration gap left unflagged")
+    assert_can_fail([Mutation(SRC,
+                              "    if state.get(\"check\") is not None and "
+                              "CHECK_SEED not in seeds:\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_the_check_is_saved_before_any_seed"),
+                    "the check's save with no seed")
