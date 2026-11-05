@@ -96,8 +96,12 @@ device block, and the decision that releases it.
      against the allocation the brief confirms **[A4]**.
   3. One block per sprint at most, so each result is read before the
      next is asked for.
-- Device: Dirac-3S. The cloud queue's 949-variable limit stands until
-  F155 shows it changed (skeleton, standing rules).
+- Device: Dirac-3S. F155 (Sprint 31) showed the cloud queue accepts a
+  continuous job of 1,350 variables, above the 949 limit the skeleton
+  states (`experiments/phase2/results/f155_variable_ceiling.json`);
+  F143's hold condition is met. The job's weights came back near flat,
+  so the probe shows the size is accepted, not that a pool that size
+  solves well.
 - Released by: the falsifier passing on the proxy (step 1), then the team
   lead's per-block approval (step 2).
 - If step 1 has not passed by its deadline: the PoC report states that

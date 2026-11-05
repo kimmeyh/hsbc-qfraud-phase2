@@ -77,12 +77,20 @@ PENDING are filled in when their result exists.
   is already at the 0.5% budget's maximum, so the measure cannot show an
   edge there. W cannot be scored.
 
-## V9. Tasks I and J (F155, F95): dry runs, PENDING D9 and D10
+## V9. Tasks I and J (F155, F95): on Dirac-3S, D12 PENDING
 
 - `run_dirac3s_units.py`, with `device_store` in place of F142's save.
-  No device call made.
-- F155: one 1,350-variable pool, built under WSL; quote 4 s, a floor.
-- F95: the two B1 units hash equal to F142's schedule-2 twins.
+  24.0 metered seconds so far, one attempt per call.
+- **F155 accepted** (D9 option 1): 1,350 variables, all entries
+  returned, 6.0 s against a 4 s floor quote
+  (`f155_variable_ceiling.json`). F143's hold condition is met.
+  **Please read**: the weights came back near flat (about 1/1350 each),
+  so the probe shows the size is accepted, not that a pool that size
+  solves well.
+- **F95 stop 1** (D10 option 1): `b1_dct_42` at schedule 4, 18.0 s,
+  three times its schedule-2 twin's 6.0 s; every sample within about
+  5e-08 of the reference optimum, so no change (`f95_schedule4.json`).
+  Stop 2 waits on D12.
 
 ## V10. Task K (F178): the learning documents
 
