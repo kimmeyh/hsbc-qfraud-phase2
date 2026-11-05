@@ -1303,6 +1303,40 @@ transaction is generated.
     this entry's rule in Sprint 27 and are not run.
   - **Not done**: no threshold, tuning or feature choice is made on test
     rows; no device; zero metered seconds.
+- **Amendment, 2026-11-05 (Sprint 31 Task E, F114 re-run, #97; Sprint 31
+  D11 option 1), written before its code change, before any fit at the
+  new rate on the simulator, and before any tracked fit at it on real
+  data.** The run under the amendment above
+  (`experiments/phase2/results/f114_real_ceiling.json`, nine ULB seeds,
+  kept as recorded) failed its shuffled-label check, and `lgbm_bins` at
+  learning rate 0.1 did not fit even ULB's training rows.
+  - **Disclosed before writing**: a scratch fit, not tracked, of the
+    same estimator at learning rate 0.05 on ULB seed 42 trained (test
+    AUPRC 0.742). The new rate is chosen on mechanism, half the step,
+    because boosting at 0.1 on 0.17% positives diverged; it is not tuned
+    over values, and no other rate is tried.
+  - **Why the simulator did not show it** (inferred, not tested): F108's
+    generator gives about 0.83% fraud on 897,933 training rows (seed 42,
+    `f169_plugin_bins.json`, `generator_check`), about 7,400 positives;
+    ULB's training split holds 170,235 rows at about 0.17%, about 290.
+  - **Stage 1, re-validation on the simulator**: `lgbm_lr05`, F169's
+    `lgbm_bins` with `learning_rate=0.05` and every other setting
+    unchanged, on F108's generator, seeds 42-46, arms and margin, with
+    F169's rule: it passes if recovered on 4 of 5 seeds on the main,
+    no-noise arm. Output `experiments/phase2/results/f169_plugin_bins_lr05.json`;
+    `f169_plugin_bins.json` is not touched. `hgb_no_es` is not rerun.
+  - **Stage 2, only if stage 1 passes**: F114 as the amendment above,
+    with `lgbm_lr05` in place of `lgbm_bins`, from the shuffled-label
+    check. Output `experiments/phase2/results/f114_real_ceiling_lr05.json`.
+    If stage 1 fails, there is no stage 2, and F114 is recorded as run
+    (check failed, estimator collapsed) and returned to the backlog.
+  - **Added to what is reported**: the training AUPRC per seed on real
+    data, so a fit that collapses is visible. Reported, not decisive.
+  - **Reading, set here**: a stage-1 pass shows only that the simulator
+    does not refuse the 0.05 estimator. The 0.1 estimator passed the
+    simulator too and collapsed on ULB, so the real-data shuffled-label
+    check decides whether the method transfers, as the amendment above
+    states. Everything else in that amendment is unchanged.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
