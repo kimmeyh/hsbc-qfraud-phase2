@@ -43,6 +43,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 27 | docs/sprints/SPRINT_27_SUMMARY.md | [OK] Complete | ~2 days (Oct 18-19, 2026) |
 | 28 | docs/sprints/SPRINT_28_SUMMARY.md | [OK] Complete | ~4 days (Oct 22-25, 2026) |
 | 29 | docs/sprints/SPRINT_29_SUMMARY.md | [OK] Complete | ~5 days (Oct 26-30, 2026) |
+| 30 | docs/sprints/SPRINT_30_SUMMARY.md | [OK] Complete | ~6 days (Oct 30 - Nov 4, 2026) |
 
 ## Last Completed Sprint
 
@@ -60,8 +61,8 @@ reliably. F176: below greedy on 3 of 6 IEEE-CIS instances, each by under
 by all sit among legitimate rows. F171: not shown, because 4 IEEE-CIS
 families are compared with 12 ULB families. Records: `SPRINT_30_PLAN.md`,
 `SPRINT_30_VALIDATION.md`, `SPRINT_30_DECISIONS.md`,
-`SPRINT_30_RETROSPECTIVE.md`; `SPRINT_30_SUMMARY.md` is written at Sprint
-31 planning.
+`SPRINT_30_RETROSPECTIVE.md`, `SPRINT_30_SUMMARY.md` (written at Sprint
+31 planning).
 
 ### Sprint 29: Make the Tools Repeatable, Then Find the Best Each Model Can Do
 (Oct 25 - Oct 30, 2026; PR #63). Delivered **F165, F159, F164, F156,
@@ -570,6 +571,12 @@ F177, F178, F179 and F180 carded during the sprint. See
 SPRINT_30_PLAN.md, SPRINT_30_VALIDATION.md, SPRINT_30_DECISIONS.md,
 SPRINT_30_RETROSPECTIVE.md and CHANGELOG.md. Removed from candidates per
 convention (Pass 1, 2026-11-04).)
+
+**Selected for Sprint 31** (team lead, 2026-11-04, D1 option 4): F180,
+F177, F178, F179, F114, F155, F157, F150, F95, F121 and F13, with F13
+last ("after other results are known"). Each part still open is a
+decision in `docs/sprints/SPRINT_31_DECISIONS.md` (D2-D6). Plan:
+`docs/sprints/SPRINT_31_PLAN.md` (draft).
 
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
