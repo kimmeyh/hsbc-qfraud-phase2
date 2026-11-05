@@ -306,7 +306,11 @@ count and seconds stated. The six-experiment frame is in
   1,140), [relaxation schedule](#qc3-relaxation-schedule) 2, one sample. Accepted only if the
   returned solution has 1,350 entries. Its quote is a floor, since 1,350
   is above every Dirac-3S cost anchor.
-  - Result: placeholder.
+  - Result, 2026-11-05: **accepted.** The solution has 1,350
+    entries; 6.0 metered seconds, so 1,350 continuous variables run
+    on Dirac-3S at schedule 2. The weights came back near flat
+    (about 1/1,350 each); no accuracy is read
+    (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **F95, relaxation schedule 4 on Dirac-3S**: four fits (two B1 91-variable
   rebuilds with Dirac-3S schedule-2 twins, two 45-variable fits with only
   Dirac-3 history), the relative gap to the reference optimum per

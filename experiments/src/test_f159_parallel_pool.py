@@ -173,6 +173,11 @@ def test_a_build_past_its_budget_is_recorded_as_failed(monkeypatch):
         time.sleep(5), (SimpleNamespace(h_list=[1]), [1.0]))[1])
     monkeypatch.setattr(f159, "h_sha256", lambda clf, X: "sha")
     monkeypatch.setattr(f159, "_ABANDONED", False)
+    # time_unit imports these first; cold, that takes about 5 s, which the
+    # clock would count as a budget overrun in a fresh process (the red
+    # proof's subprocess, 2026-11-05). Import them before the clock starts.
+    import full_pair_pool  # noqa: F401
+    import qubo_proxy  # noqa: F401
     t0 = time.perf_counter()
     row = f159.time_unit(0.1, "32", budget_s=0.2)
     assert time.perf_counter() - t0 < 3, TIMING_MESSAGE

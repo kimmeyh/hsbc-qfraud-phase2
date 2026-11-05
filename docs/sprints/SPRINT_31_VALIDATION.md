@@ -46,16 +46,34 @@ PENDING are filled in when their result exists.
   header line. The submission-artifact tests ran against 6.21.4; no
   tracked PDF was rebuilt.
 
-## V5. Task E (F114): stopped, PENDING D11
+## V5. Task E (F114): re-run reported with warnings, D13 PENDING
 
-- `experiments/phase2/results/f114_real_ceiling.json`, incomplete as
-  recorded. The shuffled-label check failed its margin, so by the entry
-  no F114 figure is a ceiling.
-- `lgbm_bins` at learning rate 0.1 did not fit ULB on any of nine seeds
-  (test AUPRC 0.002 to 0.327). A scratch run at 0.05 trains. IEEE-CIS
-  was not run.
+- First run, learning rate 0.1 (`f114_real_ceiling.json`, kept as
+  recorded): the shuffled-label check failed, and `lgbm_bins` did not
+  fit ULB on any of nine seeds. Under D11 option 1, an F108 amendment
+  (efe7b88) set a re-run at learning rate 0.05 before any fit.
+- Stage 1 (`f169_plugin_bins_lr05.json`): recovered on 5 of 5 seeds on
+  every arm.
+- Stage 2 (`f114_real_ceiling_lr05.json`): the check passed (0.00118
+  against 0.00167, margin 0.0005). IEEE-CIS 0.0254 (0.0232 to 0.0276)
+  against an achieved 0.0293; ULB 0.00016 against 0.00111. Both carry
+  the calibration warning. Page: `docs/phase2/F114_REAL_CEILING.md`.
+- **Please read**: the check passed by about 0.00001, and the ULB
+  figure is not a usable ceiling (three seeds train badly).
+- **Defect, D13**: the re-run replaced the first run's nine ULB score
+  files (gitignored). A scratch rebuild matched all nine recorded
+  hashes. `test_outcome_record_required.py`'s stale-hash test is red on
+  this workstation until D13 is carried out.
 
-## V6. Task F (F157 SPECTRA): PENDING
+## V6. Task F (F157 SPECTRA): run complete, D14 PENDING
+
+- `f157_spectra_algorithms.json`: four datasets, 10 seeds each, 0
+  metered seconds. 32 pages from `scripts/f157_spectra_docs.py` under
+  `docs/phase2/algorithms/`, checked by
+  `experiments/src/test_f157_spectra_docs.py`.
+- **Defect, D14**: the entry's rule keeps the RBF SVM on all four
+  datasets, but the SVM lane scored only the linear form. The pages say
+  so, and they wait on D14 before they are committed.
 
 ## V7. Task G (F157 QNN): dequantized
 

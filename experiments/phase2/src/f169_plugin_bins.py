@@ -221,7 +221,7 @@ def main_lr05() -> int:
             if resume else [])
     for seed in fc.SEEDS:
         if seed in {r["seed"] for r in rows}:
-            continue           # resume: never redo a seed
+            continue           # resume (lr05): never redo a seed
         rows.append(seed_run(seed, ESTIMATORS_LR05))
         provenance.write_result(OUT_LR05, _doc_lr05(rows), __file__,
                                 [r["seed"] for r in rows], rid)

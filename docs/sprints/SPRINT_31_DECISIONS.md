@@ -832,3 +832,77 @@ and the writer change stops the same overwrite in any module.
 2. The same without the `save_test_scores` change (about 30 minutes).
 3. Record the break and the rebuild method only; change no file (about
    10 minutes).
+
+---
+
+## D14. F157 SPECTRA: the entry's rule keeps the RBF SVM, and the SVM lane scored only the linear form. What is reported? (Criterion 7)
+
+Asked 2026-11-05 at Phase 4, after the F157 SPECTRA run completed.
+
+**What.** The entry ("F157 SPECTRA part", which takes F166's rule
+unchanged) keeps the RBF SVM as the SVM lane's form if its best
+validation AUPRC beats the linear form's on a majority of seeds. It did
+so on every dataset: 6 of 10 seeds on energy_steel, 10 of 10 on
+oilgas_gasturbine, 10 of 10 on telecom_churn and 7 of 10 on
+maintenance_ai4i. The RBF form was fitted on validation only, so it has
+no test score; every SVM figure, the SVM's rank and the two pairs
+touching it are the linear form's. F166's module stops before marking a
+run complete when this happens (`f166_ulb_algorithms.rbf_kept`, added
+after the PR 63 review). The SPECTRA module I wrote records it
+(`svm_lane_is_kept_form` false) and marks the run complete. That is my
+departure from F166's protocol, and the entry does not permit it.
+
+**Size of the gap.** Where the RBF fit worked, it led by a wide margin
+on validation: for example oilgas_gasturbine about 0.85 against 0.78,
+telecom_churn about 0.84 against 0.66, energy_steel about 0.87 against
+0.69. On energy_steel seeds 42, 44, 45 and 46 the RBF validation AUPRC
+equals the positive rate (no ranking); those count as linear wins, so
+they do not add to the RBF majority. The other six lanes are unaffected.
+
+**What is done, not waiting on this.** The 32 pages are generated
+(`scripts/f157_spectra_docs.py`, with tests). Every SVM page and every
+comparison page states that the SVM figures are the linear form, not the
+form the rule keeps. They are not committed until this is answered.
+
+**Why it matters.** As recorded, the comparison pages rank an SVM that
+the entry's own rule set aside, and on three datasets the SVM's place
+in the order could change. Publishing it as complete repeats the defect
+F166's guard was added to stop.
+
+**Kind per option.** Option 1: Prevention (the module gets F166's guard
+and the kept form is scored). Option 2: Workaround (reports the gap
+openly; scores nothing new). Option 3: Workaround (withholds the SVM
+lane only).
+
+**Cost per option** (0 metered seconds in each):
+- Option 1: about 60 minutes. A dated amendment to the F157 SPECTRA
+  entry, committed before any RBF test score: per seed, the RBF form at
+  its validation-chosen `C`, fitted on the same subsample, scored on the
+  test fold with an outcome block, becomes the SVM lane where the rule
+  keeps RBF. The module calls a guard like `rbf_kept` for any lane it
+  cannot score. Fits: 40 at about 0.05 to 9 s each, under 5 minutes in
+  all. The analysis is recomputed, the result replaced with `replace=`
+  stating why, and the pages regenerated. About 5 files.
+- Option 2: about 15 minutes. Commit the pages as generated, plus a
+  dated note in the entry that this part departed from F166's stop rule
+  and why; the result keeps `complete` true. About 3 files.
+- Option 3: about 30 minutes. Re-render with the SVM lane removed from
+  the order, the pairs and the pages (six algorithms, five pairs per
+  dataset), with a dated note in the entry. About 4 files.
+
+**Recommendation: 1.** It scores the form the rule keeps, at under five
+minutes of local fits, and adds the guard so the next module cannot do
+the same. Options 2 and 3 leave the comparison without the SVM the
+entry asked for.
+
+**Options.**
+
+1. Write a dated amendment, score the kept RBF form on the test fold per
+   seed, add F166's stop guard to the SPECTRA module, replace the result
+   with `replace=` stating why, and regenerate the 32 pages (about 60
+   minutes, 0 metered seconds).
+2. Commit the pages as they are, with the linear-form statement, and
+   add a dated note to the entry recording the departure (about 15
+   minutes).
+3. Remove the SVM lane from the SPECTRA order, pairs and pages, with a
+   dated note in the entry (about 30 minutes).

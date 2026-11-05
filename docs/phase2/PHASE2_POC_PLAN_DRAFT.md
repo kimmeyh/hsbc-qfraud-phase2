@@ -152,6 +152,13 @@ device block, and the decision that releases it.
   Dequantized on IEEE-CIS month 4: GAM and HGB match the circuit within
   the margin (`docs/phase2/F157_QNN_IEEE.md`). No PoC work is planned
   on this circuit.
+- **The plug-in ceiling on real data (F114, Sprint 31).** After the
+  re-run at learning rate 0.05 (`f114_real_ceiling_lr05.json`,
+  `docs/phase2/F114_REAL_CEILING.md`), IEEE-CIS month 4 has an estimate
+  of 0.0254 (0.0232 to 0.0276) with a calibration warning. The ULB
+  figure, 0.00016, is far below the model's own achieved error and is
+  not a usable ceiling. PoC work: none planned. A calibrated plug-in is
+  a backlog item, not a PoC dependency.
 - **The gate-based arm (F6).** Simulation only, as F6 recommends. A
   Braket hardware run is a new card with its own cost; the AWS credits
   may change that cost **[A3]**.

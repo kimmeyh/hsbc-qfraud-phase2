@@ -109,6 +109,32 @@ def test_f169_resumes_at_its_first_unrecorded_seed(monkeypatch, tmp_path):
     assert ran == seeds[2:]
 
 
+def test_f169lr05_resumes_at_its_first_unrecorded_seed(monkeypatch, tmp_path):
+    """The F114 re-run's stage 1 loop (`main_lr05`), on `OUT_LR05`."""
+    import f169_plugin_bins as m
+    seeds = list(m.fc.SEEDS)
+    _resume(monkeypatch, m, tmp_path, {"rows": [{"seed": s} for s in seeds[:2]]})
+    monkeypatch.setattr(m, "OUT_LR05", m.OUT)
+    ran = []
+    monkeypatch.setattr(m, "seed_run", lambda s, e: ran.append(s) or {"seed": s})
+    monkeypatch.setattr(m, "_doc_lr05", lambda *a, **k: {"summary": {}})
+    m.main_lr05()
+    assert ran == seeds[2:]
+
+
+def test_f169lr05_resume_loop_can_fail():
+    """Proof for the test above; `LOOPS` holds one loop per file."""
+    from injection import Mutation, assert_can_fail, run_pytest
+    old = "            continue           # resume (lr05): never redo a seed\n"
+    assert_can_fail([Mutation(PHASE2 / "f169_plugin_bins.py", old,
+                              old.replace("continue", "pass    "),
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_f169lr05_resumes_at_its_first_unrecorded_seed",
+                        ROOT),
+                    "f169's lr05 loop redoes a recorded seed")
+
+
 def test_f174_resumes_at_its_first_unrecorded_seed(monkeypatch, tmp_path):
     import f174_ieee_algorithms as m
     seeds = list(m.SEEDS)

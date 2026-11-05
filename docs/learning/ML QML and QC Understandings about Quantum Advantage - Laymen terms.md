@@ -521,6 +521,15 @@ The six-experiment frame they fit into is in
     not yet been tested fairly on real data; what to do next is a
     decision for the team lead (Sprint 31 D11)
     (`experiments/phase2/results/f114_real_ceiling.json`).
+  - Result of the re-run, 2026-11-05: the team lead chose to re-test
+    the estimator at a slower learning rate. It passed on the
+    simulator, and the shuffled-label check then passed, by a very
+    small amount. For [IEEE-CIS](#acr-ieee-cis) the best error the data allows is
+    estimated at about 2.5%, against the model's own 2.9%, with a
+    warning that the model's probabilities are not well calibrated.
+    The [ULB](#acr-ulb) estimate is far below an error the model actually
+    reaches, so it is not a usable ceiling
+    (`experiments/phase2/results/f114_real_ceiling_lr05.json`).
 - **The circuit and its twins on more test frauds (F157, [QNN](#acr-qnn) part).**
   Rerun the 8-qubit circuit on [IEEE-CIS](#acr-ieee-cis)'s test month, which has about
   2,962 frauds, so "the twin copies the circuit" can be decided. Entry:
@@ -544,7 +553,9 @@ The six-experiment frame they fit into is in
     there (`docs/phase2/EXP5_ROUTER.md`).
 - **Does Dirac-3S accept a 1,350-variable job (F155)?** One device call,
   approved on its own. Entry: "F155".
-  - Result: placeholder
+  - Result, 2026-11-05: **accepted.** The device took the
+    1,350-variable job and returned 1,350 values, using 6.0 metered
+    seconds. This is a size test only; no accuracy was read
     (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **Relaxation schedule 4 on Dirac-3S (F95).** Four fits; does a slower
   device setting close the small gap Dirac-3 left? Entry: "F95".

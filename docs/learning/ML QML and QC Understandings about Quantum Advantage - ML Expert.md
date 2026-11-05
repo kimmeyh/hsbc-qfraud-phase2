@@ -365,6 +365,15 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
     [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) 0.002 to 0.327). No ceiling is reported; the check may reflect
     the collapse rather than the method. The next step is Sprint 31 D11
     (`experiments/phase2/results/f114_real_ceiling.json`).
+  - Result of the re-run at learning rate 0.05, 2026-11-05 (D11
+    option 1): stage 1 recovered on 5 of 5 seeds on every arm; the
+    shuffled-label check passed (0.00118 against 0.00167, margin
+    0.0005). [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) plug-in 0.0254 (0.0232 to 0.0276)
+    against an achieved error of 0.0293; [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb) 0.00016 (0.00010
+    to 0.00022) against 0.00111. Both carry the calibration warning;
+    the [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb) figure is not a usable ceiling, and three [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb)
+    seeds still fit badly (train [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) 0.887, 0.624, 0.925)
+    (`experiments/phase2/results/f114_real_ceiling_lr05.json`).
 - **F157 [QNN](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qnn) part** (F106 entry, amendment of 2026-11-05): the same
   circuit and six twins on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis)'s month-4 fold, about 2,962 test
   positives, 295 training positives and 6,000 negatives, seeds 42-49. It
@@ -392,7 +401,9 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
     kept [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) out on C and R (`docs/phase2/EXP5_ROUTER.md`).
 - **F155, the [Dirac-3S](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-dirac-3s) size limit**: one 1,350-variable job; accepted
   only if the solution has 1,350 entries. No accuracy is read.
-  - Result: placeholder.
+  - Result, 2026-11-05: accepted; 1,350 entries returned, 6.0
+    metered seconds
+    (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **F95, relaxation schedule 4**: four fits; the solver gap against the
   exact optimum. No accuracy is read.
   - Result: placeholder.
