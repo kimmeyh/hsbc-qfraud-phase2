@@ -1,0 +1,101 @@
+{
+ "generator": "experiments/phase2/src/run_dirac3s_units.py",
+ "card": "F95",
+ "sprint": 31,
+ "evidence_tag": "HW",
+ "device_type": "dirac-3s",
+ "metered_seconds": 18.0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F95",
+ "complete": false,
+ "rows": [
+  {
+   "card": "F95",
+   "unit": "b1_dct_42",
+   "stop": 1,
+   "seed": 42,
+   "device_type": "dirac-3s",
+   "evidence_tag": "HW",
+   "job_id": "6aec8ad8358b23d0cb37424b",
+   "metered_seconds": 18.0,
+   "metered_seconds_parsed": true,
+   "attempts": 1,
+   "wall_seconds_including_queue": 31.8,
+   "submitted": "2026-11-05T08:55:30",
+   "finished": "2026-11-05T08:56:01",
+   "stored": "device_samples/f95_b1_dct_42_6aec8ad8358b23d0cb37424b.json",
+   "hw_config": {
+    "lambda_coef": 340470.0,
+    "weak_cls_schedule": 2,
+    "weak_cls_type": "dct",
+    "weak_cls_params": {
+     "random_state": 42
+    },
+    "weak_cls_strategy": "multi_processing",
+    "relaxation_schedule": 4,
+    "num_samples": 8
+   },
+   "screen": {
+    "off_diagonal_spread_over_resolvable": 0.004699386142685112,
+    "linear_spread_over_resolvable": 0.006265848190246816,
+    "screen_pass": false,
+    "dynamic_range_db": 4.771518695607588,
+    "n_variables": 91,
+    "hamiltonian_sha256": "b458527237a15f326b0ed8f6e10f5b86140a0f07a152e15fe0019d87ca7898e3"
+   },
+   "twin": "f142:b1_42",
+   "status": "ok",
+   "n_samples_returned": 8,
+   "returned_length": 91,
+   "device_timing": {
+    "run_time_per_sample_s": [
+     2.239110947,
+     2.217870235,
+     2.254769087,
+     2.313699007,
+     2.185991049,
+     2.25672245,
+     2.12496233,
+     2.302035809
+    ],
+    "runtime_sum_s": 17.895160914,
+    "preprocessing_s": 0.008625144,
+    "source": "eqc-models SolutionResults.run_time (ns)"
+   },
+   "gap_device_weights": -4.494121008900983e-09,
+   "objective_reference": -166493.56370004418,
+   "per_sample_gap": [
+    -4.494121008900983e-09,
+    -4.4939866366527416e-08,
+    -3.145829275711738e-08,
+    -2.2469500105021198e-08,
+    -4.9433715729176594e-08,
+    -4.4939527070919464e-08,
+    -3.14582744026409e-08,
+    -3.595222515192203e-08
+   ],
+   "gap_min": -4.9433715729176594e-08,
+   "gap_range": 4.493959472027561e-08
+  }
+ ],
+ "provenance": {
+  "generator": "experiments/phase2/src/run_dirac3s_units.py",
+  "generator_commit": "1fb4eba0ccddd96f09b25d57a6be9d3e6824ba24",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43
+  ],
+  "versions": {
+   "python": "3.12.14",
+   "numpy": "2.5.2",
+   "scipy": "1.18.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "fe89814dbb6c4502859042549d9a99bb"
+ }
+}

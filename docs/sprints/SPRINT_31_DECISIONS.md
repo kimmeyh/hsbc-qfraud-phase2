@@ -541,6 +541,18 @@ it, rather than ship a check that reads green on untested lines.
 4. Build none in Sprint 31; F177 returns to the backlog with this
    analysis attached.
 
+**Answer (team lead, 2026-11-05): not yet chosen.** "Can you explain
+what the 'proofs' are and why they are important to run so often as it
+would appear to me they only need to run once or if something about
+them changed. Can you also research 'risk based testing' with regard to
+development testing, software engineering and agile development best
+practices as it appears that we are testing without regard to the
+risk-related need of each test for each change or each sprint. Then
+update the options after I have time to review what you found regarding
+the proofs and risk based testing." The options above stay as asked;
+revised options follow as a dated "Changed since asked" note after the
+team lead's review.
+
 ---
 
 ## D9. F155: send the 1,350-variable probe to Dirac-3S? (Criterion H)
@@ -589,6 +601,9 @@ on the send path already proven on Dirac-3S, at one call.
    minutes), then ask again with its dry run.
 3. Do not run F155 in Sprint 31.
 
+**Answer (team lead, 2026-11-05): 1.** F155 stop 1 approved: one
+Dirac-3S call, one attempt.
+
 ---
 
 ## D10. F95 stop 1: send fit 1 at relaxation schedule 4 to Dirac-3S? (Criterion H)
@@ -629,6 +644,10 @@ before the other three are asked.
 1. Approve F95 stop 1: one Dirac-3S call, `b1_dct_42` at schedule 4, 8
    samples; cost unknown, about 15 s by the card's Dirac-3 estimate.
 2. Do not run F95 in Sprint 31.
+
+**Answer (team lead, 2026-11-05): 1.** F95 stop 1 approved: one
+Dirac-3S call, `b1_dct_42` at schedule 4, one attempt. Stop 2 is asked
+after this fit's cost is known.
 
 ---
 
@@ -692,3 +711,5 @@ rule: no real-data figure from an estimator the simulator has not passed.
    minutes).
 3. Run IEEE-CIS as the entry stands, descriptive only, then record as in
    option 2 (about 40 minutes plus IEEE-CIS's run time).
+
+**Answer (team lead, 2026-11-05): 1.**
