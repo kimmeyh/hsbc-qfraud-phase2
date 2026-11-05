@@ -33,8 +33,10 @@ Rules for this draft:
 - Experiments 1, 2, 4 and 6 have proxy or classical results already. In
   the PoC they are re-run on the brief's data and metrics, if the brief
   sets any **[A2]**.
-- Experiment 5 stays on HOLD under its 2026-10-14 condition; it enters
-  the PoC only if that condition is met.
+- Experiment 5 ran on the proxy in Sprint 31 (team lead, Sprint 31 D3,
+  hold set aside) and accepted no segment
+  (`docs/phase2/EXP5_ROUTER.md`). It enters the PoC only with a
+  segment measure that does not saturate.
 
 ## Stages
 
@@ -113,13 +115,18 @@ device block, and the decision that releases it.
 
 ### Experiment 5 (F121): segment transfer
 
-- Entry: to write. State: HOLD until a Phase 2 run, proxy or device,
-  shows an in-segment edge over the matched control with an interval
-  excluding zero (team lead, 2026-10-14, Sprint 26 Decision 2).
-- PoC work: none planned. If the hold condition is met, the entry is
-  written and the experiment is placed in stage 1 or 2.
-- Device: to be decided.
-- Released by: its hold condition.
+- Entry: written 2026-11-05 (Sprint 31 Task H). The 2026-10-14 hold
+  (Sprint 26 Decision 2) was set aside by Sprint 31 D3 to run it in
+  full on the proxy. State: result in `docs/phase2/EXP5_ROUTER.md`. No
+  ProductCD segment is accepted, for the proxy or for the HGB
+  reference. Segment W cannot be scored. On C, R and S recall within
+  the segment at the 0.5% budget is already at its maximum, so the
+  measure cannot show an edge there.
+- PoC work: none planned on this measure. A re-entry needs a segment
+  measure that does not saturate (for example a smaller budget or a
+  ranking measure), written as a new entry before any score is read.
+- Device: none.
+- Released by: a new entry, approved by the team lead.
 
 ### Experiment 6 (F110): training time against sample count
 
