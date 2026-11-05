@@ -1,11 +1,11 @@
 {
   "current_sprint": {
     "number": 31,
-    "name": "(named at planning)",
+    "name": "Make Testing Fast and Sure, Then Read the Ceiling, the Segment and Both Devices",
     "branch": "feature/20261104_Sprint_31",
-    "status": "phase_1_backlog_refinement",
-    "plan_doc": "",
-    "pr": null,
+    "status": "phase_3_planning",
+    "plan_doc": "docs/sprints/SPRINT_31_PLAN.md",
+    "pr": 92,
     "plan_approved": false,
     "github_issues": [],
     "task_actuals": {},
