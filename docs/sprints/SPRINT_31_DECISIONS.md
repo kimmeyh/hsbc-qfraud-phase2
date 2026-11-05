@@ -768,3 +768,67 @@ in D5, and the card's cap bounds the unknown cost.
    the card's 102 s remaining cap); one attempt each.
 2. Approve `b1_dct_43` only: one Dirac-3S call, 18 s measured.
 3. Do not run F95 stop 2; F95 is reported on stop 1.
+
+---
+
+## D13. F114: the re-run overwrote the first run's score files. How is it repaired? (Criterion 7)
+
+Asked 2026-11-05 at Phase 4, after the F114 re-run (D11 option 1).
+
+**What.** `outcome_record.record` saves each row's test scores to
+`experiments/phase2/predictions/<name>_<seed>.npz` (gitignored) and the
+result records the file's SHA-256. The re-run (`f114_real_ceiling.py
+--lr05`, 7850a60) kept the first run's record name, `f114_<dataset>`,
+so at 10:05 it replaced the first run's ULB score files for seeds
+42-50. The first result (`f114_real_ceiling.json`) is unchanged, but
+its nine recorded hashes no longer match the files on disk; the
+re-run's result (`f114_real_ceiling_lr05.json`) matches the files now
+there. My code defect: the new mode needed its own record name, and no
+test checked it. `save_test_scores` replaces a file without checking
+what it held, so no guard stopped it. `test_outcome_record_required.py`
+reports it after the fact: its stale-hash test names the nine files and
+stays red on this workstation until they are restored (the files are
+gitignored, so CI does not see them).
+
+**Recoverable, checked.** The files are byte-reproducible (numpy writes
+a fixed zip date). A scratch rebuild of the first run's nine ULB fits
+(`f169_plugin_bins.make('lgbm_bins', seed)` on `f114_real_ceiling.ulb`)
+matched all nine recorded SHA-256 values exactly. Nothing in the
+repository was written by the check.
+
+**Why it matters.** A recorded result whose evidence file has been
+replaced cannot be re-checked by anyone, and the next module that
+reuses a record name will do the same, silently. Under Criterion 4's
+precedence rule this is not fixed and re-run without a decision.
+
+**Kind per option.** Option 1: Prevention (the writer refuses the
+replacement for every module) plus repair. Option 2: Workaround
+(repair only). Option 3: Workaround (records the break, fixes nothing).
+
+**Cost per option** (0 metered seconds in each):
+- Option 1: about 45 minutes. (a) `save_test_scores` refuses to replace
+  an existing file whose bytes differ, naming the file, with a test and
+  a red proof; (b) the `--lr05` mode records as `f114lr05_<dataset>`;
+  (c) the re-run's result is re-run with `replace=` stating why (about
+  2 minutes of fits; deterministic), and every figure and hash compared
+  with the current file before it is accepted; (d) the first run's nine
+  files restored at their original paths from the verified rebuild. About
+  5 files.
+- Option 2: about 30 minutes: (b), (c) and (d) only. About 3 files.
+- Option 3: about 10 minutes: a dated note in `docs/phase2/F114_REAL_CEILING.md`
+  and the first result's document that the nine files were replaced and
+  how to rebuild them; no file changes.
+
+**Recommendation: 1.** The repair restores both runs' evidence exactly,
+and the writer change stops the same overwrite in any module.
+
+**Options.**
+
+1. Make `save_test_scores` refuse to replace a different file (with a
+   red proof), give the re-run the record name `f114lr05_<dataset>`,
+   re-run it with `replace=` and check every figure and hash against the
+   current result, and restore the first run's nine files from the
+   verified rebuild (about 45 minutes).
+2. The same without the `save_test_scores` change (about 30 minutes).
+3. Record the break and the rebuild method only; change no file (about
+   10 minutes).

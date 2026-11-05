@@ -1,0 +1,656 @@
+{
+ "card": "F114",
+ "part": "stage 1, F169 re-validation at learning rate 0.05",
+ "sprint": 31,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, amendment 2026-11-05 (F114 re-run)",
+ "estimators": {
+  "lgbm_lr05": "LGBMClassifier(n_estimators=100, learning_rate=0.05, num_leaves=31, min_child_samples=20, max_bin=4095)"
+ },
+ "margin": {
+  "abs": 0.0005,
+  "rel": 0.1
+ },
+ "pass_seeds": 4,
+ "seeds": [
+  42,
+  43,
+  44,
+  45,
+  46
+ ],
+ "rows": [
+  {
+   "seed": 42,
+   "n_train": 897933,
+   "n_test": 615643,
+   "generator_check": {
+    "bayes_error": 0.006099614366235471,
+    "bayes_classifier_error": 0.006092816778555104,
+    "sd_error": 9.892164329545072e-05,
+    "fraud_rate": 0.008288894700337696,
+    "mean_eta": 0.008320739525776335,
+    "sd_rate": 9.892164329545072e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "lgbm_lr05": {
+      "estimate": 0.006270137357020773,
+      "bayes_error": 0.006099614366235471,
+      "ratio": 1.0279563560164122,
+      "recovered": true,
+      "auprc": 0.2967596278545007,
+      "bayes_auprc": 0.306269385878548,
+      "fit_s": 7.5,
+      "outcome": {
+       "name": "f169_none_lgbm_lr05",
+       "seed": 42,
+       "n_test": 615643,
+       "n_positives": 5103,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3079,
+        "n_flagged": 3079,
+        "confusion": {
+         "tn": 608915,
+         "fp": 1625,
+         "fn": 3649,
+         "tp": 1454
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_none_lgbm_lr05_42.npz",
+        "sha256": "1325914d157db6266e51826934c7d0c7461db77d841389a6a5537328cb5d1add",
+        "n_rows": 615643
+       }
+      }
+     }
+    },
+    "flip": {
+     "lgbm_lr05": {
+      "estimate": 0.0065694364662933075,
+      "bayes_error": 0.006405274729778547,
+      "ratio": 1.0256291483878999,
+      "recovered": true,
+      "auprc": 0.2642552720602542,
+      "bayes_auprc": 0.2741849167317829,
+      "fit_s": 1.0,
+      "outcome": {
+       "name": "f169_flip_lgbm_lr05",
+       "seed": 42,
+       "n_test": 615643,
+       "n_positives": 5186,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3079,
+        "n_flagged": 3079,
+        "confusion": {
+         "tn": 608765,
+         "fp": 1692,
+         "fn": 3799,
+         "tp": 1387
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_flip_lgbm_lr05_42.npz",
+        "sha256": "678fa67ac197a8fc2de1969235f40917d22dfb7bf3864c9c7d60f50d7b5e7972",
+        "n_rows": 615643
+       }
+      }
+     }
+    },
+    "reference": {
+     "lgbm_lr05": {
+      "estimate": 6.1245076873044685e-06,
+      "bayes_error": 0.0,
+      "ratio": null,
+      "recovered": true,
+      "auprc": 0.06519655926529067,
+      "bayes_auprc": 1.0,
+      "fit_s": 0.9,
+      "outcome": {
+       "name": "f169_reference_lgbm_lr05",
+       "seed": 42,
+       "n_test": 615643,
+       "n_positives": 376,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3079,
+        "n_flagged": 3110,
+        "confusion": {
+         "tn": 612399,
+         "fp": 2868,
+         "fn": 134,
+         "tp": 242
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_reference_lgbm_lr05_42.npz",
+        "sha256": "7017583155c874e1a45dfba7432a835d77d50845be2b4b41cd9ade226b3ab268",
+        "n_rows": 615643
+       }
+      }
+     }
+    }
+   },
+   "seconds": 13.7
+  },
+  {
+   "seed": 43,
+   "n_train": 881184,
+   "n_test": 603745,
+   "generator_check": {
+    "bayes_error": 0.006256330713384506,
+    "bayes_classifier_error": 0.006272515714415855,
+    "sd_error": 0.0001011438222682125,
+    "fraud_rate": 0.008455556567756255,
+    "mean_eta": 0.00846660110734864,
+    "sd_rate": 0.0001011438222682125,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "lgbm_lr05": {
+      "estimate": 0.006063278110267158,
+      "bayes_error": 0.006256330713384506,
+      "ratio": 0.9691428391558107,
+      "recovered": true,
+      "auprc": 0.29282480936629746,
+      "bayes_auprc": 0.2998064530181119,
+      "fit_s": 1.1,
+      "outcome": {
+       "name": "f169_none_lgbm_lr05",
+       "seed": 43,
+       "n_test": 603745,
+       "n_positives": 5105,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3019,
+        "n_flagged": 3020,
+        "confusion": {
+         "tn": 597055,
+         "fp": 1585,
+         "fn": 3670,
+         "tp": 1435
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_none_lgbm_lr05_43.npz",
+        "sha256": "ef130988b5aacee57194438db2cf08deaa71739bc249db7f4c36d39e8f73ca9a",
+        "n_rows": 603745
+       }
+      }
+     }
+    },
+    "flip": {
+     "lgbm_lr05": {
+      "estimate": 0.006424850878795525,
+      "bayes_error": 0.006553617231673909,
+      "ratio": 0.9803518654925328,
+      "recovered": true,
+      "auprc": 0.2625165678665479,
+      "bayes_auprc": 0.2707231746157078,
+      "fit_s": 1.0,
+      "outcome": {
+       "name": "f169_flip_lgbm_lr05",
+       "seed": 43,
+       "n_test": 603745,
+       "n_positives": 5144,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3019,
+        "n_flagged": 3019,
+        "confusion": {
+         "tn": 596951,
+         "fp": 1650,
+         "fn": 3775,
+         "tp": 1369
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_flip_lgbm_lr05_43.npz",
+        "sha256": "baf16113b50008b58d176b16ee5e7f6e5565bd6817d6db8aa8049453500ceb5b",
+        "n_rows": 603745
+       }
+      }
+     }
+    },
+    "reference": {
+     "lgbm_lr05": {
+      "estimate": 1.297072436782892e-05,
+      "bayes_error": 0.0,
+      "ratio": null,
+      "recovered": true,
+      "auprc": 0.7549693228189627,
+      "bayes_auprc": 1.0,
+      "fit_s": 0.9,
+      "outcome": {
+       "name": "f169_reference_lgbm_lr05",
+       "seed": 43,
+       "n_test": 603745,
+       "n_positives": 335,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3019,
+        "n_flagged": 3019,
+        "confusion": {
+         "tn": 600690,
+         "fp": 2720,
+         "fn": 36,
+         "tp": 299
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_reference_lgbm_lr05_43.npz",
+        "sha256": "ffe8f5ea3c842313cb5615202cbe3f759a4f4c0ef8f54b908fa64f7601a34412",
+        "n_rows": 603745
+       }
+      }
+     }
+    }
+   },
+   "seconds": 5.2
+  },
+  {
+   "seed": 44,
+   "n_train": 890741,
+   "n_test": 609725,
+   "generator_check": {
+    "bayes_error": 0.006208546065179572,
+    "bayes_classifier_error": 0.006227397597277461,
+    "sd_error": 0.0001002372204012521,
+    "fraud_rate": 0.008577637459510436,
+    "mean_eta": 0.008571484340145522,
+    "sd_rate": 0.0001002372204012521,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "lgbm_lr05": {
+      "estimate": 0.006507097438798293,
+      "bayes_error": 0.006208546065179572,
+      "ratio": 1.0480871641257743,
+      "recovered": true,
+      "auprc": 0.3084155041626212,
+      "bayes_auprc": 0.3177499074352389,
+      "fit_s": 1.1,
+      "outcome": {
+       "name": "f169_none_lgbm_lr05",
+       "seed": 44,
+       "n_test": 609725,
+       "n_positives": 5230,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3049,
+        "n_flagged": 3049,
+        "confusion": {
+         "tn": 602982,
+         "fp": 1513,
+         "fn": 3694,
+         "tp": 1536
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_none_lgbm_lr05_44.npz",
+        "sha256": "fe307639f47e676b4fbae863363f6172d88aa2fff9e8f77b620225279037d13a",
+        "n_rows": 609725
+       }
+      }
+     }
+    },
+    "flip": {
+     "lgbm_lr05": {
+      "estimate": 0.006762256130778519,
+      "bayes_error": 0.006515885580583689,
+      "ratio": 1.0378107545241395,
+      "recovered": true,
+      "auprc": 0.2823835195519865,
+      "bayes_auprc": 0.2885261428452116,
+      "fit_s": 1.1,
+      "outcome": {
+       "name": "f169_flip_lgbm_lr05",
+       "seed": 44,
+       "n_test": 609725,
+       "n_positives": 5280,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3049,
+        "n_flagged": 3049,
+        "confusion": {
+         "tn": 602875,
+         "fp": 1570,
+         "fn": 3801,
+         "tp": 1479
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_flip_lgbm_lr05_44.npz",
+        "sha256": "1ba989dae120563bf0de4c6d10ca874f56d918b522c0f8f1d8412dfa506cb9f2",
+        "n_rows": 609725
+       }
+      }
+     }
+    },
+    "reference": {
+     "lgbm_lr05": {
+      "estimate": 7.005206883113671e-05,
+      "bayes_error": 0.0,
+      "ratio": null,
+      "recovered": true,
+      "auprc": 0.0805742464459342,
+      "bayes_auprc": 1.0,
+      "fit_s": 0.9,
+      "outcome": {
+       "name": "f169_reference_lgbm_lr05",
+       "seed": 44,
+       "n_test": 609725,
+       "n_positives": 378,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3049,
+        "n_flagged": 3165,
+        "confusion": {
+         "tn": 606397,
+         "fp": 2950,
+         "fn": 163,
+         "tp": 215
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_reference_lgbm_lr05_44.npz",
+        "sha256": "8e9e492b8ee51f5b9dd772d7ae138008137f2052d104aee255a5e4f48879a7b9",
+        "n_rows": 609725
+       }
+      }
+     }
+    }
+   },
+   "seconds": 5.3
+  },
+  {
+   "seed": 45,
+   "n_train": 901670,
+   "n_test": 618114,
+   "generator_check": {
+    "bayes_error": 0.006039362363182529,
+    "bayes_classifier_error": 0.006019925127080118,
+    "sd_error": 9.8246568712195e-05,
+    "fraud_rate": 0.008139275279317407,
+    "mean_eta": 0.008151475872763759,
+    "sd_rate": 9.8246568712195e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "lgbm_lr05": {
+      "estimate": 0.006064322336777877,
+      "bayes_error": 0.006039362363182529,
+      "ratio": 1.0041328822637818,
+      "recovered": true,
+      "auprc": 0.29208565093371913,
+      "bayes_auprc": 0.2955930126888375,
+      "fit_s": 1.1,
+      "outcome": {
+       "name": "f169_none_lgbm_lr05",
+       "seed": 45,
+       "n_test": 618114,
+       "n_positives": 5031,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3091,
+        "n_flagged": 3091,
+        "confusion": {
+         "tn": 611402,
+         "fp": 1681,
+         "fn": 3621,
+         "tp": 1410
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_none_lgbm_lr05_45.npz",
+        "sha256": "73b61ee8d9fe095432be57ad1335df547928da1fa0abbc0461402a773fdf5962",
+        "n_rows": 618114
+       }
+      }
+     }
+    },
+    "flip": {
+     "lgbm_lr05": {
+      "estimate": 0.006451801002533793,
+      "bayes_error": 0.006342994004676264,
+      "ratio": 1.017153886284192,
+      "recovered": true,
+      "auprc": 0.25628171891565565,
+      "bayes_auprc": 0.2600395017747272,
+      "fit_s": 1.1,
+      "outcome": {
+       "name": "f169_flip_lgbm_lr05",
+       "seed": 45,
+       "n_test": 618114,
+       "n_positives": 5110,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3091,
+        "n_flagged": 3091,
+        "confusion": {
+         "tn": 611237,
+         "fp": 1767,
+         "fn": 3786,
+         "tp": 1324
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_flip_lgbm_lr05_45.npz",
+        "sha256": "6d8185dcf9b8a69eca0ac6ae48b995865891a5184a44f6f9ff30e6e8e13d8cd8",
+        "n_rows": 618114
+       }
+      }
+     }
+    },
+    "reference": {
+     "lgbm_lr05": {
+      "estimate": 3.647890491336296e-05,
+      "bayes_error": 0.0,
+      "ratio": null,
+      "recovered": true,
+      "auprc": 0.9092979606391688,
+      "bayes_auprc": 1.0,
+      "fit_s": 0.8,
+      "outcome": {
+       "name": "f169_reference_lgbm_lr05",
+       "seed": 45,
+       "n_test": 618114,
+       "n_positives": 400,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3091,
+        "n_flagged": 13618,
+        "confusion": {
+         "tn": 604475,
+         "fp": 13239,
+         "fn": 21,
+         "tp": 379
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_reference_lgbm_lr05_45.npz",
+        "sha256": "38ebf532e606f13134fa84d84eb6291437112a59d6d37000f16e76cb31d18f8a",
+        "n_rows": 618114
+       }
+      }
+     }
+    }
+   },
+   "seconds": 5.3
+  },
+  {
+   "seed": 46,
+   "n_train": 879888,
+   "n_test": 602629,
+   "generator_check": {
+    "bayes_error": 0.006026596882732953,
+    "bayes_classifier_error": 0.006033562938391614,
+    "sd_error": 9.936072712069097e-05,
+    "fraud_rate": 0.008262131427462004,
+    "mean_eta": 0.008245475862870152,
+    "sd_rate": 9.936072712069097e-05,
+    "pass": true
+   },
+   "arms": {
+    "none": {
+     "lgbm_lr05": {
+      "estimate": 0.00634968929851085,
+      "bayes_error": 0.006026596882732953,
+      "ratio": 1.053611087992894,
+      "recovered": true,
+      "auprc": 0.3005164211903526,
+      "bayes_auprc": 0.3073036858543876,
+      "fit_s": 1.1,
+      "outcome": {
+       "name": "f169_none_lgbm_lr05",
+       "seed": 46,
+       "n_test": 602629,
+       "n_positives": 4979,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3014,
+        "n_flagged": 3014,
+        "confusion": {
+         "tn": 596068,
+         "fp": 1582,
+         "fn": 3547,
+         "tp": 1432
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_none_lgbm_lr05_46.npz",
+        "sha256": "f4b060ca332f52d42ee7213ec29645ead84fec980a148716a0dc3f6804f9c07f",
+        "n_rows": 602629
+       }
+      }
+     }
+    },
+    "flip": {
+     "lgbm_lr05": {
+      "estimate": 0.006649261459245701,
+      "bayes_error": 0.0063359471318471545,
+      "ratio": 1.0494502748963443,
+      "recovered": true,
+      "auprc": 0.2671818410057353,
+      "bayes_auprc": 0.27393096856656224,
+      "fit_s": 1.0,
+      "outcome": {
+       "name": "f169_flip_lgbm_lr05",
+       "seed": 46,
+       "n_test": 602629,
+       "n_positives": 4980,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3014,
+        "n_flagged": 3014,
+        "confusion": {
+         "tn": 595988,
+         "fp": 1661,
+         "fn": 3627,
+         "tp": 1353
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_flip_lgbm_lr05_46.npz",
+        "sha256": "45e880b334852671ae456badd593f8bb49397ff714930e89099c0e433eabb183",
+        "n_rows": 602629
+       }
+      }
+     }
+    },
+    "reference": {
+     "lgbm_lr05": {
+      "estimate": 5.851156674051151e-06,
+      "bayes_error": 0.0,
+      "ratio": null,
+      "recovered": true,
+      "auprc": 0.02047917079205878,
+      "bayes_auprc": 1.0,
+      "fit_s": 0.9,
+      "outcome": {
+       "name": "f169_reference_lgbm_lr05",
+       "seed": 46,
+       "n_test": 602629,
+       "n_positives": 301,
+       "at_budget_on_test": {
+        "budget": 0.005,
+        "n_budget": 3014,
+        "n_flagged": 3116,
+        "confusion": {
+         "tn": 599291,
+         "fp": 3037,
+         "fn": 222,
+         "tp": 79
+        }
+       },
+       "test_scores": {
+        "path": "experiments/phase2/predictions/f169_reference_lgbm_lr05_46.npz",
+        "sha256": "426f11d5f531ab68f970751bed920c2fd0dfd14550b062f7c899ed3b78a06f07",
+        "n_rows": 602629
+       }
+      }
+     }
+    }
+   },
+   "seconds": 5.2
+  }
+ ],
+ "summary": {
+  "by_arm": {
+   "none": {
+    "seeds_recovered": 5,
+    "n_seeds": 5,
+    "recovers": true
+   },
+   "flip": {
+    "seeds_recovered": 5,
+    "n_seeds": 5,
+    "recovers": true
+   },
+   "reference": {
+    "seeds_recovered": 5,
+    "n_seeds": 5,
+    "recovers": true
+   }
+  },
+  "deciding_arm": "none",
+  "passes": true,
+  "stage2": true,
+  "reading": "lgbm_lr05 passes F169's rule on the simulator: stage 2, F114 from the shuffled-label check, runs"
+ },
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f169_plugin_bins.py",
+  "generator_commit": "d24d0d85bb4160723e62275eca4c6067992107f0",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "97cceab05364487dbc0babdb2c51a4b3"
+ }
+}
