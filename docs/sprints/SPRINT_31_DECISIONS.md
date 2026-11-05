@@ -634,7 +634,7 @@ before the other three are asked.
 
 ## D11. F114: the preregistered estimator does not train on ULB. What next?
 
-Asked 2026-11-05 at Phase 4, Task E run stopped after one seed.
+Asked 2026-11-05 at Phase 4, Task E run stopped after nine ULB seeds.
 
 **What.** F114 runs F169's `lgbm_bins` plug-in (LightGBM, 100 trees,
 learning rate 0.1, 4,095 bins), fixed by the 2026-11-05 F108 amendment.
@@ -643,9 +643,10 @@ On ULB:
   fraud rate of 0.0017, margin 0.0005
   (`experiments/phase2/results/f114_real_ceiling.json`, `check`). By the
   entry, no F114 figure is reported as a ceiling.
-- On real labels, seed 42, the fit **collapsed**: test AUPRC 0.013 and an
-  error of 0.0033, worse than flagging nothing (the same file, `rows`).
-  The run was stopped there; IEEE-CIS has not run.
+- On real labels the fit **collapsed** on every recorded seed: seeds 42
+  to 50 give test AUPRC from 0.002 to 0.327, and every error (0.0032 to
+  0.0109) is worse than flagging nothing (the same file, `rows`). The run
+  was stopped before seed 51; IEEE-CIS has not run.
 - A scratch diagnosis on seed 42 (not a tracked result; reproduced by
   fitting `LGBMClassifier` on `f114_real_ceiling.ulb(42)`): at learning
   rate 0.1 the model does not fit even its training rows (training AUPRC
