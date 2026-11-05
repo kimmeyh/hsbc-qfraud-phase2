@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-05
 
+- **docs**: F157 QNN pilot (Sprint 31 Task G), `experiments/phase2/results/f157_qnn_ieee_pilot.json`: seed 42 took 907 s, projecting 7,254 s for eight seeds, inside the entry's 4-hour limit, so all eight run. (Issue #99)
 - **docs**: corrected the F114 line below and D11: the run was stopped after nine ULB seeds (42 to 50), not one, and the fit collapsed on all nine (test AUPRC 0.002 to 0.327). The recorded result file was right; the text written beside it was not. (Issue #97)
 - **docs**: F114 stopped after one seed (Sprint 31 Task E). `experiments/phase2/results/f114_real_ceiling.json`, incomplete as recorded: the shuffled-label check failed, and on real ULB labels F169's `lgbm_bins` (learning rate 0.1) collapsed (test AUPRC 0.013). A scratch diagnosis shows the fit does not train at rate 0.1 and does at 0.05. Written as D11 in `SPRINT_31_DECISIONS.md` before it is asked; IEEE-CIS not run. (Issue #97)
 - **fix**: F114's first save names the shuffled-label check's seed (Sprint 31 Task E). The run of 2026-11-05 crashed after the check: the save had no seed rows, and `provenance.record` refuses an empty seed list. The module's tests had stubbed the writer; a new test runs `main` through the real writer and stops after the check, with a red proof. The check itself failed its margin (estimate 0.0011 against a test fraud rate of 0.0017, margin 0.0005), so by the entry no F114 figure is reported as a ceiling. (Issue #97)
