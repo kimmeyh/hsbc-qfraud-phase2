@@ -569,8 +569,11 @@ different measurement path). Option 3: none.
 - Option 1: 1 call. `qpu_cost_model.quote(1350, 1)` gives 4 s from one
   Dirac-3S anchor (833 variables); 1,350 is above it, so 4 s is a floor,
   not a bound. Whether a rejected job is billed is unverified. One
-  attempt, never retried. About 10 minutes of local pool build before the
-  call.
+  attempt, never retried. The dry run built the pool (1,350 variables, as
+  the entry states) in about 2.5 minutes under WSL; a metered run builds
+  it twice (screen, then send), so about 5 minutes pass before the call.
+  The pool fails A31's resolution screen; the entry reports it and does
+  not read accuracy, so it does not block the probe.
 - Option 2: about 45 minutes to build and test a bare-Hamiltonian unit
   and its dry run, then this approval asked again; the same 1 call.
 - Option 3: 0.
