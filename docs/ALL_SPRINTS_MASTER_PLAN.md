@@ -771,6 +771,13 @@ value. Removed from candidates.)
 - Acceptance: an exclusive lock (an `O_CREAT | O_EXCL` lock file beside the status file, with a stale-lock message naming the file) around the whole read, change and write; a test with two processes in which neither change is lost, proven red; a `PermissionError` on replace reported as a refusal; `--review-task` applied after pause and finish, with a test of the one-command case
 - Depends on: nothing
 
+**F181. The device-default guard enforces Dirac-3S only (~15m [no-history], zero metered) Priority 20**
+- Phase: tooling (added 2026-11-04 at Sprint 31 planning, from D5 and D7)
+- Platform: N/A (tests)
+- The team lead's rule from Sprint 31 D5: "this and all future runs will be on the Dirace-3S" (`SPRINT_EXECUTION_WORKFLOW.md`, standing hardware rule). `experiments/src/test_phase2_device_default.py` still accepts a Phase 2 module that names Dirac-3 on a `# device named:` line, so the rule is written and not checked. Offered as Task M in D7; the approval named no option, so it is carded here
+- Acceptance: the guard refuses any module under `experiments/phase2/src/` that names `eqc_submit.DIRAC_3` (not `DIRAC_3S`), proven red in the same commit; the module docstring cites D5
+- Depends on: nothing
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)

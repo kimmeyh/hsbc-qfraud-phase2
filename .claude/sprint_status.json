@@ -3,14 +3,64 @@
     "number": 31,
     "name": "Make Testing Fast and Sure, Then Read the Ceiling, the Segments and Dirac-3S",
     "branch": "feature/20261104_Sprint_31",
-    "status": "phase_3_planning",
+    "status": "phase_4_execution",
     "plan_doc": "docs/sprints/SPRINT_31_PLAN.md",
     "pr": 92,
-    "plan_approved": false,
-    "github_issues": [],
+    "plan_approved": true,
+    "github_issues": [
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104
+    ],
     "task_actuals": {},
     "task_started": {},
-    "task_issues": {},
+    "task_issues": {
+      "A": [
+        93
+      ],
+      "B": [
+        94
+      ],
+      "C": [
+        95
+      ],
+      "D": [
+        96
+      ],
+      "E": [
+        97
+      ],
+      "F": [
+        98
+      ],
+      "G": [
+        99
+      ],
+      "H": [
+        100
+      ],
+      "I": [
+        101
+      ],
+      "J": [
+        102
+      ],
+      "K": [
+        103
+      ],
+      "L": [
+        104
+      ]
+    },
     "review_task": null
   },
   "last_completed_sprint": {

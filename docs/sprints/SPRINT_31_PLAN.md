@@ -1,8 +1,9 @@
 # Sprint 31 Plan: Make Testing Fast and Sure, Then Read the Ceiling, the Segments and Dirac-3S
 
 **Sprint**: 31 | **Branch**: `feature/20261104_Sprint_31`
-**Planned**: 2026-11-04 | **Status**: DRAFT, D2-D6 answered
-(`SPRINT_31_DECISIONS.md`); approval asked as D7.
+**Planned**: 2026-11-04 | **Status**: APPROVED 2026-11-04 (D7, recorded
+as option 1; D2-D6 in `SPRINT_31_DECISIONS.md`). Issues: A #93, B #94,
+C #95, D #96, E #97, F #98, G #99, H #100, I #101, J #102, K #103, L #104
 **Scope**: F180, F177, F178, F179, F114, F155, F157 (two parts), F95,
 F121 and F13 (team lead selection, 2026-11-04, D1 option 4), and the
 pypdf bump (D6). F150 is carried to Sprint 32 (D4).

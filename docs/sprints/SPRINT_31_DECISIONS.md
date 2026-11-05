@@ -436,3 +436,19 @@ written.
    any Phase 2 module that names Dirac-3, its red proof in the same commit
    (15 minutes; 1,584 in total).
 3. Approved with changes: reply 3 followed by the changes.
+
+**Answer (team lead, 2026-11-04).** Verbatim: "Sprint plan approved as
+amended (with any comments I provided), proceed with execution. All
+Sprint tasks and sub-tasks are approved. Do not stop between tasks as
+they are all approved, please continue to complete all tasks and without
+addition approvals until Manual Validation, providing your
+recommendation for Manual Validation steps. Do not stop to ask questions
+unless meeting the criteria in \docs\SPRINT_STOPPING_CRITERIA.md. If
+questions must be asked, ask as late as possible - do everything that
+can be done (all tasks and parts of tasks, without the answer to the
+question(s), then ask the question(s)". Recorded as option 1: no option
+digit names Task M, and the defined-scope rule keeps an unselected item
+out, so the guard tightening is carded as F181 for refinement. The two
+Dirac-3S blocks still stop for their own approval (Criterion H, which no
+general approval replaces); both are built and dry-run first, and asked
+for as late as possible.
