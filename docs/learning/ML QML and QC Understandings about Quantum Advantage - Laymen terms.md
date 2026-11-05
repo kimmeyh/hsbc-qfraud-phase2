@@ -525,7 +525,10 @@ The six-experiment frame they fit into is in
   Rerun the 8-qubit circuit on [IEEE-CIS](#acr-ieee-cis)'s test month, which has about
   2,962 frauds, so "the twin copies the circuit" can be decided. Entry:
   the F106 entry's amendment of 2026-11-05.
-  - Result: placeholder (`experiments/phase2/results/f157_qnn_ieee.json`).
+  - Result, 2026-11-05: **the twin copies the circuit.** Two ordinary
+    models, [GAM](#acr-gam) and [HGB](#acr-hgb), scored at least as well as the circuit on
+    eight seeds, so the circuit shows nothing a classical model cannot
+    do here (`experiments/phase2/results/f157_qnn_ieee.json`).
 - **Seven algorithms on [SPECTRA](#acr-spectra)'s four datasets (F157, [SPECTRA](#acr-spectra) part).**
   Entry: "F157 [SPECTRA](#acr-spectra) part".
   - Result: placeholder

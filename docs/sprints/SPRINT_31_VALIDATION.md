@@ -57,10 +57,17 @@ PENDING are filled in when their result exists.
 
 ## V6. Task F (F157 SPECTRA): PENDING
 
-## V7. Task G (F157 QNN): PENDING
+## V7. Task G (F157 QNN): dequantized
 
-- Pilot: seed 42 took 907 s, eight seeds projected at 7,254 s, inside
-  the 4-hour limit (`f157_qnn_ieee_pilot.json`).
+- `docs/phase2/F157_QNN_IEEE.md` from `f157_qnn_ieee.json`, eight
+  seeds, no cut. GAM and HGB are no worse than the circuit within the
+  0.005 margin; the circuit is ahead of logistic regression, JOINT and
+  RFF.
+- **Please read**: the interval resamples test rows, not seeds. Across
+  seeds HGB is ahead on 5 of 8 (Wilcoxon p 0.109). The outcome follows
+  the entry's rule; "HGB beats the circuit" is not claimed.
+- Seed 48's phase complexity is 0.095 against about 0.5 on the others,
+  still above the 0.01 floor.
 
 ## V8. Task H: Experiment 5
 

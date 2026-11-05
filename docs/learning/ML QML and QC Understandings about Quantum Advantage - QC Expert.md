@@ -315,7 +315,11 @@ count and seconds stated. The six-experiment frame is in
 - **F157 [QNN](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qnn) part**: the F106 circuit and six twins on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis)'s
   month-4 fold, about 2,962 test positives, so "dequantized" becomes
   decidable at the 0.005 margin.
-  - Result: placeholder.
+  - Result, 2026-11-05: **dequantized.** [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) match
+    the circuit within the margin; the encoding was phase-active on
+    every seed (phase complexity 0.095 on seed 48, 0.4842 to 0.5506 on
+    the rest, all above the 0.01 floor)
+    (`experiments/phase2/results/f157_qnn_ieee.json`).
 - **F114, F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra) part and Experiment 5**: classical ceilings,
   algorithm rankings and segment routing; see the machine learning
   expert version's section 7.

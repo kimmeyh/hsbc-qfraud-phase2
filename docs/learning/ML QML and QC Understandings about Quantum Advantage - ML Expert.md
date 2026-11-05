@@ -370,7 +370,12 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
   positives, 295 training positives and 6,000 negatives, seeds 42-49. It
   can decide "dequantized"; "circuit ahead" may stay out of reach for the
   three widest twins.
-  - Result: placeholder.
+  - Result, 2026-11-05: **dequantized.** [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) (twin minus circuit
+    +0.0047, 99.17% interval +0.0007 to +0.0092) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) (+0.0193,
+    +0.0139 to +0.0247) are no worse within the 0.005 margin; the circuit
+    is ahead of logistic regression, the joint 3-way twin and [RFF](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-rff). The interval
+    resamples test rows; across seeds [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) is ahead on 5 of 8
+    (Wilcoxon p 0.109) (`experiments/phase2/results/f157_qnn_ieee.json`).
 - **F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra) part**: F166's seven algorithms and grids on
   energy_steel, oilgas_gasturbine, telecom_churn and maintenance_ai4i,
   with in-pocket and out-of-pocket [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) as secondaries.
