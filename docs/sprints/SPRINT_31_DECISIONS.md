@@ -154,6 +154,35 @@ metered or simulated lane is planned.
    (200 minutes, 0 metered seconds).
 3. F157 leaves Sprint 31 and stays in the backlog at priority 30.
 
+**Changed since asked (2026-11-04).** The team lead asked what F157 has
+done and not done, and whether the rest is worth doing. Found:
+
+- **Done under F157's protocol**: seven lanes (HGB, LightGBM, XGBoost,
+  CatBoost, logistic regression, SVM, CVQBoost proxy) on ULB (F166) and
+  IEEE-CIS (F174).
+- **Not done under it**: SPECTRA's four datasets (partial earlier work:
+  F100's classical bar, F162's three lanes inside the pocket on three
+  cells); the CVQBoost device lane (Phase 1 B1-B4 and F142 ran frozen
+  configurations, not a tuned lane); QSVM (Phase 1 B5 on ULB: test AUPRC
+  mean 0.212, "cheap and weak", `docs/B4_B5_HARDWARE_RESULT.md`); QNN
+  (F106's statevector circuit on ULB only, eight seeds, inconclusive,
+  because its test fold held 99 positives, `docs/phase2/F106_DEQUANTIZATION.md`).
+- The QNN lane is the only one with a different hypothesis class, and
+  F106's inconclusive reading also holds F116 on HOLD. A run with more
+  test positives is not among options 1-3, so it is added here as
+  option 4. Options 1-3 are unchanged.
+
+4. QNN part: F106's circuit and twins under an entry written first, on a
+   larger positive count (IEEE-CIS, or ULB with more test positives; the
+   entry chooses and says why), seeds set from a timed seed-42 pilot (about
+   120 minutes [no-history] plus the run; F106's eight ULB seeds took 8,640
+   s; 0 metered seconds, a local statevector).
+
+Options 1 and 4 do not conflict: "1 and 4" runs both (about 360 minutes
+plus both runs). Updated recommendation: 4 if one part is taken, because
+it is the open quantum question at zero metered cost; 1 and 4 if both
+fit.
+
 ---
 
 ## D3. F121: the hold condition is not met. What runs?
