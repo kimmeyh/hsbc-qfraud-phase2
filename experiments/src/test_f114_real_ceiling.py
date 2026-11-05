@@ -1,0 +1,97 @@
+"""F114 (Sprint 31 Task E, #97): the shuffled-label check, the seed
+count, the calibration warning and the reading, each term proven red.
+
+No model is fit here: `summarize` is fed hand-built rows.
+"""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+PHASE2 = ROOT / "experiments" / "phase2" / "src"
+SRC = PHASE2 / "f114_real_ceiling.py"
+THIS = Path(__file__).relative_to(ROOT).as_posix()
+sys.path.insert(0, str(PHASE2))
+
+import f114_real_ceiling as f114  # noqa: E402
+
+
+def _row(ds, seed, est, achieved, q=0.0017):
+    return {"dataset": ds, "seed": seed, "estimate": est,
+            "achieved_error": achieved, "consistency_gap": est - achieved,
+            "auprc": 0.8, "test_fraud_rate": q}
+
+
+def test_the_check_uses_the_entrys_margin():
+    # q = 0.0017: margin max(0.0005, 0.00017) = 0.0005.
+    assert f114.check_passes(0.0017 + 0.0005, 0.0017)
+    assert not f114.check_passes(0.0017 + 0.00051, 0.0017)
+    assert not f114.check_passes(0.0017 - 0.00051, 0.0017)
+    # q = 0.035: margin 0.0035, the relative term.
+    assert f114.check_passes(0.035 + 0.0034, 0.035)
+    assert not f114.check_passes(0.035 + 0.0036, 0.035)
+
+
+def test_the_seed_count_follows_seed_42s_time():
+    assert f114.seed_count(1.0) == 10          # 60 fit, capped at 10
+    assert f114.seed_count(8.0) == 7           # floor(60 / 8)
+    assert f114.seed_count(30.0) == 5          # floor 2, raised to 5
+
+
+def test_a_failed_check_reports_no_ceiling():
+    rows = [_row("ulb", 42 + i, 0.0015, 0.0006) for i in range(5)]
+    s = f114.summarize({"pass": False}, rows)
+    assert s["ceilings_reported"] is False
+    assert s["reading"].startswith("check failed")
+    s = f114.summarize({"pass": True}, rows)
+    assert s["ceilings_reported"] is True
+    assert s["reading"].startswith("check passed")
+    assert f114.summarize(None, rows)["ceilings_reported"] is False
+
+
+def test_a_gap_whose_interval_excludes_zero_is_a_warning():
+    off = [_row("ulb", 42 + i, 0.0015 + i * 1e-5, 0.0006) for i in range(5)]
+    on = [_row("ulb", 42 + i, 0.0006 + (-1) ** i * 1e-4, 0.0006)
+          for i in range(5)]
+    assert f114.summarize({"pass": True}, off)["by_dataset"]["ulb"][
+        "calibration_warning"] is True
+    assert f114.summarize({"pass": True}, on)["by_dataset"]["ulb"][
+        "calibration_warning"] is False
+
+
+def test_the_rules_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+
+    def test(name):
+        return lambda: run_pytest(f"{THIS}::{name}", ROOT)
+    assert_can_fail([Mutation(SRC,
+                              "    return abs(estimate - q) <= margin(q)\n",
+                              "    return abs(estimate - q) <= 2 * "
+                              "margin(q)\n", expect_occurrences=1)],
+                    test("test_the_check_uses_the_entrys_margin"),
+                    "a check twice as loose as the entry")
+    assert_can_fail([Mutation(SRC, "MIN_SEEDS = 5\n", "MIN_SEEDS = 3\n",
+                              expect_occurrences=1)],
+                    test("test_the_seed_count_follows_seed_42s_time"),
+                    "a seed floor under 5")
+    assert_can_fail([Mutation(SRC, "BUDGET_MIN = 60\n", "BUDGET_MIN = 120\n",
+                              expect_occurrences=1)],
+                    test("test_the_seed_count_follows_seed_42s_time"),
+                    "a 120-minute budget")
+    assert_can_fail([Mutation(SRC,
+                              "            \"ceilings_reported\": bool(check "
+                              "and check[\"pass\"])}\n",
+                              "            \"ceilings_reported\": True}\n",
+                              expect_occurrences=1)],
+                    test("test_a_failed_check_reports_no_ceiling"),
+                    "a ceiling reported after a failed check")
+    assert_can_fail([Mutation(SRC,
+                              "                       gap[\"ci95\"] and "
+                              "(gap[\"ci95\"][0] > 0\n",
+                              "                       False and "
+                              "(gap[\"ci95\"][0] > 0\n",
+                              expect_occurrences=1)],
+                    test("test_a_gap_whose_interval_excludes_zero_is_a_"
+                         "warning"),
+                    "a calibration gap left unflagged")
