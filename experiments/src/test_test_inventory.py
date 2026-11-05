@@ -45,6 +45,15 @@ def test_the_place_and_tier_follow_the_rules():
     assert inv.tier("test_agent_status.py") == "normal"
 
 
+def test_quoted_docstrings_are_us_english(tmp_path):
+    # The inventory quotes each file's docstring into a tracked markdown
+    # file, which test_us_english scans (Sprint 31: one quote broke it).
+    f = tmp_path / "test_x.py"
+    f.write_bytes(('"""A ' + "sizea" + 'ble, ' + "Colo" + 'ur check."""\n')
+                  .encode("utf-8"))
+    assert inv.guards(f) == "A sizable, Color check."
+
+
 def test_the_inventory_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
 
@@ -65,3 +74,9 @@ def test_the_inventory_can_fail():
                               "    ", expect_occurrences=1)],
                     test("test_the_place_and_tier_follow_the_rules"),
                     "the device store guard out of the high tier")
+    assert_can_fail([Mutation(SCRIPT,
+                              "    s = us_english(m.group(1) if m else first)\n",
+                              "    s = (m.group(1) if m else first)\n",
+                              expect_occurrences=1)],
+                    test("test_quoted_docstrings_are_us_english"),
+                    "a docstring quoted without the US English pairs")

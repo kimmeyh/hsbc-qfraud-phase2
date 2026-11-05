@@ -111,8 +111,23 @@ def guards(path: Path) -> str:
         return "(no docstring)"
     first = " ".join(doc.split("\n\n")[0].split())
     m = re.match(r"(.+?[.!?])(\s|$)", first)
-    s = m.group(1) if m else first
+    s = us_english(m.group(1) if m else first)
     return (s[:117] + "...") if len(s) > 120 else s
+
+
+def us_english(text: str) -> str:
+    """Apply us_english_fix's pairs to a quoted docstring sentence.
+
+    The inventory is a tracked markdown file, so test_us_english scans it;
+    a docstring quoted here must not carry a spelling that guard bans.
+    """
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import us_english_fix as fix
+    for brit, us in fix.PAIRS:
+        text = re.sub(r"\b" + brit + r"\b",
+                      lambda m, us=us: fix.match_case(m.group(0), us),
+                      text, flags=re.IGNORECASE)
+    return text
 
 
 def kind(path: Path, row: dict) -> str:
