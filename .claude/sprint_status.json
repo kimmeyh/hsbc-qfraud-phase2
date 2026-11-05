@@ -22,7 +22,9 @@
       104
     ],
     "task_actuals": {},
-    "task_started": {},
+    "task_started": {
+      "A": "2026-11-04T23:15:07-05:00"
+    },
     "task_issues": {
       "A": [
         93
@@ -61,7 +63,10 @@
         104
       ]
     },
-    "review_task": null
+    "review_task": null,
+    "task_estimates": {
+      "A": 45
+    }
   },
   "last_completed_sprint": {
     "number": 30,
