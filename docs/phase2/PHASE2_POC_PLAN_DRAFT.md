@@ -144,6 +144,10 @@ device block, and the decision that releases it.
 - **Best achievable result per algorithm per dataset (F157, F166).**
   F166 does ULB in this sprint; the other datasets follow in stage 1, on
   the brief's data first **[A2]**.
+- **F106's circuit against its twins (F157 QNN part, Sprint 31).**
+  Dequantized on IEEE-CIS month 4: GAM and HGB match the circuit within
+  the margin (`docs/phase2/F157_QNN_IEEE.md`). No PoC work is planned
+  on this circuit.
 - **The gate-based arm (F6).** Simulation only, as F6 recommends. A
   Braket hardware run is a new card with its own cost; the AWS credits
   may change that cost **[A3]**.
