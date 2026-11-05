@@ -1,0 +1,432 @@
+{
+ "card": "F114",
+ "sprint": 31,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, amendment 2026-11-05 (F114)",
+ "estimator": "f169_plugin_bins.make('lgbm_bins', seed)",
+ "margin": {
+  "abs": 0.0005,
+  "rel": 0.1
+ },
+ "check": {
+  "dataset": "ulb",
+  "seed": 42,
+  "estimate": 0.0011041268145590187,
+  "test_fraud_rate": 0.0016741268107003137,
+  "margin": 0.0005,
+  "pass": false,
+  "fit_s": 20.8
+ },
+ "seed_plan": {
+  "ulb": {
+   "t42_min": 0.05,
+   "n_seeds": 10
+  }
+ },
+ "ieee_fold": null,
+ "rows": [
+  {
+   "dataset": "ulb",
+   "seed": 42,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.0004086978299030222,
+   "achieved_error": 0.0033306312339195713,
+   "consistency_gap": -0.002921933404016549,
+   "auprc": 0.012514465102752517,
+   "load_s": 1.8,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 42,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56376,
+      "fp": 275,
+      "fn": 86,
+      "tp": 9
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_42.npz",
+     "sha256": "a4ace15f9671ac35c4a97032e109cca8da2e2961786ce4d63c3f1302b7079655",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 43,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.0001164448472340108,
+   "achieved_error": 0.005357205794241004,
+   "consistency_gap": -0.005240760947006993,
+   "auprc": 0.1461327187662027,
+   "load_s": 1.9,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 43,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56424,
+      "fp": 227,
+      "fn": 38,
+      "tp": 57
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_43.npz",
+     "sha256": "b65d144b4006cd4071f34eb716f0b3131dd5393640df1543db6d94a3d819fd20",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 44,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.0003464599058444109,
+   "achieved_error": 0.010855390688330455,
+   "consistency_gap": -0.010508930782486044,
+   "auprc": 0.025074625856145907,
+   "load_s": 1.8,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 44,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 523,
+     "confusion": {
+      "tn": 56162,
+      "fp": 489,
+      "fn": 61,
+      "tp": 34
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_44.npz",
+     "sha256": "9755dcd1ccbf3242f647038d6c6d9d8f061284d5f9f770fb7f943c77edad0df1",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 45,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.0003936501994523177,
+   "achieved_error": 0.006255947555774856,
+   "consistency_gap": -0.005862297356322538,
+   "auprc": 0.00157503221288783,
+   "load_s": 1.9,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 45,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 285,
+     "confusion": {
+      "tn": 56366,
+      "fp": 285,
+      "fn": 95,
+      "tp": 0
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_45.npz",
+     "sha256": "efc83f6c1a1371b748f9dda9311a70241b30907277114ccb80bde4897169d412",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 46,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.00013423272172811946,
+   "achieved_error": 0.003718323758502802,
+   "consistency_gap": -0.003584091036774683,
+   "auprc": 0.04661226557278673,
+   "load_s": 1.9,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 46,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56388,
+      "fp": 263,
+      "fn": 74,
+      "tp": 21
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_46.npz",
+     "sha256": "f065a6fd53cc0a701c8fb1a5ee57445e4ee5d15369a63e79c9a0ffd40a13f836",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 47,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.00038700538678153497,
+   "achieved_error": 0.0031720297465900682,
+   "consistency_gap": -0.0027850243598085333,
+   "auprc": 0.15268386718750634,
+   "load_s": 1.9,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 47,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 286,
+     "confusion": {
+      "tn": 56412,
+      "fp": 239,
+      "fn": 48,
+      "tp": 47
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_47.npz",
+     "sha256": "3f4ee3ed7c3219b3d0043aab423bedd6c5f90bb1888ae2e07a8b36720e7cf839",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 48,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.00029922905947390196,
+   "achieved_error": 0.0031720297465900682,
+   "consistency_gap": -0.002872800687116166,
+   "auprc": 0.3272675423810418,
+   "load_s": 1.9,
+   "fit_s": 1.2,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 48,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56430,
+      "fp": 221,
+      "fn": 32,
+      "tp": 63
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_48.npz",
+     "sha256": "132f8373f5cb73169b03a3b0e72d6884a504328f129d0e6328fcaa4379dc5446",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 49,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.0001494691084894443,
+   "achieved_error": 0.004440841645226095,
+   "consistency_gap": -0.004291372536736651,
+   "auprc": 0.003492800300461783,
+   "load_s": 1.9,
+   "fit_s": 1.2,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 49,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 293,
+     "confusion": {
+      "tn": 56363,
+      "fp": 288,
+      "fn": 90,
+      "tp": 5
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_49.npz",
+     "sha256": "921c9a61188ff801967046102dcd4e49d7d83254449d4074c447d6d81aa1c7fd",
+     "n_rows": 56746
+    }
+   }
+  },
+  {
+   "dataset": "ulb",
+   "seed": 50,
+   "n_train": 170235,
+   "n_test": 56746,
+   "test_positives": 95,
+   "test_fraud_rate": 0.0016741268107003137,
+   "estimate": 0.0006775449131758917,
+   "achieved_error": 0.006203080393331689,
+   "consistency_gap": -0.005525535480155797,
+   "auprc": 0.0863531214094122,
+   "load_s": 1.8,
+   "fit_s": 1.1,
+   "outcome": {
+    "name": "f114_ulb",
+    "seed": 50,
+    "n_test": 56746,
+    "n_positives": 95,
+    "at_budget_on_test": {
+     "budget": 0.005,
+     "n_budget": 284,
+     "n_flagged": 284,
+     "confusion": {
+      "tn": 56413,
+      "fp": 238,
+      "fn": 49,
+      "tp": 46
+     }
+    },
+    "test_scores": {
+     "path": "experiments/phase2/predictions/f114_ulb_50.npz",
+     "sha256": "03311bb122198fdc3df3d90b23ff2ffb94555c1229b09ac9f78cc887043cccb3",
+     "n_rows": 56746
+    }
+   }
+  }
+ ],
+ "summary": {
+  "by_dataset": {
+   "ulb": {
+    "estimate": {
+     "n": 9,
+     "mean": 0.00032363710800918373,
+     "sd": 0.00017736164049537412,
+     "ci95": [
+      0.00018730488253954126,
+      0.0004599693334788262
+     ]
+    },
+    "achieved_error": {
+     "n": 9,
+     "mean": 0.005167275618056289,
+     "sd": 0.002465037201091932,
+     "ci95": [
+      0.003272480291672923,
+      0.007062070944439655
+     ]
+    },
+    "consistency_gap": {
+     "n": 9,
+     "mean": -0.004843638510047106,
+     "sd": 0.0024357338238746697,
+     "ci95": [
+      -0.0067159092667509876,
+      -0.0029713677533432245
+     ]
+    },
+    "calibration_warning": true,
+    "auprc": {
+     "n": 9,
+     "mean": 0.08907849319879976,
+     "sd": 0.10652814856433754,
+     "ci95": [
+      0.007193709497131065,
+      0.17096327690046847
+     ]
+    },
+    "test_fraud_rate": 0.0016741268107003137
+   }
+  },
+  "reading": "check failed: the method does not transfer to real data; the estimates are plug-in values only, never ceilings, and F114 stays open",
+  "ceilings_reported": false
+ },
+ "complete": false,
+ "provenance": {
+  "generator": "experiments/phase2/src/f114_real_ceiling.py",
+  "generator_commit": "b3f328197a3e6a068b65fe5ee9fd60311fdab684",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "31f01b253f34461cbceb3ffd284657fc"
+ }
+}

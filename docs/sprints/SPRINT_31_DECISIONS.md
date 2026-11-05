@@ -629,3 +629,65 @@ before the other three are asked.
 1. Approve F95 stop 1: one Dirac-3S call, `b1_dct_42` at schedule 4, 8
    samples; cost unknown, about 15 s by the card's Dirac-3 estimate.
 2. Do not run F95 in Sprint 31.
+
+---
+
+## D11. F114: the preregistered estimator does not train on ULB. What next?
+
+Asked 2026-11-05 at Phase 4, Task E run stopped after one seed.
+
+**What.** F114 runs F169's `lgbm_bins` plug-in (LightGBM, 100 trees,
+learning rate 0.1, 4,095 bins), fixed by the 2026-11-05 F108 amendment.
+On ULB:
+- The shuffled-label check **failed**: estimate 0.0011 against a test
+  fraud rate of 0.0017, margin 0.0005
+  (`experiments/phase2/results/f114_real_ceiling.json`, `check`). By the
+  entry, no F114 figure is reported as a ceiling.
+- On real labels, seed 42, the fit **collapsed**: test AUPRC 0.013 and an
+  error of 0.0033, worse than flagging nothing (the same file, `rows`).
+  The run was stopped there; IEEE-CIS has not run.
+- A scratch diagnosis on seed 42 (not a tracked result; reproduced by
+  fitting `LGBMClassifier` on `f114_real_ceiling.ulb(42)`): at learning
+  rate 0.1 the model does not fit even its training rows (training AUPRC
+  0.067 at 4,095 bins, 0.317 at 255). At 0.05 it trains (test AUPRC 0.742
+  at 4,095 bins, 0.723 at 255). Boosting at a high rate on 0.17% positives
+  diverges; F169 validated the estimator on a simulator, where it did not.
+
+**Why it matters.** The failed check may be the collapse, not the
+method: an estimator that cannot fit cannot be judged by the check. A
+changed learning rate is a new estimator, so F169's simulator validation
+does not cover it, and the entry would need a dated amendment before any
+new figure.
+
+**Kind per option.** Option 1: Prevention (the estimator is re-validated
+where it was validated, then used; the amendment is written first).
+Option 2: Workaround (the result is recorded as it stands). Option 3:
+Workaround.
+
+**Cost per option.**
+- Option 1: about 60 minutes: F169's simulator check re-run at learning
+  rate 0.05 (`f169_plugin_bins.py`; its recorded fits total about 1
+  minute, plus its data build), a dated amendment to the F108 entry, then
+  F114 re-run from the check (ULB seed 42's fit took 1.1 s and the check's
+  20.8 s; IEEE-CIS not yet timed). 0 metered seconds.
+- Option 2: about 20 minutes: the F114 result document says the check
+  failed and the estimator collapsed on ULB; F114 returns to the backlog
+  with this finding. 0 metered seconds.
+- Option 3: about 40 minutes plus IEEE-CIS's run time: IEEE-CIS run as
+  the entry stands (descriptive only, since the check failed), then the
+  document of option 2.
+
+**Recommendation: 1.** The check cannot answer its question while the
+estimator does not fit, and re-validating on the simulator keeps F108's
+rule: no real-data figure from an estimator the simulator has not passed.
+
+**Options.**
+
+1. Re-validate `lgbm_bins` at learning rate 0.05 on F169's simulator; if
+   it passes F108's rule, write a dated F108 amendment and re-run F114
+   from the shuffled-label check (about 60 minutes, 0 metered seconds).
+2. Record F114 as run (check failed, estimator collapsed on ULB) in a
+   result document and return the card to the backlog (about 20
+   minutes).
+3. Run IEEE-CIS as the entry stands, descriptive only, then record as in
+   option 2 (about 40 minutes plus IEEE-CIS's run time).
