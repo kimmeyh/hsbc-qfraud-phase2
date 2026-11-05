@@ -64,6 +64,56 @@ def test_the_attribution_names_each_case():
         "neither passes")
 
 
+def _rows_lr05(rec: list[bool]) -> list[dict]:
+    return [{"seed": 42 + i,
+             "arms": {arm: {"lgbm_lr05": {"recovered": r if arm == "none"
+                                          else True}}
+                      for arm in ("none", "flip", "reference")}}
+            for i, r in enumerate(rec)]
+
+
+def test_the_lr05_estimator_differs_only_in_its_rate():
+    # The F114 re-run amendment, stage 1: half the rate, nothing else.
+    a = f169.make("lgbm_bins", 42).get_params()
+    b = f169.make("lgbm_lr05", 42).get_params()
+    assert b["learning_rate"] == 0.05 and a["learning_rate"] == 0.1
+    assert {k: v for k, v in a.items() if k != "learning_rate"} == {
+        k: v for k, v in b.items() if k != "learning_rate"}
+
+
+def test_lr05_needs_four_recovered_and_a_partial_run_never_passes():
+    assert f169.summarize_lr05(_rows_lr05(FOUR))["passes"] is True
+    assert f169.summarize_lr05(_rows_lr05(THREE))["passes"] is False
+    assert f169.summarize_lr05(_rows_lr05([True] * 2))["passes"] is False
+    stopped = _rows_lr05(ALL)
+    stopped[0] = {"seed": 42, "arms": {}, "stopped": "generator check failed"}
+    stopped[1]["arms"]["none"]["lgbm_lr05"]["recovered"] = False
+    assert f169.summarize_lr05(stopped)["passes"] is False
+
+
+def test_lr05_writes_only_its_own_file(tmp_path, monkeypatch):
+    """Through the real writer, with the simulator stubbed: the default
+    result is never touched, and only `lgbm_lr05` is fit."""
+    import json
+    monkeypatch.setattr(f169, "OUT", tmp_path / "default.json")
+    monkeypatch.setattr(f169, "OUT_LR05", tmp_path / "lr05.json")
+    asked = []
+
+    def fake(seed, estimators):
+        asked.append(estimators)
+        return _rows_lr05([True])[0] | {"seed": seed}
+    monkeypatch.setattr(f169, "seed_run", fake)
+    assert f169.main(["lr05"]) == 0
+    assert not (tmp_path / "default.json").exists()
+    assert [p.name for p in tmp_path.iterdir()
+            if not p.name.startswith("lr05.json")] == []
+    doc = json.loads((tmp_path / "lr05.json").read_text(encoding="utf-8"))
+    assert set(asked) == {("lgbm_lr05",)}
+    assert list(doc["estimators"]) == ["lgbm_lr05"]
+    assert doc["complete"] is True and doc["summary"]["passes"] is True
+    assert f169.main(["lr5"]) == 2
+
+
 def test_the_rule_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     src = PHASE2 / "f169_plugin_bins.py"
@@ -94,3 +144,21 @@ def test_the_rule_can_fail():
                               expect_occurrences=1)],
                     test("test_the_attribution_names_each_case"),
                     "the attribution swapped")
+    assert_can_fail([Mutation(src, "LR05 = 0.05\n", "LR05 = 0.1\n",
+                              expect_occurrences=1)],
+                    test("test_the_lr05_estimator_differs_only_in_its_rate"),
+                    "the re-run estimator at the old rate")
+    assert_can_fail([Mutation(src, '                    "recovers": rec >= '
+                              'fc.PASS_SEEDS}\n',
+                              '                    "recovers": rec >= '
+                              'min(fc.PASS_SEEDS, len(rows))}\n',
+                              expect_occurrences=1)],
+                    test("test_lr05_needs_four_recovered_and_a_partial_run_"
+                         "never_passes"),
+                    "a two-seed partial run read as a pass")
+    assert_can_fail([Mutation(src, "    rid, resume = provenance.start("
+                              "OUT_LR05)\n",
+                              "    rid, resume = provenance.start(OUT)\n",
+                              expect_occurrences=1)],
+                    test("test_lr05_writes_only_its_own_file"),
+                    "stage 1 started on the default result")

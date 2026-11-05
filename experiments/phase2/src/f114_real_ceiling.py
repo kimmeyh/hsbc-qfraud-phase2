@@ -15,6 +15,12 @@ Order, as the entry sets it:
      n = min(10, floor(60 / t42)), at least 5, seeds 42 to 41 + n.
 
     <venv python> experiments/phase2/src/f114_real_ceiling.py
+    <venv python> experiments/phase2/src/f114_real_ceiling.py --lr05
+
+`--lr05` is stage 2 of the 2026-11-05 F114 re-run amendment, run only if
+stage 1 (`f169_plugin_bins.py lr05`) passes: `lgbm_lr05` in place of
+`lgbm_bins`, each seed's training AUPRC recorded, written to
+`f114_real_ceiling_lr05.json`. The default run is unchanged.
 
 Zero metered seconds. Writes `experiments/phase2/results/f114_real_ceiling.json`
 through `provenance.write_result` after each step; resumable, `complete`
@@ -39,6 +45,16 @@ import f108_ceiling as fc  # noqa: E402  (the margin, not edited)
 OUT = ROOT / "experiments" / "phase2" / "results" / "f114_real_ceiling.json"
 # F168 part 7: a long run resumes through provenance.start.
 LONG_RUN = True
+# The F114 re-run amendment (2026-11-05, Sprint 31 D11 option 1), stage 2:
+# `--lr05` uses `lgbm_lr05`, writes `OUT_LR05` and records each seed's
+# training AUPRC. The default run is unchanged.
+ESTIMATOR = "lgbm_bins"
+TRAIN_AUPRC = False
+OUT_LR05 = OUT.with_name("f114_real_ceiling_lr05.json")
+ENTRY = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, "
+         "amendment 2026-11-05 (F114)")
+ENTRY_LR05 = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, "
+              "amendment 2026-11-05 (F114 re-run)")
 DATASETS = ("ulb", "ieee")
 SEEDS = tuple(range(42, 52))
 MIN_SEEDS = 5
@@ -112,9 +128,13 @@ def t_interval(values) -> dict:
 
 
 # --------------------------------------------------------------- fitting
-def plugin_scores(Xtr, ytr, Xte, seed: int) -> np.ndarray:
+def fit_plugin(Xtr, ytr, seed: int):
     import f169_plugin_bins as f169
-    return f169.make("lgbm_bins", seed).fit(Xtr, ytr).predict_proba(Xte)[:, 1]
+    return f169.make(ESTIMATOR, seed).fit(Xtr, ytr)
+
+
+def plugin_scores(Xtr, ytr, Xte, seed: int) -> np.ndarray:
+    return fit_plugin(Xtr, ytr, seed).predict_proba(Xte)[:, 1]
 
 
 def shuffle_check() -> dict:
@@ -137,7 +157,8 @@ def seed_row(dataset: str, seed: int) -> dict:
     t0 = time.perf_counter()
     d = LOADERS[dataset](seed)
     load_s = time.perf_counter() - t0
-    p = plugin_scores(d["Xtr"], d["ytr"], d["Xte"], seed)
+    model = fit_plugin(d["Xtr"], d["ytr"], seed)
+    p = model.predict_proba(d["Xte"])[:, 1]
     y = d["yte"]
     est = float(np.mean(np.minimum(p, 1 - p)))
     achieved = float(np.mean((p >= 0.5).astype(int) != y))
@@ -149,6 +170,10 @@ def seed_row(dataset: str, seed: int) -> dict:
            "load_s": round(load_s, 1),
            "fit_s": round(time.perf_counter() - t0 - load_s, 1),
            "outcome": orec.record(f"f114_{dataset}", seed, y, p)}
+    if TRAIN_AUPRC:
+        # Reported, not decisive: a fit that collapses shows here.
+        row["train_auprc"] = float(average_precision_score(
+            d["ytr"], model.predict_proba(d["Xtr"])[:, 1]))
     print(f"  {dataset} s{seed}: est {est:.5f} achieved {achieved:.5f} "
           f"q {row['test_fraud_rate']:.5f} auprc {row['auprc']:.3f} "
           f"{row['fit_s']} s", flush=True)
@@ -191,9 +216,8 @@ def summarize(check: dict | None, rows: list[dict]) -> dict:
 def _doc(state: dict, complete: bool = False) -> dict:
     return {"card": "F114", "sprint": 31, "phase": 2, "evidence_tag": "SIM",
             "metered_seconds": 0,
-            "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, "
-                     "F108, amendment 2026-11-05 (F114)",
-            "estimator": "f169_plugin_bins.make('lgbm_bins', seed)",
+            "entry": ENTRY_LR05 if ESTIMATOR == "lgbm_lr05" else ENTRY,
+            "estimator": f"f169_plugin_bins.make('{ESTIMATOR}', seed)",
             "margin": {"abs": fc.MARGIN_ABS, "rel": fc.MARGIN_REL},
             "check": state.get("check"), "seed_plan": state.get("plan", {}),
             "ieee_fold": state.get("ieee_fold"),
@@ -213,7 +237,21 @@ def seeds_used(state: dict) -> list[int]:
     return seeds
 
 
-def main() -> int:
+def select(argv: list[str]) -> bool:
+    """`--lr05`: stage 2 of the F114 re-run amendment. Returns False for an
+    argument this module does not take."""
+    global OUT, ESTIMATOR, TRAIN_AUPRC
+    if argv == ["--lr05"]:
+        OUT, ESTIMATOR, TRAIN_AUPRC = OUT_LR05, "lgbm_lr05", True
+        return True
+    return not argv
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = [] if argv is None else argv
+    if not select(argv):
+        print(f"usage: f114_real_ceiling.py [--lr05]; got {argv}")
+        return 2
     import provenance
     rid, resume = provenance.start(OUT)
     state = {"rows": [], "plan": {}}
@@ -257,4 +295,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

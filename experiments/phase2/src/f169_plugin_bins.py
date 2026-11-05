@@ -19,6 +19,11 @@ window, against the Bayes error) on the full training window. The pass
 rule is F108's: recovered on 4 of 5 seeds on the main, no-noise arm.
 
     <venv python> experiments/phase2/src/f169_plugin_bins.py
+    <venv python> experiments/phase2/src/f169_plugin_bins.py lr05
+
+`lr05` is stage 1 of the 2026-11-05 F114 re-run amendment: `lgbm_lr05`
+(`lgbm_bins` at learning rate 0.05) alone, to
+`f169_plugin_bins_lr05.json`. The default run is unchanged.
 
 Zero metered seconds. Writes `experiments/phase2/results/f169_plugin_bins.json`
 through `provenance.write_result` after each seed; resumable by seed,
@@ -45,6 +50,12 @@ LONG_RUN = True
 ESTIMATORS = ("hgb_no_es", "lgbm_bins")
 LGBM_MAX_BIN = 4095
 DECIDING_ARM = "none"                  # F108's main, no-noise arm
+# The F114 re-run amendment (2026-11-05, Sprint 31 D11 option 1), stage 1:
+# `lgbm_lr05` is `lgbm_bins` at half the learning rate, run with `lr05`.
+# The default run and `f169_plugin_bins.json` are unchanged.
+LR05 = 0.05
+ESTIMATORS_LR05 = ("lgbm_lr05",)
+OUT_LR05 = OUT.with_name("f169_plugin_bins_lr05.json")
 
 
 def make(name: str, seed: int):
@@ -52,9 +63,10 @@ def make(name: str, seed: int):
         from sklearn.ensemble import HistGradientBoostingClassifier
         return HistGradientBoostingClassifier(random_state=seed,
                                               early_stopping=False)
-    if name == "lgbm_bins":
+    if name in ("lgbm_bins", "lgbm_lr05"):
         from lightgbm import LGBMClassifier
-        return LGBMClassifier(n_estimators=100, learning_rate=0.1,
+        rate = LR05 if name == "lgbm_lr05" else 0.1
+        return LGBMClassifier(n_estimators=100, learning_rate=rate,
                               num_leaves=31, min_child_samples=20,
                               max_bin=LGBM_MAX_BIN, random_state=seed,
                               verbose=-1)
@@ -96,7 +108,7 @@ def labels(d: dict, eta: np.ndarray) -> dict:
     return out
 
 
-def seed_run(seed: int) -> dict:
+def seed_run(seed: int, estimators: tuple = ESTIMATORS) -> dict:
     t0 = time.perf_counter()
     d = fc.generate(seed)
     d["seed"] = seed
@@ -112,13 +124,13 @@ def seed_run(seed: int) -> dict:
         return row
     for arm, (X, y, e) in labels(d, eta).items():
         row["arms"][arm] = {name: plugin(arm, name, seed, X[tr], y[tr], X[te],
-                                         y[te], e[te]) for name in ESTIMATORS}
+                                         y[te], e[te]) for name in estimators}
     row["seconds"] = round(time.perf_counter() - t0, 1)
     print(f"  s{seed} " + " | ".join(
         f"{a}/{n}: est {v[n]['estimate']:.5f} bayes {v[n]['bayes_error']:.5f}"
         f" rec {v[n]['recovered']} "
         f"auprc {v[n]['auprc']:.3f}" for a, v in row["arms"].items()
-        for n in ESTIMATORS) + f" {row['seconds']} s", flush=True)
+        for n in estimators) + f" {row['seconds']} s", flush=True)
     return row
 
 
@@ -165,7 +177,69 @@ def _doc(rows, complete=False):
             "rows": rows, "summary": summarize(rows), "complete": complete}
 
 
-def main() -> int:
+def summarize_lr05(rows: list) -> dict:
+    """Stage 1 of the F114 re-run amendment: F169's rule for `lgbm_lr05`,
+    recovered on at least 4 seeds on the main arm. A stopped seed is a
+    miss, and a partial run (under 4 recovered) never passes."""
+    n = ESTIMATORS_LR05[0]
+    out = {}
+    for arm in list(fc.NOISE) + ["reference"]:
+        live = [r for r in rows if arm in r["arms"]]
+        rec = sum(r["arms"][arm][n]["recovered"] for r in live)
+        out[arm] = {"seeds_recovered": rec, "n_seeds": len(rows),
+                    "recovers": rec >= fc.PASS_SEEDS}
+    passes = out[DECIDING_ARM]["recovers"]
+    reading = ("lgbm_lr05 passes F169's rule on the simulator: stage 2, "
+               "F114 from the shuffled-label check, runs" if passes else
+               "lgbm_lr05 does not pass: no stage 2; F114 is recorded as run "
+               "and returned to the backlog")
+    return {"by_arm": out, "deciding_arm": DECIDING_ARM, "passes": passes,
+            "stage2": passes, "reading": reading}
+
+
+def _doc_lr05(rows, complete=False):
+    return {"card": "F114", "part": "stage 1, F169 re-validation at "
+            "learning rate 0.05", "sprint": 31, "phase": 2,
+            "evidence_tag": "SIM", "metered_seconds": 0,
+            "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, "
+                     "F108, amendment 2026-11-05 (F114 re-run)",
+            "estimators": {"lgbm_lr05": f"LGBMClassifier(n_estimators=100, "
+                                        f"learning_rate={LR05}, "
+                                        f"num_leaves=31, min_child_samples=20, "
+                                        f"max_bin={LGBM_MAX_BIN})"},
+            "margin": {"abs": fc.MARGIN_ABS, "rel": fc.MARGIN_REL},
+            "pass_seeds": fc.PASS_SEEDS, "seeds": [r["seed"] for r in rows],
+            "rows": rows, "summary": summarize_lr05(rows),
+            "complete": complete}
+
+
+def main_lr05() -> int:
+    """Stage 1 of the F114 re-run amendment; writes only `OUT_LR05`."""
+    import provenance
+    rid, resume = provenance.start(OUT_LR05)
+    rows = (json.loads(OUT_LR05.read_text(encoding="utf-8"))["rows"]
+            if resume else [])
+    for seed in fc.SEEDS:
+        if seed in {r["seed"] for r in rows}:
+            continue           # resume: never redo a seed
+        rows.append(seed_run(seed, ESTIMATORS_LR05))
+        provenance.write_result(OUT_LR05, _doc_lr05(rows), __file__,
+                                [r["seed"] for r in rows], rid)
+    doc = _doc_lr05(rows, complete=True)
+    provenance.write_result(OUT_LR05, doc, __file__,
+                            [r["seed"] for r in rows], rid)
+    print(json.dumps(doc["summary"], indent=1))
+    print("complete", flush=True)
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = [] if argv is None else argv
+    if argv == ["lr05"]:
+        return main_lr05()
+    if argv:
+        print(f"usage: f169_plugin_bins.py [lr05]; got {argv}")
+        return 2
     import provenance
     rid, resume = provenance.start(OUT)
     rows = json.loads(OUT.read_text(encoding="utf-8"))["rows"] if resume else []
@@ -183,4 +257,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

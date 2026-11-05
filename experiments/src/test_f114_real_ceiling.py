@@ -8,6 +8,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[2]
 PHASE2 = ROOT / "experiments" / "phase2" / "src"
 SRC = PHASE2 / "f114_real_ceiling.py"
@@ -91,6 +93,54 @@ def test_the_seeds_recorded_include_the_check():
                             "check": {"pass": True}}) == [42, 43]
 
 
+def test_lr05_uses_its_estimator_and_writes_only_its_own_file(
+        tmp_path, monkeypatch):
+    """The F114 re-run amendment, stage 2, through the real writer, stopped
+    after the check: the default result is never touched."""
+    import json
+    for name in ("OUT", "ESTIMATOR", "TRAIN_AUPRC"):
+        monkeypatch.setattr(f114, name, getattr(f114, name))
+    monkeypatch.setattr(f114, "OUT", tmp_path / "default.json")
+    monkeypatch.setattr(f114, "OUT_LR05", tmp_path / "lr05.json")
+    monkeypatch.setattr(f114, "shuffle_check", lambda: {
+        "dataset": "ulb", "seed": 42, "estimate": 0.0017,
+        "test_fraud_rate": 0.0017, "margin": 0.0005, "pass": True})
+
+    def stop(ds, seed):
+        raise KeyboardInterrupt("stopped after the check")
+    monkeypatch.setattr(f114, "seed_row", stop)
+    try:
+        f114.main(["--lr05"])
+    except KeyboardInterrupt:
+        pass
+    assert [p.name for p in tmp_path.iterdir()
+            if not p.name.startswith("lr05.json")] == []
+    doc = json.loads((tmp_path / "lr05.json").read_text(encoding="utf-8"))
+    assert doc["estimator"] == "f169_plugin_bins.make('lgbm_lr05', seed)"
+    assert doc["entry"].endswith("(F114 re-run)")
+    assert f114.TRAIN_AUPRC is True
+    assert f114.main(["--lr5"]) == 2
+
+
+def test_the_training_auprc_is_recorded_in_lr05(monkeypatch):
+    class Model:
+        def predict_proba(self, X):
+            p = np.asarray(X, dtype=float)[:, 0]
+            return np.column_stack([1 - p, p])
+    X = np.array([[0.1], [0.9], [0.2], [0.8]])
+    y = np.array([0, 1, 0, 1])
+    monkeypatch.setitem(f114.LOADERS, "ulb", lambda seed: {
+        "Xtr": X, "ytr": y, "Xte": X, "yte": y})
+    monkeypatch.setattr(f114, "fit_plugin", lambda Xtr, ytr, seed: Model())
+    # The real record saves test scores under predictions/: never here.
+    import outcome_record
+    monkeypatch.setattr(outcome_record, "record", lambda *a, **k: {})
+    monkeypatch.setattr(f114, "TRAIN_AUPRC", False)
+    assert "train_auprc" not in f114.seed_row("ulb", 42)
+    monkeypatch.setattr(f114, "TRAIN_AUPRC", True)
+    assert f114.seed_row("ulb", 42)["train_auprc"] == 1.0
+
+
 def test_the_rules_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
 
@@ -132,3 +182,25 @@ def test_the_rules_can_fail():
                               "    if False:\n", expect_occurrences=1)],
                     test("test_the_check_is_saved_before_any_seed"),
                     "the check's save with no seed")
+    assert_can_fail([Mutation(SRC,
+                              "        OUT, ESTIMATOR, TRAIN_AUPRC = OUT_LR05, "
+                              "\"lgbm_lr05\", True\n",
+                              "        OUT, ESTIMATOR, TRAIN_AUPRC = OUT, "
+                              "\"lgbm_lr05\", True\n",
+                              expect_occurrences=1)],
+                    test("test_lr05_uses_its_estimator_and_writes_only_its_"
+                         "own_file"),
+                    "stage 2 written over the default result")
+    assert_can_fail([Mutation(SRC,
+                              "        OUT, ESTIMATOR, TRAIN_AUPRC = OUT_LR05, "
+                              "\"lgbm_lr05\", True\n",
+                              "        OUT, ESTIMATOR, TRAIN_AUPRC = OUT_LR05, "
+                              "\"lgbm_bins\", True\n",
+                              expect_occurrences=1)],
+                    test("test_lr05_uses_its_estimator_and_writes_only_its_"
+                         "own_file"),
+                    "stage 2 run with the old estimator")
+    assert_can_fail([Mutation(SRC, "    if TRAIN_AUPRC:\n", "    if False:\n",
+                              expect_occurrences=1)],
+                    test("test_the_training_auprc_is_recorded_in_lr05"),
+                    "the training AUPRC left out")
