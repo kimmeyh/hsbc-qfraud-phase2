@@ -1,9 +1,9 @@
 # Sprint 31 Plan: Make Testing Fast and Sure, Then Read the Ceiling, the Segment and Both Devices
 
 **Sprint**: 31 | **Branch**: `feature/20261104_Sprint_31`
-**Planned**: 2026-11-04 | **Status**: DRAFT, written on the recommended
-answers to D2-D6 (`SPRINT_31_DECISIONS.md`); approval is asked after
-they are answered.
+**Planned**: 2026-11-04 | **Status**: DRAFT. D2 answered ("1 and 4");
+D3-D6 written on their recommended answers (`SPRINT_31_DECISIONS.md`);
+approval is asked after they are answered.
 **Scope**: F180, F177, F178, F179, F114, F155, F157, F150, F95, F121 and
 F13 (team lead selection, 2026-11-04, D1 option 4); the pypdf bump if D6
 adds it.
@@ -87,8 +87,9 @@ evidence. **Five cards cannot be planned as carded**; each is a decision
   **unverified**.
   `qpu_cost_model.quote(1300, 1)` gives 4 s from one Dirac-3S anchor
   (833); above it, 4 s is a floor.
-- **F157: no part named (D2).** The other datasets on disk are SPECTRA's
-  four.
+- **F157: no part named (D2, answered "1 and 4").** The other datasets
+  on disk are SPECTRA's four. The QNN lane exists only as F106's
+  statevector circuit on ULB, inconclusive at 99 test positives.
 - **F121: hold not met (D3).** No Phase 2 result records an in-segment
   edge over a matched control. F162's per-row scores (three lanes, three
   cells, seeds 42-51, 90 files) are on disk, and the pocket flag is
@@ -121,7 +122,13 @@ evidence. **Five cards cannot be planned as carded**; each is a decision
   fire: a label-shuffled ULB arm on seed 42, where the estimate must sit
   at the no-information level; if it does not, the method does not
   transfer and the real-data figures are not reported as ceilings.
-- **F157.** Descriptive, with F166's paired test, as F174.
+- **F157, SPECTRA part.** Descriptive, with F166's paired test, as F174.
+- **F157, QNN part.** F106's rule (no twin's interval clears the -0.005
+  margin) left the reading inconclusive at 99 positives. Fires: the entry
+  states the positive count at which F106's observed spread gives an
+  interval narrower than the margin, computed from `f106_dequant.json`
+  before the run; if the chosen dataset cannot reach it, the entry says
+  the run cannot decide and is redesigned before it starts.
 - **F121.** Not run at planning: the test module does not exist yet. The
   task's first step, before the proxy's figures are read, runs the same
   test with HGB's stored scores in place of the proxy's. If HGB also
@@ -148,7 +155,8 @@ Estimates are the cards', on the recommended answers to D2-D6.
 | C | F177 | The levers chosen in B's decision, each measured before and after; `scripts/suite_times.py`; the checklist and workflow say which suite runs when | up to 240 | the before run is B's; one after run (~5-49 min) | B's decision |
 | D | (D6) | pypdf 6.21.2 to 6.21.4 in the lock, a dated header line; the submission-artifact tests, no PDF re-rendered | 45 | - | - |
 | E | F114 | Entry (dated F108 amendment) first; F169's LightGBM 4,095-bin plug-in on ULB and IEEE-CIS; the shuffled-label arm first; intervals over seeds | 90 | seed-42 pilot timed first, then the seeds the entry names, background | A |
-| F | F157 | Part 3 per D2: F166's protocol on the four SPECTRA datasets; pages from the tracked generator | 240 | a timed seed-42 pilot per dataset, then the seeds it sets, background | A |
+| F | F157 | SPECTRA part (D2 option 1): F166's protocol on the four SPECTRA datasets; pages from the tracked generator | 240 | a timed seed-42 pilot per dataset, then the seeds it sets, background | A |
+| M | F157 | QNN part (D2 option 4): entry first, choosing IEEE-CIS or a larger ULB test set and saying why; F106's circuit and twins; seeds from a timed seed-42 pilot | 120 | pilot first; F106's eight ULB seeds took 8,640 s; background | A |
 | G | F121 | Per D3: entry; the HGB reference run first; the hold test on F162's stored scores; Experiment 5's entry as a draft | 60 | minutes | A |
 | H | F150 | Per D4: the draft checked against the title and F109, handed to the team lead to send; the rebuild only if a reply arrives before Phase 5 | 15 | - | D4 |
 | I | F155 | Entry; the 1,300-variable unit through the proven runner and `device_store`; offline dry run; then STOP for approval with the call count and seconds | 30 | about 4 metered s after approval | A |
@@ -156,11 +164,11 @@ Estimates are the cards', on the recommended answers to D2-D6.
 | K | F178 | The three documents, version 1.0 with change lists; the link, acronym and claim test proven red; the Phase 5 update step | 234 | - | results of E-J where available |
 | L | F13 | The Phase 2 plan updated from this sprint's results; then the backlog re-prioritized from it | 75 | - | all others |
 
-**Derived total: 1,314 minutes of work**, the sum of the task estimates
-(45 + 180 + 240 + 45 + 90 + 240 + 60 + 15 + 30 + 60 + 234 + 75). Plus
-about 120 minutes for F150's rebuild only if the authors reply before
-Phase 5. The selection's card estimates, with these changes: F157 named
-at 240 (D2), F121 at 60 (D3), F150 at 15 (D4), F95 at 60 (D5), the
+**Derived total: 1,434 minutes of work**, the sum of the task estimates
+(45 + 180 + 240 + 45 + 90 + 240 + 60 + 15 + 30 + 60 + 234 + 75 + 120).
+Plus about 120 minutes for F150's rebuild only if the authors reply
+before Phase 5. The selection's card estimates, with these changes: F157
+as two parts, 240 and 120 (D2, answered "1 and 4"), F121 at 60 (D3), F150 at 15 (D4), F95 at 60 (D5), the
 pypdf task at 45 (D6), and F178's sourcing allowance below.
 
 How each estimate was set (`docs/VELOCITY_LOG.md`): Sprint 30's active
@@ -179,8 +187,9 @@ the sprint is not dominated by checks.
 ### Task order
 
 1. **A** (F179): the lock, before the sprint's own timers lean on it.
-2. **B** (F180) starts with the background full run. **E** and **F**
-   pilots start in the background while B's analysis runs.
+2. **B** (F180) starts with the background full run. **E**, **F** and
+   **M** pilots start in the background while B's analysis runs, one
+   heavy run at a time beside the suite.
 3. **D** (pypdf) and **G** (F121) while runs go.
 4. B's recommendations asked as one decision; then **C** (F177).
 5. **I** and **J** built and dry-run; each stops for its own approval.
@@ -197,7 +206,9 @@ the sprint is not dominated by checks.
   call count and seconds. `device_store` records an intent before each
   send and refuses a repeated problem hash. F155's rejected-job billing
   is unverified, and its 4 s is a floor.
-- **Runtimes.** F157's and F114's are unsized until their pilots. No
+- **Runtimes.** F157's two parts and F114's are unsized until their
+  pilots; F106's eight ULB seeds took 8,640 s, and a larger positive
+  count costs more. No
   unsized run starts; each run over 30 minutes writes a heartbeat.
 - **Local red-proof runs edit source files.** No two suite runs at once,
   and no edit to a file a running proof mutates (Sprint 30's two restore

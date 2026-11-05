@@ -183,6 +183,10 @@ plus both runs). Updated recommendation: 4 if one part is taken, because
 it is the open quantum question at zero metered cost; 1 and 4 if both
 fit.
 
+**Answer (team lead, 2026-11-04): "d2 1 and 4".** F157 runs two parts in
+Sprint 31: the SPECTRA part (option 1, 240 minutes) and the QNN part
+(option 4, about 120 minutes [no-history]), both 0 metered seconds.
+
 ---
 
 ## D3. F121: the hold condition is not met. What runs?
