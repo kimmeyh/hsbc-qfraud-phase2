@@ -36,6 +36,8 @@ ROOT = HERE.parents[2]
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(ROOT / "experiments" / "src"))
 
+# One pass over stored scores, under a minute: not a long run (F168).
+LONG_RUN = False
 OUT = ROOT / "experiments" / "phase2" / "results" / "exp5_router.json"
 PRED = ROOT / "experiments" / "phase2" / "predictions"
 SEEDS = tuple(range(42, 52))
