@@ -228,7 +228,7 @@ on 2026-10-23:
 | 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below |
 | 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below |
 | 4 | Replication under the source protocol (Loke et al.) | F111 | none | Written 2026-10-22, below |
-| 5 | Segment transfer (H5), with the section 5 control | F121 | to be decided | To write; F121 is on HOLD |
+| 5 | Segment transfer (H5), with the section 5 control | F121 | none (proxy, stored scores) | Written 2026-11-05, below; hold set aside (Sprint 31 D3) |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
 | - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
@@ -244,6 +244,7 @@ on 2026-10-23:
 | - | Best achievable result per algorithm on IEEE-CIS, classical and proxy lanes | F174 (F157 part 2) | none | Written 2026-10-31, below |
 | - | ULB frauds missed by every model: nearest neighbors | F170 | none | Written 2026-10-31, below |
 | - | F158 step 3 on IEEE-CIS | F171 | none | Written 2026-10-31, below |
+| - | Best achievable result per algorithm on SPECTRA's four datasets, classical and proxy lanes | F157 SPECTRA part | none | Written 2026-11-05, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -623,6 +624,84 @@ any lane below is fit. Not filed; part of this draft. No device.
   AUC-PR and ROC-AUC, the resampled class counts, the duplicate count,
   the pilot timing and projection, and the primary interval.
 
+### Experiment 5 (F121): segment transfer and router acceptance, on the proxy
+
+Written 2026-11-05 (Sprint 31 Task H, #100), before any per-segment
+score is computed. Not filed; part of this draft. No device.
+
+- **Hold set aside.** F121 was on HOLD until a Phase 2 run showed an
+  in-segment edge over the matched control (Sprint 26 Decision 2). The
+  team lead set the hold aside (Sprint 31 D3 option 2: "run the whole d5
+  experiment so we can learn what is new or is verified"). This entry is
+  that run's design.
+- **ID and card**: Experiment 5, F121 (H5's transfer half).
+- **Question**: on prespecified fraud segments, out of time, does
+  routing a segment to the CVQBoost proxy give at least one point of
+  recall at the 0.5% alert budget over the classical champion, beyond
+  what a matched random segment gives?
+- **Hypothesis and prediction**: no transfer. F162 found the proxy not
+  reliably above HGB or XGBoost inside SPECTRA's pocket, F113 found no
+  CVQBoost-specific complementarity with XGBoost, and on IEEE-CIS F174
+  ranked the proxy below the tree libraries. The prediction is that no
+  segment is accepted.
+- **Falsifier**: any segment accepted by the rule below, with the
+  classical reference check passed.
+- **Scores used: F174's stored month-4 test scores, no new fit.** F174
+  (Sprint 30) fitted every lane on months 0-3 and stored each lane's
+  per-row test scores on month 4 (85,302 rows), seeds 42-51
+  (`experiments/phase2/predictions/f174_{lane}_{seed}.npz`, `y_test`,
+  `p_test`). Those scores were seen overall in F174, never by segment.
+  Month 4 is out of time: every lane was fitted on earlier months, and
+  each lane's configuration was chosen on month 3.
+  - **Row alignment, checked first**: the month-4 rows of the
+    deduplicated training data (`ieee_loader.dedupe_ieee`,
+    `ieee_splits.rolling_origin_folds`), in fold order, must give a label
+    vector equal to every stored `y_test`; otherwise the run stops.
+- **Lanes**: the **champion** is F174's LightGBM lane, its configuration
+  chosen per seed on month 3 (the top lane of F174's ranking by mean
+  test AUPRC is reported beside it; if they differ, the champion stays
+  LightGBM, as the plan named, and the result says so). The **proxy** is
+  F174's proxy lane, configuration chosen per seed on month 3. The
+  **classical reference** is F174's HGB lane.
+- **Segments, prespecified: the five values of `ProductCD`** (W, C, R,
+  H, S; 439,667, 68,519, 37,699, 33,024 and 11,628 rows in the
+  deduplicated training data). ProductCD is the product code of the
+  transaction, a natural business segment, chosen before any
+  per-segment score is seen. No other segmentation is tried.
+- **In-segment edge** for lane L on a row set R: the recall of L at the
+  0.5% alert budget applied within R (the top ceil(0.005 x |R|) rows of R
+  by L's score), minus the champion's recall on R by the same rule.
+  Ranking within R removes the two models' score scales.
+- **Matched random-segment control (section 5)**: for segment S, the
+  control is drawn from month-4 rows outside S, matched in size and
+  positive rate, downsizing both sides to what the complement supports
+  when it holds fewer positives than S (section 5's rule). 20 draws per
+  seed (`numpy.random.default_rng(1000 * seed + segment index)`); the
+  control edge is the mean edge over the draws, and the segment side, if
+  downsized, is the mean over its own 20 draws.
+- **Router criterion, per segment S** (m = 5, Bonferroni 0.05 / 5): S is
+  **accepted** for the proxy if both hold over the 10 seeds:
+  1. the mean in-segment edge of the proxy is at least 0.01 (one point
+     of recall); and
+  2. the 99% t interval (1 - 0.05 / 5) of (segment edge minus control
+     edge) over seeds lies wholly above 0.
+  Otherwise S is **not accepted**. The exact two-sided Wilcoxon p-value
+  of the per-seed differences is reported beside each interval.
+- **Classical reference check, first, before any proxy figure is
+  computed**: the same criterion with HGB in the proxy's place. If HGB
+  is accepted on any segment, the criterion cannot tell a model
+  difference from a routing effect on that segment: the run stops before
+  the proxy's figures are computed, and a redesign is written as a
+  decision. If HGB is accepted on none, the proxy's figures are computed.
+- **Reported whatever the result**: per segment and seed, the rows and
+  positives in S and in the control, any downsizing, each lane's
+  in-segment recall at the budget, both edges, the interval, the
+  Wilcoxon p-value and accepted or not; the alignment check; an outcome
+  block per lane and seed for the whole month (from the stored scores).
+- **Device**: none. Zero metered seconds.
+- **Output**: `experiments/phase2/results/exp5_router.json` (`SIM`), a
+  result document `docs/phase2/EXP5_ROUTER.md`.
+
 ### Experiment 6 (F110): training time against sample count, proxy first
 
 Written 2026-10-22 (Sprint 28 Task E, #52), before any timing below.
@@ -879,6 +958,48 @@ and governs wherever the two differ.
 - **What is reported whatever the result**: every lane's AUPRC and AUROC
   per seed, every interval and Wilcoxon p-value, the outcome word, C, |A|,
   the entropy, the lambdas and the pilot timing.
+- **Amendment, 2026-11-05 (Sprint 31 Task G, F157 QNN part, #99; Sprint
+  31 D2 option 4), written before its module exists or any lane is fit
+  on the new data.** F106 was inconclusive with 99 test positives per
+  seed. This amendment re-runs the same circuit and twins on a test fold
+  with more positives.
+  - **The positive count needed, from F106's own spread**
+    (`experiments/phase2/results/f106_dequant.json`). Each twin's
+    99.17% interval half-width h at 99 test positives per seed: logistic
+    regression 0.0270, GAM 0.0234, GA2M 0.0304, HGB 0.0299, JOINT 0.0377,
+    RFF 0.0247. Assuming h falls as 1 / sqrt(test positives) (inferred:
+    the interval resamples test rows), a half-width under the 0.005
+    margin needs 99 x (h / 0.005)^2 test positives per seed: 2,896, 2,176,
+    3,661, 3,536, 5,641 and 2,416.
+  - **Dataset: IEEE-CIS, not ULB.** ULB holds 473 frauds after
+    duplicates are dropped, under every twin's need even with every
+    fraud in the test fold. IEEE-CIS's month-4 fold (F174's test fold)
+    holds 85,302 rows at a 3.47% fraud rate, about 2,962 positives
+    (`f174_ieee_algorithms.json`, `folds.test`). That meets the need of
+    logistic regression, GAM and RFF, and not of GA2M, HGB or JOINT. So
+    **the run can decide "dequantized"** (one twin's lower bound above
+    -0.005 suffices), but **"circuit ahead" needs every twin's upper
+    bound below 0** and may stay out of reach on the three wider twins.
+    The result says which twins were decidable at the realized width.
+  - **Data**: IEEE-CIS, F174's month-4 fold (`f174_ieee_algorithms.data`,
+    imported): features fitted on months 0-3 with the item-4 controls,
+    missing values filled with the training months' median. Features:
+    `data.top_k_features` with k = 8 on a stratified 50,000-row
+    subsample of the training rows, seeded by the seed (as F174's proxy).
+    **Training rows**: 295 training positives and 6,000 training
+    negatives drawn from the seed, F106's training size and rate, so the
+    only changes are the data and the test fold. **Validation** (the RFF
+    bandwidth only): a stratified 20,000-row draw from the remaining
+    training rows. **Test**: the whole month-4 fold.
+  - **Unchanged**: the phases, the circuit (8 qubits, three layers, 750
+    steps, the step count of F106's run), the six twins, the primary
+    metric, the paired bootstrap, the margin, the outcome rule, m = 6,
+    seeds 42-49, the secondary diagnostics.
+  - **Pilot**: seed 42 first, timed. The eight seeds follow if they
+    project to 4 hours or less; otherwise the seed count drops to the
+    most that fit in 4 hours, not under 5, recorded here before the run.
+  - **Output**: `experiments/phase2/results/f157_qnn_ieee.json` (`SIM`),
+    resumable by seed; a result document `docs/phase2/F157_QNN_IEEE.md`.
 
 ### F107: shot budget of the F106 circuit, and what the Schmidt-rank threshold does not cover
 
@@ -1115,6 +1236,56 @@ transaction is generated.
   - **Reported whatever the result**: per seed, arm and estimator, the
     estimate, the Bayes error, their ratio, recovered or not, the test
     AUPRC against the Bayes AUPRC, the fit time, and an outcome block.
+- **Amendment, 2026-11-05 (Sprint 31 Task E, F114, #97), written before
+  its module exists or any model is fit on real data.** F169's
+  `lgbm_bins` plug-in, the one method that passed this entry's rule on
+  5 of 5 seeds on the main arm, is applied to ULB and IEEE-CIS.
+  - **Question**: what Bayes error does the plug-in estimate on each
+    dataset, and is that estimate trustworthy enough to report as a
+    ceiling?
+  - **Estimator, unchanged from F169**: `LGBMClassifier(n_estimators=100,
+    learning_rate=0.1, num_leaves=31, min_child_samples=20,
+    max_bin=4095, random_state=seed)`, no early stopping, fit on the
+    whole training window; the plug-in is the mean of min(p, 1 - p) on
+    the test rows. `f169_plugin_bins.make` is imported, not copied.
+  - **Data**: ULB as F166 (exact duplicates removed, the stratified
+    60/20/20 split per seed; the validation rows are not used). IEEE-CIS
+    as F174 (deduplicated, rolling-origin folds, trained on the months
+    before month 4, tested on month 4, the item-4 controls applied on the
+    training rows). On IEEE-CIS the split is fixed and the seed moves
+    only the model.
+  - **Seeds**: 42-51, as F166 and F174. Seed 42 runs first on each
+    dataset and is timed; if 10 seeds would take over 60 minutes on one
+    dataset, the seed count drops to the most that fit in 60 minutes,
+    not under 5, and the result says so.
+  - **Check first: the shuffled-label arm (ULB, seed 42), before any
+    real-label estimate is read.** The training labels are permuted
+    (`numpy.random.default_rng(42)`), the test labels are not. A model
+    that learned nothing gives p near the training fraud rate, so the
+    plug-in must sit at the no-information level, the test fraud rate
+    q: it passes if |estimate - q| <= max(0.0005, 0.10 x q), this
+    entry's margin with q as the true value. **If it fails, the method
+    does not transfer to real data**: the real-data estimates are run
+    and reported as plug-in values only, never as ceilings, and F114
+    stays open.
+  - **Reported per dataset**: the plug-in estimate per seed; its mean
+    with a 95% t-interval over seeds; the test fraud rate; the model's
+    own test error at a 0.5 threshold (an achieved error, so it is an
+    upper reference for the Bayes error, not a bound on it); the
+    consistency gap, the plug-in minus that achieved error, whose sign
+    shows whether the model's probabilities are over- or under-confident
+    on the test rows; the test AUPRC; the fit time; and an outcome
+    block.
+  - **Reading, set here**: with the check passed, each dataset's
+    interval is reported as "the plug-in ceiling estimate, error metric,
+    under the plug-in's calibration assumption". It is not a recall
+    ceiling: the alert-budget recall that would follow from it is not
+    derived here. A consistency gap whose interval excludes 0 is
+    reported as a calibration warning on that dataset's figure. The card's
+    other methods (the `a*N^(-b) + c` floor, confident learning) failed
+    this entry's rule in Sprint 27 and are not run.
+  - **Not done**: no threshold, tuning or feature choice is made on test
+    rows; no device; zero metered seconds.
 - **Device**: none. Zero metered seconds.
 - **Stopping rules**: the generator check above. A method that does not
   recover is recorded as failing and is not used on real data (F114).
@@ -1645,6 +1816,55 @@ Everything not stated here is as in the F166 entry above.
   the result file, so `test_phase2_figures_resolve.py` checks their
   figures.
 
+### F157 SPECTRA part: best achievable result per algorithm on SPECTRA's four datasets
+
+Written 2026-11-05 (Sprint 31 Task F, #98; Sprint 31 D2 option 1),
+before any score below. Not filed; part of this draft. No device.
+Descriptive: no pass or fail. Everything not stated here is as in the
+F166 entry above.
+
+- **ID and card**: unnumbered analysis entry; the SPECTRA part of F157.
+  Device lanes and QNN are out of this part.
+- **Question**: tuned under F166's protocol, how well does each of the
+  same seven algorithms do on each of energy_steel, oilgas_gasturbine,
+  telecom_churn and maintenance_ai4i, and which differences between
+  them are reliable?
+- **Data and split**: `data.load_spectra(name)`, label `target`, the
+  seeded 60/20/20 split `spectra_segment.spectra_split(df, seed,
+  "target")`, the features `spectra_segment._prep_spectra` returns
+  (covariates plus phases; `target`, `target_real` and `in_pocket` never
+  features; telecom_churn drops `age`, as its frozen cell), coerced to
+  numeric by `spectra_segment.coerce_features_to_numeric`. The split
+  every Phase 2 SPECTRA result uses (F162).
+- **Algorithms and configurations**: F166's seven, with its grids,
+  unchanged, except:
+  - Logistic regression, the linear SVM and the RBF alternative fill
+    missing values with the training fold's median, as F174.
+  - **The proxy**: F166's three configurations (free, mid and full),
+    each with k = min(its k, the dataset's feature count), top-k by
+    `data.top_k_features` on the training fold, the serial full-pair
+    build, dct learners seeded by `qubo_proxy.seeded_weak_params(seed)`,
+    `lambda = 2 x n_train`. If two configurations become identical after
+    the cap, both are fitted and the first listed wins ties, as F166.
+  - The RBF alternative's subsample is the whole training fold when it
+    has fewer than 20,000 rows.
+- **Metrics**: F166's, on the test fold, with an outcome block per
+  algorithm, seed and dataset. **Secondary, reported**: test AUPRC
+  inside the pocket (`in_pocket` = 1) and outside it, as F162 reports.
+- **Seeds, per dataset, from that dataset's seed-42 time**: seed 42
+  runs first on every dataset, all seven algorithms, timed as `t42`
+  minutes. Each dataset's seed count is `n = min(10, floor(60 / t42))`,
+  at least 3, seeds 42 to 41 + n. This is F166's rule with 60 minutes in
+  place of 120, because four datasets run in one sprint; below 5 seeds a
+  page says so. The primary test of an adjacent pair is chosen by n as
+  in F166.
+- **Rankings**: as F166, per dataset.
+- **Output**: `experiments/phase2/results/f157_spectra_algorithms.json`
+  (evidence tag `SIM`), resumable by (dataset, seed). One page per
+  dataset and algorithm and one comparison page per dataset under
+  `docs/phase2/algorithms/`, from a tracked generator, each naming the
+  result file, so `test_phase2_figures_resolve.py` checks their figures.
+
 ### F170: ULB frauds missed by every model, are their nearest neighbors legitimate?
 
 Written 2026-10-31 (Sprint 30 Task G, #81), before its module exists or
@@ -1852,3 +2072,10 @@ the test frauds. Added, as exploratory figures:
 - 2026-10-31: the F171 entry gains a post hoc budget amendment (Sprint 30
   Decision D7), written after F171's 0.5% result was seen and before the
   new budgets were counted.
+- 2026-11-05: the F108 entry gains its F114 amendment (Sprint 31 Task
+  E): F169's plug-in on ULB and IEEE-CIS, the shuffled-label check
+  first, written before its module exists.
+- 2026-11-05: section 6 gains the Experiment 5 entry (Sprint 31 Task H)
+  and the F157 SPECTRA entry (Task F), each with its table row; the F106
+  entry gains its F157 QNN amendment (Task G); each written before its
+  module exists or any score it reads is computed.
