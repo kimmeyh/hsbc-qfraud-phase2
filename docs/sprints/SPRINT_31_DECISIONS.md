@@ -452,3 +452,177 @@ out, so the guard tightening is carded as F181 for refinement. The two
 Dirac-3S blocks still stop for their own approval (Criterion H, which no
 general approval replaces); both are built and dry-run first, and asked
 for as late as possible.
+
+---
+
+## D8. F180: which testing changes does F177 (Task C) build?
+
+Asked 2026-11-05 at Phase 4, Task B done. The analysis is
+`docs/testing/F180_TESTING_ANALYSIS.md`; the inventory is
+`docs/testing/F180_TEST_INVENTORY.md`.
+
+**What.** F180 measured the suite. CI's full job ran every test, the red
+proofs included, in 12:06 (run 41982345324). Locally the same tests take
+17.7 times longer, because this workstation is slow to start a Python
+process (`import numpy, pandas, sklearn` took 18-22 s with the machine
+idle). A local run with every proof is projected at about 8 hours today.
+37 untested refusals, terms and states reached review in Sprints 28-30.
+F177 builds only the changes chosen here. The changes, prevention first:
+- **a. CI's full job replaces the local Phase 5 full run.** Phase 5
+  starts it by hand (`gh workflow run ci.yml --ref <branch>`) and reads
+  it with `scripts/check_ci_status.py --require-job full`. Gives up: a
+  Windows-only defect is found only by a local run of the changed files.
+- **b. A red proof runs locally only when its files changed**: its test
+  file, a file its mutations name, `injection.py` or `conftest.py`,
+  against `origin/develop`. Every proof still runs on CI's full job.
+  Gives up: a guard weakened by a file its proof does not name is found
+  at CI, not at once.
+- **c. Diff coverage**: coverage.py plus diff-cover in CI's push job,
+  failing when a changed line in `scripts/`, `experiments/src/`,
+  `experiments/phase2/src/` or `.claude/hooks/` is not executed. This is
+  the check that the per-term rule was applied. Two new declared
+  dependencies. Gives up: lines run only inside a subprocess may read as
+  not covered unless coverage's subprocess support is set up
+  (**unverified** for this suite; the build measures it first).
+- **d. The local non-proof tests run in parallel** with pytest-xdist
+  (`--dist loadfile`). Proofs stay serial and alone. One new declared
+  dependency. Gives up: each test that writes the tree or uses git must
+  be checked first and grouped or kept serial.
+- **e. The short review and CI's full job start at push, in parallel**,
+  the review with its time cap (process documents only).
+- **f. `scripts/env_check.py`**: times a Python start, the scientific
+  imports and a file stat, and prints them beside the 2026-11-05 values,
+  so a slow machine is seen before a run, not during it.
+
+Not in the options, because they are not changes F177 builds: the team
+lead may exempt the repository and the venv from Norton and Defender
+real-time scanning, which would test the inferred cause. F177's lever 3
+(skip the nested evidence hash) is not recommended: it saves under a
+second per start against 8-35 s.
+
+**Why it matters.** Sprint 30 took about 86 minutes from an approved
+change to `gh pr ready`, against the target of its development time
+plus about 15. The local full run is the step the team lead waits on
+before Manual Validation, and today it cannot finish in a working day.
+Untested branches keep reaching review because the rule against them is
+applied by hand.
+
+**Kind per option.** Option 1: Prevention (a, b, c and f stop the slow
+run and the untested branch recurring; d and e shorten what remains).
+Option 2: Prevention for the time, Workaround for effectiveness
+(untested branches are still found only by review). Option 3:
+Workaround (process only; nothing checks the rule). Option 4: none.
+
+**Cost per option** (F177's estimate is up to 240 minutes; 0 metered
+seconds in every option):
+- Option 1, a-f: about 240 minutes (a 30, b 60, c 60, d 45, e 15,
+  f 30); about 12 files; 3 new dependencies in the lock.
+- Option 2, a, b, d, e, f: about 180 minutes; about 9 files; 1 new
+  dependency.
+- Option 3, a, b, e: about 105 minutes; about 6 files; no new
+  dependency.
+- Option 4: 0 minutes now; F177 returns to the backlog.
+
+**Recommendation: 1.** a and b remove the hours-long local run, which
+is the largest measured cost. c is the only change that checks the
+per-term rule instead of trusting it, and the 37 untested branches are
+the largest class a test can catch. If c's subprocess measurement shows
+it cannot see the hook and script tests, the build stops c and reports
+it, rather than ship a check that reads green on untested lines.
+
+**Options.**
+
+1. Build a, b, c, d, e and f in Task C (about 240 minutes, 3 new
+   dependencies: coverage, diff-cover, pytest-xdist).
+2. Build a, b, d, e and f in Task C, without diff coverage (about 180
+   minutes, 1 new dependency: pytest-xdist).
+3. Build a, b and e in Task C, process and selection only (about 105
+   minutes, no new dependency).
+4. Build none in Sprint 31; F177 returns to the backlog with this
+   analysis attached.
+
+---
+
+## D9. F155: send the 1,350-variable probe to Dirac-3S? (Criterion H)
+
+Asked 2026-11-05 at Phase 4, Task I built and dry-run. Entry: "F155" in
+`experiments/phase2/PREREGISTRATION_DRAFT.md` section 6. Dry run:
+`experiments/phase2/results/f155_dry_run_stop1.json`.
+
+**What.** One Dirac-3S job tests whether the cloud queue accepts a
+continuous job above 954 and 987 variables. The team lead set the size
+at 1,300 (Sprint 28 DV1). A CVQBoost pool cannot have 1,300 variables:
+order 3 gives 1,159 at 19 features and 1,350 at 20. The built unit is
+the 1,350-variable pool (ULB, seed 42, 20 features, order 3, `dct`,
+seeded), one sample, schedule 2, sent through F142's proven path with
+`device_store`. Accepted means the returned solution has 1,350 entries.
+
+**Why it matters.** F143 (987 variables) stays on HOLD until a job above
+949 is shown to be accepted. 1,350 answers the same question as 1,300:
+it is above both 954 and 987. An exact 1,300 needs a bare Hamiltonian,
+a send path no Phase 2 runner has used.
+
+**Kind per option.** Option 1: none (a measurement). Option 2: none (a
+different measurement path). Option 3: none.
+
+**Cost per option.**
+- Option 1: 1 call. `qpu_cost_model.quote(1350, 1)` gives 4 s from one
+  Dirac-3S anchor (833 variables); 1,350 is above it, so 4 s is a floor,
+  not a bound. Whether a rejected job is billed is unverified. One
+  attempt, never retried. About 10 minutes of local pool build before the
+  call.
+- Option 2: about 45 minutes to build and test a bare-Hamiltonian unit
+  and its dry run, then this approval asked again; the same 1 call.
+- Option 3: 0.
+
+**Recommendation: 1.** It answers the question the size was chosen for,
+on the send path already proven on Dirac-3S, at one call.
+
+**Options.**
+
+1. Approve F155 stop 1: one Dirac-3S call, the 1,350-variable pool, one
+   sample, schedule 2; quote 4 s (a floor); one attempt.
+2. Build an exact 1,300-variable bare Hamiltonian unit first (about 45
+   minutes), then ask again with its dry run.
+3. Do not run F155 in Sprint 31.
+
+---
+
+## D10. F95 stop 1: send fit 1 at relaxation schedule 4 to Dirac-3S? (Criterion H)
+
+Asked 2026-11-05 at Phase 4, Task J built and dry-run. Entry: "F95" in
+`experiments/phase2/PREREGISTRATION_DRAFT.md` section 6. Dry run:
+`experiments/phase2/results/f95_dry_run_stop1.json`.
+
+**What.** Fit 1 of the four D5 option 3 named: `b1_dct_42` (B1's
+configuration, 91 variables, ULB seed 42, `dct`, alpha 2, seeded), 8
+samples, relaxation schedule 4, on Dirac-3S. Its schedule-2 twin is
+F142's `b1_42`. Rebuilt offline on 2026-11-05, the twin's pool matches
+F142's recorded hash, and its 8 stored samples lie within about 6e-08
+(relative) of the reference optimum: no schedule-2 residual. "No change"
+at schedule 4 is the expected result. Stop 2 (the other three fits) is
+asked after this fit's cost is known.
+
+**Why it matters.** It answers the question promised in the QCi memo of
+2026-09-25 on the device now in use, and it measures schedule 4's cost
+on Dirac-3S, which no call has measured.
+
+**Kind.** None (a measurement).
+
+**Cost per option.**
+- Option 1: 1 call. `qpu_cost_model.quote(91, 8,
+  relaxation_schedule=4)` returns unknown: no Dirac-3S call has run at
+  schedule 4. F95's card estimate, derived on Dirac-3: 4-5 s per fit at
+  schedule 2 times 3.4 (range 2.3-5.3) for schedule 4, about 15 s per
+  fit, low confidence. The card's re-quote line is 27 s per fit; the
+  card's cap is 120 s over all four fits. One attempt, never retried.
+- Option 2: 0.
+
+**Recommendation: 1.** One fit establishes the rate at a bounded cost
+before the other three are asked.
+
+**Options.**
+
+1. Approve F95 stop 1: one Dirac-3S call, `b1_dct_42` at schedule 4, 8
+   samples; cost unknown, about 15 s by the card's Dirac-3 estimate.
+2. Do not run F95 in Sprint 31.
