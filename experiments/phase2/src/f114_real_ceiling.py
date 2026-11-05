@@ -50,6 +50,9 @@ LONG_RUN = True
 # training AUPRC. The default run is unchanged.
 ESTIMATOR = "lgbm_bins"
 TRAIN_AUPRC = False
+# The score files' name stem. The re-run has its own (Sprint 31 D13): with
+# the first run's stem it replaced that run's nine recorded ULB files.
+RECORD = "f114"
 OUT_LR05 = OUT.with_name("f114_real_ceiling_lr05.json")
 ENTRY = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, "
          "amendment 2026-11-05 (F114)")
@@ -169,7 +172,7 @@ def seed_row(dataset: str, seed: int) -> dict:
            "auprc": float(average_precision_score(y, p)),
            "load_s": round(load_s, 1),
            "fit_s": round(time.perf_counter() - t0 - load_s, 1),
-           "outcome": orec.record(f"f114_{dataset}", seed, y, p)}
+           "outcome": orec.record(f"{RECORD}_{dataset}", seed, y, p)}
     if TRAIN_AUPRC:
         # Reported, not decisive: a fit that collapses shows here.
         row["train_auprc"] = float(average_precision_score(
@@ -240,9 +243,10 @@ def seeds_used(state: dict) -> list[int]:
 def select(argv: list[str]) -> bool:
     """`--lr05`: stage 2 of the F114 re-run amendment. Returns False for an
     argument this module does not take."""
-    global OUT, ESTIMATOR, TRAIN_AUPRC
+    global OUT, ESTIMATOR, TRAIN_AUPRC, RECORD
     if argv == ["--lr05"]:
         OUT, ESTIMATOR, TRAIN_AUPRC = OUT_LR05, "lgbm_lr05", True
+        RECORD = "f114lr05"
         return True
     return not argv
 

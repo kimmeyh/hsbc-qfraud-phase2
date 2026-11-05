@@ -72,16 +72,35 @@ def at_budget_on_test(y, scores, budget: float = ALERT_BUDGET) -> dict:
 
 def save_test_scores(name: str, seed, y_test, p_test,
                      pred_dir: Path = PRED_DIR) -> dict:
-    """Write the per-row test labels and scores; return path and SHA-256."""
+    """Write the per-row test labels and scores; return path and SHA-256.
+
+    Never replaces a file (Sprint 31 D13, team lead: check that the name
+    does not exist first and alter it as needed). If `<name>_<seed>.npz`
+    holds the same bytes, it is reused (a resumed or repeated run). If it
+    holds different bytes, the next free name `<name>_<seed>_v2.npz`,
+    `_v3`, ... is written, and the returned path is that one. The F114
+    re-run replaced nine recorded score files because this function
+    overwrote whatever held the name."""
     if not name or any(c in name for c in "/\\ ."):
         raise ValueError(f"name {name!r} must be a plain file stem")
     pred_dir.mkdir(parents=True, exist_ok=True)
-    f = pred_dir / f"{name}_{seed}.npz"
-    tmp = f.with_suffix(f".{os.getpid()}.tmp.npz")
+    first = pred_dir / f"{name}_{seed}.npz"
+    tmp = first.with_suffix(f".{os.getpid()}.tmp.npz")
     np.savez_compressed(tmp, y_test=np.asarray(y_test), p_test=np.asarray(p_test))
-    os.replace(tmp, f)
+    data = tmp.read_bytes()
+    f, n = first, 1
+    while True:
+        try:
+            os.link(tmp, f)        # fails if the name exists: never replaces
+            break
+        except FileExistsError:
+            if f.read_bytes() == data:
+                break              # the same scores are already there
+            n += 1
+            f = pred_dir / f"{name}_{seed}_v{n}.npz"
+    tmp.unlink()
     return {"path": shown_path(f),
-            "sha256": hashlib.sha256(f.read_bytes()).hexdigest(),
+            "sha256": hashlib.sha256(data).hexdigest(),
             "n_rows": int(len(p_test))}
 
 

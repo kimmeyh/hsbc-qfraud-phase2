@@ -98,7 +98,7 @@ def test_lr05_uses_its_estimator_and_writes_only_its_own_file(
     """The F114 re-run amendment, stage 2, through the real writer, stopped
     after the check: the default result is never touched."""
     import json
-    for name in ("OUT", "ESTIMATOR", "TRAIN_AUPRC"):
+    for name in ("OUT", "ESTIMATOR", "TRAIN_AUPRC", "RECORD"):
         monkeypatch.setattr(f114, name, getattr(f114, name))
     monkeypatch.setattr(f114, "OUT", tmp_path / "default.json")
     monkeypatch.setattr(f114, "OUT_LR05", tmp_path / "lr05.json")
@@ -119,6 +119,7 @@ def test_lr05_uses_its_estimator_and_writes_only_its_own_file(
     assert doc["estimator"] == "f169_plugin_bins.make('lgbm_lr05', seed)"
     assert doc["entry"].endswith("(F114 re-run)")
     assert f114.TRAIN_AUPRC is True
+    assert f114.RECORD == "f114lr05"   # D13: never the first run's stem
     assert f114.main(["--lr5"]) == 2
 
 
@@ -134,11 +135,17 @@ def test_the_training_auprc_is_recorded_in_lr05(monkeypatch):
     monkeypatch.setattr(f114, "fit_plugin", lambda Xtr, ytr, seed: Model())
     # The real record saves test scores under predictions/: never here.
     import outcome_record
-    monkeypatch.setattr(outcome_record, "record", lambda *a, **k: {})
+    names = []
+    monkeypatch.setattr(outcome_record, "record",
+                        lambda name, *a, **k: names.append(name) or {})
     monkeypatch.setattr(f114, "TRAIN_AUPRC", False)
     assert "train_auprc" not in f114.seed_row("ulb", 42)
     monkeypatch.setattr(f114, "TRAIN_AUPRC", True)
     assert f114.seed_row("ulb", 42)["train_auprc"] == 1.0
+    # D13: the score files are named by the mode's own stem.
+    monkeypatch.setattr(f114, "RECORD", "f114lr05")
+    f114.seed_row("ulb", 42)
+    assert names == ["f114_ulb", "f114_ulb", "f114lr05_ulb"]
 
 
 def test_the_rules_can_fail():
@@ -204,3 +211,13 @@ def test_the_rules_can_fail():
                               expect_occurrences=1)],
                     test("test_the_training_auprc_is_recorded_in_lr05"),
                     "the training AUPRC left out")
+    assert_can_fail([Mutation(SRC, '        RECORD = "f114lr05"\n',
+                              "        pass\n", expect_occurrences=1)],
+                    test("test_lr05_uses_its_estimator_and_writes_only_its_"
+                         "own_file"),
+                    "the re-run recording under the first run's name")
+    assert_can_fail([Mutation(SRC, 'orec.record(f"{RECORD}_{dataset}"',
+                              'orec.record(f"f114_{dataset}"',
+                              expect_occurrences=1)],
+                    test("test_the_training_auprc_is_recorded_in_lr05"),
+                    "seed rows ignoring the mode's record name")

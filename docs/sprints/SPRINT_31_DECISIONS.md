@@ -769,6 +769,10 @@ in D5, and the card's cap bounds the unknown cost.
 2. Approve `b1_dct_43` only: one Dirac-3S call, 18 s measured.
 3. Do not run F95 stop 2; F95 is reported on stop 1.
 
+**Answer (team lead, 2026-11-05): 1.** F95 stop 2 approved: three
+Dirac-3S calls, `b1_dct_43`, `g0b_3_42` and `b1_lg_42`, one attempt
+each, within the card's 102 s remaining cap.
+
 ---
 
 ## D13. F114: the re-run overwrote the first run's score files. How is it repaired? (Criterion 7)
@@ -832,6 +836,20 @@ and the writer change stops the same overwrite in any module.
 2. The same without the `save_test_scores` change (about 30 minutes).
 3. Record the break and the rebuild method only; change no file (about
    10 minutes).
+
+**Answer (team lead, 2026-11-05).** Verbatim: "change the name of the
+new (at rate .05) to something differnt. Ensure that in the future when
+picking file names, ensure the filename does not exist first, altering
+the filename as needed (preventetive). Can the overwritten file be
+retrieved from a prior github commit and if so, do that."
+Carried out as: (a) the `--lr05` mode records as `f114lr05_<dataset>`;
+(b) `save_test_scores` never replaces a file: when the name is taken by
+different bytes it writes the next free name (`<name>_<seed>_v2.npz`,
+`_v3`, ...) and records that path; identical bytes reuse the file;
+(c) git cannot retrieve the files: `experiments/phase2/predictions/` is
+gitignored (`.gitignore` line 91) and no commit on any branch touches
+it. The nine files are restored from the scratch rebuild, whose SHA-256
+values match all nine recorded ones byte for byte.
 
 ---
 
@@ -906,3 +924,5 @@ entry asked for.
    minutes).
 3. Remove the SVM lane from the SPECTRA order, pairs and pages, with a
    dated note in the entry (about 30 minutes).
+
+**Answer (team lead, 2026-11-05): 1.**
