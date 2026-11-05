@@ -245,6 +245,8 @@ on 2026-10-23:
 | - | ULB frauds missed by every model: nearest neighbors | F170 | none | Written 2026-10-31, below |
 | - | F158 step 3 on IEEE-CIS | F171 | none | Written 2026-10-31, below |
 | - | Best achievable result per algorithm on SPECTRA's four datasets, classical and proxy lanes | F157 SPECTRA part | none | Written 2026-11-05, below |
+| - | Does the Dirac-3S queue accept a job above 987 variables? | F155 | Dirac-3S, 1 call | Written 2026-11-05, below |
+| - | Relaxation schedule 4 on Dirac-3S | F95 | Dirac-3S, 4 calls in two stops | Written 2026-11-05, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -701,6 +703,21 @@ score is computed. Not filed; part of this draft. No device.
 - **Device**: none. Zero metered seconds.
 - **Output**: `experiments/phase2/results/exp5_router.json` (`SIM`), a
   result document `docs/phase2/EXP5_ROUTER.md`.
+- **Notes written AFTER the result (2026-11-05, Sprint 31 Task H). The
+  text above is left as it stood before the run.**
+  1. HGB was accepted on no segment, so the proxy's figures were
+     computed. Neither lane was accepted on any segment.
+  2. Segment W was infeasible on every seed: the rows outside it are too
+     few to draw a matched control of its size. The entry did not foresee
+     this.
+  3. On C, R and S the champion's recall within the segment equals the
+     segment's alerts divided by its frauds: every alert is a fraud. A
+     lane can tie it and cannot beat it, so the measure saturates. HGB's
+     interval of edge minus control lies above 0 on C and R with a mean
+     edge of 0.0, so the minimum-edge clause, not the interval, kept it
+     out. A redesign (a per-segment budget, or a measure that ranks beyond
+     the budget) is a backlog matter and is not applied to this result.
+  Reported in `docs/phase2/EXP5_ROUTER.md`.
 
 ### Experiment 6 (F110): training time against sample count, proxy first
 
@@ -1865,6 +1882,101 @@ F166 entry above.
   `docs/phase2/algorithms/`, from a tracked generator, each naming the
   result file, so `test_phase2_figures_resolve.py` checks their figures.
 
+### F155: does the Dirac-3S queue accept a job above 987 variables?
+
+Written 2026-11-05 (Sprint 31 Task I, #101), before any call. Not
+filed; part of this draft. Device: Dirac-3S, one call, approved on its
+own with its call count and seconds (Criterion H).
+
+- **ID and card**: unnumbered verify entry; F155.
+- **Question**: does the cloud `dirac-3s` queue accept one continuous
+  job larger than both 954 (QCi's integer-solver figure of 2026-10-21)
+  and 987 (F143's size)? The team lead set the size at 1,300 (Sprint 28
+  DV1).
+- **The unit**: a CVQBoost pool on ULB, seed 42, Phase 1's stratified
+  split, the top 20 features, weak-learner order 3, `dct` learners
+  seeded by F145's rule, `lambda_coef` 2 x n_train: 20 + 190 + 1,140 =
+  **1,350 variables**. A CVQBoost pool cannot have 1,300 variables (order
+  3 gives 1,159 at k = 19 and 1,350 at k = 20). 1,350 is the nearest pool
+  size above 1,300, and it is sent through the same path as F142's
+  fits. Sprint 31 D9 asks the team lead to confirm this size against a
+  bare 1,300-variable Hamiltonian before the call. One sample,
+  relaxation schedule 2.
+- **Fires**: the job is rejected (the queue or the client refuses it, or
+  the job ends in an error), or it returns a solution with fewer than
+  1,350 entries, which reads as rejected. **Accepted** only if the
+  returned solution has 1,350 entries.
+- **Not read**: accuracy. The job runs under section 4's exception
+  (its purpose is the size limit); its resolution screen is reported
+  beside it. No test score is computed.
+- **Cost**: `qpu_cost_model.quote(1350, 1)`, written by the dry run to
+  `experiments/phase2/results/f155_dry_run_stop1.json`. 1,350 is above every
+  Dirac-3S anchor, so the quote is a floor, not a bound. Whether a
+  rejected job is billed is unverified. One attempt; never retried.
+- **Storage**: the full response and the pool declaration through
+  `device_store.saving` (problem kind `cvqboost_pool`), the intent written
+  before the send; the result through `provenance.write_result` to
+  `experiments/phase2/results/f155_variable_ceiling.json` (evidence tag
+  `HW`).
+- **What is reported whatever the result**: accepted or rejected, the
+  error text if any, the returned solution length, metered seconds, wall
+  time including queue, and the job id.
+
+### F95: relaxation schedule 4 on Dirac-3S
+
+Written 2026-11-05 (Sprint 31 Task J, #102; Sprint 31 D5 options 1 and
+3), before any schedule-4 call. Not filed; part of this draft. Device:
+Dirac-3S (D5's standing rule). Descriptive: four fits support no test.
+
+- **ID and card**: unnumbered verify entry; F95, the check promised in
+  the QCi memo sent 2026-09-25: "Would relaxation schedule 4 close the
+  residual?"
+- **The schedule-2 answer on Dirac-3S (D5 option 1)**: F142's B1 fits at
+  schedule 2, seeds 42 and 43, 91 variables, reached the reference
+  optimum: objective gaps of +0.0007 and -0.011 on about -166,494
+  (`experiments/phase2/results/f142_dirac3s_verify.json`). On Dirac-3 the
+  same configuration's gaps were 0.08% to 0.12%
+  (`experiments/results/hw_dispersion.json`). This part is reported from
+  the stored rows; it needs no call.
+- **Units** (D5 option 3): the four fits the card names, each a seeded
+  rebuild (F145) of its Phase 1 configuration on ULB, Phase 1's
+  stratified split, 8 samples, **relaxation schedule 4**:
+  1. `b1_dct_42`: B1 `hw_b1_dct` (k = 13, order 2, `dct`, alpha 2, 91
+     variables), seed 42. Dirac-3S schedule-2 twin: F142 `b1_42`.
+  2. `b1_dct_43`: the same, seed 43. Twin: F142 `b1_43`.
+  3. `g0b_3_42`: G0b fit 3 (`39a4716aaf9e6691`: k = 9, order 2, `lg`,
+     balanced, alpha 4, 45 variables), seed 42, the Dirac-3 fit with the
+     0.413% gap. No Dirac-3S twin; its Dirac-3 schedule-2 gap is
+     reported beside it.
+  4. `b1_lg_42`: B1 `hw_b1_lg` (k = 9, order 2, `lg`, balanced, alpha
+     0.5, 45 variables), seed 42. No Dirac-3S twin; its Dirac-3 gap is
+     reported beside it.
+- **Measures**: the relative gap of the device's weights to the
+  reference QP optimum of the same Hamiltonian, (obj(w_device) -
+  obj(w_ref)) / |obj(w_ref)|, computed in float64; the same per returned
+  sample, and their range; metered seconds and wall time.
+- **Reading**: for units 1 and 2, schedule 4 changes the reading only if
+  its gap differs from the twin's by more than the range of the twin's
+  per-sample gaps, recomputed from the twin's stored samples. With no
+  residual at schedule 2, "no change" is the expected and reportable
+  result. Units 3 and 4 have no same-device twin: their gaps are
+  reported beside the Dirac-3 schedule-2 gaps and are not compared as a
+  test, because the device differs.
+- **Not read**: accuracy. Section 4's exception applies (the purpose is
+  the solver's gap); each unit's resolution screen is reported. No test
+  score is computed.
+- **Stops**: stop 1 is unit 1 alone. Its measured seconds re-quote stop 2
+  (units 2-4), which is approved separately. Cap 120 s over both stops,
+  checked between units; a running call cannot be stopped. One attempt
+  per unit; a unit with any record is never sent again without a human
+  decision.
+- **Storage**: as F155: `device_store.saving` per unit;
+  `experiments/phase2/results/f95_schedule4.json` through
+  `provenance.write_result` (evidence tag `HW`).
+- **What is reported whatever the result**: each fit's gap, per-sample
+  range, cost, wait and job id, failures included; the statement that
+  four fits support no test.
+
 ### F170: ULB frauds missed by every model, are their nearest neighbors legitimate?
 
 Written 2026-10-31 (Sprint 30 Task G, #81), before its module exists or
@@ -2079,3 +2191,7 @@ the test frauds. Added, as exploratory figures:
   and the F157 SPECTRA entry (Task F), each with its table row; the F106
   entry gains its F157 QNN amendment (Task G); each written before its
   module exists or any score it reads is computed.
+- 2026-11-05: section 6 gains the F155 entry (Sprint 31 Task I) and the
+  F95 entry (Task J), each with its table row, before any call. F155's
+  unit is 1,350 variables, the nearest CVQBoost pool size above the
+  1,300 the team lead set; Sprint 31 D9 asks the team lead to confirm it.
