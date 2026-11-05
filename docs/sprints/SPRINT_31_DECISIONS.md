@@ -713,3 +713,58 @@ rule: no real-data figure from an estimator the simulator has not passed.
    option 2 (about 40 minutes plus IEEE-CIS's run time).
 
 **Answer (team lead, 2026-11-05): 1.**
+
+---
+
+## D12. F95 stop 2: send the other three schedule-4 fits to Dirac-3S? (Criterion H)
+
+Asked 2026-11-05 at Phase 4, after F95 stop 1 (D10 option 1). Entry:
+"F95" in `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6. Stop 1:
+`experiments/phase2/results/f95_schedule4.json`. Dry run:
+`experiments/phase2/results/f95_dry_run_stop2.json`.
+
+**What.** Stop 1 ran `b1_dct_42` at relaxation schedule 4 on Dirac-3S:
+18.0 metered seconds, three times its schedule-2 twin's 6.0 s (F142
+`b1_42`), and every one of the 8 samples within about 5e-08 of the
+reference optimum, so no change from schedule 2. Stop 2 is the other
+three fits D5 option 3 named, 8 samples each, schedule 4, one attempt
+each, in this order:
+- `b1_dct_43`: B1's configuration, 91 variables, ULB seed 43, `dct`,
+  alpha 2. Its schedule-2 twin is F142's `b1_43` (hash matched in the
+  dry run).
+- `g0b_3_42`: 45 variables, `lg`, alpha 4, seed 42. No Dirac-3S twin;
+  Dirac-3 history only.
+- `b1_lg_42`: 45 variables, `lg`, alpha 0.5, seed 42. No Dirac-3S twin;
+  Dirac-3 history only.
+
+**Why it matters.** Stop 1 gives one 91-variable point. The second B1
+fit tests whether "no change" repeats on another seed with a Dirac-3S
+twin; the two 45-variable fits are the card's `lg` fits, with Dirac-3
+history only, so they test schedule 4 at a second size and a second
+weak-classifier type.
+
+**Kind per option.** None (a measurement).
+
+**Cost per option.**
+- Option 1: 3 calls. `b1_dct_43`: 18 s, **measured** at this
+  configuration (stop 1's call: same size, samples and schedule;
+  `qpu_cost_model.quote(91, 8, relaxation_schedule=4)` over
+  `f95_schedule4.json`). The two 45-variable fits: **unknown** (no
+  Dirac-3S call within 2x of 45 variables); bounded by call count, 2
+  calls. Inferred, not measured: at about 2.24 s per sample for 91
+  variables, a 45-variable fit is likely at or under 18 s. Card cap 120 s,
+  18 s spent, so 102 s remain; the runner stops between units once the
+  cap is reached. One attempt each, never retried.
+- Option 2: 1 call, `b1_dct_43` only, 18 s measured.
+- Option 3: 0.
+
+**Recommendation: 1.** It completes the four fits the team lead chose
+in D5, and the card's cap bounds the unknown cost.
+
+**Options.**
+
+1. Approve F95 stop 2: three Dirac-3S calls, `b1_dct_43` (18 s
+   measured), `g0b_3_42` and `b1_lg_42` (unknown, bounded by 2 calls and
+   the card's 102 s remaining cap); one attempt each.
+2. Approve `b1_dct_43` only: one Dirac-3S call, 18 s measured.
+3. Do not run F95 stop 2; F95 is reported on stop 1.
