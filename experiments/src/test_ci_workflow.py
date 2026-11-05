@@ -44,7 +44,7 @@ def test_the_push_job_leaves_out_only_the_proofs_and_slow():
 def test_the_full_job_runs_the_proofs_on_ready_for_review():
     jobs = _jobs()
     assert _pytest_lines(jobs["full"]) == [
-        'run: pytest -m "not slow" -q --durations=25']
+        'run: pytest -m "not slow" -q --durations=25 --junitxml=${{ runner.temp }}/ci-full.xml']
     # Every non-draft event, so a push after ready for review runs the
     # proofs too (PR 74 review); the push job only on a draft.
     assert ("if: github.event_name == 'workflow_dispatch' || "

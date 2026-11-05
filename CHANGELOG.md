@@ -6,7 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-05
 
-- **ci**: CI's full job writes a junit report outside the checkout and uploads it as the `ci-full-junit` artifact, so F180's inventory has per-file CI times (Sprint 31 Task B). `test_ci_workflow.py` pins the new line. (Issue #94)
+- **ci**: CI's full job writes a junit report outside the checkout and uploads it as the `ci-full-junit` artifact, so F180's inventory has per-file CI times (Sprint 31 Task B). `test_ci_workflow.py` pins the new line. This line was committed one commit early, with ba442e8; the change is in the next commit. (Issue #94)
 - **docs**: Sprint 31 entries, each written before its module exists or any score it reads is computed (`experiments/phase2/PREREGISTRATION_DRAFT.md` section 6). F108 gains its F114 amendment (Task E, #97): F169's plug-in on ULB and IEEE-CIS, the shuffled-label check first. New entry, F157 SPECTRA part (Task F, #98): F166's protocol on SPECTRA's four datasets, 60 minutes per dataset in place of 120. F106 gains its F157 QNN amendment (Task G, #99): IEEE-CIS month 4, chosen because F106's interval spread needs about 2,200 to 5,600 test positives per seed and ULB holds 473 frauds. New entry, Experiment 5 (Task H, #100): the router criterion on F174's stored month-4 scores, ProductCD segments, section 5's matched control, the HGB reference check first; the hold set aside by Sprint 31 D3.
 
 ### 2026-11-04

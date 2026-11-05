@@ -141,8 +141,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r experiments/requirements.txt
 
+      # The junit report gives F180's inventory its per-file CI times
+      # (Sprint 31 Task B); it is uploaded even when a test fails. It is
+      # written outside the checkout, so the clean-tree step still holds.
       - name: Tests, red proofs included
-        run: pytest -m "not slow" -q --durations=25
+        run: pytest -m "not slow" -q --durations=25 --junitxml=${{ runner.temp }}/ci-full.xml
+
+      - name: Keep the junit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-full-junit
+          path: ${{ runner.temp }}/ci-full.xml
 
       # A red proof breaks a file and restores it; this catches one that
       # did not restore.

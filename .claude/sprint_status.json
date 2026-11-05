@@ -21,9 +21,12 @@
       103,
       104
     ],
-    "task_actuals": {},
+    "task_actuals": {
+      "A": 58
+    },
     "task_started": {
-      "A": "2026-11-04T23:15:07-05:00"
+      "A": "2026-11-04T23:15:07-05:00",
+      "B": "2026-11-05T00:13:07-05:00"
     },
     "task_issues": {
       "A": [
@@ -65,7 +68,14 @@
     },
     "review_task": null,
     "task_estimates": {
-      "A": 45
+      "A": 45,
+      "B": 180
+    },
+    "task_actual_method": {
+      "A": "gaps over 30 min and pauses subtracted"
+    },
+    "task_elapsed": {
+      "A": 58
     }
   },
   "last_completed_sprint": {
@@ -79,5 +89,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-04"
+  "updated": "2026-11-05"
 }
