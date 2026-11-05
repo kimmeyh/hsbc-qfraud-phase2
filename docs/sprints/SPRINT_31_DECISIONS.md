@@ -243,6 +243,16 @@ hold stands with a reason that is no longer only a decision.
    measurement (30 minutes, 0 metered seconds).
 4. F121 leaves Sprint 31 and stays on HOLD.
 
+**Answer (team lead, 2026-11-04): 2.** Verbatim: "D3 2 - run the whole
+d5 experiment so we can learn what is new or is verified". Recorded as:
+the hold of record (Sprint 26 Decision 2) is set aside by this answer.
+Experiment 5 (F121) runs in full on the proxy: its entry written first,
+then the transfer half judged by the router criterion (at least one point
+of recall at the 0.5% budget above the classical champion, out of time,
+on prespecified segments, against a matched random-segment control),
+pilot first. "d5" is read as Experiment 5, F121's experiment; the reading
+is stated in the plan so it can be corrected.
+
 ---
 
 ## D4. F150: was the construction request to the SPECTRA authors sent?
@@ -281,6 +291,11 @@ and nothing else unblocks F150.
    runs only if the reply arrives before Phase 5 (15 minutes now).
 3. It was not sent and is not to be sent: F150 leaves Sprint 31 and stays
    blocked.
+
+**Answer (team lead, 2026-11-04): "D4 delay to next sprint".** None of
+the listed options. F150 leaves Sprint 31 and is carried to Sprint 32's
+refinement at priority 41; whether the request was sent is asked again
+then.
 
 ---
 
@@ -332,6 +347,15 @@ nothing.
    stopping after fit 1 to re-quote; cost unknown, asked for separately
    before it runs (60 minutes to build).
 
+**Answer (team lead, 2026-11-04): "1 and 3".** Verbatim: "d5 this and
+all future runs will be on the Dirace-3S 1 and 3". F95 reports F142's
+Dirac-3S rows as the schedule-2 answer (option 1) and runs the four fits
+on Dirac-3S at schedule 4, bounded by 4 calls, stopping after fit 1 to
+re-quote, behind its own approval (option 3). 90 minutes. **Standing
+rule from this answer: this run and every future device run go to
+Dirac-3S.** Recorded in `SPRINT_EXECUTION_WORKFLOW.md`'s standing
+hardware rule.
+
 ---
 
 ## D6. pypdf 6.21.2 has 7 known vulnerabilities. Is the bump in Sprint 31?
@@ -367,3 +391,48 @@ line, and a task this project has done twice before at low cost.
    a dated header line, and the submission-artifact tests run without
    re-rendering any submitted PDF (45 minutes, 0 metered seconds).
 2. Leave it out: a backlog card at priority 20.
+
+**Answer (team lead, 2026-11-04): 1.** The bump is Task D of Sprint 31.
+
+---
+
+## D7. Is the Sprint 31 plan approved?
+
+Asked 2026-11-04 at Phase 3.7.
+
+**What.** Approval of `docs/sprints/SPRINT_31_PLAN.md` as written after
+D2-D6: Tasks A-L, 1,569 minutes by card estimate, and two Dirac-3S
+blocks (F155 about 4 s, a floor; F95 bounded by 4 calls, fit 1 approved
+alone), each stopping for its own approval. The plan reads D3's "the
+whole d5 experiment" as Experiment 5 (F121) run in full on the proxy,
+with its hold set aside.
+
+**Why it matters.** Execution, the task issues and the first task file
+all wait on approval. One gap is open: D5's new rule, "this and all
+future runs will be on the Dirace-3S", is written in
+`SPRINT_EXECUTION_WORKFLOW.md`, but `test_phase2_device_default.py`
+still accepts a Phase 2 module that names Dirac-3 with a reason. A rule
+kept only in a document is the kind this repository has had to replace
+with a check.
+
+**Kind per option.** Option 1: none. Option 2: Prevention (the rule is
+checked, not remembered). Option 3: as named.
+
+**Cost per option.**
+- Option 1: 1,569 minutes; the two blocks above; about 60 files (task estimates: A 3, B 5, C 10, D 2, E 4, F 12, G 4, H 5, I 3, J 4, K 5, L 3).
+- Option 2: 1,584 minutes (plus 15 for the guard, as Task M); the same
+  blocks; 1 more file.
+- Option 3: whatever the changes cost.
+
+**Recommendation: 2.** It turns D5's standing rule into a test in the
+sprint that made it, at 15 minutes, before the two device builds are
+written.
+
+**Options.**
+
+1. Approved as written: Tasks A-L, 1,569 minutes; D3 read as Experiment
+   5 in full on the proxy.
+2. Approved, with Task M added: `test_phase2_device_default.py` refuses
+   any Phase 2 module that names Dirac-3, its red proof in the same commit
+   (15 minutes; 1,584 in total).
+3. Approved with changes: reply 3 followed by the changes.

@@ -572,7 +572,7 @@ SPRINT_30_PLAN.md, SPRINT_30_VALIDATION.md, SPRINT_30_DECISIONS.md,
 SPRINT_30_RETROSPECTIVE.md and CHANGELOG.md. Removed from candidates per
 convention (Pass 1, 2026-11-04).)
 
-**Selected for Sprint 31** (team lead, 2026-11-04, D1 option 4): F180,
+**Selected for Sprint 31** (team lead, 2026-11-04, D1 option 4; D2-D6 answered the same day): F180,
 F177, F178, F179, F114, F155, F157, F150, F95, F121 and F13, with F13
 last ("after other results are known"). Each part still open is a
 decision in `docs/sprints/SPRINT_31_DECISIONS.md` (D2-D6). Plan:

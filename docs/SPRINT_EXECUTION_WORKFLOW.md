@@ -140,3 +140,5 @@ Consult this line at the START and END of every phase; state which steps were do
 ## Standing hardware rule (restated because it overrides everything)
 
 All development on the classical proxy. Every metered Dirac-3 run: explicit approval, call count and expected seconds stated first, retries per the frozen protocol (max 2, reported), results to results.json with [HW] tags.
+
+**Every device run goes to Dirac-3S** (team lead, 2026-11-04, Sprint 31 D5: "this and all future runs will be on the Dirace-3S"). This replaces Sprint 26 Decision 11's default, under which an entry could name Dirac-3 with a reason; a run on Dirac-3 now needs a new decision by the team lead. The approval rule above applies to Dirac-3S unchanged.
