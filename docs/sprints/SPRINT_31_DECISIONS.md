@@ -1073,3 +1073,11 @@ sprint of the gate, not the gate.
    the pragmas and tests in Sprint 32; the gate fails again when F182
    ships (about 20 minutes now).
 3. Remove the diff-coverage step and its guard (about 15 minutes).
+
+**Changed since asked (2026-11-06).** Tasks M and N added code. On
+107dd75 (CI run 42176650858) the step reports 1,434 changed lines, 478
+not run (67%), in 11 files; `scripts/suite_times.py` (95.9%) is new to
+the list, and `run_dirac3s_units.py` is at 65.9%. The rest of the push
+job, and CI's full job with every red proof, are green on 107dd75, so
+this step is the only red check. The options, costs and recommendation
+are unchanged.
