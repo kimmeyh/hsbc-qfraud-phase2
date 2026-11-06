@@ -12,7 +12,7 @@ The appendix here holds only what neither defines.
 
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
-  through Sprint 30. Sprint 31's device and simulator runs have
+  through Sprint 30. Sprint 31's [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) and simulator runs have
   placeholders in "Experiments planned".
 
 ## Bottom line

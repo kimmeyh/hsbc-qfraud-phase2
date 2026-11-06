@@ -283,15 +283,21 @@ def acronym_entry_problems(docs: dict[str, str]) -> list[str]:
 
 
 def acronym_link_problems(docs: dict[str, str]) -> list[str]:
+    """A dataset's short name may link to its Appendix F entry (`ds-`)
+    instead of its acronym entry, when Doc 1 has that `ds-` id."""
     known = acronym_entries(docs)
+    doc1_ids = set(ANCHOR.findall(docs[DOC1]))
     out = []
     for doc, text in docs.items():
         for n, is_h, _, kind, token, target, vis in _uses(doc, text):
             if is_h or token not in known:
                 continue
             path, frag = _split(target, doc) if kind == "link" else ("", "")
+            ds = "ds-" + slug(token)[len("acr-"):]
             ok = (kind == "link" and vis.strip() in (token, token + "s")
-                  and path == DOC1 and frag == slug(token))
+                  and path == DOC1
+                  and (frag == slug(token)
+                       or (frag == ds and ds in doc1_ids)))
             if not ok:
                 out.append(f"{doc}:{n}: {token} is not a link to its entry")
     return out
@@ -611,6 +617,9 @@ PROOFS = [
      "an acronym not spelled out"),
     (DOC3, f"[QSVM]({_D1}%20-%20Laymen%20terms.md#acr-qsvm)", "QSVM",
      "test_every_acronym_use_links_its_entry", "an unlinked acronym"),
+    (DOC1, '<a id="ds-ulb"></a>', '<a id="ds-ulbx"></a>',
+     "test_every_acronym_use_links_its_entry",
+     "a dataset short name linking a missing entry"),
     (DOC1, "[Bayes error](#ml-bayes-error)", "Bayes error",
      "test_a_terms_first_use_links_its_entry", "an unlinked first use"),
     (DOC2, "**Equivalence margin**:", "**Alert budget**:",
@@ -619,8 +628,8 @@ PROOFS = [
      "Untagged prose.\n\n- [SIM] On the training fold, as each device "
      "run built it",
      "test_claim_sections_hold_only_claims", "prose in a claim section"),
-    (DOC1, "- [HW] A quantum support vector machine",
-     "- A quantum support vector machine",
+    (DOC1, "- [HW] **A quantum support vector machine",
+     "- **A quantum support vector machine",
      "test_every_claim_has_an_evidence_tag", "a claim without a tag"),
     (DOC3, "`docs/sprints/SPRINT_26_SUMMARY.md`",
      "`docs/sprints/SPRINT_26_SUMMARX.md`",

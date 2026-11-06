@@ -1168,6 +1168,10 @@ up the check.
 4. Remove the diff-coverage step, its guard and the coverage
    measurement (about 15 minutes).
 
+**Answer (team lead, 2026-11-06, Manual Validation): 1.** Verbatim:
+"A3. a" and then "i chose option a." The terminal shows a numbered
+list nested under a bullet with letters, so "a" is option 1.
+
 ---
 
 ## D17. Test time: what runs where, so a sprint fits 1-2 hours? (V3)
@@ -1254,3 +1258,7 @@ run under the new policy.
 2. Card F183 with (a)-(d) for the top of Sprint 32 (about 5 minutes
    now, about 120 minutes in Sprint 32).
 3. No change to the test policy.
+
+**Answer (team lead, 2026-11-06, Manual Validation): 1.** Verbatim:
+"a4. a" and then "i chose option a." The terminal shows a numbered
+list nested under a bullet with letters, so "a" is option 1.

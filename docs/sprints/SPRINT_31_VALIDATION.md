@@ -27,6 +27,7 @@ They stay below, unchanged, for information. The actions are:
 - **A2 (V11). Confirm F143's move from HOLD to priority 150, low**
   (line 595, and the Pass 3 note on line 596):
   `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\ALL_SPRINTS_MASTER_PLAN.md`
+  - **Answered 2026-11-06: "A2. confirmed".**
 - **A3. Answer D16** (what replaces the 100% diff-coverage gate) and
   **A4. Answer D17** (the test-time policy):
   `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\sprints\SPRINT_31_DECISIONS.md`

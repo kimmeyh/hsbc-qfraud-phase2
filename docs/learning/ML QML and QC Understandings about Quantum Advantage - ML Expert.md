@@ -6,7 +6,7 @@ experience. Acronyms and common terms link to the
 [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md),
 which owns them; the appendix here holds only what that version lacks.
 The [quantum computing expert version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20QC%20Expert.md)
-covers the devices in more depth.
+covers the [devices](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) in more depth.
 
 ## Change list
 
