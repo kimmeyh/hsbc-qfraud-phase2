@@ -1,10 +1,10 @@
 # SPECTRA energy_steel: seven algorithms compared (F157)
 
-**BLUF.** Over 10 seeds (42-51), the order by mean test AUPRC is CatBoost, XGBoost, HGB, LightGBM, the proxy, logistic regression and SVM. Of the six adjacent pairs, 1 differs reliably under the entry's test: CVQBoost proxy above logistic regression. No other adjacent pair differs reliably, so the order among CatBoost, XGBoost, HGB, LightGBM and the proxy; logistic regression and SVM is not established.
+**BLUF.** Over 10 seeds (42-51), the order by mean test AUPRC is CatBoost, XGBoost, HGB, LightGBM, the proxy, logistic regression and SVM. Of the six adjacent pairs, 1 differs reliably under the entry's test: CVQBoost proxy above logistic regression. No other adjacent pair differs reliably, so the order among CatBoost, XGBoost, HGB, LightGBM and the proxy; logistic regression and SVM is not established. Test scores carry no ranking (AUPRC equals the positive rate) for logistic regression on 1 of 10 (seed 46); SVM on 4 of 10 (seeds 44, 45, 46, 49). Those seeds are in the means and the places. On each of them the lane's recall at the budget reads 1.0, which raises its mean recall.
 
 - **Card**: F157 (Sprint 31 Task F, #98), the SPECTRA part: F166's algorithms and grids on SPECTRA's four datasets.
 - **Entry**: `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6, "F157 SPECTRA part", written before any score.
-- **Amendment**: the SVM lane is the form the entry's rule keeps, scored on the test fold under the entry's amendment of 2026-11-05 (Sprint 31 D14 option 1). The first result, `experiments/phase2/results/f157_spectra_algorithms.json`, is kept as recorded; it scored the linear form only.
+- **Amendment**: the SVM lane is the form the entry's rule keeps, scored on the test fold under the entry's amendment of 2026-11-05 (Sprint 31 D14 option 1). The first result, `experiments/phase2/results/f157_spectra_algorithms.json`, is kept as recorded; it scored the linear form only. The amendment was written after that result was seen; the other six lanes are unchanged from it.
 - **Evidence**: `experiments/phase2/results/f157_spectra_algorithms_rbf.json` (evidence tag SIM, zero metered seconds). Every figure below comes from that file.
 - **Seeds**: seed 42 took 3.45 minutes for all seven algorithms, so the entry's rule gave 10 seeds.
 - **Data**: SPECTRA `energy_steel`, label `target`, spectra_segment.spectra_split 60/20/20, seeded. Tuning reads the training and validation folds; every score here is on the test fold (7,008 rows, 1,782 positives per seed; 17 feature columns).

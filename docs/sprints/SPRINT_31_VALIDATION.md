@@ -135,18 +135,28 @@ PENDING are filled in when their result exists.
 - `run_dirac3s_units.py`, with `device_store` in place of F142's save.
   73.0 metered seconds in all, one attempt per call, none retried.
 - **F155 accepted** (D9 option 1): 1,350 variables, all entries
-  returned, 6.0 s against a 4 s floor quote
-  (`f155_variable_ceiling.json`). F143's hold condition is met.
-  **Please read**: the weights came back near flat (about 1/1350 each),
-  so the probe shows the size is accepted, not that a pool that size
-  solves well.
+  returned, 6.0 s against a 4 s floor quote, wall 144.1 s, job
+  `6aec89e4358b23d0cb37424a` (`f155_variable_ceiling.json`). F143's
+  hold condition is met. 1,350 is above the 949 base-module figure and
+  within the 9,980 expansion-module figure
+  (`docs/phase2/DIRAC_3S_SITE_SWEEP.md`, F14).
+  **Please read**: the pool failed the resolution screen (coefficient
+  spread 0.12 of what the device resolves), so the probe tests
+  acceptance only, by design. The weights came back near flat: 0.0007392
+  to 0.0007409 against 1/1350 = 0.0007407, from the stored response
+  `device_samples/f155_pool_1350_6aec89e4358b23d0cb37424a.json` (the
+  result file holds no weights). A failed screen predicts that.
 - **F95 stop 1** (D10 option 1): `b1_dct_42` at schedule 4, 18.0 s,
-  three times its schedule-2 twin's 6.0 s; every sample within about
-  5e-08 of the reference optimum, so no change (`f95_schedule4.json`).
+  three times its schedule-2 twin's 6.0 s (`f95_schedule4.json`).
 - **F95 stop 2** (D12 option 1): `b1_dct_43` 18.0 s, `g0b_3_42` 15.0 s,
-  `b1_lg_42` 16.0 s. No change on any fit. The card used 67.0 of its
-  120 s. Page: `docs/phase2/F95_SCHEDULE4.md`. Schedule 4 can be left
-  out of later device plans for pools of this kind.
+  `b1_lg_42` 16.0 s. The card used 67.0 of its 120 s.
+- **F95 reading** (Task M, `f95_schedule4_twins.json`): no change on
+  the two fits with a Dirac-3S twin, `b1_dct_42` and `b1_dct_43`. Both
+  pools fail the resolution screen, so the test is weak. The two
+  45-variable fits have only a Dirac-3 history (gaps 0.4133% and
+  0.0153%), so they are reported, not compared. Page:
+  `docs/phase2/F95_SCHEDULE4.md`. There is no evidence for schedule 4;
+  device plans stay at schedule 2.
 
 ## V10. Task K (F178): the learning documents
 
@@ -167,6 +177,7 @@ PENDING are filled in when their result exists.
   Its hold condition is met (F155), but F157 SPECTRA puts the proxy
   reliably below the RBF SVM on telecom_churn, and B4's edges there
   were negative, so a device block is not justified by the evidence.
-- **Not carded, for refinement**: energy_steel seed 42's unexplained
-  RBF result; a calibrated ULB ceiling; an Experiment 5 measure that
+- **Not carded, for refinement**: energy_steel's unexplained RBF
+  results, seed 42 (no ranking on validation, ranked on test) and seed
+  49 (the reverse); a calibrated ULB ceiling; an Experiment 5 measure that
   does not saturate.

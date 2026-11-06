@@ -34,7 +34,9 @@ FIRST = "`experiments/phase2/results/f157_spectra_algorithms.json`"
 AMENDED = ("- **Amendment**: the SVM lane is the form the entry's rule keeps, "
            "scored on the test fold under the entry's amendment of "
            "2026-11-05 (Sprint 31 D14 option 1). The first result, "
-           f"{FIRST}, is kept as recorded; it scored the linear form only.")
+           f"{FIRST}, is kept as recorded; it scored the linear form only. "
+           "The amendment was written after that result was seen; the "
+           "other six lanes are unchanged from it.")
 GENERATOR = "`experiments/phase2/src/f157_spectra_algorithms.py`"
 NAMES, INNER, POSSESSIVE, WORDS = fd.NAMES, fd.INNER, fd.POSSESSIVE, fd.WORDS
 ClaimError = fd.ClaimError
@@ -133,6 +135,46 @@ def degenerate_seeds(rows: list[dict], fold: str = "val") -> list[int]:
     return out
 
 
+def no_ranking_seeds(rows: list[dict], a: str) -> list[int]:
+    """Seeds whose test AUPRC for lane `a` equals the test fold's positive
+    rate to 4 places: scores that carry no ranking (fresh-eyes 3.1)."""
+    return [r["seed"] for r in rows
+            if round(r["lanes"][a]["test"]["auprc"], 4)
+            == round(r["lanes"][a]["test"]["prevalence"], 4)]
+
+
+def no_ranking_text(rows: list[dict], order: list[str]) -> str:
+    """The BLUF sentence for lanes with no-ranking seeds, or ''."""
+    parts, recalls = [], set()
+    for a in order:
+        s = no_ranking_seeds(rows, a)
+        if s:
+            parts.append(f"{INNER[a]} on {len(s)} of {len(rows)} "
+                         f"({seeds_text(s)})")
+            recalls |= {r["lanes"][a]["test"]["recall_at_budget_on_test"]
+                        for r in rows if r["seed"] in s}
+    if not parts:
+        return ""
+    text = (" Test scores carry no ranking (AUPRC equals the positive rate) "
+            "for " + "; ".join(parts) + ". Those seeds are in the means and "
+            "the places.")
+    if recalls == {1.0}:
+        text += (" On each of them the lane's recall at the budget reads "
+                 "1.0, which raises its mean recall.")
+    return text
+
+
+def c_edge_line(res: dict, rows: list[dict]) -> str:
+    """Says when the RBF form's chosen C is the grid's largest value."""
+    top = max(g["C"] for g in res["svm_rbf_grid"])
+    k = sum(1 for r in rows if r["lanes"]["svm"]["chosen_params"]["C"] == top)
+    if not k:
+        return ""
+    return (f"The chosen C is the grid's largest value, {top:g}, on {k} of "
+            f"{len(rows)} seeds, so a larger C may do better; the grid is "
+            "the entry's, not widened here.")
+
+
 def seeds_text(seeds: list[int]) -> str:
     return (f"seed{'s' if len(seeds) > 1 else ''} "
             f"{', '.join(str(x) for x in seeds)}")
@@ -185,7 +227,7 @@ def algo_doc(res: dict, ds: str, a: str) -> str:
     lanes = [r["lanes"][a] for r in R]
     order = A["order_by_mean_test_auprc"]
     comp = comparison_page(ds)
-    L = [f"# {NAMES[a]} on SPECTRA {ds}: best achievable result (F157)", ""]
+    L = [f"# {NAMES[a]} on SPECTRA {ds}: best result within F166's grid (F157)", ""]
     L += [f"**BLUF.** Tuned on validation and scored on the test fold over "
           f"{N} seeds ({seeds}), {NAMES[a]} reaches a mean test AUPRC of "
           f"{fd.f4(s['auprc']['mean'])} (95% t interval "
@@ -222,6 +264,8 @@ def algo_doc(res: dict, ds: str, a: str) -> str:
               f"{res['rbf_rows']:,} training rows (the whole fold when "
               "smaller). " + svm_form_line(A, N), "",
               linear_paragraph(R), ""]
+        if A["svm_lane_form"] == "rbf" and c_edge_line(res, R):
+            L += [c_edge_line(res, R), ""]
         flat = degenerate_seeds(R)
         if flat:
             L += [f"On {seeds_text(flat)} the RBF form's best validation "
@@ -232,7 +276,7 @@ def algo_doc(res: dict, ds: str, a: str) -> str:
                    for r in R if r["seed"] in flat):
                 raise ClaimError("a seed with a no-ranking RBF score is "
                                  "recorded as an RBF win")
-            flat_test = degenerate_seeds(R, "test")
+            flat_test = [x for x in degenerate_seeds(R, "test") if x in flat]
             ranked = [x for x in flat if x not in flat_test]
             if flat_test:
                 L += [f"On {seeds_text(flat_test)} the scored RBF lane's test "
@@ -247,6 +291,11 @@ def algo_doc(res: dict, ds: str, a: str) -> str:
                       "dataset's features (the date columns parsed per fold, "
                       "which raise a format warning) is a guess, not tested.",
                       ""]
+        mirror = [x for x in degenerate_seeds(R, "test") if x not in flat]
+        if mirror:
+            L += [f"On {seeds_text(mirror)} the reverse holds: the RBF "
+                  "scores carry a ranking on validation and none on test. "
+                  "**Not explained** either.", ""]
     L += ["## Test-fold results over seeds", "",
           f"Mean, SD and 95% t interval over {N} seeds, each seed at its "
           "own chosen configuration.", "",
@@ -307,6 +356,7 @@ def comparison(res: dict, ds: str) -> str:
         bluf += (" No other adjacent pair differs reliably, so the order "
                  "among " + "; ".join(fd.names(r) for r in runs)
                  + " is not established.")
+    bluf += no_ranking_text(R, order)
     svm_form_line(A, N)  # refuses a lane that is not the kept form
     plan = res["seed_plans"][ds]
     L = [f"# SPECTRA {ds}: {count} algorithms compared (F157)", "", bluf, ""]

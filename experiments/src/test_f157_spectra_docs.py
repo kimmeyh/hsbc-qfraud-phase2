@@ -145,3 +145,56 @@ def test_the_unexplained_seed_is_stated(recorded):
     """energy_steel seed 42: constant on validation, ranked on test."""
     text = sd.algo_doc(recorded, "energy_steel", "svm")
     assert "**Not explained**" in text and "seed 42" in text
+
+
+def _lane(auprc, prev=0.254281, recall=0.02):
+    return {"test": {"auprc": auprc, "prevalence": prev,
+                     "recall_at_budget_on_test": recall}}
+
+
+def test_no_ranking_seeds_are_named_in_the_bluf():
+    """Fresh-eyes 3.1: a lane whose test scores carry no ranking on a seed
+    is named, and the recall sentence appears only when it is measured."""
+    rows = [{"seed": 42, "lanes": {"svm": _lane(0.25428, recall=1.0),
+                                   "hgb": _lane(0.91)}},
+            {"seed": 43, "lanes": {"svm": _lane(0.83), "hgb": _lane(0.92)}}]
+    assert sd.no_ranking_seeds(rows, "svm") == [42]
+    text = sd.no_ranking_text(rows, ["hgb", "svm"])
+    assert "SVM on 1 of 2 (seed 42)" in text and "HGB" not in text
+    assert "reads 1.0" in text
+    rows[0]["lanes"]["svm"]["test"]["recall_at_budget_on_test"] = 0.0
+    assert "reads 1.0" not in sd.no_ranking_text(rows, ["hgb", "svm"])
+    rows[0]["lanes"]["svm"]["test"]["auprc"] = 0.5
+    assert sd.no_ranking_text(rows, ["hgb", "svm"]) == ""
+
+
+def test_the_recorded_comparison_names_the_no_ranking_seeds(recorded):
+    text = sd.render(recorded)["ENERGY_STEEL_COMPARISON.md"]
+    assert "SVM on 4 of 10 (seeds 44, 45, 46, 49)" in text
+
+
+def test_a_c_at_the_grid_edge_is_stated():
+    """Fresh-eyes 3.5: the SVM page says when the chosen C is the top."""
+    res = {"svm_rbf_grid": [{"C": 0.1}, {"C": 1.0}, {"C": 10.0}]}
+    rows = [{"seed": s, "lanes": {"svm": {"chosen_params": {"C": c}}}}
+            for s, c in ((42, 10.0), (43, 1.0))]
+    assert "on 1 of 2 seeds" in sd.c_edge_line(res, rows)
+    rows[0]["lanes"]["svm"]["chosen_params"]["C"] = 1.0
+    assert sd.c_edge_line(res, rows) == ""
+
+
+def test_the_titles_name_the_grid_and_the_amendment_its_timing(recorded):
+    """Fresh-eyes 3.4 and 3.8."""
+    page = sd.algo_doc(recorded, "telecom_churn", "hgb")
+    assert page.startswith("# HGB on SPECTRA") and "within F166's grid" in page
+    assert "best achievable" not in page
+    assert "written after that result was seen" in sd.AMENDED
+
+
+def test_the_mirror_seed_is_stated_and_not_called_also(recorded):
+    """Fresh-eyes 3.3: seed 49 is ranked on validation and constant on
+    test; it is stated as unexplained and not listed with the seeds that
+    carry no ranking on both folds."""
+    text = sd.algo_doc(recorded, "energy_steel", "svm")
+    assert "On seed 49 the reverse holds" in text
+    assert "On seeds 44, 45, 46 the scored RBF lane's test" in text

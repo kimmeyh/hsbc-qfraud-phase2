@@ -31,7 +31,14 @@ calibration warning, and the ULB figure should not be relied on.**
 
 Stage 1, `lgbm_lr05` on F108's simulator (`f169_plugin_bins_lr05.json`):
 recovered on 5 of 5 seeds on the main arm, and on 5 of 5 on the flip
-and reference arms. It passes F169's rule, so stage 2 ran.
+and reference arms. It passes F169's rule, so stage 2 ran. The reference
+arm's recovery is vacuous: its true error is 0, and the estimate reads
+near 0 although the model's AUPRC there is 0.065 (seed 42) against a
+possible 1.0.
+An overconfident model's plug-in reads near 0 whether or not it
+separates the classes, which is the ULB pattern below, so this arm
+cannot catch that failure. The simulator's training folds also hold far
+more positives than ULB's, about 290.
 
 Stage 2 (`f114_real_ceiling_lr05.json`), ten seeds each (42-51; seed 42
 took 0.06 min on ULB and 0.08 min on IEEE-CIS, so no cut):
@@ -43,7 +50,10 @@ took 0.06 min on ULB and 0.08 min on IEEE-CIS, so no cut):
   [-0.00140, -0.00051]; test AUPRC 0.623 [0.503, 0.743].
 - IEEE-CIS, 2,962 test positives: estimate 0.0254 [0.0232, 0.0276];
   achieved error 0.0293 [0.0274, 0.0312]; consistency gap -0.0038
-  [-0.0058, -0.0019]; test AUPRC 0.478 [0.446, 0.509].
+  [-0.0058, -0.0019]; test AUPRC 0.478 [0.446, 0.509]. The gap is
+  negative on 9 of 10 seeds; on seed 42 it is +0.0033. Every IEEE-CIS
+  seed has the same training and test rows, so its interval is over the
+  model's randomness only, not over the data.
 
 Training AUPRC, reported by the re-run amendment so a collapse shows
 (`rows[].train_auprc`): ULB 1.0 on seven seeds, and 0.887 (seed 44),
@@ -65,12 +75,16 @@ above the test fraud rate. IEEE-CIS 0.662 to 0.665 on every seed.
   training positives. The ULB figure is reported as the entry requires and is
   not a usable ceiling.
 - **IEEE-CIS**: the gap is smaller relative to the figure (about 13%).
-  The plug-in says the model's own error of 0.0293 could fall to about
-  0.025 on these features, if the probabilities were calibrated.
+  Under the plug-in's calibration assumption it reads 0.025, against the
+  model's own 0.0293; the warning says that assumption does not hold
+  here, and the size and direction of the bias are unknown.
 - **The check passed by a hair.** At 0.00049 against a 0.0005 margin, a
   slightly different permutation could fail it. The entry fixes one
   draw, so the pass stands, but it is weak support for "the method
-  transfers".
+  transfers". The check also barely moved between a collapsed model and
+  a working one: the first run's estimate was 0.00110
+  (`f114_real_ceiling.json`), this run's 0.00118, both about 30% below
+  the fraud rate they should equal.
 
 ## Defect found and repaired (Sprint 31 D13)
 

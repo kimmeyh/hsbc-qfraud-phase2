@@ -97,11 +97,15 @@ device block, and the decision that releases it.
   3. One block per sprint at most, so each result is read before the
      next is asked for.
 - Device: Dirac-3S. F155 (Sprint 31) showed the cloud queue accepts a
-  continuous job of 1,350 variables, above the 949 limit the skeleton
-  states (`experiments/phase2/results/f155_variable_ceiling.json`);
-  F143's hold condition is met. The job's weights came back near flat,
-  so the probe shows the size is accepted, not that a pool that size
-  solves well.
+  continuous job of 1,350 variables, above the 949 base-module figure
+  the skeleton states and within the 9,980 expansion-module figure
+  (`docs/phase2/DIRAC_3S_SITE_SWEEP.md`, F14;
+  `experiments/phase2/results/f155_variable_ceiling.json`). F143's hold
+  condition is met. The pool failed the resolution screen, so the probe
+  tests acceptance only, by design; its weights came back near flat
+  (0.0007392 to 0.0007409, from the stored response
+  `experiments/phase2/results/device_samples/f155_pool_1350_6aec89e4358b23d0cb37424a.json`),
+  as a failed screen predicts.
 - Released by: the falsifier passing on the proxy (step 1), then the team
   lead's per-block approval (step 2).
 - If step 1 has not passed by its deadline: the PoC report states that
@@ -168,9 +172,12 @@ device block, and the decision that releases it.
   0.7254. PoC work: these lanes are the reference a SPECTRA-style
   dataset in the brief is compared against **[A2]**.
 - **Relaxation schedule 4 on Dirac-3S (F95, Sprint 31).** No change on
-  any of four fits, at about three times the device seconds per sample;
-  67.0 of 120 metered seconds (`docs/phase2/F95_SCHEDULE4.md`). PoC
-  device blocks keep schedule 2.
+  the two fits with a Dirac-3S schedule-2 twin, whose pools fail the
+  resolution screen, so the evidence is weak; the other two fits have
+  only a Dirac-3 history and are not compared. About three times the
+  device seconds per sample; 67.0 of 120 metered seconds
+  (`docs/phase2/F95_SCHEDULE4.md`). There is no evidence for schedule 4,
+  so PoC device blocks keep schedule 2.
 - **The gate-based arm (F6).** Simulation only, as F6 recommends. A
   Braket hardware run is a new card with its own cost; the AWS credits
   may change that cost **[A3]**.

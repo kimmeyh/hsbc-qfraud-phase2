@@ -16,11 +16,11 @@ above 0) accepts no ProductCD segment for HGB and none for the CVQBoost
 proxy. The reference check passed its purpose: HGB was not accepted, so
 the run went on to the proxy, as the entry sets.
 
-**The measure cannot show an edge on most segments.** On segments C, R
-and S, the champion's recall within the segment is already as high as the
-segment's 0.5% alert budget allows: every alert is a fraud. A lane can tie
-it and cannot beat it, so its edge is 0 or below by construction. Segment
-W cannot be scored at all. This is a property of the design, found after
+**The measure cannot show an edge on any segment that can be scored.**
+On segments C, R, H and S, the champion's recall within the segment is
+already as high as the segment's 0.5% alert budget allows: every alert is
+a fraud, on every seed. A lane can tie it and cannot beat it, so its edge
+is 0 or below by construction. Segment W cannot be scored at all. This is a property of the design, found after
 the result, and it is the main thing this run teaches.
 
 ## What ran
@@ -41,8 +41,10 @@ the result, and it is the main thing this run teaches.
   0.01: not accepted.
 - **R**: mean edge 0.0; edge minus control 0.00211, interval [0.00067,
   0.00355]. The same pattern: not accepted.
-- **H**: mean edge -0.0037; interval [-0.0081, 0.0011]. Not accepted.
-- **S**: mean edge -0.0047; interval [-0.0195, 0.0118]. Not accepted.
+- **H**: mean edge -0.0037; edge minus control interval [-0.0081,
+  0.0011]. Not accepted. Five seeds tie the champion; five miss one fraud.
+- **S**: mean edge -0.0047; edge minus control interval [-0.0195,
+  0.0118]. Not accepted. Nine seeds tie; seed 45 is below.
 
 The minimum-edge clause is what kept HGB out on C and R. With the
 interval clause alone, the criterion would have accepted the classical
@@ -52,25 +54,35 @@ a tie.
 ## The proxy (CVQBoost, F174's stored scores)
 
 - **W**: not feasible, as above.
-- **C**: mean edge -0.0069; interval [-0.0084, -0.0034]. Below the
-  champion, reliably.
-- **R**: mean edge 0.0; interval [0.0025, 0.0047]. Not accepted.
-- **H**: mean edge -0.0126; interval [-0.0140, -0.0066]. Below the
-  champion, reliably.
-- **S**: mean edge 0.0; interval [0.0006, 0.0034]. Not accepted.
+- **C**: mean edge -0.0069, below the champion on 10 of 10 seeds; edge
+  minus control interval [-0.0084, -0.0034]. Not accepted.
+- **R**: mean edge 0.0; edge minus control interval [0.0025, 0.0047].
+  Not accepted.
+- **H**: mean edge -0.0126, below the champion on 10 of 10 seeds; edge
+  minus control interval [-0.0140, -0.0066]. Not accepted.
+- **S**: mean edge 0.0; edge minus control interval [0.0006, 0.0034].
+  Not accepted.
+
+Each interval is of edge minus the matched control, not of the edge
+itself; "below the champion" is read from the per-seed edges.
 
 ## Why most edges are exactly 0
 
-At a 0.5% budget a segment's alerts are few: about 44 on C, 16 on R, 11
-on H and 6 on S, against 1,123, 161, 135 and 86 frauds. On C the
-champion's recall within the segment is 0.0401 (seed 42), on R 0.106 and
-on S 0.0814: each is the alerts it is allowed divided by the frauds, so
-every alert is a fraud. HGB and the proxy reach the same figure on R and
-S, and HGB on C, which is why their mean edges are 0.0 to the stated
-places. Only on H, where the champion misses, and on C for the proxy, do
-the lanes differ, and there they are below it. (The alert counts are
-rounded from 0.5% of the segment's rows; ties at the threshold can add
-one, which is why a recall can sit slightly above that ratio.)
+At a 0.5% budget a segment's alerts are few: 45 on C, 17 on R, 12 on H
+and 7 on S (0.5% of the segment's rows, rounded up), against 1,123, 161,
+135 and 86 frauds. The champion's recall within the segment is 0.0401 on
+C, 0.106 on R, 0.0889 on H and 0.0814 on S, on every seed: each is the
+alerts it is allowed divided by the frauds, so every alert is a fraud.
+HGB and the proxy reach the same figure on R and S, and HGB on C, which
+is why their mean edges are 0.0 to the stated places. Where a lane
+differs (HGB on H and S, the proxy on C and H), it is below the
+champion, because the lane misses a fraud the champion catches.
+
+The control clause rewards a tie: a lane that exactly ties the champion
+passes the interval clause whenever its matched controls fall below the
+champion (HGB on C and R, the proxy on R and S). On a saturated measure
+that clause cannot separate an edge from a tie; only the minimum-edge
+clause does.
 
 A segment router can only gain where the champion's top alerts are not
 all fraud. At this budget that is rare on IEEE-CIS month 4, so recall at

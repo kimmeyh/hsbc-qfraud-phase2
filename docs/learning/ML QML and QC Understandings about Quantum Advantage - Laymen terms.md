@@ -551,8 +551,9 @@ The six-experiment frame they fit into is in
     the estimator at a slower learning rate. It passed on the
     simulator, and the shuffled-label check then passed, by a very
     small amount. For [IEEE-CIS](#acr-ieee-cis) the best error the data allows is
-    estimated at about 2.5%, against the model's own 2.9%, with a
-    warning that the model's probabilities are not well calibrated.
+    estimated at about 2.5%, against the model's own 2.9%. That figure rests on an
+    assumption, that the model's probabilities are well calibrated,
+    which the check says does not hold here.
     The [ULB](#acr-ulb) estimate is far below an error the model actually
     reaches, so it is not a usable ceiling
     (`experiments/phase2/results/f114_real_ceiling_lr05.json`).
@@ -562,7 +563,7 @@ The six-experiment frame they fit into is in
   the F106 entry's amendment of 2026-11-05.
   - Result, 2026-11-05: **the twin copies the circuit.** Two ordinary
     models, [GAM](#acr-gam) and [HGB](#acr-hgb), scored at least as well as the circuit on
-    eight seeds, so the circuit shows nothing a classical model cannot
+    average over eight seeds (on a single seed either can be ahead), so the circuit shows nothing a classical model cannot
     do here (`experiments/phase2/results/f157_qnn_ieee.json`).
 - **Seven algorithms on [SPECTRA](#acr-spectra)'s four datasets (F157, [SPECTRA](#acr-spectra) part).**
   Entry: "F157 [SPECTRA](#acr-spectra) part".
@@ -581,23 +582,26 @@ The six-experiment frame they fit into is in
   "Experiment 5".
   - Result, 2026-11-05: **no product type was accepted**, for the
     quantum-inspired model or for the classical check model. A lesson
-    about the test itself: in most product types the best model's few
-    allowed alerts are already all fraud, so no other model can beat it
+    about the test itself: in every product type that could be scored, the best
+    model's few allowed alerts are already all fraud, so no other model can beat it
     there (`docs/phase2/EXP5_ROUTER.md`).
 - **Does Dirac-3S accept a 1,350-variable job (F155)?** One device call,
   approved on its own. Entry: "F155".
   - Result, 2026-11-05: **accepted.** The device took the
     1,350-variable job and returned 1,350 values, using 6.0 metered
-    seconds. This is a size test only; no accuracy was read
+    seconds. This is a size test only, by design: the problem
+    was too flat for any answer to show quality, and no accuracy was
+    read
     (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **Relaxation schedule 4 on Dirac-3S (F95).** Four fits; does a slower
   device setting close the small gap Dirac-3 left? Entry: "F95".
-  - Result, 2026-11-05: **no change.** The slower setting found the
-    same best answer as the usual one on all four fits, and each sample
-    cost about three times the device time. The card used 67.0 of its
-    120 approved seconds, so this setting can be left out of later
-    plans for problems of this kind
-    (`experiments/phase2/results/f95_schedule4.json`).
+  - Result, 2026-11-05: **no change on the two fits that could be
+    compared**, but those two problems are too easy to tell the
+    settings apart, so this is weak evidence. The other two fits had
+    no match on the same device. Each sample cost about three times
+    the device time, and the card used 67.0 of its 120 approved
+    seconds. Later plans keep the usual setting
+    (`docs/phase2/F95_SCHEDULE4.md`).
 
 ## 8. Experiments not yet planned
 

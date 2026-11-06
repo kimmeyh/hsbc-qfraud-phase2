@@ -131,13 +131,14 @@ The appendix here holds only what neither defines.
   solution shape on oilgas (cosine 0.83 against 0.89-0.90)
   (`docs/phase2/F17_EMULATOR.md`).
 - [HW] Dirac-3S accepted a 1,350-variable continuous job at schedule 2,
-  all entries returned, 6.0 metered seconds; the weights came back near
-  flat, so size is shown, not solution quality
+  all entries returned, 6.0 metered seconds; the pool failed the resolution
+  screen and the weights came back near flat, so size is shown, not solution quality
   (`experiments/phase2/results/f155_variable_ceiling.json`).
 - [HW] [Relaxation schedule](#qc3-relaxation-schedule) 4 on Dirac-3S, four fits at 45 and 91
-  variables: every sample at the reference optimum to solver precision,
-  as at schedule 2; 67.0 metered seconds
-  (`experiments/phase2/results/f95_schedule4.json`).
+  variables: no change on the two 91-variable fits with a schedule-2
+  twin on the same device, but both fail the resolution screen, so
+  the test is weak; the 45-variable fits have only Dirac-3 history.
+  67.0 metered seconds (`docs/phase2/F95_SCHEDULE4.md`).
 
 ### What outside research says
 
@@ -324,18 +325,20 @@ count and seconds stated. The six-experiment frame is in
   rebuilds with Dirac-3S schedule-2 twins, two 45-variable fits with only
   Dirac-3 history), the relative gap to the reference optimum per
   sample. Cap 120 s over two stops. "No change" is the expected result.
-  - Result, 2026-11-05: **no change.** All 32 samples sit at the
-    reference optimum to solver precision, as at schedule 2; 18.0, 18.0,
-    15.0 and 16.0 s per fit, 67.0 of the 120 s cap. Schedule 4 can be
-    left out of device plans for pools of this kind
-    (`experiments/phase2/results/f95_schedule4.json`).
+  - Result, 2026-11-05: **no change on the two twin-compared fits**,
+    whose pools fail the resolution screen, so the test is weak. The
+    45-variable fits have only Dirac-3 history and are not compared.
+    18.0, 18.0, 15.0 and 16.0 s per fit, 67.0 of the 120 s cap. There
+    is no evidence for schedule 4; device plans stay at schedule 2
+    (`docs/phase2/F95_SCHEDULE4.md`).
 - **F157 [QNN](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qnn) part**: the F106 circuit and six twins on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis)'s
   month-4 fold, about 2,962 test positives, so "dequantized" becomes
   decidable at the 0.005 margin.
   - Result, 2026-11-05: **dequantized.** [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) match
     the circuit within the margin; the encoding was phase-active on
-    every seed (phase complexity 0.095 on seed 48, 0.4842 to 0.5506 on
-    the rest, all above the 0.01 floor)
+    every seed (phase complexity 0.4842 to 0.5506 on seven seeds,
+    and 0.095 on seed 48, about a fifth of the others; all above the
+    0.01 floor)
     (`experiments/phase2/results/f157_qnn_ieee.json`).
 - **F114, F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra) part and Experiment 5**: classical ceilings,
   algorithm rankings and segment routing; see the machine learning

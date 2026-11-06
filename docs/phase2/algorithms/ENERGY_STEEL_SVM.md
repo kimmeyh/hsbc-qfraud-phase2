@@ -1,10 +1,10 @@
-# SVM on SPECTRA energy_steel: best achievable result (F157)
+# SVM on SPECTRA energy_steel: best result within F166's grid (F157)
 
 **BLUF.** Tuned on validation and scored on the test fold over 10 seeds (42-51), SVM reaches a mean test AUPRC of 0.6247 (95% t interval 0.3963 to 0.8530). It is number 7 of 7 by mean test AUPRC; the ranking and which differences are reliable are on [ENERGY_STEEL_COMPARISON.md](ENERGY_STEEL_COMPARISON.md).
 
 - **Card**: F157 (Sprint 31 Task F, #98), the SPECTRA part: F166's algorithms and grids on SPECTRA's four datasets.
 - **Entry**: `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6, "F157 SPECTRA part", written before any score.
-- **Amendment**: the SVM lane is the form the entry's rule keeps, scored on the test fold under the entry's amendment of 2026-11-05 (Sprint 31 D14 option 1). The first result, `experiments/phase2/results/f157_spectra_algorithms.json`, is kept as recorded; it scored the linear form only.
+- **Amendment**: the SVM lane is the form the entry's rule keeps, scored on the test fold under the entry's amendment of 2026-11-05 (Sprint 31 D14 option 1). The first result, `experiments/phase2/results/f157_spectra_algorithms.json`, is kept as recorded; it scored the linear form only. The amendment was written after that result was seen; the other six lanes are unchanged from it.
 - **Evidence**: `experiments/phase2/results/f157_spectra_algorithms_rbf.json` (evidence tag SIM, zero metered seconds), generator `experiments/phase2/src/f157_spectra_algorithms.py`. Every figure below comes from that file. Each seed's outcome block is in the file's rows; the per-row test scores it names are in `experiments/phase2/predictions/` (gitignored, kept on this machine), each recorded with its SHA-256.
 - **Data**: SPECTRA `energy_steel`, label `target`, spectra_segment.spectra_split 60/20/20, seeded. Tuning reads the training and validation folds; every score here is on the test fold (7,008 rows, 1,782 positives per seed; 17 feature columns).
 
@@ -23,11 +23,15 @@ The RBF SVM is fitted on a stratified subsample of at most 20,000 training rows 
 
 The linear form (`LinearSVC`, all training rows, F166's grid), which the rule did not keep: mean test AUPRC 0.6484 over 10 seeds, from 0.2543 to 0.7177 (the SVM figures of `experiments/phase2/results/f157_spectra_algorithms.json`). It is not ranked.
 
+The chosen C is the grid's largest value, 10, on 6 of 10 seeds, so a larger C may do better; the grid is the entry's, not widened here.
+
 On seeds 42, 44, 45, 46 the RBF form's best validation AUPRC equals the test fold's positive rate to four places, which is what a score with no ranking gets. They count as linear wins, so they do not add to the RBF majority.
 
-On seeds 44, 45, 46, 49 the scored RBF lane's test AUPRC is also the positive rate: no ranking there either, and those seeds are scored as they are, as the amendment sets.
+On seeds 44, 45, 46 the scored RBF lane's test AUPRC is also the positive rate: no ranking there either, and those seeds are scored as they are, as the amendment sets.
 
 On seed 42 the RBF scores carry no ranking on validation but do on test. **Not explained**: the same fit gives constant scores on one fold and ranked scores on the other. A cause in this dataset's features (the date columns parsed per fold, which raise a format warning) is a guess, not tested.
+
+On seed 49 the reverse holds: the RBF scores carry a ranking on validation and none on test. **Not explained** either.
 
 ## Test-fold results over seeds
 

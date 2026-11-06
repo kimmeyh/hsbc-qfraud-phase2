@@ -19,8 +19,13 @@ surrogate. F106 on ULB was inconclusive at 99 test positives per seed;
 this test fold holds 2,962, which is what narrowed the intervals.
 
 **Please read the caveat under Reading**: the interval resamples test
-rows, not seeds. Across seeds HGB is ahead on 5 of 8 and its Wilcoxon p
-is 0.109, so the seed-to-seed spread is wider than the interval.
+rows, not seeds, and every seed scores the same test fold. It leaves out
+what changes between seeds: the training draw, the feature choice and
+the initialization. A t interval over the eight per-seed deltas, at the
+same 99.17% level (computed from `per_seed_delta`; not stored), crosses
+the -0.005 margin for both GAM and HGB. So the outcome holds for this
+test fold under the entry's rule; it is not shown across training
+draws. GAM is ahead on 4 of 8 seeds and HGB on 5 of 8.
 
 ## Results (Measured)
 
@@ -31,10 +36,13 @@ twin is ahead:
 - GAM: +0.0047 [+0.0007, +0.0092], p = 0.547, 4 of 8. **No worse.**
 - GA2M: -0.0019 [-0.0060, +0.0024], p = 0.844, 4 of 8. Not decided:
   its lower bound, -0.0060, is below the -0.005 line by 0.001.
-- JOINT: -0.0224 [-0.0270, -0.0176], p = 0.039, 2 of 8. **Below.**
-- RFF: -0.0400 [-0.0449, -0.0349], p = 0.016, 1 of 8. **Below.**
+- JOINT: -0.0224 [-0.0270, -0.0176], p = 0.039, 2 of 8. **Below** on
+  the test-row interval; not significant across seeds (p above the
+  0.0083 per-comparison level).
+- RFF: -0.0400 [-0.0449, -0.0349], p = 0.016, 1 of 8. **Below** on the
+  test-row interval; not significant across seeds.
 - logistic regression: -0.0614 [-0.0665, -0.0560], p = 0.008, 0 of 8.
-  **Below.**
+  **Below** on both readings.
 
 Each seed's training rows: 295 positives and 6,000 negatives. Each
 seed's test fold: all 85,302 month-4 rows, 2,962 positives. Per-seed
@@ -54,10 +62,13 @@ under 6 s. The pilot projected 7,254 s for eight seeds, inside the
 
 ## Reading
 
-- **The circuit is a competent classifier on IEEE-CIS, not a better
-  one.** Its function is reached by an additive model (GAM) and by
-  gradient-boosted trees (HGB) on the same eight features. This is the
-  outcome F106 predicted and could not confirm on ULB.
+- **The circuit is not a better classifier than its twins here.** Its
+  function is reached by an additive model (GAM) and by gradient-boosted
+  trees (HGB) on each seed's same eight features. All lanes share a
+  deliberately small regime (6,295 training rows, eight features), so
+  none is strong in absolute terms; the full-data lanes on the same fold
+  are in `docs/phase2/algorithms/IEEE_COMPARISON.md`. This is the outcome
+  F106 predicted and could not confirm on ULB.
 - **The interval and the seeds disagree in strength.** The bootstrap
   resamples the test rows of each seed; with 2,962 positives it is
   narrow. The per-seed deltas vary more: HGB's run from -0.0143 to
@@ -69,8 +80,10 @@ under 6 s. The pilot projected 7,254 s for eight seeds, inside the
 - **Seed 48 is the odd seed.** Its C is a fifth of the others and its
   Berry connection about a third, so the encoding was less
   phase-active there; the circuit's AUPRC on that seed (0.1993) is still
-  inside the others' range. Inferred, not tested: the seed's features
-  gave less phase spread.
+  inside the others' range, and ahead of GAM, GA2M and HGB on that seed.
+  Inferred, not tested: the seed's features gave less phase spread. So
+  the diagnostics do not track the circuit's AUPRC across seeds, and
+  they are not evidence of a quantum mechanism here.
 - **The encoding was built as the entry states** (`encoding_built_wrong`
   is false).
 

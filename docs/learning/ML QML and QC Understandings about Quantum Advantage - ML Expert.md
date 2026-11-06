@@ -110,7 +110,7 @@ covers the devices in more depth.
   (`docs/phase2/F171_MISSED_IEEE.md`).
 - [SIM] On F108's simulator, a per-type cascade (one detector per fraud
   type, max of the two probabilities) recalled less within 0.5% than one
-  model: mean -0.069, 95% interval -0.126 to -0.013, over 8 seeds
+  model: mean -0.079, 95% interval -0.126 to -0.013, over 8 seeds
   (`experiments/phase2/results/f158_fraud_types.json`).
 - [SIM] The real-data step of that test did not run, because its
   condition was a cascade above one model
@@ -290,7 +290,7 @@ covers the devices in more depth.
   slope 1.40 [1.35, 1.45] at 91 variables and 1.44 [1.38, 1.49] at 833;
   the solve is flat in rows (`docs/phase2/F110_SCALING.md`).
 - [SIM] Experiment 5: no ProductCD segment accepted for the proxy or for
-  [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb); on C, R and S recall at the budget saturates, so the edge is
+  [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb); on C, R, H and S recall at the budget saturates, so the edge is
   0 or below by construction (`docs/phase2/EXP5_ROUTER.md`).
 
 ## 6. Quantum machine learning
@@ -320,8 +320,10 @@ covers the devices in more depth.
 - [HW] A [QSVM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qsvm) on Dirac-3 scored a mean test [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) of 0.212 against
   CVQBoost's 0.767 on the same data (`docs/B4_B5_HARDWARE_RESULT.md`).
 - [SIM] F106's circuit on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) month 4, eight seeds: dequantized.
-  [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) are no worse within the 0.005 margin
-  (`experiments/phase2/results/f157_qnn_ieee.json`).
+  [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) are no worse within the 0.005 margin on the test-row
+  interval. A t interval over the eight per-seed deltas crosses the
+  margin, so the outcome is not shown across training draws
+  (`docs/phase2/F157_QNN_IEEE.md`).
 
 ### What outside research says
 
@@ -423,20 +425,23 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
   edge above 0)? [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) is checked first in the proxy's place; the
   prediction is that no segment is accepted.
   - Result, 2026-11-05: no segment accepted for the proxy or for [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb).
-    W cannot be matched; on C, R and S the champion's in-segment alerts
+    W cannot be matched; on C, R, H and S the champion's in-segment alerts
     are all frauds, so recall at the budget saturates and edges are 0 or
     below by construction. The minimum-edge clause, not the interval,
     kept [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) out on C and R (`docs/phase2/EXP5_ROUTER.md`).
 - **F155, the [Dirac-3S](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-dirac-3s) size limit**: one 1,350-variable job; accepted
   only if the solution has 1,350 entries. No accuracy is read.
   - Result, 2026-11-05: accepted; 1,350 entries returned, 6.0
-    metered seconds
+    metered seconds. The pool failed the resolution screen, so the
+    probe tests acceptance only, by design
     (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **F95, relaxation schedule 4**: four fits; the solver gap against the
   exact optimum. No accuracy is read.
-  - Result, 2026-11-05: no change; every sample at the reference
-    optimum to solver precision, 67.0 of 120 metered seconds
-    (`experiments/phase2/results/f95_schedule4.json`).
+  - Result, 2026-11-05: no change on the two fits with a schedule-2
+    twin on the same device, whose pools fail the resolution screen,
+    so the test is weak; the two 45-variable fits have only Dirac-3
+    history and are not compared. 67.0 of 120 metered seconds
+    (`docs/phase2/F95_SCHEDULE4.md`).
 
 ## 8. Experiments not yet planned
 
