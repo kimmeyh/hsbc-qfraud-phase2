@@ -54,6 +54,21 @@ def test_quoted_docstrings_are_us_english(tmp_path):
     assert inv.guards(f) == "A sizable, Color check."
 
 
+def test_a_file_absent_from_a_report_is_blank_not_zero():
+    """Sprint 31 Task N: a file no report holds was shown as 0.0 s local,
+    which reads as measured."""
+    rows = {"test_suite_times.py": {"tests": 3, "proofs": 1, "slow": 0}}
+    absent = inv.render(rows, {}, {}, "l.xml", "c.xml")
+    row = next(ln for ln in absent.splitlines()
+               if ln.startswith("| test_suite_times.py"))
+    assert [c.strip() for c in row.split("|")[7:11]] == ["", "", "", ""]
+    held = inv.render(rows, {"test_suite_times.py": [1.25, 2.0]}, {},
+                      "l.xml", "c.xml")
+    row = next(ln for ln in held.splitlines()
+               if ln.startswith("| test_suite_times.py"))
+    assert [c.strip() for c in row.split("|")[7:9]] == ["1.2", "2.0"]
+
+
 def test_the_inventory_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
 
@@ -80,3 +95,10 @@ def test_the_inventory_can_fail():
                               expect_occurrences=1)],
                     test("test_quoted_docstrings_are_us_english"),
                     "a docstring quoted without the US English pairs")
+    assert_can_fail([Mutation(SCRIPT,
+                              "        lt, ct = local.get(name), ci.get(name)\n",
+                              "        lt, ct = local.get(name, [0.0, 0.0]), "
+                              "ci.get(name)\n",
+                              expect_occurrences=1)],
+                    test("test_a_file_absent_from_a_report_is_blank_not_zero"),
+                    "an unmeasured file shown as 0.0 s")

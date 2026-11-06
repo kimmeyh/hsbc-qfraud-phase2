@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-06
+
+- **fix**: CI red on 62db122 (Sprint 31 Task N): the new `test_no_proofs_under_xdist.py` was not in `F180_TEST_INVENTORY.md`. Regenerated from the local report it already used and CI's full-job report for 62db122, which fills the CI columns for the first time. `scripts/test_inventory.py` showed a file no report holds as 0.0 local seconds, which reads as measured (`test_suite_times.py` was one); such a file is now blank, and the page says what a blank means. A test, proven red. (Issue #106)
+
 ### 2026-11-05
 
 - **fix**: CI red on dfb1694 (Sprint 31 Task N). (1) `f95_schedule4_twins.json`, an HW file, had rows with no `job_id` or `device_type` (`test_row_schema`, B2 and F141). `run_dirac3s_units.twins` now copies both from each schedule-4 row, and the file was regenerated offline from the same stored samples (no device call), replacing the recorded one with the reason in its provenance block; every reading is unchanged. `provenance.start` takes `replace=`, a stated reason, so a deliberate replacement starts in code; there is no command-line form. (2) A red proof's mutation was committed in dfb1694: the ML Expert learning document read -0.079 for F158's cascade, against -0.069 in `f158_fraud_types.json`. I had run proof tests under `pytest -n 4`; two proofs on that document interleaved, and the second restored the first's mutation as the original. The figure is restored. Prevention: the root `conftest.py` fails a proof at setup inside an xdist worker, before its body runs; `-m "not proof" -n auto` is unchanged (`test_no_proofs_under_xdist.py`). Each change proven red. (Issue #106)

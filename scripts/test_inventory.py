@@ -177,6 +177,7 @@ def render(rows, local, ci, local_name, ci_name) -> str:
         f"- Local report: `{local_name}`",
         f"- CI report: `{ci_name}`" if ci_name else
         "- CI report: none given; the CI columns are blank",
+        "- A blank time means the file is not in that report.",
         "",
         "| File | Guards | Kind | Tests | Proofs | Slow | Local s | "
         "Local proof s | CI s | CI proof s | Runs in | Tier | Last fix |",
@@ -186,12 +187,15 @@ def render(rows, local, ci, local_name, ci_name) -> str:
     for name in sorted(rows):
         r = rows[name]
         path = TESTS / name
-        lt, ct = local.get(name, [0.0, 0.0]), ci.get(name)
+        # A file the report does not hold is blank, not 0.0: an unmeasured
+        # file must not read as measured (Sprint 31 Task N).
+        lt, ct = local.get(name), ci.get(name)
+        lts = (f"{lt[0]:.1f}", f"{lt[1]:.1f}") if lt else ("", "")
         cis = (f"{ct[0]:.1f}", f"{ct[1]:.1f}") if ct else ("", "")
         g = guards(path).replace("|", "\\|")
         lines.append(
             f"| {name} | {g} | {kind(path, r)} | {r['tests']} | "
-            f"{r['proofs']} | {r['slow']} | {lt[0]:.1f} | {lt[1]:.1f} | "
+            f"{r['proofs']} | {r['slow']} | {lts[0]} | {lts[1]} | "
             f"{cis[0]} | {cis[1]} | {runs_in(r)} | {tier(name)} | "
             f"{last_fix(path)} |")
     return "\n".join(head + lines) + "\n"
