@@ -1304,3 +1304,86 @@ above is wrong, and the full job changed shape.
   local run stays the parallel run.
 - `test_no_duplicate_proofs.py` fails when two red proofs make the same
   mutation to the same file (change d). The repository has none now.
+
+---
+
+## D18. Backlog: which proposals from the learning-document review become cards? (A1)
+
+Asked 2026-11-06 at Manual Validation, after the team lead's A1 review
+asked: "Have you made any updates to the Phase 2 planning or backlog
+based on what we learned in creating these 3 documents? if not, can you
+propose changes and priorities for approval." No such update had been
+made. The review also asked for a deep dive into investigation data and
+for an experiment with superposition, entanglement and interference on
+all the datasets.
+
+**What.** Nine proposals, none carded yet. Each would be a new card in
+`docs/ALL_SPRINTS_MASTER_PLAN.md`. Priority is the backlog's number
+(lower runs sooner; F180 is 9, F114 16, F181 20, F157 30). All estimates
+are [no-history] and unverified; every one costs 0 metered seconds.
+
+From the team lead's review (group A):
+- **F184. Data used, or usable, for fraud investigation** (~90m,
+  research document). What banks, card networks and investigators
+  record; which fields the public datasets lack; which of the team
+  lead's suggestions (card, customer and advertising identifiers and
+  histories, address, product, merchant, customer device, social media)
+  are lawful and obtainable. Priority 25.
+- **F185. A cost-weighted alert budget** (~60m). Rank by expected
+  dollars saved net of review cost (EvidenceBasedDB
+  `hoppner-instance-threshold`, high) on ULB's Amount and IEEE-CIS's
+  TransactionAmt, against today's count-based 0.5% budget, using the
+  stored scores. Priority 18.
+- **F186. Card-testing sequences** (~90m). On an IEEE-CIS card-holder
+  key: small-then-large pairs within 24 hours, their fraud rate, and the
+  lift of velocity features at the budget. ULB has no card field.
+  Priority 22.
+- **F187. A circuit with all three quantum properties and many
+  non-Clifford gates** (~120m, simulation only). Widths 8 to 20,
+  non-Clifford count stepped past exact statevector cost; ULB, IEEE-CIS
+  month 4 and SPECTRA's four datasets on the quantum-enhanced `target`
+  label; the six F106 twins, HGB and a kernel surrogate. Gate-based
+  hardware only if a circuit beats every twin, under its own approval.
+  Related to F116 and F117 (HOLD). Priority 45.
+
+From EvidenceBasedDB's ranked memo (group B):
+- **F188. Rounding test** (~30m): round each IEEE-CIS selection instance
+  to 200:1 and see whether F176's under-2e-05 gains survive. If not, no
+  device run on that formulation can show anything. Priority 24.
+- **F189. Solver sweep on the first design** (~45m): F176's solvers and
+  a cardinality-penalty sweep on the ULB instances. Priority 50.
+- **F190. Equal-feature comparison** (~60m): every classical lane on the
+  proxy's 17 features, ULB and IEEE-CIS. Priority 35.
+- **F191. Kernel copy and qubit sweep** (~120m): a classical surrogate
+  for any quantum kernel, and kernel concentration from 2 to 14 qubits
+  on fraud features. Priority 55.
+- **F192. Bank-scale timing** (~120m): classical training and scoring at
+  1, 10 and 100 million rows, beside a quantum step's loading and shot
+  cost. Priority 40.
+
+**Why it matters.** The documents now name these as next steps; without
+cards they are not planned, and the team lead's two requests (the data
+deep dive and the three-property experiment) have no home. Group A
+answers questions a bank would ask first (money saved, card testing,
+which data). Group B decides whether further device work can show
+anything (F188 first).
+
+**Kind per option.** Options 1 and 2: Prevention (the backlog records
+the work, so it is planned and not lost). Option 3: Workaround.
+
+**Cost per option** (0 metered seconds in each):
+- Option 1: about 20 minutes now, one file (`ALL_SPRINTS_MASTER_PLAN.md`)
+  plus the CHANGELOG: nine cards at the priorities above.
+- Option 2: about 10 minutes now, the same file: F184-F187 only; group B
+  stays as text in the learning documents.
+- Option 3: no change.
+
+**Recommendation: 1.** Group B's F188 is the cheapest test that decides
+whether any further device run is worth approving, so it belongs in the
+backlog beside group A.
+
+**Options**
+
+1. Add all nine cards, F184-F192, at the priorities above.
+2. Add F184-F187 only, at the priorities above.
+3. Add no cards.
