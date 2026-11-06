@@ -41,3 +41,21 @@ def test_the_rules_can_fail():
                     lambda: run_pytest(f"{THIS}::test_a_value_above_the_idle_"
                                        "range_is_slow", ROOT),
                     "a slow machine reported as ok")
+
+
+# Sprint 31 D16 option 1: each changed refusal has a test and a proof.
+
+def test_no_files_to_time_is_refused(monkeypatch, tmp_path):
+    import pytest
+    monkeypatch.setattr(ec, "ROOT", tmp_path)
+    with pytest.raises(SystemExit, match="no .py files under"):
+        ec.stat_ms()
+
+
+def test_the_no_files_refusal_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(SRC, "    if not files:\n", "    if False:\n",
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_no_files_to_time_is_refused", ROOT),
+                    "an empty tree timed as fast")

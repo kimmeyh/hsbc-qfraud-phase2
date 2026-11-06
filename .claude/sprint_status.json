@@ -37,7 +37,8 @@
       "E": 316,
       "L": 101,
       "M": 41,
-      "N": 128
+      "N": 128,
+      "O": 66
     },
     "task_started": {
       "A": "2026-11-04T23:15:07-05:00",
@@ -131,7 +132,8 @@
       "E": "gaps over 30 min and pauses subtracted",
       "L": "gaps over 30 min and pauses subtracted",
       "M": "gaps over 30 min and pauses subtracted",
-      "N": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle"
+      "N": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle",
+      "O": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 58,
@@ -146,7 +148,8 @@
       "E": 1068,
       "L": 966,
       "M": 41,
-      "N": 304
+      "N": 304,
+      "O": 66
     },
     "task_parallel": {
       "E": [
@@ -217,14 +220,13 @@
         "L"
       ]
     },
-    "task_paused": {
-      "C": "2026-11-05T22:18:11-05:00"
-    },
+    "task_paused": {},
     "task_paused_s": {
       "L": 51892,
       "I": 14637,
       "J": 47664,
-      "E": 45149
+      "E": 45149,
+      "C": 62750
     },
     "task_pause_spans": {
       "L": [
@@ -269,6 +271,12 @@
         [
           "2026-11-05T10:27:36-05:00",
           "2026-11-05T18:27:34-05:00"
+        ]
+      ],
+      "C": [
+        [
+          "2026-11-05T22:18:11-05:00",
+          "2026-11-06T15:44:01-05:00"
         ]
       ]
     }

@@ -31,10 +31,9 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] HARDWARE: any metered run stops for approval (Criterion H), always
 
 ## Phase 5: Review & Validation
-- [ ] **Suite green, by risk (F177, Sprint 31 D8, changes a, b, d).** Three runs, each output to a file and its summary read there, never piped to a tail, so a failing test's name is kept (Sprint 30 IMP-4, `TROUBLESHOOTING.md`):
-  - **Every test, every red proof, on CI (a)**: `gh workflow run ci.yml --ref <branch>` starts CI's full job; `scripts/check_ci_status.py --wait --require-job full` reads it. This replaces the local full run: the proofs' answers change only when their files change, and CI runs them all in about 12 minutes against an hour or more here.
-  - **The changed proofs, locally (b)**: `scripts/select_proofs.py --run` runs the red proofs of each test file whose test, named files or shared machinery (`injection.py`, a `conftest.py`, `pytest.ini`) changed against `origin/develop`. This keeps a Windows-only defect in a changed guard visible here.
-  - **Every non-proof test, locally, in parallel (d)**: `pytest experiments/src -m "not proof and not serial" -n auto --dist loadfile -q -rf`, then the files that cannot share the machine (they write inside the repository or read state another file writes there; `SERIAL_FILES` in the root `conftest.py`), alone: `pytest experiments/src -m "serial and not proof" -q -rf`.
+- [ ] **Suite green, by risk (F177, Sprint 31 D8; D17 option 1).** Two runs, each output to a file and its summary read there, never piped to a tail, so a failing test's name is kept (Sprint 30 IMP-4, `TROUBLESHOOTING.md`):
+  - **Every non-proof test and the selected proofs, on CI**: `gh workflow run ci.yml --ref <branch>` starts CI's full job; `scripts/check_ci_status.py --wait --require-job full` reads it. The full job runs every non-proof test, then `scripts/select_proofs.py --sample --run`: the red proofs of each test file whose test or named file changed against `origin/develop`, plus this sprint's rotating sample of one proof file in 20. A proof tests its test, so it shows nothing new unless its files changed.
+  - **The changed files' tests, locally**: during a task, `scripts/select_proofs.py --tests --base HEAD` runs the non-proof tests of the uncommitted changes, of the files that name them, of the tests that name a changed folder two or more levels deep, and the repository guards (30 files in 4 minutes 46 seconds for one Sprint 31 change). At Phase 5 the branch's change set is the whole sprint (99 of 163 files on Sprint 31), so the Phase 5 local run is the parallel one: `pytest experiments/src -m "not proof and not serial" -n auto --dist loadfile -q -rf`, then `pytest experiments/src -m "serial and not proof" -q -rf` (`SERIAL_FILES` in the root `conftest.py`). A red proof is run locally only to prove a new or changed guard (`assert_can_fail`), never under xdist.
   - Before a long run, `scripts/env_check.py` prints this machine's start-up times beside the 2026-11-05 values (f); a SLOW line explains a slow run before it starts.
 - [ ] No unamended drift from prereg-freeze in analysis code
 - [ ] Plan acceptance criteria walked line by line WITH EVIDENCE
@@ -59,7 +58,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
 - [ ] CI checked on the final HEAD (`scripts/check_ci_status.py`, no waiting). If it is still running or RED, arm the watcher and hand the result to an agent; the close-out hook blocks the completion claim until it is green
 - [ ] `gh pr ready` (ONLY here); final gate; team lead notified for approval
-- [ ] After `gh pr ready`: `scripts/check_ci_status.py --wait --require-job full`. Ready for review starts CI's full job, the only CI run of the red proofs (Sprint 30 Task L); without `--require-job` the earlier green push run reads as a pass before the full job is listed (PR 74 review). The completion claim waits for it to be green
+- [ ] After `gh pr ready`: `scripts/check_ci_status.py --wait --require-job full`. Ready for review starts CI's full job, the only CI run of the red proofs, selected and sampled (Sprint 30 Task L; Sprint 31 D17); without `--require-job` the earlier green push run reads as a pass before the full job is listed (PR 74 review). The completion claim waits for it to be green
 
 ## Phase 8: Delivery Cycle (after develop merge)
 - [ ] Team lead merges develop->main (parallel; do not block on it)

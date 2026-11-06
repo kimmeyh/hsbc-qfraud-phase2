@@ -1172,6 +1172,22 @@ up the check.
 "A3. a" and then "i chose option a." The terminal shows a numbered
 list nested under a bullet with letters, so "a" is option 1.
 
+**Changed since asked (2026-11-06).** Option 1 is built. Two facts
+changed while it was built.
+
+- 10 of the 19 untested refusal lines on this branch were module entry
+  lines (`raise SystemExit(main())` and `sys.exit(main(...))`). They
+  refuse nothing: they return the exit code of `main`. The check
+  (`scripts/refusal_coverage.py`) treats them as ordinary lines, and a
+  proof shows the rule can fail.
+- The other 9 are real refusals. Each now has a test and a red proof:
+  `f157_qnn_ieee.py` line 185, `f157_spectra_algorithms.py` line 355,
+  `run_dirac3s_units.py` lines 165, 212 and 355, `env_check.py` line 44,
+  `f157_spectra_docs.py` lines 68 and 84, and `select_proofs.py` line 42.
+- The push job's Diff coverage step writes the diff-cover report as JSON
+  and runs `scripts/refusal_coverage.py` on it. The step has no
+  `--fail-under`. `test_ci_workflow.py` fails if either changes.
+
 ---
 
 ## D17. Test time: what runs where, so a sprint fits 1-2 hours? (V3)
@@ -1262,3 +1278,29 @@ run under the new policy.
 **Answer (team lead, 2026-11-06, Manual Validation): 1.** Verbatim:
 "a4. a" and then "i chose option a." The terminal shows a numbered
 list nested under a bullet with letters, so "a" is option 1.
+
+**Changed since asked (2026-11-06).** Option 1 is built. One figure
+above is wrong, and the full job changed shape.
+
+- "161 proof files" is wrong. 161 was the count of proof tests. At
+  cdb8471 there were 56 proof files; there are 58 now.
+- The CI full job now runs every non-proof test, then the red proofs
+  that `scripts/select_proofs.py --sample --run` selects: the proofs of
+  each test file whose test or named file changed, plus this sprint's
+  rotating sample of one proof file in 20. The proof step runs even when
+  a test failed.
+- A shared-machinery change (`injection.py`, a `conftest.py`,
+  `pytest.ini`) selects only the test files that name it.
+- Locally, `scripts/select_proofs.py --tests` runs the non-proof tests
+  of the changed files, the files that name them, the tests that name a
+  changed directory, and the repository guards (`test_us_english.py`,
+  `test_evidence_immutability.py`). The folder rule counts only a
+  changed non-Python file in a folder two or more levels deep: before
+  that, almost every test named `docs` or `experiments/src`, and one
+  task's change selected 110 of 163 files. With it, one task's change
+  (`--base HEAD`) selects 30, which ran in 4 minutes 46 seconds. The
+  whole sprint selects 99, so (a)'s
+  under-5-minute target holds for a task, not at Phase 5; the Phase 5
+  local run stays the parallel run.
+- `test_no_duplicate_proofs.py` fails when two red proofs make the same
+  mutation to the same file (change d). The repository has none now.

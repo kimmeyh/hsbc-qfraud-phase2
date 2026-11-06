@@ -1,30 +1,41 @@
-"""Which test files' red proofs need a local run for this branch (F177
-change b, Sprint 31 D8).
+"""Which test files to run for this branch: their red proofs (F177
+change b, Sprint 31 D8) or their ordinary tests (Sprint 31 D17 option 1).
 
-    <venv python> scripts/select_proofs.py              list the test files
+    <venv python> scripts/select_proofs.py              list the files
     <venv python> scripts/select_proofs.py --run        run their proofs
+    <venv python> scripts/select_proofs.py --sample --run
+                                     ... plus this sprint's 5% sample (CI)
+    <venv python> scripts/select_proofs.py --tests      run their tests
     <venv python> scripts/select_proofs.py --base REF   compare with REF
+    Arguments after `--` go to pytest (`-- --junitxml=out.xml`).
 
 A red proof's answer changes only when its own test file, a file it
-mutates, or the shared machinery (`injection.py`, `conftest.py`)
-changes (`docs/testing/F180_PROOFS_AND_RISK_BASED_TESTING.md`). So a
-test file is selected when, against the merge base with `--base`
-(default `origin/develop`), plus uncommitted and untracked files:
+mutates, or the proof machinery changes
+(`docs/testing/F180_PROOFS_AND_RISK_BASED_TESTING.md`). So a test file
+is selected when, against the merge base with `--base` (default
+`origin/develop`), plus uncommitted and untracked files:
   - the test file itself changed, or
-  - `experiments/src/injection.py`, a `conftest.py` or `pytest.ini`
-    changed (then every test file is selected), or
   - a changed file is named in the test file's source, by its file name
     (`f157_spectra_algorithms.py`) or by its module stem as an import or
     a quoted string (`f157_spectra_algorithms`).
-The name rule finds the file a proof mutates when the test names it, as
-every proof here does (`Mutation(SRC, ...)` with `SRC` built from the
-file name). It can select too much, never too little, for such a proof.
-A proof that mutates a file it never names is the gap; CI's full job,
-which runs every proof, is the safety net (D8 change a).
+A change to the shared machinery (`injection.py`, a `conftest.py`,
+`pytest.ini`) selects the test files that name it, not every file: it
+selected all 58 proof files before D17, about 4 hours here (Sprint 31).
+
+`--sample` adds a 5% rotating sample of the proof files: the files at
+the positions that equal the sprint number modulo 20, so every proof file
+runs at least once in 20 sprints (D17 c). CI's full job runs the
+selection with the sample.
+
+`--tests` runs the ordinary (non-proof) tests of the selected files, plus
+the repository guards in `ALWAYS` and any test file whose source names a
+changed file's directory (D17 a). CI's push job runs every non-proof test
+on every push; it is the safety net for what this selection misses.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -32,7 +43,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = "experiments/src"
-SHARED = ("experiments/src/injection.py", "conftest.py", "pytest.ini")
+STATUS = ROOT / ".claude" / "sprint_status.json"
+SAMPLE_CYCLE = 20                    # 5%: every proof file once in 20 sprints
+# Cheap guards over the whole repository, run on every local change.
+ALWAYS = ("experiments/src/test_us_english.py",
+          "experiments/src/test_evidence_immutability.py")
 
 
 def git(*args: str) -> list[str]:
@@ -55,6 +70,10 @@ def test_files() -> list[str]:
                   for p in (ROOT / TESTS).glob("test_*.py"))
 
 
+def _read(f: str) -> str:
+    return (ROOT / f).read_text(encoding="utf-8")
+
+
 def names_file(source: str, changed: str) -> bool:
     name = Path(changed).name
     if name in source:
@@ -67,12 +86,24 @@ def names_file(source: str, changed: str) -> bool:
                      source) is not None
 
 
+def names_directory(source: str, changed: str) -> bool:
+    """The test names the changed file's directory, as a path string
+    ("docs/learning") or a Path join ("docs" / "learning").
+
+    Only a changed non-Python file in a folder two or more levels deep
+    counts: a Python file is found by name, and almost every test names
+    `docs` or `experiments/src`, which selected 110 of 163 files for one
+    task's change on Sprint 31."""
+    parts = Path(changed).parent.parts
+    if Path(changed).suffix == ".py" or len(parts) < 2:
+        return False
+    return ("/".join(parts) in source
+            or '" / "'.join(parts) in source)
+
+
 def select(changed: set[str], tests: list[str] | None = None,
-           read=lambda f: (ROOT / f).read_text(encoding="utf-8")) -> list[str]:
+           read=_read) -> list[str]:
     tests = test_files() if tests is None else tests
-    if any(c == s or c.endswith("/conftest.py") for c in changed
-           for s in SHARED):
-        return list(tests)
     out = []
     for t in tests:
         if t in changed:
@@ -84,21 +115,71 @@ def select(changed: set[str], tests: list[str] | None = None,
     return out
 
 
+def sample(tests: list[str], sprint: int, read=_read) -> list[str]:
+    """This sprint's slice of the proof files: every SAMPLE_CYCLE-th one,
+    starting at the sprint number modulo SAMPLE_CYCLE."""
+    proofs = [t for t in sorted(tests) if "assert_can_fail" in read(t)]
+    return [t for i, t in enumerate(proofs)
+            if i % SAMPLE_CYCLE == sprint % SAMPLE_CYCLE]
+
+
+def select_tests(changed: set[str], tests: list[str] | None = None,
+                 read=_read) -> list[str]:
+    tests = test_files() if tests is None else tests
+    chosen = set(select(changed, tests, read))
+    chosen |= {t for t in ALWAYS if t in tests}
+    for t in tests:
+        if t not in chosen and any(names_directory(read(t), c)
+                                   for c in changed):
+            chosen.add(t)
+    return sorted(chosen)
+
+
+def sprint_number(path: Path = STATUS) -> int:
+    try:
+        n = json.loads(path.read_text(encoding="utf-8"))[
+            "current_sprint"]["number"]
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        raise SystemExit(f"cannot read the sprint number from {path}: {exc}")
+    if not isinstance(n, int) or isinstance(n, bool):
+        raise SystemExit(f"{path}: the sprint number is not an integer")
+    return n
+
+
 def main(argv=None) -> int:
+    argv = sys.argv[1:] if argv is None else list(argv)
+    extra = argv[argv.index("--") + 1:] if "--" in argv else []
+    argv = argv[:argv.index("--")] if "--" in argv else argv
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--base", default="origin/develop")
     ap.add_argument("--run", action="store_true",
                     help="run the selected files' proofs (-m proof)")
+    ap.add_argument("--sample", action="store_true",
+                    help="add this sprint's 5%% sample of proof files")
+    ap.add_argument("--tests", action="store_true",
+                    help="run the selected files' non-proof tests")
     args = ap.parse_args(argv)
-    chosen = select(changed_files(args.base))
+    if args.tests and (args.run or args.sample):
+        print("--tests runs ordinary tests; it takes no --run or --sample",
+              file=sys.stderr)
+        return 2
+    changed = changed_files(args.base)
+    if args.tests:
+        chosen = select_tests(changed)
+        marker, what = "not proof", "test file(s) to run locally"
+    else:
+        chosen = select(changed)
+        if args.sample:
+            chosen = sorted(set(chosen) | set(sample(test_files(),
+                                                     sprint_number())))
+        marker, what = "proof", "test file(s) with proofs to run"
     for t in chosen:
         print(t)
-    print(f"{len(chosen)} test file(s) with proofs to run locally",
-          file=sys.stderr)
-    if not args.run or not chosen:
+    print(f"{len(chosen)} {what}", file=sys.stderr)
+    if not (args.run or args.tests) or not chosen:
         return 0
-    return subprocess.run([sys.executable, "-m", "pytest", "-m", "proof",
-                           "-q", "-p", "no:cacheprovider", *chosen],
+    return subprocess.run([sys.executable, "-m", "pytest", "-m", marker,
+                           "-q", "-p", "no:cacheprovider", *extra, *chosen],
                           cwd=ROOT).returncode
 
 

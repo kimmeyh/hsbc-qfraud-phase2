@@ -198,3 +198,41 @@ def test_the_mirror_seed_is_stated_and_not_called_also(recorded):
     text = sd.algo_doc(recorded, "energy_steel", "svm")
     assert "On seed 49 the reverse holds" in text
     assert "On seeds 44, 45, 46 the scored RBF lane's test" in text
+
+
+# Sprint 31 D16 option 1: each changed refusal has a test and a proof.
+
+def _confusion_lane(tn):
+    return {"test": {"operating_points": [{"confusion": {
+        "tp": 1, "fn": 1, "fp": 0, "tn": tn}}]}}
+
+
+def test_a_dataset_with_no_rows_is_refused():
+    with pytest.raises(sd.ClaimError, match="no rows for energy_steel"):
+        sd.rows_of({"rows": []}, "energy_steel")
+
+
+def test_lanes_of_one_seed_on_different_rows_are_refused():
+    same = [{"seed": 42, "lanes": {"a": _confusion_lane(8),
+                                   "b": _confusion_lane(8)}}]
+    assert sd.test_size(same) == ([10], [2])
+    mixed = [{"seed": 42, "lanes": {"a": _confusion_lane(8),
+                                    "b": _confusion_lane(9)}}]
+    with pytest.raises(sd.ClaimError, match="score different test rows"):
+        sd.test_size(mixed)
+
+
+def test_the_d16_refusals_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = ROOT / "scripts" / "f157_spectra_docs.py"
+    me = "experiments/src/test_f157_spectra_docs.py::"
+    for old, new, test, label in (
+            ("    if not rows:\n", "    if False:\n",
+             "test_a_dataset_with_no_rows_is_refused",
+             "a dataset with no rows rendered"),
+            ("    if any(len(v) > 1 for v in by_seed.values()):\n",
+             "    if False:\n",
+             "test_lanes_of_one_seed_on_different_rows_are_refused",
+             "lanes on different test rows compared")):
+        assert_can_fail([Mutation(src, old, new, expect_occurrences=1)],
+                        lambda test=test: run_pytest(me + test, ROOT), label)

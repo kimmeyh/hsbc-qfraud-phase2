@@ -338,3 +338,69 @@ def test_the_twin_reading_can_fail():
              "--twins run for a card with no twins")):
         assert_can_fail([Mutation(src, old, new, expect_occurrences=1)],
                         lambda test=test: run_pytest(me + test, ROOT), label)
+
+
+# Sprint 31 D16 option 1: each changed refusal has a test and a proof.
+
+def test_an_unreadable_result_refuses(tmp_path, monkeypatch):
+    import pytest
+    _paths(tmp_path, monkeypatch)
+    R.CARDS["F95"]["result"].write_text("{not json", encoding="utf-8")
+    with pytest.raises(SystemExit, match="is unreadable"):
+        R.done("F95")
+
+
+def test_a_held_lock_refuses_and_is_left_alone(tmp_path, monkeypatch):
+    import pytest
+    _paths(tmp_path, monkeypatch)
+    lock = R.CARDS["F95"]["result"].with_suffix(".lock")
+    lock.write_text("1", encoding="utf-8")
+    with pytest.raises(SystemExit, match="exists; another F95 run"):
+        with R._lock("F95"):
+            pass
+    assert lock.read_text(encoding="utf-8") == "1"
+
+
+def test_a_rebuilt_pool_with_another_hash_is_refused(tmp_path, monkeypatch):
+    import contextlib
+    import pytest
+    res = tmp_path / "f142.json"
+    res.write_text(json.dumps({"rows": [{"unit": "t", "all_samples": "x"}]}),
+                   encoding="utf-8")
+    dry = tmp_path / "dry.json"
+    dry.write_text(json.dumps({"stops": {"1": {"units": [
+        {"unit": "t", "hamiltonian_sha256": "a" * 64}]}}}), encoding="utf-8")
+    monkeypatch.setattr(R, "F142_RESULT", res)
+    monkeypatch.setattr(R, "F142_DRY_RUN", dry)
+    monkeypatch.setattr(R.v, "UNITS", [{"unit": "t"}])
+    monkeypatch.setattr(R.v, "_data", lambda u: (None,) * 8)
+
+    class Clf:
+        def fit(self, X, y):
+            pass
+    monkeypatch.setattr(R.v, "_make_clf", lambda cfg, extra: Clf())
+    monkeypatch.setattr(R.eqc_submit, "offline_solver",
+                        lambda sent, device_type=None: contextlib.nullcontext())
+    monkeypatch.setattr(R.device_store, "problem_arrays", lambda clf: None)
+    monkeypatch.setattr(R.device_store, "problem_sha256", lambda a: "b" * 64)
+    with pytest.raises(RuntimeError, match="hash differs"):
+        R.twin_gaps("t")
+
+
+def test_the_d16_refusals_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = Path(R.__file__)
+    me = "experiments/src/test_run_dirac3s_units.py::"
+    for old, new, test, label in (
+            ('        return json.loads(path.read_text(encoding="utf-8"))["rows"]\n',
+             "        return []\n",
+             "test_an_unreadable_result_refuses",
+             "an unreadable result read as empty"),
+            ("os.O_CREAT | os.O_EXCL | os.O_WRONLY", "os.O_CREAT | os.O_WRONLY",
+             "test_a_held_lock_refuses_and_is_left_alone",
+             "a held lock taken over"),
+            ("    if sha != hashes[f142_unit]:\n", "    if False:\n",
+             "test_a_rebuilt_pool_with_another_hash_is_refused",
+             "samples read against a different pool")):
+        assert_can_fail([Mutation(src, old, new, expect_occurrences=1)],
+                        lambda test=test: run_pytest(me + test, ROOT), label)

@@ -177,3 +177,20 @@ def test_the_rules_can_fail():
                               expect_occurrences=1)],
                     test("test_the_pocket_metric_splits_the_test_rows"),
                     "an AUPRC on a side with no positive")
+
+
+# Sprint 31 D16 option 1: each changed refusal has a test and a proof.
+
+def test_an_unknown_mode_is_refused():
+    import pytest
+    with pytest.raises(SystemExit, match="mode required: run | rbf | analyze"):
+        f157.main(["nope"])
+
+
+def test_the_mode_refusal_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(
+        SRC, '        raise SystemExit("mode required: run | rbf | analyze")\n',
+        "        pass\n", expect_occurrences=1)],
+        lambda: run_pytest(f"{THIS}::test_an_unknown_mode_is_refused", ROOT),
+        "an unknown mode not refused")

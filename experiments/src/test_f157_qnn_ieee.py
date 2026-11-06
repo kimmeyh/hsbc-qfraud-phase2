@@ -82,3 +82,22 @@ def test_the_rules_can_fail():
                               expect_occurrences=1)],
                     test("test_the_seed_plan_keeps_eight_under_four_hours"),
                     "a seed floor under 5")
+
+
+# Sprint 31 D16 option 1: each changed refusal has a test and a proof.
+
+def test_an_unknown_mode_is_refused():
+    import pytest
+    for argv in (["nope"], []):
+        with pytest.raises(SystemExit,
+                           match=r"usage: f157_qnn_ieee.py pilot\|run"):
+            g.main(argv)
+
+
+def test_the_mode_refusal_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(
+        SRC, '        raise SystemExit("usage: f157_qnn_ieee.py pilot|run")\n',
+        "        return 2\n", expect_occurrences=1)],
+        lambda: run_pytest(f"{THIS}::test_an_unknown_mode_is_refused", ROOT),
+        "an unknown mode not refused")

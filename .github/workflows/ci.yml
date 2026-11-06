@@ -132,16 +132,20 @@ jobs:
           fi
           echo "Working tree clean after the test run."
 
-      # F177 change c (Sprint 31 D8): a changed line in the evidence code,
-      # the scripts or the hooks that no test ran fails the job. This is the
-      # check that every new branch got its test (37 untested branches
-      # reached review in Sprints 28-30). It runs LAST, so its red cannot
-      # skip the guard and clean-tree steps above (it did on d2cb10a).
+      # F177 change c (Sprint 31 D8), narrowed by D16 option 1: a changed
+      # REFUSAL line (raise, sys.exit, SystemExit) in the evidence code, the
+      # scripts or the hooks that no test ran fails the job; every other
+      # untested changed line is listed and does not fail. Untested
+      # refusals are the class the check exists for (37 reached review in
+      # Sprints 28-30); every changed line failed on every experiment
+      # module's data-only paths. It runs LAST, so its red cannot skip the
+      # guard and clean-tree steps above (it did on d2cb10a).
       - name: Diff coverage
         run: |
           coverage combine --keep -q
           coverage xml -q -o coverage.xml
-          diff-cover coverage.xml --compare-branch=origin/develop --fail-under=100 --show-uncovered --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
+          diff-cover coverage.xml --compare-branch=origin/develop --format json:diff-cover.json --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
+          python scripts/refusal_coverage.py diff-cover.json
 
   full:
     if: github.event_name == 'workflow_dispatch' || !github.event.pull_request.draft
@@ -151,6 +155,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # select_proofs.py compares with origin/develop
 
       - uses: actions/setup-python@v5
         with:
@@ -160,18 +166,27 @@ jobs:
       - name: Install dependencies
         run: pip install -r experiments/requirements.txt
 
-      # The junit report gives F180's inventory its per-file CI times
-      # (Sprint 31 Task B); it is uploaded even when a test fails. It is
-      # written outside the checkout, so the clean-tree step still holds.
-      - name: Tests, red proofs included
-        run: pytest -m "not slow" -q --durations=25 --junitxml=${{ runner.temp }}/ci-full.xml
+      # The junit reports give F180's inventory its per-file CI times
+      # (Sprint 31 Task B); they are uploaded even when a test fails. They
+      # are written outside the checkout, so the clean-tree step still holds.
+      - name: Tests
+        run: pytest -m "not proof and not slow" -q --durations=25 --junitxml=${{ runner.temp }}/ci-full.xml
 
-      - name: Keep the junit report
+      # Sprint 31 D17 option 1 (c): the red proofs of the files this branch
+      # changed (own test, named file), plus this sprint's 5% rotating
+      # sample, so every proof file runs at least once in 20 sprints. A
+      # proof tests its test, so it shows nothing new unless its files
+      # changed; all 58 proof files took 4 hours locally.
+      - name: Red proofs, selected and sampled
+        if: success() || failure()
+        run: python scripts/select_proofs.py --sample --run -- --junitxml=${{ runner.temp }}/ci-proofs.xml
+
+      - name: Keep the junit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ci-full-junit
-          path: ${{ runner.temp }}/ci-full.xml
+          path: ${{ runner.temp }}/ci-*.xml
 
       # A red proof breaks a file and restores it; this catches one that
       # did not restore.
