@@ -1008,3 +1008,68 @@ entry asked for.
    dated note in the entry (about 30 minutes).
 
 **Answer (team lead, 2026-11-05): 1.**
+
+## D15. F177 change c: diff coverage at 100% is red on this branch, mostly on code only a real run executes. What does the gate require?
+
+Asked 2026-11-05 at the end of Phase 4, after CI's first diff-coverage
+report (run 42147689802 on eb8b438).
+
+**What.** Change c (D8) fails CI's push job when a changed line in
+`experiments/src`, `experiments/phase2/src`, `scripts` or
+`.claude/hooks` is run by no test. The measurement works: code the
+tests run in a subprocess is counted (`update_sprint_status.py`, run
+that way, is at 95.1%). On this branch it reports 1,311 changed lines,
+474 not run (63%), in 10 files:
+
+- Run-only code, which needs the real data or a device and which no CI
+  test can run: `exp5_router.py` 42.1%, `f157_qnn_ieee.py` 32.1%,
+  `f157_spectra_algorithms.py` 48.0%, `f114_real_ceiling.py` 70.3%,
+  `run_dirac3s_units.py` 61.0%. Most of their missing lines are the
+  `run` and `main` paths.
+- Gaps a test can close: some refusals in those same modules (for
+  example `f157_spectra_algorithms.py` line 165, the refusal of an RBF
+  refit whose validation AUPRC differs), and `f157_spectra_docs.py`
+  90.7% (two `ClaimError`s, lines 66 and 82), `select_proofs.py` 62.5%
+  (its `--run` path), `env_check.py` 76.6%, `update_sprint_status.py`
+  95.1%, `f169_plugin_bins.py` 97.6%.
+
+**Why it matters.** At 100% the push job is red on every sprint that
+adds an experiment module, so the check reads as noise and is ignored,
+which is worse than no check. The gaps in the second group are the
+defect class change c exists for (37 untested branches reached review
+in Sprints 28-30). The close-out hook blocks the completion claim while
+CI is red, so this sprint cannot close with the gate as it is.
+
+**Kind per option.** Option 1: Prevention. Option 2: Workaround now,
+Prevention from Sprint 32. Option 3: Workaround.
+
+**Cost per option** (0 metered seconds in each):
+- Option 1: about 240 minutes, this sprint. Each run-only function gets
+  `# pragma: no cover` with its reason on the same line ("run-only:
+  needs the raw data" or "run-only: device call"); a new guard test
+  fails a pragma with no reason, proven red. Every other uncovered
+  line gets a test, each refusal proven red. The gate stays at 100%.
+  About 15 files.
+- Option 2: about 20 minutes, this sprint. The diff-coverage step
+  reports and does not fail (`continue-on-error: true`) for Sprint 31.
+  New card F182, "the run-only marks and the missing tests" (option 1's
+  work, about 240 minutes), for Sprint 32 refinement; the step fails
+  again when F182 ships. About 3 files.
+- Option 3: about 15 minutes. Remove the diff-coverage step and its
+  guard; keep `.coveragerc` for local use. About 3 files.
+
+**Recommendation: 1.** It keeps the check that finds untested
+refusals, and the reason on each pragma keeps an exclusion visible in
+review. It costs about four hours before Manual Validation. Option 2 is
+the choice if that time is better spent in Sprint 32: it loses one
+sprint of the gate, not the gate.
+
+**Options**
+
+1. Build it now: run-only pragmas with reasons, a guard on the reasons,
+   tests for every other uncovered line; the gate stays at 100%
+   (about 240 minutes).
+2. Report only for Sprint 31 (`continue-on-error: true`); card F182 for
+   the pragmas and tests in Sprint 32; the gate fails again when F182
+   ships (about 20 minutes now).
+3. Remove the diff-coverage step and its guard (about 15 minutes).
