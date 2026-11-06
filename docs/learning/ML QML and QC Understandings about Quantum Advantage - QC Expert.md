@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Quantum Computing Expert Version
 
-**Version 1.1**, 2026-11-05 (Sprint 31, card F178). For readers with
+**Version 1.2**, 2026-11-06 (Sprint 31, card F178). For readers with
 undergraduate-or-above or professional quantum computing experience,
 not necessarily in machine learning. Acronyms and common terms link to
 the [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md);
@@ -10,6 +10,7 @@ The appendix here holds only what neither defines.
 
 ## Change list
 
+- **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F. New: [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference) beside [superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition) and [entanglement](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-entanglement), in outside research and in our circuit; a proposed experiment with all three properties and many non-Clifford gates; the scope of the F110 build cost; and the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
   through Sprint 30. Sprint 31's [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) and simulator runs have
@@ -28,7 +29,9 @@ The appendix here holds only what neither defines.
   something on a non-convex problem where a classical solver measurably
   falls short.
 - **The non-convex replacement is not yet decisive.** Cardinality
-  constrained [learner selection](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-learner-selection) on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) has [room](#qc3-room) between greedy and
+  constrained [learner selection](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-learner-selection) on the
+  [fraud detection dataset of the Institute of Electrical and Electronics Engineers Computational Intelligence Society](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
+  ([IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)) has [room](#qc3-room) between greedy and
   the floor, but the best classical improvement on greedy found so far is
   under 2e-05, which may sit below the device's resolution.
 - **Dirac-3S is a better solver than Dirac-3 on our one resolvable
@@ -37,7 +40,9 @@ The appendix here holds only what neither defines.
 - **The gate-based arm stays in simulation.** At every width we can
   afford the circuit is exactly simulable, and its simulated reading
   against [classical twins](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-classical-twin) is inconclusive at the test-positive counts
-  [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb) allows.
+  the [credit card dataset of the Universite Libre de Bruxelles](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb)
+  ([ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb)) allows. A circuit with superposition,
+  entanglement and interference together was dequantized on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis).
 - Device interpretations here are this project's own independent
   findings; QCi has not validated them
   (`docs/phase2/DIRAC_UNDERSTANDINGS.md`).
@@ -56,6 +61,11 @@ The appendix here holds only what neither defines.
 
 ## 1. The optimization problem the devices solved
 
+**In short:** Phase 1 trained CVQBoost's weights, a strictly convex
+quadratic on the simplex, so any good solver reaches the same optimum.
+Phase 2 moves to a cardinality-constrained selection problem, which is
+not convex.
+
 - **CVQBoost**: a pool of weak learners, each voting -1 or +1 on each
   training row; the weights minimize a quadratic objective, data term
   plus a ridge term, on the simplex (weights non-negative, summing to 1).
@@ -70,10 +80,16 @@ The appendix here holds only what neither defines.
   to numerical [precision](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-precision) (`docs/paper/proposal.md`, section 2).
 - **The Phase 2 formulation**: choose exactly m learners (a cardinality
   constraint, binary variables), a [QUBO](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qubo) with no [exact classical proxy](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-exact-classical-proxy) at
-  scale. Its first proxy design failed its [falsifier](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-falsifier); its [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis)
+  scale. Its first proxy design failed its [falsifier](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-falsifier); its [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
   design has room (section 3).
 
 ## 2. The hardware: Dirac-3 and Dirac-3S
+
+**In short:** Dirac-3 matched the exact optimum on small problems and
+lost fidelity as size grew, as its 200:1 resolution predicts.
+Dirac-3S returned the optimum on our one resolvable instance, with no
+change in accuracy. Dirac-3S takes 1,350 variables; schedule 4 showed
+nothing.
 
 ### What our experiments showed
 
@@ -169,12 +185,16 @@ The appendix here holds only what neither defines.
 
 ## 3. The non-convex selection problem (Experiment 3)
 
+**In short:** the first design had no room above greedy. The [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
+design has room, but the best classical gain below greedy is under
+2e-05, likely below what a device can resolve.
+
 ### What our experiments showed
 
 - [SIM] On the training fold, as every device run built it, the
   cardinality problem has many tied optima: every method reaches the
   floor (`docs/phase2/DIRAC_UNDERSTANDINGS.md`).
-- [SIM] The first proxy design (held-out predictions, [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb)) fails its
+- [SIM] The first proxy design (held-out predictions, [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb)) fails its
   falsifier on all six instances: the best selection is 0.0016 to 0.0026
   above the floor, below the 0.01 required; greedy equals the best any
   method found; [SCIP](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-scip) at its 300 s cap did not improve on greedy
@@ -183,11 +203,11 @@ The appendix here holds only what neither defines.
   coefficient ratio is about 2.01 (passes 200:1), but only 2.9% to 6.2%
   of coefficient pairs differ by at least max / 200 (fails)
   (`docs/phase2/F153_EXP3_DESIGN.md`).
-- [SIM] On [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) (60 and 136 variables), greedy ends 0.096-0.098
+- [SIM] On [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) (60 and 136 variables), greedy ends 0.096-0.098
   above the floor, so the room rule passes; [SCIP](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-scip)'s [dual bound](#qc3-dual-bound) puts the
   true optimum between greedy and about 0.08-0.18 below it
   (`docs/sprints/SPRINT_29_VALIDATION.md`).
-- [SIM] Below greedy on 3 of 6 [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) instances, each by under 2e-05:
+- [SIM] Below greedy on 3 of 6 [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) instances, each by under 2e-05:
   [simulated annealing](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-simulated-annealing) from greedy reached -0.702763 against -0.702745 on
   one instance, with room about 0.097; [SCIP](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-scip) at 1,200 s never beat greedy;
   on the mid instances its dual bound (for example -0.9026 against a
@@ -213,13 +233,18 @@ The appendix here holds only what neither defines.
 
 ## 4. The gate-based arm, in simulation
 
+**In short:** our 8-qubit circuit used superposition, entanglement and
+interference, and was exactly simulable and dequantized. Outside
+results agree that those three are not enough: a circuit becomes hard
+to simulate through many non-Clifford gates.
+
 ### What our experiments showed
 
 - [SIM] The design study recommends simulation only: at every affordable
   width the circuit is exactly simulable on a laptop, so hardware adds
   [noise](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-noise) and cost; no Braket service was called
   (`docs/phase2/F6_GATE_BASED_ARM.md`).
-- [SIM] An 8-qubit, three-layer sandwich-encoded circuit on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb) phase
+- [SIM] An 8-qubit, three-layer sandwich-encoded circuit on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) phase
   features (8 seeds, 99 test positives): circuit [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) 0.699 against [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb)
   0.719, [GA2M](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ga2m) 0.705, [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) 0.704, [RFF](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-rff) 0.673; inconclusive under the
   preset [equivalence margin](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20ML%20Expert.md#ml2-equivalence-margin) of 0.005 [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) (`docs/phase2/F106_DEQUANTIZATION.md`).
@@ -230,11 +255,19 @@ The appendix here holds only what neither defines.
   1.67-3.22 of a possible 16, and the single-qubit expectation magnitudes
   average 0.25-0.41 (`docs/phase2/F107_SHOT_BUDGET.md`).
 - [SIM] [Shot](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-shot) budget: about 10,000 shots per row to stay within 0.005
-  [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) of exact, about 5.7 x 10^8 shots for one [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb) [test fold](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-test-fold); [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) is
+  [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) of exact, about 5.7 x 10^8 shots for one [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) [test fold](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-test-fold); [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) is
   not monotone in shots, so the critical budget is unstable
   (`docs/phase2/F107_SHOT_BUDGET.md`).
-- [SIM] On [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra)'s datasets, the Tier 1 screen says "candidate" on 32
+- [SIM] On [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-spectra)'s datasets, the Tier 1 screen says "candidate" on 32
   of 35 runs; it does not refuse fraud (`docs/phase2/F109_TIER1_LADDER.md`).
+- [SIM] The circuit has all three properties: data-dependent Y
+  rotations put each [qubit](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-qubit) in [superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition), a ring of
+  exp(-i lambda Z Z) couplings entangles neighbors, and the readout
+  depends on [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference) between amplitudes; its rotation angles are
+  data-dependent, so it is not a Clifford circuit. At 8 qubits it is
+  exactly simulable by statevector, and on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) it is dequantized
+  (`experiments/phase2/src/f106_dequant.py`,
+  `docs/phase2/F157_QNN_IEEE.md`).
 
 ### What outside research says
 
@@ -243,6 +276,17 @@ The appendix here holds only what neither defines.
   `chowdhury-gottesman-knill-restated-stabilizer-simulable`, high), and
   the stabilizer subtheory is not universal (EvidenceBasedDB
   `howard-stabilizer-subtheory-efficiently-simulable`, high).
+- Interference does not change that. The Gottesman-Knill record does
+  not mention interference, but any circuit of [Clifford gates](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-clifford-gate) only is
+  classically simulable (EvidenceBasedDB `dz-lg-clifford-simulable`,
+  low), and Clifford circuits already interfere: a Hadamard on each
+  side of a phase gate cancels amplitudes (our inference, from the
+  definition in EvidenceBasedDB `ferrie-classical-is-restricted-quantum`,
+  low). Classical simulation cost grows exponentially with the number
+  of non-Clifford operations, the "magic" (EvidenceBasedDB
+  `cited-nonclifford-cost-magic`, low).
+- Interference gives a large speedup only for special problems
+  (EvidenceBasedDB `aaronson-foreword-special-problems`, low).
 - Random parameterized circuits forming 2-designs have exponentially
   small gradient variance in the [qubit](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-qubit) count (EvidenceBasedDB
   `mcclean-rpqc-gradient-variance-exp-small`, high); local costs at
@@ -270,17 +314,25 @@ The appendix here holds only what neither defines.
 
 ## 5. Quantum advantage on real hardware
 
+**In short:** no device run showed an advantage. On our problems the
+slow step is the classical pool build, not the solve.
+
 ### What our experiments showed
 
 - [HW] The Phase 1 device campaign: 61 fits, zero failures, zero
   retries, and no accuracy gain over the exact solve
   (`docs/paper/proposal.md`).
-- [HW] On the [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) feature ladder, hardware and classical proxy
+- [HW] On the [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) feature ladder, hardware and classical proxy
   agreed within a maximum cell gap of 0.0013 over 12 cells
   (`docs/paper/proposal.md`).
 - [SIM] The classical cost is in the pool build, not the solve: a serial
   833-variable build at full rows takes 773 s, and the 833-variable
-  solve is flat in rows at about 0.35 s (`docs/phase2/F110_SCALING.md`).
+  solve is flat in rows at about 0.35 s. The build's log-log slope in
+  rows is 1.40 at 91 variables and 1.44 at 833; Hamiltonian
+  construction is about linear (0.93 and 0.95). Scope: [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb), the serial
+  full-pair build, 17,023 to 170,235 rows; a parallel build, other
+  models and other datasets were not measured
+  (`docs/phase2/F110_SCALING.md`).
 
 ### What outside research says
 
@@ -306,13 +358,16 @@ The appendix here holds only what neither defines.
 
 ## 6. Experiments planned (Sprint 31)
 
-Each entry is in `experiments/phase2/PREREGISTRATION_DRAFT.md`, written
+**In short:** Sprint 31 ran these. The two device runs tested size and
+a schedule, not accuracy; the circuit run on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) was dequantized.
+
+Sprint 31 ran these. Each entry is in `experiments/phase2/PREREGISTRATION_DRAFT.md`, written
 before any call or score. Metered calls stop for approval with their call
 count and seconds stated. The six-experiment frame is in
 `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
 
 - **F155, the Dirac-3S variable ceiling**: one continuous job of 1,350
-  variables (a CVQBoost pool on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb), top 20 features, order 3: 20 + 190 +
+  variables (a CVQBoost pool on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb), top 20 features, order 3: 20 + 190 +
   1,140), [relaxation schedule](#qc3-relaxation-schedule) 2, one sample. Accepted only if the
   returned solution has 1,350 entries. Its quote is a floor, since 1,350
   is above every Dirac-3S cost anchor.
@@ -331,7 +386,7 @@ count and seconds stated. The six-experiment frame is in
     18.0, 18.0, 15.0 and 16.0 s per fit, 67.0 of the 120 s cap. There
     is no evidence for schedule 4; device plans stay at schedule 2
     (`docs/phase2/F95_SCHEDULE4.md`).
-- **F157 [QNN](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qnn) part**: the F106 circuit and six twins on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis)'s
+- **F157 [QNN](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qnn) part**: the F106 circuit and six twins on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)'s
   month-4 fold, about 2,962 test positives, so "dequantized" becomes
   decidable at the 0.005 margin.
   - Result, 2026-11-05: **dequantized.** [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) match
@@ -340,7 +395,7 @@ count and seconds stated. The six-experiment frame is in
     and 0.095 on seed 48, about a fifth of the others; all above the
     0.01 floor)
     (`experiments/phase2/results/f157_qnn_ieee.json`).
-- **F114, F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra) part and Experiment 5**: classical ceilings,
+- **F114, F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-spectra) part and Experiment 5**: classical ceilings,
   algorithm rankings and segment routing; see the machine learning
   expert version's section 7.
   - Result, 2026-11-05: all three reported in the machine learning
@@ -348,10 +403,14 @@ count and seconds stated. The six-experiment frame is in
 
 ## 7. Experiments not yet planned
 
+**In short:** ideas, not scheduled work: the store's ranked list, then
+the team lead's review (2026-11-06), proposed for the backlog as
+Sprint 31 D18. The main new one is a circuit beyond cheap simulation.
+
 From EvidenceBasedDB's memo `docs/spikes/F118_WHAT_THE_STORE_SAYS.md`
 (in that repository); none is scheduled.
 
-- **Rounding test**: round each [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) selection instance to 200:1
+- **Rounding test**: round each [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) selection instance to 200:1
   and measure the objective change; if it exceeds the under-2e-05 gains,
   no device run on this formulation can show anything.
 - **Resolution test on Dirac-3S**: rescale a Hamiltonian so distinct
@@ -363,7 +422,36 @@ From EvidenceBasedDB's memo `docs/spikes/F118_WHAT_THE_STORE_SAYS.md`
 - **Fault-tolerant resource estimates** (logical qubits, T-count,
   wall clock) for each candidate quantum step at production sizes.
 
+From the team lead's review:
+
+- **A circuit with all three properties and many non-Clifford gates**
+  (proposed card; related to the held F116 and F117). Design, for
+  refinement:
+  - Circuits: the F106 [sandwich encoding](#qc3-sandwich-encoding) plus layers of T and
+    arbitrary-angle rotations, at widths 8, 12, 16 and 20 qubits and a
+    non-Clifford count stepped so that the largest is beyond exact
+    statevector cost on a workstation; a tensor-network or
+    stabilizer-rank simulator records the classical cost of each.
+  - Data: [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb), [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)'s month-4 fold, and [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-spectra)'s four datasets
+    on the quantum-enhanced `target` label, in and out of the pocket,
+    with `target_real` as a second reading.
+  - Comparators: the six F106 twins, [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb), and a classical surrogate of
+    the circuit's own kernel, on the same features and splits.
+  - Gate: hardware only if a circuit beats every twin in simulation,
+    and only under its own approval with shots and cost stated, since
+    gate-based hardware is paid by use and adds noise.
+  - Prediction (from the outside results above): the twins match the
+    circuit wherever it is simulable, and no width we can afford
+    leaves simulation.
+- **A study of the data fraud investigators use**, **a cost-weighted
+  [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget)** and **card-testing sequences**: classical; see the
+  machine learning expert version's section 8.
+
 ## 8. Index of what was tested
+
+**In short:** two quantum devices and one [statevector simulator](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-statevector-simulator); no
+gate-based hardware. The datasets are described in the plain-terms
+version's Appendix F.
 
 Every dataset, model and platform is listed with its source in the
 plain-terms version's section 9. Hardware: Dirac-3 (Phase 1 blocks B1 to
