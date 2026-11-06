@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-06
 
+- **docs**: Sprint 31 D15 gains a dated "Changed since asked" note with 107dd75's diff-coverage figures (1,434 changed lines, 478 not run); the entry itself is unchanged. Recorded here because 4e918a5 carried no entry. (Issue #95)
 - **docs**: `SPRINT_31_VALIDATION.md` completed for handover: Tasks M and N (V12, V13), the defect I introduced in dfb1694 and its prevention, the final local run's times and its three parallel-only failures, change b's full selection, CI's thin full-job time margin, the diff-coverage figures D15 decides, and the fresh-eyes findings left for refinement. (Issue #106)
 - **fix**: CI red on 62db122 (Sprint 31 Task N): the new `test_no_proofs_under_xdist.py` was not in `F180_TEST_INVENTORY.md`. Regenerated from the local report it already used and CI's full-job report for 62db122, which fills the CI columns for the first time. `scripts/test_inventory.py` showed a file no report holds as 0.0 local seconds, which reads as measured (`test_suite_times.py` was one); such a file is now blank, and the page says what a blank means. A test, proven red. (Issue #106)
 
