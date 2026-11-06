@@ -110,7 +110,7 @@ covers the devices in more depth.
   (`docs/phase2/F171_MISSED_IEEE.md`).
 - [SIM] On F108's simulator, a per-type cascade (one detector per fraud
   type, max of the two probabilities) recalled less within 0.5% than one
-  model: mean -0.079, 95% interval -0.126 to -0.013, over 8 seeds
+  model: mean -0.069, 95% interval -0.126 to -0.013, over 8 seeds
   (`experiments/phase2/results/f158_fraud_types.json`).
 - [SIM] The real-data step of that test did not run, because its
   condition was a cascade above one model

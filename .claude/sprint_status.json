@@ -20,7 +20,8 @@
       102,
       103,
       104,
-      105
+      105,
+      106
     ],
     "task_actuals": {
       "A": 58,
@@ -33,7 +34,8 @@
       "J": 189,
       "K": 518,
       "E": 316,
-      "L": 101
+      "L": 101,
+      "M": 41
     },
     "task_started": {
       "A": "2026-11-04T23:15:07-05:00",
@@ -48,7 +50,8 @@
       "D": "2026-11-05T04:32:24-05:00",
       "L": "2026-11-05T06:10:23-05:00",
       "C": "2026-11-05T19:12:06-05:00",
-      "M": "2026-11-05T22:15:09-05:00"
+      "M": "2026-11-05T22:15:09-05:00",
+      "N": "2026-11-05T23:12:14-05:00"
     },
     "task_issues": {
       "A": [
@@ -89,6 +92,9 @@
       ],
       "M": [
         105
+      ],
+      "N": [
+        106
       ]
     },
     "review_task": null,
@@ -116,7 +122,8 @@
       "J": "gaps over 30 min and pauses subtracted",
       "K": "gaps over 30 min and pauses subtracted",
       "E": "gaps over 30 min and pauses subtracted",
-      "L": "gaps over 30 min and pauses subtracted"
+      "L": "gaps over 30 min and pauses subtracted",
+      "M": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 58,
@@ -129,7 +136,8 @@
       "J": 983,
       "K": 1028,
       "E": 1068,
-      "L": 966
+      "L": 966,
+      "M": 41
     },
     "task_parallel": {
       "E": [

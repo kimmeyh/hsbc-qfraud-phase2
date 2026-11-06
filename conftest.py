@@ -295,6 +295,33 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(pytest.mark.serial)
 
 
+# A red proof mutates a tracked file and restores it from the bytes it read
+# first. Two proofs on the same file in two xdist workers interleave: the
+# second reads the first's mutation as the original and restores it. That
+# left a mutated figure in a learning document, committed in dfb1694 and
+# caught by CI (Sprint 31 Task N). So a proof in an xdist worker fails at
+# setup, before its body mutates anything. Only selected proofs reach setup,
+# so `-m "not proof" -n auto` still runs.
+PROOFS_UNDER_XDIST = ("red proof refused inside xdist worker {w}: a proof "
+                      "mutates and restores a tracked file, and two workers "
+                      "on one file leave a mutation behind. Run proofs "
+                      "without -n (scripts/select_proofs.py --run, or "
+                      "pytest -m proof).")
+
+
+def proof_under_xdist(item, worker: str | None) -> str | None:
+    """The refusal for a proof item set up in an xdist worker, or None."""
+    if worker and item.get_closest_marker("proof"):
+        return PROOFS_UNDER_XDIST.format(w=worker)
+    return None
+
+
+def pytest_runtest_setup(item):
+    why = proof_under_xdist(item, os.environ.get("PYTEST_XDIST_WORKER"))
+    if why:
+        pytest.fail(why, pytrace=False)
+
+
 def pytest_terminal_summary(terminalreporter):
     if _DIRTY_AT_START:
         terminalreporter.write_sep(

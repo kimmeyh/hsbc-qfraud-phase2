@@ -10,6 +10,8 @@
  "rows": [
   {
    "unit": "b1_dct_42",
+   "job_id": "6aec8ad8358b23d0cb37424b",
+   "device_type": "dirac-3s",
    "twin": "f142:b1_42",
    "gap_min": -4.9433715729176594e-08,
    "gap_range": 4.493959472027561e-08,
@@ -41,6 +43,8 @@
   },
   {
    "unit": "b1_dct_43",
+   "job_id": "6aed0d9c358b23d0cb374256",
+   "device_type": "dirac-3s",
    "twin": "f142:b1_43",
    "gap_min": -7.639702157683807e-08,
    "gap_range": 4.4938405613861964e-08,
@@ -72,6 +76,8 @@
   },
   {
    "unit": "g0b_3_42",
+   "job_id": "6aed0ddb358b23d0cb374257",
+   "device_type": "dirac-3s",
    "twin": "dirac-3:hw_g0b_3_stratified_42",
    "gap_min": -3.460437762248082e-08,
    "gap_range": 3.272007040831608e-08,
@@ -87,6 +93,8 @@
   },
   {
    "unit": "b1_lg_42",
+   "job_id": "6aed0e12358b23d0cb374258",
+   "device_type": "dirac-3s",
    "twin": "dirac-3:hw_b1_lg_stratified_42",
    "gap_min": -6.24503447311849e-08,
    "gap_range": 2.405731964094404e-07,
@@ -103,7 +111,7 @@
  ],
  "provenance": {
   "generator": "experiments/phase2/src/run_dirac3s_units.py",
-  "generator_commit": "e3fb757a7626f673cca17b2e3215e90ad46f04bc",
+  "generator_commit": "dfb1694c1b3dc8a1ed77709ecea5fe164043ad8b",
   "generator_clean": false,
   "seeds": [
    42,
@@ -120,6 +128,10 @@
    "eqc-models": "0.22.1",
    "qci-client": "5.0.3"
   },
-  "run_id": "82f3d8044fdd42d5a0e204c202b6e7a9"
+  "run_id": "e70a93ab5aa947da828b3569db4beebe",
+  "replaces": {
+   "reason": "Sprint 31 Task N (#106): each row now carries its schedule-4 job id and device type (test_row_schema, B2 and F141); every reading is recomputed from the same stored samples",
+   "previous_run_id": "82f3d8044fdd42d5a0e204c202b6e7a9"
+  }
  }
 }

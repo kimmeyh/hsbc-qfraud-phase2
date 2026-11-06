@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNNER = ROOT / "experiments" / "phase2" / "src" / "run_dirac3s_units.py"
@@ -273,9 +274,11 @@ def test_twins_is_f95_only_and_stop_is_needed_otherwise():
 
 def test_twins_writes_its_own_file_and_reads_the_result(tmp_path, monkeypatch):
     rows = [{"unit": "x", "twin": "f142:t", "gap_min": 2e-8, "gap_range": 1e-8,
-             "screen": {"screen_pass": False}},
+             "screen": {"screen_pass": False}, "job_id": "jx",
+             "device_type": "dirac-3s"},
             {"unit": "y", "twin": "dirac-3:hist", "gap_min": 1e-8,
-             "gap_range": 1e-8, "screen": {"screen_pass": True}}]
+             "gap_range": 1e-8, "screen": {"screen_pass": True},
+             "job_id": "jy", "device_type": "dirac-3s"}]
     first = tmp_path / "f95_schedule4.json"
     first.write_text(json.dumps({"rows": rows}), encoding="utf-8")
     before = first.read_bytes()
@@ -294,6 +297,15 @@ def test_twins_writes_its_own_file_and_reads_the_result(tmp_path, monkeypatch):
     assert x["reading"]["changes_reading"] is False
     assert y["dirac3_history"]["gap_to_exact_pct"] == 0.4
     assert isinstance(y["reading"], str)
+    # Task N: each row names its job and device (B2, F141).
+    assert [(r["job_id"], r["device_type"]) for r in doc["rows"]] == [
+        ("jx", "dirac-3s"), ("jy", "dirac-3s")]
+    # A recorded file is replaced only with a stated reason, recorded.
+    with pytest.raises(FileExistsError):
+        R.twins(read_twin=lambda name: _row(1e-8, 5e-8))
+    R.twins(read_twin=lambda name: _row(1e-8, 5e-8), replace="test reason")
+    again = json.loads(path.read_text(encoding="utf-8"))
+    assert again["provenance"]["replaces"]["reason"] == "test reason"
 
 
 def test_the_twin_reading_can_fail():
@@ -312,6 +324,15 @@ def test_the_twin_reading_can_fail():
             ("    if len(hit) != 1:\n", "    if not hit:\n",
              "test_the_dirac3_history_needs_exactly_one_row",
              "an ambiguous Dirac-3 history row used"),
+            ('        rec = {"unit": r["unit"], "job_id": r["job_id"],\n'
+             '               "device_type": r["device_type"], "twin":',
+             '        rec = {"unit": r["unit"], "twin":',
+             "test_twins_writes_its_own_file_and_reads_the_result",
+             "a twins row with no job id or device"),
+            ("                            run_id, replace=replace)",
+             "                            run_id)",
+             "test_twins_writes_its_own_file_and_reads_the_result",
+             "the stated replacement not passed to the writer"),
             ('        if args.card != "F95":\n', "        if False:\n",
              "test_twins_is_f95_only_and_stop_is_needed_otherwise",
              "--twins run for a card with no twins")):

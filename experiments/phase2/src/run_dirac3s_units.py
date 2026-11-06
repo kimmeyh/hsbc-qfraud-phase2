@@ -398,18 +398,23 @@ def dirac3_history(file: str) -> dict:
             "gap_to_exact_pct": p["gap_to_exact_pct"]}
 
 
-def twins(read_twin=None) -> Path:
+def twins(read_twin=None, replace: str | None = None) -> Path:
     """F95's preregistered reading, offline, from stored samples only
     (no device call): each unit's schedule-4 gap against its twin. Written
-    to its own file; `f95_schedule4.json` is read, never written."""
+    to its own file; `f95_schedule4.json` is read, never written. Each row
+    carries its schedule-4 job's id and device, so the device output it
+    reads can be recovered (B2, F141). `replace` states why a recorded
+    file goes; there is no command-line form."""
     read_twin = read_twin or twin_gaps
     rows = json.loads(CARDS["F95"]["result"].read_text(
         encoding="utf-8"))["rows"]
-    run_id, _ = provenance.start(TWINS_RESULT, resumable=False)
+    run_id, _ = provenance.start(TWINS_RESULT, resumable=False,
+                                 replace=replace)
     out = []
     for r in rows:
         kind, name = r["twin"].split(":", 1)
-        rec = {"unit": r["unit"], "twin": r["twin"],
+        rec = {"unit": r["unit"], "job_id": r["job_id"],
+               "device_type": r["device_type"], "twin": r["twin"],
                "gap_min": r["gap_min"], "gap_range": r["gap_range"],
                "screen_pass": r["screen"]["screen_pass"]}
         if kind == "f142":
@@ -429,7 +434,7 @@ def twins(read_twin=None) -> Path:
            "note": "computed from stored device samples; no device call",
            "rows": out}
     provenance.write_result(TWINS_RESULT, doc, __file__, SEEDS["F95"],
-                            run_id)
+                            run_id, replace=replace)
     return TWINS_RESULT
 
 

@@ -360,6 +360,20 @@ def test_start_refuses_any_result_for_a_run_that_cannot_resume(tmp_path):
         prov.start(tmp_path / "r.json", resumable=False)
 
 
+def test_start_with_a_stated_reason_replaces_and_records_it(tmp_path):
+    """Sprint 31 Task N: a deliberate replacement starts in code, and the
+    writer records the reason beside the replaced run's id."""
+    old = _recorded(tmp_path, complete=True)
+    rid, resume = prov.start(tmp_path / "r.json", resumable=False,
+                             replace="rows gain their job ids")
+    assert not resume and rid != old
+    out = _write(tmp_path, rid, replace="rows gain their job ids")
+    assert out["provenance"]["replaces"] == {
+        "reason": "rows gain their job ids", "previous_run_id": old}
+    with pytest.raises(ValueError, match="state why"):
+        prov.start(tmp_path / "r.json", replace="  ")
+
+
 # Only provenance.py makes or resumes an id; a module asks `start` (PR 63
 # review: five modules each decided `resume` themselves, after the work).
 ID_CALLS = ("new_run_id", "run_id_for")
@@ -507,6 +521,16 @@ def test_the_start_refusal_can_fail():
            '            f"{path.name} holds {state}',
            "test_start_refuses_any_result_for_a_run_that_cannot_resume",
            "a rerun over a recorded result")
+
+
+def test_the_start_replace_can_fail():
+    node = "test_start_with_a_stated_reason_replaces_and_records_it"
+    _fails(WRITER, "    if replace is not None:\n        if not str(replace)",
+           "    if False:\n        if not str(replace)", node,
+           "a stated replacement refused at the start")
+    _fails(WRITER, "        if not str(replace).strip():\n            raise",
+           "        if False:\n            raise", node,
+           "a blank reason accepted at the start")
 
 
 def test_the_id_scan_can_fail():
