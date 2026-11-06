@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Machine Learning Expert Version
 
-**Version 1.0**, 2026-11-05 (Sprint 31, card F178). For readers with
+**Version 1.1**, 2026-11-05 (Sprint 31, card F178). For readers with
 undergraduate-or-above or professional machine learning and data-science
 experience. Acronyms and common terms link to the
 [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md),
@@ -10,6 +10,7 @@ covers the devices in more depth.
 
 ## Change list
 
+- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
   through Sprint 30. Sprint 31's runs have placeholders in "Experiments
   planned".
@@ -202,6 +203,12 @@ covers the devices in more depth.
 - [SIM] [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) rolling-origin [AUROC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auroc) for LightGBM was 0.9139 in Phase 1;
   the challenge statement's 0.9459 is a leaderboard figure
   (`docs/paper/proposal.md`).
+- [SIM] [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra), 10 seeds per dataset: boosted trees first by mean
+  test [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) on all four datasets, the proxy fifth or sixth of
+  seven. The [RBF](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-rbf) [SVM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-svm) is reliably above the proxy on
+  oilgas_gasturbine (0.8532 against 0.8394) and telecom_churn (0.8441
+  against 0.7254); exact Wilcoxon on adjacent pairs, Bonferroni 0.05 / 6
+  (`experiments/phase2/results/f157_spectra_algorithms_rbf.json`).
 
 ### What outside research says
 
@@ -232,6 +239,11 @@ covers the devices in more depth.
   early stopping on 4 of 5. Recovering the Bayes error is not ranking like
   the Bayes classifier: LightGBM's test [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) is 0.282 to 0.300 against a
   Bayes [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) of 0.296 to 0.318 (`docs/phase2/F169_PLUGIN_BINS.md`).
+- [SIM] F169's plug-in, re-run at a lower learning rate, on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) month 4:
+  0.0254 (0.0232 to 0.0276) against an achieved error of 0.0293, with a
+  calibration warning; the shuffled-label check passed. [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ulb): 0.00016,
+  not a usable ceiling
+  (`experiments/phase2/results/f114_real_ceiling_lr05.json`).
 
 ## 5. The quantum-inspired lane as a model
 
@@ -277,6 +289,9 @@ covers the devices in more depth.
 - [SIM] The pool build grows faster than linearly in rows: log-log
   slope 1.40 [1.35, 1.45] at 91 variables and 1.44 [1.38, 1.49] at 833;
   the solve is flat in rows (`docs/phase2/F110_SCALING.md`).
+- [SIM] Experiment 5: no ProductCD segment accepted for the proxy or for
+  [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb); on C, R and S recall at the budget saturates, so the edge is
+  0 or below by construction (`docs/phase2/EXP5_ROUTER.md`).
 
 ## 6. Quantum machine learning
 
@@ -304,6 +319,9 @@ covers the devices in more depth.
   `docs/phase2/F109_TIER1_LADDER.md`).
 - [HW] A [QSVM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qsvm) on Dirac-3 scored a mean test [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) of 0.212 against
   CVQBoost's 0.767 on the same data (`docs/B4_B5_HARDWARE_RESULT.md`).
+- [SIM] F106's circuit on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis) month 4, eight seeds: dequantized.
+  [GAM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-gam) and [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) are no worse within the 0.005 margin
+  (`experiments/phase2/results/f157_qnn_ieee.json`).
 
 ### What outside research says
 

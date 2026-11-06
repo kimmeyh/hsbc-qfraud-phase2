@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Quantum Computing Expert Version
 
-**Version 1.0**, 2026-11-05 (Sprint 31, card F178). For readers with
+**Version 1.1**, 2026-11-05 (Sprint 31, card F178). For readers with
 undergraduate-or-above or professional quantum computing experience,
 not necessarily in machine learning. Acronyms and common terms link to
 the [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md);
@@ -10,6 +10,7 @@ The appendix here holds only what neither defines.
 
 ## Change list
 
+- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
   through Sprint 30. Sprint 31's device and simulator runs have
   placeholders in "Experiments planned".
@@ -129,6 +130,14 @@ The appendix here holds only what neither defines.
   sparsity (14-38% exact zeros on the device, 0.2-17% emulated) or its
   solution shape on oilgas (cosine 0.83 against 0.89-0.90)
   (`docs/phase2/F17_EMULATOR.md`).
+- [HW] Dirac-3S accepted a 1,350-variable continuous job at schedule 2,
+  all entries returned, 6.0 metered seconds; the weights came back near
+  flat, so size is shown, not solution quality
+  (`experiments/phase2/results/f155_variable_ceiling.json`).
+- [HW] [Relaxation schedule](#qc3-relaxation-schedule) 4 on Dirac-3S, four fits at 45 and 91
+  variables: every sample at the reference optimum to solver precision,
+  as at schedule 2; 67.0 metered seconds
+  (`experiments/phase2/results/f95_schedule4.json`).
 
 ### What outside research says
 

@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.0**, 2026-11-05 (Sprint 31, card F178). Written for readers
+**Version 1.1**, 2026-11-05 (Sprint 31, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
 computing, and are expert in none of them. Two companion versions go
 deeper: one for [machine learning experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20ML%20Expert.md)
@@ -8,6 +8,7 @@ and one for [quantum computing experts](ML%20QML%20and%20QC%20Understandings%20a
 
 ## Change list
 
+- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. It covers Phase 1
   (filed 2026-09-12) and Phase 2 up to Sprint 30. Sprint 31's own runs
   have not finished; each has a marked place in "Experiments planned"
@@ -260,6 +261,18 @@ recall at the alert budget.
   calibrated estimates recovered the known value on only 2 of 5 repeats
   (`docs/phase2/F108_CEILING_VALIDATION.md`,
   `docs/phase2/F114_CALIBRATED_PLUGIN.md`).
+- [SIM] On [SPECTRA](#acr-spectra)'s four datasets, over 10 [repeats](#def-repeat),
+  boosted-tree models had the highest mean test [AUPRC](#acr-auprc) on every
+  dataset, and the quantum-inspired model placed fifth or sixth of seven.
+  On two datasets a radial basis function ([RBF](#acr-rbf)) [SVM](#acr-svm) scored
+  reliably above it, 0.8532 against 0.8394 and 0.8441 against 0.7254
+  (`experiments/phase2/results/f157_spectra_algorithms_rbf.json`).
+- [SIM] On [IEEE-CIS](#acr-ieee-cis)'s fourth month, the estimated
+  [Bayes error](#ml-bayes-error) is 0.0254 (0.0232 to 0.0276), below the
+  0.0293 error the model reaches, with a warning that the model's
+  probabilities are not well calibrated. The [ULB](#acr-ulb) estimate,
+  0.00016, is not usable
+  (`experiments/phase2/results/f114_real_ceiling_lr05.json`).
 
 ### What outside research says
 
@@ -349,6 +362,12 @@ them (`docs/phase2/DIRAC_UNDERSTANDINGS.md`).
 - [SIM] Averaging several device answers instead of keeping one added
   only +0.0014 [AUPRC](#acr-auprc), far below the spread between repeats
   (`docs/phase2/F20_SOFT_VOTES_RESULT.md`).
+- [HW] Dirac-3S accepted a 1,350-variable job and returned all 1,350
+  values, using 6.0 metered seconds. This tests size only, not accuracy
+  (`experiments/phase2/results/f155_variable_ceiling.json`).
+- [HW] A slower device setting found the same best answer as the usual
+  one on four fits, at about three times the device time per sample
+  (`experiments/phase2/results/f95_schedule4.json`).
 
 ### What outside research says
 
@@ -422,6 +441,12 @@ same job as well and as fast. When a classical method can, the step is
   (area under the receiver operating characteristic curve ([AUROC](#acr-auroc)) 0.93
   to 0.99), so a router keyed on it is not independent
   (`docs/F101_IN_POCKET_PROVENANCE.md`).
+- [SIM] On [IEEE-CIS](#acr-ieee-cis)'s test month, two ordinary models, [GAM](#acr-gam) and
+  [HGB](#acr-hgb), scored at least as well as the 8-qubit circuit on eight
+  repeats (`experiments/phase2/results/f157_qnn_ieee.json`).
+- [SIM] Sending one product type to the quantum-inspired model did not
+  add the required one point of recall in any product type
+  (`docs/phase2/EXP5_ROUTER.md`).
 
 ### What outside research says
 
