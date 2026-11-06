@@ -23,10 +23,18 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import f166_docs as fd  # noqa: E402  (F166's helpers)
 
+# The D14 amendment's result: every row, with the kept SVM form scored. The
+# first result (`FIRST`) is kept as recorded; its linear SVM rows are in
+# this file as `svm_linear`.
 RESULT = (ROOT / "experiments" / "phase2" / "results"
-          / "f157_spectra_algorithms.json")
+          / "f157_spectra_algorithms_rbf.json")
 DOCS = fd.DOCS
-FILE = "`experiments/phase2/results/f157_spectra_algorithms.json`"
+FILE = "`experiments/phase2/results/f157_spectra_algorithms_rbf.json`"
+FIRST = "`experiments/phase2/results/f157_spectra_algorithms.json`"
+AMENDED = ("- **Amendment**: the SVM lane is the form the entry's rule keeps, "
+           "scored on the test fold under the entry's amendment of "
+           "2026-11-05 (Sprint 31 D14 option 1). The first result, "
+           f"{FIRST}, is kept as recorded; it scored the linear form only.")
 GENERATOR = "`experiments/phase2/src/f157_spectra_algorithms.py`"
 NAMES, INNER, POSSESSIVE, WORDS = fd.NAMES, fd.INNER, fd.POSSESSIVE, fd.WORDS
 ClaimError = fd.ClaimError
@@ -94,31 +102,53 @@ def data_line(res: dict, ds: str, rows: list[dict]) -> str:
 
 def svm_form_line(A: dict, n: int) -> str:
     won, kept = A["svm_form"]["rbf_beats_linear_seeds"], A["svm_form"]["kept"]
-    if A["svm_lane_is_kept_form"] != (kept == "linear"):
-        raise ClaimError("svm_lane_is_kept_form disagrees with the kept form")
+    if not A.get("svm_lane_is_kept_form") or A.get("svm_lane_form") != kept:
+        raise ClaimError(f"the rule keeps the {kept} SVM and the lane scored "
+                         f"{A.get('svm_lane_form')!r}")
     head = (f"The entry keeps the RBF form only if its best validation AUPRC "
             f"beats the linear form's on a majority of seeds. It did so on "
             f"{won} of {n} seeds, so the entry's rule keeps the **{kept}** "
             "form.")
     if kept == "linear":
         return head + " Every SVM figure here is the linear form."
-    return (head + " The RBF form was fitted on validation only and has no "
-            "test score, so **every SVM figure here is the linear form, not "
-            "the form the rule keeps**. The SVM's place in the order and its "
-            "adjacent pairs are the linear form's.")
+    return (head + " Every SVM figure here, its place in the order and its "
+            "adjacent pairs are the RBF form's, scored on the test fold under "
+            "the D14 amendment. The linear form is reported on the SVM page, "
+            "not ranked.")
 
 
-def degenerate_seeds(rows: list[dict]) -> list[int]:
-    """Seeds whose best RBF validation AUPRC equals the test fold's
-    positive rate to 4 places (the result does not record the validation
-    fold's rate): the AUPRC of scores that carry no ranking."""
+def degenerate_seeds(rows: list[dict], fold: str = "val") -> list[int]:
+    """Seeds whose RBF AUPRC equals the test fold's positive rate to 4
+    places: on validation the best recorded RBF fit (`fold="val"`; the
+    result does not record the validation fold's rate), on test the
+    scored RBF lane (`fold="test"`). That is the AUPRC of scores that
+    carry no ranking."""
     out = []
     for r in rows:
-        rbf = r["svm_rbf_alternative"]["best_val_auprc"]
         prev = r["lanes"]["svm"]["test"]["prevalence"]
-        if round(rbf, 4) == round(prev, 4):
+        v = (r["svm_rbf_alternative"]["best_val_auprc"] if fold == "val"
+             else r["lanes"]["svm"]["test"]["auprc"])
+        if round(v, 4) == round(prev, 4):
             out.append(r["seed"])
     return out
+
+
+def seeds_text(seeds: list[int]) -> str:
+    return (f"seed{'s' if len(seeds) > 1 else ''} "
+            f"{', '.join(str(x) for x in seeds)}")
+
+
+def linear_paragraph(rows: list[dict]) -> str:
+    """The linear form's test AUPRC, the form the rule did not keep."""
+    import statistics
+    lin = [r["lanes"].get("svm_linear") for r in rows]
+    if any(x is None for x in lin):
+        raise ClaimError("a seed has no svm_linear lane")
+    v = [x["test"]["auprc"] for x in lin]
+    return (f"The linear form (`LinearSVC`, all training rows, F166's grid), "
+            f"which the rule did not keep: mean test AUPRC "
+            f"{fd.f4(statistics.mean(v))} over {len(v)} seeds, from {fd.f4(min(v))} "
+            f"to {fd.f4(max(v))} (the SVM figures of {FIRST}). It is not ranked.")
 
 
 def pocket_line(A: dict, a: str) -> str | None:
@@ -163,7 +193,7 @@ def algo_doc(res: dict, ds: str, a: str) -> str:
           f"It is number {order.index(a) + 1} of {len(order)} by mean test "
           f"AUPRC; the ranking and which differences are reliable are on "
           f"[{comp}]({comp}).", ""]
-    L += [CARD, ENTRY,
+    L += [CARD, ENTRY, AMENDED,
           f"- **Evidence**: {FILE} (evidence tag SIM, zero metered seconds), "
           f"generator {GENERATOR}. Every figure below comes from that file. "
           "Each seed's outcome block is in the file's rows; the per-row test "
@@ -184,26 +214,39 @@ def algo_doc(res: dict, ds: str, a: str) -> str:
     L.append("")
     if a == "proxy":
         L += [proxy_paragraph(R), ""]
-    if a in ("logreg", "svm"):
+    if a == "logreg" or (a == "svm" and A["svm_lane_form"] == "linear"):
         L += [fd.balanced_line(R, a, N), ""]
     if a == "svm":
-        L += ["## Alternative tried: an RBF kernel", "",
-              f"An RBF SVM on a stratified subsample of at most "
+        L += ["## The SVM's form", "",
+              f"The RBF SVM is fitted on a stratified subsample of at most "
               f"{res['rbf_rows']:,} training rows (the whole fold when "
-              "smaller). " + svm_form_line(A, N), ""]
+              "smaller). " + svm_form_line(A, N), "",
+              linear_paragraph(R), ""]
         flat = degenerate_seeds(R)
         if flat:
-            L += [f"On seed{'s' if len(flat) > 1 else ''} "
-                  f"{', '.join(str(x) for x in flat)} the RBF form's best "
-                  "validation AUPRC equals the test fold's positive rate to "
-                  "four places, which is what a score with no ranking gets. "
-                  "Inferred, not tested: the RBF fit learned nothing on "
-                  "those seeds. They count as linear wins, so they do not "
-                  "add to the RBF majority.", ""]
+            L += [f"On {seeds_text(flat)} the RBF form's best validation "
+                  "AUPRC equals the test fold's positive rate to four places, "
+                  "which is what a score with no ranking gets. They count as "
+                  "linear wins, so they do not add to the RBF majority.", ""]
             if any(r["svm_rbf_alternative"]["beats_linear_on_validation"]
                    for r in R if r["seed"] in flat):
                 raise ClaimError("a seed with a no-ranking RBF score is "
                                  "recorded as an RBF win")
+            flat_test = degenerate_seeds(R, "test")
+            ranked = [x for x in flat if x not in flat_test]
+            if flat_test:
+                L += [f"On {seeds_text(flat_test)} the scored RBF lane's test "
+                      "AUPRC is also the positive rate: no ranking there "
+                      "either, and those seeds are scored as they are, as "
+                      "the amendment sets.", ""]
+            if ranked:
+                L += [f"On {seeds_text(ranked)} the RBF scores carry no "
+                      "ranking on validation but do on test. **Not "
+                      "explained**: the same fit gives constant scores on one "
+                      "fold and ranked scores on the other. A cause in this "
+                      "dataset's features (the date columns parsed per fold, "
+                      "which raise a format warning) is a guess, not tested.",
+                      ""]
     L += ["## Test-fold results over seeds", "",
           f"Mean, SD and 95% t interval over {N} seeds, each seed at its "
           "own chosen configuration.", "",
@@ -264,12 +307,10 @@ def comparison(res: dict, ds: str) -> str:
         bluf += (" No other adjacent pair differs reliably, so the order "
                  "among " + "; ".join(fd.names(r) for r in runs)
                  + " is not established.")
-    if not A["svm_lane_is_kept_form"]:
-        bluf += (" The SVM figures are the linear form, which the entry's "
-                 "rule did not keep (see the notes).")
+    svm_form_line(A, N)  # refuses a lane that is not the kept form
     plan = res["seed_plans"][ds]
     L = [f"# SPECTRA {ds}: {count} algorithms compared (F157)", "", bluf, ""]
-    L += [CARD, ENTRY,
+    L += [CARD, ENTRY, AMENDED,
           f"- **Evidence**: {FILE} (evidence tag SIM, zero metered seconds). "
           "Every figure below comes from that file.",
           f"- **Seeds**: seed 42 took {plan['t42_minutes']} minutes for all "

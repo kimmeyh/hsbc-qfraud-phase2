@@ -86,23 +86,33 @@ def test_a_non_serial_proxy_build_is_refused(recorded):
         sd.proxy_paragraph(bad)
 
 
-def test_the_svm_line_says_when_the_lane_is_not_the_kept_form():
+def test_the_svm_line_refuses_a_lane_that_is_not_the_kept_form():
+    """D14: the pages describe only a lane of the kept form."""
     rbf = {"svm_form": {"kept": "rbf", "rbf_beats_linear_seeds": 6},
-           "svm_lane_is_kept_form": False}
+           "svm_lane_is_kept_form": True, "svm_lane_form": "rbf"}
     lin = {"svm_form": {"kept": "linear", "rbf_beats_linear_seeds": 2},
-           "svm_lane_is_kept_form": True}
-    assert "not the form the rule keeps" in sd.svm_form_line(rbf, 10)
-    assert "not the form the rule keeps" not in sd.svm_form_line(lin, 10)
-    rbf["svm_lane_is_kept_form"] = True
-    with pytest.raises(sd.ClaimError, match="disagrees"):
+           "svm_lane_is_kept_form": True, "svm_lane_form": "linear"}
+    assert "are the RBF form's" in sd.svm_form_line(rbf, 10)
+    assert "Every SVM figure here is the linear form." in sd.svm_form_line(lin, 10)
+    rbf["svm_lane_form"] = "linear"
+    with pytest.raises(sd.ClaimError, match="keeps the rbf SVM"):
         sd.svm_form_line(rbf, 10)
 
 
-def test_the_comparison_bluf_names_the_svm_form_gap(recorded):
-    for ds in sd.DATASETS:
-        text = sd.comparison(recorded, ds).split("\n\n")[1]
-        kept = recorded["analysis"][ds]["svm_lane_is_kept_form"]
-        assert ("did not keep" in text) is (not kept), ds
+def test_a_result_with_the_wrong_form_renders_no_page(recorded):
+    bad = copy.deepcopy(recorded)
+    bad["analysis"]["telecom_churn"]["svm_lane_form"] = "linear"
+    with pytest.raises(sd.ClaimError, match="keeps the rbf SVM"):
+        sd.render(bad)
+
+
+def test_the_svm_page_reports_the_linear_form_unranked(recorded):
+    text = sd.algo_doc(recorded, "telecom_churn", "svm")
+    assert "which the rule did not keep" in text and "not ranked" in text
+    bad = copy.deepcopy(recorded)
+    del sd.rows_of(bad, "telecom_churn")[0]["lanes"]["svm_linear"]
+    with pytest.raises(sd.ClaimError, match="svm_linear"):
+        sd.algo_doc(bad, "telecom_churn", "svm")
 
 
 def test_a_no_ranking_rbf_win_is_refused(recorded):
@@ -121,3 +131,17 @@ def test_degenerate_rbf_seeds_are_found():
             {"seed": 43, "svm_rbf_alternative": {"best_val_auprc": 0.61},
              "lanes": {"svm": {"test": {"prevalence": 0.254281}}}}]
     assert sd.degenerate_seeds(rows) == [42]
+
+
+def test_degenerate_rbf_seeds_are_found_on_test():
+    rows = [{"seed": 42, "lanes": {"svm": {"test": {
+                "prevalence": 0.254281, "auprc": 0.8332}}}},
+            {"seed": 43, "lanes": {"svm": {"test": {
+                "prevalence": 0.254281, "auprc": 0.25428}}}}]
+    assert sd.degenerate_seeds(rows, "test") == [43]
+
+
+def test_the_unexplained_seed_is_stated(recorded):
+    """energy_steel seed 42: constant on validation, ranked on test."""
+    text = sd.algo_doc(recorded, "energy_steel", "svm")
+    assert "**Not explained**" in text and "seed 42" in text

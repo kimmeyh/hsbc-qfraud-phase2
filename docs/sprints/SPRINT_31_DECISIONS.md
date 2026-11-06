@@ -616,6 +616,25 @@ hook and script tests, the build stops c and reports it.
 test run today. continue as previously instructed". No option chosen
 yet; D8 stays open and is asked again with the revised options.
 
+**Answer (team lead, 2026-11-05 19:10), verbatim:** "I answered the
+question as no changes. continue as if you would before the question
+was asked." Not read as an option choice. A first reading as revised
+option 4 was shown and the team lead said it is incorrect: "I
+previously answerd a d8 questions with what should be done this
+sprint." The session record and this file hold no earlier Sprint 31 D8
+option answer (the two earlier "D8 1" answers are Sprint 26's and
+Sprint 30's D8s, on other questions). D8 is asked again, unchanged
+since its 18:40 note.
+
+**Answer (team lead, 2026-11-05 19:15): build all six, a-f.** The team
+lead pasted the six changes a-f with "I believe these are the 6
+changes I asked for prior to this sprint", so "no changes" means the
+plan is unchanged: the original option 1, which is revised option 3
+(about 240 minutes; coverage, diff-cover and pytest-xdist added to the
+lock). The team lead also noted the D8 shown at 17:58 had no question
+in it: its numbered options did not reach the screen. Task C builds
+a-f.
+
 ---
 
 ## D9. F155: send the 1,350-variable probe to Dirac-3S? (Criterion H)
