@@ -15,6 +15,24 @@ asked at handover.
 This file is the durable copy. The same items are listed to the screen at
 handover: a pointer to a file is not a handover.
 
+## Actions for the team lead (revised 2026-11-06)
+
+The team lead's first review (2026-11-06) marked V1-V9, V12 and V13 as
+not Manual Validation items: they report results and need no action.
+They stay below, unchanged, for information. The actions are:
+
+- **A1 (V10). Judge the plain-terms learning document**: does it read
+  as intended?
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\learning\ML QML and QC Understandings about Quantum Advantage - Laymen terms.md`
+- **A2 (V11). Confirm F143's move from HOLD to priority 150, low**
+  (line 595, and the Pass 3 note on line 596):
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\ALL_SPRINTS_MASTER_PLAN.md`
+- **A3. Answer D16** (what replaces the 100% diff-coverage gate) and
+  **A4. Answer D17** (the test-time policy):
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\sprints\SPRINT_31_DECISIONS.md`
+
+## For information (no action needed)
+
 ---
 
 ## V1. Task A (F179): the status file's lock

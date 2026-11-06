@@ -933,6 +933,9 @@ gitignored (`.gitignore` line 91) and no commit on any branch touches
 it. The nine files are restored from the scratch rebuild, whose SHA-256
 values match all nine recorded ones byte for byte.
 
+**Follow-up (team lead, 2026-11-06, Manual Validation),** after a fuller
+explanation of D13 was given on screen. Verbatim: "D13. OK"
+
 ---
 
 ## D14. F157 SPECTRA: the entry's rule keeps the RBF SVM, and the SVM lane scored only the linear form. What is reported? (Criterion 7)
@@ -1081,3 +1084,173 @@ the list, and `run_dirac3s_units.py` is at 65.9%. The rest of the push
 job, and CI's full job with every red proof, are green on 107dd75, so
 this step is the only red check. The options, costs and recommendation
 are unchanged.
+
+**Answer (team lead, 2026-11-06, Manual Validation).** Verbatim: "D15.
+There is no way to justify 4 hours of this type of testing every sprint
+or in any sprint and certainly not multiple times per sprint. Sprints
+should only be taking 1-2 hours including all the testing needed. What
+other options are possible, including removing or adjusting this test
+requirement """ fails when any changed line of code is not run by a
+test""""
+None of D15's options is taken. The new options are D16. One fact for
+the record: D15 option 1's 240 minutes was a one-time catch-up on this
+branch's 478 lines; after it, a sprint would have paid only for its own
+new lines. The answer rules it out for any sprint either way.
+
+---
+
+## D16. Diff coverage: what replaces the 100% gate? (follows D15)
+
+Asked 2026-11-06 at Manual Validation, after D15's answer.
+
+**What.** CI's push job fails when a changed line in `experiments/src`,
+`experiments/phase2/src`, `scripts` or `.claude/hooks` is run by no
+test (F177 change c). On cdb8471 (CI run 42194486482), 478 of 1,434
+changed lines are not run. Counted from that run's report
+(`--show-uncovered`) against the source: **19 of the 478 are refusal
+lines** (`raise`, `SystemExit`, `sys.exit`), in 10 files. Some of the 19
+are a `main` function's usage refusal. The other 459 lines are mostly
+the `run` and `main` paths of experiment modules, which need the raw
+data or a device and which no CI test can run.
+
+**Why it matters.** The class change c exists for is the untested
+refusal, term or state: 37 reached review in Sprints 28-30
+(`docs/testing/F180_TESTING_ANALYSIS.md` Part 2). A gate on every line
+is red on every sprint that adds an experiment module, so it is noise.
+A gate on refusal lines only is aimed at that class and is red only
+when a new refusal has no test, which the per-term rule already
+requires. Measuring coverage also slows the push job: its Tests step
+took 5:44 on cdb8471 against 2:04 without coverage on 0fc2004. The
+team lead's target is a sprint of 1-2 hours including all testing.
+
+**Kind per option.** Option 1: Prevention. Option 2: Prevention from
+Sprint 32, Workaround for Sprint 31. Option 3: Workaround (a report,
+nothing fails). Option 4: Workaround (the check is gone).
+
+**Cost per option** (0 metered seconds in each; minutes are estimates,
+unverified until done):
+- Option 1: about 90 minutes this sprint. A filter script (about 30
+  minutes, with a test and a red proof) makes the step fail only on an
+  untested changed refusal line and list the other untested lines
+  without failing; tests for this branch's 19 refusal lines (about 60
+  minutes). Then, per sprint, a test for each new refusal, already the
+  per-term rule. About 12 files.
+- Option 2: about 30 minutes this sprint: the filter, report-only for
+  Sprint 31 (`continue-on-error: true`). Card F182, "tests for Sprint
+  31's 19 untested refusal lines" (about 60 minutes), for Sprint 32; the
+  step fails again when F182 ships. About 4 files now.
+- Option 3: about 20 minutes. The step never fails; it writes the
+  untested refusal lines to the job summary, and the Phase 5 review
+  lists them. The push job keeps the coverage slowdown. About 3 files.
+- Option 4: about 15 minutes. Remove the diff-coverage step, its guard
+  and the coverage measurement; keep `.coveragerc` for local use. The
+  push job returns to about 3 minutes. Untested refusals are found by
+  review only, as in Sprints 28-30. About 4 files.
+
+**Recommendation: 2.** It keeps a gate aimed at the one class it
+catches well, costs about 30 minutes now, and moves the 60-minute
+catch-up to Sprint 32, where it can be sized into the sprint. Option 1
+does the same work now, in a sprint that is already long. Option 3 is
+a report nothing makes anyone read. Option 4 is the cheapest and gives
+up the check.
+
+**Options**
+
+1. Refusal lines only, now: the step fails only on an untested changed
+   `raise`/`SystemExit` line and lists the rest; tests for this branch's
+   19 refusal lines (about 90 minutes now).
+2. Refusal lines only, from Sprint 32: build the filter now, report-only
+   for Sprint 31; card F182 for the 19 refusal tests in Sprint 32; the
+   step fails again when F182 ships (about 30 minutes now).
+3. Report only, permanently: the step never fails and lists untested
+   refusal lines in the job summary for the Phase 5 review (about 20
+   minutes).
+4. Remove the diff-coverage step, its guard and the coverage
+   measurement (about 15 minutes).
+
+---
+
+## D17. Test time: what runs where, so a sprint fits 1-2 hours? (V3)
+
+Asked 2026-11-06 at Manual Validation, after the team lead's V3
+comments: the CI full job must be faster than 20 minutes; a 20-minute
+local non-proof run is too slow; "Can we run 5% each time via CI (on a
+server) once per sprint" for the proofs; and V13's question about more
+than one proof per file.
+
+**What.** Measured this sprint:
+- Local non-proof run: 962 s in parallel plus 506 s serial, about 24.5
+  minutes (107dd75's code, 2026-11-06).
+- Local red proofs: 4 h 11 min when shared code (`conftest.py`) changed,
+  because change b then selects all 161 proof files.
+- CI push job (every non-proof test): 6:45 on cdb8471, Tests step 5:44
+  with coverage measured; 3:08 before coverage.
+- CI full job (every test and every proof): 921 s of tests on 107dd75's
+  second attempt; the first hit the 20-minute limit. About 500 of CI's
+  657 s on 075c3ac were proofs (F180 Part 3).
+
+What F180's risk-based analysis found (Parts 5 and 7): a proof tests the
+test, not the code, so it shows nothing new unless its own test file,
+the file it breaks, or the proof machinery changed. Each of the five
+recorded proof failures in Sprints 28-30 was in a proof whose own files
+had changed. Changed-files selection with a fallback is Microsoft's Test
+Impact Analysis design; mutation testing in practice runs on changed
+lines only (Petrovic and Ivankovic, ICSE-SEIP 2018). The local machine's
+slowness is per-file cost (about 4-11 ms per file operation, low CPU),
+inferred from on-access antivirus scanning, unverified.
+
+**The proposed policy (options 1 and 2 build it):**
+- (a) **Local: changed files only.** No local full non-proof run. A
+  change runs the tests of the changed files and the repository guards
+  that scan a changed directory. Target under 5 minutes; measured when
+  built.
+- (b) **CI push job: unchanged**, every non-proof test on every push.
+  It is the safety net for (a), and runs on the server, not here.
+- (c) **Proofs: on CI only, once per sprint at Phase 5, and at ready
+  for review.** The full job runs the proofs the branch selects (own
+  test or broken file changed), plus a 5% rotating sample of the rest:
+  the sprint number picks the slice, so every proof runs at least once
+  in 20 sprints. A shared-machinery change no longer selects all 161; it
+  selects the sample plus the proofs of the proof machinery itself.
+  Expected full job well under 20 minutes; measured when built.
+- (d) **No two proofs with the same break** (V13): a guard fails two
+  proofs that make the same mutation (same file, same old text, same new
+  text). More than one proof per test file stays allowed, because each
+  proof shows that one check can fail: a file with five refusals needs
+  five. The defect in V13 was two proofs running at the same time, which
+  the xdist refusal (62db122) already stops.
+
+**What it gives up.** A proof made stale by an unrelated change can go
+unseen for up to 20 sprints (the recorded cases were all caught by
+changed-files selection). A local change can miss a test that depends
+on a changed file only indirectly; the push job finds it minutes later.
+A Windows-only failure is found only by a local run of the affected
+files.
+
+**Why it matters.** Under the current policy, testing alone can exceed
+the 1-2 hour sprint target several times over.
+
+**Kind per option.** Options 1 and 2: Prevention. Option 3: Workaround.
+
+**Cost per option** (0 metered seconds in each; estimates, unverified):
+- Option 1: about 120 minutes this sprint: (a) a changed-files test
+  selector, (c) the sample and the shared-machinery change in
+  `select_proofs.py` and the full job's selection in `ci.yml`, (d) the
+  duplicate guard, each with a test and a red proof, and the checklist
+  steps. About 8 files.
+- Option 2: about 5 minutes now: card F183 with (a)-(d), about 120
+  minutes, at the top of Sprint 32's plan. Sprint 31 closes under the
+  current policy (its tests are already run).
+- Option 3: no change.
+
+**Recommendation: 2.** The work is the same, and Sprint 31's testing is
+already done, so building it now saves nothing in this sprint and makes
+it longer. In Sprint 32 it is the first task, so that sprint's own tests
+run under the new policy.
+
+**Options**
+
+1. Build (a)-(d) now, in Sprint 31 (about 120 minutes).
+2. Card F183 with (a)-(d) for the top of Sprint 32 (about 5 minutes
+   now, about 120 minutes in Sprint 32).
+3. No change to the test policy.
