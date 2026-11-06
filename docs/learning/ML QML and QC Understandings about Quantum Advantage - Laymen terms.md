@@ -268,7 +268,7 @@ recall at the alert budget.
   reliably above it, 0.8532 against 0.8394 and 0.8441 against 0.7254
   (`experiments/phase2/results/f157_spectra_algorithms_rbf.json`).
 - [SIM] On [IEEE-CIS](#acr-ieee-cis)'s fourth month, the estimated
-  [Bayes error](#ml-bayes-error) is 0.0254 (0.0232 to 0.0276), below the
+  Bayes error is 0.0254 (0.0232 to 0.0276), below the
   0.0293 error the model reaches, with a warning that the model's
   probabilities are not well calibrated. The [ULB](#acr-ulb) estimate,
   0.00016, is not usable
