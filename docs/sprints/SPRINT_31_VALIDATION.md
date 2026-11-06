@@ -156,4 +156,17 @@ PENDING are filled in when their result exists.
 - Please open the plain-terms version and judge whether it reads as
   intended.
 
-## V11. Task L (F13): PENDING
+## V11. Task L (F13): the PoC plan and the backlog from this sprint's results
+
+- `docs/phase2/PHASE2_POC_PLAN_DRAFT.md` takes every Sprint 31 result:
+  F114, F155, F157 SPECTRA and QNN parts, Experiment 5 and F95. The
+  F157 line now says SPECTRA's four datasets are done.
+- `docs/ALL_SPRINTS_MASTER_PLAN.md`: dated Pass 3 notes on F95, F114,
+  F121, F143, F157, F161 and F13.
+- **One priority changed, please confirm**: F143 from HOLD to 150, low.
+  Its hold condition is met (F155), but F157 SPECTRA puts the proxy
+  reliably below the RBF SVM on telecom_churn, and B4's edges there
+  were negative, so a device block is not justified by the evidence.
+- **Not carded, for refinement**: energy_steel seed 42's unexplained
+  RBF result; a calibrated ULB ceiling; an Experiment 5 measure that
+  does not saturate.
