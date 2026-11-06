@@ -138,6 +138,46 @@ def rbf_alternative(seed: int, d: dict) -> dict:
             "best_val_auprc": max(t["val_auprc"] for t in tried)}
 
 
+def rbf_lane(name: str, seed: int, d: dict, recorded: dict) -> dict:
+    """The D14 amendment: the kept RBF form, the validation-chosen `C` of
+    the recorded subsample fits, scored once on the test fold. Refuses a
+    refit whose validation AUPRC differs from the recorded one."""
+    import outcome_record as orec
+    from sklearn.metrics import average_precision_score
+    V, T = d["val"], d["test"]
+    sub = f166.stratified_rows(V["ytr"], f166.RBF_ROWS, seed)
+    if len(sub) != recorded["rows"]:
+        raise RuntimeError(f"{name} s{seed}: subsample of {len(sub)} rows, "
+                           f"recorded {recorded['rows']}")
+    tried, p_vas, fits = [], [], []
+    for params in f166.RBF_GRID:
+        m, fit_s = f174.fit_classical("rbf", params, seed, V["Xtr"].iloc[sub],
+                                      V["ytr"][sub])
+        p_va = f166.scores(m, V["Xev"].to_numpy(np.float64))
+        tried.append({"params": params, "fit_s": fit_s,
+                      "val_auprc": float(average_precision_score(V["yev"],
+                                                                 p_va))})
+        p_vas.append(p_va)
+        fits.append(m)
+    got = [t["val_auprc"] for t in tried]
+    want = [t["val_auprc"] for t in recorded["tried"]]
+    if not np.allclose(got, want, rtol=0, atol=1e-12):
+        raise RuntimeError(f"{name} s{seed}: the RBF refit gives validation "
+                           f"AUPRC {got}, recorded {want}; nothing scored")
+    i = f166.choose(tried)
+    p_te = f166.scores(fits[i], T["Xev"].to_numpy(np.float64))
+    # Training AUPRC on the subsample the form was fitted on (the amendment).
+    p_tr = f166.scores(fits[i], T["Xtr"].iloc[sub].to_numpy(np.float64))
+    return {"algorithm": "svm", "form": "rbf", "seed": seed, "tried": tried,
+            "chosen": i, "chosen_params": tried[i]["params"],
+            "subsample_rows": int(len(sub)),
+            "test": f166.fold_metrics(T["yev"], V["yev"], p_vas[i], p_te,
+                                      T["ytr"][sub], p_tr, seed),
+            "pocket": pocket_auprc(T["yev"], p_te, d["pocket"]),
+            "outcome": orec.record(f"f157_{name}_svm_rbf", seed, T["yev"], p_te,
+                                   y_val=V["yev"], p_val=p_vas[i])}
+
+
 def seed_run(name: str, seed: int) -> dict:
     t0 = time.perf_counter()
     d = data(name, seed)
@@ -170,12 +210,30 @@ def choose_seeds(t42_min: float) -> dict:
 
 
 # ---------------------------------------------------------------- analysis
+class FormNotScored(RuntimeError):
+    """The rule keeps a form the SVM lane did not score (F166's `rbf_kept`;
+    Sprint 31 D14: this module had recorded it and carried on)."""
+
+
+def lane_form(rows: list[dict]) -> str:
+    forms = {r["lanes"]["svm"].get("form", "linear") for r in rows}
+    if len(forms) != 1:
+        raise FormNotScored(f"the SVM lane mixes forms across seeds: {forms}")
+    return forms.pop()
+
+
 def analyze_dataset(rows: list[dict]) -> dict:
-    """F166's analysis for one dataset. A kept RBF form is recorded, not
-    raised: the svm lane scores the linear SVM only, so its figures are
-    then marked as not the kept form (F166's `rbf_kept`)."""
+    """F166's analysis for one dataset. Refuses, before any figure, a
+    dataset whose kept SVM form is not the form its lane scored."""
+    kept = f166.analyze(rows, {})["svm_form"]["kept"]
+    scored = lane_form(rows)
+    if kept != scored:
+        raise FormNotScored(
+            f"{rows[0]['dataset']}: the rule keeps the {kept} SVM and the "
+            f"lane scored the {scored} form; run the rbf mode (D14)")
     a = f166.analyze(rows, f166.load_scores(rows))
-    a["svm_lane_is_kept_form"] = a["svm_form"]["kept"] == "linear"
+    a["svm_lane_is_kept_form"] = True
+    a["svm_lane_form"] = scored
     def side_summary(alg, side):
         v = [r["lanes"][alg]["pocket"][side] for r in rows
              if r["lanes"][alg]["pocket"][side] is not None]
@@ -237,17 +295,64 @@ def run() -> None:
     print("complete", flush=True)
 
 
+OUT_RBF = OUT.with_name("f157_spectra_algorithms_rbf.json")
+AMENDMENT = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F157 "
+             "SPECTRA part, amendment 2026-11-05 (Sprint 31 D14 option 1)")
+
+
+def run_rbf() -> None:
+    """The D14 amendment: every row of the recorded result, with the kept
+    RBF form scored into the SVM lane where the rule keeps it, written to
+    `OUT_RBF`; the recorded result is read, never written. Resumable by
+    (dataset, seed)."""
+    import provenance
+    rid, resume = provenance.start(OUT_RBF)
+    src = json.loads(OUT.read_text(encoding="utf-8"))
+    rows = (json.loads(OUT_RBF.read_text(encoding="utf-8"))["rows"]
+            if resume else [dict(r, lanes=dict(r["lanes"])) for r in src["rows"]])
+    plans = src["seed_plans"]
+
+    def doc(complete=False):
+        d = _doc(rows, plans, complete)
+        d["amendment"], d["source_result"] = AMENDMENT, OUT.name
+        return d
+    for name in DATASETS:
+        rs = [r for r in rows if r["dataset"] == name]
+        if f166.analyze(rs, {})["svm_form"]["kept"] != "rbf":
+            continue
+        for r in rs:
+            if r["lanes"]["svm"].get("form") == "rbf":
+                continue           # resume (rbf): never rescore a seed
+            d = data(name, r["seed"])
+            r["lanes"]["svm_linear"] = r["lanes"]["svm"]
+            r["lanes"]["svm"] = rbf_lane(name, r["seed"], d,
+                                         r["svm_rbf_alternative"])
+            print(f"  {name} s{r['seed']} svm rbf test auprc "
+                  f"{r['lanes']['svm']['test']['auprc']:.4f}", flush=True)
+            provenance.write_result(OUT_RBF, doc(), __file__,
+                                    sorted({x["seed"] for x in rows}), rid)
+    final = doc(complete=True)
+    final["analysis"] = {n: analyze_dataset([r for r in rows
+                                             if r["dataset"] == n])
+                         for n in DATASETS}
+    provenance.write_result(OUT_RBF, final, __file__,
+                            sorted({r["seed"] for r in rows}), rid)
+    print("complete", flush=True)
+
+
 def main(argv=None) -> int:
     mode = (argv or sys.argv[1:] or [""])[0]
     if mode == "run":
         run()
+    elif mode == "rbf":
+        run_rbf()
     elif mode == "analyze":
         doc = json.loads(OUT.read_text(encoding="utf-8"))
         print(json.dumps({n: analyze_dataset([r for r in doc["rows"]
                                               if r["dataset"] == n])
                           for n in DATASETS}, indent=1, default=str))
     else:
-        raise SystemExit("mode required: run | analyze")
+        raise SystemExit("mode required: run | rbf | analyze")
     return 0
 
 

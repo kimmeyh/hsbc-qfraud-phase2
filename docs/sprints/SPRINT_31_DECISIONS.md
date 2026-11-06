@@ -553,6 +553,69 @@ the proofs and risk based testing." The options above stay as asked;
 revised options follow as a dated "Changed since asked" note after the
 team lead's review.
 
+**Changed since asked (2026-11-05, 18:40).** Two facts changed.
+
+- **The local full run is shorter than projected.** D8 said a local
+  run with every proof was projected at about 8 hours (from a run
+  stopped at 8% after 40 minutes). Today's full local run, every proof
+  included, finished in 4,774 s, 79.6 minutes (3,181 passed, 7 failed;
+  scratchpad junit report used for the inventory). Inferred, not
+  tested: the workstation was less loaded. The cost is still real: an
+  hour and twenty minutes, against CI's 12.
+- **The research** (`docs/testing/F180_PROOFS_AND_RISK_BASED_TESTING.md`,
+  which the team lead asked for): a proof's answer changes only when its
+  test, the file it mutates or the shared machinery changes, so
+  re-running an unchanged proof shows nothing new. ISTQB, Microsoft and
+  Google select tests by change and risk and keep a scheduled full run
+  as the safety net. Today's two proof failures fit that: the f169 proof
+  failed because a file it mutates changed (b would run it); the f159
+  proof failed because of start-up time, with no file of its own changed
+  (b would skip it, and nothing would be lost).
+
+**Revised options**, built on that: change selection (b) plus the full
+run moved to CI (a) is the risk-based core; c is the only check that
+the per-term rule was applied; d and e only shorten what remains.
+
+**Kind.** Revised option 1: Prevention. Revised option 2: Prevention for
+the run time, Workaround for the untested branches. Revised option 3:
+Prevention (the original option 1). Revised option 4: none.
+
+**Cost** (0 metered seconds in each; per-item minutes as asked):
+- Revised 1, a, b, c and f: about 180 minutes, about 9 files, 2 new
+  dependencies (coverage, diff-cover).
+- Revised 2, a, b and f: about 120 minutes, about 6 files, no new
+  dependency.
+- Revised 3, all six: about 240 minutes, about 12 files, 3 new
+  dependencies (the original option 1).
+- Revised 4: 0 minutes now; F177 returns to the backlog.
+
+**Recommendation: revised 1.** b is the risk-based selection the
+research supports, a keeps every proof running once per sprint on CI,
+and c checks the untested-branch rule instead of trusting it. d is
+left out: once b takes the unchanged proofs out of the local run, the
+remainder is the non-proof tests (39:34 measured), and each test that
+writes the tree or uses git would have to be checked before it could
+run in parallel. If c's subprocess measurement shows it cannot see the
+hook and script tests, the build stops c and reports it.
+
+**Revised options.**
+
+1. Build a, b, c and f in Task C: CI's full job replaces the local
+   Phase 5 full run, a proof runs locally only when its own files
+   changed, diff coverage in CI's push job, and the start-up timing
+   script (about 180 minutes, 2 new dependencies: coverage,
+   diff-cover).
+2. Build a, b and f in Task C, without diff coverage (about 120
+   minutes, no new dependency).
+3. Build a, b, c, d, e and f in Task C, as first asked (about 240
+   minutes, 3 new dependencies: coverage, diff-cover, pytest-xdist).
+4. Build none in Sprint 31; F177 returns to the backlog with this
+   analysis attached.
+
+**Team lead, 2026-11-05 19:00, verbatim:** "d8. no change due to the
+test run today. continue as previously instructed". No option chosen
+yet; D8 stays open and is asked again with the revised options.
+
 ---
 
 ## D9. F155: send the 1,350-variable probe to Dirac-3S? (Criterion H)

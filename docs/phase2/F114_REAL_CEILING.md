@@ -34,7 +34,7 @@ recovered on 5 of 5 seeds on the main arm, and on 5 of 5 on the flip
 and reference arms. It passes F169's rule, so stage 2 ran.
 
 Stage 2 (`f114_real_ceiling_lr05.json`), ten seeds each (42-51; seed 42
-took 0.05 min on ULB and 0.08 min on IEEE-CIS, so no cut):
+took 0.06 min on ULB and 0.08 min on IEEE-CIS, so no cut):
 
 - Shuffled-label check, ULB seed 42: estimate 0.00118, test fraud rate
   0.00167, margin 0.0005: pass.
@@ -72,14 +72,21 @@ above the test fraud rate. IEEE-CIS 0.662 to 0.665 on every seed.
   draw, so the pass stands, but it is weak support for "the method
   transfers".
 
-## Known defect, awaiting D13
+## Defect found and repaired (Sprint 31 D13)
 
-The re-run kept the first run's record name, so it replaced the first
-run's ULB score files for seeds 42-50 under `experiments/phase2/predictions/`
-(gitignored). The first result's figures are unchanged, but its nine
-score-file hashes no longer match the files on disk. A scratch rebuild
-matched all nine recorded hashes exactly, so the files can be restored.
-The repair is Sprint 31 D13 in `docs/sprints/SPRINT_31_DECISIONS.md`.
+The re-run first kept the first run's record name, so it replaced the
+first run's ULB score files for seeds 42-50 under
+`experiments/phase2/predictions/` (gitignored, so no commit held them).
+Repaired on 2026-11-05 under D13:
+- `outcome_record.save_test_scores` never replaces a file now: a name
+  held by different bytes gets the next free name (`_v2`, `_v3`, ...).
+- The re-run records as `f114lr05_<dataset>`. It was repeated under that
+  name; every figure matched the earlier re-run, and only the record
+  names, score paths and timings changed (seed 42 on ULB 0.06 minutes,
+  against 0.05). `f114_real_ceiling_lr05.json` was replaced with the
+  reason recorded in its provenance block.
+- The first run's nine files were restored from a scratch rebuild whose
+  SHA-256 values match all nine recorded ones.
 
 ## What this changes
 

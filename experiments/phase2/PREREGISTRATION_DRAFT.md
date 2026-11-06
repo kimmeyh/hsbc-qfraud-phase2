@@ -1916,6 +1916,38 @@ F166 entry above.
   `docs/phase2/algorithms/`, from a tracked generator, each naming the
   result file, so `test_phase2_figures_resolve.py` checks their figures.
 
+**Amendment, 2026-11-05 (Sprint 31 D14 option 1, team lead), written
+before any RBF test score.** The run kept the RBF form on all four
+datasets under F166's rule (6, 10, 10 and 7 of 10 seeds), and the SVM
+lane had scored only the linear form. F166's module stops before
+`complete` in that case; this part's module did not, which departed
+from the entry. The validation results seen so far are disclosed: the
+per-seed best validation AUPRC of both forms (in the result) and that
+four energy_steel RBF seeds sit at the positive rate. No RBF test
+score has been computed.
+- **The SVM lane is the kept form.** On every dataset where the rule
+  keeps RBF, the SVM lane is, per seed, the RBF configuration with the
+  highest validation AUPRC among `C` {1, 10} (ties: the first listed),
+  fitted as recorded (`gamma="scale"`, the same stratified subsample of
+  at most 20,000 training rows, the training fold's median fill) and
+  scored once on the test fold, with an outcome block. Its training
+  AUPRC is on the subsample it was fitted on. Seeds whose RBF scores
+  carry no ranking are scored as they are; nothing is excluded.
+- **The linear rows stay in the result** as `svm_linear`, reported on
+  the SVM page as the form not kept, and not ranked.
+- **The analysis is recomputed** with the kept form in the SVM lane:
+  the order, the adjacent pairs and the pocket figures, as the entry
+  sets. The other six lanes are unchanged; nothing else is refitted.
+- **The stop rule**: the module refuses to analyze a dataset whose kept
+  form is not the form its SVM lane scored, as F166's `rbf_kept`.
+- **Output**: a new file, `experiments/phase2/results/f157_spectra_algorithms_rbf.json`,
+  holding every row with the kept form in the SVM lane and the
+  recomputed analysis; the first result stays as recorded (as the F114
+  re-run did, and as D13 asks: a name that is free, never a
+  replacement). D14 option 1 said the result would be replaced; this is
+  the one change from it, and nothing recorded is lost. The pages are
+  regenerated from the new file.
+
 ### F155: does the Dirac-3S queue accept a job above 987 variables?
 
 Written 2026-11-05 (Sprint 31 Task I, #101), before any call. Not

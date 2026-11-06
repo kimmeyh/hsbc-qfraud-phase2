@@ -17,11 +17,11 @@
   "test_fraud_rate": 0.0016741268107003137,
   "margin": 0.0005,
   "pass": true,
-  "fit_s": 3.9
+  "fit_s": 29.1
  },
  "seed_plan": {
   "ulb": {
-   "t42_min": 0.05,
+   "t42_min": 0.06,
    "n_seeds": 10
   },
   "ieee": {
@@ -66,9 +66,9 @@
    "consistency_gap": -0.0005731939971593801,
    "auprc": 0.7420719357209213,
    "load_s": 1.9,
-   "fit_s": 1.2,
+   "fit_s": 1.4,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 42,
     "n_test": 56746,
     "n_positives": 95,
@@ -84,7 +84,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_42.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_42.npz",
      "sha256": "a448b943d9c3f110325ceee3b55dda71e151192c07ed5cdb00a22ee9538868df",
      "n_rows": 56746
     }
@@ -103,9 +103,9 @@
    "consistency_gap": -0.0005628474760337169,
    "auprc": 0.6896186134567269,
    "load_s": 1.9,
-   "fit_s": 1.2,
+   "fit_s": 1.5,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 43,
     "n_test": 56746,
     "n_positives": 95,
@@ -121,7 +121,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_43.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_43.npz",
      "sha256": "7d8b52af08b93922d7ecc5957733af6f56872eb7b68e9afb770d1bfdeec11182",
      "n_rows": 56746
     }
@@ -140,9 +140,9 @@
    "consistency_gap": -0.001807803624602937,
    "auprc": 0.3211697466513617,
    "load_s": 1.9,
-   "fit_s": 1.1,
+   "fit_s": 1.3,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 44,
     "n_test": 56746,
     "n_positives": 95,
@@ -158,7 +158,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_44.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_44.npz",
      "sha256": "48851ca64aff9cba748b61d5ba5f8f29da2a3273e9a9c582e3df816f164882b3",
      "n_rows": 56746
     }
@@ -177,9 +177,9 @@
    "consistency_gap": -0.0005176457231394992,
    "auprc": 0.7009617871604105,
    "load_s": 1.9,
-   "fit_s": 1.1,
+   "fit_s": 1.3,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 45,
     "n_test": 56746,
     "n_positives": 95,
@@ -195,7 +195,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_45.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_45.npz",
      "sha256": "adb59bc92aa9120dde3311da2ed74a222c365672906a0fcc2ccfddbe0073b46a",
      "n_rows": 56746
     }
@@ -213,10 +213,10 @@
    "achieved_error": 0.0007753850491664611,
    "consistency_gap": -0.0006787015684232753,
    "auprc": 0.6788221155183021,
-   "load_s": 1.9,
-   "fit_s": 1.2,
+   "load_s": 1.8,
+   "fit_s": 1.3,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 46,
     "n_test": 56746,
     "n_positives": 95,
@@ -232,7 +232,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_46.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_46.npz",
      "sha256": "33fbee25b905738fa2c3125b2328c1aeda6d14339776f0524ac691f21accc64c",
      "n_rows": 56746
     }
@@ -251,9 +251,9 @@
    "consistency_gap": -0.0004382898701608195,
    "auprc": 0.7868031527893232,
    "load_s": 1.9,
-   "fit_s": 1.2,
+   "fit_s": 1.4,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 47,
     "n_test": 56746,
     "n_positives": 95,
@@ -269,7 +269,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_47.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_47.npz",
      "sha256": "75fc77a240814b183b2080d392d96641d6d3f10ae40cd94d2fb24670d615cab5",
      "n_rows": 56746
     }
@@ -287,10 +287,10 @@
    "achieved_error": 0.0005462940119127339,
    "consistency_gap": -0.00043571024596607115,
    "auprc": 0.8073081332167855,
-   "load_s": 1.9,
-   "fit_s": 1.2,
+   "load_s": 2.0,
+   "fit_s": 1.4,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 48,
     "n_test": 56746,
     "n_positives": 95,
@@ -306,7 +306,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_48.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_48.npz",
      "sha256": "829b711ff92df62c3bf26d3b8041db9fdaad53e27e11c0d4687121b46701fb4e",
      "n_rows": 56746
     }
@@ -324,10 +324,10 @@
    "achieved_error": 0.0011102104113065237,
    "consistency_gap": -0.0009637955439745374,
    "auprc": 0.6003641088031473,
-   "load_s": 2.0,
-   "fit_s": 1.1,
+   "load_s": 1.8,
+   "fit_s": 1.4,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 49,
     "n_test": 56746,
     "n_positives": 95,
@@ -343,7 +343,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_49.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_49.npz",
      "sha256": "98632b2dbd025d92e267397af01bac11e125b49f3d50a754391045363f8f05c2",
      "n_rows": 56746
     }
@@ -362,9 +362,9 @@
    "consistency_gap": -0.00214433010272712,
    "auprc": 0.3649078799427264,
    "load_s": 1.9,
-   "fit_s": 1.1,
+   "fit_s": 1.3,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 50,
     "n_test": 56746,
     "n_positives": 95,
@@ -380,7 +380,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_50.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_50.npz",
      "sha256": "1b57d4be797d11889acf82e0367259b2a5d639ee1a36b611c9e9c032341726da",
      "n_rows": 56746
     }
@@ -399,9 +399,9 @@
    "consistency_gap": -0.0014114636066447413,
    "auprc": 0.5427112989571703,
    "load_s": 1.9,
-   "fit_s": 1.1,
+   "fit_s": 1.2,
    "outcome": {
-    "name": "f114_ulb",
+    "name": "f114lr05_ulb",
     "seed": 51,
     "n_test": 56746,
     "n_positives": 95,
@@ -417,7 +417,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ulb_51.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ulb_51.npz",
      "sha256": "2604bc20b9534eff9640a58c82505fa2778138a576e677a41aa7b1ff10cc1728",
      "n_rows": 56746
     }
@@ -435,10 +435,10 @@
    "achieved_error": 0.028064992614475627,
    "consistency_gap": 0.003301895224295491,
    "auprc": 0.44903489502434746,
-   "load_s": 254.7,
-   "fit_s": 4.6,
+   "load_s": 261.7,
+   "fit_s": 4.7,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 42,
     "n_test": 85302,
     "n_positives": 2962,
@@ -454,7 +454,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_42.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_42.npz",
      "sha256": "be63623dd72cadc7897b41d79108207723da32abbfdcf2e4fd50f4034bd28479",
      "n_rows": 85302
     }
@@ -473,9 +473,9 @@
    "consistency_gap": -0.006067298820288013,
    "auprc": 0.3851367438758197,
    "load_s": 0.0,
-   "fit_s": 4.5,
+   "fit_s": 4.7,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 43,
     "n_test": 85302,
     "n_positives": 2962,
@@ -491,7 +491,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_43.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_43.npz",
      "sha256": "75698ac63a8303878b331bfb9d07977ae6f3624023222976f895c620e0a3fca1",
      "n_rows": 85302
     }
@@ -510,9 +510,9 @@
    "consistency_gap": -0.0034135173088798883,
    "auprc": 0.5078224385431533,
    "load_s": 0.0,
-   "fit_s": 4.5,
+   "fit_s": 4.6,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 44,
     "n_test": 85302,
     "n_positives": 2962,
@@ -528,7 +528,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_44.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_44.npz",
      "sha256": "1deef992af9335491fa95b619659afac8b5981aa83be0e8f9c0c6cd15c76686c",
      "n_rows": 85302
     }
@@ -547,9 +547,9 @@
    "consistency_gap": -0.003696881010134847,
    "auprc": 0.45599964281815764,
    "load_s": 0.0,
-   "fit_s": 4.7,
+   "fit_s": 4.6,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 45,
     "n_test": 85302,
     "n_positives": 2962,
@@ -565,7 +565,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_45.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_45.npz",
      "sha256": "856caaf4c5a89ec17439683da5827923965fbf18a14cb043575ae5f915550ce5",
      "n_rows": 85302
     }
@@ -584,9 +584,9 @@
    "consistency_gap": -0.005497738314741617,
    "auprc": 0.5116026841002294,
    "load_s": 0.0,
-   "fit_s": 4.5,
+   "fit_s": 4.7,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 46,
     "n_test": 85302,
     "n_positives": 2962,
@@ -602,7 +602,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_46.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_46.npz",
      "sha256": "3217eedb10c27bf4609504c8e37a3be6e04c8a9d04db64a82d0735bcd5b359a5",
      "n_rows": 85302
     }
@@ -621,9 +621,9 @@
    "consistency_gap": -0.005987087751449311,
    "auprc": 0.5050447263160746,
    "load_s": 0.0,
-   "fit_s": 4.6,
+   "fit_s": 4.7,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 47,
     "n_test": 85302,
     "n_positives": 2962,
@@ -639,7 +639,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_47.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_47.npz",
      "sha256": "f8f397f89a3cee663d5e7e411ee28d2dab78f4cfc86024fba84b4885302f89e8",
      "n_rows": 85302
     }
@@ -658,9 +658,9 @@
    "consistency_gap": -0.004185310823193837,
    "auprc": 0.5110487697504669,
    "load_s": 0.0,
-   "fit_s": 4.5,
+   "fit_s": 4.8,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 48,
     "n_test": 85302,
     "n_positives": 2962,
@@ -676,7 +676,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_48.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_48.npz",
      "sha256": "331065c5cdf79b24d012e21c12f0a87ab4b03211fc4c9aafc2d22b03a1fcce64",
      "n_rows": 85302
     }
@@ -695,9 +695,9 @@
    "consistency_gap": -0.004342982942553138,
    "auprc": 0.5052348783030025,
    "load_s": 0.0,
-   "fit_s": 4.6,
+   "fit_s": 4.8,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 49,
     "n_test": 85302,
     "n_positives": 2962,
@@ -713,7 +713,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_49.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_49.npz",
      "sha256": "41864f8813d41130c9597db57f53f1fb7c5d7c272b3dd3511281ebedc8698f32",
      "n_rows": 85302
     }
@@ -732,9 +732,9 @@
    "consistency_gap": -0.003349168031628536,
    "auprc": 0.5119706865017912,
    "load_s": 0.0,
-   "fit_s": 4.7,
+   "fit_s": 4.6,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 50,
     "n_test": 85302,
     "n_positives": 2962,
@@ -750,7 +750,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_50.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_50.npz",
      "sha256": "ab3a871c2aae202eb02581aedae2a0ccda4e18fba7c5e22a415b6349c0285921",
      "n_rows": 85302
     }
@@ -769,9 +769,9 @@
    "consistency_gap": -0.00519158983030903,
    "auprc": 0.43237462715729996,
    "load_s": 0.0,
-   "fit_s": 4.5,
+   "fit_s": 4.6,
    "outcome": {
-    "name": "f114_ieee",
+    "name": "f114lr05_ieee",
     "seed": 51,
     "n_test": 85302,
     "n_positives": 2962,
@@ -787,7 +787,7 @@
      }
     },
     "test_scores": {
-     "path": "experiments/phase2/predictions/f114_ieee_51.npz",
+     "path": "experiments/phase2/predictions/f114lr05_ieee_51.npz",
      "sha256": "544564987cd780f7e53804bb3ae1679762e50aa7d6e4f00bdaf927542a512d7c",
      "n_rows": 85302
     }
@@ -884,7 +884,7 @@
  "complete": true,
  "provenance": {
   "generator": "experiments/phase2/src/f114_real_ceiling.py",
-  "generator_commit": "d24d0d85bb4160723e62275eca4c6067992107f0",
+  "generator_commit": "f9234789a537fa4bb26c83769995bb4f2dbc2c09",
   "generator_clean": true,
   "seeds": [
    42,
@@ -911,6 +911,10 @@
    "eqc-models": "0.22.1",
    "qci-client": "5.0.3"
   },
-  "run_id": "99ebd58f683a49d88b7430c92044a7a4"
+  "run_id": "eedd74b3de42483e9d647b60902d3312",
+  "replaces": {
+   "reason": "Sprint 31 D13: the same re-run under its own record name f114lr05_<dataset>; every figure matched the replaced result; only the record names, score paths and timings changed",
+   "previous_run_id": "99ebd58f683a49d88b7430c92044a7a4"
+  }
  }
 }
