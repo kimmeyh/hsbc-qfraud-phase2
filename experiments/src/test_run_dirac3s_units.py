@@ -224,3 +224,96 @@ def test_the_runner_can_fail(tmp_path, monkeypatch):
                         run(_failed_stops), "a failed unit not ending the stop")
     finally:
         importlib.reload(R)
+
+
+# F95's preregistered reading against each twin (Sprint 31 Phase 5,
+# fresh-eyes finding 1.1: `twin_gaps` existed and nothing called it).
+
+def _row(gmin, grange, unit="u"):
+    return {"unit": unit, "gap_min": gmin, "gap_range": grange}
+
+
+def test_the_reading_changes_only_beyond_the_twin_range():
+    twin = _row(1.0e-8, 5.0e-8)
+    assert R.twin_reading(_row(3.0e-8, 1e-8), twin)["changes_reading"] is False
+    assert R.twin_reading(_row(5.0e-8, 1e-8), twin)["changes_reading"] is False
+    assert R.twin_reading(_row(7.0e-8, 1e-8), twin)["changes_reading"] is True
+    assert R.twin_reading(_row(-5.0e-8, 1e-8), twin)["changes_reading"] is True
+
+
+def test_a_twin_without_per_sample_gaps_is_refused():
+    import pytest
+    with pytest.raises(ValueError, match="twin has no per-sample gaps"):
+        R.twin_reading(_row(1e-8, 1e-8), _row(None, None))
+    with pytest.raises(ValueError, match="schedule-4 row has no"):
+        R.twin_reading(_row(1e-8, None), _row(1e-8, 1e-8))
+
+
+def test_the_dirac3_history_needs_exactly_one_row(tmp_path, monkeypatch):
+    import pytest
+    hw = tmp_path / "hw_dispersion.json"
+    hw.write_text(json.dumps({"per_fit": [
+        {"file": "a.json", "relaxation_schedule": 2, "gap_to_exact_pct": 0.4},
+        {"file": "b.json", "relaxation_schedule": 2, "gap_to_exact_pct": 0.1},
+        {"file": "b.json", "relaxation_schedule": 2, "gap_to_exact_pct": 0.2}]}),
+        encoding="utf-8")
+    monkeypatch.setattr(R, "HW_DISPERSION", hw)
+    assert R.dirac3_history("a.json")["gap_to_exact_pct"] == 0.4
+    for name in ("b.json", "c.json"):
+        with pytest.raises(ValueError, match="rows in hw_dispersion"):
+            R.dirac3_history(name)
+
+
+def test_twins_is_f95_only_and_stop_is_needed_otherwise():
+    import pytest
+    assert R.main(["--card", "F155", "--twins"]) == 2
+    with pytest.raises(SystemExit):
+        R.main(["--card", "F95"])
+
+
+def test_twins_writes_its_own_file_and_reads_the_result(tmp_path, monkeypatch):
+    rows = [{"unit": "x", "twin": "f142:t", "gap_min": 2e-8, "gap_range": 1e-8,
+             "screen": {"screen_pass": False}},
+            {"unit": "y", "twin": "dirac-3:hist", "gap_min": 1e-8,
+             "gap_range": 1e-8, "screen": {"screen_pass": True}}]
+    first = tmp_path / "f95_schedule4.json"
+    first.write_text(json.dumps({"rows": rows}), encoding="utf-8")
+    before = first.read_bytes()
+    hw = tmp_path / "hw.json"
+    hw.write_text(json.dumps({"per_fit": [{"file": "hist.json",
+                  "relaxation_schedule": 2, "gap_to_exact_pct": 0.4}]}),
+                  encoding="utf-8")
+    monkeypatch.setitem(R.CARDS["F95"], "result", first)
+    monkeypatch.setattr(R, "TWINS_RESULT", tmp_path / "twins.json")
+    monkeypatch.setattr(R, "HW_DISPERSION", hw)
+    path = R.twins(read_twin=lambda name: _row(1e-8, 5e-8))
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    assert first.read_bytes() == before
+    assert doc["metered_seconds"] == 0 and "provenance" in doc
+    x, y = doc["rows"]
+    assert x["reading"]["changes_reading"] is False
+    assert y["dirac3_history"]["gap_to_exact_pct"] == 0.4
+    assert isinstance(y["reading"], str)
+
+
+def test_the_twin_reading_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = Path(R.__file__)
+    me = "experiments/src/test_run_dirac3s_units.py::"
+    for old, new, test, label in (
+            ('"changes_reading": abs(diff) > twin["gap_range"]}',
+             '"changes_reading": abs(diff) >= 0}',
+             "test_the_reading_changes_only_beyond_the_twin_range",
+             "a change read inside the twin's range"),
+            ('        if d.get("gap_min") is None or d.get("gap_range") is None:\n',
+             "        if False:\n",
+             "test_a_twin_without_per_sample_gaps_is_refused",
+             "a comparison made with no per-sample gaps"),
+            ("    if len(hit) != 1:\n", "    if not hit:\n",
+             "test_the_dirac3_history_needs_exactly_one_row",
+             "an ambiguous Dirac-3 history row used"),
+            ('        if args.card != "F95":\n', "        if False:\n",
+             "test_twins_is_f95_only_and_stop_is_needed_otherwise",
+             "--twins run for a card with no twins")):
+        assert_can_fail([Mutation(src, old, new, expect_occurrences=1)],
+                        lambda test=test: run_pytest(me + test, ROOT), label)

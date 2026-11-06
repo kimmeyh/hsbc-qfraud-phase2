@@ -366,6 +366,73 @@ def twin_gaps(f142_unit: str) -> dict:
             "samples": row["all_samples"], **gaps(J, C, w_ref, samples)}
 
 
+TWINS_RESULT = RESULTS / "f95_schedule4_twins.json"
+HW_DISPERSION = ROOT / "experiments" / "results" / "hw_dispersion.json"
+
+
+def twin_reading(row: dict, twin: dict) -> dict:
+    """The F95 entry's reading for a unit with a same-device twin:
+    schedule 4 changes the reading only if its gap differs from the
+    twin's by more than the range of the twin's per-sample gaps. The gap
+    compared is each side's best sample (`gap_min`)."""
+    for side, d in (("schedule-4 row", row), ("twin", twin)):
+        if d.get("gap_min") is None or d.get("gap_range") is None:
+            raise ValueError(f"{row['unit']}: the {side} has no per-sample "
+                             "gaps, so the entry's comparison cannot be made")
+    diff = row["gap_min"] - twin["gap_min"]
+    return {"gap_difference": diff, "twin_gap_range": twin["gap_range"],
+            "changes_reading": abs(diff) > twin["gap_range"]}
+
+
+def dirac3_history(file: str) -> dict:
+    """A Dirac-3 schedule-2 fit's recorded gap, reported beside a unit
+    with no same-device twin (not compared as a test)."""
+    fits = json.loads(HW_DISPERSION.read_text(encoding="utf-8"))["per_fit"]
+    hit = [p for p in fits if p.get("file") == file]
+    if len(hit) != 1:
+        raise ValueError(f"{file}: {len(hit)} rows in hw_dispersion.json")
+    p = hit[0]
+    return {"source": "experiments/results/hw_dispersion.json",
+            "file": file, "device": "dirac-3",
+            "relaxation_schedule": p["relaxation_schedule"],
+            "gap_to_exact_pct": p["gap_to_exact_pct"]}
+
+
+def twins(read_twin=None) -> Path:
+    """F95's preregistered reading, offline, from stored samples only
+    (no device call): each unit's schedule-4 gap against its twin. Written
+    to its own file; `f95_schedule4.json` is read, never written."""
+    read_twin = read_twin or twin_gaps
+    rows = json.loads(CARDS["F95"]["result"].read_text(
+        encoding="utf-8"))["rows"]
+    run_id, _ = provenance.start(TWINS_RESULT, resumable=False)
+    out = []
+    for r in rows:
+        kind, name = r["twin"].split(":", 1)
+        rec = {"unit": r["unit"], "twin": r["twin"],
+               "gap_min": r["gap_min"], "gap_range": r["gap_range"],
+               "screen_pass": r["screen"]["screen_pass"]}
+        if kind == "f142":
+            t = read_twin(name)
+            rec["twin_gaps"] = t
+            rec["reading"] = twin_reading(r, t)
+        else:
+            rec["dirac3_history"] = dirac3_history(f"{name}.json")
+            rec["reading"] = "reported beside, not a test: the device differs"
+        out.append(rec)
+    doc = {"generator": "experiments/phase2/src/run_dirac3s_units.py "
+                        "--card F95 --twins",
+           "card": "F95", "sprint": 31, "evidence_tag": "HW",
+           "metered_seconds": 0, "complete": True,
+           "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, "
+                    "F95, Reading",
+           "note": "computed from stored device samples; no device call",
+           "rows": out}
+    provenance.write_result(TWINS_RESULT, doc, __file__, SEEDS["F95"],
+                            run_id)
+    return TWINS_RESULT
+
+
 def write(card: str, rows: list, run_id: str) -> None:
     spec = CARDS[card]
     good = {r["unit"] for r in rows if r.get("status") in ("ok",
@@ -452,9 +519,20 @@ def dry_run(card: str, stop: int, screened: dict) -> Path:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--card", choices=sorted(CARDS), required=True)
-    ap.add_argument("--stop", type=int, required=True)
+    ap.add_argument("--stop", type=int)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--twins", action="store_true",
+                    help="F95 only: the entry's reading against each twin, "
+                         "from stored samples; no device call")
     args = ap.parse_args(argv)
+    if args.twins:
+        if args.card != "F95":
+            print("REFUSING: --twins is F95's reading only.")
+            return 2
+        print(f"Written: {twins().name}")
+        return 0
+    if args.stop is None:
+        ap.error("--stop is required unless --twins is given")
     units = [u for u in CARDS[args.card]["units"] if u["stop"] == args.stop]
     if not units:
         print(f"REFUSING: {args.card} has no stop {args.stop}.")
