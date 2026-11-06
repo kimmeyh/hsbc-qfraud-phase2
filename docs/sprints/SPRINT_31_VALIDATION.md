@@ -5,8 +5,8 @@
 **Scope**: F179 (A), F180 (B), F177 (C), pypdf (D), F114 (E), F157
 SPECTRA (F), F157 QNN (G), Experiment 5 (H), F155 (I), F95 (J), F178
 (K), F13 (L). Issues #93-104.
-**Metered seconds**: 0 so far. No Dirac, Braket or other paid service was
-called. F155 and F95 wait on their approvals (D9, D10).
+**Metered seconds**: 73.0, all on Dirac-3S: F155 6.0 (D9) and F95 67.0
+(D10, D12). No Braket or other paid service was called.
 
 This file is the durable copy. The same items are listed to the screen at
 handover: a pointer to a file is not a handover.
@@ -46,7 +46,7 @@ PENDING are filled in when their result exists.
   header line. The submission-artifact tests ran against 6.21.4; no
   tracked PDF was rebuilt.
 
-## V5. Task E (F114): re-run reported with warnings, D13 PENDING
+## V5. Task E (F114): re-run reported with warnings, D13 carried out
 
 - First run, learning rate 0.1 (`f114_real_ceiling.json`, kept as
   recorded): the shuffled-label check failed, and `lgbm_bins` did not
@@ -60,20 +60,35 @@ PENDING are filled in when their result exists.
   the calibration warning. Page: `docs/phase2/F114_REAL_CEILING.md`.
 - **Please read**: the check passed by about 0.00001, and the ULB
   figure is not a usable ceiling (three seeds train badly).
-- **Defect, D13**: the re-run replaced the first run's nine ULB score
-  files (gitignored). A scratch rebuild matched all nine recorded
-  hashes. `test_outcome_record_required.py`'s stale-hash test is red on
-  this workstation until D13 is carried out.
+- **Defect, D13, repaired**: the re-run replaced the first run's nine
+  ULB score files (gitignored, so git could not restore them). They
+  were restored from a scratch rebuild that matched all nine recorded
+  hashes. The re-run was repeated under its own record name
+  (`f114lr05_<dataset>`); every figure matched. The score writer now
+  never replaces a file: an existing name moves it to `_v2`, `_v3`, ...
+  (`outcome_record.save_test_scores`, f923478).
+- **Please check**: `test_outcome_record_required.py`'s stale-hash test
+  is green on this workstation again.
 
-## V6. Task F (F157 SPECTRA): run complete, D14 PENDING
+## V6. Task F (F157 SPECTRA): D14 carried out, pages committed
 
-- `f157_spectra_algorithms.json`: four datasets, 10 seeds each, 0
-  metered seconds. 32 pages from `scripts/f157_spectra_docs.py` under
-  `docs/phase2/algorithms/`, checked by
-  `experiments/src/test_f157_spectra_docs.py`.
-- **Defect, D14**: the entry's rule keeps the RBF SVM on all four
-  datasets, but the SVM lane scored only the linear form. The pages say
-  so, and they wait on D14 before they are committed.
+- First result, `f157_spectra_algorithms.json`, kept as recorded: the
+  SVM lane scored only the linear form, though the entry's rule keeps
+  the RBF form on all four datasets.
+- D14 option 1: an amendment (a25b90a) scored the RBF form on the test
+  fold, in a new file, `f157_spectra_algorithms_rbf.json`. 0 metered
+  seconds.
+- 32 pages under `docs/phase2/algorithms/` (1c385a0), from
+  `scripts/f157_spectra_docs.py`, checked by
+  `experiments/src/test_f157_spectra_docs.py`. A result whose SVM lane
+  is not the kept form renders no page.
+- Result: boosted trees first on every dataset; the proxy fifth or
+  sixth of seven. The RBF SVM is reliably above the proxy on
+  oilgas_gasturbine (0.8532 against 0.8394) and telecom_churn (0.8441
+  against 0.7254).
+- **Please read**: `ENERGY_STEEL_SVM.md`. On seed 42 the RBF scores
+  carry no ranking on validation and do on test. The page states this
+  as not explained.
 
 ## V7. Task G (F157 QNN): dequantized
 
@@ -95,10 +110,10 @@ PENDING are filled in when their result exists.
   is already at the 0.5% budget's maximum, so the measure cannot show an
   edge there. W cannot be scored.
 
-## V9. Tasks I and J (F155, F95): on Dirac-3S, D12 PENDING
+## V9. Tasks I and J (F155, F95): on Dirac-3S, both complete
 
 - `run_dirac3s_units.py`, with `device_store` in place of F142's save.
-  24.0 metered seconds so far, one attempt per call.
+  73.0 metered seconds in all, one attempt per call, none retried.
 - **F155 accepted** (D9 option 1): 1,350 variables, all entries
   returned, 6.0 s against a 4 s floor quote
   (`f155_variable_ceiling.json`). F143's hold condition is met.
@@ -108,7 +123,10 @@ PENDING are filled in when their result exists.
 - **F95 stop 1** (D10 option 1): `b1_dct_42` at schedule 4, 18.0 s,
   three times its schedule-2 twin's 6.0 s; every sample within about
   5e-08 of the reference optimum, so no change (`f95_schedule4.json`).
-  Stop 2 waits on D12.
+- **F95 stop 2** (D12 option 1): `b1_dct_43` 18.0 s, `g0b_3_42` 15.0 s,
+  `b1_lg_42` 16.0 s. No change on any fit. The card used 67.0 of its
+  120 s. Page: `docs/phase2/F95_SCHEDULE4.md`. Schedule 4 can be left
+  out of later device plans for pools of this kind.
 
 ## V10. Task K (F178): the learning documents
 

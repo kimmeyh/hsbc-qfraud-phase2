@@ -388,7 +388,17 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
 - **F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra) part**: F166's seven algorithms and grids on
   energy_steel, oilgas_gasturbine, telecom_churn and maintenance_ai4i,
   with in-pocket and out-of-pocket [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) as secondaries.
-  - Result: placeholder.
+  - Result, 2026-11-05: boosted trees first by mean test [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) on every
+    dataset; the proxy fifth or sixth of seven. Reliable adjacent pairs
+    (exact Wilcoxon, Bonferroni 0.05 / 6): the proxy above logistic
+    regression on energy_steel, oilgas_gasturbine and telecom_churn; the
+    [SVM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-svm) above the proxy on oilgas_gasturbine (0.8532 against 0.8394)
+    and telecom_churn (0.8441 against 0.7254); LightGBM above the proxy
+    on maintenance_ai4i (0.6148 against 0.5387). The [SVM](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-svm) lane is
+    the [RBF](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-rbf) form the entry's rule kept on all four datasets, scored
+    under the entry's amendment of 2026-11-05. On energy_steel seed 42 its
+    scores carry no ranking on validation and do on test; not explained
+    (`experiments/phase2/results/f157_spectra_algorithms_rbf.json`).
 - **Experiment 5, segment routing**: on F174's stored month-4 scores, is
   any ProductCD segment accepted for the proxy (mean in-segment recall
   edge at least 0.01 and a 99% interval of segment minus matched-control
@@ -406,7 +416,9 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
     (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **F95, relaxation schedule 4**: four fits; the solver gap against the
   exact optimum. No accuracy is read.
-  - Result: placeholder.
+  - Result, 2026-11-05: no change; every sample at the reference
+    optimum to solver precision, 67.0 of 120 metered seconds
+    (`experiments/phase2/results/f95_schedule4.json`).
 
 ## 8. Experiments not yet planned
 

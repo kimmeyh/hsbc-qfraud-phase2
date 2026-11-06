@@ -315,7 +315,11 @@ count and seconds stated. The six-experiment frame is in
   rebuilds with Dirac-3S schedule-2 twins, two 45-variable fits with only
   Dirac-3 history), the relative gap to the reference optimum per
   sample. Cap 120 s over two stops. "No change" is the expected result.
-  - Result: placeholder.
+  - Result, 2026-11-05: **no change.** All 32 samples sit at the
+    reference optimum to solver precision, as at schedule 2; 18.0, 18.0,
+    15.0 and 16.0 s per fit, 67.0 of the 120 s cap. Schedule 4 can be
+    left out of device plans for pools of this kind
+    (`experiments/phase2/results/f95_schedule4.json`).
 - **F157 [QNN](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qnn) part**: the F106 circuit and six twins on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-ieee-cis)'s
   month-4 fold, about 2,962 test positives, so "dequantized" becomes
   decidable at the 0.005 margin.
@@ -327,7 +331,8 @@ count and seconds stated. The six-experiment frame is in
 - **F114, F157 [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-spectra) part and Experiment 5**: classical ceilings,
   algorithm rankings and segment routing; see the machine learning
   expert version's section 7.
-  - Result: placeholder.
+  - Result, 2026-11-05: all three reported in the machine learning
+    expert version's section 7; none used a device.
 
 ## 7. Experiments not yet planned
 

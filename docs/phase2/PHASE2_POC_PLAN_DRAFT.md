@@ -159,6 +159,17 @@ device block, and the decision that releases it.
   figure, 0.00016, is far below the model's own achieved error and is
   not a usable ceiling. PoC work: none planned. A calibrated plug-in is
   a backlog item, not a PoC dependency.
+- **Seven algorithms on SPECTRA's four datasets (F157 SPECTRA part,
+  Sprint 31).** Boosted trees lead on every dataset and the proxy places
+  fifth or sixth of seven by mean test AUPRC
+  (`f157_spectra_algorithms_rbf.json`, `docs/phase2/algorithms/`). On
+  telecom_churn the RBF SVM is reliably above the proxy, 0.8441 against
+  0.7254. PoC work: these lanes are the reference a SPECTRA-style
+  dataset in the brief is compared against **[A2]**.
+- **Relaxation schedule 4 on Dirac-3S (F95, Sprint 31).** No change on
+  any of four fits, at about three times the device seconds per sample;
+  67.0 of 120 metered seconds (`docs/phase2/F95_SCHEDULE4.md`). PoC
+  device blocks keep schedule 2.
 - **The gate-based arm (F6).** Simulation only, as F6 recommends. A
   Braket hardware run is a new card with its own cost; the AWS credits
   may change that cost **[A3]**.

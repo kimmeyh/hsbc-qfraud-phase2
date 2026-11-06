@@ -540,8 +540,15 @@ The six-experiment frame they fit into is in
     do here (`experiments/phase2/results/f157_qnn_ieee.json`).
 - **Seven algorithms on [SPECTRA](#acr-spectra)'s four datasets (F157, [SPECTRA](#acr-spectra) part).**
   Entry: "F157 [SPECTRA](#acr-spectra) part".
-  - Result: placeholder
-    (`experiments/phase2/results/f157_spectra_algorithms.json`).
+  - Result, 2026-11-05: **the boosted-tree models led on all four
+    datasets, and the quantum-inspired model was never first.** By mean
+    score it placed fifth or sixth of seven on every dataset. On two
+    datasets the [SVM](#acr-svm) scored reliably above it (0.8532 against
+    0.8394, and 0.8441 against 0.7254), and on a third LightGBM did
+    (0.6148 against 0.5387). Most neighbors in the order cannot be told
+    apart. The [SVM](#acr-svm) here is the radial basis function ([RBF](#acr-rbf)) form the design's
+    rule chose, scored under a dated change to the design
+    (`experiments/phase2/results/f157_spectra_algorithms_rbf.json`).
 - **Routing one product type to the quantum-inspired model (Experiment
   5).** Does sending one product code to the quantum-inspired model add
   one point of recall at the 0.5% budget? The prediction is no. Entry:
@@ -559,7 +566,12 @@ The six-experiment frame they fit into is in
     (`experiments/phase2/results/f155_variable_ceiling.json`).
 - **Relaxation schedule 4 on Dirac-3S (F95).** Four fits; does a slower
   device setting close the small gap Dirac-3 left? Entry: "F95".
-  - Result: placeholder (`experiments/phase2/results/f95_schedule4.json`).
+  - Result, 2026-11-05: **no change.** The slower setting found the
+    same best answer as the usual one on all four fits, and each sample
+    cost about three times the device time. The card used 67.0 of its
+    120 approved seconds, so this setting can be left out of later
+    plans for problems of this kind
+    (`experiments/phase2/results/f95_schedule4.json`).
 
 ## 8. Experiments not yet planned
 
