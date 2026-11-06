@@ -57,6 +57,36 @@ def test_the_full_job_runs_the_proofs_on_ready_for_review():
     assert "Test run must leave the tree clean" in jobs["full"]
 
 
+DIFF_COVER = ("diff-cover coverage.xml --compare-branch=origin/develop "
+              "--fail-under=100")
+
+
+def test_the_push_job_fails_a_changed_line_no_test_ran():
+    """F177 change c (Sprint 31 D8): every process the tests start
+    measures itself, and a changed source line no test ran fails the
+    job. Each term is proven red below."""
+    job = _jobs()["test"]
+    assert "fetch-depth: 0" in job  # diff-cover needs origin/develop
+    tests = job.split("- name: Tests\n", 1)[1].split("\n      - ", 1)[0]
+    assert "COVERAGE_PROCESS_START: ${{ github.workspace }}/.coveragerc" in tests
+    assert sum(DIFF_COVER in ln for ln in job.splitlines()) == 1
+
+
+def test_the_diff_coverage_step_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    test = f"{THIS}::test_the_push_job_fails_a_changed_line_no_test_ran"
+    for old, new, label in (
+            ("          fetch-depth: 0", "          fetch-depth: 1",
+             "a shallow checkout diff-cover cannot compare"),
+            ("          COVERAGE_PROCESS_START: ${{ github.workspace }}/.coveragerc\n",
+             "",
+             "the tests run without measuring coverage"),
+            ("--fail-under=100", "--fail-under=90",
+             "an untested changed line allowed")):
+        assert_can_fail([Mutation(WORKFLOW, old, new, expect_occurrences=1)],
+                        lambda: run_pytest(test, ROOT), label)
+
+
 def _conftest():
     spec = importlib.util.spec_from_file_location("_root_conftest", CONFTEST)
     mod = importlib.util.module_from_spec(spec)

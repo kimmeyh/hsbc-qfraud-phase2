@@ -38,7 +38,27 @@ PENDING are filled in when their result exists.
   red guard. The generator now applies the US English pairs (5947f29),
   with a test and a red proof.
 
-## V3. Task C (F177): PENDING D8
+## V3. Task C (F177): all six changes built (D8, a to f)
+
+- **a, b, d**: `docs/SPRINT_CHECKLIST.md` Phase 5 suite step. Every test
+  and every proof on CI's full job (a); locally only the proofs whose
+  files changed, `scripts/select_proofs.py --run` (b); the local
+  non-proof tests in parallel, then `SERIAL_FILES` alone (d).
+- **Measured, same machine**: the local non-proof run took 2,379 s
+  serial (B's before run, 01:51). After: 968 s in parallel plus 195 s
+  for the serial files, 1,163 s in all, about half.
+- **Please read**: the first parallel run failed three files that pass
+  alone (a git timeout, a time limit, memory). They are now in
+  `SERIAL_FILES`, with that reason in the root `conftest.py`.
+- **c**: diff coverage in CI's push job (`.coveragerc`, `diff-cover
+  --fail-under=100` against `origin/develop`). The first CI run on this
+  branch shows what it reports; see the note below this item.
+- **e**: a Phase 7 step starts the short review and CI's full job
+  together.
+- **f**: `scripts/env_check.py` prints start-up times beside the
+  2026-11-05 idle values (this run: all three ok).
+- Guards: `test_ci_workflow.py` (diff-coverage step, three red proofs),
+  `test_select_proofs.py` (three), `test_env_check.py` (one).
 
 ## V4. Task D: pypdf 6.21.2 to 6.21.4
 

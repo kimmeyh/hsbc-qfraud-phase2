@@ -1,0 +1,24 @@
+# Diff coverage (F177 change c, Sprint 31 D8). CI's push job sets
+# COVERAGE_PROCESS_START to this file, so every Python process the tests
+# start measures itself through coverage's startup hook (a1_coverage.pth)
+# and the `subprocess` patch: hook and script tests run their code in a
+# subprocess. `diff-cover` then fails a changed line in these sources that
+# no test ran. Test files and fixtures are not measured.
+[run]
+parallel = True
+relative_files = True
+patch = subprocess
+data_file = ${COVERAGE_DATA_DIR-.}/.coverage
+source =
+    experiments/src
+    experiments/phase2/src
+    scripts
+    .claude/hooks
+omit =
+    */test_*.py
+    */conftest.py
+
+[paths]
+source =
+    ./
+    */hsbc-qfraud-phase2/

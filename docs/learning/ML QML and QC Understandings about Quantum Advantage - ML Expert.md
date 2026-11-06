@@ -351,7 +351,7 @@ covers the devices in more depth.
 ## 7. Experiments planned (Sprint 31)
 
 Each entry is in `experiments/phase2/PREREGISTRATION_DRAFT.md`, written
-before its run. Results are placeholders until the runs finish. The
+before its run. Each result, dated, is under its entry. The
 six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
 
 - **F114, the ceiling on real data** (F108 entry, amendment of

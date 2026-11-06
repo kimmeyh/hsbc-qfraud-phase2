@@ -42,11 +42,14 @@ jobs:
     runs-on: ubuntu-latest
     # 10 until Sprint 30, then 20, then 13 (D9). Without the proofs the
     # job took 3:08 on 0fc2004 (tests 2:04, install 0:46); 6 stops a hung
-    # run with margin for a slow runner.
-    timeout-minutes: 6
+    # run with margin for a slow runner. 12 from Sprint 31 (F177 change c):
+    # measuring coverage slows the tests; the first measured run sets it.
+    timeout-minutes: 12
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # diff-cover compares with origin/develop
 
       - uses: actions/setup-python@v5
         with:
@@ -68,8 +71,23 @@ jobs:
       # `slow` is the live-pipeline test, which needs the raw IEEE-CIS data
       # CI does not have. `--durations` prints the slowest tests, so the
       # next cut is chosen from CI's own times.
+      # COVERAGE_PROCESS_START makes every Python process measure itself
+      # (.coveragerc, F177 change c), the tests' subprocesses included.
       - name: Tests
+        env:
+          COVERAGE_PROCESS_START: ${{ github.workspace }}/.coveragerc
+          COVERAGE_DATA_DIR: ${{ github.workspace }}
         run: pytest -m "not proof and not slow" -q --durations=25
+
+      # F177 change c (Sprint 31 D8): a changed line in the evidence code,
+      # the scripts or the hooks that no test ran fails the job. This is the
+      # check that every new branch got its test (37 untested branches
+      # reached review in Sprints 28-30).
+      - name: Diff coverage
+        run: |
+          coverage combine --keep -q
+          coverage xml -q -o coverage.xml
+          diff-cover coverage.xml --compare-branch=origin/develop --fail-under=100 --show-uncovered --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
 
       # F78, Sprint 16. Until this step existed, every guard in this
       # repository was WINDOWS-ONLY protection: the hooks were PowerShell and

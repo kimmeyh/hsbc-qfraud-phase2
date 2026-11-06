@@ -508,7 +508,8 @@ same job as well and as fast. When a classical method can, the step is
 ## 7. Experiments planned
 
 Sprint 31 runs these. Each design was written before its run, in
-`experiments/phase2/PREREGISTRATION_DRAFT.md`. No result is known yet.
+`experiments/phase2/PREREGISTRATION_DRAFT.md`. Each result, dated, is
+under its design.
 The six-experiment frame they fit into is in
 `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
 

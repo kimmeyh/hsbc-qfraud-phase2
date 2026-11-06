@@ -262,10 +262,37 @@ def is_proof(item) -> bool:
     return bool(_called(fn) & _proof_calls(inspect.getmodule(fn)))
 
 
+# Test files that cannot share the machine with other test files, so the
+# parallel local run (F177 change d, `-n auto --dist loadfile`) leaves them
+# out and they run after it, alone (`-m serial`). Each writes a file inside
+# the repository, or reads state another file writes there: a token a hook
+# reads, an evidence file it restores in a `finally`, a hook or guard file
+# it edits and restores. Chosen on the safe side from a search for writes
+# outside `tmp_path` and restores (Sprint 31 Task C); a file leaves this
+# list only with the reason it is safe.
+# Three more need the whole machine (the first parallel run, 2026-11-05,
+# failed each under load and passed each alone): test_phase3_artifacts.py
+# (its git calls time out), test_h6_twin_preflight.py (a time limit) and
+# test_ieee_runner_correctness.py (memory).
+SERIAL_FILES = frozenset({
+    "test_phase3_artifacts.py", "test_h6_twin_preflight.py",
+    "test_ieee_runner_correctness.py",
+    "test_amendment_token.py", "test_ci_status.py",
+    "test_confidentiality_scan.py", "test_cross_repo_write_guard.py",
+    "test_dirac3s_verify.py", "test_evidence_artifacts_current.py",
+    "test_guard_discipline.py", "test_hardware_artifact_durability.py",
+    "test_injection.py", "test_phase2_helpers.py", "test_pre_commit_hook.py",
+    "test_published_artifacts.py", "test_qci_env_single_loader.py",
+    "test_score_gates.py",
+})
+
+
 def pytest_collection_modifyitems(config, items):
     for item in items:
         if is_proof(item):
             item.add_marker(pytest.mark.proof)
+        if Path(str(item.fspath)).name in SERIAL_FILES:
+            item.add_marker(pytest.mark.serial)
 
 
 def pytest_terminal_summary(terminalreporter):

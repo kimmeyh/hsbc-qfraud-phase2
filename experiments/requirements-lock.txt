@@ -40,6 +40,13 @@
 # (fixed in 6.21.3) and CVE-2026-119203, CVE-2026-119204 and
 # CVE-2026-119205 (fixed in 6.21.4), found by pip-audit on 2026-11-04.
 # No tracked PDF was rebuilt.
+#
+# 2026-11-05 (Sprint 31 Task C, Decision 8, F177): test tooling added, no
+# figure-producing package changed: coverage 7.17.2 and diff-cover 11.0.1
+# (diff coverage in CI, change c), pytest-xdist 3.8.0 (parallel local
+# non-proof tests, change d). Their dependencies as resolved: execnet 2.1.2,
+# chardet 7.7.0, jinja2 3.1.6, markupsafe 3.0.4, pygments 2.21.0 and
+# pluggy 1.6.0 (pluggy was already installed with pytest).
 
 numpy==1.26.4
 pandas==2.3.3
@@ -63,3 +70,7 @@ python-dotenv==1.2.3
 pypdf==6.21.4
 pyscipopt==6.2.1
 pytest==9.1.1
+pytest-xdist==3.8.0
+execnet==2.1.2
+coverage==7.17.2
+diff-cover==11.0.1

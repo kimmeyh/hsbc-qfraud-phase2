@@ -31,7 +31,12 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] HARDWARE: any metered run stops for approval (Criterion H), always
 
 ## Phase 5: Review & Validation
-- [ ] Full suite green, every red proof included (`pytest experiments/src -q -rf`; CI's push job leaves the proofs out, Sprint 30 Task L); the whole output goes to a file and its summary is read there, never piped to a tail, so a failing test's name is kept (Sprint 30 IMP-4, `TROUBLESHOOTING.md`); no unamended drift from prereg-freeze in analysis code
+- [ ] **Suite green, by risk (F177, Sprint 31 D8, changes a, b, d).** Three runs, each output to a file and its summary read there, never piped to a tail, so a failing test's name is kept (Sprint 30 IMP-4, `TROUBLESHOOTING.md`):
+  - **Every test, every red proof, on CI (a)**: `gh workflow run ci.yml --ref <branch>` starts CI's full job; `scripts/check_ci_status.py --wait --require-job full` reads it. This replaces the local full run: the proofs' answers change only when their files change, and CI runs them all in about 12 minutes against an hour or more here.
+  - **The changed proofs, locally (b)**: `scripts/select_proofs.py --run` runs the red proofs of each test file whose test, named files or shared machinery (`injection.py`, a `conftest.py`, `pytest.ini`) changed against `origin/develop`. This keeps a Windows-only defect in a changed guard visible here.
+  - **Every non-proof test, locally, in parallel (d)**: `pytest experiments/src -m "not proof and not serial" -n auto --dist loadfile -q -rf`, then the files that cannot share the machine (they write inside the repository or read state another file writes there; `SERIAL_FILES` in the root `conftest.py`), alone: `pytest experiments/src -m "serial and not proof" -q -rf`.
+  - Before a long run, `scripts/env_check.py` prints this machine's start-up times beside the 2026-11-05 values (f); a SLOW line explains a slow run before it starts.
+- [ ] No unamended drift from prereg-freeze in analysis code
 - [ ] Plan acceptance criteria walked line by line WITH EVIDENCE
 - [ ] Check: every compound decision rule, refusal and reported state added this sprint got its per-term tests, each proven red, in the commit that added it (Phase 4 item; a rule found here without them is a Phase 4 miss, recorded for the retrospective)
 - [ ] OUTWARD documents pass `scripts/outward_readability.py` BEFORE handover (IMP-5: the QCi package needed a revision round purely to strip tokens a vendor reader cannot resolve, after the team lead had already reviewed it)
@@ -49,6 +54,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 - [ ] 7-step protocol run in order (SPRINT_RETROSPECTIVE.md); 16 categories x 4 roles, verbatim, no placeholders; the review findings are an input
 - [ ] Every RECURRING finding class has an improvement (card acceptance criterion, Phase 5 gate, test or hook); single findings have a root cause recorded
 - [ ] Improvements proposed + dispositioned; now-items committed; backlog-items -> master plan with F#s
+- [ ] **At the push of the improvement commits, start the short review and CI's full job together (F177 change e)**: `gh workflow run ci.yml --ref <branch>` and the review agent in the same step, so neither waits on the other; the review's time cap holds, and the full job's result is read at 7.0.
 - [ ] ONE short review of the improvement commits only; its trivial findings fixed, the rest to the next sprint's Phase 1 refinement (no second round). "Short" is a time cap: the brief states about 10 minutes, the diff only, no test runs and no live GitHub calls (the full suite and CI's full job carry the tests; Sprint 30's ran 14 minutes on a brief with none of these limits)
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
 - [ ] CI checked on the final HEAD (`scripts/check_ci_status.py`, no waiting). If it is still running or RED, arm the watcher and hand the result to an agent; the close-out hook blocks the completion claim until it is green
