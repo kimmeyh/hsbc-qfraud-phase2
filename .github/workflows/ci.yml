@@ -79,16 +79,6 @@ jobs:
           COVERAGE_DATA_DIR: ${{ github.workspace }}
         run: pytest -m "not proof and not slow" -q --durations=25
 
-      # F177 change c (Sprint 31 D8): a changed line in the evidence code,
-      # the scripts or the hooks that no test ran fails the job. This is the
-      # check that every new branch got its test (37 untested branches
-      # reached review in Sprints 28-30).
-      - name: Diff coverage
-        run: |
-          coverage combine --keep -q
-          coverage xml -q -o coverage.xml
-          diff-cover coverage.xml --compare-branch=origin/develop --fail-under=100 --show-uncovered --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
-
       # F78, Sprint 16. Until this step existed, every guard in this
       # repository was WINDOWS-ONLY protection: the hooks were PowerShell and
       # this runner is ubuntu-latest, so none of them had ever executed here.
@@ -141,6 +131,17 @@ jobs:
             exit 1
           fi
           echo "Working tree clean after the test run."
+
+      # F177 change c (Sprint 31 D8): a changed line in the evidence code,
+      # the scripts or the hooks that no test ran fails the job. This is the
+      # check that every new branch got its test (37 untested branches
+      # reached review in Sprints 28-30). It runs LAST, so its red cannot
+      # skip the guard and clean-tree steps above (it did on d2cb10a).
+      - name: Diff coverage
+        run: |
+          coverage combine --keep -q
+          coverage xml -q -o coverage.xml
+          diff-cover coverage.xml --compare-branch=origin/develop --fail-under=100 --show-uncovered --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
 
   full:
     if: github.event_name == 'workflow_dispatch' || !github.event.pull_request.draft

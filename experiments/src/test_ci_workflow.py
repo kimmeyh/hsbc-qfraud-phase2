@@ -70,6 +70,15 @@ def test_the_push_job_fails_a_changed_line_no_test_ran():
     tests = job.split("- name: Tests\n", 1)[1].split("\n      - ", 1)[0]
     assert "COVERAGE_PROCESS_START: ${{ github.workspace }}/.coveragerc" in tests
     assert sum(DIFF_COVER in ln for ln in job.splitlines()) == 1
+    # Last, so its red cannot skip the guard and clean-tree steps.
+    names = [ln.strip() for ln in job.splitlines()
+             if ln.strip().startswith("- name:")]
+    assert names[-1] == "- name: Diff coverage"
+    # A test's removed probe module must not fail the report (d2cb10a).
+    import configparser
+    rc = configparser.ConfigParser(interpolation=None)
+    rc.read(ROOT / ".coveragerc", encoding="utf-8")
+    assert rc.getboolean("report", "ignore_errors", fallback=False)
 
 
 def test_the_diff_coverage_step_can_fail():
@@ -85,6 +94,16 @@ def test_the_diff_coverage_step_can_fail():
              "an untested changed line allowed")):
         assert_can_fail([Mutation(WORKFLOW, old, new, expect_occurrences=1)],
                         lambda: run_pytest(test, ROOT), label)
+    assert_can_fail([Mutation(WORKFLOW, "'.claude/hooks/*.py'\n\n  full:",
+                              "'.claude/hooks/*.py'\n"
+                              "      - name: After it\n        run: true\n"
+                              "\n  full:", expect_occurrences=1)],
+                    lambda: run_pytest(test, ROOT),
+                    "a step after diff coverage, which its red would skip")
+    assert_can_fail([Mutation(ROOT / ".coveragerc", "ignore_errors = True",
+                              "ignore_errors = False", expect_occurrences=1)],
+                    lambda: run_pytest(test, ROOT),
+                    "a removed probe module fails the report")
 
 
 def _conftest():
