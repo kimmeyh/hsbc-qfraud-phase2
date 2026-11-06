@@ -35,7 +35,8 @@
       "K": 518,
       "E": 316,
       "L": 101,
-      "M": 41
+      "M": 41,
+      "N": 128
     },
     "task_started": {
       "A": "2026-11-04T23:15:07-05:00",
@@ -123,7 +124,8 @@
       "K": "gaps over 30 min and pauses subtracted",
       "E": "gaps over 30 min and pauses subtracted",
       "L": "gaps over 30 min and pauses subtracted",
-      "M": "gaps over 30 min and pauses subtracted"
+      "M": "gaps over 30 min and pauses subtracted",
+      "N": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle"
     },
     "task_elapsed": {
       "A": 58,
@@ -137,7 +139,8 @@
       "K": 1028,
       "E": 1068,
       "L": 966,
-      "M": 41
+      "M": 41,
+      "N": 304
     },
     "task_parallel": {
       "E": [
@@ -275,5 +278,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-05"
+  "updated": "2026-11-06"
 }

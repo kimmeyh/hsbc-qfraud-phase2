@@ -4,15 +4,16 @@
 **Branch**: `feature/20261104_Sprint_31` | **PR**: #92 (draft)
 **Scope**: F179 (A), F180 (B), F177 (C), pypdf (D), F114 (E), F157
 SPECTRA (F), F157 QNN (G), Experiment 5 (H), F155 (I), F95 (J), F178
-(K), F13 (L). Issues #93-104.
+(K), F13 (L), and two Phase 5 tasks: the fresh-eyes fixes (M) and CI
+red on dfb1694 (N). Issues #93-106.
 **Metered seconds**: 73.0, all on Dirac-3S: F155 6.0 (D9) and F95 67.0
 (D10, D12). No Braket or other paid service was called.
+**HEAD at handover**: 107dd75. CI's full job (every test and every red
+proof) is green on it. The push job is red on diff coverage only: D15,
+asked at handover.
 
 This file is the durable copy. The same items are listed to the screen at
 handover: a pointer to a file is not a handover.
-
-DRAFT: written during Phase 4 and completed at handover. Items marked
-PENDING are filled in when their result exists.
 
 ---
 
@@ -50,9 +51,28 @@ PENDING are filled in when their result exists.
 - **Please read**: the first parallel run failed three files that pass
   alone (a git timeout, a time limit, memory). They are now in
   `SERIAL_FILES`, with that reason in the root `conftest.py`.
+- **Measured again on the final state** (107dd75's code, 2026-11-06):
+  962 s in parallel plus 506 s for the serial files.
+- **Please read, change b**: a change to shared machinery selects every
+  proof file. The final run's `conftest.py` change selected all 161, and
+  the proofs took 4 h 11 min locally. Earlier in Phase 5 I ran the proofs
+  of only the 17 test files that changed directly, though b had selected
+  all 159. That was my shortcut, not the rule; the full-job run in CI is
+  what covered the rest.
+- **Please read, change d**: on the final run, three tests failed under
+  parallel load and passed alone, each reading a subprocess's output
+  (`test_outward_readability.py`, `test_closeout_plan_gate.py`, and a
+  setup error in `test_evidence_immutability.py`). They are not moved to
+  `SERIAL_FILES`, because the cause is not known; listed for refinement.
 - **c**: diff coverage in CI's push job (`.coveragerc`, `diff-cover
-  --fail-under=100` against `origin/develop`). The first CI run on this
-  branch shows what it reports; see the note below this item.
+  --fail-under=100` against `origin/develop`). On 107dd75 it reports
+  1,434 changed lines, 478 not run by any test (67%), most of them in
+  run modules (`exp5_router.py`, `f157_qnn_ieee.py`,
+  `f157_spectra_algorithms.py`, `run_dirac3s_units.py`). D15 decides
+  what the gate does; it is asked at handover.
+- **CI's full job has a thin time margin**: on 107dd75 the first attempt
+  hit its 20-minute limit on a runner about 1.4 times slower throughout;
+  the second took 921 s for the tests. Listed for refinement.
 - **e**: a Phase 7 step starts the short review and CI's full job
   together.
 - **f**: `scripts/env_check.py` prints start-up times beside the
@@ -107,8 +127,16 @@ PENDING are filled in when their result exists.
   oilgas_gasturbine (0.8532 against 0.8394) and telecom_churn (0.8441
   against 0.7254).
 - **Please read**: `ENERGY_STEEL_SVM.md`. On seed 42 the RBF scores
-  carry no ranking on validation and do on test. The page states this
-  as not explained.
+  carry no ranking on validation and do on test; on seed 49 the reverse.
+  The page states both as not explained.
+- **Please read**: `ENERGY_STEEL_COMPARISON.md`'s BLUF (Task M). The
+  SVM's test scores carry no ranking on 4 of 10 seeds (44, 45, 46, 49)
+  and logistic regression's on seed 46; those seeds are in the means and
+  places, and on them recall at the budget reads 1.0. The SVM pages also
+  state when the chosen C is the grid's largest value, 10: on
+  oilgas_gasturbine and telecom_churn 10 of 10 seeds, energy_steel 6 and
+  maintenance_ai4i 2, so a larger C may do better. The titles say "best
+  result within F166's grid".
 
 ## V7. Task G (F157 QNN): dequantized
 
@@ -118,7 +146,11 @@ PENDING are filled in when their result exists.
   RFF.
 - **Please read**: the interval resamples test rows, not seeds. Across
   seeds HGB is ahead on 5 of 8 (Wilcoxon p 0.109). The outcome follows
-  the entry's rule; "HGB beats the circuit" is not claimed.
+  the entry's rule; "HGB beats the circuit" is not claimed. A t interval
+  over the eight per-seed deltas crosses the margin for GAM and HGB, so
+  the outcome is not shown across training draws (the page's BLUF now
+  says so). JOINT and RFF are below the circuit on the test-row interval
+  only.
 - Seed 48's phase complexity is 0.095 against about 0.5 on the others,
   still above the 0.01 floor.
 
@@ -126,9 +158,10 @@ PENDING are filled in when their result exists.
 
 - `docs/phase2/EXP5_ROUTER.md` from `exp5_router.json`. No ProductCD
   segment is accepted, for the proxy or for HGB.
-- **Please read**: on C, R and S the champion's recall within the segment
-  is already at the 0.5% budget's maximum, so the measure cannot show an
-  edge there. W cannot be scored.
+- **Please read**: on C, R, H and S, every segment that can be scored,
+  the champion's recall within the segment is already at the 0.5%
+  budget's maximum, so the measure cannot show an edge there. W cannot
+  be scored. The control clause passes a lane that only ties.
 
 ## V9. Tasks I and J (F155, F95): on Dirac-3S, both complete
 
@@ -181,3 +214,45 @@ PENDING are filled in when their result exists.
   results, seed 42 (no ranking on validation, ranked on test) and seed
   49 (the reverse); a calibrated ULB ceiling; an Experiment 5 measure that
   does not saturate.
+
+## V12. Task M (#105): the Phase 5 fresh-eyes review, fixed
+
+- A fresh-eyes agent read every Sprint 31 result against its file
+  (42 findings). The major ones are fixed in 0910e4a and dfb1694:
+  - F95's preregistered reading was never computed; now it is
+    (`f95_schedule4_twins.json`), and the page and V9 say what it shows.
+  - SPECTRA pages, F157 QNN, Experiment 5, F114, V9, the PoC plan draft
+    and the three learning documents corrected to match their files.
+- **Please read**: `docs/phase2/F114_REAL_CEILING.md`. The stage-1
+  reference arm's "recovery" is vacuous, and the shuffled-label check
+  barely moved between a collapsed and a working model.
+- **For refinement, not fixed**: F95's generator changed between stops
+  (1fb4eba to f3bb8d5); energy_steel seed 46 makes all three linear
+  models give no ranking (a feature preparation check); the secondary
+  bootstrap in the SPECTRA result is conditional on the fits and can
+  disagree with the Wilcoxon test; the PoC plan's "fifth or sixth" is a
+  point order, not a tested one; ULB's 7-seed figures; the device runs'
+  interpreter is not the locked environment.
+
+## V13. Task N (#106): CI red on dfb1694, and a defect I introduced
+
+- **Please read**: dfb1694 committed a wrong figure. The ML Expert
+  learning document read -0.079 for F158's cascade, against -0.069 in
+  `f158_fraud_types.json`. I had run red proofs under `pytest -n 4`; two
+  proofs on that document interleaved, and the second restored the
+  first's mutation as the original. CI's push job caught it. Restored in
+  62db122. Every other learning-document proof target was checked
+  against HEAD; this was the only one left behind.
+- **Prevention**: the root `conftest.py` fails a red proof at setup
+  inside an xdist worker, before it mutates anything
+  (`test_no_proofs_under_xdist.py`, proven red).
+- `f95_schedule4_twins.json`'s rows had no job id or device type
+  (`test_row_schema`). The file was regenerated offline from the same
+  stored samples, every reading unchanged, with the replacement and its
+  reason in the provenance block; `provenance.start` now takes a stated
+  `replace=` in code (no command-line form).
+- The test inventory missed the new test file, and showed files no
+  report holds as 0.0 local seconds; they are now blank (107dd75).
+- **For refinement**: a security review suggested that
+  `select_proofs.py` fail when a non-empty change selects no proof. Not
+  needed today (CI's full job runs every proof), but a cheap hardening.
