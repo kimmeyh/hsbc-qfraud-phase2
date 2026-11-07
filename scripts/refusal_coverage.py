@@ -22,9 +22,11 @@ import re
 import sys
 from pathlib import Path
 
-# A statement that refuses: `raise ...`, `sys.exit(...)`, `SystemExit(...)`
-# anywhere on the line (as in `raise SystemExit(...)` or `exit(SystemExit)`).
-REFUSAL = re.compile(r"^\s*raise\b|\bsys\.exit\s*\(|\bSystemExit\b")
+# A statement that refuses: `raise ...`, `sys.exit(...)`, or a
+# `SystemExit(...)` built anywhere on the line. The bare name is not one:
+# `except SystemExit as exc:` and `pytest.raises(SystemExit, ...)` refuse
+# nothing (PR 92 review).
+REFUSAL = re.compile(r"^\s*raise\b|\bsys\.exit\s*\(|\bSystemExit\s*\(")
 # A module's entry line, `raise SystemExit(main(...))` or
 # `sys.exit(main(...))`, passes on main's exit code and refuses nothing:
 # 10 of the 19 "refusals" counted on cdb8471 were these.

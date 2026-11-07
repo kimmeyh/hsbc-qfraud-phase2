@@ -54,11 +54,11 @@ def test_the_full_job_runs_the_proofs_on_ready_for_review():
             "--junitxml=${{ runner.temp }}/ci-proofs.xml") in proofs
     assert "fetch-depth: 0" in jobs["full"]
     # Every non-draft event, so a push after ready for review runs the
-    # proofs too (PR 74 review); the push job only on a draft.
+    # proofs too (PR 74 review); the push job, with its refusal gate, on
+    # every pull request push, so the merged HEAD is gated (PR 92 review).
     assert ("if: github.event_name == 'workflow_dispatch' || "
             "!github.event.pull_request.draft" in jobs["full"])
-    assert ("if: github.event_name == 'pull_request' && "
-            "github.event.pull_request.draft" in jobs["test"])
+    assert "    if: github.event_name == 'pull_request'\n" in jobs["test"]
     text = WORKFLOW.read_text(encoding="utf-8").replace("\r\n", "\n")
     assert "types: [opened, synchronize, reopened, ready_for_review]" in text
     assert "\n  workflow_dispatch:\n" in text.split("\njobs:", 1)[0]
@@ -187,6 +187,11 @@ def test_the_selection_and_marking_can_fail():
             ("select_proofs.py --sample --run", "select_proofs.py --sample",
              "test_the_full_job_runs_the_proofs_on_ready_for_review",
              "the full job lists the proofs and runs none"),
+            ("    if: github.event_name == 'pull_request'\n",
+             "    if: github.event_name == 'pull_request' && "
+             "github.event.pull_request.draft\n",
+             "test_the_full_job_runs_the_proofs_on_ready_for_review",
+             "the refusal gate skipped after ready for review"),
             ("        if: success() || failure()\n", "",
              "test_the_full_job_runs_the_proofs_on_ready_for_review",
              "a failed test skipping the proofs"),

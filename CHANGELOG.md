@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-07
 
+- **fix**: Sprint 31 Task P, the PR 92 review fixes, each with a test and a red proof. `refusal_coverage.py` counts a built `SystemExit(...)`, not the bare name (`except SystemExit` refuses nothing). `run_dirac3s_units.py`: a returned paid call's row is written before a missing stored response refuses (status `stored_response_missing`, nonzero), so the result file and the cap never lose a paid call; `--twins` refuses unless F95 is complete and every unit has an ok row; the variable-count refusal before a send is tested. `ci.yml`: the push job, with the refusal gate, runs on every pull request push, so a push after ready for review is gated. `exp5_router.py`: a label mismatch writes nothing and exits nonzero. `SPRINT_31_RETROSPECTIVE.md` drafted with the team lead's feedback, the review findings and the proposed improvements. (Issue #108)
 - **docs**: new card F193 (priority 32, zero metered for steps 1-5), at EvidenceBasedDB's request: CVQBoost inside the SPECTRA pocket with the FourierWall2 document's configuration (XGBoost weak learners, seed 20260804, 4 datasets x both labels), then seed repeats, tuned baselines, telecom_churn alone and a regularization check; a device run only on a reliable lead and under approval. It closes the gaps between that document and F162. (Issue #95)
 
 ### 2026-11-06

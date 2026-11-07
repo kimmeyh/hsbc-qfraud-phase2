@@ -43,7 +43,10 @@ def test_refusal_lines_are_recognized():
     assert rc.is_refusal("    raise")
     assert rc.is_refusal("    sys.exit(2)")
     assert rc.is_refusal("    raise SystemExit(1)")
-    assert rc.is_refusal("    exit(SystemExit)")
+    assert rc.is_refusal("    exc = SystemExit(2)")
+    # The bare name refuses nothing (PR 92 review).
+    assert not rc.is_refusal("    except SystemExit as exc:")
+    assert not rc.is_refusal("    with pytest.raises(SystemExit, match='x'):")
     assert not rc.is_refusal("    y = x + 1  # raise in a comment")
     assert not rc.is_refusal("    y = x + 1  # not sys.exit(2): a comment")
     assert not rc.is_refusal("    raised = True")
@@ -113,6 +116,9 @@ def test_each_rule_can_fail():
     for old, new, test, label in (
             ('REFUSAL = re.compile(r"^\\s*raise\\b|', 'REFUSAL = re.compile(r"^\\s*raisex\\b|',
              "test_refusal_lines_are_recognized", "a raise not recognized"),
+            ('|\\bSystemExit\\s*\\(")', '|\\bSystemExit\\b")',
+             "test_refusal_lines_are_recognized",
+             "the bare name SystemExit read as a refusal"),
             ('    code = line.split("#", 1)[0]\n', "    code = line\n",
              "test_refusal_lines_are_recognized", "a comment read as code"),
             (" and not ENTRY.match(code)", "",

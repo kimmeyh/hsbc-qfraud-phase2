@@ -120,3 +120,33 @@ def test_the_rules_can_fail():
                               "    return []\n", expect_occurrences=1)],
                     test("test_an_accepted_reference_blocks_the_proxy"),
                     "the reference check ignored")
+
+
+def test_a_label_mismatch_writes_nothing_and_exits_nonzero(tmp_path,
+                                                           monkeypatch):
+    # PR 92 review: it was written "complete" and exited 0.
+    import pytest
+    import provenance
+    written = []
+    monkeypatch.setattr(e5, "OUT", tmp_path / "exp5.json")
+    monkeypatch.setattr(provenance, "start", lambda *a, **k: ("rid", False))
+    monkeypatch.setattr(provenance, "write_result",
+                        lambda *a, **k: written.append(a))
+    monkeypatch.setattr(e5, "run", lambda: {"alignment": {"pass": False}})
+    with pytest.raises(SystemExit, match="do not match"):
+        e5.main()
+    assert written == []
+    monkeypatch.setattr(e5, "run", lambda: {"alignment": {"pass": True}})
+    assert e5.main() == 0 and len(written) == 1
+
+
+def test_the_alignment_refusal_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    assert_can_fail([Mutation(SRC, '    if not doc["alignment"]["pass"]:\n'
+                                   '        raise SystemExit(',
+                              '    if False:\n        raise SystemExit(',
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_a_label_mismatch_writes_nothing_and_"
+                        "exits_nonzero", ROOT),
+                    "a label mismatch written as complete")

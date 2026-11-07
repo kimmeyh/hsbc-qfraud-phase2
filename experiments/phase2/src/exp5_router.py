@@ -230,6 +230,13 @@ def main() -> int:
     import provenance
     rid, _ = provenance.start(OUT, resumable=False)
     doc = run()
+    # Labels that do not match are a data fault, not an outcome: nothing
+    # is written, and the exit is nonzero (PR 92 review). An accepted HGB
+    # is a preregistered stop and is written.
+    if not doc["alignment"]["pass"]:
+        raise SystemExit("REFUSING: the stored labels do not match the "
+                         f"rebuilt month 4; nothing written: "
+                         f"{doc['alignment']}")
     doc["complete"] = True
     provenance.write_result(OUT, doc, __file__, list(SEEDS), rid)
     print({k: doc.get(k) for k in ("alignment", "stopped",

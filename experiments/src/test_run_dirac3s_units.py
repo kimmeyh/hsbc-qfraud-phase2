@@ -279,8 +279,13 @@ def test_twins_writes_its_own_file_and_reads_the_result(tmp_path, monkeypatch):
             {"unit": "y", "twin": "dirac-3:hist", "gap_min": 1e-8,
              "gap_range": 1e-8, "screen": {"screen_pass": True},
              "job_id": "jy", "device_type": "dirac-3s"}]
+    for r in rows:
+        r["status"] = "ok"
+    monkeypatch.setitem(R.CARDS["F95"], "units",
+                        [{"unit": "x"}, {"unit": "y"}])
     first = tmp_path / "f95_schedule4.json"
-    first.write_text(json.dumps({"rows": rows}), encoding="utf-8")
+    first.write_text(json.dumps({"rows": rows, "complete": True}),
+                     encoding="utf-8")
     before = first.read_bytes()
     hw = tmp_path / "hw.json"
     hw.write_text(json.dumps({"per_fit": [{"file": "hist.json",
@@ -306,6 +311,86 @@ def test_twins_writes_its_own_file_and_reads_the_result(tmp_path, monkeypatch):
     R.twins(read_twin=lambda name: _row(1e-8, 5e-8), replace="test reason")
     again = json.loads(path.read_text(encoding="utf-8"))
     assert again["provenance"]["replaces"]["reason"] == "test reason"
+
+
+def test_twins_refuses_a_partial_card(tmp_path, monkeypatch):
+    # PR 92 review: a reading of stop 1 alone was written "complete".
+    ok = {"unit": "x", "status": "ok", "twin": "f142:t", "gap_min": 2e-8,
+          "gap_range": 1e-8, "screen": {"screen_pass": True},
+          "job_id": "jx", "device_type": "dirac-3s"}
+    monkeypatch.setitem(R.CARDS["F95"], "units",
+                        [{"unit": "x"}, {"unit": "y"}])
+    first = tmp_path / "f95_schedule4.json"
+    monkeypatch.setitem(R.CARDS["F95"], "result", first)
+    monkeypatch.setattr(R, "TWINS_RESULT", tmp_path / "twins.json")
+    for rows, complete, why in (
+            ([ok], True, r"\['y'\]"),                       # a unit missing
+            ([ok, dict(ok, unit="y", status="failed")], True, r"\['y'\]"),
+            ([ok, dict(ok, unit="y")], False, "complete=False")):
+        first.write_text(json.dumps({"rows": rows, "complete": complete}),
+                         encoding="utf-8")
+        with pytest.raises(SystemExit, match=why):
+            R.twins(read_twin=lambda name: _row(1e-8, 5e-8))
+        assert not (tmp_path / "twins.json").exists()
+
+
+def test_a_wrong_variable_count_refuses_before_any_send(tmp_path,
+                                                        monkeypatch):
+    # The last offline check before a paid send (PR 92 review).
+    _paths(tmp_path, monkeypatch)
+    sent = []
+    # Every field the offline line prints, so a removed refusal reaches
+    # the send and is seen there, not as a missing key.
+    monkeypatch.setattr(R, "offline", lambda u: {
+        "n_variables": 9, "n_variables_expected": 10,
+        "device_type": "dirac-3s", "num_samples": 1,
+        "relaxation_schedule": 4, "screen_pass": True, "quote": {}})
+    monkeypatch.setattr(R, "run_stop", lambda *a, **k: sent.append(1) or 0)
+    monkeypatch.setattr(R, "dry_run",
+                        lambda *a, **k: sent.append(1) or tmp_path / "d.json")
+    assert R.main(["--card", "F95", "--stop", "2", "--dry-run"]) == 3
+    assert sent == []
+
+
+def test_a_returned_call_is_recorded_before_a_missing_response_refuses():
+    # PR 92 review: the refusal ran first and the paid row was lost.
+    seen = []
+    row = {"unit": "u"}
+    with pytest.raises(RuntimeError, match="not stored"):
+        R.record_returned(row, {"path": None},
+                          lambda r: seen.append(dict(r)))
+    assert [r["status"] for r in seen] == ["submitted_reading",
+                                           "stored_response_missing"]
+    assert "stored_response_missing" in R.NONZERO
+
+
+def test_the_pr92_review_fixes_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    for old, new, test, label in (
+            ("    if result.get(\"complete\") is not True or missing:\n",
+             "    if False:\n",
+             "test_twins_refuses_a_partial_card",
+             "a partial F95 card read as complete"),
+            ("        if s[\"n_variables\"] != s[\"n_variables_expected\"]:\n",
+             "        if False:\n",
+             "test_a_wrong_variable_count_refuses_before_any_send",
+             "a wrong variable count sent"),
+            ("    row[\"status\"] = \"submitted_reading\"\n"
+             "    on_submitted(row)\n"
+             "    try:\n"
+             "        device_store.require_saved(saved)\n",
+             "    device_store.require_saved(saved)\n"
+             "    row[\"status\"] = \"submitted_reading\"\n"
+             "    on_submitted(row)\n"
+             "    try:\n"
+             "        pass\n",
+             "test_a_returned_call_is_recorded_before_a_missing_response_refuses",
+             "the refusal before the paid row is recorded")):
+        assert_can_fail([Mutation(RUNNER, old, new, expect_occurrences=1)],
+                        lambda test=test: run_pytest(
+                            "experiments/src/test_run_dirac3s_units.py::"
+                            + test, ROOT),
+                        label)
 
 
 def test_the_twin_reading_can_fail():

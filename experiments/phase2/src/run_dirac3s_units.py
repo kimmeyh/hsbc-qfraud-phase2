@@ -236,6 +236,21 @@ def gaps(J, C, w_ref, samples) -> dict:
             "gap_range": (max(per) - min(per)) if per else None}
 
 
+def record_returned(row: dict, saved: dict, on_submitted) -> None:
+    """A returned paid call goes to the result file FIRST; then a response
+    that was not stored marks the row and refuses. In the other order the
+    refusal lost the paid row, and a later stop's cap read too few
+    seconds (PR 92 review)."""
+    row["status"] = "submitted_reading"
+    on_submitted(row)
+    try:
+        device_store.require_saved(saved)
+    except RuntimeError as exc:
+        row.update({"status": "stored_response_missing", "error": str(exc)})
+        on_submitted(row)
+        raise
+
+
 def metered(card: str, u: dict, screened: dict, client, on_submitted) -> dict:
     """One metered Dirac-3S fit, ONE attempt, stored through device_store.
     `on_submitted(row)` is called as soon as the fit returns, before any
@@ -284,9 +299,7 @@ def metered(card: str, u: dict, screened: dict, client, on_submitted) -> dict:
         row.update(_returned_length(saved, screened["n_variables"]))
         on_submitted(row)
         return row
-    device_store.require_saved(saved)
-    row["status"] = "submitted_reading"
-    on_submitted(row)
+    record_returned(row, saved, on_submitted)
     try:
         read(card, row, fit, cfg, Xtr, y_pm1, screened["n_variables"])
     except Exception as exc:                               # noqa: BLE001
@@ -406,8 +419,19 @@ def twins(read_twin=None, replace: str | None = None) -> Path:
     reads can be recovered (B2, F141). `replace` states why a recorded
     file goes; there is no command-line form."""
     read_twin = read_twin or twin_gaps
-    rows = json.loads(CARDS["F95"]["result"].read_text(
-        encoding="utf-8"))["rows"]
+    result = json.loads(CARDS["F95"]["result"].read_text(encoding="utf-8"))
+    rows = result["rows"]
+    # A partial card is not the preregistered reading (PR 92 review): a
+    # "complete" twins file from stop 1 alone would then block the real one.
+    good = {r["unit"] for r in rows if r.get("status") in ("ok",
+                                                           "ok_unmetered")}
+    missing = [u["unit"] for u in CARDS["F95"]["units"]
+               if u["unit"] not in good]
+    if result.get("complete") is not True or missing:
+        raise SystemExit(f"REFUSING: F95 is not complete; units without an "
+                         f"ok row: {missing or 'none'}, complete="
+                         f"{result.get('complete')}. Run its stops first.")
+    rows = [r for r in rows if r["unit"] in good]
     run_id, _ = provenance.start(TWINS_RESULT, resumable=False,
                                  replace=replace)
     out = []
@@ -455,7 +479,7 @@ def write(card: str, rows: list, run_id: str) -> None:
                             run_id)
 
 
-NONZERO = ("failed", "ok_reading_failed")
+NONZERO = ("failed", "ok_reading_failed", "stored_response_missing")
 
 
 def run_stop(card: str, stop: int, todo: list, screened: dict,
