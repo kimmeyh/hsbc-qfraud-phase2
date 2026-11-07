@@ -1389,3 +1389,92 @@ backlog beside group A.
 3. Add no cards.
 
 **Answer (team lead, 2026-11-06): 1.** Verbatim: "D18 option 1 (all 9 cards)". Cards F184-F192 are added to `ALL_SPRINTS_MASTER_PLAN.md` at the priorities above.
+
+---
+
+## D19. Retrospective: what happens to the review findings not fixed in Task P?
+
+Asked 2026-11-07 at the Phase 7 retrospective (step 6).
+
+**What.** The PR 92 reviews found about 25 points. Task P fixed the six
+that could write a wrong record or leave the merged HEAD ungated (961e564).
+Three groups remain, listed in full in `SPRINT_31_RETROSPECTIVE.md`,
+"Review findings not fixed":
+- (a) Prove the Sprint 31 refusals red: proofs for thirteen tested refusals
+  and terms, and two runner refusal tests moved onto temporary paths with
+  stubs first, because a proof of either today would write into
+  `experiments/phase2/results/` or open a device client. About 90 minutes.
+- (b) The refusal gate sees `print("REFUSING: ..."); return N` and
+  one-line raises, with a test for each such line the change shows. About
+  60 minutes.
+- (c) The latent set: eight defects that no recorded run has hit
+  (Experiment 5's score path, F114 `--lr05`'s stage-1 check, `run_rbf`'s
+  seeds, `provenance.start(replace=)` with `resumable`, `os.link` cleanup,
+  two `f157_spectra_docs` branches, Experiment 5's untested `edges()` and
+  `accept()` refusals). About 120 minutes.
+
+**Why it matters.** Fixing all three now adds about 270 minutes to a
+sprint already at 2,893 active minutes against a 1-2 hour target. Left
+uncarded, (a) and (b) leave refusals the D16 gate exists for unchecked.
+None changes a recorded result: the reviewers checked the three runs the
+latent set could touch.
+
+**Kind.** Options 1 and 2: Prevention (carded with acceptance criteria,
+so each is built and proven). Option 3: Prevention now, at the cost of
+the sprint time. Option 4: Workaround.
+
+**Cost.** Option 1: about 10 minutes now (one card, F194, with all three
+groups, priority 12). Option 2: about 10 minutes now (two cards: F194 for
+(a) and (b) at priority 12, F195 for (c) at priority 28). Option 3: about
+270 minutes now. Option 4: none.
+
+**Recommendation: 2.** (a) and (b) complete D16's gate and belong at the
+top of Sprint 32; (c) is latent and can wait behind the experiments.
+
+**Options**
+
+1. Card all three groups as F194, priority 12.
+2. Card (a) and (b) as F194, priority 12, and (c) as F195, priority 28.
+3. Fix all three now, in Sprint 31.
+4. Card nothing; the findings stay in the retrospective only.
+
+---
+
+## D20. Retrospective: which improvements are applied now?
+
+Asked 2026-11-07 at the Phase 7 retrospective (step 6). The five
+proposals are in full in `SPRINT_31_RETROSPECTIVE.md`, "Improvements
+proposed".
+
+**What.**
+- IMP-1: a refusal test stubs what the refusal protects (a Phase 4
+  checklist line). About 5 minutes.
+- IMP-2: a result is marked complete only by a check that it is (a
+  guard). About 60 minutes; red on arrival until D19's (c) is fixed.
+- IMP-3: the refusal gate sees the repository's refusal forms. The same
+  work as D19's (b).
+- IMP-4: Phase 3 states the plan's total beside the 1-2 hour target and,
+  when it is over, asks the scope as a decision with a cut option. About
+  10 minutes.
+- IMP-5: a research estimate uses the median ratio of the last three
+  sprints' measured research rows. About 10 minutes.
+
+**Why it matters.** IMP-4 and IMP-5 answer category 3 (Poor): this sprint
+ran 1.69 times its estimate and far over the time target. IMP-1 answers
+the proof that ran without end for 83 minutes.
+
+**Kind.** All Prevention.
+
+**Cost.** Option 1: about 25 minutes now, three files
+(`SPRINT_CHECKLIST.md`, `SPRINT_PLANNING.md`, the CHANGELOG), and IMP-2
+and IMP-3 to the backlog. Option 2: about 85 minutes now. Option 3: about
+5 minutes now (all five to the backlog).
+
+**Recommendation: 1.** IMP-1, 4 and 5 are text rules that cost minutes;
+IMP-2 needs D19's (c) first, and IMP-3 is D19's (b).
+
+**Options**
+
+1. Apply IMP-1, IMP-4 and IMP-5 now; IMP-2 and IMP-3 to the backlog.
+2. Apply all five now.
+3. Apply none now; all five to the backlog.
