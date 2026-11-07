@@ -1387,3 +1387,5 @@ backlog beside group A.
 1. Add all nine cards, F184-F192, at the priorities above.
 2. Add F184-F187 only, at the priorities above.
 3. Add no cards.
+
+**Answer (team lead, 2026-11-06): 1.** Verbatim: "D18 option 1 (all 9 cards)". Cards F184-F192 are added to `ALL_SPRINTS_MASTER_PLAN.md` at the priorities above.

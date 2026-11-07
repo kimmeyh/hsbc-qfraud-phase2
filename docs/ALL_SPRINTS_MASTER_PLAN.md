@@ -786,6 +786,69 @@ value. Removed from candidates.)
 - Acceptance: the guard refuses any module under `experiments/phase2/src/` that names `eqc_submit.DIRAC_3` (not `DIRAC_3S`), proven red in the same commit; the module docstring cites D5
 - Depends on: nothing
 
+**F184. Data used, or usable, for fraud investigation (~90m [no-history], zero metered) Priority 25**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from the team lead's A1 review of the learning documents)
+- Platform: N/A (research document)
+- What banks, card networks and investigators record; which fields the public datasets (ULB, IEEE-CIS, SPECTRA) lack; which of the team lead's suggestions (card, customer and advertising identifiers and histories, address, product, merchant, customer device, social media) are lawful and obtainable
+- Acceptance: a document under `docs/phase2/` with each field's source cited, its lawful basis or the reason it is not usable, and whether a public dataset holds it; claims from EvidenceBasedDB cite their entry
+- Depends on: nothing
+
+**F185. A cost-weighted alert budget (~60m [no-history], zero metered) Priority 18**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1)
+- Platform: ULB, IEEE-CIS (stored scores)
+- Rank by expected dollars saved net of review cost (EvidenceBasedDB `hoppner-instance-threshold`, high) on ULB's Amount and IEEE-CIS's TransactionAmt, against today's count-based 0.5% budget, using the stored per-row test scores (the outcome blocks)
+- Acceptance: both rankings at the same review count, with dollars caught and the confusion counts for each, from the stored scores (their SHA-256 checked), in a result file with provenance and an outcome block
+- Depends on: nothing
+
+**F186. Card-testing sequences (~90m [no-history], zero metered) Priority 22**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1)
+- Platform: IEEE-CIS (ULB has no card field)
+- On an IEEE-CIS card-holder key: small-then-large pairs within 24 hours, their fraud rate, and the lift of velocity features at the 0.5% budget
+- Acceptance: the key's definition and its known limits stated; the pair count and fraud rate with an interval; the velocity features' lift on the month-4 test set, with an outcome block
+- Depends on: nothing
+
+**F187. A circuit with all three quantum properties and many non-Clifford gates (~120m [no-history], simulation only, zero metered) Priority 45**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from the team lead's A1 request for an experiment with superposition, entanglement and interference on all the datasets; draft design in the quantum computing expert learning document, section 7)
+- Platform: simulator; ULB, IEEE-CIS month 4 and SPECTRA's four datasets on the quantum-enhanced `target` label
+- Widths 8 to 20, non-Clifford count stepped past exact statevector cost; compared with the six F106 twins, HGB and a kernel surrogate. Gate-based hardware only if a circuit beats every twin, under its own approval. Related to F116 and F117 (HOLD)
+- Acceptance: an experiment entry written before any run; every arm scored at the 0.5% budget with outcome blocks; the twin comparison reported per dataset, including where no circuit beats a twin
+- Depends on: nothing
+
+**F188. Rounding test on the IEEE-CIS selection instances (~30m [no-history], zero metered) Priority 24**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from EvidenceBasedDB's ranked memo)
+- Platform: classical solvers
+- Round each IEEE-CIS selection instance to 200:1 and see whether F176's under-2e-05 gains survive. If not, no device run on that formulation can show anything
+- Acceptance: each instance's gain before and after rounding, from F176's solvers; the finding stated for any device run proposed on that formulation
+- Depends on: nothing
+
+**F189. Solver sweep on the first design (~45m [no-history], zero metered) Priority 50**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from EvidenceBasedDB's ranked memo)
+- Platform: ULB instances, classical solvers
+- F176's solvers and a cardinality-penalty sweep on the ULB instances
+- Acceptance: each solver's objective per penalty value per instance, in a result file with provenance
+- Depends on: nothing
+
+**F190. Equal-feature comparison (~60m [no-history], zero metered) Priority 35**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from EvidenceBasedDB's ranked memo)
+- Platform: ULB, IEEE-CIS
+- Every classical lane on the proxy's 17 features, so the classical and quantum arms see the same inputs
+- Acceptance: each lane's score at the 0.5% budget on the 17 features beside its full-feature score, with outcome blocks
+- Depends on: nothing
+
+**F191. Kernel copy and qubit sweep (~120m [no-history], zero metered) Priority 55**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from EvidenceBasedDB's ranked memo)
+- Platform: simulator, fraud features
+- A classical surrogate for any quantum kernel, and kernel concentration from 2 to 14 qubits on fraud features
+- Acceptance: the surrogate's score beside the quantum kernel's at the 0.5% budget; the off-diagonal kernel variance per qubit count
+- Depends on: nothing
+
+**F192. Bank-scale timing (~120m [no-history], zero metered) Priority 40**
+- Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from EvidenceBasedDB's ranked memo)
+- Platform: classical, synthetic rows at bank scale
+- Classical training and scoring at 1, 10 and 100 million rows, beside a quantum step's loading and shot cost
+- Acceptance: measured classical times on this machine with its specification stated; the quantum figures cited to their source, marked as estimates
+- Depends on: nothing
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)
