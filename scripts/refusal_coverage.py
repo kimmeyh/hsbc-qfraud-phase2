@@ -6,8 +6,9 @@ lines, almost all the `run` and `main` paths of experiment modules that
 need the raw data or a device. The class the gate exists for is the
 untested refusal (37 reached review in Sprints 28-30), so this script
 reads diff-cover's JSON report and fails only when an uncovered changed
-line is a refusal: a `raise`, `sys.exit(...)` or `SystemExit`. Every other
-uncovered line is listed, and does not fail.
+line is a refusal: a `raise` (also a one-line `if bad: raise`),
+`sys.exit(...)`, `SystemExit(...)` or a `print("REFUSING ...")`. Every
+other uncovered line is listed, and does not fail.
 
 Usage: python scripts/refusal_coverage.py diff-cover.json
 
@@ -20,13 +21,20 @@ from __future__ import annotations
 import json
 import re
 import sys
+import tokenize
 from pathlib import Path
 
 # A statement that refuses: `raise ...`, `sys.exit(...)`, or a
 # `SystemExit(...)` built anywhere on the line. The bare name is not one:
 # `except SystemExit as exc:` and `pytest.raises(SystemExit, ...)` refuse
-# nothing (PR 92 review).
-REFUSAL = re.compile(r"^\s*raise\b|\bsys\.exit\s*\(|\bSystemExit\s*\(")
+# nothing (PR 92 review). Sprint 31 i3 (team lead, 2026-11-07) adds the
+# repository's two other forms: a one-line `if bad: raise ...`, and the
+# commonest, `print("REFUSING: ...")` followed by `return N`, seen by its
+# print (silent-failure finding 4 of the PR 92 review).
+REFUSAL = re.compile(
+    r"^\s*raise\b|\bsys\.exit\s*\(|\bSystemExit\s*\("
+    r"|^\s*(?:if|elif|else|except|for|while|with)\b.*:\s*raise\b"
+    r"|\b(?:print|write)\s*\(\s*f?[\"']REFUSING\b")
 # A module's entry line, `raise SystemExit(main(...))` or
 # `sys.exit(main(...))`, passes on main's exit code and refuses nothing:
 # 10 of the 19 "refusals" counted on cdb8471 were these.
@@ -36,6 +44,24 @@ ENTRY = re.compile(r"^\s*(raise\s+SystemExit|sys\.exit)\(\s*main\(")
 def is_refusal(line: str) -> bool:
     code = line.split("#", 1)[0]
     return bool(REFUSAL.search(code)) and not ENTRY.match(code)
+
+
+def statement(src: list[str], n: int) -> str:
+    """The statement that starts on line `n` (1-based), its continuation
+    lines joined and each line's comment removed. coverage.py names a
+    multi-line statement by its first line, so `print(` alone on line n
+    with `"REFUSING: ..."` on line n + 1 is still seen. Source the
+    tokenizer cannot read from line n is judged by line n alone."""
+    rest = iter(s + "\n" for s in src[n - 1:])
+    end = n
+    try:
+        for tok in tokenize.generate_tokens(lambda: next(rest, "")):
+            if tok.type in (tokenize.NEWLINE, tokenize.ENDMARKER):
+                end = n + tok.start[0] - 1
+                break
+    except (tokenize.TokenError, SyntaxError):
+        end = n
+    return " ".join(s.split("#", 1)[0] for s in src[n - 1:max(end, n)])
 
 
 def uncovered(report: dict) -> dict[str, list[int]]:
@@ -66,7 +92,7 @@ def classify(missed: dict[str, list[int]], root: Path | None = None):
             if not 1 <= n <= len(src):
                 raise ValueError(f"{path}:{n} is past the end of the file")
             row = (path, n, src[n - 1].strip())
-            (refusals if is_refusal(src[n - 1]) else others).append(row)
+            (refusals if is_refusal(statement(src, n)) else others).append(row)
     return refusals, others
 
 

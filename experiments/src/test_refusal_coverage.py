@@ -53,6 +53,46 @@ def test_refusal_lines_are_recognized():
     assert not rc.is_refusal("    return y")
 
 
+def test_a_one_line_raise_is_a_refusal():
+    """Sprint 31 i3: `if bad: raise ...` on one line."""
+    assert rc.is_refusal("    if bad: raise ValueError('no')")
+    assert rc.is_refusal("    else: raise ClaimError('x')")
+    assert not rc.is_refusal("    if raised: count += 1")
+    assert not rc.is_refusal("    note = 'x: raise later'")
+
+
+def test_a_refusing_print_is_a_refusal():
+    """Sprint 31 i3: the repository's commonest refusal,
+    `print("REFUSING: ..."); return N`, seen by its print."""
+    assert rc.is_refusal('    print("REFUSING: no ledger", file=sys.stderr)')
+    assert rc.is_refusal("    print(f'REFUSING {label}: {why}')")
+    assert rc.is_refusal('    sys.stderr.write("REFUSING: x")')
+    assert not rc.is_refusal('    assert "REFUSING" in out')
+    assert not rc.is_refusal('    print("not REFUSING anything")')
+
+
+MULTI = ("def g(x):\n"
+         "    print(\n"
+         "        \"REFUSING: no ledger\",  # the reason\n"
+         "        file=sys.stderr)\n"
+         "    return 2\n")
+
+
+def test_a_multi_line_refusal_is_seen_by_its_first_line(tmp_path):
+    """coverage.py names a multi-line statement by its first line, which
+    here is `print(` alone."""
+    (tmp_path / "m.py").write_text(MULTI, encoding="utf-8")
+    refusals, others = rc.classify({"m.py": [2, 5]}, tmp_path)
+    assert [n for _, n, _ in refusals] == [2]
+    assert [n for _, n, _ in others] == [5]
+
+
+def test_source_the_tokenizer_cannot_read_is_judged_by_its_line(tmp_path):
+    (tmp_path / "m.py").write_text("x = (\n", encoding="utf-8")
+    refusals, others = rc.classify({"m.py": [1]}, tmp_path)
+    assert refusals == [] and [n for _, n, _ in others] == [1]
+
+
 def test_a_module_entry_line_is_not_a_refusal():
     assert not rc.is_refusal("    raise SystemExit(main())")
     assert not rc.is_refusal("    raise SystemExit(main(sys.argv[1:]))")
@@ -114,9 +154,9 @@ def test_malformed_report_contents_exit_2(tmp_path):
 def test_each_rule_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     for old, new, test, label in (
-            ('REFUSAL = re.compile(r"^\\s*raise\\b|', 'REFUSAL = re.compile(r"^\\s*raisex\\b|',
+            ('    r"^\\s*raise\\b|', '    r"^\\s*raisex\\b|',
              "test_refusal_lines_are_recognized", "a raise not recognized"),
-            ('|\\bSystemExit\\s*\\(")', '|\\bSystemExit\\b")',
+            ('|\\bSystemExit\\s*\\("\n', '|\\bSystemExit\\b"\n',
              "test_refusal_lines_are_recognized",
              "the bare name SystemExit read as a refusal"),
             ('    code = line.split("#", 1)[0]\n', "    code = line\n",
@@ -128,7 +168,22 @@ def test_each_rule_can_fail():
              'ENTRY = re.compile(r"^\\s*(raise\\s+SystemExit|sys\\.exit)\\(")',
              "test_a_module_entry_line_is_not_a_refusal",
              "every SystemExit read as an entry line"),
-            ("            (refusals if is_refusal(src[n - 1]) else others).append(row)\n",
+            (r'    r"|^\s*(?:if|elif|else|except|for|while|with)\b.*:\s*raise\b"' "\n",
+             "",
+             "test_a_one_line_raise_is_a_refusal",
+             "a one-line raise not recognized"),
+            ('    r"|\\b(?:print|write)\\s*\\(\\s*f?[\\"\']REFUSING\\b")',
+             '    )',
+             "test_a_refusing_print_is_a_refusal",
+             "a REFUSING print not recognized"),
+            ("is_refusal(statement(src, n))", "is_refusal(src[n - 1])",
+             "test_a_multi_line_refusal_is_seen_by_its_first_line",
+             "only the first line of a statement read"),
+            ("    except (tokenize.TokenError, SyntaxError):\n",
+             "    except ZeroDivisionError:\n",
+             "test_source_the_tokenizer_cannot_read_is_judged_by_its_line",
+             "unreadable source raises"),
+            ("            (refusals if is_refusal(statement(src, n)) else others).append(row)\n",
              "            others.append(row)\n",
              "test_classify_splits_refusals_from_other_lines",
              "every line classed as not a refusal"),

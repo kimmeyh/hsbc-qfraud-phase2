@@ -1487,3 +1487,15 @@ with pros and cons, in `SPRINT_31_RETROSPECTIVE.md`, "Improvements
 proposed". Option "applied now" means alternative a of that improvement.
 The options above and their numbers do not change, and neither does the
 recommendation (1).
+
+**Answer (team lead, 2026-11-07), per improvement, not a numbered
+option.** Verbatim: "i1. a i2. b i3. b i4. not needed - skip i5. not
+needed. skip". So:
+- i1, alternative a, now: the Phase 4 checklist line.
+- i2, alternative b, now: the complete-check test, with the open places
+  listed as exceptions until D19 group (c) fixes them.
+- i3, alternative b, now: the refusal gate sees `REFUSING` lines and
+  one-line raises, with a test for each such line the branch changed.
+  This is D19 group (b), done now.
+- i4: skipped.
+- i5: skipped.

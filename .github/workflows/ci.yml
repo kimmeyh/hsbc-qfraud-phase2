@@ -136,7 +136,8 @@ jobs:
           echo "Working tree clean after the test run."
 
       # F177 change c (Sprint 31 D8), narrowed by D16 option 1: a changed
-      # REFUSAL line (raise, sys.exit, SystemExit) in the evidence code, the
+      # REFUSAL line (raise, a one-line `if bad: raise`, sys.exit,
+      # SystemExit, print("REFUSING ...")) in the evidence code, the
       # scripts or the hooks that no test ran fails the job; every other
       # untested changed line is listed and does not fail. Untested
       # refusals are the class the check exists for (37 reached review in
