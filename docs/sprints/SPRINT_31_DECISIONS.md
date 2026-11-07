@@ -1445,6 +1445,13 @@ in ca774e7. The options above keep their numbers and now cover (a) and
 and (c) as F195; option 3 fixes (a) and (c) now, about 210 minutes;
 option 4 is unchanged. The recommendation stays 2.
 
+**Changed since asked (2026-11-07, 6:40pm).** The team lead asked for
+retrospective items in the format of `SPRINT_RETROSPECTIVE.md` step 5.
+D19 is now two items in `SPRINT_31_RETROSPECTIVE.md`, "Open items":
+i6 (group a) and i7 (group c), answered by letter. Option 1 is closest
+to i6 a with i7 b (both at priority 12, as two cards); option 2 is i6 a and i7 a; option 3 is i6 b and i7 c;
+option 4 is i6 e and i7 e.
+
 ---
 
 ## D20. Retrospective: which improvements are applied now?
@@ -1554,3 +1561,10 @@ already far over its target.
 1. Build the test now with all 13 places as a shrink-only exception list.
 2. Build the test now and review all 13 places now (about 3 hours).
 3. Do not build it now; card it as F196, priority 28.
+
+**Changed since asked (2026-11-07, 6:40pm).** The team lead asked for
+retrospective items in the format of `SPRINT_RETROSPECTIVE.md` step 5.
+D21 is now item i2 in `SPRINT_31_RETROSPECTIVE.md`, "Open items",
+answered by letter. Option 1 is i2 a, option 2 is i2 b, option 3 is
+i2 c. New: d (the check inside `provenance.write_result`, card F196),
+e (skip and track) and f (skip). The recommendation stays the same (a).

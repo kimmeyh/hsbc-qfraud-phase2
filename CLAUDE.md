@@ -141,7 +141,11 @@ only in memory.
   PLAIN NUMBERED LIST answerable by typing a digit.** The test is mechanical: if
   the team lead cannot answer by typing `1`, the format is wrong. Applies to
   yes/no (`1. Yes  2. No`), option comparisons and path selection, everywhere,
-  including outside any sprint enforcement window. (Corrected four times in
+  including outside any sprint enforcement window. **One exception:**
+  retrospective improvements, questions and decisions are numbered `i1` to
+  `in` with options lettered `a` to `z`, answered "i1. a i2. c" or "all as
+  recommended", in the format of `docs/SPRINT_RETROSPECTIVE.md` step 5
+  (team lead, 2026-11-07, Sprint 31). (Corrected four times in
   spamfilter-multi: three were AskUserQuestion by reflex, the fourth was two
   bolded paragraphs with a recommendation and no tool at all. This repository's
   CLAUDE.md never carried the rule, which is how it failed to reach

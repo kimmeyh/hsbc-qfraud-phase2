@@ -451,6 +451,130 @@ that records this.
     - Cons: it is the one-sprint problem that i5 exists to fix.
 - **Recommendation: a, now.**
 
+## Open items (the 2026-11-07 format, `SPRINT_RETROSPECTIVE.md` step 5)
+
+The team lead asked for every open retrospective item in this format.
+i2 is D21. i6 and i7 are D19's groups (a) and (c); group (b) is done
+(i3, ca774e7). Answer: "i2. a i6. a i7. a", or "all as recommended".
+
+### i2. A result is marked complete only by a check that it is
+
+- **What it is:** a test that scans `experiments/phase2/src/` for a
+  literal `complete: True` with no refusal earlier in the same function.
+  The 13 places that do this today go on a list that can only shrink
+  (`frozen_list.check`): f114 `main`, f157 `run` and `run_rbf`, f158
+  `main`, f160 `main`, f166 `run`, f169 `main_lr05` and `main`, f170
+  `main`, f171 budgets `main`, f171 missed `main`, f174 `run`,
+  `run_dirac3s_units.dry_run`.
+- **What it prevents and/or catches:** prevents, at development: a new
+  module cannot record a partial or wrong run as complete without a check
+  first. It catches nothing in the 13 listed places until they are
+  reviewed.
+- **Long-term value:** "complete" is what the cards, the gate report and
+  EvidenceBasedDB read. A false "complete" goes into reported results.
+- **Evidence:** 4 places in Sprint 31 (review class 2): `twins` could
+  record a partial F95 card as complete, and Experiment 5 recorded a label
+  mismatch as complete (both fixed in 961e564); F114 `--lr05` and
+  `run_rbf` are still open. No recorded run was affected (the reviewers
+  checked three). Time wasted: not measured; the two fixes were part of
+  Task P.
+- **Pros and cons:** Pro: automatic, and every new module is covered from
+  its first commit. Con: a refusal earlier in the function is a proxy; a
+  refusal about something else also passes.
+- **Prevention or control:** prevention. **Extends:** the
+  `test_result_writer_required.py` family and `frozen_list.check`.
+  **Effort:** 45 minutes to 3 hours, by option.
+- **Options for implementing:**
+  - a. (Recommendation) Build it now, with the 13 places on the
+    shrink-only list. About 45 minutes; a new test file and the
+    regenerated test inventory. Pro: new cases stop now. Con: the 13 stay
+    unchecked until reviewed.
+  - b. Build it now and review all 13 now: each gets a check before it, or
+    a stated reason it is complete by construction. About 3 hours. Pro:
+    complete. Con: about 2 more hours on a sprint far over its target.
+  - c. Backlog: card F196, priority 28, with this item's options b and c
+    recorded. About 10 minutes now. Pro: no sprint time. Con: new modules
+    stay unguarded until it is built.
+  - d. Put the check in `provenance.write_result`: it refuses
+    `complete: True` unless the caller passes its check's result, as card
+    F196, priority 28. About 10 minutes now, 120 or more later. Pro: one
+    place, prevention at write time. Con: every writer's call changes.
+  - e. Skip for this sprint; track it in the retrospective, in case it
+    recurs. Pro: no cost. Con: no protection.
+  - f. Skip. Pro: no cost. Con: no protection, and no record.
+
+### i6. Prove the Sprint 31 refusals red
+
+- **What it is:** red proofs for the 13 Sprint 31 refusals and terms that
+  have a test and no proof: six in `f157_spectra_docs.py`, four in
+  `run_dirac3s_units.py` (the unreadable ledger, the unreadable balance,
+  `--stop` missing, the intents term of `done`), two in
+  `f157_spectra_algorithms.py`, and the `ci95[1] < 0` term in F114. First,
+  two runner refusal tests move onto temporary paths with stubs (i1's
+  rule), because a proof of either today would write into
+  `experiments/phase2/results/` or open a device client.
+- **What it prevents and/or catches:** catches, at testing: a refusal
+  test that passes whether or not the refusal works. The prevention
+  already exists (the per-term rule in Phase 4); this completes it for
+  Sprint 31.
+- **Long-term value:** each refusal's test is shown able to fail, so a
+  later change that breaks the refusal turns CI red.
+- **Evidence:** 37 untested refusals, terms and states reached review in
+  Sprints 28-30. The PR 92 review found these 13 (test-coverage findings
+  1, 5, 8, 9). CLAUDE.md records three vacuous guards in two earlier
+  sprints. Time wasted: not measured.
+- **Pros and cons:** Pro: closes a known gap with proofs, the repository's
+  standard. Con: about 90 minutes, and proofs run slowly on this machine.
+- **Prevention or control:** control (catches). **Extends:** the Phase 4
+  per-term rule and `injection.Mutation`. **Effort:** about 90 minutes.
+- **Options for implementing:**
+  - a. (Recommendation) Backlog: card F194, priority 12, the top of
+    Sprint 32. About 10 minutes now. Pro: done early next sprint, with no
+    more time on this one. Con: the 13 stay unproven for one sprint.
+  - b. Do it now, in Sprint 31. About 90 minutes. Pro: the gap closes
+    before merge. Con: more time on a sprint far over its target.
+  - c. Backlog at a lower priority: card F194, priority 28. Pro: it does
+    not displace experiments. Con: it may wait several sprints.
+  - d. Skip for this sprint; track it, in case it recurs. Pro: no cost.
+    Con: the 13 stay unproven.
+  - e. Skip. Pro: no cost. Con: no record.
+
+### i7. Fix the latent set
+
+- **What it is:** eight defects that no recorded run has hit. Experiment
+  5 reads each score file from F174's outcome block and checks its hash;
+  F114 `--lr05` refuses unless stage 1 is complete and passed; `run_rbf`
+  refuses a dataset whose seeds differ from its plan;
+  `provenance.start(replace=)` refuses `resumable=True`; `outcome_record`
+  removes its temporary file when `os.link` fails; `f157_spectra_docs`
+  writes `linear_paragraph` only for a kept RBF form and states a missing
+  pocket figure; tests for Experiment 5's `edges()` and `accept()`
+  refusals.
+- **What it prevents and/or catches:** prevents, at development: a later
+  run reading superseded scores, or recording a run as complete without
+  its stage-1 or seed check.
+- **Long-term value:** the next re-score or rerun cannot quietly produce
+  a wrong record.
+- **Evidence:** 0 occurrences in recorded runs. The reviewers checked
+  three: no `_v2` score file exists, F169's stage 1 recorded a pass, and
+  all four SPECTRA datasets keep the RBF form. Review classes 2 and 3.
+  Time wasted: none yet.
+- **Pros and cons:** Pro: removes defects before a run hits them. Con:
+  about 120 minutes for defects with no occurrence yet.
+- **Prevention or control:** prevention. **Extends:** each module's
+  existing refusals. **Effort:** about 120 minutes.
+- **Options for implementing:**
+  - a. (Recommendation) Backlog: card F195, priority 28. About 10 minutes
+    now. Pro: no sprint time; done before the next run of these modules.
+    Con: latent for some sprints.
+  - b. Backlog at the top: card F195, priority 12, beside i6. Pro: fixed
+    early in Sprint 32. Con: it displaces experiment work.
+  - c. Do it now, in Sprint 31. About 120 minutes. Pro: fixed before
+    merge. Con: more time on a sprint far over its target.
+  - d. Skip for this sprint; track it, in case one is hit. Pro: no cost.
+    Con: a rerun can still record a wrong result.
+  - e. Skip. Pro: no cost. Con: no record.
+
 ## Improvement Decisions
 
 Team lead, 2026-11-07 (D20), verbatim: "i1. a i2. b i3. b i4. not
