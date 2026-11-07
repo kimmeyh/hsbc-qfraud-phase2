@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-07
+
+- **docs**: new card F193 (priority 32, zero metered for steps 1-5), at EvidenceBasedDB's request: CVQBoost inside the SPECTRA pocket with the FourierWall2 document's configuration (XGBoost weak learners, seed 20260804, 4 datasets x both labels), then seed repeats, tuned baselines, telecom_churn alone and a regularization check; a device run only on a reliable lead and under approval. It closes the gaps between that document and F162. (Issue #95)
+
 ### 2026-11-06
 
 - **docs**: Sprint 31 D18 answered, option 1: nine new cards in `ALL_SPRINTS_MASTER_PLAN.md`, all at 0 metered seconds. From the team lead's A1 review: F184 (investigation data, priority 25), F185 (cost-weighted alert budget, 18), F186 (card-testing sequences, 22), F187 (a three-property circuit in simulation, 45). From EvidenceBasedDB's ranked memo: F188 (rounding test, 24), F189 (solver sweep, 50), F190 (equal-feature comparison, 35), F191 (kernel copy and qubit sweep, 55), F192 (bank-scale timing, 40). (Issue #95)

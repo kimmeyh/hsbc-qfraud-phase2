@@ -849,6 +849,21 @@ value. Removed from candidates.)
 - Acceptance: measured classical times on this machine with its specification stated; the quantum figures cited to their source, marked as estimates
 - Depends on: nothing
 
+**F193. CVQBoost in the SPECTRA pocket: the FourierWall2 configuration repeated (~4h [extrapolated], zero metered for steps 1-5) Priority 32**
+- Phase: Phase 2 research (added 2026-11-07, requested by EvidenceBasedDB Sprint 16 Manual Validation Q4 = 1, the team lead approving the request; follows F162)
+- Platform: proxy (CVQBoost on the classical solver); SPECTRA, all 4 datasets x both labels (`target`, `target_real`)
+- Why: EvidenceBasedDB stores `cvqboost-tuned-in-segment-wins-single-run` (LOW): on the tuned SPECTRA rollout, one run, seed 20260804, CVQBoost led XGBoost inside the pocket on ROC-AUC in 5 of 7 valid cells and on PR-AUC in 6 of 7 (a 1.000 tie on energy_steel `target_real` counted as a lead). Source: `D:\Data\Harold\EvidenceBasedDB\References\2026-08_Kimmey_CVQBoost-Findings.md`, sections 10 and 11; the document calls the edge "fragile" and says "Firming it up needs repeats". F162 (`docs/phase2/F162_IN_POCKET.md`) found no reliable lead over ten seeds, but it differs from the document: `dct` weak learners (the document: XGBoost, depth 6, 100 trees, on 1 to 3 features), label `target` only, three cells (no maintenance_ai4i), XGBoost at library defaults. FourierWall2's split and XGBoost settings are not on record. So EvidenceBasedDB links neither F162 nor B4 as contradicting the claim
+- Steps, cheapest first; each step's confirm and refute stated in the entry before it runs:
+  1. Exact single-run repeat: weak_cls_schedule 3, num_samples 8, relaxation_schedule 2, lambda_coef = 2 x n_train, XGBoost weak learners, leak-free features, seed 20260804, all 8 cells. Confirms: the proxy reproduces 5 of 7 and 6 of 7. Refutes or redirects: it does not, so the result depends on the device or on a split not on record
+  2. Seed repeat of 1: ten or more seeds, the same cells, in-pocket ROC-AUC and AUPRC, proxy minus XGBoost, paired Wilcoxon at F162's family level. Confirms: a reliable "proxy above" on a cell. Refutes: no cell reliably above
+  3. Step 2 against a tuned XGBoost and HGB. Confirms: the lead survives a tuned baseline. Refutes: it was a lead over an untuned model
+  4. telecom_churn only, more seeds (F162: "a telecom-only entry (m = 2, more seeds) is what would decide it")
+  5. Regularization check (the document's section 11: in-pocket train AUC about 0.98 to 1.00 against test 0.59 to 0.90): step 2 with a larger lambda or a smaller weak-learner pool. Confirms: a lead that survives less memorizing. Refutes: the lead needs the overfit
+  6. Device run only if step 2 or 4 shows a reliable lead, and only under the team lead's metered approval (Criterion H). F162: "nothing here justifies one" as things stand
+- Cost basis: F162 took about 28.5 minutes for ten seeds on three cells with `dct` learners (3.1 minutes for seed 42). XGBoost weak learners on 8 cells are unmeasured; step 1 measures one seed first and sets the cap for steps 2-5
+- Acceptance: an experiment entry written before step 1; every row with an outcome block and provenance; each step's reading against its stated confirm and refute; the result at a named commit, which EvidenceBasedDB reads from this repository (nothing is sent back)
+- Depends on: nothing (step 6 depends on steps 2 or 4 and an approval)
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)
