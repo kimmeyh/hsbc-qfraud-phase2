@@ -3,7 +3,7 @@
     "number": 31,
     "name": "Make Testing Fast and Sure, Then Read the Ceiling, the Segments and Dirac-3S",
     "branch": "feature/20261104_Sprint_31",
-    "status": "phase_5_validation",
+    "status": "phase_6_push",
     "plan_doc": "docs/sprints/SPRINT_31_PLAN.md",
     "pr": 92,
     "plan_approved": true,
@@ -38,7 +38,8 @@
       "L": 101,
       "M": 41,
       "N": 128,
-      "O": 66
+      "O": 66,
+      "C": 336
     },
     "task_started": {
       "A": "2026-11-04T23:15:07-05:00",
@@ -133,7 +134,8 @@
       "L": "gaps over 30 min and pauses subtracted",
       "M": "gaps over 30 min and pauses subtracted",
       "N": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle",
-      "O": "gaps over 30 min and pauses subtracted"
+      "O": "gaps over 30 min and pauses subtracted",
+      "C": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 58,
@@ -149,7 +151,8 @@
       "L": 966,
       "M": 41,
       "N": 304,
-      "O": 66
+      "O": 66,
+      "C": 2573
     },
     "task_parallel": {
       "E": [
@@ -292,5 +295,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-06"
+  "updated": "2026-11-07"
 }
