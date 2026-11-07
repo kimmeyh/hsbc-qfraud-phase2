@@ -293,40 +293,163 @@ Not changed, with the reason, and the thread answered:
 
 ## Improvements proposed
 
-- **IMP-1. A refusal test stubs what the refusal protects.**
-  Source: class 4; the `--tests` proof ran nested test runs from 16:29 to
-  17:52, and test-coverage finding 2 (two runner refusal tests run
-  against real paths). Type: test rule. Prevention: a Phase 4 checklist
-  line, "a test of a refusal replaces the action the refusal blocks
-  (a run, a write, a client) with a stub that fails at once", so its red
-  proof cannot start the action. Extends: the Phase 4 per-term item.
-  Effort: about 5 minutes. Recommendation: now.
-- **IMP-2. A result is marked complete only by a check that it is.**
-  Source: class 2, four places this sprint. Type: guard. Prevention: a
-  test that scans `experiments/phase2/src/` for a literal
-  `"complete": True` (or `doc["complete"] = True`) not preceded in its
-  function by a refusal, with the two fixed functions as its proven
-  cases. Extends: `test_result_writer_required.py`. Effort: about 60
-  minutes. Recommendation: backlog (it needs the deferred set fixed first,
-  or it is red on arrival).
-- **IMP-3. The refusal gate sees the repository's refusal forms.**
-  Source: class 1; silent-failure finding 4. Type: gate. Prevention: as
-  the deferred item above. Extends: D16's `refusal_coverage.py`. Effort:
-  about 60 minutes. Recommendation: backlog, with the deferred proofs.
-- **IMP-4. A sprint plan fits the sprint time target, or says it does
-  not.** Source: category 3 (Poor) and category 1: 2,893 active minutes
-  against the 1-2 hour target, from twelve tasks. Type: planning rule.
-  Prevention: Phase 3 states the plan's derived total beside the 1-2
-  hour target and, when it exceeds it, asks the scope as a decision with
-  a cut option. Extends: the Phase 3 estimate step in
-  `SPRINT_PLANNING.md`. Effort: about 10 minutes. Recommendation: now.
-- **IMP-5. Research estimates use more than one sprint's ratio.**
-  Source: category 3; Sprint 30's 0.02-0.38 set this sprint's research
-  estimates, and E, F, J and K ran 2.1 to 3.5 times over. Type: planning
-  rule. Prevention: a research estimate uses the median ratio of the
+In the ADR review format of `SPRINT_RETROSPECTIVE.md` step 5 (team lead,
+2026-11-07). These five were first written as IMP-1 to IMP-5. They are
+now i1 to i5, in the same order. D20 has a "Changed since asked" note
+that records this.
+
+### i1. A refusal test stubs what the refusal protects
+
+- **What it is:** a Phase 4 line in `SPRINT_CHECKLIST.md`: "a test of a
+  refusal replaces the action the refusal blocks (a run, a write, a
+  device client) with a stub that fails at once".
+- **What it prevents:** a red proof removes the refusal and then does the
+  real action. In Sprint 31, the `--tests` proof started nested test
+  runs that did not stop, from 16:29 to 17:52. Two runner refusal tests
+  still run against real paths (test-coverage finding 2). Their proofs
+  would write into `experiments/phase2/results/` or open a device client.
+- **Long-term value:** every future refusal proof is safe to run, both
+  locally and in CI. It protects evidence files and metered seconds.
+- **Prevention or control:** prevention.
+- **Extends:** the Phase 4 per-term item.
+- **Effort:** about 5 minutes. One file.
+- **Alternatives:**
+  - **a. A checklist line (the proposal).**
+    - Pros: 5 minutes. It applies to every refusal test from the next task.
+    - Cons: nothing enforces it. It depends on the checklist being read.
+  - **b. A test that fails a refusal test with no stub.**
+    - Pros: enforced.
+    - Cons: about 60 minutes. A source scan cannot tell which action a
+      refusal blocks, so it would be a heuristic with false results.
+  - **c. A time limit on each proof run.**
+    - Pros: stops a run that does not end.
+    - Cons: a control, not prevention. It does not stop a write or a
+      device call that happens before the limit.
+- **Recommendation: a, now.** It costs minutes and stops the cause. b
+  costs more than the one recorded case justifies.
+
+### i2. A result is marked complete only by a check that it is
+
+- **What it is:** a test that scans `experiments/phase2/src/` for a
+  literal `"complete": True` (or `doc["complete"] = True`) with no refusal
+  before it in the same function. The two functions fixed in Task P are
+  its proven cases.
+- **What it prevents:** a partial or wrong run recorded as complete.
+  Sprint 31 found four places (class 2): `twins` and the Experiment 5
+  alignment stop (fixed in 961e564), and F114 `--lr05` and `run_rbf`
+  (open, D19 group c).
+- **Long-term value:** "complete" is what the cards, the gate report and
+  EvidenceBasedDB read. A false "complete" goes into reported results.
+- **Prevention or control:** prevention at the source, checked by a test.
+- **Extends:** `test_result_writer_required.py`.
+- **Effort:** about 60 minutes. Two files.
+- **Alternatives:**
+  - **a. Backlog, built after D19 group (c) (the proposal).**
+    - Pros: it arrives green, and each open place is fixed and proven
+      first.
+    - Cons: the gap stays open for one more sprint.
+  - **b. Build it now, with a list of the two known open places as
+    exceptions.**
+    - Pros: it stops new cases at once.
+    - Cons: 60 more minutes on a sprint already far over its target. An
+      exception list must be emptied later, or it hides the gap.
+  - **c. Put the check in `provenance.write_result`: it refuses
+    `complete: True` unless the caller passes the result of its check.**
+    - Pros: one place, and it prevents at write time for every module.
+    - Cons: it changes every writer's call. About 120 minutes or more,
+      across many modules.
+- **Recommendation: a, backlog,** in the card with D19 group (c). Record
+  c in the card as the design to compare when it is built.
+
+### i3. The refusal gate sees the repository's refusal forms
+
+- **What it is:** `scripts/refusal_coverage.py` also counts
+  `print("REFUSING: ..."); return N` and a one-line `if bad: raise ...`
+  as refusals. Each such line the branch changes gets a test in the same
+  commit.
+- **What it prevents:** an untested refusal in the commonest form in this
+  repository passes CI (class 1; silent-failure finding 4). Today the gate
+  sees only a line that starts with `raise`, or that has `sys.exit(` or
+  `SystemExit(`.
+- **Long-term value:** D16's gate then covers the class it was built for.
+  Without it, a green gate means less than it seems to.
+- **Prevention or control:** a control (a CI gate). Prevention is the
+  per-term test rule. The gate catches what that rule misses.
+- **Extends:** D16's `refusal_coverage.py`.
+- **Effort:** about 60 minutes. The same work as D19 group (b).
+- **Alternatives:**
+  - **a. Backlog, with D19 group (a), as one card (the proposal).**
+    - Pros: the gate and the missing proofs arrive together. Sprint 31
+      stays as it is.
+    - Cons: one more sprint with the gate partly blind.
+  - **b. Do it now.**
+    - Pros: the gate is complete this sprint.
+    - Cons: 60 minutes. Every `REFUSING` line this branch changed needs a
+      test in the same commit, which can grow the work.
+  - **c. Change the `REFUSING` / `return N` form to `raise SystemExit`
+    across the repository, so the current gate sees it.**
+    - Pros: one refusal form, and a simpler gate.
+    - Cons: it changes the exit path of many modules, and the tests that
+      read their return codes. Much larger than a or b.
+- **Recommendation: a, backlog.**
+
+### i4. A sprint plan fits the time target, or says that it does not
+
+- **What it is:** a line in the Phase 3 estimate step of
+  `SPRINT_PLANNING.md`. Phase 3 states the plan's estimated total beside
+  the 1-2 hour target. When the total is over, the scope is asked as a
+  decision with a cut option.
+- **What it prevents:** a sprint approved at many times the target when
+  the team lead never saw the total. Sprint 31 planned 1,569 minutes and
+  used 2,893 active minutes, against 60-120 (categories 1 and 3).
+- **Long-term value:** sprints stay small enough to review and validate.
+  An overrun becomes a choice made with the number in view.
+- **Prevention or control:** prevention.
+- **Extends:** the Phase 3 estimate step in `SPRINT_PLANNING.md`.
+- **Effort:** about 10 minutes. One file.
+- **Alternatives:**
+  - **a. State the total, and ask a decision with a cut option when it is
+    over (the proposal).**
+    - Pros: 10 minutes. The team lead decides with the number.
+    - Cons: the estimates themselves ran 1.69 times low, so the total
+      understates. It needs i5.
+  - **b. A hard cap: a plan never goes over 2 hours, and tasks over the
+    cap go to the backlog.**
+    - Pros: the strongest prevention.
+    - Cons: research tasks with device blocks may not split. It removes
+      the team lead's choice.
+  - **c. A hook that blocks plan approval when the estimate total in
+    `sprint_status.json` is over 120 minutes.**
+    - Pros: enforced.
+    - Cons: about 60 minutes. A hook on a judgment call.
+- **Recommendation: a, now,** with i5.
+
+### i5. Research estimates use more than one sprint's ratio
+
+- **What it is:** a rule in the estimation step of `SPRINT_PLANNING.md`.
+  A research estimate uses the median ratio (actual to estimate) of the
   last three sprints' measured research rows in `VELOCITY_LOG.md`, and
-  states it. Extends: the estimation rule in `SPRINT_PLANNING.md`.
-  Effort: about 10 minutes. Recommendation: now.
+  the plan states the ratio.
+- **What it prevents:** one sprint's ratio sets the next sprint's
+  estimates. Sprint 30's ratios of 0.02-0.38 set this sprint's research
+  estimates. E, F, J and K then ran 2.1 to 3.5 times over (category 3).
+- **Long-term value:** estimates follow measured history, and i4's total
+  becomes a number the team lead can trust.
+- **Prevention or control:** prevention.
+- **Extends:** the estimation rule in `SPRINT_PLANNING.md`.
+- **Effort:** about 10 minutes. One file.
+- **Alternatives:**
+  - **a. The median of the last three sprints (the proposal).**
+    - Pros: one unusual sprint does not move it.
+    - Cons: it is slow to follow a real change, by up to two sprints.
+  - **b. The mean of all research rows.**
+    - Pros: the most data.
+    - Cons: old sprints had a different mix of work, and outliers move a
+      mean.
+  - **c. A fixed multiplier from this sprint (1.69).**
+    - Pros: the simplest.
+    - Cons: it is the one-sprint problem that i5 exists to fix.
+- **Recommendation: a, now.**
 
 ## Improvement Decisions
 

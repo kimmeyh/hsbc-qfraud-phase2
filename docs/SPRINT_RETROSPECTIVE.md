@@ -56,7 +56,23 @@ How the 7-step protocol below carries it out:
 2. **Draft in parallel**: Claude writes its Development Team feedback for all 16 categories into `docs/sprints/drafts/SPRINT_N_RETROSPECTIVE_claude_draft.md` while waiting.
 3. **Record verbatim**: paste the template into `docs/sprints/SPRINT_N_RETROSPECTIVE.md`; the team lead's exact words per category; Claude's lines from the draft. Exit gate: 16 categories, 4 roles, no placeholders.
 4. **Combine, display and summarize** in chat: both feedback sets together per category, then a short summary of the themes.
-5. **Propose improvements** from the combined feedback and the review findings; per proposal: Title / Source (the fact it rests on) / Type / **Prevention or control** (a control says why prevention is not enough) / **Extends** (the existing prevention it extends, or "new" with why) / Effort / Recommendation. Display; do NOT auto-apply.
+5. **Propose improvements** from the combined feedback and the review findings, in the ADR review format below (team lead, 2026-11-07, Sprint 31). Display; do NOT auto-apply.
+   - Number the improvements `i1` to `in`. Letter each one's alternatives `a` to `z`. Never use `IMP-n` again, and never reuse a number inside the sprint.
+   - Each improvement has these fields, in this order:
+     - **What it is:** the change, the file it changes and the rule it adds.
+     - **What it prevents:** the failure it stops, with the fact it rests on (a finding, a commit, a file and line, a measurement).
+     - **Long-term value:** why it is still worth having after this sprint.
+     - **Prevention or control:** a control says why prevention is not enough.
+     - **Extends:** the existing prevention it extends, or "new" and why.
+     - **Effort:** minutes, and the files it touches.
+     - **Alternatives:** `a` is the proposal itself. Each other reasonable alternative, `b` onward, gets one line of pros and one of cons. Give alternatives whenever a reasonable one exists. Write "none reasonable" only when that is true, and say why.
+     - **Recommendation:** the letter, now or backlog, and the reason.
+   - Checklist before display:
+     - [ ] Every improvement has all eight fields, in order.
+     - [ ] Every "What it prevents" names a fact, not a feeling.
+     - [ ] Each alternative has its pros and cons on their own lines.
+     - [ ] The disposition decision (step 6) refers to `i1`-`in` and to letters, never to `IMP-n`. Its options are still a numbered list, answerable by a digit.
+     - [ ] The chat display shows every field. It does not show only titles.
 6. **Team lead disposes each**: apply now, backlog, or skip (blanket disposition acceptable). Record in an "Improvement Decisions" section.
 7. **Apply**: now-items as commits on the sprint branch; backlog-items to ALL_SPRINTS_MASTER_PLAN.md; skips noted. Then the mandatory completion updates (master plan Last Completed Sprint, summary doc scheduling, CHECKLIST reconciliation, **one `docs/VELOCITY_LOG.md` row per task from `sprint_status.json` `task_actuals`** (IMP-7, Sprint 22)). THEN `gh pr ready`.
 
@@ -138,8 +154,8 @@ How the 7-step protocol below carries it out:
 
 ## Improvement Decisions
 
-| # | Title | Source | Type | Effort | Decision (now/backlog/skip) |
-|---|---|---|---|---|---|
+| # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
+|---|---|---|---|---|
 ```
 
 ## Transition note

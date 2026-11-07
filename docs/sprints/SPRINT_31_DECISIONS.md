@@ -1478,3 +1478,12 @@ IMP-2 needs D19's (c) first, and IMP-3 is D19's (b).
 1. Apply IMP-1, IMP-4 and IMP-5 now; IMP-2 and IMP-3 to the backlog.
 2. Apply all five now.
 3. Apply none now; all five to the backlog.
+
+**Changed since asked (2026-11-07, 4:55pm).** At the team lead's request,
+the improvements are now in the ADR review format
+(`SPRINT_RETROSPECTIVE.md` step 5) and numbered i1 to i5. IMP-1 is i1,
+and so on to IMP-5, which is i5. Each now has alternatives a, b and c
+with pros and cons, in `SPRINT_31_RETROSPECTIVE.md`, "Improvements
+proposed". Option "applied now" means alternative a of that improvement.
+The options above and their numbers do not change, and neither does the
+recommendation (1).

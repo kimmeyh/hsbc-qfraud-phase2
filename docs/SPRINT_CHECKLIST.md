@@ -52,7 +52,7 @@ Consult at EVERY phase boundary (open this file in the same turn; walk lines wit
 ## Phase 7: Retrospective (before ready)
 - [ ] 7-step protocol run in order (SPRINT_RETROSPECTIVE.md); 16 categories x 4 roles, verbatim, no placeholders; the review findings are an input
 - [ ] Every RECURRING finding class has an improvement (card acceptance criterion, Phase 5 gate, test or hook); single findings have a root cause recorded
-- [ ] Improvements proposed + dispositioned; now-items committed; backlog-items -> master plan with F#s
+- [ ] Improvements proposed in the ADR review format (numbered i1-in; what it is, what it prevents, long-term value, alternatives a-z with pros and cons, recommendation; `SPRINT_RETROSPECTIVE.md` step 5 and its checklist) + dispositioned; now-items committed; backlog-items -> master plan with F#s
 - [ ] **At the push of the improvement commits, start the short review and CI's full job together (F177 change e)**: `gh workflow run ci.yml --ref <branch>` and the review agent in the same step, so neither waits on the other; the review's time cap holds, and the full job's result is read at 7.0.
 - [ ] ONE short review of the improvement commits only; its trivial findings fixed, the rest to the next sprint's Phase 1 refinement (no second round). "Short" is a time cap: the brief states about 10 minutes, the diff only, no test runs and no live GitHub calls (the full suite and CI's full job carry the tests; Sprint 30's ran 14 minutes on a brief with none of these limits)
 - [ ] Completion updates: master plan Last Completed Sprint; CHECKLIST-Phase2.md reconciled; sprint_status updated
