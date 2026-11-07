@@ -1438,6 +1438,13 @@ top of Sprint 32; (c) is latent and can wait behind the experiments.
 3. Fix all three now, in Sprint 31.
 4. Card nothing; the findings stay in the retrospective only.
 
+**Changed since asked (2026-11-07, 5:45pm).** Group (b) is done: the team
+lead's D20 answer chose i3 alternative b, which is group (b), and it is
+in ca774e7. The options above keep their numbers and now cover (a) and
+(c) only: option 1 cards (a) and (c) as F194; option 2 cards (a) as F194
+and (c) as F195; option 3 fixes (a) and (c) now, about 210 minutes;
+option 4 is unchanged. The recommendation stays 2.
+
 ---
 
 ## D20. Retrospective: which improvements are applied now?
@@ -1499,3 +1506,51 @@ needed. skip". So:
   This is D19 group (b), done now.
 - i4: skipped.
 - i5: skipped.
+
+---
+
+## D21. Retrospective: i2 cannot be built as answered; which way now?
+
+Asked 2026-11-07 at the Phase 7 retrospective (step 7), after the team
+lead's D20 answer "i2. b".
+
+**What.** i2 alternative b was "build the complete-check test now, with
+the two known open places as exceptions". A scan of
+`experiments/phase2/src/` finds 18 places that write a literal
+`complete: True`. 5 have a refusal earlier in the same function. 13 do
+not: `f114_real_ceiling.main`, `f157_spectra_algorithms.run` and
+`run_rbf`, `f158_fraud_types.main`, `f160_room_ieee.main`,
+`f166_ulb_algorithms.run`, `f169_plugin_bins.main_lr05` and `main`,
+`f170_missed_neighbors.main`, `f171_budgets.main`,
+`f171_missed_ieee.main`, `f174_ieee_algorithms.run` and
+`run_dirac3s_units.dry_run`. So the exception list holds 13 places, not
+2. Most write "complete" after a loop over the whole plan, so they may
+be complete by construction; the reviews found two real gaps
+(`main_lr05`, `run_rbf`).
+
+**Why it matters.** The test stops a new partial run from being recorded
+as complete. The exception list decides how much of that protection
+reaches the existing code now.
+
+**Kind.** Option 1: Prevention for new code; the 13 stay as they are
+until reviewed. Option 2: Prevention, complete. Option 3: Workaround
+(nothing now).
+
+**Cost.** Option 1: about 45 minutes, a new test file plus the
+regenerated test inventory; the 13 are listed with the repository's
+shrink-only pattern (`frozen_list.check`), so a place can leave the list
+and never join it. Option 2: about 3 hours: option 1, then each of the
+13 gets a check before it or a stated reason why it is complete by
+construction. Option 3: about 10 minutes, a new card F196, priority 28,
+with i2's alternatives b and c recorded in it.
+
+**Recommendation: 1.** It gives what b was chosen for, new cases stopped
+now, at about 45 minutes. It extends the existing frozen-list pattern,
+and the list can only shrink. Option 2 adds about 2 hours to a sprint
+already far over its target.
+
+**Options**
+
+1. Build the test now with all 13 places as a shrink-only exception list.
+2. Build the test now and review all 13 places now (about 3 hours).
+3. Do not build it now; card it as F196, priority 28.

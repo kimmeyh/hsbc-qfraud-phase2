@@ -453,4 +453,13 @@ that records this.
 
 ## Improvement Decisions
 
-Awaiting the team lead (step 6).
+Team lead, 2026-11-07 (D20), verbatim: "i1. a i2. b i3. b i4. not
+needed - skip i5. not needed. skip".
+
+| # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
+|---|---|---|---|---|
+| i1 | A refusal test stubs what the refusal protects | a | about 5 min | now (ca774e7) |
+| i2 | A result is marked complete only by a check that it is | b | see D21 | now; 13 exceptions, not 2, so asked again as D21 |
+| i3 | The refusal gate sees the repository's refusal forms | b | about 60 min | now (ca774e7); D19 group (b) |
+| i4 | A sprint plan fits the time target, or says that it does not | none | none | skip |
+| i5 | Research estimates use more than one sprint's ratio | none | none | skip |
