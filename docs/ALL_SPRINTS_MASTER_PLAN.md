@@ -594,6 +594,13 @@ carded. See SPRINT_31_PLAN.md, SPRINT_31_VALIDATION.md,
 SPRINT_31_DECISIONS.md, SPRINT_31_RETROSPECTIVE.md and CHANGELOG.md.
 Removed from candidates per convention (Pass 1, 2026-11-08).)
 
+**Selected for Sprint 32** (team lead, 2026-11-08, D1, a different set:
+all five cards): F188, F181, F185, F194 and the F178 update, then the
+F150 request draft updated (D2 option 3: not sent; F150 stays blocked).
+F178 runs after every other step and the F150 update after F178. 195
+minutes by card estimate, zero metered. Record:
+`docs/sprints/SPRINT_32_DECISIONS.md`.
+
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
 - Platform: N/A (document)
@@ -672,7 +679,7 @@ value. Removed from candidates.)
 - Sprint 27's F103 rebuilds the paper's sparse pocket and dense substrate from its description. This card builds the same two substrates as the authors construct them, as close a duplicate as their details allow, and repeats the four published values: JOINT minus GA2M +0.37 and +0.00, HGB minus GAM +0.15, joint ratio 9.9
 - Acceptance: each value against the paper's with F103's tolerances; each difference from F103's rebuild named and explained
 - Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103 spent (corrected 2026-10-19, Pass 1: shipped in Sprint 27)
-- **Pass 1 (2026-11-08)**: carried from Sprint 31 (D4, "delay to next sprint"); whether the construction request was sent is asked again as Sprint 32 D2
+- **Pass 1 (2026-11-08)**: carried from Sprint 31 (D4, "delay to next sprint"); whether the construction request was sent is asked again as Sprint 32 D2. **Answered 2026-11-08 (D2 option 3)**: not sent and not sent now; the draft is updated as Sprint 32's last task, after F178. Still blocked
 
 **F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 30**
 - **Pass 3 (2026-11-05, Sprint 31 Tasks F and G)**: the SPECTRA part shipped (four datasets, 32 pages under `docs/phase2/algorithms/`; the RBF SVM scored under the D14 amendment; the proxy fifth or sixth of seven on every dataset) and the QNN part shipped (dequantized, `docs/phase2/F157_QNN_IEEE.md`). Remaining: the device lanes and QSVM, each a card when selected. One open item, not carded: energy_steel seed 42's RBF SVM is constant on validation and ranked on test, stated as not explained on its page; refinement decides whether it gets a card. Priority 30 unchanged. (Pass 1, 2026-11-08: carded as F196)

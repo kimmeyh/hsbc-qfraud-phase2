@@ -74,6 +74,16 @@ F185 and F194 lead the next slate (priorities 18 and 26).
 2. F188, F181, the F178 update and F185 (135 minutes by card).
 3. F188, F181, the F178 update and F194 (120 minutes by card).
 
+**Answer (team lead, 2026-11-08): a different set, all five cards.**
+Verbatim: "d1. do these:", followed by the five card lines of the
+terminal summary pasted unchanged (F188 30m, F181 15m, F178 30m, F185
+60m, F194 45m). Sprint 32 is F188, F181, F185, F194 and the F178 update:
+195 minutes by card with the F150 request update below (180 plus 15),
+about 315 calibrated at 1.62; 0 metered seconds. This is past the 1-2
+hour target; the team lead chose it with F185's line saying so. Order
+from D2's answer: F178 runs after every other step, and the F150 request
+update after F178.
+
 ---
 
 ## D2. F150: was the construction request to the SPECTRA authors sent?
@@ -117,3 +127,14 @@ and nothing else unblocks F150.
 
 Note (2026-11-08): option 3's "leaves Sprint 31" is D4's wording, kept
 unchanged. Today it means F150 is not in Sprint 32 and stays blocked.
+
+**Answer (team lead, 2026-11-08): 3, with an instruction.** Verbatim: "d2
+3 please update the request after this sprint (after F178 completes and
+F178 should not be done until all the other steps complete)". Read as:
+the request was not sent and is not sent now; F150's rebuild stays
+blocked. The draft
+(`docs/spectra_package/F150_CONSTRUCTION_REQUEST_DRAFT.md`, gitignored)
+is updated as Sprint 32's last task, after F178, with this sprint's
+results; it is not sent. F178 runs after every other task and step that
+can change a result. If "after this sprint" meant Sprint 33, the plan
+approval (D3) offers that.
