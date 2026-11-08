@@ -1,0 +1,304 @@
+{
+ "card": "F157",
+ "part": "QNN",
+ "sprint": 31,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F106, amendment 2026-11-05 (F157 QNN part)",
+ "dataset": "ieee-cis month 4 (F174's test fold)",
+ "seeds": [
+  42
+ ],
+ "seed_plan": {
+  "pilot_s": 906.8,
+  "projected_s": 7254.3,
+  "n_seeds": 8,
+  "cut": false,
+  "fold_build_s": 265.7
+ },
+ "alpha_each": 0.008333333333333333,
+ "margin": 0.005,
+ "n_boot": 2000,
+ "steps": 750,
+ "rows": [
+  {
+   "seed": 42,
+   "features": [
+    "V257",
+    "uid_D15_mean",
+    "V244",
+    "uid_TransactionAmt_std",
+    "V201",
+    "V188",
+    "uid_C12_mean",
+    "V228"
+   ],
+   "n_train": 6295,
+   "n_train_pos": 295,
+   "n_test": 85302,
+   "n_test_pos": 2962,
+   "lanes": {
+    "circuit": {
+     "auprc": 0.19206695373120314,
+     "auroc": 0.7064970559808912,
+     "norm_auprc": 0.1630033432982644,
+     "outcome": {
+      "name": "f157_qnn_circuit",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 457,
+       "confusion": {
+        "tn": 82163,
+        "fp": 177,
+        "fn": 2682,
+        "tp": 280
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_circuit_42.npz",
+       "sha256": "dc82bb323336fd3adab3fef4c4a27723a0805d915b7c3ca67edef32a1508b213",
+       "n_rows": 85302
+      }
+     }
+    },
+    "lr": {
+     "auprc": 0.18162718703408418,
+     "auroc": 0.6438860453609048,
+     "norm_auprc": 0.15218802900633285,
+     "outcome": {
+      "name": "f157_qnn_lr",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 429,
+       "confusion": {
+        "tn": 82223,
+        "fp": 117,
+        "fn": 2650,
+        "tp": 312
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_lr_42.npz",
+       "sha256": "90ed2ecd1fbb8b3bdbd39b2379a8552e501caf9badfae911846e72a68c189421",
+       "n_rows": 85302
+      }
+     }
+    },
+    "gam": {
+     "auprc": 0.18644029164636503,
+     "auroc": 0.6668097496636612,
+     "norm_auprc": 0.15717427444763454,
+     "outcome": {
+      "name": "f157_qnn_gam",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 428,
+       "confusion": {
+        "tn": 82148,
+        "fp": 192,
+        "fn": 2726,
+        "tp": 236
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_gam_42.npz",
+       "sha256": "1112ec1b89d45c5964e3e3bbc511be54540159469f841dd375e0b360880dc997",
+       "n_rows": 85302
+      }
+     }
+    },
+    "ga2m": {
+     "auprc": 0.20390122606255617,
+     "auroc": 0.6794965666641027,
+     "norm_auprc": 0.17526332749074772,
+     "outcome": {
+      "name": "f157_qnn_ga2m",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 433,
+       "confusion": {
+        "tn": 82220,
+        "fp": 120,
+        "fn": 2649,
+        "tp": 313
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_ga2m_42.npz",
+       "sha256": "90f74a0fd61fede7da0df25488129d457bbf43f02abc19ddad7bcb4c57748973",
+       "n_rows": 85302
+      }
+     }
+    },
+    "hgb": {
+     "auprc": 0.21443514744263883,
+     "auroc": 0.6984479526680516,
+     "norm_auprc": 0.18617618347281972,
+     "outcome": {
+      "name": "f157_qnn_hgb",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 506,
+       "confusion": {
+        "tn": 82160,
+        "fp": 180,
+        "fn": 2636,
+        "tp": 326
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_hgb_42.npz",
+       "sha256": "966533ad62aa1c97ce84a5b2d292b23ea71c2bfb45cbd6018ce7dbf1060318a9",
+       "n_rows": 85302
+      }
+     }
+    },
+    "joint": {
+     "auprc": 0.16834808594272904,
+     "auroc": 0.6665241324118947,
+     "norm_auprc": 0.13843124152400624,
+     "outcome": {
+      "name": "f157_qnn_joint",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 430,
+       "confusion": {
+        "tn": 82113,
+        "fp": 227,
+        "fn": 2759,
+        "tp": 203
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_joint_42.npz",
+       "sha256": "a4181e5c18296a68f5b6769ae7057644332db15c642db8f4ce8f12ee81d29a2d",
+       "n_rows": 85302
+      }
+     }
+    },
+    "rff": {
+     "auprc": 0.2003625397466525,
+     "auroc": 0.696783117283338,
+     "norm_auprc": 0.171597344734867,
+     "outcome": {
+      "name": "f157_qnn_rff",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 429,
+       "confusion": {
+        "tn": 82224,
+        "fp": 116,
+        "fn": 2649,
+        "tp": 313
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f157_qnn_rff_42.npz",
+       "sha256": "f909e89d50aab7b1b2bd379fde60912e8184bdfeb6932f708a6adb8c886b447e",
+       "n_rows": 85302
+      }
+     }
+    }
+   },
+   "lambdas": [
+    0.5605,
+    0.7512,
+    0.3528
+   ],
+   "loss_trace": [
+    [
+     100,
+     0.16194
+    ],
+    [
+     200,
+     0.16219
+    ],
+    [
+     300,
+     0.11603
+    ],
+    [
+     400,
+     0.12627
+    ],
+    [
+     500,
+     0.13779
+    ],
+    [
+     600,
+     0.1457
+    ],
+    [
+     700,
+     0.15583
+    ]
+   ],
+   "diagnostics": {
+    "C": 0.5204,
+    "berry_abs": 0.0762,
+    "sum_single_qubit_entropy_bits": 3.2717
+   },
+   "seconds": {
+    "circuit_train": 695.3,
+    "circuit_predict": 41.1,
+    "seconds_lr_gam_ga2m_hgb": 1.2,
+    "seconds_joint": 131.5,
+    "seconds_rff": 3.8
+   }
+  }
+ ],
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f157_qnn_ieee.py",
+  "generator_commit": "a1e75ffdac32c4d90d82d0ddf363afe13424e2e8",
+  "generator_clean": true,
+  "seeds": [
+   42
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "9dba40c04b2848059da5e1f12e0c4062"
+ }
+}

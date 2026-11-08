@@ -1,0 +1,87 @@
+{
+ "generator": "experiments/phase2/src/run_dirac3s_units.py --dry-run",
+ "card": "F95",
+ "stop": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "complete": true,
+ "note": "offline builds of the requests the stop would send; no device call",
+ "written": "2026-11-05T04:37:58",
+ "units": [
+  {
+   "unit": "b1_dct_43",
+   "n_variables": 91,
+   "n_variables_expected": 91,
+   "device_type": "dirac-3s",
+   "num_samples": 8,
+   "relaxation_schedule": 4,
+   "dynamic_range_db": 4.771518695607588,
+   "off_diagonal_spread_over_resolvable": 0.004699386142685112,
+   "linear_spread_over_resolvable": 0.004699386142685112,
+   "screen_pass": false,
+   "quote": {
+    "known": false,
+    "note": "no measured call at degree 2 within 2x of 91 variables; bound the block by call count and state the estimate as unknown",
+    "device": "dirac-3s"
+   },
+   "hamiltonian_sha256": "30d84a83cd1910aa6f19c2df419d1ca7ebc64c6ab0a47c0ffde8c3d473963327"
+  },
+  {
+   "unit": "g0b_3_42",
+   "n_variables": 45,
+   "n_variables_expected": 45,
+   "device_type": "dirac-3s",
+   "num_samples": 8,
+   "relaxation_schedule": 4,
+   "dynamic_range_db": 9.63393802934471,
+   "off_diagonal_spread_over_resolvable": 18.04564278791083,
+   "linear_spread_over_resolvable": 24.971598085000146,
+   "screen_pass": true,
+   "quote": {
+    "known": false,
+    "note": "no measured call at degree 2 within 2x of 45 variables; bound the block by call count and state the estimate as unknown",
+    "device": "dirac-3s"
+   },
+   "hamiltonian_sha256": "fa81d245c37ba9c622008723e1ec044d22edc8e90ede654ecf03ee3c8a76aef2"
+  },
+  {
+   "unit": "b1_lg_42",
+   "n_variables": 45,
+   "n_variables_expected": 45,
+   "device_type": "dirac-3s",
+   "num_samples": 8,
+   "relaxation_schedule": 4,
+   "dynamic_range_db": 5.642223973865484,
+   "off_diagonal_spread_over_resolvable": 45.24220485057702,
+   "linear_spread_over_resolvable": 62.60625732682191,
+   "screen_pass": true,
+   "quote": {
+    "known": false,
+    "note": "no measured call at degree 2 within 2x of 45 variables; bound the block by call count and state the estimate as unknown",
+    "device": "dirac-3s"
+   },
+   "hamiltonian_sha256": "d947298abd458985d41f29579b4ff422b51af91fbeac5d8685956a59f8a543da"
+  }
+ ],
+ "provenance": {
+  "generator": "experiments/phase2/src/run_dirac3s_units.py",
+  "generator_commit": "a12f2a1d6b12255af3d53792e90c2d67f4a04e40",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43
+  ],
+  "versions": {
+   "python": "3.12.14",
+   "numpy": "2.5.2",
+   "scipy": "1.18.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "1546b26444ae4b56b53deaa5cf81412b"
+ }
+}

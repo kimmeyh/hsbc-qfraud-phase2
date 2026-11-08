@@ -53,10 +53,15 @@ import json
 import math
 import os
 import sys
+import time
+from contextlib import contextmanager
 from datetime import date, datetime
 from pathlib import Path
 
 STATUS = Path(__file__).resolve().parents[1] / ".claude" / "sprint_status.json"
+
+# How long an update waits for another update's lock before it refuses.
+LOCK_WAIT_S = 10.0
 
 
 def typed(value: str):
@@ -323,6 +328,40 @@ def finish_task(doc: dict, task: str, now: datetime,
             f"{how})")
 
 
+@contextmanager
+def status_lock(path: Path):
+    """Hold `<status>.lock` for one whole read, change and write (F179).
+
+    The file is created with O_EXCL, so only one update can hold it. A
+    second update waits up to LOCK_WAIT_S, then refuses and names the
+    lock, because a lock left by a killed update is removed by hand.
+    """
+    lock = path.with_name(path.name + ".lock")
+    deadline = time.monotonic() + LOCK_WAIT_S
+    while True:
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            break
+        except FileExistsError:
+            if time.monotonic() >= deadline:
+                try:
+                    holder = lock.read_text(encoding="utf-8").strip()
+                except OSError:
+                    holder = "unreadable"
+                raise SystemExit(
+                    f"{lock} is locked by another update ({holder}). "
+                    "Nothing was written. If no update is running, the "
+                    "lock is stale: delete that file and run again.")
+            time.sleep(0.05)
+    try:
+        os.write(fd, f"pid {os.getpid()}, "
+                     f"{datetime.now().astimezone().isoformat()}".encode())
+        os.close(fd)
+        yield
+    finally:
+        lock.unlink(missing_ok=True)
+
+
 def main(argv: list[str] | None = None,
          now: datetime | None = None) -> int:
     # `now` is a parameter for tests, not a command-line flag: a flag that
@@ -362,7 +401,12 @@ def main(argv: list[str] | None = None,
     path = Path(args.path)
     if not path.exists():
         raise SystemExit(f"{path} does not exist")
+    with status_lock(path):
+        return _apply(path, args, now)
 
+
+def _apply(path: Path, args: argparse.Namespace,
+           now: datetime | None) -> int:
     raw = path.read_text(encoding="utf-8")
     doc = json.loads(raw)
     changes: list[str] = []
@@ -419,6 +463,18 @@ def main(argv: list[str] | None = None,
         changes.append(set_estimate(doc, owner, args.estimate))
     for number in args.add_issue:
         changes.append(add_issue(doc, number, args.task))
+    clock = now or datetime.now().astimezone()
+    if args.pause_task:
+        changes.append(pause_task(doc, args.pause_task, clock))
+    if args.resume_task:
+        changes.append(resume_task(doc, args.resume_task, clock))
+    if args.start_task:
+        changes.append(start_task(doc, args.start_task, clock, args.parallel))
+    if args.finish_task:
+        changes.append(finish_task(doc, args.finish_task, clock,
+                                   path.parent / "activity.log"))
+    # After pause and finish, so `--finish-task J --review-task M` is one
+    # command: J is closed before the move off it is checked (F179).
     if args.review_task:
         cur = doc["current_sprint"]
         before = cur.get("review_task")
@@ -433,17 +489,6 @@ def main(argv: list[str] | None = None,
         cur["review_task"] = args.review_task
         changes.append(f"  current_sprint.review_task: {before!r} -> "
                        f"{args.review_task!r}")
-
-    clock = now or datetime.now().astimezone()
-    if args.pause_task:
-        changes.append(pause_task(doc, args.pause_task, clock))
-    if args.resume_task:
-        changes.append(resume_task(doc, args.resume_task, clock))
-    if args.start_task:
-        changes.append(start_task(doc, args.start_task, clock, args.parallel))
-    if args.finish_task:
-        changes.append(finish_task(doc, args.finish_task, clock,
-                                   path.parent / "activity.log"))
 
     if not changes:
         print("nothing to do; pass --set or --new-sprint")
@@ -462,14 +507,24 @@ def main(argv: list[str] | None = None,
     # when the file changed since it was read; the write is one replace,
     # from a temporary file of this process's own. This NARROWS the window
     # and does not close it: two updates can both pass the check before
-    # either replaces. An exclusive lock is carded (Sprint 30 Task O).
+    # either replaces. F179 closes it: main() holds an exclusive lock for
+    # the whole update. The check stays for a hand edit, which takes no lock.
     tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
     tmp.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
     if path.read_text(encoding="utf-8") != raw:
         tmp.unlink(missing_ok=True)
         raise SystemExit(f"{path.name} changed while this update ran; "
                          "nothing was written. Run the command again.")
-    os.replace(tmp, path)
+    try:
+        os.replace(tmp, path)
+    except PermissionError as exc:
+        # Windows refuses the replace while another process holds the file
+        # open (a running suite did, twice, Sprint 30), and each refusal
+        # left a tmp file behind.
+        tmp.unlink(missing_ok=True)
+        raise SystemExit(f"{path.name} could not be replaced ({exc}); "
+                         "another process holds it open. Nothing was "
+                         "written. Run the command again when it ends.")
 
     # Re-read and re-parse rather than trusting the write.
     json.loads(path.read_text(encoding="utf-8"))

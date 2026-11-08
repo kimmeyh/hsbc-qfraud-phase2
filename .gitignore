@@ -147,3 +147,10 @@ experiments/results/*.dryrun.json
 # update_sprint_status.py writes a temporary file, then replaces the status
 # file with it; one left by a crash is not tracked (Sprint 30 IMP-5).
 .claude/sprint_status.json.*.tmp
+# Its lock (F179, Sprint 31): one left by a killed update is removed by hand.
+.claude/sprint_status.json.lock
+
+# Diff coverage output (F177 change c): CI makes these; never tracked.
+.coverage
+.coverage.*
+coverage.xml

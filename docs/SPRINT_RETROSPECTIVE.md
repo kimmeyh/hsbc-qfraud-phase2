@@ -56,8 +56,30 @@ How the 7-step protocol below carries it out:
 2. **Draft in parallel**: Claude writes its Development Team feedback for all 16 categories into `docs/sprints/drafts/SPRINT_N_RETROSPECTIVE_claude_draft.md` while waiting.
 3. **Record verbatim**: paste the template into `docs/sprints/SPRINT_N_RETROSPECTIVE.md`; the team lead's exact words per category; Claude's lines from the draft. Exit gate: 16 categories, 4 roles, no placeholders.
 4. **Combine, display and summarize** in chat: both feedback sets together per category, then a short summary of the themes.
-5. **Propose improvements** from the combined feedback and the review findings; per proposal: Title / Source (the fact it rests on) / Type / **Prevention or control** (a control says why prevention is not enough) / **Extends** (the existing prevention it extends, or "new" with why) / Effort / Recommendation. Display; do NOT auto-apply.
-6. **Team lead disposes each**: apply now, backlog, or skip (blanket disposition acceptable). Record in an "Improvement Decisions" section.
+5. **Propose improvements** from the combined feedback and the review findings, in the format below (team lead, 2026-11-07, Sprint 31). It applies to every retrospective improvement, question and decision, a review finding not fixed included. The goal is long-term effectiveness at reasonable efficiency, aligned with this repository's architecture, its agile and software engineering practice, and its risk-based, automated testing. Display; do NOT auto-apply.
+   - Number the items `i1` to `in`, each followed by a brief title. Never use `IMP-n`, and never reuse a number inside the sprint.
+   - Each item has these fields, in this order:
+     - **What it is:** the change, the file it changes and the rule it adds.
+     - **What it prevents and/or catches:** prevention is preferred, at the earliest stage that can hold it: the sprint process, the backlog item, the sprint card, development, then testing. Name the stage. Something that only catches says so, and says why prevention is not enough.
+     - **Long-term value:** why it is still worth having after this sprint.
+     - **Evidence:** the facts that suggest it has long-term value: how many times the problem occurred (and in which sprints), the time it wasted, and the efficiency it gains and how. A count that is not known is written "not measured", never estimated without saying so.
+     - **Pros and cons:** of the proposal itself.
+     - **Prevention or control,** **Extends** (the existing prevention it extends, or "new" and why) and **Effort** (minutes, files).
+     - **Options for implementing,** lettered `a` to `z`. Each states what is done, when (now, or the backlog with its card number and priority) and its effort, with one pro and one con. The recommended option is marked `(Recommendation)`. A usual order, where it fits:
+       - a. the best option, now or backlog depending on its effort;
+       - b. the best option, but backlogged for its time or the number of files it touches;
+       - c. the next best alternative;
+       - d. the next best after c;
+       - e. skip for this sprint, but track it, in case it recurs;
+       - f. skip.
+   - The team lead answers in one line, "i1. a i2. c i3. b", or "all as recommended". This answer form replaces the digit rule for retrospective items only. Each option must be executable the moment its letter arrives: card numbers and priorities are named in it.
+   - Write the items to the retrospective file before display. When an item is also a numbered decision (`SPRINT_n_DECISIONS.md`), the decision's "Changed since asked" note maps its options to the item's letters.
+   - Checklist before display:
+     - [ ] Every item has an `i` number, a title and every field above, in order.
+     - [ ] "What it prevents" names the stage, and "Evidence" names counts and times, or says "not measured".
+     - [ ] Every option names its timing, effort, card number and priority where it has one, a pro and a con. One option is marked `(Recommendation)`.
+     - [ ] The chat display shows every field. It does not show only titles.
+6. **Team lead disposes each** with the `i1. a` answer form, or "all as recommended". Record the answer verbatim in an "Improvement Decisions" section.
 7. **Apply**: now-items as commits on the sprint branch; backlog-items to ALL_SPRINTS_MASTER_PLAN.md; skips noted. Then the mandatory completion updates (master plan Last Completed Sprint, summary doc scheduling, CHECKLIST reconciliation, **one `docs/VELOCITY_LOG.md` row per task from `sprint_status.json` `task_actuals`** (IMP-7, Sprint 22)). THEN `gh pr ready`.
 
 ## The 16 Mandatory Categories
@@ -138,8 +160,8 @@ How the 7-step protocol below carries it out:
 
 ## Improvement Decisions
 
-| # | Title | Source | Type | Effort | Decision (now/backlog/skip) |
-|---|---|---|---|---|---|
+| # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
+|---|---|---|---|---|
 ```
 
 ## Transition note

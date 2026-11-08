@@ -115,7 +115,8 @@ def test_load_scores_refuses_a_replaced_file(tmp_path):
     rec = [{"outcome": {"test_scores": ts}}]
     y_back, ps = fs._load_scores(rec)            # intact: loads
     assert np.array_equal(y_back, y) and np.allclose(ps[0], p)
-    orec.save_test_scores("f152_test", 42, y, p[::-1], pred_dir=tmp_path)
+    # The writer never replaces a file (D13), so replace it directly.
+    np.savez_compressed(tmp_path / "f152_test_42.npz", y_test=y, p_test=p[::-1])
     with pytest.raises(ValueError, match="does not match the recorded"):
         fs._load_scores(rec)
 

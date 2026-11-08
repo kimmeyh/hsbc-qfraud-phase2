@@ -1,0 +1,137 @@
+{
+ "generator": "experiments/phase2/src/run_dirac3s_units.py --card F95 --twins",
+ "card": "F95",
+ "sprint": 31,
+ "evidence_tag": "HW",
+ "metered_seconds": 0,
+ "complete": true,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F95, Reading",
+ "note": "computed from stored device samples; no device call",
+ "rows": [
+  {
+   "unit": "b1_dct_42",
+   "job_id": "6aec8ad8358b23d0cb37424b",
+   "device_type": "dirac-3s",
+   "twin": "f142:b1_42",
+   "gap_min": -4.9433715729176594e-08,
+   "gap_range": 4.493959472027561e-08,
+   "screen_pass": false,
+   "twin_gaps": {
+    "f142_unit": "b1_42",
+    "hamiltonian_sha256": "b458527237a15f326b0ed8f6e10f5b86140a0f07a152e15fe0019d87ca7898e3",
+    "relaxation_schedule": 2,
+    "samples": "device_samples/f142_b1_42_6ad04e0b358b23d0cb3727a5.json",
+    "objective_reference": -166493.56370004418,
+    "per_sample_gap": [
+     4.493514262350124e-09,
+     -4.943371905046281e-08,
+     -3.145834624730596e-08,
+     -3.8859048762917345e-13,
+     -4.044555551989834e-08,
+     5.88392074385874e-13,
+     1.34821609526572e-08,
+     -3.5952187394141854e-08
+    ],
+    "gap_min": -4.943371905046281e-08,
+    "gap_range": 6.291588000312001e-08
+   },
+   "reading": {
+    "gap_difference": 3.321286218603493e-15,
+    "twin_gap_range": 6.291588000312001e-08,
+    "changes_reading": false
+   }
+  },
+  {
+   "unit": "b1_dct_43",
+   "job_id": "6aed0d9c358b23d0cb374256",
+   "device_type": "dirac-3s",
+   "twin": "f142:b1_43",
+   "gap_min": -7.639702157683807e-08,
+   "gap_range": 4.4938405613861964e-08,
+   "screen_pass": false,
+   "twin_gaps": {
+    "f142_unit": "b1_43",
+    "hamiltonian_sha256": "30d84a83cd1910aa6f19c2df419d1ca7ebc64c6ab0a47c0ffde8c3d473963327",
+    "relaxation_schedule": 2,
+    "samples": "device_samples/f142_b1_43_6ad05358358b23d0cb3727a8.json",
+    "objective_reference": -166493.56466611073,
+    "per_sample_gap": [
+     -6.740947743090074e-08,
+     -1.3482630574218427e-08,
+     -6.291563875740354e-08,
+     -2.24707083984067e-08,
+     -3.595261091172923e-08,
+     -5.392812397862839e-08,
+     -5.8421646605523e-08,
+     -2.247063847659197e-08
+    ],
+    "gap_min": -6.740947743090074e-08,
+    "gap_range": 5.392684685668231e-08
+   },
+   "reading": {
+    "gap_difference": -8.987544145937332e-09,
+    "twin_gap_range": 5.392684685668231e-08,
+    "changes_reading": false
+   }
+  },
+  {
+   "unit": "g0b_3_42",
+   "job_id": "6aed0ddb358b23d0cb374257",
+   "device_type": "dirac-3s",
+   "twin": "dirac-3:hw_g0b_3_stratified_42",
+   "gap_min": -3.460437762248082e-08,
+   "gap_range": 3.272007040831608e-08,
+   "screen_pass": true,
+   "dirac3_history": {
+    "source": "experiments/results/hw_dispersion.json",
+    "file": "hw_g0b_3_stratified_42.json",
+    "device": "dirac-3",
+    "relaxation_schedule": 2,
+    "gap_to_exact_pct": 0.4133399972512124
+   },
+   "reading": "reported beside, not a test: the device differs"
+  },
+  {
+   "unit": "b1_lg_42",
+   "job_id": "6aed0e12358b23d0cb374258",
+   "device_type": "dirac-3s",
+   "twin": "dirac-3:hw_b1_lg_stratified_42",
+   "gap_min": -6.24503447311849e-08,
+   "gap_range": 2.405731964094404e-07,
+   "screen_pass": true,
+   "dirac3_history": {
+    "source": "experiments/results/hw_dispersion.json",
+    "file": "hw_b1_lg_stratified_42.json",
+    "device": "dirac-3",
+    "relaxation_schedule": 2,
+    "gap_to_exact_pct": 0.015293054445101692
+   },
+   "reading": "reported beside, not a test: the device differs"
+  }
+ ],
+ "provenance": {
+  "generator": "experiments/phase2/src/run_dirac3s_units.py",
+  "generator_commit": "dfb1694c1b3dc8a1ed77709ecea5fe164043ad8b",
+  "generator_clean": false,
+  "seeds": [
+   42,
+   43
+  ],
+  "versions": {
+   "python": "3.12.14",
+   "numpy": "2.5.2",
+   "scipy": "1.18.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "e70a93ab5aa947da828b3569db4beebe",
+  "replaces": {
+   "reason": "Sprint 31 Task N (#106): each row now carries its schedule-4 job id and device type (test_row_schema, B2 and F141); every reading is recomputed from the same stored samples",
+   "previous_run_id": "82f3d8044fdd42d5a0e204c202b6e7a9"
+  }
+ }
+}

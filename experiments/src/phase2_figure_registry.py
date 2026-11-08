@@ -359,4 +359,15 @@ REGISTERED: dict[str, dict[str, str]] = {
         "99.63": "rows a learner pair agrees on, in percent; " + _NOT,
         "99.92": "rows a learner pair agrees on, in percent; " + _NOT,
     },
+    "F114_REAL_CEILING.md": {
+        "0.00049": "the check's distance, |estimate - test fraud rate| "
+                   "(0.0011828 - 0.0016741) from f114_real_ceiling_lr05.json; "
+                   "recomputed 2026-11-05",
+    },
+    "F157_QNN_IEEE.md": {
+        "-0.005": "the entry's decision line, a preregistered threshold, "
+                  "not a result",
+        "99.17": "the Bonferroni interval level 1 - 0.05/6, in percent, a "
+                 "preregistered setting, not a result",
+    },
 }

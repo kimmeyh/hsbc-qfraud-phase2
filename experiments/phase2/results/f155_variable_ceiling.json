@@ -1,0 +1,80 @@
+{
+ "generator": "experiments/phase2/src/run_dirac3s_units.py",
+ "card": "F155",
+ "sprint": 31,
+ "evidence_tag": "HW",
+ "device_type": "dirac-3s",
+ "metered_seconds": 6.0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F155",
+ "complete": true,
+ "rows": [
+  {
+   "card": "F155",
+   "unit": "pool_1350",
+   "stop": 1,
+   "seed": 42,
+   "device_type": "dirac-3s",
+   "evidence_tag": "HW",
+   "job_id": "6aec89e4358b23d0cb37424a",
+   "metered_seconds": 6.0,
+   "metered_seconds_parsed": true,
+   "attempts": 1,
+   "wall_seconds_including_queue": 144.1,
+   "submitted": "2026-11-05T08:49:39",
+   "finished": "2026-11-05T08:52:04",
+   "stored": "device_samples/f155_pool_1350_6aec89e4358b23d0cb37424a.json",
+   "hw_config": {
+    "lambda_coef": 340470.0,
+    "weak_cls_schedule": 3,
+    "weak_cls_type": "dct",
+    "weak_cls_params": {
+     "random_state": 42
+    },
+    "weak_cls_strategy": "multi_processing",
+    "relaxation_schedule": 2,
+    "num_samples": 1
+   },
+   "screen": {
+    "off_diagonal_spread_over_resolvable": 0.1206175776622512,
+    "linear_spread_over_resolvable": 0.23810223122937899,
+    "screen_pass": false,
+    "dynamic_range_db": 4.779077196215677,
+    "n_variables": 1350,
+    "hamiltonian_sha256": "ad7dfdec7f2ea1ab0901cb4617b5408ca65a9ec7317746d176dd87587532876f"
+   },
+   "twin": null,
+   "status": "ok",
+   "n_samples_returned": 1,
+   "returned_length": 1350,
+   "device_timing": {
+    "run_time_per_sample_s": [
+     5.327982426
+    ],
+    "runtime_sum_s": 5.327982426,
+    "preprocessing_s": 0.934169292,
+    "source": "eqc-models SolutionResults.run_time (ns)"
+   },
+   "accepted": true
+  }
+ ],
+ "provenance": {
+  "generator": "experiments/phase2/src/run_dirac3s_units.py",
+  "generator_commit": "1fb4eba0ccddd96f09b25d57a6be9d3e6824ba24",
+  "generator_clean": true,
+  "seeds": [
+   42
+  ],
+  "versions": {
+   "python": "3.12.14",
+   "numpy": "2.5.2",
+   "scipy": "1.18.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "77d1a6e0099d427598c91912ac35c84a"
+ }
+}

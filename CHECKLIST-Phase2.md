@@ -93,6 +93,11 @@ Nothing in this stage is time-bound. Schedule on value.
         F170 and F171 written before their first scores, and F171's budget
         amendment before its post hoc count (Decision D7). Open: the filing
         date (team lead)
+      - **Progress 2026-11-05** (Sprint 31): entries for F114 (with the
+        staged re-run amendment, efe7b88), F157's SPECTRA and QNN parts
+        (with the D14 RBF amendment, a25b90a), Experiment 5, F155 and F95
+        written before their first scores. Open: the filing date (team
+        lead)
 - [x] **C**: F154 every saved test result's confusion counts, and where
       each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
       the standing rule that every result records its outcomes (CLAUDE.md),
@@ -104,14 +109,21 @@ Nothing in this stage is time-bound. Schedule on value.
       F107 (shot budget; the Schmidt-rank threshold is undefined for
       classical inputs) if F6 recommends pursue. Sprint 27:
       `docs/phase2/F6_GATE_BASED_ARM.md` (pursue narrowly, simulation only),
-      `F106_DEQUANTIZATION.md`, `F107_SHOT_BUDGET.md`
+      `F106_DEQUANTIZATION.md`, `F107_SHOT_BUDGET.md`. Sprint 31 (F157 QNN
+      part): on IEEE-CIS, GAM and HGB are no worse than the circuit within
+      the 0.005 margin, so the circuit is dequantized
+      (`docs/phase2/F157_QNN_IEEE.md`)
 - [x] **C**: F108 ceiling validation harness.
       Sprint 27: `docs/phase2/F108_CEILING_VALIDATION.md`; no method validated.
       Sprint 29 (F156): the Henze-Penrose bound fails on the harness too;
       F169 tries the second named candidate. Sprint 30 (F169): both
       plug-ins pass F108's rule; LightGBM's reference-arm passes are
       degenerate, so the reading rests on the main and flip arms
-      (`docs/phase2/F169_PLUGIN_BINS.md`)
+      (`docs/phase2/F169_PLUGIN_BINS.md`). Sprint 31 (F114): on real data,
+      the re-run at learning rate 0.05 passed the shuffled-label check by
+      about 0.00001; IEEE-CIS 0.0254 against an achieved 0.0293, with the
+      calibration warning; the ULB figure is not a usable ceiling
+      (`docs/phase2/F114_REAL_CEILING.md`)
 - [x] **C**: F109 SPECTRA domain ladder and aggregation experiments.
       Sprint 27: `docs/phase2/F109_TIER1_LADDER.md`
 - [x] **H**: Goal ordering for prioritization: field advancement leads if it
@@ -222,6 +234,11 @@ Nothing in this stage is time-bound. Schedule on value.
         XGBoost on any cell, and XGBoost is reliably above it on
         energy_steel and oilgas_gasturbine (`docs/phase2/F162_IN_POCKET.md`).
         F161, the B4 re-run on Dirac-3S, is carded with its run condition
+      - **Progress 2026-11-05** (Sprint 31, Experiment 5, classical): no
+        ProductCD segment is accepted, for the proxy or for HGB; on every
+        segment that can be scored, the champion's recall is already at the
+        0.5% budget's maximum, so the measure cannot show an edge
+        (`docs/phase2/EXP5_ROUTER.md`)
 - [ ] **C**: 6. Scaling claim -- end-to-end training time against sample count,
       including Hamiltonian construction
       - Backlog: F110
@@ -276,7 +293,10 @@ Nothing in this stage is time-bound. Schedule on value.
       first needs F141 (client support) and F142's measured cost.
       **Both done in Sprint 26** (2026-10-15): F142 spent 86.0 s over 5
       Dirac-3S fits
-      (`docs/phase2/F139_RERUN_REVIEW.md`)
+      (`docs/phase2/F139_RERUN_REVIEW.md`). Sprint 31 (F155, F95): 73.0 s
+      over 5 Dirac-3S calls, none retried. F155 accepted 1,350 variables;
+      F95 found no evidence for schedule 4, so device plans stay at
+      schedule 2 (`docs/phase2/F95_SCHEDULE4.md`)
 - [ ] **H+C**: Latency benchmark (p50/p95/p99) against the 100-300 ms envelope,
       which Phase 1 states as a target rather than a measurement (D10). F118
 - [ ] **H+C**: Calibration layer fitted, which Phase 1 specifies but does not
