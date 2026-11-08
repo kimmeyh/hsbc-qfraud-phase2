@@ -17,7 +17,7 @@
     "number": 31,
     "merged_pr": 92,
     "main_merge_pr": 109,
-    "docs_triad_complete": false
+    "docs_triad_complete": true
   },
   "prereg": {
     "status": "FROZEN",

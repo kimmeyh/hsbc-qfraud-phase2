@@ -44,6 +44,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 28 | docs/sprints/SPRINT_28_SUMMARY.md | [OK] Complete | ~4 days (Oct 22-25, 2026) |
 | 29 | docs/sprints/SPRINT_29_SUMMARY.md | [OK] Complete | ~5 days (Oct 26-30, 2026) |
 | 30 | docs/sprints/SPRINT_30_SUMMARY.md | [OK] Complete | ~6 days (Oct 30 - Nov 4, 2026) |
+| 31 | docs/sprints/SPRINT_31_SUMMARY.md | [OK] Complete | ~4 days (Nov 4 - Nov 7, 2026) |
 
 ## Last Completed Sprint
 
@@ -61,8 +62,8 @@ all four SPECTRA datasets, and the QNN circuit is dequantized on IEEE-CIS.
 Experiment 5: no segment accepted. F155: 1,350 variables accepted. F95: no
 evidence for schedule 4. Records: `SPRINT_31_PLAN.md`,
 `SPRINT_31_VALIDATION.md`, `SPRINT_31_DECISIONS.md`,
-`SPRINT_31_RETROSPECTIVE.md`, `SPRINT_31_SUMMARY.md` (written at Sprint
-32 planning).
+`SPRINT_31_RETROSPECTIVE.md`, `SPRINT_31_SUMMARY.md` (written
+2026-11-08, at Sprint 32 refinement). Main PR #109.
 
 ### Sprint 30: Measure the Work, Survive the Limits, Then Test the Ceiling
 and the Room
