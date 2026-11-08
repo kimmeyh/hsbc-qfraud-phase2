@@ -394,22 +394,6 @@ Three findings outlived their cards and are recorded there:
 - Acceptance: the team lead picks one configuration (schedule 2 at 91-136 variables, or schedule 3 at 833) with the reason recorded; F2b and F5 closed into the survivor; the survivor's cost labeled measured or extrapolated; the hardware plan's Experiment 5 row either matches it or is flagged for F92
 - Depends on: nothing. The configuration choice is the team lead's (Class 3)
 
-**F95. Relaxation schedule 4 on the residual (~1h build + approval, metered, cost unmeasured) Priority 160**
-- **2026-11-05 (Sprint 31 Task J, D10 and D12 option 1): run.** Four fits on Dirac-3S at schedule 4, 67.0 of the 120 s cap; no change on any fit, every sample at the reference optimum to solver precision (`docs/phase2/F95_SCHEDULE4.md`). The memo's open question 1 is answered for Dirac-3S. Leaves the backlog at Sprint 31 close-out
-- **F138 re-check (2026-10-13, `docs/phase2/DIRAC_3S_RESEARCH.md`)**: the four schedules are unchanged on Dirac-3S. The Dirac-3S guide's 50-variable table puts schedule 4 at 3.04x schedule 2, inside this card's 2.3x-5.3x range, so the estimate below stands, but it was derived on Dirac-3 and the guide does not say its table was measured on Dirac-3S. Re-quote from F142's first measured Dirac-3S fit
-- **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** This card's run goes to Dirac-3S unless its entry says why not. Its seconds estimate is a Dirac-3 figure; re-price it at refinement from F142's measured Dirac-3S costs with `qpu_cost_model.quote(n_variables, n_samples, relaxation_schedule=4)` (Sprint 26 IMP-5); today it returns unknown, because no Dirac-3S call has run at schedule 4, so the block is bounded by call count
-- **Pass 2 finding (2026-10-18)**. **Measured**: F142's B1 fits on Dirac-3S at schedule 2, seeds 42 and 43 at 91 variables, are seeded rebuilds of the same configuration as this card's B1 dct pools (not the frozen pools themselves). They reached the reference optimum: objective gaps of +0.0007 and -0.011 on about -166,494 (relative 4.5e-9 and -6.7e-8), weight cosine 1.0 (`experiments/phase2/results/f142_dirac3s_verify.json`). Seed 43's device objective is below the reference's, which places the reference within its solve tolerance there, not the device beyond an optimum. **Inferred**: on Dirac-3S there may be no schedule-2 residual for schedule 4 to close in this configuration, so under the Dirac-3S default this card could measure nothing. The memo's question was asked of Dirac-3, where the gap was 0.413% (G0b). Answering it as promised needs Dirac-3 named on a `# device named:` line; the alternative is to report F142's rows as the Dirac-3S answer. That is a scope decision for the team lead, not a correction
-- **UNBLOCKED 2026-09-25**: the hold was "until the QCi memo is sent", and it
-  was sent 2026-09-25 at 12:23 PM. The sent memo commits to this check, so it
-  is now promised work rather than optional
-- Phase: Experiments (added 2026-09-23; promised in the QCi memo and carded nowhere)
-- Platform: Dirac-3
-- The feedback document's open question 1, "Would relaxation schedule 4 close the residual?", is still open: every Phase 1 fit ran schedule 2, frozen before the grant. The memo names it as a use of the remaining balance
-- **Four fits at 45-91 variables**, enumerated in the HELD note below. Schedule-2 cost there is 4-9 s per fit, measured; **schedule-4 cost is unmeasured**, so the block opens with one fit to establish the rate (the F87 pattern). (Corrected 2026-09-27: this bullet said "about five fits at 91-136 variables" while the note below enumerated four, one of them at 45 variables. IMP-4 directs future readers to trust this card's numbers rather than re-derive them, so a card contradicting itself undercuts the rule that cites it. Found by both PR #141 reviews.)
-- Acceptance: the runner is idempotent before its first approval (Criterion H); per-fit residual against the proxy optimum reported as `[HW]` rows beside their schedule-2 twins
-- Depends on: a measured Dirac-3S rate at schedule 4 (corrected 2026-10-18, Pass 1: F141 and F142 are spent, both shipped in Sprint 26; F142 measured schedule 2 only, so `quote(..., relaxation_schedule=4)` still returns unknown and this block is bounded by call count) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate is spent, both reported in Sprint 25; the F124 rank-1-first gate is spent too, because rank 1's device pilot, F129, was closed); per-block team-lead approval (Criterion H)
-- **HELD until the QCi memo (F92) is sent** (team lead, 2026-09-23). Case and cost worked out at refinement, recorded so it is not re-derived: 4 fits on frozen pools that already have schedule-2 and exact-optimum twins (B1 dct seeds 42 and 43 at 91 variables; the G0b fit with the 0.413% gap; B1 lg seed 42 at 45 variables), stopping after fit 1 to re-quote if the rate exceeds 27 s. About 60 s, range 40-110 s, cap 120 s. Extrapolated, low confidence: measured schedule-2 cost of 4-5 s per fit times the 3.4x schedule-4 ratio (range 2.3x-5.3x) in QCi's portfolio example, a problem of unstated size. The per-fit data suggests the residual is a fixed offset (all 8 samples clustered well above the optimum), which predicts schedule 4 will NOT close it; that is inference, and the run is what settles it
-
 **F90. F2b at the configuration that can actually show an effect: B5, then B4 at schedule 3 -- CLOSED 2026-10-06 (Sprint 21: B5 and B4 ran; the H5 replication did not reproduce)**
 - **CLOSED.** B5 12 fits / 13 s and B4 10 feasible cells / 640 s ran on Dirac-3 on 2026-10-06. The in-segment edge against the matched control is negative on all 8 scoreable cells, and the device matches its classical proxy within 0.0072 in-pocket AUPRC. `docs/B4_B5_HARDWARE_RESULT.md` is the record. The card stays in place because `test_spectra_reconciliation.py` requires every SPECTRA record to remain findable
 - Phase: Experiments / Phase 2 evidence. **This is the replication half of Experiment 5, Segment transfer (H5)** (proposal section 5; the 2026-10-03 checklist correction). A failure of H5 is the third condition the proposal names as retiring the approach. The transfer half is F121. Sprints with F100 and F101, which make its result readable
@@ -591,11 +575,23 @@ SPRINT_30_PLAN.md, SPRINT_30_VALIDATION.md, SPRINT_30_DECISIONS.md,
 SPRINT_30_RETROSPECTIVE.md and CHANGELOG.md. Removed from candidates per
 convention (Pass 1, 2026-11-04).)
 
-**Selected for Sprint 31** (team lead, 2026-11-04, D1 option 4; D2-D6 answered the same day): F180,
-F177, F178, F179, F114, F155, F157, F150, F95, F121 and F13, with F13
-last ("after other results are known"). Each part still open is a
-decision in `docs/sprints/SPRINT_31_DECISIONS.md` (D2-D6). Plan:
-`docs/sprints/SPRINT_31_PLAN.md` (draft).
+(F180 the deep analysis of all testing, F177 the suite by risk, F179
+the status file's lock, F114 the ceiling on real data, F155 the
+Dirac-3S variable-ceiling probe, F95 relaxation schedule 4 and F121
+Experiment 5's transfer half: COMPLETED in Sprint 31, merged via PR #92
+(main PR #109), 73.0 metered seconds on Dirac-3S (F155 6.0, F95 67.0).
+F157's SPECTRA and QNN parts, F178's first versions and F13's update
+also shipped; those cards stay open. F150 was not run (D4: asked again
+at this refinement). Findings that bind other cards are recorded on
+them: F143 (F155 meets its hold condition), F161 (F157 SPECTRA and
+F95), F157 (an open item, carded as F196), F114's ULB figure (carded as
+F195), F121's saturating measure (carded as F197). F184-F193 carded
+during the sprint (D18 and EvidenceBasedDB's request); F194 carded
+from the short review of the retrospective commits. Retrospective i6
+and i7 were answered "d": tracked in `SPRINT_31_RETROSPECTIVE.md`, not
+carded. See SPRINT_31_PLAN.md, SPRINT_31_VALIDATION.md,
+SPRINT_31_DECISIONS.md, SPRINT_31_RETROSPECTIVE.md and CHANGELOG.md.
+Removed from candidates per convention (Pass 1, 2026-11-08).)
 
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
@@ -675,20 +671,10 @@ value. Removed from candidates.)
 - Sprint 27's F103 rebuilds the paper's sparse pocket and dense substrate from its description. This card builds the same two substrates as the authors construct them, as close a duplicate as their details allow, and repeats the four published values: JOINT minus GA2M +0.37 and +0.00, HGB minus GAM +0.15, joint ratio 9.9
 - Acceptance: each value against the paper's with F103's tolerances; each difference from F103's rebuild named and explained
 - Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103 spent (corrected 2026-10-19, Pass 1: shipped in Sprint 27)
-
-**F155. Dirac-3S variable-ceiling probe: does the cloud queue accept 950 variables? (~30m, about 4 metered s) Priority 60**
-- **2026-11-05 (Sprint 31 Task I, D9 option 1): run.** Accepted at 1,350 variables, all entries returned, 6.0 metered s against a 4 s floor quote (`experiments/phase2/results/f155_variable_ceiling.json`). Leaves the backlog at Sprint 31 close-out
-- Phase: Phase 2 (added 2026-10-22 by the team lead, Sprint 28 Decision 7)
-- Platform: Dirac-3S
-- The team lead: the expansion unit is installed but not fully implemented, so the cloud `dirac-3s` queue is still, temporarily, at 949 variables. One minimal job at **950** variables (949 is inside both limits and cannot tell them apart): one sample, schedule 2. Accepted means the limit is now above 949 and F143 can come off HOLD; rejected means it is still 949
-- Cost: `qpu_cost_model.quote(950, 1)` gives 3-4 s from three Dirac-3S anchors; 950 is above the largest anchor (833), so 4 s is a floor, not a bound. Whether a rejected job is billed is **unverified**, and whether the client rejects it before submission is unverified
-- Depends on: per-block approval (Criterion H). Re-run when QCi says the expansion is live, or at a cadence the team lead sets
-- **2026-10-22 (Sprint 28 Task K): 950 may no longer separate the limits.** QCi's reply of 2026-10-21 raised the integer solver to 954 levels on both devices, with Dirac-3S to 9,980 "in the coming weeks" (`docs/phase2/DIRAC_UNDERSTANDINGS.md` section 4). If the continuous ceiling moved with it (inferred, unverified), a 950-variable job is accepted before the expansion is live. The probe size is a Manual Validation decision: 955 (just above 954) or 987 (F143's own size, which answers whether F143 fits under any intermediate limit). `qpu_cost_model.quote` gives 3-4 s for each, a floor above the 833 anchor. Not run
-- **2026-10-23 (team lead, Sprint 28 Manual Validation, DV1): the probe is 1,300 variables**, above both 954 and F143's 987, so an accepted job shows the queue has moved past both. `qpu_cost_model.quote(1300, 1)` gives 4 s from one Dirac-3S anchor (833, the only one within 2x); above that anchor, 4 s is a floor, not a bound. The run still needs its own per-block approval (Criterion H)
-- **2026-10-23 (Sprint 28 D4, storage prevention)**: the probe runs from a new runner under `experiments/phase2/src`, through `device_store.saving` with a `hamiltonian` declaration, so the full response and the problem's arrays are stored. `probe_variable_ceiling.py` is a frozen Phase 1 module and is not reused for it (`test_device_store_required.py`)
+- **Pass 1 (2026-11-08)**: carried from Sprint 31 (D4, "delay to next sprint"); whether the construction request was sent is asked again as Sprint 32 D2
 
 **F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 30**
-- **Pass 3 (2026-11-05, Sprint 31 Tasks F and G)**: the SPECTRA part shipped (four datasets, 32 pages under `docs/phase2/algorithms/`; the RBF SVM scored under the D14 amendment; the proxy fifth or sixth of seven on every dataset) and the QNN part shipped (dequantized, `docs/phase2/F157_QNN_IEEE.md`). Remaining: the device lanes and QSVM, each a card when selected. One open item, not carded: energy_steel seed 42's RBF SVM is constant on validation and ranked on test, stated as not explained on its page; refinement decides whether it gets a card. Priority 30 unchanged
+- **Pass 3 (2026-11-05, Sprint 31 Tasks F and G)**: the SPECTRA part shipped (four datasets, 32 pages under `docs/phase2/algorithms/`; the RBF SVM scored under the D14 amendment; the proxy fifth or sixth of seven on every dataset) and the QNN part shipped (dequantized, `docs/phase2/F157_QNN_IEEE.md`). Remaining: the device lanes and QSVM, each a card when selected. One open item, not carded: energy_steel seed 42's RBF SVM is constant on validation and ranked on test, stated as not explained on its page; refinement decides whether it gets a card. Priority 30 unchanged. (Pass 1, 2026-11-08: carded as F196)
 - Phase: Phase 2 (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F151 and F152)
 - Platform: ULB, IEEE-CIS, then the other datasets already used
 - For each algorithm (HGB, LightGBM, XGBoost, CatBoost, logistic regression, SVM, CVQBoost proxy and device, QSVM, QNN), find the best settings under one protocol per dataset, and record the alternatives tried and why each was kept or dropped. Every result reports TP, FP, TN and FN at the 0.5% alert budget and at validation-chosen thresholds, precision, recall, specificity, F1, MCC, balanced accuracy, AUC-PR and ROC-AUC, each with its interval over seeds
@@ -708,17 +694,6 @@ value. Removed from candidates.)
 - Depends on: per-block approval (Criterion H); the run condition above
 - **Pass 1 (2026-10-25)**: F162 (Sprint 28) found the proxy not reliably above HGB or XGBoost inside the pocket on any cell, and its card said a null justifies no device block (`docs/phase2/F162_IN_POCKET.md`). Run condition (1) is judged against that result
 
-**F114. Ceiling estimates on real data: learning-curve floor and label noise (~60m to validate one method, +90m real data if it passes [no-history], zero metered) Priority 16**
-- **2026-11-05 (Sprint 31 Task E, D11 option 1, D13): run.** At learning rate 0.05 the shuffled-label check passed; IEEE-CIS month 4 0.0254 (0.0232 to 0.0276) with a calibration warning; the ULB figure, 0.00016, is not a usable ceiling (`docs/phase2/F114_REAL_CEILING.md`). Leaves the backlog at Sprint 31 close-out. A calibrated plug-in for ULB is the next step if a usable ULB ceiling is wanted; not carded, refinement decides
-- **Pass 2 (2026-11-04)**: priority 140 to 16. 140 was its blocked priority; unblocked, it is the payoff of the F169-F171 ceiling work, with 90m left
-- **Pass 1 (2026-11-04): unblocked.** F169 (Sprint 30 Task F) is the first method to pass F108's rule on the main arm: LightGBM with 4,095 bins on 5 of 5 seeds, HGB without early stopping on 4 of 5. LightGBM's reference-arm passes are degenerate, so the method rests on the main and flip arms (`docs/phase2/F169_PLUGIN_BINS.md`). The 60m "validate one method" step is spent; the 90m real-data step is what remains. F170 found ULB's frauds missed by every model have mostly legitimate neighbors (consistent with an information limit); F171 did not show a smaller missed group on IEEE-CIS (4 families against ULB's 12). Both are read beside this card's result
-- Phase: Phase 2 preparation (ceiling methodology)
-- Platform: ULB, IEEE-CIS
-- Fit `a*N^(-b) + c` against N_positives within a fixed time window; confident learning with the diagonal-dominance condition tested and reported when it fails. Report intervals, not points
-- Depends on: a ceiling method that passes F108's harness (corrected 2026-10-19, Pass 1: F108 shipped in Sprint 27 and validated none, so this card is blocked, not ready). F156 is the candidate (corrected 2026-10-25, Pass 1: the calibrated plug-in failed in Sprint 28). **2026-10-28: F156 failed (Sprint 29 Task D); F169 is the next candidate (team lead, Sprint 29 Decision D1 option 2)**
-- **2026-10-18 (Sprint 27 Task K)**: F108 validated none of the four methods on its main arm, including this card's `a*N^(-b) + c` floor (1 of 5 seeds on error; unstable on AUPRC). Under F108's rule this card has no method to run on real data until one passes F108's harness
-- **2026-10-22 (Sprint 28 Task G)**: an isotonic-calibrated plug-in on F151's stable HGB, under a dated F108 amendment, recovers 2 of 5 seeds on the main arm, the same as F108's default plug-in; calibration does not move the estimate. **Still blocked.** The next candidate is a different estimator, not a re-scaled one (`docs/phase2/F114_CALIBRATED_PLUGIN.md`)
-
 **F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 180**
 - **2026-11-05 (Sprint 31 Task L)**: `docs/phase2/PHASE2_POC_PLAN_DRAFT.md` takes every Sprint 31 result (F114, F155, F157 SPECTRA and QNN parts, Experiment 5, F95); the cards above carry Pass 3 notes from them. Priority 180 unchanged: the content still waits on notification
 - **2026-10-22 (Sprint 28 Task J, #56)**: skeleton written, `docs/phase2/PHASE2_POC_PLAN.md`. Dates now sourced: program roadmap page, team lead's screenshot of 2026-10-22 (PoC 17 Nov 2026 - 28 Feb 2027; Review and Close 1 Mar - 30 Apr 2027). The content after notification stays open
@@ -729,26 +704,8 @@ value. Removed from candidates.)
 - Depends on: nothing to start the skeleton; the dataset-specific content needs finalist notification
 - **Pass 1 (2026-10-30)**: F167 (Sprint 29) wrote the full plan on labeled assumptions, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. On notification this card replaces those assumptions with the brief's terms; the skeleton is unchanged
 
-**F177. The full suite in about 5 minutes, with no guard lost (~240m [no-history], zero metered) Priority 10**
-- Phase: tooling (added 2026-11-01 at Sprint 30 Phase 5, team lead: "full suite testing needs to be effective yet as efficient as reasonably possible. 40 minutes is way too long as it should be taking about 5 minutes"). For Sprint 31
-- Platform: N/A (tests, CI and process docs)
-- Measured 2026-11-01 (one local run on the Sprint 30 final HEAD, `--durations=0 --junitxml`, 32 cores, run serially): 48.9 minutes wall, 48.7 summed per test
-  - **Red proofs are 72% of the time (34.9 min).** Tests named as proofs (`*_can_fail` and similar) run `injection.assert_can_fail`, which starts a new pytest process per mutation. A nested start costs about 3 s before the target runs (pytest start-up, then `conftest.py`'s evidence check: list, dirty check and SHA-256 of the 277 tracked evidence files, at start and again at finish, about 0.7 s). Several targets are slow themselves: `test_outcome_record_required`'s targets parse every result file, so each of its proofs takes 16-70 s. Proofs not named as proofs (`_proof(...)` in `test_outcome_record_required`) add about 2 more minutes
-  - **The rest is 13.8 min.** Tests under 2 s each take 2.4 min in total. 13 tests of 10 s or more take 7.9 min, led by real-pipeline runs: `test_ieee_runner_correctness` shuffled-label control (95 s), `test_run_hardware_b5` dry run (78 s), two `test_render_all` renders (45 s each), `test_integer_probe` (29 s and 19 s), `test_f160_room_ieee` (23 s), F159's pool equality (15 s)
-  - **By file**: `test_outcome_record_required` 5.2 min, `test_backfill_outcomes` 3.3, `test_f166_ulb_algorithms` 3.3, `test_f159_parallel_pool` 2.5, `test_f160_room_ieee` 2.2; the top 10 files are 52% of the time
-  - Only one file carries the `slow` marker, so `-m "not slow"` removes almost nothing. pytest-xdist is not installed
-- Levers, each to be measured, with what it gives up:
-  1. **Run a red proof when its guard or target changes, not every run.** A proof shows a guard CAN fail; it needs re-running when the guard, its test or its mutated file changes. Mark proofs `redproof`; the everyday full suite runs the proofs whose files the branch's diff against `origin/develop` touches; CI and Phase 5 run all. Gives up: a guard weakened by a change in a file its proof does not name is caught at Phase 5 or CI, not at once. Saves up to about 35 min per local run
-  2. **Run the non-proof tests in parallel** (pytest-xdist, 32 cores). Proofs must stay serial and alone: they edit real source files, and a parallel test reading the same file sees the mutation (the two Sprint 30 injection-restore failures, under concurrent runs). Gives up nothing if the parallel tests are safe; each test that writes the tree or uses git must be checked first. A new declared dependency
-  3. **Make each nested run cheap.** Skip `conftest.py`'s evidence hash in a nested run (the outer session already checks it, so the guard is kept), and give slow targets a cheap form (for example, parse result files once per session, not per test). Saves the per-start cost on every proof, including at Phase 5 and in CI
-  4. **Mark the real-pipeline tests `slow`** (the 13 above that are not proofs) and run them in CI and at Phase 5. Gives up: a pipeline break found at Phase 5 or CI, not locally. About 6 min
-  5. **Combine and remove duplicates.** The two `test_render_all` tests each render the package (one shared render saves about 45 s); the six exempt-list proofs in `test_outcome_record_required` all target one node; each file's proofs to be checked for two mutations of one term
-- Target: the everyday full suite under about 5 minutes; the complete suite (every proof and slow test) at Phase 5 and in CI, made as short as levers 2, 3 and 5 allow. CI stays inside its 20-minute limit
-- Acceptance: a tracked timing report (`scripts/suite_times.py`, from `--junitxml`) so the before and after are reproducible; each lever measured; no guard removed without its replacement named; every changed guard proven red; `SPRINT_CHECKLIST.md` and `SPRINT_EXECUTION_WORKFLOW.md` say which suite runs when
-- Depends on: nothing. Informs every sprint's Phase 4 and Phase 5 time. F180's analysis (Sprint 31) comes first and may change which levers are taken
-- **Sprint 30 Task L (2026-11-01, #86, team lead D9)**: the CI part is taken in Sprint 30: the red proofs left the per-push CI job and run in a full job on ready for review. Levers 1-5 for the local full suite stay with this card for Sprint 31
-
-**F178. Three learning documents, versioned and updated every sprint (~180m first versions [no-history], then ~30-60m per sprint, zero metered) Priority 12, ONGOING**
+**F178. Three learning documents, versioned and updated every sprint (~180m first versions [no-history], then ~30-60m per sprint, zero metered) Priority 14, ONGOING**
+- **Pass 1 (2026-11-08)**: the first versions shipped in Sprint 31 (`docs/learning/`, `test_learning_docs.py`), and the update step is in `SPRINT_CHECKLIST.md` Phase 5. What remains is the per-sprint update, about 30-60 minutes. **Pass 2 (2026-11-08)**: priority 12 to 14, to sprint with F188 and F181
 - Phase: knowledge record (added 2026-11-01 by the team lead, Sprint 30 Manual Validation)
 - Platform: docs
 - Goal: a reader can come to this repository and learn what we have learned; we record our knowledge over time; it is a faster resource when the work continues. Aim: any advantage, quantum or classical, for credit card fraud detection (more true positives, fewer false negatives)
@@ -763,41 +720,8 @@ value. Removed from candidates.)
 - Acceptance (first version): the three documents exist with version 1.0 and a change list; each acronym and linked term resolves to an appendix anchor (a test fails a broken link or an acronym used before it is spelled out); each experimental claim names a tracked result file or document (the same resolution check as `test_phase2_figures_resolve.py`); `SPRINT_CHECKLIST.md` Phase 5 has the update step
 - Depends on: nothing. Informs: every sprint's Phase 5; the PoC plan
 
-**F180. Deep analysis of all testing: effective, as efficient and as quick as reasonably possible (~180m [no-history], zero metered) Priority 9**
-- Phase: tooling and process (added 2026-11-04 by the team lead after Sprint 30's retrospective improvements: "backlog deep analysis of all testing for next sprint - effective while as efficient as reasonably possible and as quickly as reasonably possible"). For Sprint 31, before F177's levers are chosen
-- Platform: N/A (tests, hooks, CI and process docs)
-- Why, measured in Sprint 30 (team lead, 2026-11-04: from an improvement's approval, the time should be its development time plus about 15 minutes; it was about 87 minutes from the D10 answer to `gh pr ready`):
-  - Local runs dominate: Task N's eight non-proof test files took 13:18 and its five proofs 17:41; Task M's four proofs took 41 minutes and four more 1:43; CI's push job runs the whole non-proof suite in 3:08 (0fc2004). The local slowness is not explained
-  - Steps ran one after another: write, local tests, local proofs, commit, review, fix, CI. The review (14 minutes, uncapped brief), the tests and CI could overlap
-  - Effectiveness gaps still reach review: PR 74's review found 9 untested refusals and states, after the per-term rule (Sprint 28 IMP-5, Sprint 29 IMP-1); one proof targeted a line that had moved (the injection refused, as designed); one Sprint 30 full-suite failure was never identified
-- Scope: every test and guard in `experiments/src/`, the hooks and CI, and the order the sprint process runs them in
-  1. **Inventory**: per test file, what it guards, its kind (unit, guard, red proof, real pipeline, document check), its local and CI time, where it runs (local, push job, full job, Phase 5) and the last time it caught a real defect (from git history and the retrospectives)
-  2. **Effectiveness**: guards that cannot fail or duplicate another; defect classes found by reviews in Sprints 28-30 that no test caught, and the cheapest test that would have; proofs that go red for an unrelated reason
-  3. **Efficiency**: the cost of each kind by place (local against CI's 2-core runner); why local runs are slow (measure: one proof run locally and on CI, interpreter start, `conftest.py`'s evidence hash, antivirus or disk on D:)
-  4. **Speed (cycle time)**: the timeline from an approved change to a verified commit, for Sprint 30 Tasks M, N and O, with what could run in parallel: proofs on CI's full job by hand while the PR is a draft (`workflow_dispatch`), the short review started at push with its 10-minute cap, only the changed files' non-proof tests run locally
-  5. **Red proofs: purpose and re-run policy** (team lead, 2026-11-04: "red tests are to ensure the tests are written effectively, correct? Do red tests need to be re-run every time or is once sufficient"). A red proof (`injection.assert_can_fail`) shows that a test CAN fail: it breaks the guarded code and the test must go red. It checks the test, not the code, so it adds nothing on a run where neither changed. Once is not enough for the life of the test, though: a proof goes stale when (a) the guarded code changes, so its mutation target moves or is removed (Sprint 30: `test_the_required_job_can_fail` targeted a line that IMP-1 rewrote; the injection refused, as designed); (b) the test changes, so a weakened assertion could pass under the mutation; (c) a shared helper or fixture changes. The analysis sets the policy from evidence: re-run a proof when its test file, its mutated file or a helper either imports changes (the diff against `origin/develop`; F177 lever 1), and all proofs once per sprint on CI's full job at ready for review; it measures what the every-run policy has caught that the changed-files policy would not (git history of proof failures). Outside practice, for comparison: Google runs mutation analysis incrementally, on the changed lines of each change at code review, not on the whole code base each time (Petrović and Ivanković, ICSE-SEIP 2018; Petrović, Ivanković, Fraser and Just, IEEE TSE 2021)
-  6. **Which full run is needed, and where** (team lead, 2026-11-04: "Do we really need a CI run if we did full suite tests before Manual Validation?"). Today two full runs happen: the local Phase 5 run and CI's full job at ready for review. CI's is the one to keep: it is a clean Linux checkout, it is the run the close-out hook requires, and it runs after the last change. Evidence from the same day: CI's full job on d4129e4 failed `test_timer_guards_can_fail`, a proof whose mutated file c116f23 had changed after Manual Validation (fixed in a428b92, issue #90). The analysis decides whether the local Phase 5 run is replaced by CI's full job started by hand (`workflow_dispatch`) before Manual Validation, and measures the cost of each
-  7. **Risk-based testing: which ideas apply** (team lead, 2026-11-04: "research 'risk based testing' and determine if any of the ideas should/could be applied ... more efficient while still being very effective"). Risk-based testing sets the intensity and order of testing by risk level, the product of a failure's likelihood and its impact (ISTQB CTFL syllabus v4.0.1, section 5.2; ISO/IEC/IEEE 29119-2 puts risk identification and analysis inside test planning). The proposals below are inferences from those sources and from industry selection work; the analysis tests each against this repository's history before it is recommended:
-     - **Apply: a risk tier per test file.** Impact is high where a missed defect damages a record or the confidentiality boundary: evidence immutability, submitted artifacts, provenance and the result writer, device store, Criterion H, the pre-commit and cross-repo hooks. Likelihood is high where code changes often or was changed recently by several hands; Google found that very few tests fail, that failures sit close to the code they test, and that frequently changed code breaks more (Memon et al., ICSE-SEIP 2017). The inventory (part 1) gets a tier column: high-impact tests run on every push; the rest run when their files change
-     - **Apply: changed-files selection with a safe fallback (test impact analysis).** Run the tests whose own file or imported modules changed, the tests that failed last time and new tests; fall back to everything when a shared file changes (`conftest.py`, `injection.py`, the requirements). This is Microsoft's Test Impact Analysis design (impacted, previously failing and new tests, with a full-run fallback). The cost is safety: a missed dependency skips a needed test, so CI's full job at ready stays the backstop. This is the mechanism for F177 lever 1 and for the red-proof policy in part 5; issue #90 above is a case it would have caught at commit time
-     - **Apply: order by risk and by last failure.** pytest's `--ff` (failed first) runs last time's failures first, and `-x` stops at the first failure; in a local run this gives the answer that matters in the first minute instead of the last
-     - **Do not apply: learned (predictive) test selection.** Facebook's model halved test cost while still reporting over 99.9% of faulty changes (Machalica et al., ICSE-SEIP 2019), but it is trained on a large history of test outcomes; this repository's failures are too few to train on. Recorded so it is not re-proposed without that history
-     - **Measure before deciding: the full job on high-risk changes only.** Today it runs once, at ready for review. The analysis checks whether a high-impact file changed during a sprint should also trigger it (by hand, `workflow_dispatch`) at the commit, rather than waiting for ready
-     - Sources: [ISTQB CTFL syllabus v4.0.1](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf); [Felderer et al., risk-based testing and ISO/IEC/IEEE 29119](https://arxiv.org/abs/1905.10676) (the standard itself is paywalled and was not read); [Memon et al. 2017](https://research.google/pubs/taming-google-scale-continuous-testing/); [Microsoft Test Impact Analysis](https://learn.microsoft.com/en-ie/previous-versions/azure/devops/pipelines/test/test-impact-analysis?view=tfs-2017); [Machalica et al. 2019](https://arxiv.org/abs/1810.05286)
-- Deliverable: `docs/testing/F180_TESTING_ANALYSIS.md` with the inventory as a tracked table (`docs/testing/F180_TEST_INVENTORY.md`) generated by a script (reproducible), the findings, and recommendations each with what it gives up; the recommendations asked as one decision in `SPRINT_31_DECISIONS.md`, prevention first. Taken recommendations land as F177's levers or new cards
-- Acceptance: the inventory covers every test file (a test fails a new test file missing from it); each timing is measured, not estimated; the Sprint 30 timeline is reconstructed from `sprint_status.json`, the CI runs and the commit times; target stated: an approved small change verified and committed in its development time plus about 15 minutes
-- Depends on: nothing. Informs: F177, every sprint's Phase 4 to 7
-
-**F179. The status file's update cannot lose another's change; the review task follows finish and pause (~45m [no-history], zero metered) Priority 14**
-- Phase: tooling (added 2026-11-04, Sprint 30 Task O, from the one short review of the retrospective improvement commit d792731)
-- Platform: N/A (scripts and tests)
-- **Pass 2 (2026-11-04)**: priority 40 to 14, to sprint with F180 and F177 (process tooling the team lead's cycle-time target depends on)
-- `scripts/update_sprint_status.py` refuses a write when the status file changed after it was read, through a per-process temporary file and `os.replace`. That narrows the window and does not close it: two updates can both pass the check before either replaces, and the second wins silently. On Windows, `os.replace` raises `PermissionError` while a reader holds the file open, so the user sees a traceback, not the refusal
-- `--review-task` is evaluated before `--pause-task` and `--finish-task` in the same command, so `--finish-task J --review-task M` is refused although J finishes in that command. Fail-safe; it costs a second command
-- Acceptance: an exclusive lock (an `O_CREAT | O_EXCL` lock file beside the status file, with a stale-lock message naming the file) around the whole read, change and write; a test with two processes in which neither change is lost, proven red; a `PermissionError` on replace reported as a refusal; `--review-task` applied after pause and finish, with a test of the one-command case
-- Depends on: nothing
-
-**F181. The device-default guard enforces Dirac-3S only (~15m [no-history], zero metered) Priority 20**
+**F181. The device-default guard enforces Dirac-3S only (~15m [no-history], zero metered) Priority 12**
+- **Pass 2 (2026-11-08)**: priority 20 to 12, to sprint with F188. Checked 2026-11-08: no module under `experiments/phase2/src/` names `eqc_submit.DIRAC_3` today, so the stricter guard passes on the current tree and only its red proof needs a mutation
 - Phase: tooling (added 2026-11-04 at Sprint 31 planning, from D5 and D7)
 - Platform: N/A (tests)
 - The team lead's rule from Sprint 31 D5: "this and all future runs will be on the Dirace-3S" (`SPRINT_EXECUTION_WORKFLOW.md`, standing hardware rule). `experiments/src/test_phase2_device_default.py` still accepts a Phase 2 module that names Dirac-3 on a `# device named:` line, so the rule is written and not checked. Offered as Task M in D7; the approval named no option, so it is carded here
@@ -832,7 +756,8 @@ value. Removed from candidates.)
 - Acceptance: an experiment entry written before any run; every arm scored at the 0.5% budget with outcome blocks; the twin comparison reported per dataset, including where no circuit beats a twin
 - Depends on: nothing
 
-**F188. Rounding test on the IEEE-CIS selection instances (~30m [no-history], zero metered) Priority 24**
+**F188. Rounding test on the IEEE-CIS selection instances (~30m [no-history], zero metered) Priority 10**
+- **Pass 2 (2026-11-08)**: priority 24 to 10. The cheapest card that decides something: if F176's gains do not survive the device's resolution, F25's design on IEEE-CIS cannot show a device result, and its HOLD can turn into a close. `experiments/phase2/src/f176_below_greedy.py` rebuilds the six instances and holds the solvers; `f176_below_greedy.json` is the result to compare with
 - Phase: Phase 2 research (added 2026-11-06, Sprint 31 D18 option 1, from EvidenceBasedDB's ranked memo)
 - Platform: classical solvers
 - Round each IEEE-CIS selection instance to 200:1 and see whether F176's under-2e-05 gains survive. If not, no device run on that formulation can show anything
@@ -881,6 +806,34 @@ value. Removed from candidates.)
 - Cost basis: F162 took about 28.5 minutes for ten seeds on three cells with `dct` learners (3.1 minutes for seed 42). XGBoost weak learners on 8 cells are unmeasured; step 1 measures one seed first and sets the cap for steps 2-5
 - Acceptance: an experiment entry written before step 1; every row with an outcome block and provenance; each step's reading against its stated confirm and refute; the result at a named commit, which EvidenceBasedDB reads from this repository (nothing is sent back)
 - Depends on: nothing (step 6 depends on steps 2 or 4 and an approval)
+
+**F194. The refusal gate measures branches and reads every print prefix (~45m [no-history], zero metered) Priority 26**
+- Phase: tooling (added 2026-11-08, Pass 1, from the one short review of Sprint 31's retrospective commits, `SPRINT_31_RETROSPECTIVE.md`)
+- Platform: N/A (CI, `scripts/refusal_coverage.py`, `.coveragerc`)
+- Coverage is by line, so a one-line `if bad: raise` counts as tested whenever its condition runs, even if no test takes the raise. `branch = True` in `.coveragerc`, with a partial-branch refusal line treated as untested, closes it. The `REFUSING` print form does not match the `rf"`, `fr"` or `F"` prefixes, and the one-line form can match `: raise` inside a string on an `if` line. None of these occurs in the repository today
+- Acceptance: `branch = True`; a refusal line with a missed branch fails the gate, proven red; the three prefixes and the string case each have a test, proven red; the CI comment and the script's docstring no longer state the line-coverage limit; CI's push job still inside its timeout
+- Depends on: nothing
+
+**F195. A usable ULB ceiling: the plug-in estimator calibrated (~90m [no-history], zero metered) Priority 60**
+- Phase: Phase 2 preparation, ceiling methodology (added 2026-11-08, Pass 1, from F114's open item)
+- Platform: ULB
+- F114 (Sprint 31) gave IEEE-CIS a ceiling and said ULB's figure, 0.00016, is not usable (`docs/phase2/F114_REAL_CEILING.md`); its next step for ULB was a calibrated plug-in, not carded until now. F108's harness validates the method first. The main risk: Sprint 28 Task G found an isotonic-calibrated plug-in on HGB did not move the estimate on F108's main arm (`docs/phase2/F114_CALIBRATED_PLUGIN.md`); this card calibrates F169's LightGBM estimator, which that test did not cover
+- Acceptance: the calibrated method passes or fails F108's rule before it touches ULB; if it passes, the ULB figure with its interval and the same warnings as F114; if it fails, the result says so and ULB has no ceiling on record
+- Depends on: nothing
+
+**F196. energy_steel seeds 42 and 49: the RBF SVM ranks on one fold and not the other (~30m [no-history], zero metered) Priority 65**
+- Phase: Phase 2 (added 2026-11-08, Pass 1, from F157's open item)
+- Platform: SPECTRA energy_steel
+- `docs/phase2/algorithms/ENERGY_STEEL_SVM.md` states two cases as not explained: on seed 42 the RBF scores carry no ranking on validation and do on test; on seed 49 the reverse. Its one guess, the date columns parsed per fold (which raise a format warning), is untested. Find the cause and whether any other seed or dataset is near it
+- Acceptance: the cause named with the evidence, or "not found" with what was checked; the page's sentence replaced by the finding; no result file rewritten
+- Depends on: nothing
+
+**F197. Experiment 5 re-entry: a segment measure that does not saturate (~60m entry draft [no-history], zero metered) Priority 70**
+- Phase: Phase 2, Experiment 5 (added 2026-11-08, Pass 1, from F121's close)
+- Platform: IEEE-CIS
+- F121 (Sprint 31) accepted no ProductCD segment, and on C, R and S recall at the 0.5% budget saturates, so the measure could not show an edge (`docs/phase2/EXP5_ROUTER.md`). A re-entry needs a measure with room above the classical champion (for example, a smaller budget per segment or AUPRC inside the segment), written as a new experiment entry before any run
+- Acceptance: a new entry naming the measure, with a check on the recorded F121 scores that the measure does not saturate for the champion; no run until the entry is approved
+- Depends on: nothing
 
 ### Paper (Stages 4-6)
 
@@ -960,11 +913,6 @@ not a sweep correction.
 - **The team lead's intent for this card**: enqueue 4 or more jobs at once so they run CONSECUTIVELY, raising the odds they execute back to back rather than each paying a fresh queue wait. That is a different and stronger value case than the throughput argument below
 - Value was judged to arrive with Phase 2 volume (81+ fit grids), and that judgment was made against a free tier with 163 spent seconds. With 3,000 granted seconds (F46) and queue wait as the binding cost rather than device seconds, the case is stronger: whenever a session needs more than one or two fits, serial submission wastes most of the wall clock. Still not recommended BEFORE submission, on calendar grounds alone
 - Depends on: nothing to build; live vetting needs F141, spent (corrected 2026-10-18, Pass 1: shipped in Sprint 26) (corrected 2026-10-13, Pass 1: the F138-then-F139 gate and the F124 rank-1-first gate are both spent); live vetting needs team-lead approval (Criterion H)
-
-**F121. Experiment 5 transfer half and router acceptance (~unknown) Priority HOLD**
-- **2026-11-05 (Sprint 31 Task H, D3): run in full on the proxy.** No ProductCD segment accepted, for the proxy or for HGB; on C, R and S recall at the 0.5% budget saturates, so the measure cannot show an edge (`docs/phase2/EXP5_ROUTER.md`). Leaves the backlog at Sprint 31 close-out. A re-entry needs a segment measure that does not saturate, written as a new entry; not carded, refinement decides
-- Phase: Phase 2, Experiment 5 (added 2026-10-03). Transfer of the in-segment result to fraud segments, judged by the proposal's router criterion: at least one point of recall at the 0.5% budget above the classical champion, out of time, on prespecified segments, against a matched random-segment control
-- HOLD until F90 reports. Bounded in advance by F113. **Corrected 2026-10-06 (Pass 1): F90 has reported** -- the replication half did not reproduce on the device (`docs/B4_B5_HARDWARE_RESULT.md`). The stated hold reason is spent; whether the transfer half is still worth running after a failed replication is a scope question for Pass 2, not a correction. **Decided 2026-10-06 (team lead, 3.1): stays on HOLD until F124 reports.** **Corrected 2026-10-07 (Pass 1): F124 has reported** -- no lever beats HGB with a CI that excludes zero on any dataset (`docs/phase2/SPECTRA_IMPROVEMENT_RESEARCH.md`). This hold reason is spent too; whether the transfer half runs is a Pass 2 scope question. **Decided 2026-10-08 (team lead, Sprint 23 refinement): stays on HOLD until F128 and F129 report.** **Corrected 2026-10-10 (Pass 1): F128 has reported** (its premise falsifier fired); F129 has not run, so the hold stands. **2026-10-13 (Sprint 25)**: F139 recommends closing F129, which would leave this hold unmeetable; a new condition or a decision is needed at the same refinement. **F129 CLOSED 2026-10-13 (team lead, Sprint 25 Manual Validation), so this hold can no longer be met. A new condition, or a decision to close or run the transfer half, is due at the Sprint 26 refinement.** **Decided 2026-10-14 (team lead, Sprint 26 Decision 2): stays on HOLD until a Phase 2 run, proxy or device, shows an in-segment edge over the matched control with an interval excluding zero.** F113 found no CVQBoost-specific complementarity with XGBoost (`docs/phase2/F113_ORACLE_GAP.md`): evidence for that decision.
 
 
 **F116. G2 entanglement ablation on the SV1 simulator (~3h [no-history]) Priority HOLD**
