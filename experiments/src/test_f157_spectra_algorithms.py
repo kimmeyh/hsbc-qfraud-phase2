@@ -113,8 +113,8 @@ def test_the_rbf_mode_writes_only_its_own_file(monkeypatch, tmp_path):
     rows = _rows(3)
     for r in rows:
         r["lanes"]["svm"] = {"tried": [], "form_marker": "linear"}
-    src.write_text(json.dumps({"rows": rows, "seed_plans": {}}),
-                   encoding="utf-8")
+    src.write_text(json.dumps({"rows": rows, "complete": True, "seed_plans": {
+        "telecom_churn": {"seeds": [42, 43, 44, 45]}}}), encoding="utf-8")
     before = src.read_bytes()
     monkeypatch.setattr(f157, "OUT", src)
     monkeypatch.setattr(f157, "OUT_RBF", tmp_path / "rbf.json")
@@ -137,6 +137,55 @@ def test_the_rbf_mode_writes_only_its_own_file(monkeypatch, tmp_path):
     assert all(r["lanes"]["svm"]["form"] == "rbf" and
                r["lanes"]["svm_linear"]["form_marker"] == "linear"
                for r in final["rows"])
+
+
+def test_the_rbf_mode_refuses_an_incomplete_or_mismatched_source(
+        monkeypatch, tmp_path):
+    """Sprint 31 i2 b: `run_rbf` rescores only a complete result whose
+    datasets hold exactly their planned seeds. Each term refuses alone.
+    `provenance.start` is stubbed to fail at once, so a removed refusal
+    cannot start a run (Sprint 31 i1)."""
+    import json
+    import provenance
+    import pytest
+    src = tmp_path / "recorded.json"
+    monkeypatch.setattr(f157, "OUT", src)
+    monkeypatch.setattr(f157, "OUT_RBF", tmp_path / "rbf.json")
+    monkeypatch.setattr(f157, "DATASETS", ("telecom_churn",))
+
+    def ran(*a, **k):
+        raise AssertionError("ran past the source refusal")
+    monkeypatch.setattr(provenance, "start", ran)
+    good = {"rows": _rows(0), "complete": True,
+            "seed_plans": {"telecom_churn": {"seeds": [42, 43, 44, 45]}}}
+    for doc, why in (
+            (dict(good, complete=False), "is not complete"),
+            (dict(good, rows=_rows(0, n=3)), "holds seeds [42, 43, 44]"),
+            (dict(good, seed_plans={"telecom_churn": {"seeds": [42, 43]}}),
+             "its plan [42, 43]")):
+        src.write_text(json.dumps(doc), encoding="utf-8")
+        with pytest.raises(SystemExit, match="REFUSING") as exc:
+            f157.run_rbf()
+        assert why in str(exc.value), (why, str(exc.value))
+    src.write_text(json.dumps(good), encoding="utf-8")
+    with pytest.raises(AssertionError, match="ran past"):
+        f157.run_rbf()
+
+
+def test_the_rbf_source_refusals_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    test = (f"{THIS}::"
+            "test_the_rbf_mode_refuses_an_incomplete_or_mismatched_source")
+    for old, new, label in (
+            ('    if src.get("complete") is not True:\n', "    if False:\n",
+             "an incomplete source accepted"),
+            ("        if got != want:\n", "        if False:\n",
+             "a seed mismatch accepted"),
+            ("    if why:\n        raise SystemExit(f\"REFUSING: {why}; the "
+             "amendment", "    if False:\n        raise SystemExit(f\"REFUSING: "
+             "{why}; the amendment", "the source never checked")):
+        assert_can_fail([Mutation(SRC, old, new, expect_occurrences=1)],
+                        lambda: run_pytest(test, ROOT), label)
 
 
 def test_the_rules_can_fail():

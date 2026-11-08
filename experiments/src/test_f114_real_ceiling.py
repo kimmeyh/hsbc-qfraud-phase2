@@ -109,6 +109,7 @@ def test_lr05_uses_its_estimator_and_writes_only_its_own_file(
     def stop(ds, seed):
         raise KeyboardInterrupt("stopped after the check")
     monkeypatch.setattr(f114, "seed_row", stop)
+    monkeypatch.setattr(f114, "stage1_refusal", lambda: None)
     try:
         f114.main(["--lr05"])
     except KeyboardInterrupt:
@@ -121,6 +122,57 @@ def test_lr05_uses_its_estimator_and_writes_only_its_own_file(
     assert f114.TRAIN_AUPRC is True
     assert f114.RECORD == "f114lr05"   # D13: never the first run's stem
     assert f114.main(["--lr5"]) == 2
+
+
+def test_stage2_refuses_unless_stage1_is_complete_and_passed(
+        tmp_path, monkeypatch, capsys):
+    """Sprint 31 i2 b: `--lr05` (stage 2) reads stage 1's result first.
+    Each term refuses alone. `provenance.start` is stubbed to fail at once,
+    so a removed refusal cannot start a run (Sprint 31 i1)."""
+    import json
+    import provenance
+    for name in ("OUT", "ESTIMATOR", "TRAIN_AUPRC", "RECORD"):
+        monkeypatch.setattr(f114, name, getattr(f114, name))
+    stage1 = tmp_path / "stage1.json"
+    monkeypatch.setattr(f114, "STAGE1", stage1)
+
+    def ran(*a, **k):
+        raise AssertionError("ran past the stage-1 refusal")
+    monkeypatch.setattr(provenance, "start", ran)
+    good = {"complete": True, "summary": {"passes": True}}
+    for doc, why in ((None, "cannot be read"),
+                     (dict(good, complete=False), "is not complete"),
+                     (dict(good, summary={"passes": False}), "did not pass")):
+        if doc is None:
+            stage1.unlink(missing_ok=True)
+        else:
+            stage1.write_text(json.dumps(doc), encoding="utf-8")
+        assert f114.main(["--lr05"]) == 2, why
+        out = capsys.readouterr().out
+        assert "REFUSING" in out and why in out, out
+    stage1.write_text(json.dumps(good), encoding="utf-8")
+    try:
+        f114.main(["--lr05"])
+    except AssertionError as exc:
+        assert "ran past" in str(exc)
+    else:
+        raise AssertionError("a complete, passed stage 1 did not proceed")
+
+
+def test_the_stage1_refusals_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    test = f"{THIS}::test_stage2_refuses_unless_stage1_is_complete_and_passed"
+    for old, new, label in (
+            ('        return f"stage 1\'s result {STAGE1.name} cannot be read ({exc})"\n',
+             "        return None\n", "an unreadable stage 1 accepted"),
+            ('    if s.get("complete") is not True:\n', "    if False:\n",
+             "an incomplete stage 1 accepted"),
+            ('    if (s.get("summary") or {}).get("passes") is not True:\n',
+             "    if False:\n", "a failed stage 1 accepted"),
+            ('    if ESTIMATOR == "lgbm_lr05":\n', "    if False:\n",
+             "stage 1 never read")):
+        assert_can_fail([Mutation(SRC, old, new, expect_occurrences=1)],
+                        lambda: run_pytest(test, ROOT), label)
 
 
 def test_the_training_auprc_is_recorded_in_lr05(monkeypatch):

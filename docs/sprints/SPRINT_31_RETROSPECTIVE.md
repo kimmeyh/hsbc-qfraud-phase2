@@ -583,7 +583,11 @@ needed - skip i5. not needed. skip".
 | # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
 |---|---|---|---|---|
 | i1 | A refusal test stubs what the refusal protects | a | about 5 min | now (ca774e7) |
-| i2 | A result is marked complete only by a check that it is | b | see D21 | now; 13 exceptions, not 2, so asked again as D21 |
+| i2 | A result is marked complete only by a check that it is | b ("i2. b", D21) | about 3 hours | now: `test_complete_checked.py`; f114 `--lr05` and `run_rbf` gained their checks; the other 11 reviewed as complete by construction, on a shrink-only list |
 | i3 | The refusal gate sees the repository's refusal forms | b | about 60 min | now (ca774e7); D19 group (b) |
 | i4 | A sprint plan fits the time target, or says that it does not | none | none | skip |
 | i5 | Research estimates use more than one sprint's ratio | none | none | skip |
+| i6 | Prove the Sprint 31 refusals red (D19 group a) | d | none | skip for this sprint; tracked here in case it recurs |
+| i7 | Fix the latent set (D19 group c) | d | none | skip for this sprint; tracked here in case one is hit. Two of its eight, F114 `--lr05`'s stage-1 check and `run_rbf`'s seed check, were done under i2 b |
+
+Team lead, 2026-11-07, verbatim: "i2. b i6. d i7. d".

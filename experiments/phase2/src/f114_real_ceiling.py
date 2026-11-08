@@ -54,6 +54,10 @@ TRAIN_AUPRC = False
 # the first run's stem it replaced that run's nine recorded ULB files.
 RECORD = "f114"
 OUT_LR05 = OUT.with_name("f114_real_ceiling_lr05.json")
+# Stage 1's result (`f169_plugin_bins.OUT_LR05`). Stage 2 runs only when it
+# is complete and passed (Sprint 31 i2 b; the PR 92 review found `--lr05`
+# never read it).
+STAGE1 = OUT.with_name("f169_plugin_bins_lr05.json")
 ENTRY = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, "
          "amendment 2026-11-05 (F114)")
 ENTRY_LR05 = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F108, "
@@ -251,11 +255,30 @@ def select(argv: list[str]) -> bool:
     return not argv
 
 
+def stage1_refusal() -> str | None:
+    """Why stage 2 may not run, or None: stage 1's result must be readable,
+    complete and passed."""
+    try:
+        s = json.loads(STAGE1.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return f"stage 1's result {STAGE1.name} cannot be read ({exc})"
+    if s.get("complete") is not True:
+        return f"stage 1's result {STAGE1.name} is not complete"
+    if (s.get("summary") or {}).get("passes") is not True:
+        return f"stage 1's result {STAGE1.name} did not pass"
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = [] if argv is None else argv
     if not select(argv):
         print(f"usage: f114_real_ceiling.py [--lr05]; got {argv}")
         return 2
+    if ESTIMATOR == "lgbm_lr05":
+        why = stage1_refusal()
+        if why:
+            print(f"REFUSING: {why}; stage 2 runs only after stage 1 passes")
+            return 2
     import provenance
     rid, resume = provenance.start(OUT)
     state = {"rows": [], "plan": {}}

@@ -47,8 +47,26 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 30: Measure the Work, Survive the Limits, Then Test the Ceiling
-and the Room** (Oct 30 - Nov 4, 2026; PR #74, main PR #91). Delivered **F173, F175,
+**Sprint 31: Make Testing Fast and Sure, Then Read the Ceiling, the
+Segments and Dirac-3S** (Nov 4 - Nov 7, 2026; PR #92). Delivered **F179,
+F180, F177, F114, F157 (SPECTRA and QNN parts), F121 (Experiment 5),
+F155, F95, F178, F13** and the pypdf bump, the Phase 5 fresh-eyes fixes,
+the Manual Validation decisions (D16: the CI gate fails only on an
+untested refusal; D17: the red proofs of changed files plus a 5% sample
+in CI's full job; D18: cards F184-F192), F193 carded, the PR 92 review
+fixes and retrospective i1, i2 and i3 (i4 to i7 skipped). 73.0 metered
+seconds on Dirac-3S. F114: IEEE-CIS 0.0254 against an achieved 0.0293,
+with the calibration warning; ULB not usable. F157: boosted trees first on
+all four SPECTRA datasets, and the QNN circuit is dequantized on IEEE-CIS.
+Experiment 5: no segment accepted. F155: 1,350 variables accepted. F95: no
+evidence for schedule 4. Records: `SPRINT_31_PLAN.md`,
+`SPRINT_31_VALIDATION.md`, `SPRINT_31_DECISIONS.md`,
+`SPRINT_31_RETROSPECTIVE.md`, `SPRINT_31_SUMMARY.md` (written at Sprint
+32 planning).
+
+### Sprint 30: Measure the Work, Survive the Limits, Then Test the Ceiling
+and the Room
+(Oct 30 - Nov 4, 2026; PR #74, main PR #91). Delivered **F173, F175,
 F168, F174, F176, F169, F170, F171, F172**, the Phase 5 fresh-eyes fixes,
 the Manual Validation fixes (D8: TP, FP, TN and FN on the comparison
 pages), the CI cut to a 3:08 push job with the red proofs in a full job

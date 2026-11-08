@@ -300,14 +300,34 @@ AMENDMENT = ("experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F157 "
              "SPECTRA part, amendment 2026-11-05 (Sprint 31 D14 option 1)")
 
 
+def source_refusal(src: dict) -> str | None:
+    """Why the recorded result cannot be the amendment's source, or None:
+    it must be complete, and each dataset must hold exactly its seed plan's
+    seeds (Sprint 31 i2 b; the PR 92 review found `run_rbf` checked
+    neither)."""
+    if src.get("complete") is not True:
+        return f"{OUT.name} is not complete"
+    for name in DATASETS:
+        want = {FIRST_SEED} | set(src["seed_plans"][name]["seeds"])
+        got = {r["seed"] for r in src["rows"] if r["dataset"] == name}
+        if got != want:
+            return (f"{OUT.name}: {name} holds seeds {sorted(got)}, its plan "
+                    f"{sorted(want)}")
+    return None
+
+
 def run_rbf() -> None:
     """The D14 amendment: every row of the recorded result, with the kept
     RBF form scored into the SVM lane where the rule keeps it, written to
     `OUT_RBF`; the recorded result is read, never written. Resumable by
     (dataset, seed)."""
     import provenance
-    rid, resume = provenance.start(OUT_RBF)
     src = json.loads(OUT.read_text(encoding="utf-8"))
+    why = source_refusal(src)
+    if why:
+        raise SystemExit(f"REFUSING: {why}; the amendment rescores a "
+                         "complete result only")
+    rid, resume = provenance.start(OUT_RBF)
     rows = (json.loads(OUT_RBF.read_text(encoding="utf-8"))["rows"]
             if resume else [dict(r, lanes=dict(r["lanes"])) for r in src["rows"]])
     plans = src["seed_plans"]
