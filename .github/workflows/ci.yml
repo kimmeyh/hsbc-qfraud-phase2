@@ -21,16 +21,19 @@ on:
 # TWO JOBS (Sprint 30 Task L, team lead D9, 2026-11-01: "find what does not
 # need to be in there and remove it ... Target is < 5 minutes").
 #
-#   test  every push. Every test except the red proofs (`-m "not proof and
-#         not slow"`). A red proof breaks a guarded file and reruns the
+#   test  every pull request push, draft or not. Every test except the red
+#         proofs (`-m "not proof and not slow"`), then the diff-coverage
+#         refusal gate. A red proof breaks a guarded file and reruns the
 #         guard's test in a nested pytest, which was most of the
 #         suite's time. It proves the guard CAN fail, which changes only
 #         when the guard or its test changes, so it does not need every push.
+#         It ran on drafts only until PR 92's review: then a push after
+#         ready for review, the HEAD that is merged, skipped the gate.
 #   full  whenever the PR is not a draft (marked ready for review, and every
-#         push after that), and on demand (workflow_dispatch). Every test,
-#         proofs included: the replacement for the proofs the push job
-#         leaves out, so a commit pushed after ready for review still runs
-#         them (PR 74 review). The local Phase 5 full suite also runs them.
+#         push after that), and on demand (workflow_dispatch). Every
+#         non-proof test, then the red proofs of the files the branch
+#         changed plus a rotating 5% sample (Sprint 31 D17), so a commit
+#         pushed after ready for review still runs them (PR 74 review).
 #         `check_ci_status.py --require-job full` reads it at Phase 7.
 #
 # `conftest.py` marks a proof from its source, so a new proof leaves the
@@ -38,15 +41,18 @@ on:
 # `test_ci_workflow.py` fails if either job's selection changes.
 jobs:
   test:
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     # 10 until Sprint 30, then 20, then 13 (D9). Without the proofs the
     # job took 3:08 on 0fc2004 (tests 2:04, install 0:46); 6 stops a hung
-    # run with margin for a slow runner.
-    timeout-minutes: 6
+    # run with margin for a slow runner. 12 from Sprint 31 (F177 change c):
+    # measuring coverage slows the tests; the first measured run sets it.
+    timeout-minutes: 12
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # diff-cover compares with origin/develop
 
       - uses: actions/setup-python@v5
         with:
@@ -68,7 +74,12 @@ jobs:
       # `slow` is the live-pipeline test, which needs the raw IEEE-CIS data
       # CI does not have. `--durations` prints the slowest tests, so the
       # next cut is chosen from CI's own times.
+      # COVERAGE_PROCESS_START makes every Python process measure itself
+      # (.coveragerc, F177 change c), the tests' subprocesses included.
       - name: Tests
+        env:
+          COVERAGE_PROCESS_START: ${{ github.workspace }}/.coveragerc
+          COVERAGE_DATA_DIR: ${{ github.workspace }}
         run: pytest -m "not proof and not slow" -q --durations=25
 
       # F78, Sprint 16. Until this step existed, every guard in this
@@ -124,6 +135,22 @@ jobs:
           fi
           echo "Working tree clean after the test run."
 
+      # F177 change c (Sprint 31 D8), narrowed by D16 option 1: a changed
+      # REFUSAL line (raise, a one-line `if bad: raise` no test ran,
+      # sys.exit, SystemExit, print("REFUSING ...")) in the evidence code, the
+      # scripts or the hooks that no test ran fails the job; every other
+      # untested changed line is listed and does not fail. Untested
+      # refusals are the class the check exists for (37 reached review in
+      # Sprints 28-30); every changed line failed on every experiment
+      # module's data-only paths. It runs LAST, so its red cannot skip the
+      # guard and clean-tree steps above (it did on d2cb10a).
+      - name: Diff coverage
+        run: |
+          coverage combine --keep -q
+          coverage xml -q -o coverage.xml
+          diff-cover coverage.xml --compare-branch=origin/develop --format json:diff-cover.json --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
+          python scripts/refusal_coverage.py diff-cover.json
+
   full:
     if: github.event_name == 'workflow_dispatch' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
@@ -132,6 +159,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # select_proofs.py compares with origin/develop
 
       - uses: actions/setup-python@v5
         with:
@@ -141,8 +170,27 @@ jobs:
       - name: Install dependencies
         run: pip install -r experiments/requirements.txt
 
-      - name: Tests, red proofs included
-        run: pytest -m "not slow" -q --durations=25
+      # The junit reports give F180's inventory its per-file CI times
+      # (Sprint 31 Task B); they are uploaded even when a test fails. They
+      # are written outside the checkout, so the clean-tree step still holds.
+      - name: Tests
+        run: pytest -m "not proof and not slow" -q --durations=25 --junitxml=${{ runner.temp }}/ci-full.xml
+
+      # Sprint 31 D17 option 1 (c): the red proofs of the files this branch
+      # changed (own test, named file), plus this sprint's 5% rotating
+      # sample, so every proof file runs at least once in 20 sprints. A
+      # proof tests its test, so it shows nothing new unless its files
+      # changed; all 58 proof files took 4 hours locally.
+      - name: Red proofs, selected and sampled
+        if: success() || failure()
+        run: python scripts/select_proofs.py --sample --run -- --junitxml=${{ runner.temp }}/ci-proofs.xml
+
+      - name: Keep the junit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-full-junit
+          path: ${{ runner.temp }}/ci-*.xml
 
       # A red proof breaks a file and restores it; this catches one that
       # did not restore.

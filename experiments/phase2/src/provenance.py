@@ -141,7 +141,8 @@ def _first_line(path: Path) -> str | None:
     return lines[0].strip() if lines else ""
 
 
-def start(path, resumable: bool = True) -> tuple[str, bool]:
+def start(path, resumable: bool = True,
+          replace: str | None = None) -> tuple[str, bool]:
     """A run's id and whether it resumes, decided before any work (PR 63
     review). Each module had decided `resume` from the sidecar's presence
     alone, so a run on a fresh clone (no sidecar) or a rerun after a
@@ -153,8 +154,16 @@ def start(path, resumable: bool = True) -> tuple[str, bool]:
     run id is the sidecar's. Any other result there (complete, from another
     run, or with no sidecar) is refused now, with nothing computed and
     nothing written. Replacing it is a deliberate act: `write_result`'s
-    `replace=` in code, or moving the recorded file aside."""
+    `replace=` in code, or moving the recorded file aside.
+
+    `replace`, a stated reason, starts a new run over a recorded result
+    instead of refusing it; the same reason must then go to `write_result`,
+    which records it beside the replaced run's id (Sprint 31 Task N)."""
     path = Path(path)
+    if replace is not None:
+        if not str(replace).strip():
+            raise ValueError("replace must state why the recorded result goes")
+        return new_run_id(), False
     if path.exists():
         try:
             old = json.loads(path.read_text(encoding="utf-8"))

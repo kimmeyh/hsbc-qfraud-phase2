@@ -33,8 +33,10 @@ Rules for this draft:
 - Experiments 1, 2, 4 and 6 have proxy or classical results already. In
   the PoC they are re-run on the brief's data and metrics, if the brief
   sets any **[A2]**.
-- Experiment 5 stays on HOLD under its 2026-10-14 condition; it enters
-  the PoC only if that condition is met.
+- Experiment 5 ran on the proxy in Sprint 31 (team lead, Sprint 31 D3,
+  hold set aside) and accepted no segment
+  (`docs/phase2/EXP5_ROUTER.md`). It enters the PoC only with a
+  segment measure that does not saturate.
 
 ## Stages
 
@@ -94,8 +96,16 @@ device block, and the decision that releases it.
      against the allocation the brief confirms **[A4]**.
   3. One block per sprint at most, so each result is read before the
      next is asked for.
-- Device: Dirac-3S. The cloud queue's 949-variable limit stands until
-  F155 shows it changed (skeleton, standing rules).
+- Device: Dirac-3S. F155 (Sprint 31) showed the cloud queue accepts a
+  continuous job of 1,350 variables, above the 949 base-module figure
+  the skeleton states and within the 9,980 expansion-module figure
+  (`docs/phase2/DIRAC_3S_SITE_SWEEP.md`, F14;
+  `experiments/phase2/results/f155_variable_ceiling.json`). F143's hold
+  condition is met. The pool failed the resolution screen, so the probe
+  tests acceptance only, by design; its weights came back near flat
+  (0.0007392 to 0.0007409, from the stored response
+  `experiments/phase2/results/device_samples/f155_pool_1350_6aec89e4358b23d0cb37424a.json`),
+  as a failed screen predicts.
 - Released by: the falsifier passing on the proxy (step 1), then the team
   lead's per-block approval (step 2).
 - If step 1 has not passed by its deadline: the PoC report states that
@@ -113,13 +123,18 @@ device block, and the decision that releases it.
 
 ### Experiment 5 (F121): segment transfer
 
-- Entry: to write. State: HOLD until a Phase 2 run, proxy or device,
-  shows an in-segment edge over the matched control with an interval
-  excluding zero (team lead, 2026-10-14, Sprint 26 Decision 2).
-- PoC work: none planned. If the hold condition is met, the entry is
-  written and the experiment is placed in stage 1 or 2.
-- Device: to be decided.
-- Released by: its hold condition.
+- Entry: written 2026-11-05 (Sprint 31 Task H). The 2026-10-14 hold
+  (Sprint 26 Decision 2) was set aside by Sprint 31 D3 to run it in
+  full on the proxy. State: result in `docs/phase2/EXP5_ROUTER.md`. No
+  ProductCD segment is accepted, for the proxy or for the HGB
+  reference. Segment W cannot be scored. On C, R and S recall within
+  the segment at the 0.5% budget is already at its maximum, so the
+  measure cannot show an edge there.
+- PoC work: none planned on this measure. A re-entry needs a segment
+  measure that does not saturate (for example a smaller budget or a
+  ranking measure), written as a new entry before any score is read.
+- Device: none.
+- Released by: a new entry, approved by the team lead.
 
 ### Experiment 6 (F110): training time against sample count
 
@@ -135,8 +150,34 @@ device block, and the decision that releases it.
 ### Work beside the experiments
 
 - **Best achievable result per algorithm per dataset (F157, F166).**
-  F166 does ULB in this sprint; the other datasets follow in stage 1, on
-  the brief's data first **[A2]**.
+  F166 did ULB (Sprint 30) and F157 SPECTRA's four datasets (Sprint 31,
+  below). IEEE-CIS and the brief's data follow in stage 1, the brief's
+  data first **[A2]**.
+- **F106's circuit against its twins (F157 QNN part, Sprint 31).**
+  Dequantized on IEEE-CIS month 4: GAM and HGB match the circuit within
+  the margin (`docs/phase2/F157_QNN_IEEE.md`). No PoC work is planned
+  on this circuit.
+- **The plug-in ceiling on real data (F114, Sprint 31).** After the
+  re-run at learning rate 0.05 (`f114_real_ceiling_lr05.json`,
+  `docs/phase2/F114_REAL_CEILING.md`), IEEE-CIS month 4 has an estimate
+  of 0.0254 (0.0232 to 0.0276) with a calibration warning. The ULB
+  figure, 0.00016, is far below the model's own achieved error and is
+  not a usable ceiling. PoC work: none planned. A calibrated plug-in is
+  a backlog item, not a PoC dependency.
+- **Seven algorithms on SPECTRA's four datasets (F157 SPECTRA part,
+  Sprint 31).** Boosted trees lead on every dataset and the proxy places
+  fifth or sixth of seven by mean test AUPRC
+  (`f157_spectra_algorithms_rbf.json`, `docs/phase2/algorithms/`). On
+  telecom_churn the RBF SVM is reliably above the proxy, 0.8441 against
+  0.7254. PoC work: these lanes are the reference a SPECTRA-style
+  dataset in the brief is compared against **[A2]**.
+- **Relaxation schedule 4 on Dirac-3S (F95, Sprint 31).** No change on
+  the two fits with a Dirac-3S schedule-2 twin, whose pools fail the
+  resolution screen, so the evidence is weak; the other two fits have
+  only a Dirac-3 history and are not compared. About three times the
+  device seconds per sample; 67.0 of 120 metered seconds
+  (`docs/phase2/F95_SCHEDULE4.md`). There is no evidence for schedule 4,
+  so PoC device blocks keep schedule 2.
 - **The gate-based arm (F6).** Simulation only, as F6 recommends. A
   Braket hardware run is a new card with its own cost; the AWS credits
   may change that cost **[A3]**.

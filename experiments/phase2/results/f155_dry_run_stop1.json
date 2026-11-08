@@ -1,0 +1,55 @@
+{
+ "generator": "experiments/phase2/src/run_dirac3s_units.py --dry-run",
+ "card": "F155",
+ "stop": 1,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "complete": true,
+ "note": "offline builds of the requests the stop would send; no device call",
+ "written": "2026-11-05T04:41:26",
+ "units": [
+  {
+   "unit": "pool_1350",
+   "n_variables": 1350,
+   "n_variables_expected": 1350,
+   "device_type": "dirac-3s",
+   "num_samples": 1,
+   "relaxation_schedule": 2,
+   "dynamic_range_db": 4.779077196215677,
+   "off_diagonal_spread_over_resolvable": 0.1206175776622512,
+   "linear_spread_over_resolvable": 0.23810223122937899,
+   "screen_pass": false,
+   "quote": {
+    "known": true,
+    "n_anchors": 1,
+    "low_s": 4.0,
+    "high_s": 4.0,
+    "basis": "1 measured call(s), degree 2, within 2x size",
+    "device": "dirac-3s",
+    "above_largest_anchor": 833,
+    "note": "1350 variables is above the largest anchor (833); high_s is a floor for the high end, not a bound"
+   },
+   "hamiltonian_sha256": "ad7dfdec7f2ea1ab0901cb4617b5408ca65a9ec7317746d176dd87587532876f"
+  }
+ ],
+ "provenance": {
+  "generator": "experiments/phase2/src/run_dirac3s_units.py",
+  "generator_commit": "a12f2a1d6b12255af3d53792e90c2d67f4a04e40",
+  "generator_clean": true,
+  "seeds": [
+   42
+  ],
+  "versions": {
+   "python": "3.12.14",
+   "numpy": "2.5.2",
+   "scipy": "1.18.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "24ae75160ac843d6b3b014897d873461"
+ }
+}

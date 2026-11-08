@@ -450,6 +450,36 @@ def test_validation_operating_points_come_from_phase1_metrics(tmp_path):
     assert [g["confusion"] for g in got] == [r["confusion"] for r in ref]
 
 
+def test_the_writer_never_replaces_a_score_file(tmp_path):
+    """Sprint 31 D13: a name held by different bytes gets the next free
+    name; the same bytes reuse the file; nothing recorded is replaced."""
+    y = np.array([0, 1, 0, 1]); p = np.array([0.1, 0.9, 0.2, 0.8])
+    first = orec.save_test_scores("demo", 7, y, p, pred_dir=tmp_path)
+    kept = (tmp_path / "demo_7.npz").read_bytes()
+    again = orec.save_test_scores("demo", 7, y, p, pred_dir=tmp_path)
+    assert again == first                              # same bytes: reused
+    other = orec.save_test_scores("demo", 7, y, p[::-1], pred_dir=tmp_path)
+    third = orec.save_test_scores("demo", 7, y, p * 0.5, pred_dir=tmp_path)
+    assert (tmp_path / "demo_7.npz").read_bytes() == kept
+    assert other["path"].endswith("demo_7_v2.npz")
+    assert third["path"].endswith("demo_7_v3.npz")
+    assert orec.sha256_of(tmp_path / "demo_7_v2.npz") == other["sha256"]
+    assert sorted(f.name for f in tmp_path.iterdir()) == [
+        "demo_7.npz", "demo_7_v2.npz", "demo_7_v3.npz"]  # no temp file left
+
+
+def test_the_writer_guard_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = ROOT / "experiments" / "phase2" / "src" / "outcome_record.py"
+    old = "            os.link(tmp, f)        # fails if the name exists: never replaces\n"
+    # The writer as it was: overwrite the first name, whatever it held.
+    new = "            os.replace(tmp, first); tmp.write_bytes(data)\n"
+    assert_can_fail([Mutation(src, old, new, expect_occurrences=1)],
+                    lambda: run_pytest(
+                        f"{THIS}::test_the_writer_never_replaces_a_score_file", ROOT),
+                    "the score writer replaces a recorded file")
+
+
 def test_saved_scores_round_trip_and_hash(tmp_path):
     y = np.array([0, 1, 0, 1]); p = np.array([0.1, 0.9, 0.2, 0.8])
     blk = orec.record("demo", 7, y, p, budget=0.25, pred_dir=tmp_path)
