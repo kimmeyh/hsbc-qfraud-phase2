@@ -156,6 +156,7 @@
 | 31 | Task M Phase 5 fresh-eyes fixes | tooling | 150m | 41m | 0.27 | measured, active, 41m elapsed |
 | 31 | Task N CI red on dfb1694 | tooling | none | 128m | n/a | measured, active, 304m elapsed; not planned; rework of a defect the sprint introduced |
 | 31 | Task O learning documents, A1 feedback | docs | 150m | 66m | 0.44 | measured, active, 66m elapsed |
+| 31 | Task P PR 92 review fixes and retrospective i1-i3 | tooling | 60m | 285m | 4.75 | measured, active, 459m elapsed; the 60m covered the six review fixes; i2 b (about 3h by its own estimate), i3 and the short review's fixes were added in the retrospective; local red proofs about 70m of it |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start
