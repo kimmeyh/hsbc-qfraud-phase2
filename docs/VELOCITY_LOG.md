@@ -2,7 +2,7 @@
 
 **Purpose**: Recorded estimate-vs-actual per task, feeding SPRINT_PLANNING.md estimation (Sprint 2 retro improvement 6). Record at task completion; recompute patterns at retro Category 3.
 **Audience**: Sprint planning sessions.
-**Last Updated**: 2026-10-10 (Sprint 24 rows; measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
+**Last Updated**: 2026-11-07 (Sprint 31 rows); 2026-10-10 (Sprint 24 rows; measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
 
 | Sprint | Task | Type | Estimate | Actual | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -141,6 +141,21 @@
 | 30 | Task N retrospective IMP-1 to IMP-5 (D10) | tooling | 160m | 60m | 0.38 | measured, active, 60m elapsed; the first task with `--estimate` |
 | 30 | Task O short review fixes of the improvement commit | tooling | 30m | 10m | 0.33 | measured, active, 10m elapsed |
 | 30 | Task P the timer red proof's duplicate target (CI full job) | tooling | 10m | 2m | 0.20 | measured, active, 2m elapsed; not planned |
+| 31 | Task A (F179) status-file lock | tooling | 45m | 58m | 1.29 | measured, active, 58m elapsed |
+| 31 | Task B (F180) testing analysis and inventory | research+tooling | 180m | 229m | 1.27 | measured, active, 260m elapsed |
+| 31 | Task C (F177) test-time levers, and Manual Validation D16-D18 | tooling | up to 240m | 336m | n/a | measured, active, 2573m elapsed; the estimate was a cap, and the task carried the Manual Validation decisions |
+| 31 | Task D (D6) pypdf lock bump | tooling | 45m | 2m | 0.04 | measured, active, 2m elapsed |
+| 31 | Task E (F114) real-data ceiling | research+code | 90m | 316m | 3.51 | measured, active, 1068m elapsed |
+| 31 | Task F (F157) SPECTRA part | research+code | 240m | 514m | 2.14 | measured, active, 1023m elapsed |
+| 31 | Task G (F157) QNN part | research+code | 120m | 201m | 1.68 | measured, active, 320m elapsed |
+| 31 | Task H (F121) Experiment 5 | research+code | 180m | 95m | 0.53 | measured, active, 95m elapsed |
+| 31 | Task I (F155) the 1,350-variable unit | research+device | 30m | 99m | 3.30 | measured, active, 343m elapsed; includes the Criterion H stop |
+| 31 | Task J (F95) schedule 4 on Dirac-3S | research+device | 90m | 189m | 2.10 | measured, active, 983m elapsed; includes the Criterion H stops |
+| 31 | Task K (F178) learning documents | docs | 234m | 518m | 2.21 | measured, active, 1028m elapsed |
+| 31 | Task L (F13) Phase 2 plan and backlog | docs | 75m | 101m | 1.35 | measured, active, 966m elapsed |
+| 31 | Task M Phase 5 fresh-eyes fixes | tooling | 150m | 41m | 0.27 | measured, active, 41m elapsed |
+| 31 | Task N CI red on dfb1694 | tooling | none | 128m | n/a | measured, active, 304m elapsed; not planned; rework of a defect the sprint introduced |
+| 31 | Task O learning documents, A1 feedback | docs | 150m | 66m | 0.44 | measured, active, 66m elapsed |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

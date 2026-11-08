@@ -8,7 +8,8 @@ untested refusal (37 reached review in Sprints 28-30), so this script
 reads diff-cover's JSON report and fails only when an uncovered changed
 line is a refusal: a `raise` (also a one-line `if bad: raise`),
 `sys.exit(...)`, `SystemExit(...)` or a `print("REFUSING ...")`. Every
-other uncovered line is listed, and does not fail.
+other uncovered line is listed, and does not fail. Coverage is by line:
+a one-line `if bad: raise` is seen only when no test ran the line.
 
 Usage: python scripts/refusal_coverage.py diff-cover.json
 
@@ -30,7 +31,11 @@ from pathlib import Path
 # nothing (PR 92 review). Sprint 31 i3 (team lead, 2026-11-07) adds the
 # repository's two other forms: a one-line `if bad: raise ...`, and the
 # commonest, `print("REFUSING: ...")` followed by `return N`, seen by its
-# print (silent-failure finding 4 of the PR 92 review).
+# print (silent-failure finding 4 of the PR 92 review). Limit: coverage is
+# by line, not by branch, so a one-line `if bad: raise` counts as tested
+# whenever any test runs its condition. It fails here only when no test
+# runs the line at all (short review of the i3 commit; branch coverage is
+# for Sprint 32's refinement).
 REFUSAL = re.compile(
     r"^\s*raise\b|\bsys\.exit\s*\(|\bSystemExit\s*\("
     r"|^\s*(?:if|elif|else|except|for|while|with)\b.*:\s*raise\b"

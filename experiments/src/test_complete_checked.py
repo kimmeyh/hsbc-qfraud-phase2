@@ -44,6 +44,16 @@ COMPLETE_BY_CONSTRUCTION = {
     "run_dirac3s_units.py:dry_run": "a dry-run file written once, after "
         "every request was built offline",
 }
+# The list as frozen on 2026-11-07. Never edit, even to remove a name:
+# a name leaves the list above, never this one (frozen_list's pattern).
+COMPLETE_BY_CONSTRUCTION_ORIGINAL = frozenset({
+    "f157_spectra_algorithms.py:run", "f158_fraud_types.py:main",
+    "f160_room_ieee.py:main", "f166_ulb_algorithms.py:run",
+    "f169_plugin_bins.py:main", "f169_plugin_bins.py:main_lr05",
+    "f170_missed_neighbors.py:main", "f171_budgets.py:main",
+    "f171_missed_ieee.py:main", "f174_ieee_algorithms.py:run",
+    "run_dirac3s_units.py:dry_run",
+})
 COMPLETE_BY_CONSTRUCTION_SHA256 = (
     "bdcb090140fbf5fc64732a41cfdf9b1b35a7f36ba1f89f18377b9a86fc80d08b")
 
@@ -120,10 +130,15 @@ def test_every_literal_complete_is_checked_or_reviewed():
 
 
 def test_the_reviewed_list_only_shrinks():
+    """The current list against the frozen original (short review of the
+    i2 commit: the list was first checked against itself)."""
     bad = fl.check(frozenset(COMPLETE_BY_CONSTRUCTION),
-                   frozenset(COMPLETE_BY_CONSTRUCTION),
+                   COMPLETE_BY_CONSTRUCTION_ORIGINAL,
                    COMPLETE_BY_CONSTRUCTION_SHA256)
     assert not bad, bad
+
+
+def test_a_reviewed_place_that_now_checks_leaves_the_list():
     stale = sorted(set(COMPLETE_BY_CONSTRUCTION) - _all_unchecked())
     assert not stale, (f"{stale} now check before they mark complete, or are "
                        "gone: remove them from the list")
@@ -207,6 +222,15 @@ def test_each_rule_can_fail():
              '    "f158_fraud_types.py:main": "every seed in SEEDS", '
              '"f999_new.py:main": "x",\n',
              shrink, "a name added to the reviewed list"),
+            ('    "f160_room_ieee.py:main", "f166_ulb_algorithms.py:run",\n',
+             '    "f160_room_ieee.py:main", "f166_ulb_algorithms.py:run", '
+             '"f999_new.py:main",\n',
+             shrink, "a name added to the frozen original"),
+            ('    "f171_missed_ieee.py:main": "one straight run, not resumable",\n',
+             '    "f171_missed_ieee.py:main": "one straight run, not resumable", '
+             '"f114_real_ceiling.py:main": "x",\n',
+             f"{THIS}::test_a_reviewed_place_that_now_checks_leaves_the_list",
+             "a place that now checks kept on the list"),
             ('    "f158_fraud_types.py:main": "every seed in SEEDS",\n', "",
              real, "a real unchecked place not caught")):
         assert_can_fail([Mutation(SELF, old, new, expect_occurrences=1)],
