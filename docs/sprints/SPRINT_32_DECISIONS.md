@@ -138,3 +138,47 @@ is updated as Sprint 32's last task, after F178, with this sprint's
 results; it is not sent. F178 runs after every other task and step that
 can change a result. If "after this sprint" meant Sprint 33, the plan
 approval (D3) offers that.
+
+---
+
+## D3. Is the Sprint 32 plan approved, and when do F178 and the F150 update run?
+
+Asked 2026-11-08 at Phase 3 planning (3.7).
+
+**What.** Approval of `docs/sprints/SPRINT_32_PLAN.md`: tasks A (F181),
+B (F194), C (F188), D (F185), E (F178) and F (the F150 request update),
+195 minutes by card, 0 metered seconds. The options differ only in when
+E and F run, because D2's answer can be read two ways: "after this
+sprint" (Sprint 33), or "after F178 completes" (the end of Sprint 32).
+
+**Why it matters.**
+- The checklist runs F178 in Phase 5, before Manual Validation, so the
+  team lead reviews it there. D2 says F178 waits until "all the other
+  steps complete". Phase 5's suite and fresh-eyes fixes are the last
+  steps that can change a result before Manual Validation; the Phase 6
+  PR review fixes can also change one, rarely.
+- The F150 update needs only the sprint's results. Done in Sprint 32,
+  the team lead sees it at Manual Validation (option 1) or with the
+  ready PR (option 2). In Sprint 33 it is a card there.
+
+**Kind.** Scope and order; no option is Prevention or Workaround.
+
+**Cost per option.** 195 minutes by card in options 1 and 2; 180 in
+option 3 (the F150 update, 15 minutes, moves to Sprint 33). 0 metered
+seconds in each. Files: about 15, the same in each.
+
+**Recommendation: 1.** F178 then records every result the sprint
+produces, and the team lead reviews it and the request draft at Manual
+Validation, as the checklist intends. Option 2 leaves both unreviewed
+until the PR is ready. Option 3 is right only if "after this sprint"
+meant Sprint 33.
+
+**Options.**
+
+1. Approve the plan as written: E (F178) after Phase 5's suite and
+   fresh-eyes fixes, then F (the F150 update), both before the Manual
+   Validation handover.
+2. Approve with E and F moved after the retrospective (Phase 7), before
+   the PR is marked ready; neither is in Manual Validation.
+3. Approve with E as in option 1, and F removed from Sprint 32: the
+   F150 update becomes a Sprint 33 candidate on F150's card.

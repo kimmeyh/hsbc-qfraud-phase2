@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-08
 
+- **docs**: Sprint 32 plan drafted, `docs/sprints/SPRINT_32_PLAN.md`: tasks A (F181), B (F194), C (F188), D (F185), E (F178) and F (the F150 request draft), 195 minutes by card, zero metered; issues #110-115. Pre-kickoff dependency scan: no known vulnerability in the lock. D3, the plan's approval and when E and F run, written to `SPRINT_32_DECISIONS.md` before it is asked.
 - **docs**: Sprint 32 selection recorded. D1, a different set: F188, F181, F185, F194 and the F178 update, 195 minutes by card with the F150 request update, zero metered. D2 option 3: the F150 construction request was not sent and is not sent; its draft is updated as the sprint's last task, after F178, which runs after every other step. Answers in `docs/sprints/SPRINT_32_DECISIONS.md`; "Selected for Sprint 32" in `ALL_SPRINTS_MASTER_PLAN.md`.
 - **docs**: `SPRINT_31_SUMMARY.md` written (three-doc rule, 3.2.1), from the plan, validation, decisions and retrospective files, git history `f6f25ed..c9da7a4` and PR #92. Linked in the master plan's Past Sprint Summary; the status file's `docs_triad_complete` set for Sprint 31. Written at refinement, before planning, because the close-out hook blocked the refinement handover without it.
 
