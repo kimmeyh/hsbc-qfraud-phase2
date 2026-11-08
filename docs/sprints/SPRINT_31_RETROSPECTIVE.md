@@ -591,3 +591,18 @@ needed - skip i5. not needed. skip".
 | i7 | Fix the latent set (D19 group c) | d | none | skip for this sprint; tracked here in case one is hit. Two of its eight, F114 `--lr05`'s stage-1 check and `run_rbf`'s seed check, were done under i2 b |
 
 Team lead, 2026-11-07, verbatim: "i2. b i6. d i7. d".
+
+## Short review of the improvement commits (Phase 7)
+
+One review of ca774e7..efc6694, about 10 minutes, no test runs. Fixed
+in 69e9bdd: the shrink-only list in `test_complete_checked.py` was
+checked against itself, and one red proof went red for another rule's
+reason. For Sprint 32's Phase 1 refinement, not fixed here:
+- **Branch coverage for the refusal gate:** coverage is by line, so a
+  one-line `if bad: raise` counts as tested whenever its condition runs.
+  `branch = True` in `.coveragerc`, and partial-branch lines treated as
+  untested, would close it. The docstring and the CI comment now state
+  the limit.
+- **Print prefixes:** the `REFUSING` print form does not match the `rf"`,
+  `fr"` or `F"` prefixes, and the one-line form can match `: raise`
+  inside a string on an `if` line. None occurs in the repository today.

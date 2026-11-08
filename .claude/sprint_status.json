@@ -40,7 +40,8 @@
       "M": 41,
       "N": 128,
       "O": 66,
-      "C": 336
+      "C": 336,
+      "P": 285
     },
     "task_started": {
       "A": "2026-11-04T23:15:07-05:00",
@@ -141,7 +142,8 @@
       "M": "gaps over 30 min and pauses subtracted",
       "N": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle",
       "O": "gaps over 30 min and pauses subtracted",
-      "C": "gaps over 30 min and pauses subtracted"
+      "C": "gaps over 30 min and pauses subtracted",
+      "P": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 58,
@@ -158,7 +160,8 @@
       "M": 41,
       "N": 304,
       "O": 66,
-      "C": 2573
+      "C": 2573,
+      "P": 459
     },
     "task_parallel": {
       "E": [
