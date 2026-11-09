@@ -1,11 +1,12 @@
 # Sprint 32 Plan: Close a Device Question, State Results in Dollars, Tighten Two Guards
 
 **Sprint**: 32 | **Branch**: `feature/20261108_Sprint_32`
-**Planned**: 2026-11-08 | **Status**: DRAFT, for approval (D3).
-Issues: A #110, B #111, C #112, D #113, E #114, F #115
+**Planned**: 2026-11-08 | **Status**: APPROVED 2026-11-08 (D3, as amended: Task G added).
+Issues: A #110, B #111, C #112, D #113, E #114, F #115, G #117
 **Scope**: F188, F181, F185, F194 and the F178 update (team lead
 selection, 2026-11-08, D1: all five cards), then the F150 request draft
-updated (D2 option 3: it is not sent, and F150 stays blocked).
+updated (D2 option 3: it is not sent, and F150 stays blocked), then
+the F111 feedback draft updated (D3, added at approval).
 **Metered seconds**: 0. No task calls a device or a paid service.
 
 ## Objective
@@ -117,12 +118,13 @@ read-only, zero metered, not evidence.
 | D | F185 | Entry first (review costs stated); the count ranking and the dollar ranking at the same review count on ULB (`Amount`) and IEEE-CIS (`TransactionAmt`), from the stored champion scores, joined only after the label and SHA-256 checks; dollars caught and confusion counts for each; result file with provenance and an outcome block; a short document | 60 | minutes (stored scores) | - |
 | E | F178 | The per-sprint update: each document's next version and change list; C's and D's results under "What our experiments showed"; their placeholders in "Experiments planned" replaced; Sprint 33's planned runs added | 30 | - | every other step (D3) |
 | F | F150 | The request draft updated with this sprint's results and the paper's title (`docs/references.md`); not sent | 15 | - | E |
+| G | F111 | The Loke feedback draft (`docs/loke_package/F111_FEEDBACK_DRAFT.md`, gitignored) updated with the results since 2026-10-23 that bear on it, each figure from its tracked result file; not sent (D3) | 15 | - | E |
 
-**Derived total: 195 minutes of work**, the sum of the task estimates
-(15 + 45 + 30 + 60 + 30 + 15): the five card estimates (180) plus the
-F150 update at D2 option 2's 15 minutes. At Sprint 31's ratio of
-actual to estimated minutes, 1.62 (range 0.04 to 4.75 by task), that is
-about 315 minutes, unverified. Phase 3, the reviews and the
+**Derived total: 210 minutes of work**, the sum of the task estimates
+(15 + 45 + 30 + 60 + 30 + 15 + 15): the five card estimates (180), the
+F150 update at D2 option 2's 15 minutes, and G at the same 15 (added at
+approval). At Sprint 31's ratio of actual to estimated minutes, 1.62
+(range 0.04 to 4.75 by task), that is about 340 minutes, unverified. Phase 3, the reviews and the
 retrospective are not in these figures. The sprint is past the 1-2 hour
 target; the team lead chose it (D1).
 
@@ -139,6 +141,7 @@ results, each from a file this sprint writes.
    fixes.
 4. **E** (F178), after every step that can change a result (D3).
 5. **F** (F150), after E.
+6. **G** (F111), after E (D3).
 
 ## Risks
 

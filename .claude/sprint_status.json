@@ -3,17 +3,18 @@
     "number": 32,
     "name": "Close a Device Question, State Results in Dollars, Tighten Two Guards",
     "branch": "feature/20261108_Sprint_32",
-    "status": "phase_3_planning",
+    "status": "phase_4_execution",
     "plan_doc": "docs/sprints/SPRINT_32_PLAN.md",
     "pr": 116,
-    "plan_approved": false,
+    "plan_approved": true,
     "github_issues": [
       110,
       111,
       112,
       113,
       114,
-      115
+      115,
+      117
     ],
     "task_actuals": {},
     "task_started": {},
@@ -35,6 +36,9 @@
       ],
       "F": [
         115
+      ],
+      "G": [
+        117
       ]
     },
     "review_task": null,
@@ -44,7 +48,8 @@
       "C": 30,
       "D": 60,
       "E": 30,
-      "F": 15
+      "F": 15,
+      "G": 15
     }
   },
   "last_completed_sprint": {
