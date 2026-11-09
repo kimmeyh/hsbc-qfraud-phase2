@@ -51,6 +51,12 @@ def test_a_gain_is_kept_unrounded_and_lost_when_coarse():
     assert not lost["kept"] and lost["step"] == pytest.approx(0.5)
 
 
+def test_a_gain_inside_the_tolerance_is_not_kept():
+    C = np.array([-0.40, -0.40 - 5e-7])     # a gain of 5e-7 < TOL (1e-6)
+    g = fr.gain(J2, C, math.inf, [0], {"other": [1]})
+    assert g["gain"] < 0 and not g["kept"]
+
+
 def test_the_best_other_support_is_the_one_read():
     g = fr.gain(J2, C2, math.inf, [0], {"same": [0], "better": [1]})
     assert g["best_other"] == "better"
@@ -175,7 +181,7 @@ def test_each_rule_can_fail():
             ("    if not step > 0:\n", "    if False:\n",
              "test_an_all_zero_problem_is_refused", "a zero step accepted"),
             ('"kept": bool(d < -TOL)}', '"kept": bool(d < 0)}',
-             "test_a_gain_is_kept_unrounded_and_lost_when_coarse",
+             "test_a_gain_inside_the_tolerance_is_not_kept",
              "a gain inside the tolerance kept"),
             ("    best = min(objs, key=objs.get)\n",
              "    best = next(iter(objs))\n",
