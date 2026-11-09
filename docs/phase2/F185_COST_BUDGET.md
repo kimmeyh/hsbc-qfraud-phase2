@@ -12,9 +12,11 @@ At the same number of alerts as today's 0.5% budget, ranking by
 expected loss (score times amount) instead of by score catches about
 four times the fraud dollars on IEEE-CIS month 4, on all ten seeds: a
 mean of $140,832 against $34,675, of $493,821 in fraud that month. It
-flags fewer frauds to do it (308 against 415 on seed 42). On ULB the
-mean gain is 755 units and its 95% interval includes zero: no reliable
-difference.
+catches fewer frauds to do it, on every seed of both datasets: on
+IEEE-CIS 246 to 373 instead of 400 to 416. On ULB the mean gain is 755
+units and its 95% interval includes zero: no reliable difference.
+IEEE-CIS month 4 is one fixed test set, so its intervals show the spread
+over training seeds only, not over months or transactions.
 
 ## What was compared
 
@@ -24,7 +26,8 @@ difference.
   test labels against the stored ones, row for row, before any amount
   was joined. No file was refused.
 - **Amounts**: ULB `Amount` (its unit is not stated in its source);
-  IEEE-CIS `TransactionAmt`, read as US dollars.
+  IEEE-CIS `TransactionAmt`, read as US dollars (unverified: no source
+  for the unit is recorded in this repository).
 - **Rankings**: (1) by score, today's; (2) by score times amount, the
   expected loss of Hoppner et al.'s rule (EvidenceBasedDB
   `hoppner-instance-threshold`, high). Both flag the same number of
@@ -47,23 +50,33 @@ difference.
   the same review cost, so the review cost changes net savings, not the
   order. On IEEE-CIS seed 42, at $10 a review, net savings are $28,504 by
   score and $136,866 by expected loss.
-- **Hoppner's own rule raises far more alerts**: on IEEE-CIS seed 42,
-  s x A > c gives 8,528, 4,618 and 1,943 alerts at review costs of $5,
-  $10 and $25, against the budget's 427. The scores are not calibrated
-  probabilities, so these counts are an upper reading, not a staffing
-  figure.
+- **Frauds caught fall on every seed**: IEEE-CIS 400 to 416 by score,
+  246 to 373 by expected loss; ULB 77 to 86 by score, 43 to 73 by
+  expected loss. On IEEE-CIS seed 42, false alerts rise from 12 to 119.
+- **Hoppner's own rule** (s x A > c) raises far more alerts than the
+  budget on IEEE-CIS (1,552 to 13,028 over seeds and costs, against
+  427) and fewer on ULB (33 to 121, against 284). The scores are not
+  calibrated probabilities, so these counts are not a staffing figure.
 
 ## What it means
 
 - A bank weighs fraud by the money it loses. On IEEE-CIS, the measure
   this repository has used (frauds caught at 0.5%) and the bank's
-  measure (dollars caught at the same review count) rank the same model
-  very differently. A comparison of a quantum lane against a classical
-  one should report both.
-- The ULB result shows the gain depends on the data: where amounts are
-  small and the frauds few, ranking by amount moves little and can lose.
+  measure (dollars caught at the same review count) choose very
+  different alerts from the same scores. A comparison of a quantum lane
+  against a classical one should report both.
+- On ULB the gain varies by seed: four seeds gain a lot and six lose a
+  little, so the mean and its interval sit over two groups. Why (for
+  example, a few high-amount frauds) was not tested.
+- The expected-loss order depends on the scores' scale: a nonlinear
+  calibration (Platt or isotonic) changes s x A and so the alerts
+  chosen. The four-times figure holds for these uncalibrated scores
+  only (Inferred).
+- Net savings count the review cost of every alert, not the cost of a
+  false alert to the customer, as the entry defined.
 - Not tested here: calibrated scores, a review cost that grows with the
-  amount, or a budget set in dollars rather than alerts.
+  amount, other test months, or a budget set in dollars rather than
+  alerts.
 
 ## Outcome blocks
 
