@@ -18,12 +18,14 @@
     ],
     "task_actuals": {
       "A": 1,
-      "B": 37
+      "B": 37,
+      "C": 47
     },
     "task_started": {
       "A": "2026-11-08T23:54:32-05:00",
       "B": "2026-11-08T23:55:42-05:00",
-      "C": "2026-11-09T00:32:17-05:00"
+      "C": "2026-11-09T00:32:17-05:00",
+      "D": "2026-11-09T00:58:36-05:00"
     },
     "task_issues": {
       "A": [
@@ -60,11 +62,18 @@
     },
     "task_actual_method": {
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 15-minute estimate: check the timer, the parallel tasks and the activity log before using it",
-      "B": "gaps over 30 min and pauses subtracted"
+      "B": "gaps over 30 min and pauses subtracted",
+      "C": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 1,
-      "B": 37
+      "B": 37,
+      "C": 47
+    },
+    "task_parallel": {
+      "D": [
+        "C"
+      ]
     }
   },
   "last_completed_sprint": {

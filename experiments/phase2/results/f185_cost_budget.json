@@ -1,0 +1,1959 @@
+{
+ "card": "F185",
+ "sprint": 32,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F185 (2026-11-09)",
+ "budget": 0.005,
+ "review_costs": [
+  5.0,
+  10.0,
+  25.0
+ ],
+ "scores": "stored champion scores used as given, not recalibrated",
+ "check": {
+  "by_score_caught": 10.0,
+  "by_loss_caught": 1000.0,
+  "can_fire": true,
+  "label_flip_refused": true
+ },
+ "datasets": {
+  "ulb": {
+   "source": "experiments/phase2/results/f166_ulb_algorithms.json",
+   "lane": "catboost",
+   "amount_column": "Amount",
+   "unit": "the dataset's Amount unit (not stated in its source)",
+   "rows": [
+    {
+     "seed": 42,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56453,
+        "fp": 198,
+        "fn": 9,
+        "tp": 86
+       },
+       "dollars_caught": 11689.869999999999,
+       "dollars_missed": 1283.1900000000023,
+       "fraud_dollars": 12973.060000000001,
+       "net_savings": {
+        "5.0": 10269.869999999999,
+        "10.0": 8849.869999999999,
+        "25.0": 4589.869999999999
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56418,
+        "fp": 233,
+        "fn": 44,
+        "tp": 51
+       },
+       "dollars_caught": 11659.789999999999,
+       "dollars_missed": 1313.2700000000023,
+       "fraud_dollars": 12973.060000000001,
+       "net_savings": {
+        "5.0": 10239.789999999999,
+        "10.0": 8819.789999999999,
+        "25.0": 4559.789999999999
+       }
+      },
+      "dollars_gain": -30.079999999999927,
+      "hoppner_alerts": {
+       "5.0": 82,
+       "10.0": 56,
+       "25.0": 40
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 42,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56453,
+        "fp": 198,
+        "fn": 9,
+        "tp": 86
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_42.npz",
+       "sha256": "2bb85b235ba470389034ade02f5b5ce37c6e6e64704651eb0483e0b7edf6f42c",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 42,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56418,
+        "fp": 233,
+        "fn": 44,
+        "tp": 51
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_42.npz",
+       "sha256": "ca15fadd5c5ffefea1728bbed72232e9171db9e7992051a9075ee3963eeb15fb",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 43,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56446,
+        "fp": 205,
+        "fn": 16,
+        "tp": 79
+       },
+       "dollars_caught": 10840.269999999999,
+       "dollars_missed": 618.4699999999993,
+       "fraud_dollars": 11458.739999999998,
+       "net_savings": {
+        "5.0": 9420.269999999999,
+        "10.0": 8000.269999999999,
+        "25.0": 3740.2699999999986
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56415,
+        "fp": 236,
+        "fn": 47,
+        "tp": 48
+       },
+       "dollars_caught": 10808.0,
+       "dollars_missed": 650.739999999998,
+       "fraud_dollars": 11458.739999999998,
+       "net_savings": {
+        "5.0": 9388.0,
+        "10.0": 7968.0,
+        "25.0": 3708.0
+       }
+      },
+      "dollars_gain": -32.26999999999862,
+      "hoppner_alerts": {
+       "5.0": 121,
+       "10.0": 68,
+       "25.0": 48
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 43,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56446,
+        "fp": 205,
+        "fn": 16,
+        "tp": 79
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_43.npz",
+       "sha256": "573c6bf93baf1974b81a585a309266c06a5eb56213aadee15afa6971d265817b",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 43,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56415,
+        "fp": 236,
+        "fn": 47,
+        "tp": 48
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_43.npz",
+       "sha256": "8e99a6ef7b238e0a135069485e3b48aa051dbfbe0103ce6c60a10b9375e54171",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 44,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56450,
+        "fp": 201,
+        "fn": 12,
+        "tp": 83
+       },
+       "dollars_caught": 10681.04,
+       "dollars_missed": 3630.3600000000006,
+       "fraud_dollars": 14311.400000000001,
+       "net_savings": {
+        "5.0": 9261.04,
+        "10.0": 7841.040000000001,
+        "25.0": 3581.040000000001
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56437,
+        "fp": 214,
+        "fn": 25,
+        "tp": 70
+       },
+       "dollars_caught": 10673.740000000003,
+       "dollars_missed": 3637.659999999998,
+       "fraud_dollars": 14311.400000000001,
+       "net_savings": {
+        "5.0": 9253.740000000003,
+        "10.0": 7833.740000000003,
+        "25.0": 3573.7400000000034
+       }
+      },
+      "dollars_gain": -7.299999999997453,
+      "hoppner_alerts": {
+       "5.0": 67,
+       "10.0": 50,
+       "25.0": 42
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 44,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56450,
+        "fp": 201,
+        "fn": 12,
+        "tp": 83
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_44.npz",
+       "sha256": "9e77cea50b5035d8f29b1ee66a5ca446d1787fb11293c73fcf50c938d4f8a69a",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 44,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56437,
+        "fp": 214,
+        "fn": 25,
+        "tp": 70
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_44.npz",
+       "sha256": "323fd3c248341360b3a077fb1d2247358db089e9393a3bbca45c685380ef08d0",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 45,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56450,
+        "fp": 201,
+        "fn": 12,
+        "tp": 83
+       },
+       "dollars_caught": 9822.53,
+       "dollars_missed": 2353.5099999999984,
+       "fraud_dollars": 12176.039999999999,
+       "net_savings": {
+        "5.0": 8402.53,
+        "10.0": 6982.530000000001,
+        "25.0": 2722.5300000000007
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56431,
+        "fp": 220,
+        "fn": 31,
+        "tp": 64
+       },
+       "dollars_caught": 9797.529999999999,
+       "dollars_missed": 2378.51,
+       "fraud_dollars": 12176.039999999999,
+       "net_savings": {
+        "5.0": 8377.529999999999,
+        "10.0": 6957.529999999999,
+        "25.0": 2697.529999999999
+       }
+      },
+      "dollars_gain": -25.00000000000182,
+      "hoppner_alerts": {
+       "5.0": 60,
+       "10.0": 45,
+       "25.0": 33
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 45,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56450,
+        "fp": 201,
+        "fn": 12,
+        "tp": 83
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_45.npz",
+       "sha256": "ad97562ed10f65f623b29ef1078da1ca0c37cd4efb56729044e0a70458874c70",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 45,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56431,
+        "fp": 220,
+        "fn": 31,
+        "tp": 64
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_45.npz",
+       "sha256": "680f356ce24c60d87c4e9bb52f0584918256bfe3907db162d3dc00868f871d58",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 46,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56448,
+        "fp": 203,
+        "fn": 14,
+        "tp": 81
+       },
+       "dollars_caught": 5527.87,
+       "dollars_missed": 4030.2199999999984,
+       "fraud_dollars": 9558.089999999998,
+       "net_savings": {
+        "5.0": 4107.87,
+        "10.0": 2687.87,
+        "25.0": -1572.13
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56413,
+        "fp": 238,
+        "fn": 49,
+        "tp": 46
+       },
+       "dollars_caught": 8344.13,
+       "dollars_missed": 1213.9599999999991,
+       "fraud_dollars": 9558.089999999998,
+       "net_savings": {
+        "5.0": 6924.129999999999,
+        "10.0": 5504.129999999999,
+        "25.0": 1244.1299999999992
+       }
+      },
+      "dollars_gain": 2816.2599999999993,
+      "hoppner_alerts": {
+       "5.0": 95,
+       "10.0": 55,
+       "25.0": 35
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 46,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56448,
+        "fp": 203,
+        "fn": 14,
+        "tp": 81
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_46.npz",
+       "sha256": "69c04619b2e04bae6a1e2ddc4ce2990704aeaac5d1847ffb26655da014732d92",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 46,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56413,
+        "fp": 238,
+        "fn": 49,
+        "tp": 46
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_46.npz",
+       "sha256": "4a04606b7c19bfc01f3eb128a7593f46e779d2fa3cb8f5aebe6f13539b61da2d",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 47,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56447,
+        "fp": 204,
+        "fn": 15,
+        "tp": 80
+       },
+       "dollars_caught": 10235.82,
+       "dollars_missed": 1800.75,
+       "fraud_dollars": 12036.57,
+       "net_savings": {
+        "5.0": 8815.82,
+        "10.0": 7395.82,
+        "25.0": 3135.8199999999997
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56437,
+        "fp": 214,
+        "fn": 25,
+        "tp": 70
+       },
+       "dollars_caught": 10220.49,
+       "dollars_missed": 1816.08,
+       "fraud_dollars": 12036.57,
+       "net_savings": {
+        "5.0": 8800.49,
+        "10.0": 7380.49,
+        "25.0": 3120.49
+       }
+      },
+      "dollars_gain": -15.329999999999927,
+      "hoppner_alerts": {
+       "5.0": 84,
+       "10.0": 59,
+       "25.0": 49
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 47,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56447,
+        "fp": 204,
+        "fn": 15,
+        "tp": 80
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_47.npz",
+       "sha256": "d4fec4df2059c0b78bac1cec4cc089393fa385f94dabcb700872257255942cde",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 47,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56437,
+        "fp": 214,
+        "fn": 25,
+        "tp": 70
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_47.npz",
+       "sha256": "afc26b873878935c20f77b8eec239576bd985fea759f7326b53d65296b312d50",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 48,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56453,
+        "fp": 198,
+        "fn": 9,
+        "tp": 86
+       },
+       "dollars_caught": 8237.61,
+       "dollars_missed": 2175.26,
+       "fraud_dollars": 10412.87,
+       "net_savings": {
+        "5.0": 6817.610000000001,
+        "10.0": 5397.610000000001,
+        "25.0": 1137.6100000000006
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56440,
+        "fp": 211,
+        "fn": 22,
+        "tp": 73
+       },
+       "dollars_caught": 8227.76,
+       "dollars_missed": 2185.1100000000006,
+       "fraud_dollars": 10412.87,
+       "net_savings": {
+        "5.0": 6807.76,
+        "10.0": 5387.76,
+        "25.0": 1127.7600000000002
+       }
+      },
+      "dollars_gain": -9.850000000000364,
+      "hoppner_alerts": {
+       "5.0": 64,
+       "10.0": 49,
+       "25.0": 38
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 48,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56453,
+        "fp": 198,
+        "fn": 9,
+        "tp": 86
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_48.npz",
+       "sha256": "1f5010862b49b27bec7aab87df815aa1d5cc410f910d9b1a93a3729a6803a7a3",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 48,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56440,
+        "fp": 211,
+        "fn": 22,
+        "tp": 73
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_48.npz",
+       "sha256": "34ad83c10437d985e7d832d91baed3d2747722584052995110ee2a0c1aed1779",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 49,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56448,
+        "fp": 203,
+        "fn": 14,
+        "tp": 81
+       },
+       "dollars_caught": 12412.02,
+       "dollars_missed": 4161.539999999994,
+       "fraud_dollars": 16573.559999999994,
+       "net_savings": {
+        "5.0": 10992.02,
+        "10.0": 9572.02,
+        "25.0": 5312.02
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56411,
+        "fp": 240,
+        "fn": 51,
+        "tp": 44
+       },
+       "dollars_caught": 14498.110000000002,
+       "dollars_missed": 2075.4499999999916,
+       "fraud_dollars": 16573.559999999994,
+       "net_savings": {
+        "5.0": 13078.110000000002,
+        "10.0": 11658.110000000002,
+        "25.0": 7398.110000000002
+       }
+      },
+      "dollars_gain": 2086.090000000002,
+      "hoppner_alerts": {
+       "5.0": 96,
+       "10.0": 53,
+       "25.0": 38
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 49,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56448,
+        "fp": 203,
+        "fn": 14,
+        "tp": 81
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_49.npz",
+       "sha256": "0c8b41e36b6b242e9662adf9810c865609087b0c5ab07d6d50c0f6ad19c61a9f",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 49,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56411,
+        "fp": 240,
+        "fn": 51,
+        "tp": 44
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_49.npz",
+       "sha256": "eced5514871996da155a5de42bb33fb90b3f01ace751e08de329e266b1fb4186",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 50,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56446,
+        "fp": 205,
+        "fn": 16,
+        "tp": 79
+       },
+       "dollars_caught": 7698.070000000001,
+       "dollars_missed": 4111.750000000003,
+       "fraud_dollars": 11809.820000000003,
+       "net_savings": {
+        "5.0": 6278.070000000001,
+        "10.0": 4858.070000000001,
+        "25.0": 598.0700000000006
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56410,
+        "fp": 241,
+        "fn": 52,
+        "tp": 43
+       },
+       "dollars_caught": 9789.050000000001,
+       "dollars_missed": 2020.7700000000023,
+       "fraud_dollars": 11809.820000000003,
+       "net_savings": {
+        "5.0": 8369.050000000001,
+        "10.0": 6949.050000000001,
+        "25.0": 2689.050000000001
+       }
+      },
+      "dollars_gain": 2090.9800000000005,
+      "hoppner_alerts": {
+       "5.0": 88,
+       "10.0": 57,
+       "25.0": 37
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 50,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56446,
+        "fp": 205,
+        "fn": 16,
+        "tp": 79
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_50.npz",
+       "sha256": "186bcc2c823ecc790a2475746a9f3534090e5adccff0cea9181349760d09c668",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 50,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56410,
+        "fp": 241,
+        "fn": 52,
+        "tp": 43
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_50.npz",
+       "sha256": "116ac46410dd47c6eded8484c5d893e5539f1d5bb05f38dc8959653c987d3c0f",
+       "n_rows": 56746
+      }
+     }
+    },
+    {
+     "seed": 51,
+     "n_test": 56746,
+     "n_positives": 95,
+     "compare": {
+      "by_score": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56444,
+        "fp": 207,
+        "fn": 18,
+        "tp": 77
+       },
+       "dollars_caught": 8315.01,
+       "dollars_missed": 2876.3600000000024,
+       "fraud_dollars": 11191.370000000003,
+       "net_savings": {
+        "5.0": 6895.01,
+        "10.0": 5475.01,
+        "25.0": 1215.0100000000002
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56413,
+        "fp": 238,
+        "fn": 49,
+        "tp": 46
+       },
+       "dollars_caught": 8993.6,
+       "dollars_missed": 2197.7700000000023,
+       "fraud_dollars": 11191.370000000003,
+       "net_savings": {
+        "5.0": 7573.6,
+        "10.0": 6153.6,
+        "25.0": 1893.6000000000004
+       }
+      },
+      "dollars_gain": 678.5900000000001,
+      "hoppner_alerts": {
+       "5.0": 93,
+       "10.0": 65,
+       "25.0": 45
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ulb_score",
+      "seed": 51,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56444,
+        "fp": 207,
+        "fn": 18,
+        "tp": 77
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f166_catboost_51.npz",
+       "sha256": "56b29a0c75c13f42012f7ed881ad81f5b78065c60cc75cabeb8152e060840fc1",
+       "n_rows": 56746
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ulb_expected_loss",
+      "seed": 51,
+      "n_test": 56746,
+      "n_positives": 95,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 284,
+       "n_flagged": 284,
+       "confusion": {
+        "tn": 56413,
+        "fp": 238,
+        "fn": 49,
+        "tp": 46
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ulb_expected_loss_51.npz",
+       "sha256": "3b2f794be36c06945a2d50dd9d04f62617e2065cd7234aa4402d987b45b84b26",
+       "n_rows": 56746
+      }
+     }
+    }
+   ],
+   "over_seeds": {
+    "by_score_caught": {
+     "n": 10,
+     "mean": 9546.011,
+     "t95": [
+      8054.712400895484,
+      11037.309599104516
+     ]
+    },
+    "by_loss_caught": {
+     "n": 10,
+     "mean": 10301.220000000003,
+     "t95": [
+      8990.446980260353,
+      11611.993019739653
+     ]
+    },
+    "paired_gain": {
+     "n": 10,
+     "mean": 755.2090000000004,
+     "t95": [
+      -50.4395620264288,
+      1560.8575620264296
+     ]
+    },
+    "fraud_dollars": {
+     "n": 10,
+     "mean": 12250.151999999998,
+     "t95": [
+      10817.88207203841,
+      13682.421927961586
+     ]
+    }
+   }
+  },
+  "ieee_cis": {
+   "source": "experiments/phase2/results/f174_ieee_algorithms.json",
+   "lane": "lightgbm",
+   "amount_column": "TransactionAmt",
+   "unit": "US dollars",
+   "rows": [
+    {
+     "seed": 42,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82328,
+        "fp": 12,
+        "fn": 2547,
+        "tp": 415
+       },
+       "dollars_caught": 32773.96308517456,
+       "dollars_missed": 461046.62790060043,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 30638.96308517456,
+        "10.0": 28503.96308517456,
+        "25.0": 22098.96308517456
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82221,
+        "fp": 119,
+        "fn": 2654,
+        "tp": 308
+       },
+       "dollars_caught": 141136.4469833374,
+       "dollars_missed": 352684.1440024376,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 139001.4469833374,
+        "10.0": 136866.4469833374,
+        "25.0": 130461.4469833374
+       }
+      },
+      "dollars_gain": 108362.48389816284,
+      "hoppner_alerts": {
+       "5.0": 8528,
+       "10.0": 4618,
+       "25.0": 1943
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82328,
+        "fp": 12,
+        "fn": 2547,
+        "tp": 415
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_42.npz",
+       "sha256": "9a72089e03a34943b30c7facf955dd467b1f76e1ba6be4cb332e0e5e89842192",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 42,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82221,
+        "fp": 119,
+        "fn": 2654,
+        "tp": 308
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_42.npz",
+       "sha256": "6ddb3dfd4bfdb9bc0b4f79a790f24814cd6d98609dd15002a37bde10c99889b5",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 43,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82326,
+        "fp": 14,
+        "fn": 2549,
+        "tp": 413
+       },
+       "dollars_caught": 32286.884079933167,
+       "dollars_missed": 461533.7069058418,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 30151.884079933167,
+        "10.0": 28016.884079933167,
+        "25.0": 21611.884079933167
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82235,
+        "fp": 105,
+        "fn": 2640,
+        "tp": 322
+       },
+       "dollars_caught": 143860.7370223999,
+       "dollars_missed": 349959.8539633751,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 141725.7370223999,
+        "10.0": 139590.7370223999,
+        "25.0": 133185.7370223999
+       }
+      },
+      "dollars_gain": 111573.85294246674,
+      "hoppner_alerts": {
+       "5.0": 8782,
+       "10.0": 4686,
+       "25.0": 1960
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 43,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82326,
+        "fp": 14,
+        "fn": 2549,
+        "tp": 413
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_43.npz",
+       "sha256": "cf8390ef9715f02e74ec2acf6bca3874bc4c444ea34b32d95f71c4ffed584e50",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 43,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82235,
+        "fp": 105,
+        "fn": 2640,
+        "tp": 322
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_43.npz",
+       "sha256": "065374ca63aecd85c9cbea5b7722bdc42e87d8619f546aaacd80fb65b5257a84",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 44,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       },
+       "dollars_caught": 31381.365065574646,
+       "dollars_missed": 462439.22592020035,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 29246.365065574646,
+        "10.0": 27111.365065574646,
+        "25.0": 20706.365065574646
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82286,
+        "fp": 54,
+        "fn": 2589,
+        "tp": 373
+       },
+       "dollars_caught": 133397.5680923462,
+       "dollars_missed": 360423.0228934288,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 131262.5680923462,
+        "10.0": 129127.56809234619,
+        "25.0": 122722.56809234619
+       }
+      },
+      "dollars_gain": 102016.20302677155,
+      "hoppner_alerts": {
+       "5.0": 6047,
+       "10.0": 3265,
+       "25.0": 1552
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 44,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_44.npz",
+       "sha256": "7175baa3d688a878cf0c0d3072bd4a92dee81d972d7642ee0aab9011a0b06b02",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 44,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82286,
+        "fp": 54,
+        "fn": 2589,
+        "tp": 373
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_44.npz",
+       "sha256": "c64596a404977a1eac41ec660a102c697455c4923319382e583d1ff4fc1e63a4",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 45,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       },
+       "dollars_caught": 32830.481035232544,
+       "dollars_missed": 460990.10995054245,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 30695.481035232544,
+        "10.0": 28560.481035232544,
+        "25.0": 22155.481035232544
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82233,
+        "fp": 107,
+        "fn": 2642,
+        "tp": 320
+       },
+       "dollars_caught": 133936.98498535156,
+       "dollars_missed": 359883.60600042343,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 131801.98498535156,
+        "10.0": 129666.98498535156,
+        "25.0": 123261.98498535156
+       }
+      },
+      "dollars_gain": 101106.50395011902,
+      "hoppner_alerts": {
+       "5.0": 8814,
+       "10.0": 4743,
+       "25.0": 2071
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 45,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_45.npz",
+       "sha256": "29033db9a4475abfe40b46a688032e8666eaa59e404b7c997a647a3042c77a95",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 45,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82233,
+        "fp": 107,
+        "fn": 2642,
+        "tp": 320
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_45.npz",
+       "sha256": "be089ec4cc3d8de5b91c2fe62c00c0441f9cc868f8249d9a5b9b03d892a8862a",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 46,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       },
+       "dollars_caught": 38201.33207511902,
+       "dollars_missed": 455619.258910656,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 36066.33207511902,
+        "10.0": 33931.33207511902,
+        "25.0": 27526.33207511902
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82159,
+        "fp": 181,
+        "fn": 2716,
+        "tp": 246
+       },
+       "dollars_caught": 138116.09200286865,
+       "dollars_missed": 355704.49898290634,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 135981.09200286865,
+        "10.0": 133846.09200286865,
+        "25.0": 127441.09200286865
+       }
+      },
+      "dollars_gain": 99914.75992774963,
+      "hoppner_alerts": {
+       "5.0": 13028,
+       "10.0": 6948,
+       "25.0": 2892
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 46,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_46.npz",
+       "sha256": "66b90a97a42874969fcc21417359f9856427649ddf87ff4c7a1cfc8fd2b98166",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 46,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82159,
+        "fp": 181,
+        "fn": 2716,
+        "tp": 246
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_46.npz",
+       "sha256": "c2f060ab79ffb488725a59bea68bbad074397c59acb323aa7f3ad881b44abc2f",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 47,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       },
+       "dollars_caught": 36045.38507938385,
+       "dollars_missed": 457775.20590639114,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 33910.38507938385,
+        "10.0": 31775.38507938385,
+        "25.0": 25370.38507938385
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82256,
+        "fp": 84,
+        "fn": 2619,
+        "tp": 343
+       },
+       "dollars_caught": 142572.5280609131,
+       "dollars_missed": 351248.0629248619,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 140437.5280609131,
+        "10.0": 138302.5280609131,
+        "25.0": 131897.5280609131
+       }
+      },
+      "dollars_gain": 106527.14298152924,
+      "hoppner_alerts": {
+       "5.0": 7780,
+       "10.0": 4147,
+       "25.0": 1744
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 47,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_47.npz",
+       "sha256": "60db409265406a0a4e4a615fd2f20a66f1e73635bc4ba59d1f43643383c11cc2",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 47,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82256,
+        "fp": 84,
+        "fn": 2619,
+        "tp": 343
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_47.npz",
+       "sha256": "aa79d608f231ecf3764ec15e44285c371228ecde7cbb4786fc2881c94a1d2425",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 48,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82313,
+        "fp": 27,
+        "fn": 2562,
+        "tp": 400
+       },
+       "dollars_caught": 34244.270053863525,
+       "dollars_missed": 459576.32093191147,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 32109.270053863525,
+        "10.0": 29974.270053863525,
+        "25.0": 23569.270053863525
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82233,
+        "fp": 107,
+        "fn": 2642,
+        "tp": 320
+       },
+       "dollars_caught": 151678.2160873413,
+       "dollars_missed": 342142.3748984337,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 149543.2160873413,
+        "10.0": 147408.2160873413,
+        "25.0": 141003.2160873413
+       }
+      },
+      "dollars_gain": 117433.94603347778,
+      "hoppner_alerts": {
+       "5.0": 9764,
+       "10.0": 5400,
+       "25.0": 2345
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 48,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82313,
+        "fp": 27,
+        "fn": 2562,
+        "tp": 400
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_48.npz",
+       "sha256": "0ef194a09cd5021e7147df4b891e2c90b407d675a9956225edaa25c480bbe149",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 48,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82233,
+        "fp": 107,
+        "fn": 2642,
+        "tp": 320
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_48.npz",
+       "sha256": "cddcd098d042c5669bc0c33c54bb295127c199d880bd68fa44c7b30965ae3dda",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 49,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       },
+       "dollars_caught": 32325.015078544617,
+       "dollars_missed": 461495.5759072304,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 30190.015078544617,
+        "10.0": 28055.015078544617,
+        "25.0": 21650.015078544617
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82224,
+        "fp": 116,
+        "fn": 2651,
+        "tp": 311
+       },
+       "dollars_caught": 145931.0659866333,
+       "dollars_missed": 347889.5249991417,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 143796.0659866333,
+        "10.0": 141661.0659866333,
+        "25.0": 135256.0659866333
+       }
+      },
+      "dollars_gain": 113606.05090808868,
+      "hoppner_alerts": {
+       "5.0": 9620,
+       "10.0": 5068,
+       "25.0": 2103
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 49,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82325,
+        "fp": 15,
+        "fn": 2550,
+        "tp": 412
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_49.npz",
+       "sha256": "43390962aebbe981f6f259ce3bf19a13c2c2350c5ec9fa3d94c44e3768bc79b6",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 49,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82224,
+        "fp": 116,
+        "fn": 2651,
+        "tp": 311
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_49.npz",
+       "sha256": "65e2b2bdcea2cef5d4b53d94915b0f9b24584ee32321b8470c7163b1297b1168",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 50,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82322,
+        "fp": 18,
+        "fn": 2553,
+        "tp": 409
+       },
+       "dollars_caught": 35682.80504322052,
+       "dollars_missed": 458137.7859425545,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 33547.80504322052,
+        "10.0": 31412.80504322052,
+        "25.0": 25007.80504322052
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82257,
+        "fp": 83,
+        "fn": 2618,
+        "tp": 344
+       },
+       "dollars_caught": 134055.95807647705,
+       "dollars_missed": 359764.63290929794,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 131920.95807647705,
+        "10.0": 129785.95807647705,
+        "25.0": 123380.95807647705
+       }
+      },
+      "dollars_gain": 98373.15303325653,
+      "hoppner_alerts": {
+       "5.0": 7921,
+       "10.0": 4316,
+       "25.0": 1916
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 50,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82322,
+        "fp": 18,
+        "fn": 2553,
+        "tp": 409
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_50.npz",
+       "sha256": "934ee94539da6bc9b0c9c197fa0e3fe5f9b42e5563a73434f484a42a0a58003b",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 50,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82257,
+        "fp": 83,
+        "fn": 2618,
+        "tp": 344
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_50.npz",
+       "sha256": "8163e7d15e7960a44a49ed686ee7f3a9359a6f5cf2c8cc44fa6994daf1216a39",
+       "n_rows": 85302
+      }
+     }
+    },
+    {
+     "seed": 51,
+     "n_test": 85302,
+     "n_positives": 2962,
+     "compare": {
+      "by_score": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82329,
+        "fp": 11,
+        "fn": 2546,
+        "tp": 416
+       },
+       "dollars_caught": 40979.00905227661,
+       "dollars_missed": 452841.5819334984,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 38844.00905227661,
+        "10.0": 36709.00905227661,
+        "25.0": 30304.00905227661
+       }
+      },
+      "by_expected_loss": {
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82204,
+        "fp": 136,
+        "fn": 2671,
+        "tp": 291
+       },
+       "dollars_caught": 143639.15196228027,
+       "dollars_missed": 350181.4390234947,
+       "fraud_dollars": 493820.590985775,
+       "net_savings": {
+        "5.0": 141504.15196228027,
+        "10.0": 139369.15196228027,
+        "25.0": 132964.15196228027
+       }
+      },
+      "dollars_gain": 102660.14291000366,
+      "hoppner_alerts": {
+       "5.0": 10953,
+       "10.0": 5897,
+       "25.0": 2516
+      }
+     },
+     "outcome_by_score": {
+      "name": "f185_ieee_cis_score",
+      "seed": 51,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82329,
+        "fp": 11,
+        "fn": 2546,
+        "tp": 416
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f174_lightgbm_51.npz",
+       "sha256": "b4e83825fda495a7710721c2e76c85f96682464ce87bcc91b25fedd2cc467100",
+       "n_rows": 85302
+      }
+     },
+     "outcome_by_expected_loss": {
+      "name": "f185_ieee_cis_expected_loss",
+      "seed": 51,
+      "n_test": 85302,
+      "n_positives": 2962,
+      "at_budget_on_test": {
+       "budget": 0.005,
+       "n_budget": 427,
+       "n_flagged": 427,
+       "confusion": {
+        "tn": 82204,
+        "fp": 136,
+        "fn": 2671,
+        "tp": 291
+       }
+      },
+      "test_scores": {
+       "path": "experiments/phase2/predictions/f185_ieee_cis_expected_loss_51.npz",
+       "sha256": "5e579fa9afb2ccf5e855934248b2371f23d5397232ed5f74e527de04304962a7",
+       "n_rows": 85302
+      }
+     }
+    }
+   ],
+   "over_seeds": {
+    "by_score_caught": {
+     "n": 10,
+     "mean": 34675.050964832306,
+     "t95": [
+      32485.12325021102,
+      36864.97867945359
+     ]
+    },
+    "by_loss_caught": {
+     "n": 10,
+     "mean": 140832.47492599487,
+     "t95": [
+      136567.4486256253,
+      145097.50122636446
+     ]
+    },
+    "paired_gain": {
+     "n": 10,
+     "mean": 106157.42396116257,
+     "t95": [
+      101561.80478050522,
+      110753.04314181992
+     ]
+    },
+    "fraud_dollars": {
+     "n": 10,
+     "mean": 493820.590985775,
+     "t95": [
+      493820.590985775,
+      493820.590985775
+     ]
+    }
+   }
+  }
+ },
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f185_cost_budget.py",
+  "generator_commit": "fe1e65677f72a17418d2573b0ae55dd6d5789946",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "d6392ce4b81840b8a8ccab7bf328a5e9"
+ }
+}

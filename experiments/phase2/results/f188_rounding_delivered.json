@@ -1,0 +1,252 @@
+{
+ "card": "F188",
+ "sprint": 32,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "dataset": "ieee_cis",
+ "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, F188, amendment of 2026-11-09 (second reading)",
+ "first_reading": "experiments/phase2/results/f188_rounding.json",
+ "ranges": [
+  100.0,
+  200.0,
+  400.0
+ ],
+ "reading_range": 200.0,
+ "tol": 1e-06,
+ "rows": [
+  {
+   "seed": 42,
+   "instance": "free",
+   "f176_gain": -1.811056147271728e-05,
+   "rounded": {
+    "100": {
+     "R": 100.0,
+     "step": 0.03,
+     "pick": "sa_from_greedy_42",
+     "pick_unrounded_objective": -0.7026829123246514,
+     "greedy_unrounded_objective": -0.7027447577892196,
+     "delivered_gain": 6.184546456822204e-05,
+     "delivers": false
+    },
+    "200": {
+     "R": 200.0,
+     "step": 0.015,
+     "pick": "sa_from_greedy_43",
+     "pick_unrounded_objective": -0.7027209892405608,
+     "greedy_unrounded_objective": -0.7027447577892196,
+     "delivered_gain": 2.3768548658820166e-05,
+     "delivers": false
+    },
+    "400": {
+     "R": 400.0,
+     "step": 0.0075,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.7027339793880971,
+     "greedy_unrounded_objective": -0.7027447577892196,
+     "delivered_gain": 1.077840112251316e-05,
+     "delivers": false
+    }
+   }
+  },
+  {
+   "seed": 42,
+   "instance": "mid",
+   "f176_gain": -2.9523491802407875e-06,
+   "rounded": {
+    "100": {
+     "R": 100.0,
+     "step": 0.03,
+     "pick": "swap_search",
+     "pick_unrounded_objective": -0.8212655201170487,
+     "greedy_unrounded_objective": -0.8215172405877254,
+     "delivered_gain": 0.00025172047067667513,
+     "delivers": false
+    },
+    "200": {
+     "R": 200.0,
+     "step": 0.015,
+     "pick": "swap_search",
+     "pick_unrounded_objective": -0.8214609489515505,
+     "greedy_unrounded_objective": -0.8215172405877254,
+     "delivered_gain": 5.6291636174821136e-05,
+     "delivers": false
+    },
+    "400": {
+     "R": 400.0,
+     "step": 0.0075,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.8215010407851928,
+     "greedy_unrounded_objective": -0.8215172405877254,
+     "delivered_gain": 1.6199802532534946e-05,
+     "delivers": false
+    }
+   }
+  },
+  {
+   "seed": 43,
+   "instance": "free",
+   "f176_gain": -1.6652425548047134e-05,
+   "rounded": {
+    "100": {
+     "R": 100.0,
+     "step": 0.03,
+     "pick": "sa_from_greedy_42",
+     "pick_unrounded_objective": -0.7036158450308163,
+     "greedy_unrounded_objective": -0.7036748939935615,
+     "delivered_gain": 5.9048962745222866e-05,
+     "delivers": false
+    },
+    "200": {
+     "R": 200.0,
+     "step": 0.015,
+     "pick": "scip",
+     "pick_unrounded_objective": -0.7024452611675356,
+     "greedy_unrounded_objective": -0.7036748939935615,
+     "delivered_gain": 0.0012296328260259504,
+     "delivers": false
+    },
+    "400": {
+     "R": 400.0,
+     "step": 0.0075,
+     "pick": "sa_from_greedy_42",
+     "pick_unrounded_objective": -0.7036814871280046,
+     "greedy_unrounded_objective": -0.7036748939935615,
+     "delivered_gain": -6.5931344430669725e-06,
+     "delivers": true
+    }
+   }
+  },
+  {
+   "seed": 43,
+   "instance": "mid",
+   "f176_gain": 0.0,
+   "rounded": {
+    "100": {
+     "R": 100.0,
+     "step": 0.03,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.8216096684834833,
+     "greedy_unrounded_objective": -0.8217699394532318,
+     "delivered_gain": 0.00016027096974857713,
+     "delivers": false
+    },
+    "200": {
+     "R": 200.0,
+     "step": 0.015,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.8217060394950189,
+     "greedy_unrounded_objective": -0.8217699394532318,
+     "delivered_gain": 6.389995821298733e-05,
+     "delivers": false
+    },
+    "400": {
+     "R": 400.0,
+     "step": 0.0075,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.821744195287468,
+     "greedy_unrounded_objective": -0.8217699394532318,
+     "delivered_gain": 2.574416576384131e-05,
+     "delivers": false
+    }
+   }
+  },
+  {
+   "seed": 44,
+   "instance": "free",
+   "f176_gain": 0.0,
+   "rounded": {
+    "100": {
+     "R": 100.0,
+     "step": 0.03,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.7032198148595139,
+     "greedy_unrounded_objective": -0.7033042431725329,
+     "delivered_gain": 8.442831301902487e-05,
+     "delivers": false
+    },
+    "200": {
+     "R": 200.0,
+     "step": 0.015,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.7032878252368246,
+     "greedy_unrounded_objective": -0.7033042431725329,
+     "delivered_gain": 1.641793570827943e-05,
+     "delivers": false
+    },
+    "400": {
+     "R": 400.0,
+     "step": 0.0075,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.7032944199250659,
+     "greedy_unrounded_objective": -0.7033042431725329,
+     "delivered_gain": 9.823247467011242e-06,
+     "delivers": false
+    }
+   }
+  },
+  {
+   "seed": 44,
+   "instance": "mid",
+   "f176_gain": 0.0,
+   "rounded": {
+    "100": {
+     "R": 100.0,
+     "step": 0.03,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.8213368193720312,
+     "greedy_unrounded_objective": -0.8215278384672211,
+     "delivered_gain": 0.000191019095189926,
+     "delivers": false
+    },
+    "200": {
+     "R": 200.0,
+     "step": 0.015,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.8214658900580054,
+     "greedy_unrounded_objective": -0.8215278384672211,
+     "delivered_gain": 6.194840921569522e-05,
+     "delivers": false
+    },
+    "400": {
+     "R": 400.0,
+     "step": 0.0075,
+     "pick": "greedy",
+     "pick_unrounded_objective": -0.8214981589144144,
+     "greedy_unrounded_objective": -0.8215278384672211,
+     "delivered_gain": 2.96795528067495e-05,
+     "delivers": false
+    }
+   }
+  }
+ ],
+ "summary": {
+  "n_instances": 6,
+  "delivers_at_200": []
+ },
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f188_rounding.py",
+  "generator_commit": "fe1e65677f72a17418d2573b0ae55dd6d5789946",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "a3105be35e384a0eb34919770d85a8c5"
+ }
+}

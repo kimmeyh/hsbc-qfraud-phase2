@@ -45,6 +45,7 @@ import f176_below_greedy as f176  # noqa: E402
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f188_rounding.json"
 OUT_DELIVERED = OUT.with_name("f188_rounding_delivered.json")
+LONG_RUN = False                       # about 10 minutes, one straight run
 F176_OUT = f176.OUT
 TOL = f176.TOL                         # 1e-6, F176's "below"
 RANGES = (100.0, 200.0, 400.0)         # 200 is the reading (the entry)

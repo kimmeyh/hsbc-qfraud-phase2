@@ -32,6 +32,7 @@ sys.path.insert(0, str(ROOT / "experiments" / "src"))
 import outcome_record as orec  # noqa: E402
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f185_cost_budget.json"
+LONG_RUN = False                       # minutes, one straight run
 RESULTS = ROOT / "experiments" / "phase2" / "results"
 SOURCES = {
     "ulb": {"result": RESULTS / "f166_ulb_algorithms.json",
