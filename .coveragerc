@@ -4,7 +4,12 @@
 # and the `subprocess` patch: hook and script tests run their code in a
 # subprocess. `diff-cover` then fails a changed line in these sources that
 # no test ran. Test files and fixtures are not measured.
+# `branch = True` (F194, Sprint 32): a one-line `if bad: raise` that no
+# test takes the raise of is a partial branch, which diff-cover's
+# `--branch-coverage` reports as a violation; by line alone it read as
+# tested whenever its condition ran.
 [run]
+branch = True
 parallel = True
 relative_files = True
 patch = subprocess

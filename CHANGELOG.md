@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-09
+
+- **fix**: Sprint 32 Task B (F194, #111): the refusal gate measures branches. `.coveragerc` sets `branch = True` and CI's diff-cover step passes `--branch-coverage`, so a one-line `if bad: raise` whose raise no test takes is an untested refusal, though its condition ran. `refusal_coverage.py` reads a `REFUSING` print with any string prefix (`rf"`, `fr"`, `F"` and the rest) and blanks string literals before matching the one-line form, so `: raise` inside a string is not a refusal. An end-to-end test runs coverage and diff-cover as CI does; each rule proven red.
+
 ### 2026-11-08
 
 - **fix**: Sprint 32 Task A (F181, #110): `test_phase2_device_default.py` refuses any Phase 2 module that names `eqc_submit.DIRAC_3` or passes `'dirac-3'` to `eqc_submit.device(`, with or without a `# device named:` reason, so the team lead's Sprint 31 D5 rule (every run on Dirac-3S) is checked, not only written. One test per form, each proven red.
