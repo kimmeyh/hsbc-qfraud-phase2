@@ -118,6 +118,51 @@ def test_a_result_short_of_f176s_instances_is_refused():
     assert fr.final_doc({}, [_row(False)], 1)["complete"] is True
 
 
+def test_a_pick_that_beats_greedy_unrounded_delivers():
+    d = fr.delivered(J2, C2, math.inf, [0], {"other": [1]})
+    assert d["pick"] == "other" and d["delivers"]
+    assert d["delivered_gain"] == pytest.approx(-0.01)
+
+
+def test_a_pick_made_on_a_coarse_problem_can_fail_to_deliver():
+    # At R = 2 both supports round to the same objective; the pick is the
+    # first seen, greedy, which delivers nothing.
+    d = fr.delivered(J2, C2, 2.0, [0], {"other": [1]})
+    assert d["pick"] == "greedy" and not d["delivers"]
+
+
+def test_the_pick_is_scored_on_the_unrounded_problem():
+    # Unrounded, support 0 is better (0.70 against 0.74). At R = 2 the
+    # step is 0.62: J rounds to 1.24 on both, C to 0 and -0.62, so the
+    # rounded problem picks support 1, which delivers nothing.
+    J = np.diag([1.0, 1.24])
+    C = np.array([-0.3, -0.5])
+    d = fr.delivered(J, C, 2.0, [0], {"other": [1]})
+    assert d["pick"] == "other"
+    assert d["greedy_unrounded_objective"] == pytest.approx(0.70)
+    assert d["pick_unrounded_objective"] == pytest.approx(0.74)
+    assert not d["delivers"] and d["delivered_gain"] == pytest.approx(0.04)
+
+
+def test_a_short_delivered_result_is_refused():
+    row = {"seed": 42, "instance": "free",
+           "rounded": {"200": {"delivers": True}}}
+    with pytest.raises(RuntimeError, match="not complete"):
+        fr.delivered_doc([row], 2)
+    with pytest.raises(RuntimeError, match="not complete"):
+        fr.delivered_doc([], 0)
+    doc = fr.delivered_doc([row], 1)
+    assert doc["complete"] is True
+    assert doc["summary"]["delivers_at_200"] == ["42/free"]
+
+
+def test_an_unknown_argument_is_refused():
+    import subprocess
+    r = subprocess.run([sys.executable, str(MODULE), "--deliverd"],
+                       capture_output=True, text=True, cwd=ROOT)
+    assert r.returncode != 0 and "usage: f188_rounding.py" in r.stderr
+
+
 # ------------------------------------------------------------- red proofs
 
 def test_each_rule_can_fail():
@@ -153,10 +198,28 @@ def test_each_rule_can_fail():
             ("    if not abs(rebuilt - recorded) <= GREEDY_MATCH:\n",
              "    if False:\n",
              "test_a_different_greedy_is_refused", "another instance read"),
-            ("    if len(rows) != n_expected or n_expected == 0:\n",
-             "    if False:\n",
-             "test_a_result_short_of_f176s_instances_is_refused",
-             "a short result marked complete")):
+            ("    true_pick = ec.objective(J, C, w)\n",
+             "    true_pick = ec.objective(Jq, Cq, w)\n",
+             "test_the_pick_is_scored_on_the_unrounded_problem",
+             "the pick scored on the rounded problem"),
+            ('"delivers": bool(d < -TOL)}', '"delivers": bool(d <= 0)}',
+             "test_a_pick_made_on_a_coarse_problem_can_fail_to_deliver",
+             "no gain read as delivered"),
+            ("    elif sys.argv[1:]:\n", "    elif False:\n",
+             "test_an_unknown_argument_is_refused",
+             "an unknown argument runs the first reading")):
         assert_can_fail([Mutation(MODULE, old, new, expect_occurrences=1)],
                         lambda test=test: run_pytest(f"{THIS}::{test}", ROOT),
                         label)
+    # The two `complete` guards share their text; each is broken alone.
+    guard = "    if len(rows) != n_expected or n_expected == 0:\n"
+    text = MODULE.read_text(encoding="utf-8")
+    assert text.count(guard) == 2
+    first, second = text.index(guard), text.rindex(guard)
+    # delivered_doc is defined before final_doc.
+    for at, test in ((first, "test_a_short_delivered_result_is_refused"),
+                     (second, "test_a_result_short_of_f176s_instances_is_refused")):
+        broken = text[:at] + "    if False:\n" + text[at + len(guard):]
+        assert_can_fail([Mutation(MODULE, text, broken, expect_occurrences=1)],
+                        lambda test=test: run_pytest(f"{THIS}::{test}", ROOT),
+                        "a short result marked complete")

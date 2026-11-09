@@ -2172,6 +2172,20 @@ or any rounded objective is computed. Zero metered seconds.
 - **Output**: `experiments/phase2/results/f188_rounding.json`, generator
   `experiments/phase2/src/f188_rounding.py`. No test score is computed,
   so no outcome block is needed.
+- **Amendment, 2026-11-09, after the first reading and before the
+  second.** The first run read "kept" at R = 200 on 42/free and 43/free,
+  with gains of 0.0009 and 0.0012, 50 to 70 times F176's, and 6% and 8%
+  of one step; on 42/free the gain is kept at R = 100 and 200 and lost
+  at 400. A gain that grows under rounding and does not shrink steadily
+  as R grows is the rounding, not F176's gain. The first reading stands
+  as registered. A second reading, not part of the original entry, asks
+  what the device would deliver: on each rounded problem, each support's
+  weights are solved as before, then scored on the **unrounded**
+  problem. The support the rounded problem ranks best is the device's
+  pick; it **delivers** a gain when its unrounded objective is below
+  greedy's unrounded objective by more than 1e-6. Output
+  `experiments/phase2/results/f188_rounding_delivered.json`, the same
+  generator (`--delivered`).
 
 ### F185: a cost-weighted alert budget on the stored champion scores
 

@@ -18,9 +18,13 @@ search is run again.
    checked against F176's record, at each R.
 
     <venv python> experiments/phase2/src/f188_rounding.py
+    <venv python> experiments/phase2/src/f188_rounding.py --delivered
 
 Zero metered seconds. Writes `experiments/phase2/results/f188_rounding.json`
 through `provenance.write_result`, once, at the end (`resumable=False`).
+`--delivered` is the entry's amendment (the second reading): the support
+each rounded problem ranks best, its weights scored on the unrounded
+problem, written to `f188_rounding_delivered.json`.
 """
 from __future__ import annotations
 
@@ -40,6 +44,7 @@ import exp3_controls as ec  # noqa: E402
 import f176_below_greedy as f176  # noqa: E402
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f188_rounding.json"
+OUT_DELIVERED = OUT.with_name("f188_rounding_delivered.json")
 F176_OUT = f176.OUT
 TOL = f176.TOL                         # 1e-6, F176's "below"
 RANGES = (100.0, 200.0, 400.0)         # 200 is the reading (the entry)
@@ -78,6 +83,26 @@ def gain(J, C, R: float, greedy_support, others: dict) -> dict:
             "greedy": g, "best_other": best, "best_other_objective": objs[best],
             "gain": d, "gain_in_steps": (d / step) if step else None,
             "kept": bool(d < -TOL)}
+
+
+def delivered(J, C, R: float, greedy_support, others: dict) -> dict:
+    """The entry's amendment (second reading): the support the problem
+    rounded at R ranks best is the device's pick; its weights, solved on
+    the rounded problem, are scored on the unrounded one. It delivers a
+    gain when that is below greedy's unrounded objective by more than
+    TOL."""
+    Jq, Cq, step = rounded(J, C, R)
+    supports = {"greedy": greedy_support, **others}
+    seen = {k: support_objective(Jq, Cq, s) for k, s in supports.items()}
+    pick = min(seen, key=seen.get)
+    w = ec.solve_on_support(Jq, Cq, supports[pick])
+    true_pick = ec.objective(J, C, w)
+    greedy_true = support_objective(J, C, greedy_support)
+    d = true_pick - greedy_true
+    return {"R": None if math.isinf(R) else R, "step": step, "pick": pick,
+            "pick_unrounded_objective": true_pick,
+            "greedy_unrounded_objective": greedy_true,
+            "delivered_gain": d, "delivers": bool(d < -TOL)}
 
 
 # ----------------------------------------------------------- the check
@@ -163,6 +188,54 @@ def require_same_greedy(rec: dict, rebuilt: float) -> None:
             f"differs from F176's {recorded}; not F176's instance")
 
 
+def delivered_doc(rows: list[dict], n_expected: int) -> dict:
+    """The second reading's result, `complete` only with every instance."""
+    if len(rows) != n_expected or n_expected == 0:
+        raise RuntimeError(f"{len(rows)} rows for {n_expected} F176 "
+                           "instances; not complete")
+    at = [f"{r['seed']}/{r['instance']}" for r in rows
+          if r["rounded"][str(int(READING_R))]["delivers"]]
+    return {"card": "F188", "sprint": 32, "phase": 2, "evidence_tag": "SIM",
+            "metered_seconds": 0, "dataset": "ieee_cis",
+            "entry": "experiments/phase2/PREREGISTRATION_DRAFT.md section 6, "
+                     "F188, amendment of 2026-11-09 (second reading)",
+            "first_reading": "experiments/phase2/results/f188_rounding.json",
+            "ranges": list(RANGES), "reading_range": READING_R, "tol": TOL,
+            "rows": rows,
+            "summary": {"n_instances": len(rows), "delivers_at_200": at},
+            "complete": True}
+
+
+def run_delivered() -> None:
+    import f160_room_ieee as f160
+    import provenance
+    f176_doc = json.loads(F176_OUT.read_text(encoding="utf-8"))
+    require_complete(f176_doc)
+    rid, _ = provenance.start(OUT_DELIVERED, resumable=False)
+    lam = f176_doc["rows"][0]["lam_mult"]
+    inst, _ = f160.ieee_instances(f160.ieee_fold())
+    rows = []
+    for rec in f176_doc["rows"]:
+        H, y, m = inst[(rec["seed"], rec["instance"])]
+        J, C = ec.problem(H, y, lam)
+        require_same_greedy(rec, ec.greedy(J, C, m)["objective"])
+        meth = rec["methods"]
+        others = {k: v["support"] for k, v in meth.items()
+                  if k != "greedy" and v.get("support")}
+        g = meth["greedy"]["support"]
+        rows.append({"seed": rec["seed"], "instance": rec["instance"],
+                     "f176_gain": rec["reading"]["gap_best_to_greedy"],
+                     "rounded": {str(int(R)): delivered(J, C, R, g, others)
+                                 for R in RANGES}})
+        print(f"{rec['seed']}/{rec['instance']}: " + json.dumps(
+            {k: v["delivered_gain"] for k, v in rows[-1]["rounded"].items()}),
+            flush=True)
+    doc = delivered_doc(rows, len(f176_doc["rows"]))
+    provenance.write_result(OUT_DELIVERED, doc, __file__,
+                            sorted({r["seed"] for r in rows}), rid)
+    print("complete", flush=True)
+
+
 def run() -> None:
     import f160_room_ieee as f160
     import provenance
@@ -220,4 +293,10 @@ def final_doc(check: dict, rows: list[dict], n_expected: int) -> dict:
 
 
 if __name__ == "__main__":
-    run()
+    if sys.argv[1:] == ["--delivered"]:
+        run_delivered()
+    elif sys.argv[1:]:
+        raise SystemExit(f"usage: f188_rounding.py [--delivered]; "
+                         f"got {sys.argv[1:]}")
+    else:
+        run()
