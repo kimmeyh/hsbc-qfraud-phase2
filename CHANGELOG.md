@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-10
+
+- **docs**: Sprint 32 Task E (F178, #114): the three learning documents go to version 1.3. F185 is a tagged claim in the plain-terms version's section 2 and the machine learning expert version's section 2; F188 is a tagged claim in the plain-terms version's section 6 and the quantum computing expert version's section 3. Each "Experiments planned" section gains a Sprint 32 part with both dated results; the rounding test and the cost-weighted budget leave "Experiments not yet planned", with their open follow-ups named. The quantum computing expert version's bottom line and section 5 cite F188, and state that closing F25's IEEE-CIS case is the team lead's decision. No Sprint 33 run is preregistered.
+
 ### 2026-11-09
 
 - **test**: `test_f188_rounding.py` tests a gain inside the 1e-6 tolerance, which no test covered, so the proof that breaks the tolerance was vacuous (CI's full job on 3520a0f, and the local proof run). All F188 proofs now go red.
