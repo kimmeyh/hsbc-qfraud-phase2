@@ -198,3 +198,73 @@ ask the question(s)". No option digit was given; the plan runs as
 written (option 1's order), with one task added: G, the F111 feedback
 draft (`docs/loke_package/F111_FEEDBACK_DRAFT.md`, gitignored) updated
 after E with the results since 2026-10-23, not sent.
+
+---
+
+## D4. F25: close its IEEE-CIS design after F188, or keep it on HOLD?
+
+Asked 2026-11-10 at the Manual Validation handover (Phase 5.3). F188's
+document leaves this to the team lead
+(`docs/phase2/F188_ROUNDING.md`, "What it means").
+
+**What.** F188 rounded F176's six IEEE-CIS selection instances to the
+device's 200:1 resolution. Its two readings disagree:
+- The registered reading (gain measured on the rounded problem) is
+  "kept" on 42/free and 43/free. By the entry, the device question
+  stays open there. Those gains are 49 and 73 times F176's, made by the
+  rounding.
+- The amendment's reading (the rounded problem's pick and weights,
+  scored on the real problem) is worse than greedy on all six at
+  R = 200. On the three instances where F176 found a gain, the loss is
+  larger than the gain. The amendment was written after the first
+  reading and set no decision rule.
+
+F25's card is on HOLD; its HOLD reason (F102, the Phase 2
+preregistration, not filed) is unchanged by F188.
+
+**Why it matters.** Closing F25 ends the one device experiment that
+could show a solver difference on a non-convex problem; it reopens only
+by a new card. Keeping it on HOLD costs nothing now, because F102 holds
+it anyway. Three facts are untested: the 200:1 figure on Dirac-3S (it
+is QCi's, from Dirac-3), other ridge weights (the step is set by the
+same largest term on every instance, likely the ridge diagonal), and
+R above 400 (at 400, 43/free delivers a small gain).
+
+**Kind.**
+- Option 1: neither; a scope decision.
+- Option 2: Prevention. F188's check becomes a precondition on the card,
+  so no device run on this or a similar formulation is proposed without
+  it.
+- Option 3: Prevention, as option 2, plus more evidence before any
+  close.
+
+**Cost per option.**
+- Option 1: 5 minutes now, one file (`docs/ALL_SPRINTS_MASTER_PLAN.md`).
+- Option 2: 5 minutes now, the same file.
+- Option 3: 10 minutes now, the same file; the new card about 30
+  classical minutes in a later sprint, zero metered seconds.
+
+**Recommendation: 2.** The registered rule says "open", and the reading
+that says "closed" came after it, with no rule. Two of the facts it
+rests on (200:1 on Dirac-3S, the ridge weight) are untested. Option 2
+keeps the card where F102 already holds it and makes F188's check a
+condition of any device proposal, which is the Prevention. Option 1 is
+not chosen because it closes on an unregistered reading. Option 3 is
+not chosen now because the card is held by F102 regardless; F198 can be
+carded when F102 is filed.
+
+**Options.**
+
+1. Close F25. Its card in `docs/ALL_SPRINTS_MASTER_PLAN.md` gets
+   "Closed 2026-11-10 (Sprint 32 D4): F188 found that at 200:1 the
+   rounded problem's answer, scored on the real problem, is worse than
+   greedy on all six IEEE-CIS instances", and moves to the completed
+   record. It reopens only by a new card.
+2. Keep F25 on HOLD. Its card gets a "Sprint 32 (F188)" line with both
+   readings, and its "Depends on" adds: "before any device run on this
+   formulation, F188's delivered reading (the rounded problem's pick,
+   scored on the real problem) must beat greedy at R = 200".
+3. Option 2, plus a new card, F198, priority 10: F188's two readings on
+   the same six instances with F176's ridge multiplier at 0.1, 1 and 10
+   times its recorded value, and R = 800 and 1,600; zero metered
+   seconds; about 30 minutes.
