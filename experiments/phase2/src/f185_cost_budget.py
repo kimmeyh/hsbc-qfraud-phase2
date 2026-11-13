@@ -79,8 +79,8 @@ def checked_scores(block: dict) -> tuple:
     if orec.sha256_of(path) != src["sha256"]:
         raise Refused(f"{src['path']}: SHA-256 differs from its outcome "
                       "block")
-    z = np.load(path)
-    return z["y_test"], z["p_test"]
+    with np.load(path) as z:            # closes the file (Windows cleanup)
+        return z["y_test"], z["p_test"]
 
 
 # ----------------------------------------------------------- the reading

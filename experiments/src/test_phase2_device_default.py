@@ -15,7 +15,7 @@ The rule, per module:
 - any line naming `eqc_submit.DIRAC_3S` carries that marker;
 - no module names `eqc_submit.DIRAC_3`, or passes `'dirac-3'` to
   `eqc_submit.device(`, marker or not. Team lead, Sprint 31 D5
-  (2026-11-04): "this and all future runs will be on the Dirace-3S"
+  (2026-11-04): "this and all future runs will be on the Dirace-3S [sic]"
   (F181, Sprint 32 Task A). A Dirac-3 contrast run would need that rule
   changed first.
 """

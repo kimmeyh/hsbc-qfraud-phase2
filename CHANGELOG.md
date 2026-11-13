@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-13
 
+- **refactor**: PR #116 Copilot review. `f185_cost_budget.checked_scores` opens the score file with `with np.load(...)`, so the file is closed after its two arrays are read (an open `NpzFile` can block temporary-folder cleanup on Windows). `test_phase2_device_default.py` marks "Dirace-3S" as `[sic]`: it is the team lead's D5 rule quoted word for word, so the spelling stays.
 - **docs**: Sprint 32 D4 answered 3 (team lead, "d4 3"). F25 stays on HOLD; its card in `ALL_SPRINTS_MASTER_PLAN.md` records F188's two readings and adds to "Depends on": before any device run on this formulation, F188's delivered reading must beat greedy at R = 200. New card F198 (priority 10): F188's readings at 0.1, 1 and 10 times F176's ridge multiplier and at R = 800 and 1,600. Manual Validation is complete; the team lead's retrospective feedback rates every category "Very Good".
 
 ### 2026-11-10
