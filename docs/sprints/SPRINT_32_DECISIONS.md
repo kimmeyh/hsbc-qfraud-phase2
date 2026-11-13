@@ -268,3 +268,8 @@ carded when F102 is filed.
    the same six instances with F176's ridge multiplier at 0.1, 1 and 10
    times its recorded value, and R = 800 and 1,600; zero metered
    seconds; about 30 minutes.
+
+**Answer (team lead, 2026-11-13): 3.** Verbatim: "d4 3". F25 stays on
+HOLD; its card gets a "Sprint 32 (F188)" line with both readings and the
+F188 condition in "Depends on"; F198 is carded at priority 10 as option
+3 states.

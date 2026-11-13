@@ -843,6 +843,14 @@ value. Removed from candidates.)
 - Acceptance: a new entry naming the measure, with a check on the recorded F121 scores that the measure does not saturate for the champion; no run until the entry is approved
 - Depends on: nothing
 
+**F198. F188 extended: other ridge weights and finer resolution (~30m [no-history], zero metered) Priority 10**
+- Phase: Phase 2, Experiment 3 (added 2026-11-13, Sprint 32 D4 option 3)
+- Platform: IEEE-CIS, local only
+- F188 (Sprint 32) found the rounded problem's answer worse than greedy on all six instances at R = 200, but only at F176's recorded ridge multiplier; the rounding step is the same on every instance, likely set by the ridge diagonal, and at R = 400 one instance (43/free) delivers a gain (`docs/phase2/F188_ROUNDING.md`)
+- Scope: F188's two readings (registered and delivered) on the same six instances, with F176's ridge multiplier at 0.1, 1 and 10 times its recorded value, and R = 800 and 1,600 beside 100, 200 and 400; an entry amendment first, before any run
+- Acceptance: a result file with provenance; for each multiplier and R, each instance's delivered gain against greedy; the check (gain lost at a coarse R) fired first; a short document
+- Depends on: nothing. Bears on F25's "Depends on" (D4)
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)
@@ -897,6 +905,7 @@ not a sweep correction.
 - **Pass 1 (2026-10-25)**: F153 (Sprint 28) found the proxy design fails on all six ULB instances: no room between greedy and the objective floor (`docs/phase2/F153_EXP3_DESIGN.md`). This card stays parked; F160's check on IEEE-CIS is what could reopen its design
 - **Design reopened 2026-10-28 (F160, Sprint 29 Task E)**: on IEEE-CIS the gap from greedy to the floor is about 0.1 on all six instances against the 0.01 rule, so F153's falsifier does not fire there and the design may proceed on IEEE-CIS. F104's gate passes there; the guide-based resolution check fails on every instance, as on the control. Open for the design: SCIP found nothing below greedy within 300 s, so the room is shown only to the floor, a bound. The HOLD reason (F102 not filed) stands
 - **Pass 1 (2026-11-04)**: F176 (Sprint 30 Task E) found selections below greedy on 3 of 6 IEEE-CIS instances, each by under 2e-05 against a room bound near 0.08-0.097; SCIP at 1,200 s did not beat greedy. The room is reachable only by a sliver so far, and the swap search missed the optimum in 3 of 7 checked cases (`docs/phase2/F176_BELOW_GREEDY.md`). The HOLD reason (F102 not filed) is unchanged
+- **Sprint 32 (F188), stays on HOLD (D4 option 3, 2026-11-13)**: F188 rounded F176's six IEEE-CIS instances to 200:1. The registered reading (gain on the rounded problem) is "kept" on 42/free and 43/free, by gains the rounding made; the amendment's reading (the rounded problem's pick and weights, scored on the real problem) is worse than greedy on all six at R = 200, and at R = 400 only 43/free delivers a gain (`docs/phase2/F188_ROUNDING.md`). Untested: 200:1 on Dirac-3S, other ridge weights, R above 400; F198 tests the last two. **Added to "Depends on" (D4): before any device run on this formulation, F188's delivered reading (the rounded problem's pick, scored on the real problem) must beat greedy at R = 200**
 - **HOLD reason, restated 2026-10-03**: needs F102 (preregistration), F94 (controls) and the allocation. **Corrected 2026-10-13 (Pass 1): F94 shipped in Sprint 25 and the allocation arrived 2026-10-09; F102 (a draft, not yet filed) is the hold reason left.** Sized at 3,070 s in the sent hardware plan; after F90 about 445 s of the 1,681 remain (**corrected 2026-10-06: F90 ran and the measured balance fell to 1,022 s**). **2026-10-10: QCi granted the 7,500 s on 2026-10-09, so the allocation no longer blocks this card**; the balance is in `experiments/results/allocation_reads.json`
 - Platform: Dirac-3 integer/qudit solver, local proxy for the relaxation only
 - **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** Experiment 3 already names Dirac-3S (draft section 6). The integer cost model and the 3,070 s sizing are Dirac-3 figures; F139's two re-measurement probes run on Dirac-3S and re-price this card. `qpu_cost_model.quote()` (Sprint 26 IMP-5) covers the continuous solver only; integer-solver cost needs those probes

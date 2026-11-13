@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-13
+
+- **docs**: Sprint 32 D4 answered 3 (team lead, "d4 3"). F25 stays on HOLD; its card in `ALL_SPRINTS_MASTER_PLAN.md` records F188's two readings and adds to "Depends on": before any device run on this formulation, F188's delivered reading must beat greedy at R = 200. New card F198 (priority 10): F188's readings at 0.1, 1 and 10 times F176's ridge multiplier and at R = 800 and 1,600. Manual Validation is complete; the team lead's retrospective feedback rates every category "Very Good".
+
 ### 2026-11-10
 
 - **docs**: Sprint 32 Manual Validation handover. `docs/sprints/SPRINT_32_VALIDATION.md` lists four actions for the team lead (D4, the two gitignored drafts, the learning documents) and the sprint's results for information. `SPRINT_32_DECISIONS.md` gains D4: close F25's IEEE-CIS design after F188, or keep it on HOLD with F188's check as a condition of any device proposal (recommended). Tasks F and G updated the gitignored F150 and F111 drafts, not sent; the sprint status records each task's actual minutes.
