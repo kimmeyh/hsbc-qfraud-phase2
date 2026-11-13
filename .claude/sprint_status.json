@@ -3,7 +3,7 @@
     "number": 32,
     "name": "Close a Device Question, State Results in Dollars, Tighten Two Guards",
     "branch": "feature/20261108_Sprint_32",
-    "status": "phase_6_push_finalize",
+    "status": "phase_7_retrospective",
     "plan_doc": "docs/sprints/SPRINT_32_PLAN.md",
     "pr": 116,
     "plan_approved": true,
@@ -24,7 +24,8 @@
       "D": 24,
       "E": 36,
       "F": 3,
-      "G": 2
+      "G": 2,
+      "H": 2
     },
     "task_started": {
       "A": "2026-11-08T23:54:32-05:00",
@@ -80,7 +81,8 @@
       "D": "gaps over 30 min and pauses subtracted",
       "E": "gaps over 30 min and pauses subtracted",
       "F": "gaps over 30 min and pauses subtracted",
-      "G": "gaps over 30 min and pauses subtracted; under a fifth of its 15-minute estimate: check the timer, the parallel tasks and the activity log before using it"
+      "G": "gaps over 30 min and pauses subtracted; under a fifth of its 15-minute estimate: check the timer, the parallel tasks and the activity log before using it",
+      "H": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it"
     },
     "task_elapsed": {
       "A": 1,
@@ -89,7 +91,8 @@
       "D": 24,
       "E": 36,
       "F": 3,
-      "G": 2
+      "G": 2,
+      "H": 2
     },
     "task_parallel": {
       "D": [
