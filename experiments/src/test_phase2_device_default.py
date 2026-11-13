@@ -33,8 +33,13 @@ PHASE2_SRC = ROOT / "experiments" / "phase2" / "src"
 RUNNER = PHASE2_SRC / "run_dirac3s_verify.py"
 MARK = "# device named:"
 NAMED = re.compile(r"eqc_submit\.DIRAC_3S?\b")
-DIRAC3 = re.compile(r"eqc_submit\.DIRAC_3\b(?!S)"
-                    r"|eqc_submit\.device\(\s*['\"]dirac-3['\"]")
+# Anywhere in the code, not only inside eqc_submit.device(: a constant held
+# in a variable, a keyword argument and a `from` import all reach the device
+# (PR #116 review). Strings stay in `code_text`, so a literal is seen.
+# One form is data, not a device: a record's `"device": "dirac-3"` label
+# for a Dirac-3 history row (run_dirac3s_units.dirac3_history).
+DIRAC3 = re.compile(r"\bDIRAC_3\b(?!S)"
+                    r"|(?<![\"']device[\"']: )['\"]dirac-3['\"]")
 
 
 def problems(text: str) -> list[str]:
@@ -96,24 +101,61 @@ def test_dirac3_is_refused_even_with_its_reason():
     assert any("names Dirac-3" in p for p in problems(named))
     assert any("names Dirac-3" in p for p in problems(literal))
     # Dirac-3S under either spelling is not Dirac-3.
+    assert problems("from eqc_submit import DIRAC_3S  # device named: r\n") == []
     assert problems("D = eqc_submit.DIRAC_3S  # device named: r\n") == []
     assert problems("with eqc_submit.device('dirac-3s'):  # device named: r\n"
                     "    metered_fit(a)\n") == []
 
 
-def test_the_dirac3_refusal_can_fail():
-    """Each form of the F181 refusal, removed, turns its test red."""
+def test_dirac3_held_imported_or_by_keyword_is_refused():
+    """PR #116 review: each shape passed the first F181 rule."""
+    held = ('D = "dirac-3"  # device named: contrast\n'
+            "with eqc_submit.device(D):\n    metered_fit(a)\n")
+    keyword = ('with eqc_submit.device(device_type="dirac-3"):'
+               "  # device named: x\n    metered_fit(a)\n")
+    imported = ("from eqc_submit import DIRAC_3  # device named: x\n"
+                "with eqc_submit.device(DIRAC_3):\n    metered_fit(a)\n")
+    for src in (held, keyword, imported):
+        assert any("names Dirac-3" in p for p in problems(src)), src
+
+
+def test_a_history_records_device_label_is_not_a_device():
+    assert problems('row = {"file": f, "device": "dirac-3"}\n') == []
+    # The label form only: the same string anywhere else is refused.
+    assert problems('row = {"file": f, "dev": "dirac-3"}\n')
+
+
+def test_the_history_label_exclusion_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     here = ROOT / "experiments" / "src" / "test_phase2_device_default.py"
-    target = ("experiments/src/test_phase2_device_default.py::"
-              "test_dirac3_is_refused_even_with_its_reason")
-    assert_can_fail([Mutation(here, 'r"eqc_submit\\.DIRAC_3\\b(?!S)"',
-                              'r"NO_MATCH_A"', expect_occurrences=1)],
-                    lambda: run_pytest(target, ROOT), "DIRAC_3 admitted")
-    assert_can_fail([Mutation(here, 'r"|eqc_submit\\.device\\(\\s*[\'\\"]'
-                              'dirac-3[\'\\"]")',
-                              'r"|NO_MATCH_B")', expect_occurrences=1)],
-                    lambda: run_pytest(target, ROOT), "'dirac-3' admitted")
+    assert_can_fail([Mutation(here, "(?<![\\\"']device[\\\"']: )", "",
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        "experiments/src/test_phase2_device_default.py::"
+                        "test_a_history_records_device_label_is_not_a_device",
+                        ROOT),
+                    "a history label read as a device")
+
+
+def test_the_dirac3_refusal_can_fail():
+    """Each form of the F181 refusal, removed, turns its tests red."""
+    from injection import Mutation, assert_can_fail, run_pytest
+    here = ROOT / "experiments" / "src" / "test_phase2_device_default.py"
+    base = "experiments/src/test_phase2_device_default.py::"
+    for old, new, test, label in (
+            ('r"\\bDIRAC_3\\b(?!S)"', 'r"NO_MATCH_A"',
+             "test_dirac3_is_refused_even_with_its_reason", "DIRAC_3 admitted"),
+            ('r"\\bDIRAC_3\\b(?!S)"', 'r"NO_MATCH_A"',
+             "test_dirac3_held_imported_or_by_keyword_is_refused",
+             "an imported DIRAC_3 admitted"),
+            ("['\\\"]dirac-3['\\\"]\")", 'NO_MATCH_B")',
+             "test_dirac3_is_refused_even_with_its_reason",
+             "'dirac-3' admitted"),
+            ("['\\\"]dirac-3['\\\"]\")", 'NO_MATCH_B")',
+             "test_dirac3_held_imported_or_by_keyword_is_refused",
+             "a held or keyword 'dirac-3' admitted")):
+        assert_can_fail([Mutation(here, old, new, expect_occurrences=1)],
+                        lambda test=test: run_pytest(base + test, ROOT), label)
 
 
 def test_prose_naming_a_call_is_not_a_call():

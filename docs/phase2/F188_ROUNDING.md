@@ -16,8 +16,9 @@ registered reading) and `experiments/phase2/results/f188_rounding_delivered.json
   43/free), which by the entry means the device question stays open
   there. That reading measures gains on the rounded problem, and those
   gains are 49 to 73 times F176's: they come from the rounding (below).
-- **The amendment's reading (Measured)**: at R = 200, the weights a
-  device can represent, scored on the real problem, are worse than
+- **The amendment's reading (Measured)**: at R = 200, the rounded
+  problem's best selection, with the continuous weights solved on the
+  rounded problem, scored on the real problem, is worse than
   classical greedy's result on all six instances. On each of the three
   instances where F176 found a gain, the loss is larger than that gain:
   42/free loses 0.000024 against a gain of 0.000018, 42/mid 0.000056

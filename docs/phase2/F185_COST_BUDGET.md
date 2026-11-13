@@ -35,7 +35,12 @@ over training seeds only, not over months or transactions.
   recalibrated.
 - **Check first**: a built case where ranking (2) must catch more
   dollars (it caught 1,000 against 10), and a label vector with one
-  label flipped, which the join refused. Both fired.
+  label flipped, which the join refused. Both fired. The entry describes
+  the second check as "a stored file with one label flipped"; the code
+  flips a label in a built four-row vector and passes it to the join,
+  without writing or reading a file. The join is the step that refuses,
+  so the check reaches the same refusal, but by a shorter path than the
+  entry states.
 
 ## What it found
 
@@ -45,7 +50,8 @@ over training seeds only, not over months or transactions.
   - the paired gain: $106,157 ($101,562 to $110,753). Every seed gains.
 - **ULB**: by score 9,546 units, by expected loss 10,301; the paired
   gain is 755 (-50 to 1,561). Six seeds lose 7 to 32 units; four gain
-  679 to 2,816. The large gains come from a few high-amount frauds.
+  679 to 2,816. Whether the large gains come from a few high-amount frauds
+  was not tested (Inferred).
 - **The cost of the trade**: at a fixed alert count both rankings pay
   the same review cost, so the review cost changes net savings, not the
   order. On IEEE-CIS seed 42, at $10 a review, net savings are $28,504 by

@@ -14,7 +14,8 @@
       113,
       114,
       115,
-      117
+      117,
+      118
     ],
     "task_actuals": {
       "A": 1,
@@ -32,7 +33,8 @@
       "D": "2026-11-09T00:58:36-05:00",
       "E": "2026-11-10T08:36:37-05:00",
       "F": "2026-11-10T09:12:33-05:00",
-      "G": "2026-11-10T09:15:14-05:00"
+      "G": "2026-11-10T09:15:14-05:00",
+      "H": "2026-11-13T11:42:30-05:00"
     },
     "task_issues": {
       "A": [
@@ -55,9 +57,12 @@
       ],
       "G": [
         117
+      ],
+      "H": [
+        118
       ]
     },
-    "review_task": null,
+    "review_task": "H",
     "task_estimates": {
       "A": 15,
       "B": 45,
@@ -65,7 +70,8 @@
       "D": 60,
       "E": 30,
       "F": 15,
-      "G": 15
+      "G": 15,
+      "H": 30
     },
     "task_actual_method": {
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 15-minute estimate: check the timer, the parallel tasks and the activity log before using it",
