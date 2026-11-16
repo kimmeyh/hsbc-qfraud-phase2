@@ -98,10 +98,19 @@ Nothing in this stage is time-bound. Schedule on value.
         (with the D14 RBF amendment, a25b90a), Experiment 5, F155 and F95
         written before their first scores. Open: the filing date (team
         lead)
+      - **Progress 2026-11-09** (Sprint 32): entries for F188 (with its
+        amendment, written after the first reading and before the second)
+        and F185 written before their first scores. Open: the filing date
+        (team lead)
 - [x] **C**: F154 every saved test result's confusion counts, and where
       each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
       the standing rule that every result records its outcomes (CLAUDE.md),
       and from D4 its provenance
+- [x] **C**: F185 a cost-weighted alert budget. Sprint 32:
+      `docs/phase2/F185_COST_BUDGET.md`. At the 0.5% alert count, ranking
+      by score times amount catches about four times the fraud dollars on
+      IEEE-CIS month 4, on all ten seeds, and fewer frauds; on ULB no
+      reliable difference
 - [x] **C**: F103 SPECTRA Tier 1 known-answer check on the paper's own dataset.
       Sprint 27: `docs/phase2/F103_TIER1_CHECK.md`; the dense substrate
       repeats under F150
@@ -210,6 +219,12 @@ Nothing in this stage is time-bound. Schedule on value.
         greedy at its 1,200 s cap, and the swap search missed the optimum
         on 3 of the 7 check cases where greedy is not optimal
         (`docs/phase2/F176_BELOW_GREEDY.md`)
+      - **Progress 2026-11-09** (Sprint 32, F188): at 200:1 resolution the
+        rounded problem's best selection, scored on the real problem, is
+        worse than greedy on all six instances
+        (`docs/phase2/F188_ROUNDING.md`). F25 stays on HOLD: before any
+        device run, F188's delivered reading must beat greedy at 200:1
+        (D4 option 3, 2026-11-13). F198 extends F188
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours

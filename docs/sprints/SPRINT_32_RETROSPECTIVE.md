@@ -391,8 +391,14 @@ Team lead, 2026-11-16, verbatim: "i1. a i2. a i3. a i4. a i5. e".
 
 | # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
 |---|---|---|---|---|
-| i1 | The timer starts when a repeated estimate matches | a | about 15 min | now |
-| i2 | Tests run before the push | a | about 60 min | now |
-| i3 | A scan guard's "fires" line names each way to reach the forbidden thing | a | 5 min | now |
-| i4 | A troubleshooting entry for the parallel suite's memory failures | a | 5 min | now |
+| i1 | The timer starts when a repeated estimate matches | a | about 15 min | now (bb37d0d) |
+| i2 | Tests run before the push | a | about 60 min | now (77101ad) |
+| i3 | A scan guard's "fires" line names each way to reach the forbidden thing | a | 5 min | now (8640767); placed in `SPRINT_PLANNING.md` beside "show each term can fire", not in `SPRINT_CHECKLIST.md` as the item said, because the checklist has no such line and the "show it can fire" rules live in `SPRINT_PLANNING.md` |
+| i4 | A troubleshooting entry for the parallel suite's memory failures | a | 5 min | now (8640767) |
 | i5 | F185's two rankings forced to flag the same count | e | none | skip, tracked: add the refusal if F185 is rerun or extended |
+
+Observed while applying i1 (2026-11-16), not yet an item: the status
+tool's first `--add-issue 119 --task I --estimate 85` printed "could not
+be replaced ... Nothing was written", yet the rerun found the estimate and
+the issue already recorded. The message was wrong in that run; the cause
+was not found. Tracked here in case it recurs.

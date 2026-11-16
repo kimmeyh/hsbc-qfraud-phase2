@@ -15,7 +15,8 @@
       114,
       115,
       117,
-      118
+      118,
+      119
     ],
     "task_actuals": {
       "A": 1,
@@ -25,7 +26,8 @@
       "E": 36,
       "F": 3,
       "G": 2,
-      "H": 2
+      "H": 2,
+      "I": 21
     },
     "task_started": {
       "A": "2026-11-08T23:54:32-05:00",
@@ -35,7 +37,8 @@
       "E": "2026-11-10T08:36:37-05:00",
       "F": "2026-11-10T09:12:33-05:00",
       "G": "2026-11-10T09:15:14-05:00",
-      "H": "2026-11-13T11:42:30-05:00"
+      "H": "2026-11-13T11:42:30-05:00",
+      "I": "2026-11-16T08:11:30-05:00"
     },
     "task_issues": {
       "A": [
@@ -61,6 +64,9 @@
       ],
       "H": [
         118
+      ],
+      "I": [
+        119
       ]
     },
     "review_task": "H",
@@ -72,7 +78,8 @@
       "E": 30,
       "F": 15,
       "G": 15,
-      "H": 30
+      "H": 30,
+      "I": 85
     },
     "task_actual_method": {
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 15-minute estimate: check the timer, the parallel tasks and the activity log before using it",
@@ -82,7 +89,8 @@
       "E": "gaps over 30 min and pauses subtracted",
       "F": "gaps over 30 min and pauses subtracted",
       "G": "gaps over 30 min and pauses subtracted; under a fifth of its 15-minute estimate: check the timer, the parallel tasks and the activity log before using it",
-      "H": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it"
+      "H": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it",
+      "I": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 1,
@@ -92,7 +100,8 @@
       "E": 36,
       "F": 3,
       "G": 2,
-      "H": 2
+      "H": 2,
+      "I": 21
     },
     "task_parallel": {
       "D": [
@@ -111,5 +120,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-13"
+  "updated": "2026-11-16"
 }

@@ -48,8 +48,25 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 31: Make Testing Fast and Sure, Then Read the Ceiling, the
-Segments and Dirac-3S** (Nov 4 - Nov 7, 2026; PR #92). Delivered **F179,
+**Sprint 32: Close a Device Question, State Results in Dollars, Tighten
+Two Guards** (Nov 8 - Nov 16, 2026; PR #116). Delivered **F188, F181,
+F185, F194 and the F178 update**, the F150 and F111 drafts updated (not
+sent; D2 option 3), the Phase 5 fresh-eyes fixes, D4 (option 3: F25
+stays on HOLD with F188's condition; F198 carded), the PR 116 review
+fixes and retrospective i1 to i4 (i5 tracked, not done). Zero metered
+seconds. F188: at 200:1 the rounded problem's best selection, scored on
+the real problem, is worse than greedy on all six IEEE-CIS instances.
+F185: at the 0.5% alert count, ranking by expected loss catches about
+four times the fraud dollars on IEEE-CIS month 4. F181: the device guard
+refuses Dirac-3 in every form, held, keyword and imported. F194: the
+refusal gate measures branches. Records: `SPRINT_32_PLAN.md`,
+`SPRINT_32_VALIDATION.md`, `SPRINT_32_DECISIONS.md`,
+`SPRINT_32_RETROSPECTIVE.md`; `SPRINT_32_SUMMARY.md` is written at Sprint
+33 refinement.
+
+### Sprint 31: Make Testing Fast and Sure, Then Read the Ceiling, the
+Segments and Dirac-3S
+(Nov 4 - Nov 7, 2026; PR #92). Delivered **F179,
 F180, F177, F114, F157 (SPECTRA and QNN parts), F121 (Experiment 5),
 F155, F95, F178, F13** and the pypdf bump, the Phase 5 fresh-eyes fixes,
 the Manual Validation decisions (D16: the CI gate fails only on an
