@@ -3,15 +3,39 @@
     "number": 33,
     "name": "The Phase 2 Preregistration, Ready to File",
     "branch": "feature/20261116_Sprint_33",
-    "status": "phase_3_planning",
+    "status": "phase_4_execution",
     "plan_doc": "docs/sprints/SPRINT_33_PLAN.md",
-    "pr": null,
-    "plan_approved": false,
-    "github_issues": [],
+    "pr": 122,
+    "plan_approved": true,
+    "github_issues": [
+      123,
+      124,
+      125,
+      126
+    ],
     "task_actuals": {},
     "task_started": {},
-    "task_issues": {},
-    "review_task": null
+    "task_issues": {
+      "A": [
+        123
+      ],
+      "B": [
+        124
+      ],
+      "D": [
+        125
+      ],
+      "C": [
+        126
+      ]
+    },
+    "review_task": null,
+    "task_estimates": {
+      "A": 75,
+      "B": 120,
+      "D": 60,
+      "C": 45
+    }
   },
   "last_completed_sprint": {
     "number": 32,
