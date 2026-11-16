@@ -40,13 +40,17 @@ Rules for this draft:
   critical path. If no design
   passes by the end of the first PoC month, the plan runs without a
   device experiment and says so. Sprint 32's rounding test (F188) makes
-  that outcome more likely: at the device's stated 200:1 resolution, the
-  rounded problem's best selection, scored on the real problem, is worse
-  than classical greedy on all six IEEE-CIS instances
+  that outcome more likely: at 200:1 resolution (QCi's figure for
+  Dirac-3, not measured on Dirac-3S), the rounded problem's best
+  selection, scored on the real problem, is worse than classical greedy
+  on all six IEEE-CIS instances. That is the amendment's reading, set
+  after the first and with no decision rule; the registered reading is
+  "kept" on two instances, with gains the rounding made
   (`docs/phase2/F188_ROUNDING.md`). F25 stays on HOLD until that reading
   beats greedy (team lead, Sprint 32 D4 option 3); F198 tests other
   ridge weights and finer resolution.
-- Experiments 1, 2, 4 and 6 have proxy or classical results already. In
+- Experiments 1, 2, 4 and 6 have proxy or classical results already
+  (Experiment 5, below, also ran). In
   the PoC they are re-run on the brief's data and metrics, if the brief
   sets any **[A2]**.
 - Experiment 5 ran on the proxy in Sprint 31 (team lead, Sprint 31 D3,
@@ -103,9 +107,11 @@ device block, and the decision that releases it.
   floor on every instance (`f160_room_ieee.json`), so F25's design
   reopens there. F176 (Sprint 30) found selections below greedy on 3
   of the 6 instances, each by under 2e-05
-  (`docs/phase2/F176_BELOW_GREEDY.md`). F188 (Sprint 32) found that at
-  200:1 resolution none of them survives as a delivered gain, and at
-  400:1 one does (`docs/phase2/F188_ROUNDING.md`). F25 is on HOLD: before
+  (`docs/phase2/F176_BELOW_GREEDY.md`). F188 (Sprint 32) found, by its
+  amendment's reading, that at 200:1 resolution none of them survives
+  as a delivered gain, and at 400:1 one does; its registered reading is
+  "kept" on two instances, with gains the rounding made
+  (`docs/phase2/F188_ROUNDING.md`). F25 is on HOLD: before
   any device run on this formulation, F188's delivered reading must beat
   greedy at 200:1 (Sprint 32 D4 option 3).
 - PoC work, in order:

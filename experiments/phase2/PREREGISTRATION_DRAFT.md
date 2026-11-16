@@ -14,8 +14,9 @@ freely, and each change is recorded in the revision log at the bottom.
   otherwise (assumption A9).
 - **Filed without the Phase 2 brief** (assumption A11). This document rests on the
   assumptions A1-A12 in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`,
-  "Assumption register": in particular assumptions A2 (data and metrics), A4 (device
-  seconds) and A12 (the reader). Where the brief differs from an
+  "Assumption register": in particular assumption A2 (data and
+  metrics), assumption A4 (device seconds) and assumption A12 (the
+  reader). Where the brief differs from an
   assumption, the change is a dated amendment; an entry already run is
   not rewritten.
 - **What filing commits to**: each entry in section 6 marked "To run" or
@@ -42,8 +43,9 @@ This document cites the repository it lives in (assumption A12):
   `docs/B4_B5_HARDWARE_RESULT.md`.
 - **IMP** and a number: a retrospective improvement, recorded in
   `docs/sprints/SPRINT_<n>_RETROSPECTIVE.md`.
-- **assumption A1 to A12** (always written with the word "assumption"): the assumptions this filing
-  rests on, in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
+- **assumption A1 to A12**, always written with the word "assumption":
+  the assumptions this filing rests on, in
+  `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
 - **Experiment 1-6**: the six experiments committed in section 5 of the
   filed Phase 1 proposal.
 - File paths are relative to the repository root.
@@ -466,10 +468,14 @@ IEEE-CIS. Not filed; part of this draft.
 and failed its falsifier on all six instances (`docs/phase2/F153_EXP3_DESIGN.md`,
 Sprint 28). Later work on IEEE-CIS, each under its own entry: F160 found
 room above the floor; F176 found selections below greedy on three of six
-instances, each by under 2e-05; F188 found that at the device's stated
-200:1 resolution the rounded problem's best selection, scored on the
-real problem, is worse than greedy on all six
-(`docs/phase2/F188_ROUNDING.md`). **The device arm (F25) does not run
+instances, each by under 2e-05. F188 rounded those instances to 200:1,
+QCi's stated resolution for Dirac-3, carried to Dirac-3S and not
+measured there (`docs/phase2/F188_ROUNDING.md`). Its two readings
+disagree. The registered reading, gains on the rounded problem, is
+"kept" on two instances, but those gains come from the rounding. The
+amendment's reading, written after the first and with no decision
+rule, scores the rounded problem's best selection on the real problem:
+it is worse than greedy on all six. **The device arm (F25) does not run
 until F188's delivered reading beats greedy at 200:1** (team lead,
 Sprint 32 D4 option 3), and then only block by block under per-block
 approval (section 4; assumption A4). If no design qualifies by the
@@ -711,9 +717,10 @@ any lane below is fit. Not filed; part of this draft. No device.
 ### Experiment 5 (F121): segment transfer and router acceptance, on the proxy
 
 **State at filing (2026-11-16): Run.** No segment was accepted
-(`docs/phase2/EXP5_ROUTER.md`, Sprint 31). On three segments, recall
-within the segment at the 0.5% budget is already at its maximum, so the
-measure cannot show an edge there. A re-entry with a measure that does not saturate (F197)
+(`docs/phase2/EXP5_ROUTER.md`, Sprint 31). On the four segments that
+can be scored (C, R, H and S), recall within the segment at the 0.5%
+budget is already at its maximum, so the measure cannot show an edge
+there. Segment W cannot be scored. A re-entry with a measure that does not saturate (F197)
 would be a new entry, written before any score; it is not registered
 here.
 
@@ -2470,3 +2477,8 @@ fails any other open item.
   entries run before filing from entries to run; each of Experiments 1-6
   gains its state at filing, Experiment 3 with Sprint 32 D4's condition;
   section 7 closed except two filing steps (date and venue; the lock).
+- 2026-11-16: after the Sprint 33 fresh-eyes review: Experiment 3's
+  state names both F188 readings and says 200:1 is QCi's Dirac-3 figure,
+  not measured on Dirac-3S; Experiment 5's state names the four segments
+  that can be scored; every assumption in the Filing section is written
+  with the word "assumption".

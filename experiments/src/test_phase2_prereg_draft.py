@@ -178,11 +178,17 @@ def test_the_filing_section_has_a_date_and_a_venue():
 
 def cited(text: str) -> set[int]:
     out: set[int] = set()
-    for m in re.finditer(r"\bassumptions? A(\d+)(?:\s*(?:-|to)\s*A(\d+))?",
+    # \s+ so a citation wrapped across lines is still read (PR review).
+    for m in re.finditer(r"\bassumptions?\s+A(\d+)(?:\s*(?:-|to)\s*A(\d+))?",
                          text):
         lo = int(m.group(1))
         out |= set(range(lo, int(m.group(2) or lo) + 1))
     return out
+
+
+def test_a_wrapped_or_ranged_citation_is_read():
+    assert cited("per assumption\n  A13, and assumptions A1-A3") == {
+        1, 2, 3, 13}
 
 
 def test_every_cited_assumption_is_in_the_register():
@@ -224,6 +230,9 @@ def test_a_change_adds_a_revision_log_row():
     assert dates and max(dates) >= changed, (
         f"the draft changed on {changed}, and its newest revision-log row "
         f"is {max(dates) if dates else None}; add a dated row")
+    # A future date would satisfy the check for good (PR review).
+    assert max(dates) <= dt.date.today(), (
+        f"a revision-log row is dated in the future: {max(dates)}")
 
 
 def test_every_figure_resolves_or_is_registered():
@@ -294,10 +303,29 @@ def test_the_section_7_check_can_fail():
 
 
 def test_the_revision_log_check_can_fail():
-    _fails(DRAFT, "- 2026-11-16: prepared for filing",
-           "- 2026-11-01: prepared for filing",
+    # Moves the change one day past the newest row. Back-dating one row
+    # went vacuous as soon as a second row shared its date.
+    _fails(Path(__file__), "    changed = last_change()\n",
+           "    changed = max(dt.date.fromisoformat(d) for d in re.findall("
+           "r\"^- (\\d{4}-\\d{2}-\\d{2}):\", log, re.M)) "
+           "+ dt.timedelta(days=1)\n",
            "test_a_change_adds_a_revision_log_row",
            "a change with no newer revision-log row")
+
+
+def test_the_wrapped_citation_reading_can_fail():
+    _fails(Path(__file__),
+           "finditer(r\"\\bassumptions?\\s+A(\\d+)",
+           "finditer(r\"\\bassumptions? A(\\d+)",
+           "test_a_wrapped_or_ranged_citation_is_read",
+           "a wrapped citation missed")
+
+
+def test_the_future_date_check_can_fail():
+    _fails(DRAFT, "- 2026-11-16: prepared for filing",
+           "- 2099-11-16: prepared for filing",
+           "test_a_change_adds_a_revision_log_row",
+           "a revision-log row dated in the future")
 
 
 def test_the_figure_check_can_fail():
