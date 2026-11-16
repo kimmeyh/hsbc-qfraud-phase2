@@ -255,6 +255,18 @@ rejection and both Bonferroni corrections, F158's Wilcoxon term and
 off-split check, F160's order gate and resolution pass-through, F159's
 budget derivation).
 
+**And for a source-scan guard, name each way to reach the forbidden thing
+(Sprint 32 i3).** A guard that reads source text for a forbidden call,
+device or constant lists, in the card's acceptance criteria, every form
+that reaches it: the direct call, a value held in a variable, a keyword
+argument, an import, an alias. Each form gets a test that the guard
+refuses it, and each allowed look-alike (a docstring, a data label) a
+test that it is passed. Three sprints paid for a guard tested only against
+the form its author wrote: Sprint 32's Dirac-3 rule (F181) missed a held
+literal, a keyword and an import (PR #116 review); Sprint 31 i3, the
+refusal gate missed two refusal forms; Sprint 28 IMP-2, a docstring was
+read as a call.
+
 ### A verification sprint GENERATES work; budget for it (Sprint 13 improvement 2)
 
 A sprint whose tasks are "check that X is true" produces a second body of work

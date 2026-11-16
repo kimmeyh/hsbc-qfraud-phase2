@@ -8,8 +8,11 @@ untested refusal (37 reached review in Sprints 28-30), so this script
 reads diff-cover's JSON report and fails only when an uncovered changed
 line is a refusal: a `raise` (also a one-line `if bad: raise`),
 `sys.exit(...)`, `SystemExit(...)` or a `print("REFUSING ...")`. Every
-other uncovered line is listed, and does not fail. Coverage is by line:
-a one-line `if bad: raise` is seen only when no test ran the line.
+other uncovered line is listed, and does not fail. Coverage is by branch
+(F194, Sprint 32: `branch = True` in `.coveragerc`, `--branch-coverage`
+on diff-cover in `ci.yml`), so a line counts as uncovered when a branch
+on it was not taken: a one-line `if bad: raise` whose raise no test
+takes is listed, though its condition ran.
 
 Usage: python scripts/refusal_coverage.py diff-cover.json
 
@@ -31,15 +34,17 @@ from pathlib import Path
 # nothing (PR 92 review). Sprint 31 i3 (team lead, 2026-11-07) adds the
 # repository's two other forms: a one-line `if bad: raise ...`, and the
 # commonest, `print("REFUSING: ...")` followed by `return N`, seen by its
-# print (silent-failure finding 4 of the PR 92 review). Limit: coverage is
-# by line, not by branch, so a one-line `if bad: raise` counts as tested
-# whenever any test runs its condition. It fails here only when no test
-# runs the line at all (short review of the i3 commit; branch coverage is
-# for Sprint 32's refinement).
+# print (silent-failure finding 4 of the PR 92 review). The print may
+# carry any string prefix (`f"`, `rf"`, `fr"`, `F"`, `R"` ...; F194). The
+# one-line form is matched with string literals blanked, so `: raise`
+# inside a string on an `if` line is not a refusal (F194).
 REFUSAL = re.compile(
     r"^\s*raise\b|\bsys\.exit\s*\(|\bSystemExit\s*\("
-    r"|^\s*(?:if|elif|else|except|for|while|with)\b.*:\s*raise\b"
-    r"|\b(?:print|write)\s*\(\s*f?[\"']REFUSING\b")
+    r"|\b(?:print|write)\s*\(\s*[rRfFbBuU]{0,2}[\"']REFUSING\b")
+ONE_LINE = re.compile(
+    r"^\s*(?:if|elif|else|except|for|while|with)\b.*:\s*raise\b")
+STRING = re.compile(r"""(?<!\w)[rRfFbBuU]{0,2}"""
+                    r"""("[^"\\]*(?:\\.[^"\\]*)*"|'[^'\\]*(?:\\.[^'\\]*)*')""")
 # A module's entry line, `raise SystemExit(main(...))` or
 # `sys.exit(main(...))`, passes on main's exit code and refuses nothing:
 # 10 of the 19 "refusals" counted on cdb8471 were these.
@@ -48,7 +53,8 @@ ENTRY = re.compile(r"^\s*(raise\s+SystemExit|sys\.exit)\(\s*main\(")
 
 def is_refusal(line: str) -> bool:
     code = line.split("#", 1)[0]
-    return bool(REFUSAL.search(code)) and not ENTRY.match(code)
+    hit = REFUSAL.search(code) or ONE_LINE.search(STRING.sub("''", code))
+    return bool(hit) and not ENTRY.match(code)
 
 
 def statement(src: list[str], n: int) -> str:

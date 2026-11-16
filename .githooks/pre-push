@@ -1,0 +1,14 @@
+#!/bin/sh
+# Pre-push gate (Sprint 32 i2). Enabled with the other gates by
+# `git config core.hooksPath .githooks`. Refuses a push whose tree no
+# passing `scripts/select_proofs.py --tests` run tested; the rule is in
+# scripts/check_pre_push.py. No override flag.
+
+script="$(git rev-parse --show-toplevel)/scripts/check_pre_push.py"
+for py in python python3; do
+  if command -v "$py" >/dev/null 2>&1; then
+    exec "$py" "$script"
+  fi
+done
+echo "BLOCKED: no python found to check the push."
+exit 1

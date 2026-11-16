@@ -179,12 +179,16 @@ def start_task(doc: dict, task: str, now: datetime,
 
 
 def set_estimate(doc: dict, task: str, minutes: int) -> str:
-    """Record the task's planned minutes. A second estimate is refused:
-    moving it after the work would move the flag (Sprint 30 IMP-3)."""
+    """Record the task's planned minutes. A different second estimate is
+    refused: moving it after the work would move the flag (Sprint 30
+    IMP-3). An equal one is no change, so `--start-task X --estimate N`
+    after `--task X --estimate N` still starts the timer (Sprint 32 i1)."""
     if minutes <= 0:
         raise SystemExit(f"an estimate is a positive number of minutes, "
                          f"not {minutes}")
     estimates = doc["current_sprint"].setdefault("task_estimates", {})
+    if estimates.get(task) == minutes:
+        return f"  current_sprint.task_estimates.{task}: {minutes} (unchanged)"
     if task in estimates:
         raise SystemExit(f"Task {task} already has an estimate: "
                          f"{estimates[task]}")

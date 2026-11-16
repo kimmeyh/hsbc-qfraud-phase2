@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Quantum Computing Expert Version
 
-**Version 1.2**, 2026-11-06 (Sprint 31, card F178). For readers with
+**Version 1.3**, 2026-11-10 (Sprint 32, card F178). For readers with
 undergraduate-or-above or professional quantum computing experience,
 not necessarily in machine learning. Acronyms and common terms link to
 the [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md);
@@ -10,6 +10,7 @@ The appendix here holds only what neither defines.
 
 ## Change list
 
+- **1.3, 2026-11-10 (Sprint 32)**: F188, the rounding test, added as a tagged claim in section 3 and a dated result in section 6, which also lists F185 (alerts ranked by cost; detail in the machine learning expert version). The bottom line and section 5's three conditions now cite it, and the rounding test leaves section 7. No Sprint 33 run is preregistered yet, so none is listed.
 - **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F. New: [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference) beside [superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition) and [entanglement](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-entanglement), in outside research and in our circuit; a proposed experiment with all three properties and many non-Clifford gates; the scope of the F110 build cost; and the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
@@ -33,7 +34,10 @@ The appendix here holds only what neither defines.
   [fraud detection dataset of the Institute of Electrical and Electronics Engineers Computational Intelligence Society](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
   ([IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)) has [room](#qc3-room) between greedy and
   the floor, but the best classical improvement on greedy found so far is
-  under 2e-05, which may sit below the device's resolution.
+  under 2e-05. The Sprint 32 rounding test (F188) found that at 200:1
+  the rounded problem's answer is worse than greedy on all six
+  instances, so a device run on this design could not show a gain.
+  Closing the case is the team lead's decision.
 - **Dirac-3S is a better solver than Dirac-3 on our one resolvable
   instance**, returning the reference optimum in every sample; accuracy
   did not change, because the optimum was already reachable classically.
@@ -187,7 +191,7 @@ nothing.
 
 **In short:** the first design had no room above greedy. The [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
 design has room, but the best classical gain below greedy is under
-2e-05, likely below what a device can resolve.
+2e-05, and rounding to 200:1 loses it on every instance.
 
 ### What our experiments showed
 
@@ -220,6 +224,20 @@ design has room, but the best classical gain below greedy is under
 - [SIM] A sparsity rule fixed before the fit failed one direction
   (held-out error 0.847 against a 0.05 tolerance)
   (`docs/sprints/SPRINT_26_SUMMARY.md`).
+- [SIM] Rounding test (F188): every coefficient of F176's six [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
+  instances rounded to the nearest multiple of max |coefficient| / R,
+  at R = 100, 200 and 400; the step is 0.015 at R = 200 on every
+  instance. The registered reading (gain on the rounded problem) is
+  "kept" at R = 200 on 42/free and 43/free, but by 0.0009 and 0.0012,
+  49 and 73 times F176's gains: made by the rounding. The amendment's
+  reading (the rounded problem's selection and weights, scored on the
+  real objective) is worse than greedy on all six at R = 100 and 200;
+  on the three gain instances the loss exceeds the gain (42/free
+  0.000024 against 0.000018, 42/mid 0.000056 against 0.000003, 43/free
+  0.0012 against 0.000017). The loss comes mostly from the rounded
+  weights; on 43/free the pick also changes with R. At R = 400 only
+  43/free delivers a gain. 200:1 is QCi's figure, carried to Dirac-3S
+  and not measured there (`docs/phase2/F188_ROUNDING.md`).
 
 ### What outside research says
 
@@ -349,17 +367,22 @@ slow step is the classical pool build, not the solve.
 - A device result can carry information only when three conditions hold
   together: the Hamiltonian passes the resolution screens, a classical
   solver measurably misses the optimum, and the miss is larger than the
-  device's resolution. F176's gains fail the third condition on present
-  evidence (inference, not tested).
+  device's resolution. F176's gains fail the third condition: F188
+  rounded the instances to 200:1 and every rounded answer, scored on
+  the real objective, lost to greedy (section 3). F188 adds a fourth
+  check before any device proposal: score the rounded problem's pick
+  on the real problem.
 - The quantum role that fits production scale is a [QUBO](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-qubo) built from
   statistics accumulated over the rows (feature or learner selection),
   whose size does not grow with the data (EvidenceBasedDB memo
   `docs/spikes/F118_WHAT_THE_STORE_SAYS.md`, inference).
 
-## 6. Experiments planned (Sprint 31)
+## 6. Experiments planned (Sprints 31 and 32)
 
 **In short:** Sprint 31 ran these. The two device runs tested size and
 a schedule, not accuracy; the circuit run on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) was dequantized.
+Sprint 32's rounding test found the device's 200:1 resolution too
+coarse for the [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) selection design.
 
 Sprint 31 ran these. Each entry is in `experiments/phase2/PREREGISTRATION_DRAFT.md`, written
 before any call or score. Metered calls stop for approval with their call
@@ -401,6 +424,23 @@ count and seconds stated. The six-experiment frame is in
   - Result, 2026-11-05: all three reported in the machine learning
     expert version's section 7; none used a device.
 
+Sprint 32 ran two more, zero metered seconds, each entry written in the
+same file before its run. No Sprint 33 run is preregistered yet.
+
+- **F188, the rounding test**: F176's six [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) instances rounded at
+  R = 100, 200 and 400; a check first that the test can say "lost". The
+  amendment of 2026-11-09, written after the first reading and before
+  the second, scores the rounded problem's answer on the real objective.
+  - Result, 2026-11-09: the check fired (7 exact-size cases, all lost at
+    R = 2). Registered reading: "kept" on 42/free and 43/free, by gains
+    the rounding made. Amendment's reading: worse than greedy on all
+    six at R = 200. The amendment set no decision rule, so whether
+    F25's [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) case closes is the team lead's decision
+    (`docs/phase2/F188_ROUNDING.md`).
+- **F185, a cost-weighted [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget)**: classical; see the machine
+  learning expert version's section 7.
+  - Result, 2026-11-09: reported there; no device was used.
+
 ## 7. Experiments not yet planned
 
 **In short:** ideas, not scheduled work: the store's ranked list, then
@@ -410,9 +450,9 @@ Sprint 31 D18. The main new one is a circuit beyond cheap simulation.
 From EvidenceBasedDB's memo `docs/spikes/F118_WHAT_THE_STORE_SAYS.md`
 (in that repository); none is scheduled.
 
-- **Rounding test**: round each [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) selection instance to 200:1
-  and measure the objective change; if it exceeds the under-2e-05 gains,
-  no device run on this formulation can show anything.
+- **Rounding test**: ran in Sprint 32 (F188, section 6). Its open
+  follow-ups: other lambda values, other instance sizes, and R above
+  400.
 - **Resolution test on Dirac-3S**: rescale a Hamiltonian so distinct
   coefficients differ by at least max / 200 and test whether solution
   quality changes.
@@ -443,9 +483,9 @@ From the team lead's review:
   - Prediction (from the outside results above): the twins match the
     circuit wherever it is simulable, and no width we can afford
     leaves simulation.
-- **A study of the data fraud investigators use**, **a cost-weighted
-  [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget)** and **card-testing sequences**: classical; see the
-  machine learning expert version's section 8.
+- **A study of the data fraud investigators use** and **card-testing
+  sequences**: classical; see the machine learning expert version's
+  section 8. The cost-weighted [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget) ran in Sprint 32 (F185).
 
 ## 8. Index of what was tested
 

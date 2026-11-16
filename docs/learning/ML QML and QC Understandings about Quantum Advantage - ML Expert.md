@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Machine Learning Expert Version
 
-**Version 1.2**, 2026-11-06 (Sprint 31, card F178). For readers with
+**Version 1.3**, 2026-11-10 (Sprint 32, card F178). For readers with
 undergraduate-or-above or professional machine learning and data-science
 experience. Acronyms and common terms link to the
 [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md),
@@ -10,6 +10,7 @@ covers the [devices](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Ad
 
 ## Change list
 
+- **1.3, 2026-11-10 (Sprint 32)**: F185, the cost-weighted budget, added as a tagged claim in section 2 and a dated result in section 7, which also lists F188 (the rounding test; detail in the quantum computing expert version). The cost-weighted idea leaves section 8. No Sprint 33 run is preregistered yet, so none is listed.
 - **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F; "device" means a quantum device, and a customer's phone or computer is a "customer device". New: what the 0.5% budget optimizes and what it does not, card testing, the data a bank could add, the circuit's three quantum properties, the scope of the F110 slope, and the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
@@ -165,6 +166,19 @@ testing, not in a new learner.
   still 0.94 and 0.89 (`docs/phase2/F152_EXP2_RESULT.md`).
 - [SIM] Card-holder aggregation helps every [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) lane: [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) [AUROC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auroc) rose
   from 0.758 to 0.816 after it (`docs/phase2/F109_TIER1_LADDER.md`).
+- [SIM] Cost-weighted budget (F185): at the 0.5% budget's alert count
+  (427 on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) month 4, 284 on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb)), ranking the stored champion
+  scores (LightGBM and CatBoost, ten seeds each) by expected loss, score
+  times amount, instead of by score: on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) $140,832 caught (95% t
+  interval $136,567 to $145,098) against $34,675 ($32,485 to $36,865) of
+  $493,821; paired gain $106,157 ($101,562 to $110,753), positive on
+  every seed. Frauds caught fall on every seed of both datasets
+  ([IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) 400 to 416 by score, 246 to 373 by expected loss). [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb)'s
+  paired gain is 755 units (-50 to 1,561). Month 4 is one fixed test
+  set, so the intervals cover training seeds only; the scores are
+  uncalibrated, and a nonlinear calibration changes the expected-loss
+  order; TransactionAmt read as dollars is unverified
+  (`docs/phase2/F185_COST_BUDGET.md`).
 
 ### What outside research says
 
@@ -443,11 +457,13 @@ not on those three properties.
   cost, against classical twins on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb), [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) and [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-spectra)'s
   `target` label (proposed, section 8).
 
-## 7. Experiments planned (Sprint 31)
+## 7. Experiments planned (Sprints 31 and 32)
 
 **In short:** Sprint 31 ran all six. None found a quantum advantage;
 F114 gave a first [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) ceiling with a calibration warning; the two
-device runs tested size and a setting, not accuracy.
+device runs tested size and a setting, not accuracy. Sprint 32 ran two
+with no device time: F185 (a cost-weighted budget) and F188 (a rounding
+test).
 
 Sprint 31 ran these. Each entry is in `experiments/phase2/PREREGISTRATION_DRAFT.md`, written
 before its run. Each result, dated, is under its entry. The
@@ -522,6 +538,25 @@ six-experiment frame is in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
     history and are not compared. 67.0 of 120 metered seconds
     (`docs/phase2/F95_SCHEDULE4.md`).
 
+Sprint 32 ran two more, zero metered seconds, each entry written in the
+same file before its run. No Sprint 33 run is preregistered yet.
+
+- **F185, a cost-weighted budget**: at k = the 0.5% budget's count,
+  ranking by s x A against ranking by s, on the stored [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) CatBoost (F166)
+  and [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) LightGBM (F174) scores, ten seeds; review costs of 5, 10
+  and 25 per alert for net savings; Hoppner's rule s > c / A as a
+  second reading.
+  - Result, 2026-11-09: on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) about four times the dollars caught,
+    every seed; on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) an interval that includes zero. Frauds caught
+    fall on both. Hoppner's rule raises far more alerts than the budget
+    on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) and fewer on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb); on uncalibrated scores that count is not
+    a staffing figure (`docs/phase2/F185_COST_BUDGET.md`).
+- **F188, the rounding test**: F176's six [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) selection instances
+  rounded to the device's 200:1 resolution. No model is scored.
+  - Result, 2026-11-09: the rounded problem's answer, scored on the
+    real objective, is worse than greedy on all six; see the quantum
+    computing expert version's section 3 (`docs/phase2/F188_ROUNDING.md`).
+
 ## 8. Experiments not yet planned
 
 **In short:** ideas, not scheduled work: the store's ranked list, then
@@ -548,9 +583,10 @@ From the team lead's review:
 
 - A study of the data fraud investigators use or could use, against
   the fields the public datasets lack.
-- A cost-weighted budget: rank by expected dollars saved net of the
-  review cost (the amount-over-cost rule) on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb)'s Amount and
-  [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)'s TransactionAmt, against the count-based budget.
+- The cost-weighted budget ran in Sprint 32 (F185, section 7). Its
+  open follow-ups: calibrated scores (Platt or isotonic), a review cost
+  that grows with the amount, other test months, and a budget set in
+  dollars rather than alerts.
 - Card-testing sequences and velocity features on an [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis)
   card-holder key: small-then-large pairs within 24 hours, their fraud
   rate, and the lift of the features at the budget.
