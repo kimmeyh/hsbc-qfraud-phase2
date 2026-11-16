@@ -174,6 +174,16 @@ def test_an_estimate_is_set_once_and_positive(tmp_path):
         _run(p, ["--estimate", "60"], 1)
 
 
+def test_a_repeated_equal_estimate_still_starts_the_timer(tmp_path):
+    # Sprint 32 i1: Task A's `--start-task A --estimate N` after
+    # `--task A --estimate N` was refused, so the timer never started.
+    p = _status(tmp_path)
+    _run(p, ["--task", "C", "--estimate", "60"], 0)
+    _run(p, ["--start-task", "C", "--estimate", "60"], 1)
+    assert "C" in _cur(p)["task_started"]
+    assert _cur(p)["task_estimates"]["C"] == 60
+
+
 def test_a_change_made_during_an_update_is_not_overwritten(tmp_path,
                                                            monkeypatch):
     # PR 74 review (Sprint 30 IMP-5): two updates at once each wrote the
@@ -370,6 +380,12 @@ def test_the_gap_rule_can_fail():
                               "    if False:\n", expect_occurrences=1)],
                     test("test_an_estimate_is_set_once_and_positive"),
                     "an estimate moved after the work")
+    assert_can_fail([Mutation(SCRIPT,
+                              "    if estimates.get(task) == minutes:\n",
+                              "    if False:\n", expect_occurrences=1)],
+                    test("test_a_repeated_equal_estimate_still_starts_the_"
+                         "timer"),
+                    "an equal estimate refused, the timer not started")
     assert_can_fail([Mutation(SCRIPT, "    if minutes <= 0:\n",
                               "    if False:\n", expect_occurrences=1)],
                     test("test_an_estimate_is_set_once_and_positive"),

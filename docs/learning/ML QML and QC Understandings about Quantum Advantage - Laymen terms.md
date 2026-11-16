@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.2**, 2026-11-06 (Sprint 31, card F178). Written for readers
+**Version 1.3**, 2026-11-10 (Sprint 32, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
 computing, and are expert in none of them. Two companion versions go
 deeper: one for [machine learning experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20ML%20Expert.md)
@@ -8,6 +8,7 @@ and one for [quantum computing experts](ML%20QML%20and%20QC%20Understandings%20a
 
 ## Change list
 
+- **1.3, 2026-11-10 (Sprint 32)**: Sprint 32's two results added, each as a tagged claim and as a dated result under "Experiments planned": F185 (alerts chosen by the money at risk, section 2) and F188 (the rounding test, section 6). The two matching ideas leave "Experiments not yet planned". No Sprint 33 run is preregistered yet, so none is listed.
 - **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Each dataset is named in full the first time, with a link to the new Appendix F (Datasets), and by its short name after that; the short name links to the same entry. "[Device](#def-device)" is defined (Appendix A). Section 3's results are rewritten in plain terms, each starting with what it means. The team lead's suggestions are added to "The data needed", with why each would help and what the public data already holds. New: the card-testing pattern, what our tests score inside the [alert budget](#ml-alert-budget), [interference](#qc-interference) beside [superposition](#qc-superposition) and [entanglement](#qc-entanglement), and where the training-cost growth was measured. "Experiments not yet planned" gains the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
 - **1.0, 2026-11-05 (Sprint 31)**: first version. It covers Phase 1
@@ -258,6 +259,15 @@ the bank with their own card, are out of scope.
   score of only 0.296 to 0.318, because a compromised terminal leaves no
   trace in the visible features
   (`docs/phase2/F108_CEILING_VALIDATION.md`).
+- [SIM] **Choosing alerts by the money at risk catches about four times
+  the fraud dollars on [IEEE-CIS](#ds-ieee-cis), but fewer frauds.** With the same 427
+  alerts as the 0.5% budget, ranking payments by score times amount
+  caught a mean of $140,832 of the $493,821 in fraud in the test month,
+  against $34,675 when ranked by score alone. Every one of ten seeds
+  gained. It caught fewer frauds to do it: 246 to 373 instead of 400 to
+  416. On [ULB](#ds-ulb) the difference was not reliable. The scores were not
+  calibrated, and calibration would change the result
+  (`docs/phase2/F185_COST_BUDGET.md`).
 
 ### What outside research says
 
@@ -669,6 +679,16 @@ is a classical step, not the device.
   step did not grow at all. Not measured: a build spread over many
   processors, other models, other datasets, or more rows
   (`docs/phase2/F110_SCALING.md`).
+- [SIM] **The device's limited precision would erase the tiny gains
+  classical search found on our best selection problem.** A device holds
+  each number to about 1 part in 200 of the largest one (QCi's figure,
+  not measured on [Dirac-3S](#qc-dirac-3s)). We rounded F176's six [IEEE-CIS](#ds-ieee-cis) selection
+  problems that way and scored each rounded answer on the real problem.
+  Every answer was worse than simple greedy search. On the three
+  problems where classical search had found a gain, the loss was larger
+  than the gain. At 1 part in 400, one problem kept a small gain.
+  Whether this closes the device question for this design is the team
+  lead's decision (`docs/phase2/F188_ROUNDING.md`).
 
 ### What outside research says
 
@@ -684,7 +704,9 @@ is a classical step, not the device.
 - For card fraud on today's devices, a quantum advantage would need a
   problem where (1) a classical solver does measurably worse, (2) the
   device can resolve the difference, and (3) the difference changes how
-  much fraud is caught. None of our problems met all three yet.
+  much fraud is caught. None of our problems met all three yet. The
+  rounding test of Sprint 32 (F188) found that our best selection
+  problem fails condition (2) once the device's precision is counted.
 - The search space for an advantage is narrow but not empty: selection
   problems built from data summaries remain open.
 
@@ -693,7 +715,9 @@ is a classical step, not the device.
 **In short:** Sprint 31 ran six planned experiments. None found a
 quantum advantage. One gave a first estimate of the best any model can
 do on [IEEE-CIS](#ds-ieee-cis), with a warning. Two device runs checked size and a
-setting, not accuracy.
+setting, not accuracy. Sprint 32 ran two more: ranking alerts by money
+caught far more fraud dollars on [IEEE-CIS](#ds-ieee-cis), and the rounding test found
+the device's precision too coarse for our best selection problem.
 
 Sprint 31 ran these. Each design was written before its run, in
 `experiments/phase2/PREREGISTRATION_DRAFT.md`. Each result, dated, is
@@ -768,21 +792,41 @@ The six-experiment frame they fit into is in
     seconds. Later plans keep the usual setting
     (`docs/phase2/F95_SCHEDULE4.md`).
 
+Sprint 32 ran two more, with no device time. Each design was written in
+the same file before its run. No Sprint 33 run is preregistered yet.
+
+- **Alerts ranked by money at risk (F185).** With the same number of
+  alerts as the 0.5% budget, does ranking by score times amount catch
+  more fraud dollars than ranking by score? Entry: "F185".
+  - Result, 2026-11-09: **yes on [IEEE-CIS](#ds-ieee-cis), about four times the dollars,
+    on every seed; no [reliable difference](#def-reliable-difference) on [ULB](#ds-ulb).** It catches fewer
+    frauds on both datasets. The scores were not calibrated, so the
+    size of the gain holds for these scores only
+    (`docs/phase2/F185_COST_BUDGET.md`).
+- **The rounding test (F188).** Round F176's six [IEEE-CIS](#ds-ieee-cis) selection
+  problems to the device's 200:1 precision. Do the tiny classical gains
+  survive? Entry: "F188" and its amendment of 2026-11-09.
+  - Result, 2026-11-09: **as first registered, "kept" on two problems,
+    but those gains were made by the rounding.** The amendment scored
+    each rounded answer on the real problem: worse than greedy search on
+    all six. A device run on this design at 200:1 could not beat
+    greedy. Closing that question is a decision for the team lead
+    (`docs/phase2/F188_ROUNDING.md`).
+
 ## 8. Experiments not yet planned
 
 **In short:** these are ideas, not scheduled work. The first group comes
 from our evidence store. The second comes from the team lead's review of
 this document (2026-11-06) and is proposed for the backlog in Sprint 31
-decision D18. Each costs classical computer minutes unless noted.
+decision D18. Each costs classical computer minutes unless noted. The
+rounding test and alerts ranked by money ran in Sprint 32 and are in
+section 7. New ideas from them: rank by money on calibrated scores, and
+repeat the rounding test with other weights and finer precision.
 
 From EvidenceBasedDB's memo
 (`docs/spikes/F118_WHAT_THE_STORE_SAYS.md` in that repository, its
 ranked list):
 
-- **A rounding test**: round each selection problem's numbers to the
-  device's 200:1 resolution and see whether the tiny classical gains
-  survive. If they do not, no device run on that problem can show
-  anything.
 - **The same solver test on the first design's problems**, with a sweep
   of the penalty that sets how many items are picked.
 - **An equal-feature comparison**: give the classical models the same 17
@@ -800,9 +844,6 @@ From the team lead's review:
   banks, card networks and investigators record, which fields the public
   datasets lack, and which of the suggestions in section 2 are lawful and
   available.
-- **Alerts ranked by money saved**: choose the 0.5% of payments that
-  save the most money after the cost of checking each alert, and compare
-  with choosing by fraud count, on [ULB](#ds-ulb) and [IEEE-CIS](#ds-ieee-cis).
 - **Card testing**: on [IEEE-CIS](#ds-ieee-cis), find small payments followed within a day
   by a large one on the same card key, count how often they are fraud,
   and test whether "small then large" fields catch more fraud.

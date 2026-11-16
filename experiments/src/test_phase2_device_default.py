@@ -12,8 +12,12 @@ The rule, per module:
   a fit outside it silently goes to Dirac-3;
 - a module that calls `eqc_submit.device(` uses `eqc_submit.PHASE2_DEVICE`,
   or names the device on a line marked `# device named:` with its reason;
-- any line naming `eqc_submit.DIRAC_3` or `eqc_submit.DIRAC_3S` carries that
-  marker.
+- any line naming `eqc_submit.DIRAC_3S` carries that marker;
+- no module names `eqc_submit.DIRAC_3`, or passes `'dirac-3'` to
+  `eqc_submit.device(`, marker or not. Team lead, Sprint 31 D5
+  (2026-11-04): "this and all future runs will be on the Dirace-3S [sic]"
+  (F181, Sprint 32 Task A). A Dirac-3 contrast run would need that rule
+  changed first.
 """
 from __future__ import annotations
 
@@ -29,6 +33,13 @@ PHASE2_SRC = ROOT / "experiments" / "phase2" / "src"
 RUNNER = PHASE2_SRC / "run_dirac3s_verify.py"
 MARK = "# device named:"
 NAMED = re.compile(r"eqc_submit\.DIRAC_3S?\b")
+# Anywhere in the code, not only inside eqc_submit.device(: a constant held
+# in a variable, a keyword argument and a `from` import all reach the device
+# (PR #116 review). Strings stay in `code_text`, so a literal is seen.
+# One form is data, not a device: a record's `"device": "dirac-3"` label
+# for a Dirac-3 history row (run_dirac3s_units.dirac3_history).
+DIRAC3 = re.compile(r"\bDIRAC_3\b(?!S)"
+                    r"|(?<![\"']device[\"']: )['\"]dirac-3['\"]")
 
 
 def problems(text: str) -> list[str]:
@@ -43,7 +54,10 @@ def problems(text: str) -> list[str]:
         out.append("calls metered_fit outside eqc_submit.device(): the fit "
                    "would go to Dirac-3")
     for i, (line, raw) in enumerate(zip(code.splitlines(), lines), 1):
-        if NAMED.search(line) and MARK not in raw:
+        if DIRAC3.search(line):
+            out.append(f"line {i} names Dirac-3; every Phase 2 run is on "
+                       f"Dirac-3S (Sprint 31 D5): {raw.strip()}")
+        elif NAMED.search(line) and MARK not in raw:
             out.append(f"line {i} names a device without '{MARK}': "
                        f"{raw.strip()}")
     if "eqc_submit.device(" in code and "eqc_submit.PHASE2_DEVICE" not in code \
@@ -68,7 +82,7 @@ def test_every_phase2_module_follows_the_default():
 def test_the_rule_reads_each_shape():
     ok_default = ("with eqc_submit.device(eqc_submit.PHASE2_DEVICE):\n"
                   "    eqc_submit.metered_fit(a, b)\n")
-    ok_named = ("D = eqc_submit.DIRAC_3  # device named: Dirac-3 contrast\n"
+    ok_named = ("D = eqc_submit.DIRAC_3S  # device named: F142 verifies it\n"
                 "with eqc_submit.device(D):\n    metered_fit(a)\n")
     assert problems(ok_default) == []
     assert problems(ok_named) == []
@@ -76,6 +90,73 @@ def test_the_rule_reads_each_shape():
     assert problems("D = eqc_submit.DIRAC_3\n"
                     "with eqc_submit.device(D):\n    metered_fit(a)\n")
     assert problems("with eqc_submit.device('dirac-3'):\n    metered_fit(a)\n")
+
+
+def test_dirac3_is_refused_even_with_its_reason():
+    """F181: the marker no longer admits Dirac-3; one test per form."""
+    named = ("D = eqc_submit.DIRAC_3  # device named: Dirac-3 contrast\n"
+             "with eqc_submit.device(D):\n    metered_fit(a)\n")
+    literal = ("with eqc_submit.device('dirac-3'):  # device named: x\n"
+               "    metered_fit(a)\n")
+    assert any("names Dirac-3" in p for p in problems(named))
+    assert any("names Dirac-3" in p for p in problems(literal))
+    # Dirac-3S under either spelling is not Dirac-3.
+    assert problems("from eqc_submit import DIRAC_3S  # device named: r\n") == []
+    assert problems("D = eqc_submit.DIRAC_3S  # device named: r\n") == []
+    assert problems("with eqc_submit.device('dirac-3s'):  # device named: r\n"
+                    "    metered_fit(a)\n") == []
+
+
+def test_dirac3_held_imported_or_by_keyword_is_refused():
+    """PR #116 review: each shape passed the first F181 rule."""
+    held = ('D = "dirac-3"  # device named: contrast\n'
+            "with eqc_submit.device(D):\n    metered_fit(a)\n")
+    keyword = ('with eqc_submit.device(device_type="dirac-3"):'
+               "  # device named: x\n    metered_fit(a)\n")
+    imported = ("from eqc_submit import DIRAC_3  # device named: x\n"
+                "with eqc_submit.device(DIRAC_3):\n    metered_fit(a)\n")
+    for src in (held, keyword, imported):
+        assert any("names Dirac-3" in p for p in problems(src)), src
+
+
+def test_a_history_records_device_label_is_not_a_device():
+    assert problems('row = {"file": f, "device": "dirac-3"}\n') == []
+    # The label form only: the same string anywhere else is refused.
+    assert problems('row = {"file": f, "dev": "dirac-3"}\n')
+
+
+def test_the_history_label_exclusion_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    here = ROOT / "experiments" / "src" / "test_phase2_device_default.py"
+    assert_can_fail([Mutation(here, "(?<![\\\"']device[\\\"']: )", "",
+                              expect_occurrences=1)],
+                    lambda: run_pytest(
+                        "experiments/src/test_phase2_device_default.py::"
+                        "test_a_history_records_device_label_is_not_a_device",
+                        ROOT),
+                    "a history label read as a device")
+
+
+def test_the_dirac3_refusal_can_fail():
+    """Each form of the F181 refusal, removed, turns BOTH its tests red:
+    one mutation per form (test_no_duplicate_proofs.py), and the run
+    passes if either test still passes."""
+    from injection import Mutation, assert_can_fail, run_pytest
+    here = ROOT / "experiments" / "src" / "test_phase2_device_default.py"
+    base = "experiments/src/test_phase2_device_default.py::"
+
+    def either_passes() -> bool:
+        return (run_pytest(base + "test_dirac3_is_refused_even_with_its_"
+                           "reason", ROOT)
+                or run_pytest(base + "test_dirac3_held_imported_or_by_"
+                              "keyword_is_refused", ROOT))
+    for old, new, label in (
+            ('r"\\bDIRAC_3\\b(?!S)"', 'r"NO_MATCH_A"',
+             "DIRAC_3, named or imported, admitted"),
+            ("['\\\"]dirac-3['\\\"]\")", 'NO_MATCH_B")',
+             "'dirac-3', passed, held or by keyword, admitted")):
+        assert_can_fail([Mutation(here, old, new, expect_occurrences=1)],
+                        either_passes, label)
 
 
 def test_prose_naming_a_call_is_not_a_call():

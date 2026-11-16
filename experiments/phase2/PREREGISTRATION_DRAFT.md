@@ -247,6 +247,8 @@ on 2026-10-23:
 | - | Best achievable result per algorithm on SPECTRA's four datasets, classical and proxy lanes | F157 SPECTRA part | none | Written 2026-11-05, below |
 | - | Does the Dirac-3S queue accept a job above 987 variables? | F155 | Dirac-3S, 1 call | Written 2026-11-05, below |
 | - | Relaxation schedule 4 on Dirac-3S | F95 | Dirac-3S, 4 calls in two stops | Written 2026-11-05, below |
+| - | Do F176's below-greedy gains survive the device's resolution? | F188 | none | Written 2026-11-09, below |
+| - | A cost-weighted alert budget on the stored champion scores | F185 | none (stored scores) | Written 2026-11-09, below |
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
@@ -2133,6 +2135,98 @@ the test frauds. Added, as exploratory figures:
 - **Output**: `experiments/phase2/results/f171_budgets.json`, generator
   `experiments/phase2/src/f171_budgets.py`.
 
+### F188: do F176's below-greedy gains survive the device's resolution?
+
+Written 2026-11-09 (Sprint 32 Task C, #112), before its module exists
+or any rounded objective is computed. Zero metered seconds.
+
+- **Question**: F176 found selections below greedy on IEEE-CIS by under
+  2e-05 (`f176_below_greedy.json`). The device sees each coefficient
+  only to max |coefficient| / 200 (QCi's stated resolution, carried to
+  Dirac-3S and not measured there; `device_resolution.DYNAMIC_RANGE`).
+  Is a gain that small still a gain in the problem the device can see?
+- **Instances**: F176's six, rebuilt with its code at its weight; each
+  rebuilt greedy objective must match F176's record within 1e-9, or the
+  run stops.
+- **Rounding**: `device_resolution._quantised_minimiser`'s rule, step =
+  max(|J|, |C|) / R, each coefficient rounded to the nearest multiple of
+  the step. R = 200 is the reading; R = 100 and 400 are reported beside
+  it, so the reading does not hang on one number.
+- **Supports**: every support F176 recorded per instance (greedy, the
+  swap search, the three annealing runs, SCIP). On each rounded problem,
+  each support's weights are solved again on that support
+  (`exp3_controls.solve_on_support`), and its objective taken on the
+  rounded problem. No search is run again.
+- **Check first, that "lost" can fire**: F176's own check cases (20
+  learners choosing 4) where greedy is above the exact optimum. At R =
+  infinity (no rounding) the exact support must stay below greedy; at R
+  = 2 at least one case must show the gain lost. If either fails, the
+  reading is reported as unable to fire.
+- **Reading, per instance and R**: the gain is **kept** when the best
+  non-greedy support's rounded objective is below greedy's rounded
+  objective by more than 1e-6 (F176's tolerance); otherwise **lost**.
+  Also reported: the gain in units of the step. Lost at R = 200 on all
+  six: no device run on this formulation at this resolution can show a
+  result F176 found, and F25's IEEE-CIS case can be closed. Kept on
+  some: the device question stays open on those instances.
+- **Output**: `experiments/phase2/results/f188_rounding.json`, generator
+  `experiments/phase2/src/f188_rounding.py`. No test score is computed,
+  so no outcome block is needed.
+- **Amendment, 2026-11-09, after the first reading and before the
+  second.** The first run read "kept" at R = 200 on 42/free and 43/free,
+  with gains of 0.0009 and 0.0012, 50 to 70 times F176's, and 6% and 8%
+  of one step; on 42/free the gain is kept at R = 100 and 200 and lost
+  at 400. A gain that grows under rounding and does not shrink steadily
+  as R grows is the rounding, not F176's gain. The first reading stands
+  as registered. A second reading, not part of the original entry, asks
+  what the device would deliver: on each rounded problem, each support's
+  weights are solved as before, then scored on the **unrounded**
+  problem. The support the rounded problem ranks best is the device's
+  pick; it **delivers** a gain when its unrounded objective is below
+  greedy's unrounded objective by more than 1e-6. Output
+  `experiments/phase2/results/f188_rounding_delivered.json`, the same
+  generator (`--delivered`).
+
+### F185: a cost-weighted alert budget on the stored champion scores
+
+Written 2026-11-09 (Sprint 32 Task D, #113), before its module exists
+or any amount is joined to a score. Zero metered seconds.
+
+- **Question**: at the same review count as today's 0.5% budget, how
+  many dollars does a ranking by expected loss catch, against today's
+  ranking by score? Hoppner et al. (EvidenceBasedDB
+  `hoppner-instance-threshold`, high): with a fixed investigation cost
+  c_f and amount A_i, flagging transaction i pays when s_i > c_f / A_i.
+- **Scores**: the champions' stored per-row test scores, ten seeds each:
+  ULB CatBoost (F166, first by mean test AUPRC), IEEE-CIS LightGBM (F174,
+  first). Each file's SHA-256 must equal its outcome block's, or the
+  dataset is refused.
+- **Amounts**: ULB `Amount` from each seed's rebuilt
+  `data.stratified_split` test part; IEEE-CIS `TransactionAmt` from
+  month 4's `ieee_splits.split_xy` eval part. The rebuilt labels must
+  equal the stored `y_test` row for row, or the dataset is refused, not
+  joined. ULB's `Amount` unit is not stated in its source description;
+  IEEE-CIS amounts are read as US dollars. Both are reported in the
+  dataset's own unit.
+- **Rankings, at k = ceil(0.5% x n_test)**: (1) by score, today's; (2) by
+  s_i x A_i, the expected loss. Scores are used as given (not
+  recalibrated), and the result says so.
+- **Review cost**: c_f = 5, 10 and 25 units per alert, fixed here.
+  At a fixed k both rankings pay the same k x c_f, so c_f changes net
+  savings, not the order. Also reported per c_f: how many alerts
+  Hoppner's rule s_i > c_f / A_i would raise, beside k.
+- **Check first, that the comparison can fire**: a constructed case
+  (scores and amounts set so the high-amount frauds score just below
+  the low-amount ones) where ranking (2) catches more dollars than (1);
+  and a stored file with one label flipped is refused.
+- **Reported whatever the result**: per seed and ranking, dollars caught,
+  dollars missed, the confusion counts at k (an outcome block per
+  ranking), net savings per c_f; the mean over seeds with a t interval,
+  and the paired difference (2) minus (1) with its interval. Descriptive;
+  no test of significance.
+- **Output**: `experiments/phase2/results/f185_cost_budget.json`,
+  generator `experiments/phase2/src/f185_cost_budget.py`.
+
 ## 7. Open items before filing
 
 - ~~Re-read arXiv:2604.18837 and confirm section 2 matches it.~~ Closed
@@ -2261,3 +2355,6 @@ the test frauds. Added, as exploratory figures:
   F95 entry (Task J), each with its table row, before any call. F155's
   unit is 1,350 variables, the nearest CVQBoost pool size above the
   1,300 the team lead set; Sprint 31 D9 asks the team lead to confirm it.
+- 2026-11-09: section 6 gains the F188 entry (Sprint 32 Task C) and the
+  F185 entry (Task D), each with its table row, before its module exists
+  or any value it reads is computed.

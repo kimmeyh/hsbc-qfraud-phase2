@@ -136,9 +136,12 @@ jobs:
           echo "Working tree clean after the test run."
 
       # F177 change c (Sprint 31 D8), narrowed by D16 option 1: a changed
-      # REFUSAL line (raise, a one-line `if bad: raise` no test ran,
-      # sys.exit, SystemExit, print("REFUSING ...")) in the evidence code, the
-      # scripts or the hooks that no test ran fails the job; every other
+      # REFUSAL line (raise, a one-line `if bad: raise`, sys.exit,
+      # SystemExit, print("REFUSING ...")) in the evidence code, the
+      # scripts or the hooks that no test ran fails the job. Coverage is by
+      # branch (F194): `--branch-coverage` reports a line with a branch no
+      # test took, so a one-line refusal whose raise no test takes fails
+      # too, though its condition ran; every other
       # untested changed line is listed and does not fail. Untested
       # refusals are the class the check exists for (37 reached review in
       # Sprints 28-30); every changed line failed on every experiment
@@ -148,7 +151,7 @@ jobs:
         run: |
           coverage combine --keep -q
           coverage xml -q -o coverage.xml
-          diff-cover coverage.xml --compare-branch=origin/develop --format json:diff-cover.json --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
+          diff-cover coverage.xml --compare-branch=origin/develop --branch-coverage --format json:diff-cover.json --include 'experiments/src/*.py' 'experiments/phase2/src/*.py' 'scripts/*.py' '.claude/hooks/*.py'
           python scripts/refusal_coverage.py diff-cover.json
 
   full:

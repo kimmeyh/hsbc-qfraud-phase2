@@ -98,6 +98,14 @@ test was never identified.
 → `SPRINT_CHECKLIST.md` Phase 5, the full-suite item: run with `-rf`,
 write the whole output to a file, then read its summary (Sprint 30 IMP-4).
 
+**Symptom: a parallel suite run (`-n auto`) fails many unrelated files
+with MemoryError or crashed xdist workers.** The workers together use
+more memory than this workstation has. Sprint 32 Phase 5: nine files
+failed in parallel, and each passed when run serially.
+→ Rerun only the failed files serially (`-p no:xdist`). Treat a failure as
+a code fault only if it also fails there. A worker cap would prevent it,
+but the right cap was not measured (Sprint 32 i4).
+
 **Symptom: a `fix:` or `feat:` commit is BLOCKED with "needs a task timer
 running" right after the task was finished.** The timer was finished
 before the commit. Commit first, then `--finish-task`; a finished task

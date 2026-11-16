@@ -2,7 +2,7 @@
 
 **Purpose**: Recorded estimate-vs-actual per task, feeding SPRINT_PLANNING.md estimation (Sprint 2 retro improvement 6). Record at task completion; recompute patterns at retro Category 3.
 **Audience**: Sprint planning sessions.
-**Last Updated**: 2026-11-07 (Sprint 31 rows); 2026-10-10 (Sprint 24 rows; measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
+**Last Updated**: 2026-11-16 (Sprint 32 rows); 2026-11-07 (Sprint 31 rows); 2026-10-10 (Sprint 24 rows; measured-row rule, F136; Sprint 23 row added 2026-10-08; rows 15-22 added 2026-10-07, IMP-7 Sprint 22 retrospective)
 
 | Sprint | Task | Type | Estimate | Actual | Ratio | Note |
 |---|---|---|---|---|---|---|
@@ -157,6 +157,16 @@
 | 31 | Task N CI red on dfb1694 | tooling | none | 128m | n/a | measured, active, 304m elapsed; not planned; rework of a defect the sprint introduced |
 | 31 | Task O learning documents, A1 feedback | docs | 150m | 66m | 0.44 | measured, active, 66m elapsed |
 | 31 | Task P PR 92 review fixes and retrospective i1-i3 | tooling | 60m | 285m | 4.75 | measured, active, 459m elapsed; the 60m covered the six review fixes; i2 b (about 3h by its own estimate), i3 and the short review's fixes were added in the retrospective; local red proofs about 70m of it |
+| 32 | Task A (F181) Dirac-3S-only device guard | tooling | 15m | 1m | n/a | measured, active, 1m elapsed; understated: the timer did not start (the repeated estimate was refused, retrospective i1), so the work went unmeasured |
+| 32 | Task B (F194) the refusal gate measures branches | tooling | 45m | 37m | 0.82 | measured, active, 37m elapsed |
+| 32 | Task C (F188) rounding test | research+code | 30m | 47m | 1.57 | measured, active, 47m elapsed; includes the amendment's second reading |
+| 32 | Task D (F185) cost-weighted alert budget | research+code | 60m | 24m | 0.40 | measured, active, 24m elapsed |
+| 32 | Task E (F178) learning documents | docs | 30m | 36m | 1.20 | measured, active, 36m elapsed |
+| 32 | Task F (F150) request draft | docs | 15m | 3m | n/a | measured, active, 3m elapsed; understated: reading before the timer started is not counted |
+| 32 | Task G (F111) feedback draft | docs | 15m | 2m | n/a | measured, active, 2m elapsed; understated: reading before the timer started is not counted |
+| 32 | Task H PR 116 review fixes | tooling | 30m | 2m | n/a | measured, active, 2m elapsed; understated: the fixes were written before the timer started (the commit hook then required it) |
+| 32 | Task I retrospective i1 to i4 | tooling | 85m | 21m | n/a | measured, active, 21m elapsed; understated: i1 was written and tested before the timer started |
+| 32 | Task J short review and CI red on 0fdcb67 | tooling | 20m | 15m | 0.75 | measured, active, 15m elapsed; not planned; two review findings and three CI failures, one from 8e0796a |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

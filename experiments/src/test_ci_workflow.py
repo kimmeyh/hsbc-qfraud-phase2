@@ -65,8 +65,10 @@ def test_the_full_job_runs_the_proofs_on_ready_for_review():
     assert "Test run must leave the tree clean" in jobs["full"]
 
 
+# F194 (Sprint 32): `--branch-coverage`, so a branch no test took is a
+# violation (`.coveragerc` sets `branch = True`).
 DIFF_COVER = ("diff-cover coverage.xml --compare-branch=origin/develop "
-              "--format json:diff-cover.json")
+              "--branch-coverage --format json:diff-cover.json")
 # D16 option 1: the job fails only on an untested changed refusal line.
 REFUSALS = "python scripts/refusal_coverage.py diff-cover.json"
 
