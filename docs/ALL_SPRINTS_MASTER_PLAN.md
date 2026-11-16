@@ -366,6 +366,13 @@ and Close, from 1 Mar 2027). The cards that feed it are F199, F198, F13,
 F102, F197 and F157; every other open card is held out of selection by
 this scope, with its priority unchanged here.
 
+**Selected for Sprint 33** (team lead, 2026-11-16, D3 option 2; goal "the
+Phase 2 registration document ready to submit"): F13 (on stated
+best-possible assumptions in place of the brief), F102 (resized, with
+F199's coverage check) and the F178 update. F199 deferred. 240 minutes
+by task estimate, zero metered. Record: `docs/sprints/SPRINT_33_DECISIONS.md`,
+`docs/sprints/SPRINT_33_PLAN.md`.
+
 ### Experiments (Stage 3 of the master timeline; submission-ready Sep 8)
 
 (F1 classical evidence campaign and F18 Dirac-3 notes mining: COMPLETED in Sprint 3, merged via PR #13; history in SPRINT_3_SUMMARY.md. Removed from candidates per convention. F1 residual -- the section-6 CVQBoost proxy tuning -- continues as F22.)

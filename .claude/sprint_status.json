@@ -1,10 +1,10 @@
 {
   "current_sprint": {
     "number": 33,
-    "name": "(named at planning)",
+    "name": "The Phase 2 Preregistration, Ready to File",
     "branch": "feature/20261116_Sprint_33",
-    "status": "phase_1_backlog_refinement",
-    "plan_doc": "",
+    "status": "phase_3_planning",
+    "plan_doc": "docs/sprints/SPRINT_33_PLAN.md",
     "pr": null,
     "plan_approved": false,
     "github_issues": [],

@@ -125,3 +125,72 @@ If D1 is 3 (both):
 
 5. F199 and F13, with the team lead supplying the brief (135 minutes by
    card).
+
+**Changed since asked (2026-11-16).** The team lead proposed a scope
+instead of answering D1 and D2: F13, F199, F102 and an F178 update, with
+the goal "the Phase 2 registration document ready to submit". D1 and D2
+are superseded by D3.
+
+---
+
+## D3. Sprint 33 scope for the goal "Phase 2 registration document ready to submit"
+
+Asked 2026-11-16, in discussion of the team lead's proposed scope.
+
+**What.** The team lead proposed F13, F199, F102 and an F178 update.
+The registration document is `experiments/phase2/PREREGISTRATION_DRAFT.md`
+(card F102).
+
+**Why it matters.**
+- F102 is the goal. Its section 7 lists what remains before filing: one
+  item is stale (it says Experiments 2-6 have no entry; section 6 shows
+  all six written), and one is the filing date and venue, the team
+  lead's decision. Its 3h estimate is from 2026-10-13, when the draft
+  was new; the remaining work is smaller (about 120m, unverified).
+- F13 replaces the PoC plan's assumptions with the brief's terms. The
+  brief is not in this repository. Without it, F13 cannot do that work.
+  With it, the brief's data and metrics terms ([A2]) can change section
+  2 of the draft, so F13 should run before F102 is closed.
+- F199 is a skeleton of the PoC report, not of the registration
+  document. One part of it serves the goal: a check that each of the six
+  filed commitments has a current entry. That check can be part of F102.
+- F178's update does not serve the goal. It is the team lead's standing
+  step and is cheap.
+- The four cards total about 360 minutes by card estimate, three times
+  the 1-2 hour target.
+
+**Kind per option.** No option carries a Prevention or a Workaround:
+each card is a deliverable.
+
+**Cost per option.**
+- Option 1: about 360 minutes by card (F13 75, F199 60, F102 180, F178
+  45); 0 metered seconds; about 9 files.
+- Option 2: about 240 minutes by card (F102 120, F13 75, F178 45); 0
+  metered seconds; about 6 files.
+- Option 3: about 165 minutes by card (F102 120, F178 45); 0 metered
+  seconds; about 4 files.
+
+**Recommendation.** Option 2 if the brief can be placed in this
+repository this sprint; option 3 if not. F199 is deferred in both: it
+serves the PoC report, and its coverage check moves into F102.
+
+**Options.**
+
+1. As proposed: F13, F199, F102 and the F178 update.
+2. F102 (resized, with F199's coverage check), F13 with the brief, and
+   the F178 update. F199 deferred.
+3. F102 (resized, with F199's coverage check) and the F178 update. F13
+   and F199 deferred.
+
+Asked with D3, as questions of fact: Q1, can the Phase 2 brief go into
+this repository this sprint? Q2, where and to whom is the preregistration
+submitted? Q3, should the filed document separate "registered and already
+run, with result" from "registered, to be run in the PoC"?
+
+**Answer (team lead, 2026-11-16): 2.** Verbatim: "q1 we are going to have
+to file without the brief. Make assumptions as best possible. q2. don't
+know yet. leave blank and changable until notified otherwise.  We will
+have to make assumptions about all missing information. q3. yes d3. 2".
+So F13 runs on stated best-possible assumptions in place of the brief;
+the filing venue and date stay blank and changeable; section 6 separates
+run entries from entries to run.
