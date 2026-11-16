@@ -1,11 +1,52 @@
 # Phase 2 Preregistration Framework: DRAFT
 
-**Status: DRAFT. Not filed. Not binding.** First draft written 2026-10-13
-(Sprint 25 Task C, card F102). This document is revised across later
-sprints until Phase 2 is approved and a filing date is set (team lead,
-2026-10-13). It binds only from its filing, and only for the experiments it
-names at that date. Until then it may be changed freely, and each change is
-recorded in the revision log at the bottom.
+**Status: DRAFT, ready to file. Not filed. Not binding.** First draft
+written 2026-10-13 (Sprint 25 Task C, card F102); prepared for filing
+2026-11-16 (Sprint 33 Task B). It binds only from its filing, and only
+for the experiments it names at that date. Until then it may be changed
+freely, and each change is recorded in the revision log at the bottom.
+
+## Filing
+
+- **Filing date**: not set.
+- **Filing venue**: not set.
+- Both stay blank and changeable until the team lead is notified
+  otherwise (assumption A9).
+- **Filed without the Phase 2 brief** (assumption A11). This document rests on the
+  assumptions A1-A12 in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`,
+  "Assumption register": in particular assumptions A2 (data and metrics), A4 (device
+  seconds) and A12 (the reader). Where the brief differs from an
+  assumption, the change is a dated amendment; an entry already run is
+  not rewritten.
+- **What filing commits to**: each entry in section 6 marked "To run" or
+  "Partly run" runs as written there. An entry marked "Run" was written
+  before its run, and git records that order; filing reports its result
+  and does not re-register it.
+
+## How to read the identifiers in this document
+
+This document cites the repository it lives in (assumption A12):
+
+- **F** and a number (F112): a backlog card, described in
+  `docs/ALL_SPRINTS_MASTER_PLAN.md`.
+- **Sprint** and a number (Sprint 31): a two-day to one-week work cycle,
+  recorded in `docs/sprints/SPRINT_<n>_PLAN.md` and its summary.
+- **D** and a number inside a sprint (Sprint 32 D4): a team-lead decision,
+  recorded in `docs/sprints/SPRINT_<n>_DECISIONS.md`.
+- **A** and a number in Phase 1 references (A31): an amendment to the
+  frozen Phase 1 preregistration, `experiments/PREREGISTRATION.md`.
+- **H** and a number (H5), and **G0b**: a Phase 1 hypothesis and a
+  Phase 1 gate, defined in `experiments/PREREGISTRATION.md`.
+- **B1 to B5**: the Phase 1 hardware blocks on Dirac-3, recorded in
+  `experiments/PREREGISTRATION.md`'s amendments and
+  `docs/B4_B5_HARDWARE_RESULT.md`.
+- **IMP** and a number: a retrospective improvement, recorded in
+  `docs/sprints/SPRINT_<n>_RETROSPECTIVE.md`.
+- **assumption A1 to A12** (always written with the word "assumption"): the assumptions this filing
+  rests on, in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
+- **Experiment 1-6**: the six experiments committed in section 5 of the
+  filed Phase 1 proposal.
+- File paths are relative to the repository root.
 
 **Relationship to Phase 1.** `experiments/PREREGISTRATION.md` is FROZEN and
 governs Phase 1 claims only. This draft does not amend it, and nothing here
@@ -220,37 +261,53 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
 ## 6. Experiments
 
 Entries are filled in as each experiment's card reaches readiness. Status
-on 2026-10-23:
+on 2026-11-16, at preparation for filing.
 
-| # | Experiment | Card(s) | Device | Entry |
-|---|---|---|---|---|
-| 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below |
-| 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below |
-| 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below |
-| 4 | Replication under the source protocol (Loke et al.) | F111 | none | Written 2026-10-22, below |
-| 5 | Segment transfer (H5), with the section 5 control | F121 | none (proxy, stored scores) | Written 2026-11-05, below; hold set aside (Sprint 31 D3) |
-| 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below |
-| - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below |
-| - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below |
-| - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below |
-| - | Gate-based arm: dequantization check (F6 recommended pursue narrowly) | F106 | none (NumPy statevector) | Written 2026-10-18, below |
-| - | Gate-based arm: the F106 circuit's shot budget | F107 | none (NumPy statevector) | Written 2026-10-18, below |
-| - | Ceiling validation on a simulator with hidden state (verification) | F108 | none | Written 2026-10-18, below |
-| - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below |
-| - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below |
-| - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below |
-| - | Fraud types: per-type detectors against one model, on F108's simulator | F158 | none | Written 2026-10-26, below |
-| - | Best achievable result per algorithm on ULB, classical and proxy lanes | F166 (F157 part 1) | none | Written 2026-10-27, below |
-| - | Best achievable result per algorithm on IEEE-CIS, classical and proxy lanes | F174 (F157 part 2) | none | Written 2026-10-31, below |
-| - | ULB frauds missed by every model: nearest neighbors | F170 | none | Written 2026-10-31, below |
-| - | F158 step 3 on IEEE-CIS | F171 | none | Written 2026-10-31, below |
-| - | Best achievable result per algorithm on SPECTRA's four datasets, classical and proxy lanes | F157 SPECTRA part | none | Written 2026-11-05, below |
-| - | Does the Dirac-3S queue accept a job above 987 variables? | F155 | Dirac-3S, 1 call | Written 2026-11-05, below |
-| - | Relaxation schedule 4 on Dirac-3S | F95 | Dirac-3S, 4 calls in two stops | Written 2026-11-05, below |
-| - | Do F176's below-greedy gains survive the device's resolution? | F188 | none | Written 2026-11-09, below |
-| - | A cost-weighted alert budget on the stored champion scores | F185 | none (stored scores) | Written 2026-11-09, below |
+**State** says whether an entry has run (Q3 of Sprint 33's planning):
+
+- **Run**: the entry was written before its run, and its result is in
+  the Result column. Filing reports it; it is not re-registered.
+- **Partly run**: one arm has run (Result names it); the rest runs in
+  the PoC as the entry states.
+- **To run**: nothing has run; the entry runs in the PoC as written.
+
+| # | Experiment | Card(s) | Device | Entry | State | Result |
+|---|---|---|---|---|---|---|
+| 1 | Isolate the confound: the k=17 decomposition | F112 | none | Written 2026-10-18, below | Run | `experiments/phase2/results/f112_intervals.json` |
+| 2 | Temporal validity on IEEE-CIS rolling-origin folds | F105, F152 | none | Written 2026-10-22, below | Run | `docs/phase2/F152_EXP2_RESULT.md` |
+| 3 | Cardinality-constrained selection on the integer solver | F94 (controls, built Sprint 25), F153, F25 | Dirac-3S, after F141 and F142 | Written 2026-10-22 (design), below | Partly run | `docs/phase2/F153_EXP3_DESIGN.md` |
+| 4 | Replication under the source protocol (Loke et al.) | F111 | none | Written 2026-10-22, below | Run | `docs/phase2/F111_LOKE_PROTOCOL.md` |
+| 5 | Segment transfer (H5), with the section 5 control | F121 | none (proxy, stored scores) | Written 2026-11-05, below; hold set aside (Sprint 31 D3) | Run | `docs/phase2/EXP5_ROUTER.md` |
+| 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below | Partly run | `docs/phase2/F110_SCALING.md` |
+| - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below | Run | `docs/phase2/F142_DIRAC3S_VERIFY.md` |
+| - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below | Run | `docs/phase2/F144_PROXY_TWIN.md` |
+| - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below | Run | `docs/phase2/F103_TIER1_CHECK.md` |
+| - | Gate-based arm: dequantization check (F6 recommended pursue narrowly) | F106 | none (NumPy statevector) | Written 2026-10-18, below | Run | `docs/phase2/F106_DEQUANTIZATION.md` |
+| - | Gate-based arm: the F106 circuit's shot budget | F107 | none (NumPy statevector) | Written 2026-10-18, below | Run | `docs/phase2/F107_SHOT_BUDGET.md` |
+| - | Ceiling validation on a simulator with hidden state (verification) | F108 | none | Written 2026-10-18, below | Run | `docs/phase2/F108_CEILING_VALIDATION.md` |
+| - | Tier 1 across the six datasets on disk | F109 | none | Written 2026-10-18, below | Run | `docs/phase2/F109_TIER1_LADDER.md` |
+| - | Where each model wins, on the stored ULB predictions | F154 | none | Written 2026-10-22, below | Run | `docs/phase2/F154_WHERE_MODELS_WIN.md` |
+| - | In-pocket head-to-head on SPECTRA: CVQBoost proxy against HGB and XGBoost | F162 | none | Written 2026-10-23, below | Run | `docs/phase2/F162_IN_POCKET.md` |
+| - | Fraud types: per-type detectors against one model, on F108's simulator | F158 | none | Written 2026-10-26, below | Run | `experiments/phase2/results/f158_fraud_types.json` |
+| - | Best achievable result per algorithm on ULB, classical and proxy lanes | F166 (F157 part 1) | none | Written 2026-10-27, below | Run | `docs/phase2/algorithms/ULB_COMPARISON.md` |
+| - | Best achievable result per algorithm on IEEE-CIS, classical and proxy lanes | F174 (F157 part 2) | none | Written 2026-10-31, below | Run | `docs/phase2/algorithms/IEEE_COMPARISON.md` |
+| - | ULB frauds missed by every model: nearest neighbors | F170 | none | Written 2026-10-31, below | Run | `docs/phase2/F170_MISSED_NEIGHBORS.md` |
+| - | F158 step 3 on IEEE-CIS | F171 | none | Written 2026-10-31, below | Run | `docs/phase2/F171_MISSED_IEEE.md` |
+| - | Best achievable result per algorithm on SPECTRA's four datasets, classical and proxy lanes | F157 SPECTRA part | none | Written 2026-11-05, below | Run | `docs/phase2/algorithms/TELECOM_CHURN_COMPARISON.md` |
+| - | Does the Dirac-3S queue accept a job above 987 variables? | F155 | Dirac-3S, 1 call | Written 2026-11-05, below | Run | `experiments/phase2/results/f155_variable_ceiling.json` |
+| - | Relaxation schedule 4 on Dirac-3S | F95 | Dirac-3S, 4 calls in two stops | Written 2026-11-05, below | Run | `docs/phase2/F95_SCHEDULE4.md` |
+| - | Do F176's below-greedy gains survive the device's resolution? | F188 | none | Written 2026-11-09, below | Run | `docs/phase2/F188_ROUNDING.md` |
+| - | A cost-weighted alert budget on the stored champion scores | F185 | none (stored scores) | Written 2026-11-09, below | Run | `docs/phase2/F185_COST_BUDGET.md` |
+
+The SPECTRA row's Result names one of its four comparison pages; the
+others are beside it in `docs/phase2/algorithms/`.
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
+
+**State at filing (2026-11-16): Run.** The intervals were computed after
+this entry (Sprint 27 Task D), in
+`experiments/phase2/results/f112_intervals.json`. In the PoC it is
+re-run only on data the brief prescribes (assumption A2).
 
 Written 2026-10-18 (Sprint 27 Task C), before any interval below is
 computed (Task D computes them).
@@ -328,6 +385,11 @@ computed (Task D computes them).
 
 ### Experiment 2 (F152): temporal validity on IEEE-CIS rolling-origin folds
 
+**State at filing (2026-11-16): Run.** Result in
+`docs/phase2/F152_EXP2_RESULT.md` (Sprint 28). In the PoC the same
+rolling-origin design runs on time-stamped data only if the brief
+prescribes it (assumption A2).
+
 Written 2026-10-22 (Sprint 28 Task B, #49), before any Phase 2 score on
 IEEE-CIS. Not filed; part of this draft.
 
@@ -399,6 +461,20 @@ IEEE-CIS. Not filed; part of this draft.
   from one six-month file.
 
 ### Experiment 3 (F153, F25): cardinality-constrained selection, proxy design first
+
+**State at filing (2026-11-16): Partly run.** The proxy design below ran
+and failed its falsifier on all six instances (`docs/phase2/F153_EXP3_DESIGN.md`,
+Sprint 28). Later work on IEEE-CIS, each under its own entry: F160 found
+room above the floor; F176 found selections below greedy on three of six
+instances, each by under 2e-05; F188 found that at the device's stated
+200:1 resolution the rounded problem's best selection, scored on the
+real problem, is worse than greedy on all six
+(`docs/phase2/F188_ROUNDING.md`). **The device arm (F25) does not run
+until F188's delivered reading beats greedy at 200:1** (team lead,
+Sprint 32 D4 option 3), and then only block by block under per-block
+approval (section 4; assumption A4). If no design qualifies by the
+assumed deadline (assumption A8), the PoC report states that no design was found
+with room for a device to win.
 
 Written 2026-10-22 (Sprint 28 Task C, #50), before any Hamiltonian below
 is built. Not filed; part of this draft. This sprint runs the proxy
@@ -533,6 +609,10 @@ design only; the device arm is F25 and needs its own per-block approval.
 
 ### Experiment 4 (F111): the CVQBoost-KNN lane under the source protocol and ours
 
+**State at filing (2026-11-16): Run.** Result in
+`docs/phase2/F111_LOKE_PROTOCOL.md` (Sprint 28). No PoC run is planned
+unless the brief asks for the source protocol (assumption A2).
+
 Written 2026-10-22 (Sprint 28 Task D, #51), before the harness exists or
 any lane below is fit. Not filed; part of this draft. No device.
 
@@ -630,6 +710,13 @@ any lane below is fit. Not filed; part of this draft. No device.
 
 ### Experiment 5 (F121): segment transfer and router acceptance, on the proxy
 
+**State at filing (2026-11-16): Run.** No segment was accepted
+(`docs/phase2/EXP5_ROUTER.md`, Sprint 31). On three segments, recall
+within the segment at the 0.5% budget is already at its maximum, so the
+measure cannot show an edge there. A re-entry with a measure that does not saturate (F197)
+would be a new entry, written before any score; it is not registered
+here.
+
 Written 2026-11-05 (Sprint 31 Task H, #100), before any per-segment
 score is computed. Not filed; part of this draft. No device.
 
@@ -722,6 +809,11 @@ score is computed. Not filed; part of this draft. No device.
   Reported in `docs/phase2/EXP5_ROUTER.md`.
 
 ### Experiment 6 (F110): training time against sample count, proxy first
+
+**State at filing (2026-11-16): Partly run.** The proxy timing ran
+(`docs/phase2/F110_SCALING.md`, Sprint 28). The device timing arm runs
+only under per-block approval (section 4), and the proxy timing is
+repeated on the program's compute only if it is provided (assumption A3).
 
 Written 2026-10-22 (Sprint 28 Task E, #52), before any timing below.
 Not filed; part of this draft. The device arm needs its own per-block
@@ -2234,14 +2326,15 @@ or any amount is joined to a score. Zero metered seconds.
   what is from the paper and what is added here.
 - ~~Recompute section 5's downsized-pair figures from code, on all five
   seeds.~~ Closed 2026-10-18: section 5, `f102_downsized_pair.json`.
-- Fill one section 6 entry per experiment that will run. **Open
-  (2026-10-18)**: Experiment 1 is written; Experiments 2-6 wait on their
-  cards (F105's adversarial-control decision, F25, F111, F121 on HOLD,
-  F110), and each is written when its card is selected.
+- ~~Fill one section 6 entry per experiment that will run.~~ Closed
+  2026-11-16 (Sprint 33 Task B): section 6 has an entry for each of
+  Experiments 1-6, each with its state at filing. Experiment 5 was
+  written 2026-11-05 after its hold was set aside; Experiments 2, 3, 4
+  and 6 on 2026-10-22.
 - ~~Set the multiplicity families, and each entry's seed count against
   them.~~ Closed 2026-10-18: section 2a. Each later entry applies it.
-- **Pool build drift (F145): fixed for Phase 2 builds, a known limit for
-  Phase 1 pools.** Decided 2026-10-14 (Sprint 26 Task B). Phase 2 builds pass
+- **Decided: pool build drift (F145), fixed for Phase 2 builds, a known
+  limit for Phase 1 pools.** Decided 2026-10-14 (Sprint 26 Task B). Phase 2 builds pass
   `qubo_proxy.seeded_weak_params(seed)` (`build --seeded-learners`); two
   such builds of seed 42's `free` sequential pool are byte-identical on all
   three folds (`f145_build_drift.json`, `seeded`; corrected 2026-10-17: this
@@ -2255,8 +2348,20 @@ or any amount is joined to a score. Zero metered seconds.
   variables.
 - ~~**Equivalence margins for verify entries.**~~ Closed 2026-10-18:
   section 2b (default AUPRC margin 0.005).
-- Confirm the filing date and the filing venue with the team lead.
-  **Open (2026-10-18)**: the team lead's decision; it is not taken here.
+- **Open, filing step: the filing date and venue.** Not set (assumption
+  A9). The team lead's decision; the "Filing" section at the top records
+  them when set.
+- **Open, filing step: lock the filed version.** At filing, the file is
+  locked as the Phase 1 preregistration is: a tag at the filing commit,
+  a hash test that fails on any change to the filed bytes, and the
+  document-of-record hook. Later changes are dated amendments in a
+  separate section, never edits. Until filing, the drift guard
+  (`experiments/src/test_phase2_prereg_draft.py`) checks that the draft
+  stays consistent while reviews change it.
+
+Every item here starts with a strike-through (closed), **Decided**, or
+**Open, filing step**. Only filing steps may stay open; the drift guard
+fails any other open item.
 
 ## Revision log
 
@@ -2358,3 +2463,10 @@ or any amount is joined to a score. Zero metered seconds.
 - 2026-11-09: section 6 gains the F188 entry (Sprint 32 Task C) and the
   F185 entry (Task D), each with its table row, before its module exists
   or any value it reads is computed.
+- 2026-11-16: prepared for filing without the brief (Sprint 33 Task B).
+  A "Filing" section (date and venue not set, assumption A9; the
+  assumptions A1-A12 cited); a section on how to read the identifiers
+  (assumption A12); section 6's table gains State and Result columns, separating
+  entries run before filing from entries to run; each of Experiments 1-6
+  gains its state at filing, Experiment 3 with Sprint 32 D4's condition;
+  section 7 closed except two filing steps (date and venue; the lock).
