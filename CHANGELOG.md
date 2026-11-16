@@ -6,6 +6,7 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-16
 
+- **docs**: Sprint 32 retrospective i3 and i4 (#119). `SPRINT_PLANNING.md`, beside "show each term can fire": a source-scan guard's acceptance criteria name every form that reaches the forbidden thing (direct, held in a variable, keyword, import, alias), each with a test, and each allowed look-alike with a test that it passes. The item named `SPRINT_CHECKLIST.md`; the "show it can fire" rules live in `SPRINT_PLANNING.md`, so the sentence went there. `TROUBLESHOOTING.md` gains an entry for parallel-suite MemoryError failures: rerun the failed files serially before reading a failure as a code fault.
 - **fix**: Sprint 32 retrospective i1 (#119). `update_sprint_status.set_estimate` treats an estimate equal to the recorded one as no change, so `--start-task X --estimate N` after `--task X --estimate N` starts the timer; before, the repeat was refused and the timer never started (Sprint 32 Task A). A different second estimate is still refused. `test_task_activity.py` gains a test and a red proof. The retrospective records the team lead's disposition verbatim: "i1. a i2. a i3. a i4. a i5. e".
 
 ### 2026-11-13
