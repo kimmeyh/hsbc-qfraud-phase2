@@ -138,24 +138,25 @@ def test_the_history_label_exclusion_can_fail():
 
 
 def test_the_dirac3_refusal_can_fail():
-    """Each form of the F181 refusal, removed, turns its tests red."""
+    """Each form of the F181 refusal, removed, turns BOTH its tests red:
+    one mutation per form (test_no_duplicate_proofs.py), and the run
+    passes if either test still passes."""
     from injection import Mutation, assert_can_fail, run_pytest
     here = ROOT / "experiments" / "src" / "test_phase2_device_default.py"
     base = "experiments/src/test_phase2_device_default.py::"
-    for old, new, test, label in (
+
+    def either_passes() -> bool:
+        return (run_pytest(base + "test_dirac3_is_refused_even_with_its_"
+                           "reason", ROOT)
+                or run_pytest(base + "test_dirac3_held_imported_or_by_"
+                              "keyword_is_refused", ROOT))
+    for old, new, label in (
             ('r"\\bDIRAC_3\\b(?!S)"', 'r"NO_MATCH_A"',
-             "test_dirac3_is_refused_even_with_its_reason", "DIRAC_3 admitted"),
-            ('r"\\bDIRAC_3\\b(?!S)"', 'r"NO_MATCH_A"',
-             "test_dirac3_held_imported_or_by_keyword_is_refused",
-             "an imported DIRAC_3 admitted"),
+             "DIRAC_3, named or imported, admitted"),
             ("['\\\"]dirac-3['\\\"]\")", 'NO_MATCH_B")',
-             "test_dirac3_is_refused_even_with_its_reason",
-             "'dirac-3' admitted"),
-            ("['\\\"]dirac-3['\\\"]\")", 'NO_MATCH_B")',
-             "test_dirac3_held_imported_or_by_keyword_is_refused",
-             "a held or keyword 'dirac-3' admitted")):
+             "'dirac-3', passed, held or by keyword, admitted")):
         assert_can_fail([Mutation(here, old, new, expect_occurrences=1)],
-                        lambda test=test: run_pytest(base + test, ROOT), label)
+                        either_passes, label)
 
 
 def test_prose_naming_a_call_is_not_a_call():

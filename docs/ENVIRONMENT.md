@@ -46,7 +46,10 @@ Sprint 24).
 `scripts/select_proofs.py --tests` run tested, with the tree committed
 (only `.claude/sprint_status.json` may differ) and a base the remote branch
 already contains. Run `select_proofs.py --tests --base origin/<branch>`
-after the last commit, then push (Sprint 32 i2; `scripts/check_pre_push.py`).
+after the last commit, then push; for a branch's first push, use the
+default base, `origin/develop`. A push of commits already on the remote
+branch or on `origin/develop` (a tag, for example) needs no run (Sprint 32
+i2; `scripts/check_pre_push.py`).
 
 The lock file pins all 18 dependencies. That is deliberate and load-bearing:
 amendment A29(h) records that drift in the comparator stack is material to the

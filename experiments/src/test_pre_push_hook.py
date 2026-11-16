@@ -57,6 +57,9 @@ def repo(tmp_path, monkeypatch):
     (w / ".githooks").mkdir()
     # Bytes, so a CRLF conversion cannot break the sh shebang.
     (w / ".githooks" / "pre-push").write_bytes(HOOK.read_bytes())
+    # On Linux git skips a hook without the execute bit, silently (CI on
+    # 0fdcb67); Windows ignores the bit, so this passed locally.
+    (w / ".githooks" / "pre-push").chmod(0o755)
     (w / "scripts" / "select_proofs.py").write_bytes(SP.read_bytes())
     (w / "scripts" / "check_pre_push.py").write_bytes(CPP.read_bytes())
     # As in this repository: the hook's import writes a bytecode cache.
@@ -134,6 +137,27 @@ def test_a_delete_is_admitted(repo):
     assert cpp.main([f"(delete) {ZERO} refs/heads/feat {b}"]) == 0
 
 
+def test_a_push_of_nothing_new_is_admitted(repo):
+    # PR 116 short review: a tag on develop, or a branch made at a develop
+    # commit, pushes no commit to test; with no run recorded it passes.
+    w, a, b = repo
+    assert sp.passed_runs() == []
+    assert cpp.main([f"refs/heads/x {a} refs/heads/x {ZERO}"]) == 0
+    _git(w, "tag", "-a", "t1", "-m", "t", a)
+    tag = _git(w, "rev-parse", "t1")
+    assert tag != a                                  # an annotated tag object
+    assert cpp.main([f"refs/tags/t1 {tag} refs/tags/t1 {ZERO}"]) == 0
+    assert cpp.main(_push(b, ZERO)) == 1             # b is new: still refused
+
+
+def test_the_hint_names_a_base_that_exists():
+    # A new remote branch has no origin/<branch> to pass as --base.
+    new = cpp.fix_hint([f"refs/heads/x {'1' * 40} refs/heads/x {ZERO}"])
+    old = cpp.fix_hint([f"refs/heads/x {'1' * 40} refs/heads/x {'2' * 40}"])
+    assert "--base origin/develop" in new
+    assert "--base origin/<branch>" in old
+
+
 def test_the_real_hook_refuses_and_admits(repo, tmp_path):
     w, a, b = repo
     remote = tmp_path / "remote.git"
@@ -176,6 +200,16 @@ def test_the_push_check_can_fail():
             (CPP, '    if set(local_sha) == {"0"}:                      '
                   "# a delete\n", "    if False:\n",
              "test_a_delete_is_admitted", "a delete refused"),
+            (CPP, '    if is_ancestor(f"{local_sha}^{{commit}}", anchor):\n'
+                  "        return None\n",
+             "    if False:\n        return None\n",
+             "test_a_push_of_nothing_new_is_admitted",
+             "a push of nothing new refused"),
+            (CPP, "    return FIX.format(base=NEW_BRANCH_BASE if new else "
+                  "BRANCH_BASE)\n",
+             "    return FIX.format(base=BRANCH_BASE)\n",
+             "test_the_hint_names_a_base_that_exists",
+             "a new branch sent to a base that does not exist"),
             (SP, "    if extra:\n", "    if False:\n",
              "test_a_narrowed_run_records_nothing",
              "a narrowed run recorded"),

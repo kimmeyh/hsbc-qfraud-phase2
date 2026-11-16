@@ -55,7 +55,11 @@ STATUS = ROOT / ".claude" / "sprint_status.json"
 SAMPLE_CYCLE = 20                    # 5%: every proof file once in 20 sprints
 # Cheap guards over the whole repository, run on every local change.
 ALWAYS = ("experiments/src/test_us_english.py",
-          "experiments/src/test_evidence_immutability.py")
+          "experiments/src/test_evidence_immutability.py",
+          # A new test file or proof is checked by these, which name no
+          # file; both missed a local run and failed CI on 0fdcb67.
+          "experiments/src/test_test_inventory.py",
+          "experiments/src/test_no_duplicate_proofs.py")
 
 
 def git(*args: str) -> list[str]:
