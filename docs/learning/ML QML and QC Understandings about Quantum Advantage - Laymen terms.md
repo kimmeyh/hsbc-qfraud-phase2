@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.3**, 2026-11-10 (Sprint 32, card F178). Written for readers
+**Version 1.4**, 2026-11-16 (Sprint 33, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
 computing, and are expert in none of them. Two companion versions go
 deeper: one for [machine learning experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20ML%20Expert.md)
@@ -8,6 +8,7 @@ and one for [quantum computing experts](ML%20QML%20and%20QC%20Understandings%20a
 
 ## Change list
 
+- **1.4, 2026-11-16 (Sprint 33)**: no new result. "Experiments planned" notes that the [preregistration](#def-preregistration) is ready to file, without the brief, on written assumptions. The team lead's decision on the rounding test (Sprint 32 D4) replaces "a decision for the team lead" in sections 6 and 7.
 - **1.3, 2026-11-10 (Sprint 32)**: Sprint 32's two results added, each as a tagged claim and as a dated result under "Experiments planned": F185 (alerts chosen by the money at risk, section 2) and F188 (the rounding test, section 6). The two matching ideas leave "Experiments not yet planned". No Sprint 33 run is preregistered yet, so none is listed.
 - **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Each dataset is named in full the first time, with a link to the new Appendix F (Datasets), and by its short name after that; the short name links to the same entry. "[Device](#def-device)" is defined (Appendix A). Section 3's results are rewritten in plain terms, each starting with what it means. The team lead's suggestions are added to "The data needed", with why each would help and what the public data already holds. New: the card-testing pattern, what our tests score inside the [alert budget](#ml-alert-budget), [interference](#qc-interference) beside [superposition](#qc-superposition) and [entanglement](#qc-entanglement), and where the training-cost growth was measured. "Experiments not yet planned" gains the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
@@ -687,8 +688,7 @@ is a classical step, not the device.
   Every answer was worse than simple greedy search. On the three
   problems where classical search had found a gain, the loss was larger
   than the gain. At 1 part in 400, one problem kept a small gain.
-  Whether this closes the device question for this design is the team
-  lead's decision (`docs/phase2/F188_ROUNDING.md`).
+  The team lead decided (Sprint 32 D4, 2026-11-13): F25 stays on hold until the delivered reading beats greedy at 200:1 (`docs/sprints/SPRINT_32_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
 
 ### What outside research says
 
@@ -810,8 +810,16 @@ the same file before its run. No Sprint 33 run is preregistered yet.
     but those gains were made by the rounding.** The amendment scored
     each rounded answer on the real problem: worse than greedy search on
     all six. A device run on this design at 200:1 could not beat
-    greedy. Closing that question is a decision for the team lead
-    (`docs/phase2/F188_ROUNDING.md`).
+    greedy. The team lead decided (Sprint 32 D4, 2026-11-13): F25 stays on hold until the delivered reading beats greedy at 200:1 (`docs/sprints/SPRINT_32_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
+
+**Sprint 33 (2026-11-16): the preregistration made ready to file.** No
+experiment ran. The document of designs,
+`experiments/phase2/PREREGISTRATION_DRAFT.md`, now says for each entry
+whether it has run, and where its result is. It is to be filed without
+the program's brief, so each missing fact is a written assumption in
+`docs/phase2/PHASE2_POC_PLAN_DRAFT.md` (for example, the data and
+measures we use, and the filing date and venue, not yet set). A test
+keeps the document consistent while it is reviewed before filing.
 
 ## 8. Experiments not yet planned
 
