@@ -28,10 +28,11 @@ handover: a pointer to a file is not a handover.
   this repository; if not, the card and sprint numbers do not resolve).
   `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\phase2\PHASE2_POC_PLAN_DRAFT.md`
 - **A3. After any change you or a reviewer make to the draft**, add a
-  revision-log row dated that day, then run the drift guard:
+  revision-log row dated that day, then run the drift guard. Replace
+  `<venv python>` with the interpreter `docs/ENVIRONMENT.md` gives:
 
   ```
-  .venv\Scripts\python.exe -m pytest -p no:xdist -m "not proof" `
+  <venv python> -m pytest -p no:xdist -m "not proof" `
     experiments\src\test_phase2_prereg_draft.py
   ```
 
@@ -43,7 +44,7 @@ handover: a pointer to a file is not a handover.
   the Filing section and do the lock step section 7 lists (a tag at the
   filing commit, a hash test and the document-of-record hook). Until
   then both fields say "not set", as you asked.
-- **A5. Judge the learning documents' version 1.4.** No new result. Each
+- **A5. Judge the learning documents' 2026-11-16 version.** No new result. Each
   "Experiments planned" section gains a Sprint 33 paragraph, and every
   F188 passage now gives your Sprint 32 D4 decision. Plain-terms
   version, sections 6 and 7:
@@ -94,7 +95,7 @@ handover: a pointer to a file is not a handover.
 - The guard now reads a citation wrapped across lines and refuses a
   revision-log date in the future, each with a proof.
 
-## V5. Task C (F178): learning documents 1.4 (b37e1e5)
+## V5. Task C (F178): learning documents, 2026-11-16 version (b37e1e5)
 
 - See A5.
 
