@@ -3,7 +3,7 @@
     "number": 33,
     "name": "The Phase 2 Preregistration, Ready to File",
     "branch": "feature/20261116_Sprint_33",
-    "status": "phase_4_execution",
+    "status": "phase_5_validation",
     "plan_doc": "docs/sprints/SPRINT_33_PLAN.md",
     "pr": 122,
     "plan_approved": true,
@@ -18,7 +18,8 @@
       "A": 6,
       "B": 12,
       "D": 14,
-      "E": 1
+      "E": 1,
+      "C": 4
     },
     "task_started": {
       "A": "2026-11-16T11:01:07-05:00",
@@ -56,13 +57,15 @@
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 75-minute estimate: check the timer, the parallel tasks and the activity log before using it",
       "B": "gaps over 30 min and pauses subtracted; under a fifth of its 120-minute estimate: check the timer, the parallel tasks and the activity log before using it",
       "D": "gaps over 30 min and pauses subtracted",
-      "E": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it"
+      "E": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it",
+      "C": "gaps over 30 min and pauses subtracted; under a fifth of its 45-minute estimate: check the timer, the parallel tasks and the activity log before using it"
     },
     "task_elapsed": {
       "A": 6,
       "B": 12,
       "D": 14,
-      "E": 1
+      "E": 1,
+      "C": 4
     }
   },
   "last_completed_sprint": {
