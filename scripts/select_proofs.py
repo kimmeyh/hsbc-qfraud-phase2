@@ -31,10 +31,18 @@ selection with the sample.
 the repository guards in `ALWAYS` and any test file whose source names a
 changed file's directory (D17 a). CI's push job runs every non-proof test
 on every push; it is the safety net for what this selection misses.
+
+A passing `--tests` run records the tree it tested and its merge base, in
+the git directory, for `.githooks/pre-push` (`check_pre_push.py`, Sprint
+32 i2). Nothing is recorded when the run was narrowed by arguments after
+`--`, when a file other than `UNTESTED_OK` is changed or untracked (the
+tests would not have run on a committed tree), or when the tree changed
+during the run. `--base origin/<branch>` tests only what is not pushed.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -56,6 +64,58 @@ def git(*args: str) -> list[str]:
     if out.returncode != 0:
         raise SystemExit(f"git {' '.join(args)} failed: {out.stderr.strip()}")
     return [ln for ln in out.stdout.splitlines() if ln.strip()]
+
+
+# Sprint state, not code: tracked, and changed by the task timer through
+# the whole sprint, so a clean tree is never reached while a task runs.
+# It is the one path a pushed tree may differ from the tested one in.
+UNTESTED_OK = (".claude/sprint_status.json",)
+MARKER = "select_proofs_passed"          # under the git directory
+MARKER_KEEP = 50
+
+
+def fingerprint(rev: str) -> str:
+    """The tree at `rev`, less `UNTESTED_OK`, as one hash."""
+    lines = [ln for ln in git("ls-tree", "-r", rev)
+             if ln.split("\t", 1)[1] not in UNTESTED_OK]
+    return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
+
+
+def other_changes() -> list[str]:
+    """Changed or untracked paths besides `UNTESTED_OK`."""
+    paths = [ln[3:].strip('"') for ln in
+             git("status", "--porcelain", "--untracked-files=all")]
+    return [p for p in paths if p not in UNTESTED_OK]
+
+
+def marker_path() -> Path:
+    p = Path(git("rev-parse", "--git-path", MARKER)[0])
+    return p if p.is_absolute() else ROOT / p
+
+
+def passed_runs() -> list[tuple[str, str]]:
+    """(fingerprint, merge base) of each recorded passing run."""
+    p = marker_path()
+    if not p.exists():
+        return []
+    return [tuple(ln.split()[:2]) for ln in
+            p.read_text(encoding="utf-8").splitlines() if len(ln.split()) >= 2]
+
+
+def note_pass(before: str | None, merge: str, extra: list[str]) -> str:
+    """Record a passing `--tests` run for the pre-push hook, or say why not."""
+    if extra:
+        return "not recorded for push: arguments after -- narrowed the run"
+    if before is None or other_changes():
+        return ("not recorded for push: files besides "
+                f"{', '.join(UNTESTED_OK)} are changed or untracked; commit "
+                "them and run again")
+    if fingerprint("HEAD") != before:
+        return "not recorded for push: HEAD changed during the run"
+    runs = passed_runs() + [(before, merge)]
+    marker_path().write_text("".join(f"{f} {m}\n" for f, m in
+                                     runs[-MARKER_KEEP:]), encoding="utf-8")
+    return f"recorded for push: HEAD's tree, tested from {merge[:9]}"
 
 
 def changed_files(base: str) -> set[str]:
@@ -165,6 +225,8 @@ def main(argv=None) -> int:
         return 2
     changed = changed_files(args.base)
     if args.tests:
+        before = None if other_changes() else fingerprint("HEAD")
+        merge = git("merge-base", args.base, "HEAD")[0]
         chosen = select_tests(changed)
         marker, what = "not proof", "test file(s) to run locally"
     else:
@@ -176,11 +238,14 @@ def main(argv=None) -> int:
     for t in chosen:
         print(t)
     print(f"{len(chosen)} {what}", file=sys.stderr)
-    if not (args.run or args.tests) or not chosen:
+    if not (args.run or args.tests):
         return 0
-    return subprocess.run([sys.executable, "-m", "pytest", "-m", marker,
-                           "-q", "-p", "no:cacheprovider", *extra, *chosen],
-                          cwd=ROOT).returncode
+    rc = 0 if not chosen else subprocess.run(
+        [sys.executable, "-m", "pytest", "-m", marker, "-q", "-p",
+         "no:cacheprovider", *extra, *chosen], cwd=ROOT).returncode
+    if args.tests and rc == 0:
+        print(note_pass(before, merge, extra), file=sys.stderr)
+    return rc
 
 
 if __name__ == "__main__":

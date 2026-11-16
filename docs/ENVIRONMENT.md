@@ -42,6 +42,12 @@ copied by hand to each clone and worktree. Without it, or with it empty, every
 commit is blocked, because an unscanned commit is not a clean one (F134,
 Sprint 24).
 
+`.githooks/pre-push` refuses a push whose tree no passing
+`scripts/select_proofs.py --tests` run tested, with the tree committed
+(only `.claude/sprint_status.json` may differ) and a base the remote branch
+already contains. Run `select_proofs.py --tests --base origin/<branch>`
+after the last commit, then push (Sprint 32 i2; `scripts/check_pre_push.py`).
+
 The lock file pins all 18 dependencies. That is deliberate and load-bearing:
 amendment A29(h) records that drift in the comparator stack is material to the
 null result, so `numpy==1.26.4`, `scikit-learn==1.9.0` and `xgboost==3.4.1` are
