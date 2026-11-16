@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-16
+
+- **fix**: Sprint 32 retrospective i1 (#119). `update_sprint_status.set_estimate` treats an estimate equal to the recorded one as no change, so `--start-task X --estimate N` after `--task X --estimate N` starts the timer; before, the repeat was refused and the timer never started (Sprint 32 Task A). A different second estimate is still refused. `test_task_activity.py` gains a test and a red proof. The retrospective records the team lead's disposition verbatim: "i1. a i2. a i3. a i4. a i5. e".
+
 ### 2026-11-13
 
 - **docs**: Sprint 32 retrospective, steps 1-5. `docs/sprints/SPRINT_32_RETROSPECTIVE.md` records the team lead's feedback verbatim in all 16 categories beside Claude's, the PR #116 review findings fixed in Task H (#118), their classes, one finding not fixed, and five improvement items, i1-i5, for disposition. Claude's draft is `docs/sprints/drafts/SPRINT_32_RETROSPECTIVE_claude_draft.md`.

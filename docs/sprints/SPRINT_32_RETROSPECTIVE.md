@@ -387,5 +387,12 @@ In the format of `SPRINT_RETROSPECTIVE.md` step 5.
 
 ## Improvement Decisions
 
+Team lead, 2026-11-16, verbatim: "i1. a i2. a i3. a i4. a i5. e".
+
 | # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
 |---|---|---|---|---|
+| i1 | The timer starts when a repeated estimate matches | a | about 15 min | now |
+| i2 | Tests run before the push | a | about 60 min | now |
+| i3 | A scan guard's "fires" line names each way to reach the forbidden thing | a | 5 min | now |
+| i4 | A troubleshooting entry for the parallel suite's memory failures | a | 5 min | now |
+| i5 | F185's two rankings forced to flag the same count | e | none | skip, tracked: add the refusal if F185 is rerun or extended |
