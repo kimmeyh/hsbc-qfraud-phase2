@@ -166,6 +166,7 @@
 | 32 | Task G (F111) feedback draft | docs | 15m | 2m | n/a | measured, active, 2m elapsed; understated: reading before the timer started is not counted |
 | 32 | Task H PR 116 review fixes | tooling | 30m | 2m | n/a | measured, active, 2m elapsed; understated: the fixes were written before the timer started (the commit hook then required it) |
 | 32 | Task I retrospective i1 to i4 | tooling | 85m | 21m | n/a | measured, active, 21m elapsed; understated: i1 was written and tested before the timer started |
+| 32 | Task J short review and CI red on 0fdcb67 | tooling | 20m | 15m | 0.75 | measured, active, 15m elapsed; not planned; two review findings and three CI failures, one from 8e0796a |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start
