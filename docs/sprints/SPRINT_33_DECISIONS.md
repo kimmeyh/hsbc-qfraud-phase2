@@ -523,3 +523,98 @@ however not using super-agent mode, just several agents all running
 opus 5.5 - OK if it takes 7 hours". So: no multi-agent workflow; several
 separate agents, each on Opus 5.5, each read only, one per block of the
 draft. Up to 7 hours is acceptable.
+
+## D10. The filed proposal's primary metric against the draft's
+
+Written 2026-11-18, from the D9 claim audit (block A, finding M4), to
+ask at the 8am handover.
+
+**What.** The filed Phase 1 proposal (`docs/paper/proposal.md`,
+section 5, "Metrics") says: "Primary: fraud caught within a fixed
+review budget (0.1% and 0.5%) on out-of-time folds. Secondary: AUPRC".
+The draft's section 2 leads with floor-normalized AUPRC, reports recall
+only at the 0.5% budget, never mentions 0.1%, and does not say it
+departs from the proposal.
+
+**Why it matters.** A reviewer who holds the filed proposal sees an
+undeclared change of primary metric, the change a preregistration
+exists to expose. A declared departure is acceptable; an undeclared one
+reads as a switched outcome.
+
+**Kind per option.**
+- Option 1: Workaround (declares the gap, leaves the 0.1% promise
+  unmet).
+- Option 2: Prevention (declares it and restores the 0.1% figure from
+  filing on).
+- Option 3: Prevention, at a large rewrite cost.
+
+**Cost per option.**
+- Option 1: about 10 minutes; one paragraph in section 2; 0 metered
+  seconds.
+- Option 2: about 20 minutes; the same paragraph plus one line in
+  section 2's "Outcomes recorded"; 0 metered seconds. Each later scored
+  result reports one more figure, computed from its stored per-row
+  scores.
+- Option 3: several hours; every section 6 entry's primary metric and
+  power statement change; 0 metered seconds.
+
+**Recommendation.** Option 2. It costs one more figure per result, the
+stored per-row scores already allow it, and it keeps the filed promise
+for every result from filing on. Option 1 is not chosen because it
+leaves the proposal's 0.1% figure unreported with no reason given.
+
+**Options.**
+
+1. Add to section 2 "Metrics": "The filed Phase 1 proposal (section 5)
+   named fraud caught within a 0.1% and a 0.5% review budget on
+   out-of-time folds as primary, with AUPRC secondary. This draft leads
+   with floor-normalized AUPRC, the measure section 2's statistical
+   standard is built on, and reports recall at the 0.5% budget beside
+   every scored result. The 0.1% budget is not reported."
+2. The paragraph in option 1, with its last sentence replaced by:
+   "From filing on, recall at the 0.1% budget is reported beside the
+   0.5% figure for every scored result; results recorded before filing
+   are not recomputed." Section 2's "Outcomes recorded" adds the 0.1%
+   budget to the confusion counts.
+3. Restore the proposal's order: budget recall at 0.1% and 0.5% becomes
+   the primary metric of every section 6 entry not yet run, and AUPRC
+   secondary.
+
+## D11. A byte lock on the filed text
+
+Written 2026-11-18, from the D9 claim audit (block G, finding D1), to
+ask at the 8am handover.
+
+**What.** Section 7 said the draft would be locked at filing "as the
+Phase 1 preregistration is", including "a hash test that fails on any
+change to the filed bytes". No such test exists for the Phase 1 file:
+its lock in this repository is the tag `prereg-freeze` and the hook
+`.claude/hooks/block_reactive_amendment.py`, and its amendments are
+appended in the same file. Task G corrected section 7 to say so and
+left the question open.
+
+**Why it matters.** The hook stops an edit made through a Claude Code
+session; it does not stop an edit made any other way. A hash of the
+filed text above the amendments section would make any change to the
+filed words fail CI, while amendments still append below it.
+
+**Kind per option.**
+- Option 1: Prevention.
+- Option 2: Workaround (the lock Phase 1 has, with its gap).
+
+**Cost per option.**
+- Option 1: about 30 minutes at the filing step; one test file and a
+  can-fail proof; 0 metered seconds.
+- Option 2: none now.
+
+**Recommendation.** Option 1. It closes the gap for the cost of one
+small test, written at the filing step when the filed text is final.
+
+**Options.**
+
+1. At filing, add `experiments/src/test_phase2_prereg_filed.py`: it
+   hashes the draft's text above a "## Amendments" heading and fails on
+   any change, with a proof that an edited copy fails. Section 7's lock
+   item names it.
+2. No hash test. The draft is locked as Phase 1's file is: a tag and
+   the document-of-record hook.
