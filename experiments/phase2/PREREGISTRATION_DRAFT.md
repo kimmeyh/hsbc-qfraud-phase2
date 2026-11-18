@@ -19,10 +19,19 @@ freely, and each change is recorded in the revision log at the bottom.
   reader). Where the brief differs from an
   assumption, the change is a dated amendment; an entry already run is
   not rewritten.
-- **What filing commits to**: each entry in section 6 marked "To run" or
-  "Partly run" runs as written there. An entry marked "Run" was written
-  before its run, and git records that order; filing reports its result
-  and does not re-register it.
+- **What filing commits to**:
+  1. It reports the entries marked "Run". Each was committed before its
+     own run, and git records that order. Filing does not re-register
+     them.
+  2. No device call is made for Experiment 3 or Experiment 6 (the two
+     "Partly run" entries) until a dated amendment to that entry states
+     the instances, the primary metric and its margin, the multiplicity
+     family, the call count and the seconds cap, and that amendment is
+     committed before the first call. Experiment 3's release condition
+     is fixed in its entry.
+  3. Any new PoC experiment gets a complete section 1 entry before its
+     first result.
+  At filing, no confirmatory test is pending: no row is "To run".
 
 ## How to read the identifiers in this document
 
@@ -33,7 +42,17 @@ This document cites the repository it lives in (assumption A12):
 - **Sprint** and a number (Sprint 31): a two-day to one-week work cycle,
   recorded in `docs/sprints/SPRINT_<n>_PLAN.md` and its summary.
 - **D** and a number inside a sprint (Sprint 32 D4): a team-lead decision,
-  recorded in `docs/sprints/SPRINT_<n>_DECISIONS.md`.
+  recorded in `docs/sprints/SPRINT_<n>_DECISIONS.md` from Sprint 29 on.
+  Before Sprint 29 a decision is recorded in that sprint's
+  `SPRINT_<n>_PLAN.md` or `SPRINT_<n>_VALIDATION.md`. "Decision" and a
+  number with no sprint means the entry's own sprint. **DV** and a
+  number: a Manual Validation decision, in the sprint's validation file.
+  **Q** and a number: a planning question in the sprint's plan.
+- **#** and a number (#49): a GitHub issue of this repository.
+- **Criterion H**: the stop before every metered device run, in
+  `docs/SPRINT_STOPPING_CRITERIA.md`. It is not a hypothesis.
+- **SIM** and **HW**: evidence tags, measured in simulation (any
+  classical computation) and measured on quantum hardware.
 - **A** and a number in Phase 1 references (A31): an amendment to the
   frozen Phase 1 preregistration, `experiments/PREREGISTRATION.md`.
 - **H** and a number (H5), and **G0b**: a Phase 1 hypothesis and a
@@ -45,10 +64,23 @@ This document cites the repository it lives in (assumption A12):
   `docs/sprints/SPRINT_<n>_RETROSPECTIVE.md`.
 - **assumption A1 to A12**, always written with the word "assumption":
   the assumptions this filing rests on, in
-  `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`.
+  `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. In
+  `docs/phase2/DIRAC_UNDERSTANDINGS.md`, A1 to A12 are questions sent to
+  QCi, a different list.
 - **Experiment 1-6**: the six experiments committed in section 5 of the
   filed Phase 1 proposal.
-- File paths are relative to the repository root.
+- File paths are relative to the repository root. A file named as "not
+  in this repository" cannot be opened from it.
+- **Per-row score files are not tracked**, except hardware files. The
+  folders `experiments/results/predictions/` and
+  `experiments/phase2/predictions/` are ignored by git, apart from the
+  `hw_*.npz` and `cvqboost_hw_*.npz` files. Phase 2 result files that
+  hold a test score record the SHA-256 of the score files they wrote
+  (F154's outcome block). Phase 1 result files, and F170's result, which
+  reads Phase 1 score files, record no hash. Classical and seeded proxy
+  score files regenerate from the generator the result names. The
+  unseeded Phase 1 proxy score files that Experiment 1, F154 and F170
+  read do not regenerate exactly (section 7, F145).
 
 **Relationship to Phase 1.** `experiments/PREREGISTRATION.md` is FROZEN and
 governs Phase 1 claims only. This draft does not amend it, and nothing here
@@ -57,14 +89,27 @@ post-submission row (F138, question 6).
 
 **Who reads this, and what they decide.** The team lead, and at filing the
 Phase 2 reviewers: what each experiment will claim, how it will be tested,
-and what result would count against it, all fixed before any Phase 2 result
-is seen.
+and what result would count against it. Each entry was committed before
+its own run, and git records that order. It was not written before every
+Phase 2 result was seen: most entries have already run (section 6's
+State column says which), and some Phase 2 work ran with no entry (section
+1). Material written after a result is marked as such in its entry.
 
 ## 1. Per-experiment template
 
-Every Phase 2 experiment gets one entry in section 6 with these fields,
-complete before its first result is computed. An experiment with an empty
-field does not run.
+From filing, every confirmatory Phase 2 experiment gets one entry in
+section 6 with these fields, complete before its first result is
+computed. An experiment with an empty field does not run.
+
+Entries written before filing follow this template in part. Descriptive
+and verification entries (for example F166, F174, the F157 SPECTRA part,
+F171, F185 and F188) state a question, data, method and reading, and
+say that they make no test; F170 makes one descriptive Mann-Whitney
+test. Experiment 4 states predictions with no separate falsifier field.
+Phase 2 work that ran with no entry (F104, F113, F115, F124, F126, F128,
+F130, F151, F159, F17, F20 and F29) is exploratory, and is cited here
+only as already seen. F102's downsized-pair computation and F145's build
+drift have no entry either; sections 5 and 7 cite them.
 
 - **ID and card**: the experiment number and its backlog card.
 - **Question**: one sentence.
@@ -89,8 +134,15 @@ field does not run.
   data, so no reported score comes from the folds that chose its
   configuration.
 - **Paired comparisons**: Wilcoxon signed-rank across seeds or folds, with
-  the paired difference and its bootstrap interval reported beside the
-  p-value.
+  the paired difference and an interval reported beside the p-value: the
+  paired bootstrap over transactions where per-row scores exist,
+  otherwise a t interval over seeds. The entry names which.
+- **Limit of seed-level tests.** Seeds over random splits of one dataset
+  are not independent samples: their test folds and training sets
+  overlap. A seed-level test here measures stability over splits and
+  model randomness, not generalization to new data, and its p-value is
+  optimistic. On IEEE-CIS the folds are fixed by month and seeds vary
+  the model only. Each headline claim says which it rests on.
 - **Multiplicity**: Bonferroni within each experiment's stated family.
 - **Seeds set from the test, not by habit.** An exact two-sided Wilcoxon
   test on k paired seeds cannot give a p-value below 2 / 2^k: 0.0625 at 5
@@ -105,7 +157,12 @@ field does not run.
 - **Metrics**: AUPRC normalized by its floor, `(AUPRC - p) / (1 - p)`, where
   `p` is the test prevalence (the AUPRC of a random ranking), with raw
   AUPRC and AUROC beside it. Recall at the 0.5% alert budget wherever an
-  operating point is claimed.
+  operating point is claimed and the test prevalence is below 0.5%. Above
+  that prevalence, the budget caps recall at the budget divided by the
+  prevalence (on IEEE-CIS's test month, 427 alerts for 2,962 frauds). The
+  cap is reported beside the figure, and the operating point is the
+  budget matched to prevalence (F171's `matched` budget, 3.0 times the
+  test prevalence), fixed in the entry before its run.
 - **Outcomes recorded** (team lead, 2026-10-22; F154): every Phase 2
   result that holds a test score, ML or QML, also records the confusion
   counts (TN, FP, FN, TP) at the 0.5% alert budget, at the
@@ -181,6 +238,12 @@ field does not run.
 - **The default AUPRC margin is 0.005**, the smallest change the Sprint 27
   plan counts as moving AUPRC (set 2026-10-18, before F130's runs). An
   entry may set another margin, with its reason, before its run.
+- **Limits of the default margin.** It was set with F64's interval for
+  Experiment 1's P2 already known, so P2 is a precision check, as its
+  entry says. It is a screen threshold from the Sprint 27 plan, not a
+  bound derived from cost. On ULB a margin this size can be resolved only
+  between near-identical arms (F106's amendment: no ULB test fold holds
+  enough frauds to resolve it between unlike models).
 
 ## 3. Two meanings of "order 3"
 
@@ -215,17 +278,22 @@ They are different things, and every document states which it means:
   still be unresolvable (F142's dry run, 2026-10-14). QCi states the same figure for both devices;
   Dirac-3S's effective resolution is unmeasured (F138). A job that fails
   the screen does not run **as an accuracy experiment**.
-- **The one exception**: a run whose stated purpose is cost, queue time or
-  a twin of a Phase 1 Hamiltonian (F142's B1 and B2 fits) may run although
+- **The one exception**: a run whose stated purpose is not accuracy (cost,
+  queue time, a size limit, a solver gap, or a twin of a Phase 1
+  Hamiltonian, as in F142's B1 and B2 fits, F155 and F95) may run although
   it fails the screen. Its entry says so before it runs, its result is
   reported as cost or fidelity evidence only, and the failed screen is
   reported beside it.
 - **Per-block approval** (Criterion H): call count and expected seconds
-  stated first, the runner idempotent, retries per the frozen protocol.
+  stated first, the runner idempotent, retries as the entry states (none,
+  where it says "never retried").
 
 ## 5. The in-segment control: a downsized matched pair
 
-Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
+Applies to every in-segment claim that a segment is special for a model
+(Experiment 5). A head-to-head on identical segment rows (F162), or a
+whole-dataset comparison (the F157 SPECTRA part), makes no such claim
+and needs no control.
 
 - **The problem.** Phase 1's H5(ii) control draws a random segment of the
   same size and positive rate from the complement of the in-segment pocket.
@@ -258,7 +326,10 @@ Applies to every in-segment result (Experiment 5 and any SPECTRA cell).
   property of the dataset: the positive counts in the complement. It was
   written after Phase 1 SPECTRA results on these cells had been seen
   (`docs/SPECTRA_CONTROL_FEASIBILITY.md`, `docs/B4_B5_HARDWARE_RESULT.md`),
-  and no Phase 2 SPECTRA result exists yet.
+  and after Phase 2 SPECTRA proxy results existed (F124, 2026-10-07). It
+  has been applied once, in Experiment 5, on IEEE-CIS segments.
+  (Corrected 2026-11-17: this sentence said no Phase 2 SPECTRA result
+  existed yet.)
 
 ## 6. Experiments
 
@@ -270,7 +341,8 @@ on 2026-11-16, at preparation for filing.
 - **Run**: the entry was written before its run, and its result is in
   the Result column. Filing reports it; it is not re-registered.
 - **Partly run**: one arm has run (Result names it); the rest runs in
-  the PoC as the entry states.
+  the PoC only after the dated amendment that "What filing commits to"
+  requires.
 - **To run**: nothing has run; the entry runs in the PoC as written.
 
 | # | Experiment | Card(s) | Device | Entry | State | Result |
@@ -282,7 +354,7 @@ on 2026-11-16, at preparation for filing.
 | 5 | Segment transfer (H5), with the section 5 control | F121 | none (proxy, stored scores) | Written 2026-11-05, below; hold set aside (Sprint 31 D3) | Run | `docs/phase2/EXP5_ROUTER.md` |
 | 6 | Scaling claim: training time against sample count | F110 | proxy first | Written 2026-10-22, below | Partly run | `docs/phase2/F110_SCALING.md` |
 | - | Dirac-3S verify runs: B1 and B2 (cost), B4 (fidelity twin) | F142 | Dirac-3S | Written 2026-10-14, below | Run | `docs/phase2/F142_DIRAC3S_VERIFY.md` |
-| - | The proxy twin of B2's pool (k=17, order 3) | F144 | none | Written 2026-10-14, below | Run | `docs/phase2/F144_PROXY_TWIN.md` |
+| - | The proxy twin of B2's configuration (k=17, order 3) | F144 | none | Written 2026-10-14, below | Run | `docs/phase2/F144_PROXY_TWIN.md` |
 | - | SPECTRA Tier 1 known-answer check (verification, not a claim) | F103 | none | Written 2026-10-18, below | Run | `docs/phase2/F103_TIER1_CHECK.md` |
 | - | Gate-based arm: dequantization check (F6 recommended pursue narrowly) | F106 | none (NumPy statevector) | Written 2026-10-18, below | Run | `docs/phase2/F106_DEQUANTIZATION.md` |
 | - | Gate-based arm: the F106 circuit's shot budget | F107 | none (NumPy statevector) | Written 2026-10-18, below | Run | `docs/phase2/F107_SHOT_BUDGET.md` |
@@ -302,14 +374,20 @@ on 2026-11-16, at preparation for filing.
 | - | A cost-weighted alert budget on the stored champion scores | F185 | none (stored scores) | Written 2026-11-09, below | Run | `docs/phase2/F185_COST_BUDGET.md` |
 
 The SPECTRA row's Result names one of its four comparison pages; the
-others are beside it in `docs/phase2/algorithms/`.
+others are beside it in `docs/phase2/algorithms/`. An entry's amendments
+have their own result files, named in each amendment: for example
+Experiment 3's F160, F176 and F188; F106's F157 run on IEEE-CIS
+(`docs/phase2/F157_QNN_IEEE.md`); and F108's F114, F156 and F169.
 
 ### Experiment 1 (F112): the k=17 decomposition, with paired intervals
 
 **State at filing (2026-11-16): Run.** The intervals were computed after
 this entry (Sprint 27 Task D), in
 `experiments/phase2/results/f112_intervals.json`. In the PoC it is
-re-run only on data the brief prescribes (assumption A2).
+re-run only on data the brief prescribes (assumption A2). Outcome: P1
+and P2 held (the result below). P2's equivalence is for AUPRC only: the
+k effect on AUROC is +0.0058 on average (7 of 10 seeds positive;
+secondary, uncorrected, no interval), above the 0.005 margin.
 
 Written 2026-10-18 (Sprint 27 Task C), before any interval below is
 computed (Task D computes them).
@@ -390,7 +468,10 @@ computed (Task D computes them).
 **State at filing (2026-11-16): Run.** Result in
 `docs/phase2/F152_EXP2_RESULT.md` (Sprint 28). In the PoC the same
 rolling-origin design runs on time-stamped data only if the brief
-prescribes it (assumption A2).
+prescribes it (assumption A2). Outcome: P1 held on both full months.
+P2 asked how much a strong lane loses from month 4 to month 5; XGBoost
+gained instead, and the gain mixes drift with one more month of training
+rows. LightGBM and HGB were above XGBoost on every month (secondary).
 
 Written 2026-10-22 (Sprint 28 Task B, #49), before any Phase 2 score on
 IEEE-CIS. Not filed; part of this draft.
@@ -475,10 +556,29 @@ disagree. The registered reading, gains on the rounded problem, is
 "kept" on two instances, but those gains come from the rounding. The
 amendment's reading, written after the first and with no decision
 rule, scores the rounded problem's best selection on the real problem:
-it is worse than greedy on all six. **The device arm (F25) does not run
-until F188's delivered reading beats greedy at 200:1** (team lead,
-Sprint 32 D4 option 3), and then only block by block under per-block
-approval (section 4; assumption A4). If no design qualifies by the
+the rounded problem's pick, with its weights solved on the rounded
+problem and scored on the real one, is worse than greedy's unrounded
+solution on all six. On three of the six the pick is greedy's own
+selection, so that comparison measures the rounding of the weights as
+well as the selection.
+F160 met the design falsifier as written on IEEE-CIS: room above the
+floor on all six instances, and one of the two resolution checks
+passed. The floor is a bound, not an optimum a solver can reach, so the
+team lead added F176's and F188's conditions; they are stricter than
+the registered rule. F176's swap search missed the exact optimum on 3
+of its 7 check cases (`docs/phase2/F176_BELOW_GREEDY.md`).
+**The device arm (F25) does not run until this release rule is met**
+(team lead, Sprint 32 D4 option 3, made testable by Sprint 33 D6 option
+1): on F176's six instances at R = 200, the rounded problem's pick
+delivers a gain of more than 1e-6 against greedy's selection solved the
+same way (on the rounded problem, scored on the real one), on at least
+one instance. Any other ridge weight, resolution or dataset (F198) is a
+new dated amendment written before its run. No stored result computes
+this comparison yet; it needs no device time. On three of the six
+instances the pick is greedy's selection, so the gain there is zero by
+construction. Then the arm runs only
+block by block under per-block approval (section 4; assumption A4),
+after the dated amendment that "What filing commits to" requires. If no design qualifies by the
 assumed deadline (assumption A8), the PoC report states that no design was found
 with room for a device to win.
 
@@ -617,7 +717,11 @@ design only; the device arm is F25 and needs its own per-block approval.
 
 **State at filing (2026-11-16): Run.** Result in
 `docs/phase2/F111_LOKE_PROTOCOL.md` (Sprint 28). No PoC run is planned
-unless the brief asks for the source protocol (assumption A2).
+unless the brief asks for the source protocol (assumption A2). Outcome:
+the protocol did not measurably change the KNN lane. Under the source
+protocol the lane was not consistent with the published figure, by
+more than the entry's tolerance, and the stable HGB beat it under both
+protocols.
 
 Written 2026-10-22 (Sprint 28 Task D, #51), before the harness exists or
 any lane below is fit. Not filed; part of this draft. No device.
@@ -631,7 +735,8 @@ any lane below is fit. Not filed; part of this draft. No device.
   value near 0.81 cannot show that the protocol matters; the paired
   difference below is the result.
 - **Sources for the source protocol.** The paper (section 2, Tables 1-2)
-  and the first author's repository, read only: commit `0092a38`
+  and the first author's repository on GitHub (not in this repository),
+  read only: commit `0092a38`
   (2026-05-22), the version nearest the paper; upstream `main` and the
   October branch read through the GitHub API. The code postdates the
   paper and compares XGBoost with hybrid XGBoost, so it shows the
@@ -656,8 +761,10 @@ any lane below is fit. Not filed; part of this draft. No device.
     `experiments/phase2/src/full_pair_pool.py` (same learners, same
     order; checked equal to the library's under `fork`, 2026-10-22).
   - lambda = 0 (paper and code), solved classically on the simplex by
-    `qubo_proxy.solve_simplex_qp`, the Hamiltonian eqc-models sends (QCi
-    confirmed it on 2026-10-21). Score: w . H, the code's `predict_raw`.
+    `qubo_proxy.solve_simplex_qp`, the Hamiltonian eqc-models sends (our
+    reading of the `eqc-models` code, recorded in
+    `docs/phase2/DIRAC_UNDERSTANDINGS.md`; reworded 2026-11-17). Score:
+    w . H, the code's `predict_raw`.
 - **Protocol A, the source's**: `load_ulb()`, `dropna()` (ULB has no
   missing values, so it removes nothing), **no deduplication**.
   `train_test_split(test_size=0.3, stratify=y, random_state=seed)`. The
@@ -720,7 +827,12 @@ any lane below is fit. Not filed; part of this draft. No device.
 (`docs/phase2/EXP5_ROUTER.md`, Sprint 31). On the four segments that
 can be scored (C, R, H and S), recall within the segment at the 0.5%
 budget is already at its maximum, so the measure cannot show an edge
-there. Segment W cannot be scored. A re-entry with a measure that does not saturate (F197)
+there. Segment W cannot be scored. The prediction "no segment is
+accepted" was met, but the acceptance criterion could not have fired
+on any segment that can be scored, so this is not evidence of no
+transfer. The measure can show a deficit, and did: the proxy was below
+the champion on C and H on all ten seeds. The ten seeds vary the model
+only; the month is fixed. A re-entry with a measure that does not saturate (F197)
 would be a new entry, written before any score; it is not registered
 here.
 
@@ -814,6 +926,9 @@ score is computed. Not filed; part of this draft. No device.
      out. A redesign (a per-segment budget, or a measure that ranks beyond
      the budget) is a backlog matter and is not applied to this result.
   Reported in `docs/phase2/EXP5_ROUTER.md`.
+- **Corrected 2026-11-17 (note 3).** The champion saturates on H as
+  well: on C, R, H and S. HGB ties it on C and R; the proxy ties it on
+  R and S (`experiments/phase2/results/exp5_router.json`, mean edge 0.0).
 
 ### Experiment 6 (F110): training time against sample count, proxy first
 
@@ -821,6 +936,12 @@ score is computed. Not filed; part of this draft. No device.
 (`docs/phase2/F110_SCALING.md`, Sprint 28). The device timing arm runs
 only under per-block approval (section 4), and the proxy timing is
 repeated on the program's compute only if it is provided (assumption A3).
+Outcome of the proxy timing: P1 was false at both cell sizes (the build
+grew faster than the predicted band). P2 held at 833 variables and
+failed under the committed rule at 91, where the solve could not be
+measured apart from its overhead. The device arm has no cells, call
+count or cap yet; under "What filing commits to" it needs a dated
+amendment before any call.
 
 Written 2026-10-22 (Sprint 28 Task E, #52), before any timing below.
 Not filed; part of this draft. The device arm needs its own per-block
@@ -829,7 +950,7 @@ approval and is not part of this sprint.
 - **What was already seen.** No row-count timing exists. F29 built its
   pools once, at full rows. The hardware plan's "about 12 minutes of CPU
   per fit" at 833 variables comes from one 735.4 s build
-  (`SPRINT_12_PLAN.md`); whether that build was sequential or full-pair is
+  (`docs/sprints/SPRINT_12_PLAN.md`); whether that build was sequential or full-pair is
   unverified. The QCi paper reports CVQBoost at about 2 s end to end
   (Dirac-3 solve about 1.3 s) at 150,000 rows
   (`docs/evidence-inventory.md`, section 3a).
@@ -892,6 +1013,10 @@ approval and is not part of this sprint.
   states: 79.4 minutes. With the pilot's own time added, the five-seed
   figure is also under the 120-minute cap (about 99 minutes), so the
   decision is the same under either reading.
+- **Noted 2026-11-17 (outside review).** The test bullet names a 95%
+  interval for the slope and 97.5% intervals for P1 and P2; 97.5% was
+  used (`docs/phase2/F110_SCALING.md`). m = 2 counts the two
+  predictions, not the two cells.
 
 ### F103: SPECTRA Tier 1 known-answer check on UCI Steel
 
@@ -906,7 +1031,8 @@ reimplementation, not a Phase 2 claim about fraud data.
   publishes on UCI Steel and its two substrates?
 - **Sources read**: the paper (sections 3-6, Algorithm 1, section 6.4's
   construction) and the two `spectra-tier1-spec.md` files in the Phase 1
-  project's planning folders (identical, 238 lines, read-only). The spec
+  project's planning folders (identical, 238 lines, read-only; not in
+  this repository). The spec
   files add nothing beyond the paper's section 6.4 and Algorithm 1.
   SPECTRA's code is proprietary; none of it is used.
 - **Known answers and tolerances** (ROC-AUC on held-out rows, mean over
@@ -1118,6 +1244,14 @@ and governs wherever the two differ.
     most that fit in 4 hours, not under 5, recorded here before the run.
   - **Output**: `experiments/phase2/results/f157_qnn_ieee.json` (`SIM`),
     resumable by seed; a result document `docs/phase2/F157_QNN_IEEE.md`.
+- **Noted 2026-11-17 (outside review).** F106's own ULB run
+  (`experiments/phase2/results/f106_dequant.json`) kept exact
+  duplicates (492 frauds, 99 test positives per seed). Phase 2 ULB
+  entries drop them, except F106, F107, F109 and Experiment 4's protocol
+  A (the source protocol, which keeps them by design). The count of test rows
+  with an exact copy in the training rows was not recorded, so copies
+  may cross the train and test folds, the mechanism Experiment 4
+  named.
 
 ### F107: shot budget of the F106 circuit, and what the Schmidt-rank threshold does not cover
 
@@ -1175,6 +1309,8 @@ shot is sampled.
     draws depend on the chunking, so they are drawn under the new size.)
 - **What is reported whatever the result**: AUPRC per seed at every m,
   the critical budget, the effective Schmidt rank and |<Z_q>| summary.
+- **Noted 2026-11-17 (outside review).** Its ULB rows kept exact
+  duplicates, as F106's did (see the note under F106).
 
 ### F108: ceiling validation on a simulator with hidden state
 
@@ -1444,6 +1580,13 @@ transaction is generated.
 - **What is reported whatever the result**: per seed and arm, the fraud
   rate, the Bayes error and AUPRC, every estimate, the fitted (a, b, c),
   the generator check, and each method's recovered or failed.
+- **Noted 2026-11-17 (outside review), on the F114 re-run.** The re-run
+  passed its shuffled-label check by under 2% of the margin, and the
+  margin there is its absolute floor, about 30% of the test fraud rate.
+  The learning-rate change followed a failed check and an untracked
+  scratch fit, as disclosed above. The pass is not evidence that the
+  method transfers to ULB, and the PoC plan does not use the ULB
+  estimate.
 
 ### F109: Tier 1 across the six datasets on disk, and the IEEE-CIS aggregation
 
@@ -1499,6 +1642,8 @@ before this module exists or any lane is fit here.
 - **What is reported whatever the result**: each dataset's lane AUCs,
   gates and word per seed; the chosen features per seed; the IEEE-CIS
   before-and-after pair.
+- **Noted 2026-11-17 (outside review).** Its ULB rows kept exact
+  duplicates, as F106's did (see the note under F106).
 
 ### F142: the first Dirac-3S fits
 
@@ -1694,6 +1839,9 @@ count was computed. Not filed; part of this draft.
 - **Recording**: the result file carries an `outcome_record` block per
   family and seed, pointing at the stored file and its SHA-256 (section 2,
   "Outcomes recorded").
+- **Noted 2026-11-17 (outside review).** With m = 156 Bonferroni
+  tests over 10 seeds, this family has little power. A null here is
+  exploratory and does not show that no subset difference exists.
 
 ### F162: in-pocket head-to-head on SPECTRA
 
@@ -1836,7 +1984,8 @@ Not filed; part of this draft. No device. Descriptive: no pass or fail.
   algorithms do on ULB, and which differences between them are reliable?
 - **Data and split**: ULB, duplicates dropped (`data.load_ulb().
   drop_duplicates()`), `data.stratified_split(df, seed)` (60/20/20), the
-  split every Phase 2 ULB result uses. Tuning reads the training and
+  split Phase 2 ULB results use, except F106, F107, F109 and Experiment
+  4's protocol A, which kept duplicates (noted 2026-11-17). Tuning reads the training and
   validation folds only; every reported score is on the test fold, so no
   score comes from the rows that chose its configuration (section 2).
 - **Features**: the classical lanes use all 30 columns; logistic
@@ -2057,8 +2206,12 @@ own with its call count and seconds (Criterion H).
 
 - **ID and card**: unnumbered verify entry; F155.
 - **Question**: does the cloud `dirac-3s` queue accept one continuous
-  job larger than both 954 (QCi's integer-solver figure of 2026-10-21)
-  and 987 (F143's size)? The team lead set the size at 1,300 (Sprint 28
+  job larger than both 954 (the integer solver's level count recorded in
+  `docs/phase2/DIRAC_UNDERSTANDINGS.md`; reworded 2026-11-17)
+  and 987 (F143's size)? (Noted 2026-11-17: the job is continuous, and
+  954 is the integer solver's level count. Whether the continuous
+  ceiling also moved from the 949 base-module figure to 954 is
+  unverified (`docs/phase2/DIRAC_UNDERSTANDINGS.md`, section 4).) The team lead set the size at 1,300 (Sprint 28
   DV1).
 - **The unit**: a CVQBoost pool on ULB, seed 42, Phase 1's stratified
   split, the top 20 features, weak-learner order 3, `dct` learners
@@ -2097,7 +2250,8 @@ Dirac-3S (D5's standing rule). Descriptive: four fits support no test.
 
 - **ID and card**: unnumbered verify entry; F95, the check promised in
   the QCi memo sent 2026-09-25: "Would relaxation schedule 4 close the
-  residual?"
+  residual?" (a tracked copy of its text: `docs/QCI_EQC_MODELS_FEEDBACK.md`,
+  section 6; whether it is the copy sent is unverified).
 - **The schedule-2 answer on Dirac-3S (D5 option 1)**: F142's B1 fits at
   schedule 2, seeds 42 and 43, 91 variables, reached the reference
   optimum: objective gaps of +0.0007 and -0.011 on about -166,494
@@ -2143,6 +2297,13 @@ Dirac-3S (D5's standing rule). Descriptive: four fits support no test.
 - **What is reported whatever the result**: each fit's gap, per-sample
   range, cost, wait and job id, failures included; the statement that
   four fits support no test.
+- **Noted 2026-11-17 (outside review).** In the schedule-2 bullet, the
+  Dirac-3 gaps beside F142's B1 gaps are not a device comparison
+  (section 4): unseeded Phase 1 pools against seeded rebuilds, both
+  91-variable pools fail the resolution screen, the reference optimum is
+  the uniform vector, and there are two fits (seeds 42 and 43). The
+  45-variable fits of units 3 and 4 pass the screen and are not part of
+  that comparison.
 
 ### F170: ULB frauds missed by every model, are their nearest neighbors legitimate?
 
@@ -2175,7 +2336,10 @@ any neighbor is computed. Not filed. No device.
   If the test does not find "higher" there, no ULB reading is made.
 - **Reading, set here**: missed higher than caught, with a median share
   above 0.5, is consistent with ULB's information limit (the ceiling
-  F169 estimates); otherwise a model weakness remains open.
+  F169 estimates); otherwise a model weakness remains open. (Noted
+  2026-11-17: F169 validated the estimator on the simulator only. The
+  ULB estimate is F114's, which the PoC plan calls not a usable ceiling,
+  so "ULB's information limit" here has no measured value.)
 - **Output**: `experiments/phase2/results/f170_missed_neighbors.json`,
   generator `experiments/phase2/src/f170_missed_neighbors.py`. No model
   is fit and no test score is computed, so no outcome block is needed.
@@ -2285,6 +2449,10 @@ or any rounded objective is computed. Zero metered seconds.
   greedy's unrounded objective by more than 1e-6. Output
   `experiments/phase2/results/f188_rounding_delivered.json`, the same
   generator (`--delivered`).
+- **Noted 2026-11-17 (outside review).** "Lost at 400" is true of
+  42/free only. On 43/free the gain also grows from R = 100 to 200, and
+  it is still kept at R = 400. The release rule for the device arm is fixed in
+  Experiment 3's state at filing (Sprint 33 D6).
 
 ### F185: a cost-weighted alert budget on the stored champion scores
 
@@ -2482,3 +2650,35 @@ fails any other open item.
   not measured on Dirac-3S; Experiment 5's state names the four segments
   that can be scored; every assumption in the Filing section is written
   with the word "assumption".
+- 2026-11-17: after an outside adversarial review (Sprint 33 Task F,
+  #128; D5 and D6 option 1). The header no longer says every design was
+  fixed before any Phase 2 result was seen. Filing now commits to
+  reporting the Run entries, to no device call for Experiments 3 and 6
+  before a dated amendment, and to a full entry for any new experiment.
+  Section 1 says how entries written before filing meet the template,
+  and names the Phase 2 work that ran with no entry. The identifiers
+  section covers decisions before Sprint 29, issues, Criterion H, the
+  evidence tags, the QCi question list and the untracked score files.
+  Section 2: the recall cap above 0.5% prevalence, the interval each
+  entry uses, and the limit of seed-level tests. Section 2b: the limits
+  of the default margin. Sections 4 and 5: the exception's scope, the
+  retry rule, and section 5's scope; the stale "no Phase 2 SPECTRA
+  result" corrected. The table names B2's configuration and points to
+  amendment results. Each state at filing gives its outcome, failures
+  included. Experiment 3's release rule is fixed (Sprint 33 D6), and the
+  state says F160 met the registered falsifier. Dated notes under
+  Experiment 5 (four saturated segments), Experiment 6, F106, F107, F109,
+  F114, F154, F155, F170, F95 and F188. Two statements attributed to QCi
+  reworded as our own reading. Paths given in full, and files outside
+  this repository marked.
+- 2026-11-18: after a fresh-eyes check of the 2026-11-17 changes (Sprint
+  33 Task F, #128). Corrected: which result files record score hashes;
+  F170 makes one descriptive test; F104 joins the work with no entry, and
+  F102's and F145's computations are named; the matched budget is 3.0
+  times the prevalence; section 5's scope names the F157 SPECTRA part as
+  a whole-dataset comparison; the "Partly run" key follows the filing
+  commitment; one wording for which ULB runs kept duplicates, with a
+  note under F107; F155's continuous ceiling is unverified; F95's memo
+  text is tracked; F95's note names the fits it covers; F188's note says
+  "lost at 400" is true of 42/free only. Experiment 3 says no stored
+  result computes the release rule yet.

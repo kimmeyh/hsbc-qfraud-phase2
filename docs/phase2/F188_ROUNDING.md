@@ -30,6 +30,14 @@ registered reading) and `experiments/phase2/results/f188_rounding_delivered.json
   result's. The 200:1 figure is QCi's, carried to Dirac-3S and not
   measured there; at 400:1 one instance (43/free) delivers a small gain,
   and no R above 400 was run.
+- **Noted 2026-11-17 (Sprint 33 D6).** At R = 200 the rounded problem's
+  pick is greedy's own selection on three of the six instances (43/mid,
+  44/free and 44/mid) and still scores worse than greedy's unrounded
+  solution. There the delivered reading measures the rounding of the
+  weights, not the selection, and no selection could pass. F25's release
+  rule now compares the pick against greedy's selection solved the same
+  way, on the rounded problem and scored on the real one
+  (`experiments/phase2/PREREGISTRATION_DRAFT.md`, Experiment 3).
 
 ## What was done
 

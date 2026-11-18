@@ -273,3 +273,14 @@ carded when F102 is filed.
 HOLD; its card gets a "Sprint 32 (F188)" line with both readings and the
 F188 condition in "Depends on"; F198 is carded at priority 10 as option
 3 states.
+
+**Changed since asked (2026-11-17, Sprint 33 D6).** An outside review
+found that at R = 200 the rounded problem's pick is greedy's own
+selection on three of the six instances and still scores worse than
+greedy, so "the delivered reading beats greedy" could not pass there.
+The team lead chose Sprint 33 D6 option 1: the condition now compares
+the pick against greedy's selection solved the same way (on the rounded
+problem, scored on the real one), with a gain of more than 1e-6 on at
+least one of the six instances at R = 200. Other ridge weights,
+resolutions or datasets (F198) each need a dated amendment before their
+run. The answer above is unchanged.

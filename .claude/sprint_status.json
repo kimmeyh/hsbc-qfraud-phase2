@@ -12,7 +12,8 @@
       124,
       125,
       126,
-      127
+      127,
+      128
     ],
     "task_actuals": {
       "A": 6,
@@ -26,7 +27,8 @@
       "B": "2026-11-16T11:07:20-05:00",
       "D": "2026-11-16T11:18:49-05:00",
       "E": "2026-11-16T11:53:56-05:00",
-      "C": "2026-11-16T11:54:28-05:00"
+      "C": "2026-11-16T11:54:28-05:00",
+      "F": "2026-11-17T23:31:33-05:00"
     },
     "task_issues": {
       "A": [
@@ -43,15 +45,19 @@
       ],
       "E": [
         127
+      ],
+      "F": [
+        128
       ]
     },
-    "review_task": "E",
+    "review_task": "F",
     "task_estimates": {
       "A": 75,
       "B": 120,
       "D": 60,
       "C": 45,
-      "E": 30
+      "E": 30,
+      "F": 110
     },
     "task_actual_method": {
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 75-minute estimate: check the timer, the parallel tasks and the activity log before using it",
@@ -79,5 +85,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-16"
+  "updated": "2026-11-17"
 }

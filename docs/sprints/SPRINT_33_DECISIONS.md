@@ -247,6 +247,8 @@ base.
 2. Keep three documents, with the plain-terms document's "which version
    to read" note.
 
+**Answer (team lead, 2026-11-17): 2.** Three documents stay.
+
 ## D5. How to apply the adversarial review of the preregistration draft
 
 Asked 2026-11-17, at Manual Validation (action A1).
@@ -300,6 +302,8 @@ them means a second revision round on the day of filing.
    R31 for the team lead's own review.
 3. Apply nothing yet; the team lead reads the findings first.
 
+**Answer (team lead, 2026-11-17): 1.** Applied as Task F (#128).
+
 ## D6. Experiment 3's device release rule (changes Sprint 32 D4's basis)
 
 Asked 2026-11-17, at Manual Validation.
@@ -344,6 +348,9 @@ until a gain survives the device's resolution) and makes it testable.
    before its run.
 2. Keep D4's rule as worded, and add the caveat that on three of the
    six instances the pick is greedy's own selection.
+
+**Answer (team lead, 2026-11-17): 1.** Applied as Task F (#128), with a
+"Changed since asked" note under Sprint 32 D4.
 
 ## D7. Private material in the now-public repository
 
@@ -396,3 +403,115 @@ copies while that is checked.
    profile stay, because evidence files and documents of record are not
    edited.
 3. Keep it public and change nothing until you have checked with QCi.
+
+**Answer (team lead, 2026-11-17), none of the three as written.**
+Verbatim: "I though the qci correspondence folder was gitignored? if
+so, would that work. Otherwise we have a non-repository directory
+D:\Data\Harold\hsbc-quantum-fraud-2026 and would that work? definately
+keeping it public but private correspoondance with QCi if at all
+possible. docs/phase2/DIRAC_UNDERSTANDINGS.md and
+docs/HARDWARE_PLAN_PHASE_2.md can be public". So: the repository stays
+public; the correspondence stays private; the two named documents stay
+as they are. Checked 2026-11-17: `docs/qci_package/` is gitignored
+(`.gitignore` line 70), and no file under any `qci_package` path is in
+any commit, so the received correspondence was never public. The draft's
+two QCi attributions are reworded to our own reading in Task F, per
+QCi's standing request of 2026-09-25 recorded in
+`docs/phase2/DIRAC_UNDERSTANDINGS.md`. One gap is asked as D8.
+
+## D8. Three outgoing QCi letters in the public git history
+
+Asked 2026-11-17, at Manual Validation, after D7's answer.
+
+**What.** QCi's own correspondence was never committed (D7). But three
+of our OUTGOING drafts to QCi were tracked, two from the first commit
+(2026-08-30) and `docs/paper/qci_cover.md` from d9d7dad (2026-09-04),
+until commit 8151ddf (2026-09-17, "Move the QCi correspondence out of the
+public repository"): `docs/paper/qci_cover.md` ("Dirac-3 Expanded
+Access: The Commercial Case", a request for 30,000 QPU seconds),
+`docs/qci-sponsorship-request.md` and `docs/qci-sponsorship-email.html`
+(the sponsorship request and its email form). They hold the team lead's
+words and our commercial ask; I found no text written by QCi in them.
+Because the repository is public, every commit before 8151ddf, and so
+these three files, can be read now. The tag `qci-letter-sent-20260908`
+also points into that history.
+
+**Why it matters.** The ask and its terms are visible to anyone who
+browses the history. Removing them means rewriting every commit since
+the first, which changes every commit hash. This repository's documents
+cite commit hashes as evidence (for example, the preregistration draft's
+"git records that order", and Experiment 4's source commit), so those
+citations would stop resolving. GitHub also keeps pull-request refs and
+cached views, which only GitHub Support can purge.
+
+**Kind per option.**
+- Option 1: Workaround (the letters stay readable in history).
+- Option 2: Prevention (the letters leave the history), at the cost of
+  every cited commit hash.
+
+**Cost per option.**
+- Option 1: 0 minutes; 0 files.
+- Option 2: about 60 minutes for me, plus a request you send to GitHub
+  Support; every branch and tag rewritten and force-pushed (each force
+  push is your approval); every commit hash cited in this repository's
+  documents re-mapped or marked stale.
+
+**Recommendation.** Option 1. The files are your own outgoing request,
+with no QCi text, and the request was sent; the cost of option 2 falls
+on the evidence trail the preregistration relies on.
+
+**Options.**
+
+1. Leave the history as it is. The three letters stay readable in the
+   commits before 8151ddf.
+2. Rewrite the history to remove the three files from every commit
+   (git filter-repo), force-push every branch and tag, ask GitHub
+   Support to purge cached views and pull-request refs, and re-map every
+   commit hash cited in this repository's documents.
+
+## D9. A second review of the preregistration draft, by a different method
+
+Asked 2026-11-18, at Manual Validation (team lead: "How can I do a
+second review of the draft, but using a somewhat different approach so
+that we can find thing that may not have been found the last time").
+
+**What.** The first review (Fable, 2026-11-17) was one free-form
+adversarial read with full repository access, in priority order. It
+sampled: its "not checked" list names F94, F107, F108's arms, F156,
+F169, several "already seen" figures and every external paper. A second
+review finds most when it changes the method, the access or the model.
+
+**Why it matters.** Each method has blind spots. A reader with the
+repository fills gaps a filing reader cannot. A sampled check misses
+what it did not sample. A free-form read finds what looks wrong, not
+what is missing against a standard.
+
+**Kind per option.** All three are Prevention (each targets a class the
+first review could not see).
+
+**Cost per option.**
+- Option 1: about 30 minutes; one agent; 0 metered seconds; no file
+  changed until findings are approved.
+- Option 2: about 60 to 90 minutes; 6 to 8 agents in parallel, which is
+  a multi-agent workflow you must opt into; 0 metered seconds.
+- Option 3: about 40 minutes; one agent; 0 metered seconds.
+
+**Recommendation.** Option 1, on the draft as it stands after Task F,
+run by a different model from the first review (Opus). It is the
+cheapest, and it tests the draft as the filing's reader will meet it.
+
+**Options.**
+
+1. Cold reader: a reviewer gets only the draft's text, with no
+   repository, playing the program's judge. It reports every term,
+   identifier or claim it cannot understand or check, and every place it
+   must take the team's word.
+2. Exhaustive claim audit: a script lists every sentence in the draft
+   with a figure, a verdict or a citation; agents check each one against
+   its source, entry by entry, including the first review's "not
+   checked" list and the external papers' public text.
+3. Standard and gaming: a reviewer scores each section 6 entry against
+   the OSF Preregistration template's items, then tries to reach a
+   favorable result inside the written rules: every choice still free
+   after filing, and a way to pass Experiment 3's release rule.
+4. Options 1 and 3 together, in parallel (two agents, about 40 minutes).
