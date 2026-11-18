@@ -50,6 +50,21 @@ handover: a pointer to a file is not a handover.
   version, sections 6 and 7:
   `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\learning\ML QML and QC Understandings about Quantum Advantage - Laymen terms.md`
 
+## Team lead's answers (2026-11-17)
+
+- A1: an adversarial review of the draft, run by Fable, before the
+  team lead's own review. The draft is still open: every word can
+  change, and each change is accounted for (a revision-log row, the
+  drift guard, and the PoC plan draft where the change touches it).
+- A2: all twelve assumptions confirmed as written.
+- A3, A4, A5: ok.
+- Added: an outside machine learning expert's review of the plain-terms
+  learning document, applied as its 2026-11-17 version (author and use
+  of artificial intelligence tools, executive summary, insurance,
+  which version to read, why SPECTRA). Decision D4 (one learning
+  document or three) asked. The two expert versions are reviewed next.
+- New fact: this repository and EvidenceBasedDB are public.
+
 ## For information (no action needed)
 
 ---

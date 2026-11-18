@@ -194,3 +194,55 @@ have to make assumptions about all missing information. q3. yes d3. 2".
 So F13 runs on stated best-possible assumptions in place of the brief;
 the filing venue and date stay blank and changeable; section 6 separates
 run entries from entries to run.
+
+## D4. One learning document or three?
+
+Asked 2026-11-17, at Manual Validation, after an outside machine learning
+expert's review of the plain-terms learning document.
+
+**What.** The learning documents are three files: plain terms, machine
+learning expert and quantum computing expert. The reviewer did not know
+which to read, read the plain-terms one, and worried that the expert
+versions held something important. The reviewer suggested one combined
+document. The plain-terms document's 2026-11-17 version now says "read
+this one", and that the expert versions cover the same experiments with
+more method detail. Almost every result file the expert versions cite is
+cited in the plain-terms version too; the exceptions are
+`docs/RESULTS_MEMO.md`, `experiments/phase2/results/f158_fraud_types.json`
+and `docs/sprints/SPRINT_26_SUMMARY.md` (checked 2026-11-17).
+
+**Why it matters.** Three files mean every update is made three times
+(Sprint 33 Task C was), and a reader must choose. One file removes the
+choice and the triple upkeep, but it is longer, and the expert detail
+must be marked so a general reader can skip it. The answer also sets how
+the team lead's coming review of the two expert versions is done: as a
+review of two files, or as a merge.
+
+**Kind per option.**
+- Option 1: Prevention (one file cannot drift from another, and the
+  reader has no choice to make).
+- Option 2: Workaround (the "which to read" note answers the reader;
+  the triple upkeep stays).
+
+**Cost per option.**
+- Option 1: about 90 minutes; 0 metered seconds; 4 files (the
+  plain-terms document; the two expert documents, removed, with links to
+  them redirected; `experiments/src/test_learning_docs.py`, whose
+  three-document checks and proofs change).
+- Option 2: 0 minutes now (already done); each later update stays three
+  edits.
+
+**Recommendation.** Option 1, after the team lead's review of the expert
+versions, so that review's feedback is applied once, in the merged file.
+The plain-terms version already holds the most results, so it is the
+base.
+
+**Options.**
+
+1. Combine: the plain-terms document becomes the only learning document.
+   The expert versions' extra method detail moves into it under marked
+   "For machine learning experts" and "For quantum computing experts"
+   parts, the two expert files are removed, and the guard checks one
+   file. Done after the team lead's review of the expert versions.
+2. Keep three documents, with the plain-terms document's "which version
+   to read" note.

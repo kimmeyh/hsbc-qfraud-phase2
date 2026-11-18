@@ -4,6 +4,10 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-17
+
+- **docs**: Sprint 33 Manual Validation, an outside machine learning expert's review of the plain-terms learning document (its 2026-11-17 version). New at the top: the author (the only author) and how heavily artificial intelligence tools were used in the experiments and documents; a multi-paragraph executive summary in place of the bottom-line list; a first look at insurance fraud (what probably carries over, what may differ, what needs its own experiment; untested); and which version to read. Section 1 says why SPECTRA is used although it is not fraud data. The change list and "How this document was made" move to the end. No result changed. Decision D4 (one learning document or three) written for the team lead. The team lead's answers to the validation actions recorded.
+
 ### 2026-11-16
 
 - **docs**: Sprint 33 Task C (F178, #126): the three learning documents at version 1.4. No new result. Each "Experiments planned" section notes that the preregistration is ready to file without the brief, on the PoC plan's written assumptions, with a drift guard through review. The team lead's decision on F188 (Sprint 32 D4: F25 on hold until the delivered reading beats greedy at 200:1) replaces "a decision for the team lead" in every F188 passage.

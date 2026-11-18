@@ -1,45 +1,135 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.4**, 2026-11-16 (Sprint 33, card F178). Written for readers
+**Version 1.5**, 2026-11-17 (Sprint 33, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
-computing, and are expert in none of them. Two companion versions go
-deeper: one for [machine learning experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20ML%20Expert.md)
-and one for [quantum computing experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20QC%20Expert.md).
+computing, and are expert in none of them.
 
-## Change list
+**Author**: Harold Kimmey, the only author. Where this document says "the
+team lead", it means the author. The work relied heavily on artificial
+intelligence tools, in every experiment and in all of the documentation.
+Claude, Anthropic's model, run through Claude Code, wrote most of the
+code, ran the experiments and drafted most of the text, this document
+included. GitHub Copilot reviewed some of the code changes. The author
+chose the questions, approved each sprint's plan and every paid run on
+quantum hardware, made the decisions recorded in the sprint records
+(`docs/sprints/`), and reviewed this document. "We" and "our" mean the
+author working with these tools.
 
-- **1.4, 2026-11-16 (Sprint 33)**: no new result. "Experiments planned" notes that the [preregistration](#def-preregistration) is ready to file, without the brief, on written assumptions. The team lead's decision on the rounding test (Sprint 32 D4) replaces "a decision for the team lead" in sections 6 and 7.
-- **1.3, 2026-11-10 (Sprint 32)**: Sprint 32's two results added, each as a tagged claim and as a dated result under "Experiments planned": F185 (alerts chosen by the money at risk, section 2) and F188 (the rounding test, section 6). The two matching ideas leave "Experiments not yet planned". No Sprint 33 run is preregistered yet, so none is listed.
-- **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Each dataset is named in full the first time, with a link to the new Appendix F (Datasets), and by its short name after that; the short name links to the same entry. "[Device](#def-device)" is defined (Appendix A). Section 3's results are rewritten in plain terms, each starting with what it means. The team lead's suggestions are added to "The data needed", with why each would help and what the public data already holds. New: the card-testing pattern, what our tests score inside the [alert budget](#ml-alert-budget), [interference](#qc-interference) beside [superposition](#qc-superposition) and [entanglement](#qc-entanglement), and where the training-cost growth was measured. "Experiments not yet planned" gains the backlog proposals of Sprint 31 D18.
-- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
-- **1.0, 2026-11-05 (Sprint 31)**: first version. It covers Phase 1
-  (filed 2026-09-12) and Phase 2 up to Sprint 30. Sprint 31's own runs
-  have not finished; each has a marked place in "Experiments planned"
-  where its result will go.
+## Executive summary
 
-## Bottom line
+[HSBC](#acr-hsbc), with The Quantum Insider, ran a challenge: can quantum
+computing help banks find credit card fraud? This project entered it.
+Phase 1, a proposal with results, was filed on 2026-09-12. Phase 2
+continues the work.
 
-- **Our experiments found no [quantum advantage](#qc-quantum-advantage) for credit card fraud
-  detection.** Tuned classical models were the best detectors on every
-  fraud dataset we tried. The quantum and [quantum-inspired](#qc-quantum-inspired) methods came
-  close on some tests and never won on a test that was set before the
-  run.
-- **The quantum hardware worked as a solver.** The [Dirac-3](#qc-dirac-3) and [Dirac-3S](#qc-dirac-3s)
-  machines solved the math problems we gave them. On our first problem
-  any good solver gets the same answer, so a perfect solver could not
-  help. The problem has to change before a [device](#def-device) can show anything.
-- **Outside research agrees.** Our store of published papers, in the
-  themes we read, holds no result in which a quantum model beats a tuned classical model on
-  table-shaped, unbalanced data like card payments.
-- **What could still help is mostly classical.** Better data (more fields
-  about the merchant, the customer's device and the account) and better use of the
-  [alert budget](#ml-alert-budget) matter more than any quantum step we tested.
-- **The quantum role that still fits is narrow.** A device can pick a
-  small set of [features](#ml-feature) or models from a summary of the data. Our tests
-  of that role are not finished.
+The short answer so far is no. We found no
+[quantum advantage](#qc-quantum-advantage) for card fraud detection. On
+every fraud dataset we tried, ordinary machine learning models, tuned
+with care, were the best detectors. The best of them were boosted
+[decision trees](#ml-decision-tree), a common method in industry. The
+[quantum-inspired](#qc-quantum-inspired) model came close on some tests.
+It never won a test whose rules were set before the run.
+
+The quantum hardware itself worked. We used two machines from the company
+QCi, [Dirac-3](#qc-dirac-3) and [Dirac-3S](#qc-dirac-3s). They solved the
+math problems we gave them correctly. But an ordinary computer solved the
+same problems just as well, so even a perfect quantum machine could not
+have made the model more accurate. We also simulated small quantum
+circuits on a laptop. Each time, an ordinary model built to copy the
+circuit did at least as well. Published research agrees: in the papers we
+read, no quantum model beats a tuned ordinary model on table-shaped data
+with few frauds, such as card payments.
+
+What made a difference was ordinary. Choosing which payments to check by
+the money at risk, and not by the fraud score alone, caught about four
+times the fraud dollars on one dataset, but fewer frauds. One wrong
+default setting made a good model look bad. And the frauds that every
+model missed looked like normal payments in the fields the public data
+has. More informative data, such as details of the merchant, the
+account and the customer's phone or computer, would likely help more than a different model.
+
+One narrow quantum role is still open: picking a small set of
+[features](#ml-feature) or models from a summary of the data. Our latest
+test of it found that the [device](#def-device)'s limited resolution would
+erase the small gains an ordinary search found. That role is on hold
+until a problem shows a gain large enough for the device to see.
+
+How far to trust this: every result in the detailed sections names the
+file it came from, and a test checks that each number appears in that
+file. Where we could, we wrote down the test and what would count as
+failure before each experiment ran (a
+[preregistration](#def-preregistration)), and we report the failures. A
+published quantum-inspired fraud result did not hold up when we repeated
+it. The limits are real too. All of the data is public card data or
+simulated data, and none of it is insurance data. The next section says
+what that may mean for insurance.
+
+## Applying these findings to insurance fraud
+
+This section is the author's starting point, drafted with artificial
+intelligence help. None of it was tested on insurance data. It says what
+probably carries over from card fraud, what may not, and what would need
+its own experiment.
+
+**How insurance fraud differs from card fraud** (unverified: from general
+knowledge of the field, not from this project's data):
+
+- The unit is a claim, not a payment. An insurer sees far fewer claims
+  than a bank sees payments, and each claim carries more information,
+  much of it text, photos, estimates and bills. The public card data we
+  used has none of that.
+- [Labels](#ml-label) are slower and less complete. A card fraud is usually confirmed
+  within weeks, when the card holder disputes the payment. A claim is
+  labeled fraud only if someone investigates it, so the known frauds are
+  the ones that were already suspected. A model trained on them can learn
+  what investigators already look for.
+- Fraud ranges from organized rings, such as staged accidents, to adding
+  to a real claim. Rings show in the links between claims, people,
+  vehicles and providers. That is network data, not a table of separate
+  rows, and every experiment here used a table of separate rows.
+- A review costs more. An investigation takes hours, not minutes, so the
+  number of claims that can be checked is small and the value of each
+  catch varies more.
+- Rules on what an insurer may use, and on fair handling of claims,
+  differ from the rules for banks. This project did not check them.
+
+**What probably carries over:**
+
+- The quantum result. The reasons the quantum methods did not help here
+  are the shape of the data (a table of numbers with few frauds) and the
+  limits of today's hardware. Neither reason is specific to cards. Unless
+  insurance data has a different shape, expect the same result.
+- The way of testing: tuned boosted trees as the model to beat; training
+  on earlier data and testing on later data; scoring only what fits in
+  the review budget; checking that the model finds nothing when the
+  labels are shuffled; and writing the test down before the run.
+- The ranking by money at risk (section 2). With fewer reviews and more
+  varied claim amounts, it may matter more for insurance than for cards.
+- The data lesson. The frauds every model missed looked normal in the
+  fields we had. Better fields helped more than a different model.
+
+**What would need its own experiment:**
+
+- Whether tuned boosted trees are still the best detector on claim data
+  with text and images.
+- Fraud rings as a network problem. Finding a tightly linked group in a
+  large network is an optimization problem of the kind the Dirac devices
+  accept. This project did not test it, and ordinary network methods
+  are strong. It would need the same test used here: a quantum run only
+  after an ordinary solver is shown to fall short. One study reports that
+  boosted trees that use the network of links were as good as or better
+  than earlier methods on a public and a private insurance fraud dataset
+  (EvidenceBasedDB `ggbm-par-or-better`, low).
+- How much the investigated-only labels bias a model's scores.
 
 ## How to read this document
 
+- **Which version to read.** Read this one. It has every experiment and
+  conclusion in plain words. Two companion versions cover the same
+  experiments with more method detail, one for
+  [machine learning experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20ML%20Expert.md) and one for
+  [quantum computing experts](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20QC%20Expert.md). Almost every
+  result file they cite is cited here too.
 - **Each numbered section starts with "In short"**: its conclusion in a
   few sentences. The detail follows.
 - **Two tiers of evidence.** Each topic has "What our experiments
@@ -66,19 +156,6 @@ and one for [quantum computing experts](ML%20QML%20and%20QC%20Understandings%20a
   (an acronym) needs an entry in Appendix B and a link to it. If an
   addition breaks a rule, the next update fixes it.
 
-## How this document was made
-
-- Our results were read from this repository's result documents on
-  2026-11-05 and 2026-11-06: `docs/phase2/`, `docs/phase2/algorithms/`,
-  the sprint summaries in `docs/sprints/`, the Phase 2 draft plan
-  `experiments/phase2/PREREGISTRATION_DRAFT.md`, and the filed Phase 1
-  proposal `docs/paper/proposal.md`.
-- Outside claims were read from the EvidenceBasedDB store, read only, on
-  2026-11-05 and 2026-11-06 (snapshot). Refresh one with
-  `python scripts/edb_query.py show <id>`.
-- The form follows EvidenceBasedDB's memo
-  `docs/spikes/F118_WHAT_THE_STORE_SAYS.md` (in that repository).
-
 ## 1. The challenge, in one paragraph
 
 **In short:** can quantum computing find more card fraud than ordinary
@@ -96,7 +173,13 @@ review. Our data: two public card-fraud datasets, the
 and the [fraud detection dataset of the Institute of Electrical and Electronics Engineers Computational Intelligence Society](#ds-ieee-cis) ([IEEE-CIS](#ds-ieee-cis));
 four [quantum-ready benchmark datasets](#ds-spectra) called [SPECTRA](#ds-spectra), built so that a
 quantum model could win; and our own [fraud simulator](#ds-simulator). Appendix F describes
-each one.
+each one. [SPECTRA](#ds-spectra) is not fraud data. Its datasets are about a steel
+plant, a gas turbine, machine failures and telephone customers. We use it
+to see whether the quantum methods win on data built for them to win.
+They did not (sections 3 and 5). It is not part of the Phase 1 proposal,
+which is why the Phase 1 explainer
+(`docs/explainer/THE_SUBMISSION_EXPLAINED.md`) says it does not belong
+there.
 
 ## 2. Credit card fraud
 
@@ -123,7 +206,7 @@ the bank with their own card, are out of scope.
 - **Mistakes cost different amounts.** A missed fraud becomes a
   chargeback: the bank pays it back. A false alarm can lose a good
   customer (`docs/paper/proposal.md`, section 1).
-- **People can check only so many alerts.** A bank sets an alert budget:
+- **People can check only so many alerts.** A bank sets an [alert budget](#ml-alert-budget):
   for example, the top 0.5% most suspicious payments go to an analyst.
   What matters is how much fraud lands inside that budget.
 - **[Labels](#ml-label) arrive late.** A payment is confirmed as fraud weeks after it
@@ -893,6 +976,33 @@ datasets.
 - **Platforms**: QCi Dirac-3 and Dirac-3S; a NumPy [statevector simulator](#qc-statevector-simulator)
   on a laptop; a workstation for every classical run. No gate based
   hardware was used (`docs/phase2/F6_GATE_BASED_ARM.md`).
+
+## About this document
+
+### How this document was made
+
+- Our results were read from this repository's result documents on
+  2026-11-05 and 2026-11-06: `docs/phase2/`, `docs/phase2/algorithms/`,
+  the sprint summaries in `docs/sprints/`, the Phase 2 draft plan
+  `experiments/phase2/PREREGISTRATION_DRAFT.md`, and the filed Phase 1
+  proposal `docs/paper/proposal.md`.
+- Outside claims were read from the EvidenceBasedDB store, read only, on
+  2026-11-05 and 2026-11-06 (snapshot). Refresh one with
+  `python scripts/edb_query.py show <id>`.
+- The form follows EvidenceBasedDB's memo
+  `docs/spikes/F118_WHAT_THE_STORE_SAYS.md` (in that repository).
+
+### Change list
+
+- **1.5, 2026-11-17 (Sprint 33)**: an outside machine learning expert's review. New at the top: the author and how artificial intelligence tools were used, a multi-paragraph executive summary in place of the bottom-line list, a first look at insurance fraud, and which version to read. Section 1 says why [SPECTRA](#ds-spectra) is used although it is not fraud data. The change list and "How this document was made" move to the end. No result changed.
+- **1.4, 2026-11-16 (Sprint 33)**: no new result. "Experiments planned" notes that the [preregistration](#def-preregistration) is ready to file, without the brief, on written assumptions. The team lead's decision on the rounding test (Sprint 32 D4) replaces "a decision for the team lead" in sections 6 and 7.
+- **1.3, 2026-11-10 (Sprint 32)**: Sprint 32's two results added, each as a tagged claim and as a dated result under "Experiments planned": F185 (alerts chosen by the money at risk, section 2) and F188 (the rounding test, section 6). The two matching ideas leave "Experiments not yet planned". No Sprint 33 run is preregistered yet, so none is listed.
+- **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Each dataset is named in full the first time, with a link to the new Appendix F (Datasets), and by its short name after that; the short name links to the same entry. "[Device](#def-device)" is defined (Appendix A). Section 3's results are rewritten in plain terms, each starting with what it means. The team lead's suggestions are added to "The data needed", with why each would help and what the public data already holds. New: the card-testing pattern, what our tests score inside the [alert budget](#ml-alert-budget), [interference](#qc-interference) beside [superposition](#qc-superposition) and [entanglement](#qc-entanglement), and where the training-cost growth was measured. "Experiments not yet planned" gains the backlog proposals of Sprint 31 D18.
+- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
+- **1.0, 2026-11-05 (Sprint 31)**: first version. It covers Phase 1
+  (filed 2026-09-12) and Phase 2 up to Sprint 30. Sprint 31's own runs
+  have not finished; each has a marked place in "Experiments planned"
+  where its result will go.
 
 ## Appendix A. Definitions
 
