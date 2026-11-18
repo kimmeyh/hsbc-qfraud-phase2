@@ -2756,7 +2756,10 @@ or any amount is joined to a score. Zero metered seconds.
   never edits to the filed text. This file also gets a hash test
   (Sprint 33 D11): `experiments/src/test_phase2_prereg_filed.py`
   hashes the text above a "## Amendments" heading and fails on any
-  change to it, with a proof that an edited copy fails. Amendments are
+  change to it, with a proof that an edited copy fails. The lock
+  covers both copies of the filed text: this file and
+  `experiments/phase2/PREREGISTRATION_FINAL.md`, the copy submitted for
+  filing, which is byte-identical to it (team lead, 2026-11-18). Amendments are
   appended below that heading. Until filing, the drift guard
   (`experiments/src/test_phase2_prereg_draft.py`) checks that the draft
   stays consistent while reviews change it.
@@ -2939,4 +2942,7 @@ fails any other open item.
   Experiment 3's state paragraph says when the rule is computed.
 - 2026-11-18: status changed from DRAFT to FINAL, the text submitted
   for filing (team lead). The filing date and venue are recorded when
-  the filing is confirmed.
+  the filing is confirmed. Copied byte for byte to
+  `experiments/phase2/PREREGISTRATION_FINAL.md`, the name submitted;
+  this file keeps its name because results and modules cite it. Both
+  are locked at filing (section 7).
