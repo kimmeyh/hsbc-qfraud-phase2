@@ -246,3 +246,153 @@ base.
    file. Done after the team lead's review of the expert versions.
 2. Keep three documents, with the plain-terms document's "which version
    to read" note.
+
+## D5. How to apply the adversarial review of the preregistration draft
+
+Asked 2026-11-17, at Manual Validation (action A1).
+
+**What.** A Fable adversarial review of
+`experiments/phase2/PREREGISTRATION_DRAFT.md` (read at 0a0e658) found 8
+Blockers, 14 Major and 9 Minor findings, R1 to R31. Every figure it
+checked against a result file matched. The Blockers are statements that
+were true of a working draft and are false of a filing (R1 "fixed
+before any Phase 2 result is seen"; R2 "no Phase 2 SPECTRA result exists
+yet"; R3 "every Phase 2 experiment gets one entry"), a filing that
+commits to no fully specified future test (R4), a device release rule
+with no decision rule (R5), state paragraphs that spell out the
+predictions that held and only link the ones that failed (R6), private
+vendor material reachable from the draft (R7), and per-row score files
+the entries depend on that are not tracked (R8). R5 and R7 are asked
+separately (D6, D7). I checked R1, R2, R3, R7, R8 and R10 against the
+files myself; each holds.
+
+**Why it matters.** The draft is not filed, so every word can change. A
+filed preregistration that says its designs were fixed before any
+result was seen, when 23 of its 25 rows had already run, is the first
+thing an outside reviewer attacks. Each fix is text: an in-place edit
+for the header, Filing, sections 1 to 5, the table and the state
+paragraphs; a dated note under an entry that has already run (the
+draft's own rule). One revision-log row dated 2026-11-17 covers them.
+
+**Kind per option.**
+- Option 1: Prevention (the claims a reviewer would attack are fixed
+  before filing, and section 1's rule is restated so later entries meet
+  it).
+- Option 2: Workaround (the Minor findings stay open for your review).
+- Option 3: Workaround (nothing changes until you read the findings).
+
+**Cost per option.**
+- Option 1: about 90 minutes; 0 metered seconds; 4 files (the draft, the
+  PoC plan draft, the guard's registered figures if a new decimal is
+  needed, CHANGELOG).
+- Option 2: about 70 minutes; 0 metered seconds; the same 4 files.
+- Option 3: 0 minutes now.
+
+**Recommendation.** Option 1. The Minor findings are cheap, and leaving
+them means a second revision round on the day of filing.
+
+**Options.**
+
+1. Apply every finding except R5 and R7 (each its own decision) as the
+   review proposes, then rerun the drift guard and its proofs and a
+   fresh-eyes check of the changed text.
+2. Apply the Blocker and Major findings except R5 and R7; leave R23 to
+   R31 for the team lead's own review.
+3. Apply nothing yet; the team lead reads the findings first.
+
+## D6. Experiment 3's device release rule (changes Sprint 32 D4's basis)
+
+Asked 2026-11-17, at Manual Validation.
+
+**What.** Sprint 32 D4 holds F25 until "F188's delivered reading beats
+greedy at 200:1". The review (R5) found that the delivered reading
+compares the rounded problem's pick, with weights solved on the rounded
+problem, against greedy solved on the unrounded problem. On three of the
+six instances the pick is greedy's own selection and still scores worse,
+so the comparison measures the rounding of the weights as well as the
+selection, and no selection can pass on those instances. The rule also
+does not say on how many instances, by what margin, or how F198's other
+ridge weights and resolutions count. (Checked by the reviewer against
+`experiments/phase2/results/f188_rounding_delivered.json`; I have not
+rechecked it.)
+
+**Why it matters.** As written, the rule cannot be passed on half its
+instances, and an analyst can vary ridge weight and resolution until it
+passes. Either is a defect a reviewer finds.
+
+**Kind per option.**
+- Option 1: Prevention (a fixed, passable rule, with variants as dated
+  amendments).
+- Option 2: Workaround (the defect is disclosed and stays).
+
+**Cost per option.**
+- Option 1: about 20 minutes; 0 metered seconds; 3 files (the draft, the
+  PoC plan draft, `docs/phase2/F188_ROUNDING.md`) plus a "Changed since
+  asked" note under Sprint 32 D4.
+- Option 2: about 10 minutes; 0 metered seconds; 2 files.
+
+**Recommendation.** Option 1. It keeps the intent of D4 (no device run
+until a gain survives the device's resolution) and makes it testable.
+
+**Options.**
+
+1. Replace the rule with: on F176's six instances at R = 200, the
+   rounded problem's pick delivers a gain of more than 1e-6 against
+   greedy's selection solved the same way (on the rounded problem,
+   scored on the real one), on at least one instance. Any other ridge
+   weight, resolution or dataset (F198) is a new dated amendment written
+   before its run.
+2. Keep D4's rule as worded, and add the caveat that on three of the
+   six instances the pick is greedy's own selection.
+
+## D7. Private material in the now-public repository
+
+Asked 2026-11-17, at Manual Validation.
+
+**What.** The repository became public on 2026-11-17. The review (R7)
+found tracked text that may not be meant for the public: the substance
+of QCi's answers to our questions, with quotes from QCi staff
+(`docs/phase2/DIRAC_UNDERSTANDINGS.md`); the device-time allocation
+request and grant (`docs/HARDWARE_PLAN_PHASE_2.md` and sprint records);
+and the account balance in device call logs and the cost ledger. The
+same file records QCi's standing request of 2026-09-25 that we present
+our device readings as our own findings, not as conclusions QCi
+validated; the draft says "QCi confirmed it on 2026-10-21". The filed
+team profile in `docs/paper/` carries the team lead's personal email
+address. The review found no credentials. Removing text now does not
+remove it from the public history.
+
+**Why it matters.** It may break QCi's request and expose commercial
+terms and personal contact details. Each day public widens the copies.
+
+**Kind per option.**
+- Option 1: Prevention (exposure stops first; each item is then decided
+  with the facts).
+- Option 2: Workaround (the current text goes; the history keeps it).
+- Option 3: Workaround (nothing changes until QCi is asked).
+
+**Cost per option.**
+- Option 1: your action in GitHub settings (about 2 minutes), then about
+  30 minutes for me to list every tracked item with its location; 0
+  metered seconds; no file changed until you decide each item.
+- Option 2: about 40 minutes; 0 metered seconds; 3 files (the draft,
+  `docs/phase2/DIRAC_UNDERSTANDINGS.md`, `docs/HARDWARE_PLAN_PHASE_2.md`).
+- Option 3: 0 minutes now.
+
+**Recommendation.** Option 1. Only you know what QCi has agreed to, and
+making the repository private again is the one step that stops further
+copies while that is checked.
+
+**Options.**
+
+1. You set this repository private again now (GitHub, Settings, Danger
+   Zone, Change visibility). I then list every tracked item with QCi
+   correspondence, commercial terms or personal details, for a decision
+   on each before it is public again.
+2. Keep it public. I remove the draft's two QCi attributions (R7's
+   wording), the Q&A substance in `docs/phase2/DIRAC_UNDERSTANDINGS.md`
+   and the allocation figures in `docs/HARDWARE_PLAN_PHASE_2.md` in a
+   new commit. The balance fields in evidence files and the filed team
+   profile stay, because evidence files and documents of record are not
+   edited.
+3. Keep it public and change nothing until you have checked with QCi.
