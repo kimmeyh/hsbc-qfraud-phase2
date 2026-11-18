@@ -28,7 +28,8 @@
       "F": 60,
       "G": 23,
       "H": 12,
-      "I": 12
+      "I": 12,
+      "J": 10
     },
     "task_started": {
       "A": "2026-11-16T11:01:07-05:00",
@@ -96,7 +97,8 @@
       "F": "gaps over 30 min and pauses subtracted",
       "G": "gaps over 30 min and pauses subtracted",
       "H": "gaps over 30 min and pauses subtracted",
-      "I": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle"
+      "I": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle",
+      "J": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 6,
@@ -107,7 +109,8 @@
       "F": 60,
       "G": 23,
       "H": 12,
-      "I": 553
+      "I": 553,
+      "J": 10
     }
   },
   "last_completed_sprint": {

@@ -49,8 +49,26 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 32: Close a Device Question, State Results in Dollars, Tighten
-Two Guards** (Nov 8 - Nov 16, 2026; PR #116). Delivered **F188, F181,
+**Sprint 33: The Phase 2 Preregistration, Ready to File** (Nov 16 - Nov
+18, 2026; PR #122). Delivered **F13 and F102** (the PoC plan restated
+for a filing without the brief; the preregistration ready to file, with
+a drift guard of eleven terms) and **the F178 update** (learning
+documents 1.6 and 1.5). Two outside reviews applied (D5, D6; D9's claim
+audit, seven read-only reviews). D10: from filing on, recall at the 0.1%
+budget is reported beside the 0.5% figure. D11: a hash test of the filed
+text at filing. D12: Experiment 3's release rule is computed after
+filing. The preregistration is marked FINAL, submitted for filing
+2026-11-18, and copied byte for byte to
+`experiments/phase2/PREREGISTRATION_FINAL.md`. Retrospective: i2 and i3
+done (Task J), i1 tracked, i4 and i5 skipped. Zero metered seconds.
+Moved to Sprint 34 (team lead): the filing venue, the lock step and
+Experiment 3's release rule. Records: `SPRINT_33_PLAN.md`,
+`SPRINT_33_VALIDATION.md`, `SPRINT_33_DECISIONS.md`,
+`SPRINT_33_RETROSPECTIVE.md`; `SPRINT_33_SUMMARY.md` at Sprint 34
+planning.
+
+### Sprint 32: Close a Device Question, State Results in Dollars, Tighten
+Two Guards (Nov 8 - Nov 16, 2026; PR #116). Delivered **F188, F181,
 F185, F194 and the F178 update**, the F150 and F111 drafts updated (not
 sent; D2 option 3), the Phase 5 fresh-eyes fixes, D4 (option 3: F25
 stays on HOLD with F188's condition; F198 carded), the PR 116 review

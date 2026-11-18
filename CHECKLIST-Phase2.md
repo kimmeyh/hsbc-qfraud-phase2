@@ -102,6 +102,12 @@ Nothing in this stage is time-bound. Schedule on value.
         amendment, written after the first reading and before the second)
         and F185 written before their first scores. Open: the filing date
         (team lead)
+      - **Progress 2026-11-18** (Sprint 33): ready to file and marked
+        FINAL, submitted for filing 2026-11-18 (team lead); copied to
+        `experiments/phase2/PREREGISTRATION_FINAL.md`; a drift guard,
+        `experiments/src/test_phase2_prereg_draft.py`. Open (Sprint 34):
+        the filing venue, the lock step in its section 7, and Experiment
+        3's release rule
 - [x] **C**: F154 every saved test result's confusion counts, and where
       each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
       the standing rule that every result records its outcomes (CLAUDE.md),
@@ -161,6 +167,9 @@ Nothing in this stage is time-bound. Schedule on value.
       - **Progress 2026-10-27** (Sprint 29, F167): a draft of the full plan
         on labeled assumptions, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; F13
         replaces each assumption with the brief's terms on notification
+      - **Progress 2026-11-16** (Sprint 33 Task A): the draft restated for
+        a filing without the brief; assumptions A1-A12, each with its
+        basis and what replaces it, confirmed by the team lead 2026-11-17
 
 ## The six experiments, in the order the proposal commits to (section 5)
 
