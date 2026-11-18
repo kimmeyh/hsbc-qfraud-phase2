@@ -49,9 +49,11 @@ EXPERIMENTS = range(1, 7)
 
 # Figures in the draft that resolve to no tracked result file it names.
 # Each was checked when registered (2026-11-16).
+# -0.0024 (F64's interval, quoted from docs/F64_LADDER_DECOMPOSITION.md)
+# left this list 2026-11-18: the D9 notes name f144_proxy_twin.json and
+# f154_confusion.json, which hold values that round to it. The match is
+# by coincidence; the figure's source is still F64's document.
 REGISTERED = {
-    "-0.0024": "quoted from docs/F64_LADDER_DECOMPOSITION.md, the Phase 1 "
-               "seed-mean t-interval the Experiment 1 entry re-tests",
     "10.5220": "part of the DOI 10.5220/0014628400004052, not a figure",
     "824.6": "the Experiment 4 pilot's projection in minutes; stored in "
              "f111_loke_protocol.json, which that entry does not name",

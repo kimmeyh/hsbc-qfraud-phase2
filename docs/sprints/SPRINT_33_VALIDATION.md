@@ -64,6 +64,31 @@ handover: a pointer to a file is not a handover.
   which version to read, why SPECTRA). Decision D4 (one learning
   document or three) asked. The two expert versions are reviewed next.
 - New fact: this repository and EvidenceBasedDB are public.
+- D8: option 1 (the three QCi letters already in the history stay).
+  D9: option 2, an exhaustive claim audit, run as seven Opus agents,
+  one per block of the draft, while the team lead was away.
+
+## D9 claim audit (2026-11-18, Task G, #129)
+
+- Seven read-only reviews checked every sentence in the draft with a
+  figure, verdict or citation against its source. Found: 3 Blocker,
+  12 Major, 42 Minor. The Blockers and Majors were spot-checked in the
+  session before any edit.
+- Applied (Task G): the factual corrections. Sections before 6 and
+  section 7 are corrected in place. Entry text written before a run is
+  kept; each affected entry gets one dated note. The same errors are
+  corrected in `F152_EXP2_RESULT.md`, `F94_EXP3_CONTROLS.md`, the PoC
+  plan and the F25 card (D6's rule added).
+- The three Blockers: Experiment 2 said no Phase 2 score on IEEE-CIS
+  existed (F109 had scored other lanes on a subsample); F108 said
+  confident learning failed (it was never run); Experiment 4 named the
+  wrong commit as nearest the paper (the first commit builds its pool
+  sequentially, 435 learners against the 465 used).
+- Held for the team lead: the filed proposal's primary metric (block
+  A, M4) and a hash test of the filed text (block G, D1). Both are
+  questions for the 8am handover.
+- Reports: `C:\Users\kimme\AppData\Local\Temp\claude\2fcd2cbd0553c57a\633d17a9-e662-4d77-b4f8-e75410d90041\scratchpad\d9\report_A.md`
+  to `report_G.md` in the same folder (local, not tracked).
 
 ## For information (no action needed)
 

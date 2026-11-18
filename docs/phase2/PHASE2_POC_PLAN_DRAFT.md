@@ -120,8 +120,8 @@ device block, and the decision that releases it.
   (`docs/phase2/F188_ROUNDING.md`). F25 is on HOLD: before
   any device run on this formulation, the release rule in the
   preregistration draft's Experiment 3 must be met (Sprint 32 D4 option
-  3; Sprint 33 D6 option 1). F160 met the registered design falsifier on
-  IEEE-CIS; the release rule is stricter than that falsifier.
+  3; Sprint 33 D6 option 1). F160 passed the registered design falsifier
+  on IEEE-CIS (the design did not fail); the release rule is stricter than that falsifier.
 - PoC work, in order:
   1. A design that meets the release rule on the proxy. This is the
      critical path. Deadline: end of PoC week 4 **[A8]**. Before any
@@ -235,7 +235,7 @@ The window opens 17 Nov 2026 (roadmap page). What this draft listed as
 
 - F25, a design for Experiment 3 that meets the release rule on the
   proxy: not yet evaluated (no stored result computes the D6
-  comparison; it needs no device time). F160 met the registered
+  comparison; it needs no device time). F160 passed the registered
   falsifier; F25 is on HOLD
   under the release rule (Sprint 32 D4, Sprint 33 D6; Experiment 3,
   above).
@@ -330,3 +330,5 @@ assumption and the date is added here.
   per-algorithm reference names F174 for IEEE-CIS. [A2] reports the
   recall cap and says fraud dollars are reported beside section 2's
   metrics.
+- 2026-11-18: after the draft's claim audit (Sprint 33 D9). F160
+  "passed" the registered design falsifier, in the BLUF and stage 2.
