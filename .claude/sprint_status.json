@@ -20,7 +20,8 @@
       "B": 12,
       "D": 14,
       "E": 1,
-      "C": 4
+      "C": 4,
+      "F": 60
     },
     "task_started": {
       "A": "2026-11-16T11:01:07-05:00",
@@ -64,14 +65,16 @@
       "B": "gaps over 30 min and pauses subtracted; under a fifth of its 120-minute estimate: check the timer, the parallel tasks and the activity log before using it",
       "D": "gaps over 30 min and pauses subtracted",
       "E": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it",
-      "C": "gaps over 30 min and pauses subtracted; under a fifth of its 45-minute estimate: check the timer, the parallel tasks and the activity log before using it"
+      "C": "gaps over 30 min and pauses subtracted; under a fifth of its 45-minute estimate: check the timer, the parallel tasks and the activity log before using it",
+      "F": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 6,
       "B": 12,
       "D": 14,
       "E": 1,
-      "C": 4
+      "C": 4,
+      "F": 60
     }
   },
   "last_completed_sprint": {
@@ -85,5 +88,5 @@
     "freeze_commit": "95751b9",
     "tag": "prereg-freeze"
   },
-  "updated": "2026-11-17"
+  "updated": "2026-11-18"
 }
