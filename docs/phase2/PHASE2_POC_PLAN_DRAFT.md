@@ -297,7 +297,9 @@ assumption and the date is added here.
 - **[A9] Preregistration filing venue and date.** Not set. Left blank
   and changeable until the team lead is notified otherwise (team lead,
   Sprint 33 Q2: "don't know yet. leave blank and changable until
-  notified otherwise"). Replaced by: the team lead's notice.
+  notified otherwise"). Replaced by: the team lead's notice. Changed
+  2026-11-18: the filing date is set to 2026-11-18 (team lead); the
+  venue stays not set.
 - **[A10] Proceeding to the PoC.** Assumed: the team proceeds to the PoC,
   and the preregistration and this plan are prepared on that basis.
   Whether the team was selected is not recorded in this repository.
@@ -332,3 +334,5 @@ assumption and the date is added here.
   metrics.
 - 2026-11-18: after the draft's claim audit (Sprint 33 D9). F160
   "passed" the registered design falsifier, in the BLUF and stage 2.
+- 2026-11-18: assumption A9 notes the filing date the team lead set,
+  2026-11-18; the venue stays not set.

@@ -1,7 +1,7 @@
 """The Phase 2 preregistration draft stays consistent while reviews change it.
 
 Sprint 33 Task D (#125), card F102. The team lead, at planning: "Add
-gaurding the draft of the preregistration so that it does not drift in the
+gaurding [sic] the draft of the preregistration so that it does not drift in the
 future. However, this is a draft that will go through a couple of reviews
 before submitting later today."
 
@@ -331,7 +331,7 @@ def test_the_future_date_check_can_fail():
 
 
 def test_the_figure_check_can_fail():
-    _fails(DRAFT, "- **Filing date**: not set.",
-           "- **Filing date**: 0.123457, not set.",
+    _fails(DRAFT, "- **Filing date**: 2026-11-18.",
+           "- **Filing date**: 0.123457, 2026-11-18.",
            "test_every_figure_resolves_or_is_registered",
            "an unresolved figure")

@@ -4,17 +4,15 @@
 lead).** First draft written 2026-10-13 (Sprint 25 Task C, card F102);
 prepared for filing 2026-11-16 (Sprint 33 Task B); final after the
 reviews of 2026-11-17 and 2026-11-18. It binds from its filing, and only
-for the experiments it names at that date. The filing date and venue
-below are recorded when the filing is confirmed. From then on, the text
+for the experiments it names at that date. The filing venue below is
+recorded when the filing is confirmed. From then on, the text
 above "## Amendments" is not edited; each later change is a dated
 amendment (section 7).
 
 ## Filing
 
-- **Filing date**: not set.
+- **Filing date**: 2026-11-18.
 - **Filing venue**: not set.
-- Both stay blank and changeable until the team lead is notified
-  otherwise (assumption A9).
 - **Filed without the Phase 2 brief** (assumption A11). This document rests on the
   assumptions A1-A12 in `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`,
   "Assumption register": in particular assumption A2 (data and
@@ -2744,9 +2742,9 @@ or any amount is joined to a score. Zero metered seconds.
   variables.
 - ~~**Equivalence margins for verify entries.**~~ Closed 2026-10-18:
   section 2b (default AUPRC margin 0.005).
-- **Open, filing step: the filing date and venue.** Not set (assumption
-  A9). The team lead's decision; the "Filing" section at the top records
-  them when set.
+- **Open, filing step: the filing venue.** The filing date is
+  2026-11-18 (team lead). The venue is not set (assumption A9); the
+  "Filing" section at the top records it when set.
 - **Open, filing step: lock the filed version.** At filing, the file is
   locked as the Phase 1 preregistration is in this repository: a tag
   (Phase 1's is `prereg-freeze`) and the document-of-record hook
@@ -2946,3 +2944,6 @@ fails any other open item.
   `experiments/phase2/PREREGISTRATION_FINAL.md`, the name submitted;
   this file keeps its name because results and modules cite it. Both
   are locked at filing (section 7).
+- 2026-11-18: the filing date set to 2026-11-18 (team lead); the venue
+  stays not set. The Filing section's "blank and changeable" line
+  removed.

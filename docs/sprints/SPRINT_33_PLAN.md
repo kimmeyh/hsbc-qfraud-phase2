@@ -36,7 +36,7 @@ document ready to submit."** The document is
 - **D3: option 2.** F102 resized with F199's coverage check, F13, the
   F178 update. F199 deferred. With Q1-Q3 answered as above, F13 runs on
   stated best-possible assumptions in place of the brief.
-- **Added at planning (team lead, 2026-11-16)**, verbatim: "Add gaurding
+- **Added at planning (team lead, 2026-11-16)**, verbatim: "Add gaurding [sic]
   the draft of the preregistration so that it does not drift in the
   future. However, this is a draft that will go through a couple of
   reviews before submitting later today." This is Task D. The guard checks
