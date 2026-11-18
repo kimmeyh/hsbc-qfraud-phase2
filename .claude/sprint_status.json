@@ -16,7 +16,8 @@
       128,
       129,
       130,
-      131
+      131,
+      132
     ],
     "task_actuals": {
       "A": 6,
@@ -26,7 +27,8 @@
       "C": 4,
       "F": 60,
       "G": 23,
-      "H": 12
+      "H": 12,
+      "I": 12
     },
     "task_started": {
       "A": "2026-11-16T11:01:07-05:00",
@@ -37,7 +39,8 @@
       "F": "2026-11-17T23:31:33-05:00",
       "G": "2026-11-18T02:33:37-05:00",
       "H": "2026-11-18T08:16:01-05:00",
-      "I": "2026-11-18T09:18:09-05:00"
+      "I": "2026-11-18T09:18:09-05:00",
+      "J": "2026-11-18T18:30:10-05:00"
     },
     "task_issues": {
       "A": [
@@ -66,6 +69,9 @@
       ],
       "I": [
         131
+      ],
+      "J": [
+        132
       ]
     },
     "review_task": "G",
@@ -78,7 +84,8 @@
       "F": 110,
       "G": 90,
       "H": 30,
-      "I": 30
+      "I": 30,
+      "J": 20
     },
     "task_actual_method": {
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 75-minute estimate: check the timer, the parallel tasks and the activity log before using it",
@@ -88,7 +95,8 @@
       "C": "gaps over 30 min and pauses subtracted; under a fifth of its 45-minute estimate: check the timer, the parallel tasks and the activity log before using it",
       "F": "gaps over 30 min and pauses subtracted",
       "G": "gaps over 30 min and pauses subtracted",
-      "H": "gaps over 30 min and pauses subtracted"
+      "H": "gaps over 30 min and pauses subtracted",
+      "I": "gaps over 30 min and pauses subtracted; over half the elapsed time had no tool call, and a background wait with none counts as idle"
     },
     "task_elapsed": {
       "A": 6,
@@ -98,7 +106,8 @@
       "C": 4,
       "F": 60,
       "G": 23,
-      "H": 12
+      "H": 12,
+      "I": 553
     }
   },
   "last_completed_sprint": {

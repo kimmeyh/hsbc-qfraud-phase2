@@ -277,6 +277,10 @@ only in memory.
     for a file already in the index; `git rm --cached` is what untracks it. The
     same move hit this first: `git mv` relocated the letter and left it staged
     for commit.
+  - **And don't search the working tree with `grep -r`.** Use the Grep tool
+    or `git grep`; both skip gitignored folders, so a broad search cannot
+    read the private ones (`docs/qci_package/`). (Sprint 33 i2: a
+    `grep -rn` matched one line in that folder. Nothing from it was used.)
 
 - **Don't trust an injection that reports success without asserting the
   mutation landed.** Break the thing, CHECK THE BYTES, then run the guard.

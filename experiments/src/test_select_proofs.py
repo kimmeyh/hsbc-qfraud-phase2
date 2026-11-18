@@ -115,6 +115,26 @@ def test_tests_mode_refuses_the_proof_flags(monkeypatch):
     assert sp.main(["--tests", "--sample"]) == 2
 
 
+def test_a_push_gate_run_refuses_a_dirty_tree(monkeypatch):
+    # Sprint 33 i3: the refusal comes before any selection or run.
+    def no_run(*a, **k):
+        raise AssertionError("main ran tests on a dirty tree")
+    monkeypatch.setattr(sp, "other_changes", lambda: ["docs/x.md"])
+    monkeypatch.setattr(sp, "changed_files", no_run)
+    monkeypatch.setattr(sp.subprocess, "run", no_run)
+    assert sp.main(["--tests", "--base", "origin/develop"]) == 2
+    assert sp.main(["--tests"]) == 2
+
+
+def test_a_task_run_on_a_dirty_tree_is_not_refused(monkeypatch):
+    monkeypatch.setattr(sp, "other_changes", lambda: ["docs/x.md"])
+    monkeypatch.setattr(sp, "changed_files", lambda base: set())
+    monkeypatch.setattr(sp, "select_tests", lambda changed: [])
+    monkeypatch.setattr(sp, "git", lambda *a: ["0" * 40])
+    assert sp.main(["--tests", "--base", "HEAD"]) == 0
+    assert sp.main(["--tests", "--", "-k", "x"]) == 0
+
+
 def test_an_unrelated_change_selects_nothing():
     assert pick(["docs/phase2/F95_SCHEDULE4.md"]) == []
     assert pick(["experiments/phase2/src/f95_other.py"]) == []
@@ -170,7 +190,10 @@ def test_the_rules_can_fail():
             ("    if args.tests and (args.run or args.sample):\n",
              "    if False:\n",
              "test_tests_mode_refuses_the_proof_flags",
-             "--tests with --run read as a proof run")):
+             "--tests with --run read as a proof run"),
+            ("        if dirty:\n", "        if False:\n",
+             "test_a_push_gate_run_refuses_a_dirty_tree",
+             "a push-gate run started on a dirty tree")):
         assert_can_fail([Mutation(SRC, old, new, expect_occurrences=1)],
                         test(name), label)
 

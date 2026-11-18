@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-18
 
+- **fix**: Sprint 33 Task J (#132), retrospective i3 option a: `scripts/select_proofs.py --tests` refuses at once, naming the paths, when a run that could be recorded for the pre-push hook starts on a tree with changed or untracked files. Before, it ran for minutes and the push was still refused. `--base HEAD` and runs narrowed after `--` still test uncommitted changes during a task. A test and a red proof. Retrospective i2 option a: a CLAUDE.md entry, search with the Grep tool or `git grep`, never `grep -r`. The retrospective records the team lead's answers (i1 track only, i4 and i5 skipped).
+
 - **fix**: Sprint 33 Task I (#131): the PR #122 review findings. The drift guard gains an eleventh term, `PREREGISTRATION_FINAL.md` byte-identical to the draft, and a Result cell must now be a file, not a directory or a glob; each change has its own red proof. Section 7 says the lock step runs after the venue is recorded and that "## Amendments" goes after the revision log. The PoC plan's assumption A2 adds the 0.1% budget (D10). The validation document notes five registered figures, not six. Sprint 33's retrospective file added.
 
 - **docs**: the preregistration's filing date set to 2026-11-18 (team lead); the venue stays not set. The Filing section's "blank and changeable" line is removed (it also answers a PR #122 Copilot comment), section 7's item covers the venue only, and the PoC plan's assumption A9 notes the date. The drift guard's figure proof targets the new filing-date line. The team lead's verbatim planning quote is marked "[sic]" in three places (PR #122 Copilot review).

@@ -38,6 +38,12 @@ the git directory, for `.githooks/pre-push` (`check_pre_push.py`, Sprint
 `--`, when a file other than `UNTESTED_OK` is changed or untracked (the
 tests would not have run on a committed tree), or when the tree changed
 during the run. `--base origin/<branch>` tests only what is not pushed.
+
+A `--tests` run that could be recorded (a `--base` other than `HEAD`,
+nothing after `--`) refuses at once, naming the paths, when a file
+other than `UNTESTED_OK` is changed or untracked: it ran for minutes and
+then could not count (Sprint 33 i3). `--base HEAD` still tests the
+uncommitted changes of a task (`docs/SPRINT_CHECKLIST.md`).
 """
 from __future__ import annotations
 
@@ -227,6 +233,14 @@ def main(argv=None) -> int:
         print("--tests runs ordinary tests; it takes no --run or --sample",
               file=sys.stderr)
         return 2
+    if args.tests and args.base != "HEAD" and not extra:
+        dirty = other_changes()
+        if dirty:
+            print("--tests would not count for a push: these paths are "
+                  "changed or untracked:\n  " + "\n  ".join(dirty) +
+                  "\nCommit them and run again, or use --base HEAD to test "
+                  "uncommitted changes during a task", file=sys.stderr)
+            return 2
     changed = changed_files(args.base)
     if args.tests:
         before = None if other_changes() else fingerprint("HEAD")
