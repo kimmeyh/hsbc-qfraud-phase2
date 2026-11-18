@@ -469,6 +469,8 @@ on the evidence trail the preregistration relies on.
    Support to purge cached views and pull-request refs, and re-map every
    commit hash cited in this repository's documents.
 
+**Answer (team lead, 2026-11-18): 1.** The history stays as it is.
+
 ## D9. A second review of the preregistration draft, by a different method
 
 Asked 2026-11-18, at Manual Validation (team lead: "How can I do a
@@ -515,3 +517,9 @@ cheapest, and it tests the draft as the filing's reader will meet it.
    favorable result inside the written rules: every choice still free
    after filing, and a way to pass Experiment 3's release rule.
 4. Options 1 and 3 together, in parallel (two agents, about 40 minutes).
+
+**Answer (team lead, 2026-11-18): 2, with a change.** Verbatim: "d9. 2
+however not using super-agent mode, just several agents all running
+opus 5.5 - OK if it takes 7 hours". So: no multi-agent workflow; several
+separate agents, each on Opus 5.5, each read only, one per block of the
+draft. Up to 7 hours is acceptable.
