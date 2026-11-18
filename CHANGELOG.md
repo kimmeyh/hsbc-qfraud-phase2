@@ -6,6 +6,8 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ### 2026-11-18
 
+- **fix**: Sprint 33 Task I (#131): the PR #122 review findings. The drift guard gains an eleventh term, `PREREGISTRATION_FINAL.md` byte-identical to the draft, and a Result cell must now be a file, not a directory or a glob; each change has its own red proof. Section 7 says the lock step runs after the venue is recorded and that "## Amendments" goes after the revision log. The PoC plan's assumption A2 adds the 0.1% budget (D10). The validation document notes five registered figures, not six. Sprint 33's retrospective file added.
+
 - **docs**: the preregistration's filing date set to 2026-11-18 (team lead); the venue stays not set. The Filing section's "blank and changeable" line is removed (it also answers a PR #122 Copilot comment), section 7's item covers the venue only, and the PoC plan's assumption A9 notes the date. The drift guard's figure proof targets the new filing-date line. The team lead's verbatim planning quote is marked "[sic]" in three places (PR #122 Copilot review).
 
 - **docs**: the preregistration copied byte for byte to `experiments/phase2/PREREGISTRATION_FINAL.md`, the name submitted for filing (team lead). `PREREGISTRATION_DRAFT.md` keeps its name because result files and modules cite it. Section 7 says the filing lock covers both copies.

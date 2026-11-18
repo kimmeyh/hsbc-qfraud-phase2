@@ -3,7 +3,7 @@
     "number": 33,
     "name": "The Phase 2 Preregistration, Ready to File",
     "branch": "feature/20261116_Sprint_33",
-    "status": "phase_5_validation",
+    "status": "phase_6_push",
     "plan_doc": "docs/sprints/SPRINT_33_PLAN.md",
     "pr": 122,
     "plan_approved": true,
@@ -15,7 +15,8 @@
       127,
       128,
       129,
-      130
+      130,
+      131
     ],
     "task_actuals": {
       "A": 6,
@@ -35,7 +36,8 @@
       "C": "2026-11-16T11:54:28-05:00",
       "F": "2026-11-17T23:31:33-05:00",
       "G": "2026-11-18T02:33:37-05:00",
-      "H": "2026-11-18T08:16:01-05:00"
+      "H": "2026-11-18T08:16:01-05:00",
+      "I": "2026-11-18T09:18:09-05:00"
     },
     "task_issues": {
       "A": [
@@ -61,6 +63,9 @@
       ],
       "H": [
         130
+      ],
+      "I": [
+        131
       ]
     },
     "review_task": "G",
@@ -72,7 +77,8 @@
       "E": 30,
       "F": 110,
       "G": 90,
-      "H": 30
+      "H": 30,
+      "I": 30
     },
     "task_actual_method": {
       "A": "gaps over 30 min and pauses subtracted; under a fifth of its 75-minute estimate: check the timer, the parallel tasks and the activity log before using it",

@@ -26,6 +26,8 @@ PoC plan it cites) and watching that test fail.
 10. Every decimal figure resolves to a tracked result file the draft names
     (F164's rule, `test_phase2_figures_resolve.py`), or is registered here
     with a reason.
+11. `PREREGISTRATION_FINAL.md`, the copy submitted for filing, is
+    byte-identical to the draft (PR #122 review, 2026-11-18).
 
 Not a source-scan guard: it reads one document's structure, so Sprint 32
 i3's list of forms does not apply.
@@ -42,6 +44,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 DRAFT = ROOT / "experiments" / "phase2" / "PREREGISTRATION_DRAFT.md"
 POC = ROOT / "docs" / "phase2" / "PHASE2_POC_PLAN_DRAFT.md"
+FINAL = ROOT / "experiments" / "phase2" / "PREREGISTRATION_FINAL.md"
 THIS = Path(__file__).relative_to(ROOT).as_posix()
 
 STATES = ("Run", "Partly run", "To run")
@@ -118,7 +121,10 @@ def _git(*args: str) -> subprocess.CompletedProcess:
 
 
 def tracked(path: str) -> bool:
-    return _git("ls-files", "--error-unmatch", path).returncode == 0
+    """A tracked FILE: ls-files also accepts a directory or a glob that
+    holds tracked files (PR #122 review), so the path must be a file."""
+    return ((ROOT / path).is_file()
+            and _git("ls-files", "--error-unmatch", path).returncode == 0)
 
 
 def test_each_of_the_six_experiments_has_a_row_and_an_entry():
@@ -248,6 +254,12 @@ def test_every_figure_resolves_or_is_registered():
     assert all(len(why) >= 10 for why in REGISTERED.values())
 
 
+def test_the_final_copy_matches_the_draft():
+    assert FINAL.read_bytes() == DRAFT.read_bytes(), (
+        "PREREGISTRATION_FINAL.md differs from PREREGISTRATION_DRAFT.md; "
+        "the two copies of the filed text must stay byte-identical")
+
+
 # --- Each term proven red -------------------------------------------------
 
 def _fails(path: Path, old: str, new: str, node: str, label: str) -> None:
@@ -277,6 +289,19 @@ def test_the_tracked_result_check_can_fail():
     _fails(DRAFT, "| Run | `docs/phase2/F188_ROUNDING.md` |",
            "| Run | `docs/phase2/F188_ROUNDING_GONE.md` |",
            "test_a_run_row_names_a_tracked_result", "an untracked result")
+
+
+def test_a_directory_is_not_a_tracked_result():
+    _fails(DRAFT, "| Run | `docs/phase2/F188_ROUNDING.md` |",
+           "| Run | `docs/phase2` |",
+           "test_a_run_row_names_a_tracked_result",
+           "a directory as the result")
+
+
+def test_the_final_copy_check_can_fail():
+    _fails(FINAL, "### Experiment 6 (F110)", "### Experiment 6 (F111)",
+           "test_the_final_copy_matches_the_draft",
+           "the FINAL copy edited alone")
 
 
 def test_the_state_at_filing_check_can_fail():

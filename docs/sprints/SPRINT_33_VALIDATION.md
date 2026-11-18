@@ -134,6 +134,12 @@ handover: a pointer to a file is not a handover.
   a hardware-plan quote, a derivation, a refused run's value). The guard
   fails if one of them later resolves or leaves the document.
 
+- Changed 2026-11-18: five figures are registered now. F64's
+  interval left the list in Task G, because the D9 notes name result
+  files that hold a value rounding to it by coincidence. The guard also
+  gained an eleventh term (the FINAL copy matches the draft) and checks
+  that a Result cell is a file (PR #122 review).
+
 ## V4. Task E: fresh-eyes review fixes (f62bb6c, #127)
 
 - The F188 passages name both readings: the registered reading ("kept"

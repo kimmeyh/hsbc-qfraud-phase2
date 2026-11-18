@@ -2758,7 +2758,13 @@ or any amount is joined to a score. Zero metered seconds.
   covers both copies of the filed text: this file and
   `experiments/phase2/PREREGISTRATION_FINAL.md`, the copy submitted for
   filing, which is byte-identical to it (team lead, 2026-11-18). Amendments are
-  appended below that heading. Until filing, the drift guard
+  appended below that heading. The lock step runs after the venue is
+  recorded, so the Filing section is complete in the locked text; the
+  "## Amendments" heading goes after the revision log, so the revision
+  log is locked too. The filing date and venue are the only lines
+  changed after the text was submitted, each with its revision-log row.
+  The drift guard also checks that the two copies stay byte-identical.
+  Until filing, the drift guard
   (`experiments/src/test_phase2_prereg_draft.py`) checks that the draft
   stays consistent while reviews change it.
 - **Open, filing step: the 0.1% budget in the outcome block.**
@@ -2947,3 +2953,7 @@ fails any other open item.
 - 2026-11-18: the filing date set to 2026-11-18 (team lead); the venue
   stays not set. The Filing section's "blank and changeable" line
   removed.
+- 2026-11-18: section 7's lock item says the lock step runs after the
+  venue is recorded, the "## Amendments" heading goes after the
+  revision log, and the drift guard checks the two copies stay
+  byte-identical (PR #122 review).

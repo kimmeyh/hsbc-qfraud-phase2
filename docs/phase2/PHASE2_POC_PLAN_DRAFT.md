@@ -263,7 +263,8 @@ assumption and the date is added here.
   counts at the 0.5% alert budget, with the recall cap reported where
   the test prevalence is above 0.5%; there the operating point is F171's
   matched budget, 3.0 times the test prevalence (preregistration draft,
-  section 2). Fraud dollars caught at the same
+  section 2), and from filing on recall and the confusion counts at
+  the 0.1% budget too (Sprint 33 D10). Fraud dollars caught at the same
   alert count where amounts exist (F185) is reported beside them; it is
   not a section 2 metric. Basis: no brief; the Phase 1
   submission was judged on these. Replaced by: any data or metric the
@@ -336,3 +337,5 @@ assumption and the date is added here.
   "passed" the registered design falsifier, in the BLUF and stage 2.
 - 2026-11-18: assumption A9 notes the filing date the team lead set,
   2026-11-18; the venue stays not set.
+- 2026-11-18: assumption A2 adds the 0.1% budget the preregistration
+  reports from filing on (Sprint 33 D10; PR #122 review).
