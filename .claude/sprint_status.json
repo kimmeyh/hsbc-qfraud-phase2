@@ -24,7 +24,8 @@
       "E": 1,
       "C": 4,
       "F": 60,
-      "G": 23
+      "G": 23,
+      "H": 12
     },
     "task_started": {
       "A": "2026-11-16T11:01:07-05:00",
@@ -80,7 +81,8 @@
       "E": "gaps over 30 min and pauses subtracted; under a fifth of its 30-minute estimate: check the timer, the parallel tasks and the activity log before using it",
       "C": "gaps over 30 min and pauses subtracted; under a fifth of its 45-minute estimate: check the timer, the parallel tasks and the activity log before using it",
       "F": "gaps over 30 min and pauses subtracted",
-      "G": "gaps over 30 min and pauses subtracted"
+      "G": "gaps over 30 min and pauses subtracted",
+      "H": "gaps over 30 min and pauses subtracted"
     },
     "task_elapsed": {
       "A": 6,
@@ -89,7 +91,8 @@
       "E": 1,
       "C": 4,
       "F": 60,
-      "G": 23
+      "G": 23,
+      "H": 12
     }
   },
   "last_completed_sprint": {
