@@ -580,6 +580,8 @@ leaves the proposal's 0.1% figure unreported with no reason given.
    the primary metric of every section 6 entry not yet run, and AUPRC
    secondary.
 
+**Answer (team lead, 2026-11-18): 2.**
+
 ## D11. A byte lock on the filed text
 
 Written 2026-11-18, from the D9 claim audit (block G, finding D1), to
@@ -618,3 +620,68 @@ small test, written at the filing step when the filed text is final.
    item names it.
 2. No hash test. The draft is locked as Phase 1's file is: a tag and
    the document-of-record hook.
+
+**Answer (team lead, 2026-11-18): 1.**
+
+## D12. When to compute Experiment 3's release rule (D6)
+
+Asked 2026-11-18, at Manual Validation (team lead: "please repeat for
+review The D6 release-rule check").
+
+**What.** D6 option 1 wrote Experiment 3's device release rule: on
+F176's six instances at R = 200, the rounded problem's pick delivers a
+gain of more than 1e-6 against greedy's selection solved the same way
+(weights solved on the rounded problem, scored on the real one), on at
+least one instance. The draft says "No stored result computes this
+comparison yet; it needs no device time."
+`experiments/phase2/results/f188_rounding_delivered.json` compares the
+pick against greedy solved on the unrounded problem (its
+`delivers_at_200` list is empty). That is the old rule, not this one.
+Computing the new rule needs a new option in
+`experiments/phase2/src/f188_rounding.py`: solve greedy's own selection
+on the rounded problem, score it on the real one, and compare.
+
+**Why it matters.**
+- The rule decides whether the device arm (F25) can run in the PoC.
+  Until it is computed, the draft cannot say whether that arm is open.
+- On three of the six instances the pick is greedy's selection, so the
+  gain there is zero by construction. Only the other three can pass.
+- Computed before filing, the filing reports the result, and the rule
+  becomes one more "Run" row. The filing then has no fully specified
+  test still to run (the first review's R4).
+- Computed after filing, it is the filing's first prospective test: the
+  rule is filed, then run, and git records that order.
+
+**Kind per option.**
+- Option 1: Workaround (answers the question now; uses up the filing's
+  one fully specified future test).
+- Option 2: Prevention (the rule is tested after it is filed, so no
+  reader can say it was tuned to a known result).
+- Option 3: Workaround (the question stays open).
+
+**Cost per option.**
+- Option 1: about 45 minutes; 0 metered seconds; 4 files (the module,
+  its test, a new result file, the draft's Experiment 3 state with a
+  revision-log row).
+- Option 2: the same 45 minutes, on the day the filing date is set;
+  until then 0.
+- Option 3: 0 minutes.
+
+**Recommendation.** Option 2. The rule was written on 2026-11-17 and
+committed before any computation of it, and it needs no device time,
+so waiting costs only the time to filing. Run after filing, it is the
+one result in the draft that no reader can call post hoc. Option 1 is
+not chosen because it turns that test into one more result recorded
+before filing.
+
+**Options.**
+
+1. Compute it now, before filing: add the option to
+   `f188_rounding.py`, write `f188_release_rule.json`, and state the
+   result in Experiment 3's state paragraph with a revision-log row.
+2. Compute it after filing, as the filing's first test: the same work,
+   started the day the filing date is set, with the result recorded as
+   a dated note under Experiment 3.
+3. Do not compute it until F198 is scheduled.
+
+**Answer (team lead, 2026-11-18): 2.**

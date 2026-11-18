@@ -90,6 +90,15 @@ handover: a pointer to a file is not a handover.
 - Reports: `C:\Users\kimme\AppData\Local\Temp\claude\2fcd2cbd0553c57a\633d17a9-e662-4d77-b4f8-e75410d90041\scratchpad\d9\report_A.md`
   to `report_G.md` in the same folder (local, not tracked).
 
+## Team lead's answers (2026-11-18, 8am)
+
+- D10: option 2. D11: option 1. D12 (when to compute Experiment 3's
+  release rule): option 2, after filing.
+- The learning documents updated to D6's rule (Task H, #130).
+- The preregistration marked FINAL, the text submitted for filing on
+  2026-11-18. The team lead reports when it is filed; then the Filing
+  section is filled and the section 7 filing steps run.
+
 ## For information (no action needed)
 
 ---

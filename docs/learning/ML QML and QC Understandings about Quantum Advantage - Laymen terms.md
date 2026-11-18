@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.5**, 2026-11-17 (Sprint 33, card F178). Written for readers
+**Version 1.6**, 2026-11-18 (Sprint 33, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
 computing, and are expert in none of them.
 
@@ -771,7 +771,7 @@ is a classical step, not the device.
   Every answer was worse than simple greedy search. On the three
   problems where classical search had found a gain, the loss was larger
   than the gain. At 1 part in 400, one problem kept a small gain.
-  The team lead decided (Sprint 32 D4, 2026-11-13): F25 stays on hold until the delivered reading beats greedy at 200:1 (`docs/sprints/SPRINT_32_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
+  The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
 
 ### What outside research says
 
@@ -893,7 +893,7 @@ the same file before its run. No Sprint 33 run is preregistered yet.
     but those gains were made by the rounding.** The amendment scored
     each rounded answer on the real problem: worse than greedy search on
     all six. A device run on this design at 200:1 could not beat
-    greedy. The team lead decided (Sprint 32 D4, 2026-11-13): F25 stays on hold until the delivered reading beats greedy at 200:1 (`docs/sprints/SPRINT_32_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
+    greedy. The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
 
 **Sprint 33 (2026-11-16): the preregistration made ready to file.** No
 experiment ran. The document of designs,
@@ -994,6 +994,7 @@ datasets.
 
 ### Change list
 
+- **1.6, 2026-11-18 (Sprint 33)**: no new result. F25's hold in sections 6 and 7 gives the testable rule (Sprint 33 D6) and when it is checked: after the preregistration is filed (D12).
 - **1.5, 2026-11-17 (Sprint 33)**: an outside machine learning expert's review. New at the top: the author and how artificial intelligence tools were used, a multi-paragraph executive summary in place of the bottom-line list, a first look at insurance fraud, and which version to read. Section 1 says why [SPECTRA](#ds-spectra) is used although it is not fraud data. The change list and "How this document was made" move to the end. No result changed.
 - **1.4, 2026-11-16 (Sprint 33)**: no new result. "Experiments planned" notes that the [preregistration](#def-preregistration) is ready to file, without the brief, on written assumptions. The team lead's decision on the rounding test (Sprint 32 D4) replaces "a decision for the team lead" in sections 6 and 7.
 - **1.3, 2026-11-10 (Sprint 32)**: Sprint 32's two results added, each as a tagged claim and as a dated result under "Experiments planned": F185 (alerts chosen by the money at risk, section 2) and F188 (the rounding test, section 6). The two matching ideas leave "Experiments not yet planned". No Sprint 33 run is preregistered yet, so none is listed.

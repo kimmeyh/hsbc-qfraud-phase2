@@ -1,10 +1,13 @@
-# Phase 2 Preregistration Framework: DRAFT
+# Phase 2 Preregistration Framework: FINAL
 
-**Status: DRAFT, ready to file. Not filed. Not binding.** First draft
-written 2026-10-13 (Sprint 25 Task C, card F102); prepared for filing
-2026-11-16 (Sprint 33 Task B). It binds only from its filing, and only
-for the experiments it names at that date. Until then it may be changed
-freely, and each change is recorded in the revision log at the bottom.
+**Status: FINAL, the text submitted for filing on 2026-11-18 (team
+lead).** First draft written 2026-10-13 (Sprint 25 Task C, card F102);
+prepared for filing 2026-11-16 (Sprint 33 Task B); final after the
+reviews of 2026-11-17 and 2026-11-18. It binds from its filing, and only
+for the experiments it names at that date. The filing date and venue
+below are recorded when the filing is confirmed. From then on, the text
+above "## Amendments" is not edited; each later change is a dated
+amendment (section 7).
 
 ## Filing
 
@@ -171,9 +174,19 @@ drift have no entry either; sections 5 and 7 cite them.
   cap is reported beside the figure, and the operating point is the
   budget matched to prevalence (F171's `matched` budget, 3.0 times the
   test prevalence), fixed in the entry before its run.
+- **Departure from the filed proposal's primary metric** (Sprint 33
+  D10). The filed Phase 1 proposal (section 5) named fraud caught
+  within a 0.1% and a 0.5% review budget on out-of-time folds as
+  primary, with AUPRC secondary. This draft leads with floor-normalized
+  AUPRC, the measure section 2's statistical standard is built on, and
+  reports recall at the 0.5% budget beside every scored result. From
+  filing on, recall at the 0.1% budget is reported beside the 0.5%
+  figure for every scored result; results recorded before filing are
+  not recomputed.
 - **Outcomes recorded** (team lead, 2026-10-22; F154): every Phase 2
   result written from that date that holds a test score, ML or QML, also records the confusion
-  counts (TN, FP, FN, TP) at the 0.5% alert budget, at the
+  counts (TN, FP, FN, TP) at the 0.5% alert budget (and, from filing
+  on, at the 0.1% budget; Sprint 33 D10), at the
   validation-chosen operating points where a validation fold exists, and
   at the experiment's own threshold where it has one; and saves its
   per-row test scores with their SHA-256, so any two models can be
@@ -610,7 +623,9 @@ delivers a gain of more than 1e-6 against greedy's selection solved the
 same way (on the rounded problem, scored on the real one), on at least
 one instance. Any other ridge weight, resolution or dataset (F198) is a
 new dated amendment written before its run. No stored result computes
-this comparison yet; it needs no device time. On three of the six
+this comparison yet; it needs no device time. It is computed after
+filing, as the filing's first test, and its result is recorded as a
+dated note under this entry (Sprint 33 D12). On three of the six
 instances the pick is greedy's selection, so the gain there is zero by
 construction. Then the arm runs only
 block by block under per-block approval (section 4; assumption A4),
@@ -2738,10 +2753,22 @@ or any amount is joined to a score. Zero metered seconds.
   (`.claude/hooks/block_reactive_amendment.py` guards the Phase 1
   file). No test hashes the Phase 1 file, whose amendments are
   appended in the same file. Later changes are dated amendments,
-  never edits to the filed text. Whether to add a hash test of the
-  filed text is open (corrected 2026-11-18, D9 claim audit). Until filing, the drift guard
+  never edits to the filed text. This file also gets a hash test
+  (Sprint 33 D11): `experiments/src/test_phase2_prereg_filed.py`
+  hashes the text above a "## Amendments" heading and fails on any
+  change to it, with a proof that an edited copy fails. Amendments are
+  appended below that heading. Until filing, the drift guard
   (`experiments/src/test_phase2_prereg_draft.py`) checks that the draft
   stays consistent while reviews change it.
+- **Open, filing step: the 0.1% budget in the outcome block.**
+  `experiments/phase2/src/outcome_record.py` records confusion counts
+  at the 0.5% budget only. Before the first scored result after filing,
+  it also records them, and recall, at the 0.1% budget (section 2,
+  Sprint 33 D10).
+- **Decided: Experiment 3's release rule is computed after filing.**
+  It runs after the filing commit, as the filing's first test, and its
+  result is a dated note under Experiment 3 (Sprint 33 D12). No device
+  time.
 
 Every item here starts with a strike-through (closed), **Decided**, or
 **Open, filing step**. Only filing steps may stay open; the drift guard
@@ -2903,3 +2930,13 @@ fails any other open item.
   one dated note: Experiments 1 to 6, F103, F106, F107, F108, F109,
   F142, F144, F154, F166, F174, the F157 SPECTRA part, F171, F188 and
   F185.
+- 2026-11-18: the team lead's answers to Sprint 33 D10, D11 and D12.
+  Section 2 declares the departure from the filed proposal's primary
+  metric and reports recall at the 0.1% budget from filing on (D10).
+  Section 7's lock item names a hash test of the filed text (D11), and
+  gains two items: the 0.1% budget in the outcome block (a filing step)
+  and Experiment 3's release rule, computed after filing (D12).
+  Experiment 3's state paragraph says when the rule is computed.
+- 2026-11-18: status changed from DRAFT to FINAL, the text submitted
+  for filing (team lead). The filing date and venue are recorded when
+  the filing is confirmed.
