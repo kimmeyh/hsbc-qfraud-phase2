@@ -35,10 +35,11 @@ it are computed from it, as shown.
   annealing matched it on the 3 smaller ones and came within 3e-6 on the 3
   larger. **Greedy and annealing are equivalent here; greedy is the cheaper,
   deterministic bar.**
-- **The ridge carries almost all of the objective.** The data term (how
+- **The data term is a tiny part of the objective.** The data term (how
   well the selection fits the labels) is at most 0.33% of the objective's
-  size on any instance; the rest is the ridge term `2 ||w||^2`, from
-  `lambda = 2 * rows`. That is the main design question for F25 (below).
+  size on any instance; the rest is the constant -1 and the ridge term
+  `2 ||w||^2`, from `lambda = 2 * rows` (corrected 2026-11-18, Sprint 33
+  D9: this said the ridge was all the rest). That is the main design question for F25 (below).
 
 ## What was run
 

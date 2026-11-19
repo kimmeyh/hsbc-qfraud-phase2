@@ -2,7 +2,9 @@
 
 Sprint 28 Task B (#49), 2026-10-22. Zero metered seconds. The entry is
 `experiments/phase2/PREREGISTRATION_DRAFT.md` section 6, "Experiment 2",
-committed before any Phase 2 score on IEEE-CIS (`cec20d6`). Every figure
+committed before any Phase 2 score on IEEE-CIS's rolling-origin folds
+(`cec20d6`). F109 had scored other lanes (GAM, GA2M, HGB, JOINT) on an
+IEEE-CIS subsample on 2026-10-18 (corrected 2026-11-18, Sprint 33 D9). Every figure
 below is in `experiments/phase2/results/f152_exp2.json` (five model seeds,
 42-46, three rolling-origin folds); the two-seed pilot is
 `f152_exp2_pilot.json`. Code: `experiments/phase2/src/f152_exp2_score.py`;
