@@ -46,6 +46,7 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 | 30 | docs/sprints/SPRINT_30_SUMMARY.md | [OK] Complete | ~6 days (Oct 30 - Nov 4, 2026) |
 | 31 | docs/sprints/SPRINT_31_SUMMARY.md | [OK] Complete | ~4 days (Nov 4 - Nov 7, 2026) |
 | 32 | docs/sprints/SPRINT_32_SUMMARY.md | [OK] Complete | ~9 days (Nov 8 - Nov 16, 2026) |
+| 33 | docs/sprints/SPRINT_33_SUMMARY.md | [OK] Complete | ~3 days (Nov 16 - Nov 18, 2026) |
 
 ## Last Completed Sprint
 
@@ -64,8 +65,8 @@ done (Task J), i1 tracked, i4 and i5 skipped. Zero metered seconds.
 Moved to Sprint 34 (team lead): the filing venue, the lock step and
 Experiment 3's release rule. Records: `SPRINT_33_PLAN.md`,
 `SPRINT_33_VALIDATION.md`, `SPRINT_33_DECISIONS.md`,
-`SPRINT_33_RETROSPECTIVE.md`; `SPRINT_33_SUMMARY.md` at Sprint 34
-planning.
+`SPRINT_33_RETROSPECTIVE.md`, `SPRINT_33_SUMMARY.md` (written
+2026-11-19, at Sprint 34 refinement). Main PR #133.
 
 ### Sprint 32: Close a Device Question, State Results in Dollars, Tighten
 Two Guards (Nov 8 - Nov 16, 2026; PR #116). Delivered **F188, F181,
@@ -384,12 +385,16 @@ and Close, from 1 Mar 2027). The cards that feed it are F199, F198, F13,
 F102, F197 and F157; every other open card is held out of selection by
 this scope, with its priority unchanged here.
 
-**Selected for Sprint 33** (team lead, 2026-11-16, D3 option 2; goal "the
-Phase 2 registration document ready to submit"): F13 (on stated
-best-possible assumptions in place of the brief), F102 (resized, with
-F199's coverage check) and the F178 update. F199 deferred. 240 minutes
-by task estimate, zero metered. Record: `docs/sprints/SPRINT_33_DECISIONS.md`,
-`docs/sprints/SPRINT_33_PLAN.md`.
+**Sprint 34 refinement (2026-11-19).** Pass 1: Sprint 33 rolled; no card
+closed (F13 and F102 shipped parts and stay open). The team lead moved
+three items to Sprint 34 at Sprint 33's close: the filing venue and the
+lock step (F102), Experiment 3's release rule (Sprint 33 D12, carded as
+F200) and the 0.1% budget in the outcome block (Sprint 33 D10, carded
+as F201). The short review's low note is carded as F202. Pass 2: the
+submission scope above is kept; under it F200, F201, F202, F178, F102,
+F199, F198, F13, F197 and F157 are ranked, and every other open card
+keeps its priority and is held out. Selection: Sprint 34 D1
+(`docs/sprints/SPRINT_34_DECISIONS.md`).
 
 ### Experiments (Stage 3 of the master timeline; submission-ready Sep 8)
 
@@ -657,6 +662,18 @@ SPRINT_32_VALIDATION.md, SPRINT_32_DECISIONS.md,
 SPRINT_32_RETROSPECTIVE.md, SPRINT_32_SUMMARY.md and CHANGELOG.md.
 Removed from candidates per convention (Pass 1, 2026-11-16).)
 
+(Sprint 33, merged via PR #122 (main PR #133), zero metered seconds:
+F13's restatement for a filing without the brief, F102's draft ready to
+file with its drift guard, and the F178 update. No card closed: the
+preregistration was submitted for filing 2026-11-18 and F102 keeps the
+venue and the lock step; F13 keeps the brief's terms. F200 and F201
+carded from Sprint 33 D12 and D10, F202 from the short review.
+Retrospective i1 tracked, i4 and i5 skipped, in
+`SPRINT_33_RETROSPECTIVE.md`. See SPRINT_33_PLAN.md,
+SPRINT_33_VALIDATION.md, SPRINT_33_DECISIONS.md,
+SPRINT_33_RETROSPECTIVE.md, SPRINT_33_SUMMARY.md and CHANGELOG.md
+(Pass 1, 2026-11-19).)
+
 **F146. Dirac-3 and Dirac-3S understandings, suggested improvements and QCi questions: keep current (~0.5h per update, zero metered) Priority HOLD (permanent)**
 - Phase: Phase 2, standing (added 2026-10-13 by the team lead during Sprint 25 Manual Validation)
 - Platform: N/A (document)
@@ -713,7 +730,8 @@ value. Removed from candidates.)
 
 (F129 rank-1 device pilot, energy_steel with leaf regularization on Dirac-3: CLOSED 2026-10-13 by the team lead at Sprint 25 Manual Validation, on F139's recommendation (`docs/phase2/F139_RERUN_REVIEW.md`). F142's B4 verify twin answers its fidelity question on Dirac-3S, on a resolvable Hamiltonian with Dirac-3 rows already on record. No metered seconds were spent on it. Removed from candidates; F121's hold condition, which waited for it, needs a new one at the next refinement.)
 
-**F102. Phase 2 preregistration framework (~3h [no-history], zero metered) Priority 30**
+**F102. Phase 2 preregistration framework (~3h [no-history], zero metered) Priority 20**
+- **Pass 1 and 2 (2026-11-19)**: Sprint 33 made the draft ready to file; it was marked FINAL and submitted for filing 2026-11-18 (team lead), and copied to `experiments/phase2/PREREGISTRATION_FINAL.md`. What remains is section 7's filing steps: record the venue, then the lock step (a tag at the filing commit, `experiments/src/test_phase2_prereg_filed.py` hashing both copies above a "## Amendments" heading placed after the revision log, with a proof, and the document-of-record hook), about 60 minutes. Priority 30 to 20. **Blocked on the venue**: section 7 runs the lock after the venue is recorded
 - **Pass 2 (2026-11-16)**: priority 30 unchanged, under the submission scope. The report cites each experiment's entry; the open item is the filing date, which is the team lead's
 - **Pass 1 (2026-10-25)**: Sprint 28 wrote section 6 entries for Experiments 2, 3, 4 and 6 (F152, F153, F111, F110), and for F154 and F162. Experiment 5 has no entry; its transfer half is F121, on HOLD. The filing date is still open (team lead)
 - **Sprint 27 Task C (2026-10-18, #35)**: section 7's items done or dated in `experiments/phase2/PREREGISTRATION_DRAFT.md`. arXiv:2604.18837 re-read: nested CV, Wilcoxon and the 0.0625 floor at 5 pairs are the paper's; the bootstrap interval, family-wide Bonferroni and normalized AUPRC are this project's (the paper reports no interval and applies Bonferroni once). New sections 2a (one Bonferroni family per experiment; seeds needed per family size) and 2b (equivalence against a margin, default 0.005 AUPRC). Section 5 recomputed by code (`f102_downsized_pair.json`): seed 42's 855 + 278 reproduces; 88-94% of pocket positives kept; the interval 3-7% wider, not "about 4%" on every seed. Experiment 1's entry (F112) written before its intervals. Still open: entries for Experiments 2-6 as their cards are selected; the filing date (team lead)
@@ -738,7 +756,8 @@ value. Removed from candidates.)
 - Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103 spent (corrected 2026-10-19, Pass 1: shipped in Sprint 27)
 - **Pass 1 (2026-11-08)**: carried from Sprint 31 (D4, "delay to next sprint"); whether the construction request was sent is asked again as Sprint 32 D2. **Answered 2026-11-08 (D2 option 3)**: not sent and not sent now; the draft is updated as Sprint 32's last task, after F178. Still blocked
 
-**F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 50**
+**F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 70**
+- **Pass 2 (2026-11-19)**: priority 50 to 70. What remains (device lanes, QSVM) needs metered approval and the PoC's terms
 - **Pass 2 (2026-11-16)**: priority 30 to 50, under the submission scope. Its classical and proxy parts are the report's reference lanes and are done; what remains (device lanes, QSVM) needs metered approval and the PoC's terms
 - **Pass 3 (2026-11-05, Sprint 31 Tasks F and G)**: the SPECTRA part shipped (four datasets, 32 pages under `docs/phase2/algorithms/`; the RBF SVM scored under the D14 amendment; the proxy fifth or sixth of seven on every dataset) and the QNN part shipped (dequantized, `docs/phase2/F157_QNN_IEEE.md`). Remaining: the device lanes and QSVM, each a card when selected. One open item, not carded: energy_steel seed 42's RBF SVM is constant on validation and ranked on test, stated as not explained on its page; refinement decides whether it gets a card. Priority 30 unchanged. (Pass 1, 2026-11-08: carded as F196)
 - Phase: Phase 2 (added 2026-10-23 by the team lead, Sprint 28 Manual Validation, after F151 and F152)
@@ -760,7 +779,8 @@ value. Removed from candidates.)
 - Depends on: per-block approval (Criterion H); the run condition above
 - **Pass 1 (2026-10-25)**: F162 (Sprint 28) found the proxy not reliably above HGB or XGBoost inside the pocket on any cell, and its card said a null justifies no device block (`docs/phase2/F162_IN_POCKET.md`). Run condition (1) is judged against that result
 
-**F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 20**
+**F13. Phase 2 PoC sprint planning (~75m timebox for the skeleton) Priority 50**
+- **Pass 2 (2026-11-19)**: priority 20 to 50. Sprint 33 Task A restated the draft on assumptions A1-A12, confirmed by the team lead 2026-11-17. What remains needs the brief, which is not in this repository
 - **Pass 2 (2026-11-16)**: priority 180 to 20, under the submission scope. The plan's assumptions [A1]-[A8] decide what the PoC report may say; replacing them needs the brief's terms, which are not in this repository (whether we were selected is not recorded here)
 - **2026-11-05 (Sprint 31 Task L)**: `docs/phase2/PHASE2_POC_PLAN_DRAFT.md` takes every Sprint 31 result (F114, F155, F157 SPECTRA and QNN parts, Experiment 5, F95); the cards above carry Pass 3 notes from them. Priority 180 unchanged: the content still waits on notification
 - **2026-10-22 (Sprint 28 Task J, #56)**: skeleton written, `docs/phase2/PHASE2_POC_PLAN.md`. Dates now sourced: program roadmap page, team lead's screenshot of 2026-10-22 (PoC 17 Nov 2026 - 28 Feb 2027; Review and Close 1 Mar - 30 Apr 2027). The content after notification stays open
@@ -771,7 +791,8 @@ value. Removed from candidates.)
 - Depends on: nothing to start the skeleton; the dataset-specific content needs finalist notification
 - **Pass 1 (2026-10-30)**: F167 (Sprint 29) wrote the full plan on labeled assumptions, `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`. On notification this card replaces those assumptions with the brief's terms; the skeleton is unchanged
 
-**F178. Three learning documents, versioned and updated every sprint (~180m first versions [no-history], then ~30-60m per sprint, zero metered) Priority 14, ONGOING**
+**F178. Three learning documents, versioned and updated every sprint (~180m first versions [no-history], then ~30-60m per sprint, zero metered) Priority 16, ONGOING**
+- **Pass 2 (2026-11-19)**: priority 14 to 16, to sprint with F200: its update states the release rule's result
 - **Pass 1 (2026-11-08)**: the first versions shipped in Sprint 31 (`docs/learning/`, `test_learning_docs.py`), and the update step is in `SPRINT_CHECKLIST.md` Phase 5. What remains is the per-sprint update, about 30-60 minutes. **Pass 2 (2026-11-08)**: priority 12 to 14, to sprint with F188 and F181
 - Phase: knowledge record (added 2026-11-01 by the team lead, Sprint 30 Manual Validation)
 - Platform: docs
@@ -865,7 +886,8 @@ value. Removed from candidates.)
 - Acceptance: the cause named with the evidence, or "not found" with what was checked; the page's sentence replaced by the finding; no result file rewritten
 - Depends on: nothing
 
-**F197. Experiment 5 re-entry: a segment measure that does not saturate (~60m entry draft [no-history], zero metered) Priority 40**
+**F197. Experiment 5 re-entry: a segment measure that does not saturate (~60m entry draft [no-history], zero metered) Priority 60**
+- **Pass 2 (2026-11-19)**: priority 40 to 60, below F198, which feeds the filed Experiment 3
 - **Pass 2 (2026-11-16)**: priority 70 to 40, under the submission scope. Experiment 5 is a committed experiment; the report can state F121's result as it stands, so this re-entry adds a reading rather than closing a gap
 - Phase: Phase 2, Experiment 5 (added 2026-11-08, Pass 1, from F121's close)
 - Platform: IEEE-CIS
@@ -873,7 +895,8 @@ value. Removed from candidates.)
 - Acceptance: a new entry naming the measure, with a check on the recorded F121 scores that the measure does not saturate for the champion; no run until the entry is approved
 - Depends on: nothing
 
-**F198. F188 extended: other ridge weights and finer resolution (~30m [no-history], zero metered) Priority 12**
+**F198. F188 extended: other ridge weights and finer resolution (~30m [no-history], zero metered) Priority 40**
+- **Pass 2 (2026-11-19)**: priority 12 to 40. F200 tests the filed release rule first; F198 explores other settings, which need a dated amendment (Sprint 33 D6)
 - Phase: Phase 2, Experiment 3 (added 2026-11-13, Sprint 32 D4 option 3)
 - Platform: IEEE-CIS, local only
 - F188 (Sprint 32) found the rounded problem's answer worse than greedy on all six instances at R = 200, but only at F176's recorded ridge multiplier; the rounding step is the same on every instance, likely set by the ridge diagonal, and at R = 400 one instance (43/free) delivers a gain (`docs/phase2/F188_ROUNDING.md`)
@@ -882,13 +905,37 @@ value. Removed from candidates.)
 - Depends on: nothing. Bears on F25's "Depends on" (D4)
 - **Pass 2 (2026-11-16)**: priority 10 to 12, to sprint with F199. It feeds the PoC report's Experiment 3 section: whether any device run on F25's formulation can show a result
 
-**F199. PoC report skeleton: one section per commitment, its sources and its gaps (~60m [no-history], zero metered) Priority 10**
+**F199. PoC report skeleton: one section per commitment, its sources and its gaps (~60m [no-history], zero metered) Priority 30**
+- **Pass 2 (2026-11-19)**: priority 10 to 30. Deferred from Sprint 33 (D3); the filed preregistration is now its main source. Its "Depends on" stays: which documents are submitted is not yet known (Sprint 33 D3, Q2)
 - Phase: Phase 2, PoC write-up (added 2026-11-16, Pass 2, from the team lead's scope: prep for submission)
 - Platform: docs
 - The PoC report is stage 3 of `docs/phase2/PHASE2_POC_PLAN_DRAFT.md` and has no file yet. A skeleton now shows, before the PoC's runs, what the report can already say and what is missing. New file `docs/phase2/POC_REPORT_DRAFT.md`: one section per commitment in the filed proposal, Experiments 1-6 (section 5) and the gate-based arm and router acceptance (section 7). Each section names its preregistration entry, its result files and documents, its state (measured, null, held or not started), and its gaps, each gap naming the card that closes it or "no card"
 - This enables: every later sprint picks its card from a named gap in the report. This prevents: a write-up stage that finds its gaps in week 12
 - Acceptance: the file has the eight sections; every figure resolves to a tracked result file (`test_phase2_figures_resolve.py` reads `docs/phase2/`); `scripts/outward_readability.py` run and its hits fixed or listed; the assumptions it rests on cite the PoC draft's register ([A1] to [A8])
 - Depends on: Sprint 33 D1 (which documents are to be submitted). Informs: F13
+
+**F200. Experiment 3's release rule computed, the filing's first test (~45m [no-history], zero metered) Priority 10**
+- Phase: Phase 2, Experiment 3 (added 2026-11-19, Pass 1, from Sprint 33 D12 option 2; the team lead moved it to Sprint 34 at Sprint 33's close)
+- Platform: IEEE-CIS, local only
+- The rule, filed in Experiment 3 (Sprint 33 D6): on F176's six instances at R = 200, the rounded problem's pick delivers a gain of more than 1e-6 against greedy's own selection solved the same way (weights solved on the rounded problem, scored on the real one), on at least one instance. `f188_rounding_delivered.json` compares against greedy solved on the unrounded problem, the old rule. On three instances the pick is greedy's selection, so only the other three can pass
+- Scope: a new option in `experiments/phase2/src/f188_rounding.py` that solves greedy's selection on the rounded problem and scores it on the real one; a new result file, `f188_release_rule.json`, with provenance; a check fired first that the new comparison gives zero gain where the pick is greedy's selection
+- This enables: the PoC plan and report can say whether F25's device arm is open. This prevents: a rule that could be called tuned to a known result (it is run after it is filed)
+- Acceptance: the result file; each instance's delivered gain against greedy's own selection; the rule's verdict (pass on at least one, or fail); the result recorded as a dated note under Experiment 3, below "## Amendments" once F102's lock is in place; F25's HOLD note updated
+- Depends on: the filing (2026-11-18, done). Its dated note's place depends on F102's lock: if the venue is not yet set, the result goes in its own document and the note waits for the lock
+
+**F201. The 0.1% alert budget in the outcome block (~45m [no-history], zero metered) Priority 12**
+- Phase: Phase 2, reporting (added 2026-11-19, Pass 1, from Sprint 33 D10 option 2 and the preregistration's section 7)
+- Platform: N/A (code: `experiments/phase2/src/outcome_record.py`)
+- From filing on, recall at the 0.1% budget is reported beside the 0.5% figure for every scored result; results recorded before filing are not recomputed (section 2). The outcome block records the 0.5% budget only
+- Acceptance: the block records confusion counts and recall at the 0.1% budget beside the 0.5% ones; `test_outcome_record_required.py` fails a result file dated after filing without them, with a red proof; existing result files unchanged (`test_evidence_immutability.py`)
+- Depends on: nothing. Must ship before the first scored result after filing
+
+**F202. The pre-push gate resolves `--base` before deciding it is a task run (~15m, zero metered) Priority 14**
+- Phase: tooling (added 2026-11-19, Pass 1, from the short review of Sprint 33's improvement commits)
+- Platform: N/A (`scripts/select_proofs.py`)
+- Sprint 33 Task J lets `--base HEAD` run on a dirty tree, by string. `--base @` and `--base HEAD~0` name the same commit and are refused. A false refusal, not a missed one; the message names `--base HEAD`
+- Acceptance: the base compared by `git rev-parse` with HEAD; a test for `@`; the existing red proof still fires
+- Depends on: nothing
 
 ### Paper (Stages 4-6)
 
@@ -946,6 +993,7 @@ not a sweep correction.
 - **Pass 1 (2026-11-04)**: F176 (Sprint 30 Task E) found selections below greedy on 3 of 6 IEEE-CIS instances, each by under 2e-05 against a room bound near 0.08-0.097; SCIP at 1,200 s did not beat greedy. The room is reachable only by a sliver so far, and the swap search missed the optimum in 3 of 7 checked cases (`docs/phase2/F176_BELOW_GREEDY.md`). The HOLD reason (F102 not filed) is unchanged
 - **Sprint 32 (F188), stays on HOLD (D4 option 3, 2026-11-13)**: F188 rounded F176's six IEEE-CIS instances to 200:1. The registered reading (gain on the rounded problem) is "kept" on 42/free and 43/free, by gains the rounding made; the amendment's reading (the rounded problem's pick and weights, scored on the real problem) is worse than greedy on all six at R = 200, and at R = 400 only 43/free delivers a gain (`docs/phase2/F188_ROUNDING.md`). Untested: 200:1 on Dirac-3S, other ridge weights, R above 400; F198 tests the last two. **Added to "Depends on" (D4): before any device run on this formulation, F188's delivered reading (the rounded problem's pick, scored on the real problem) must beat greedy at R = 200**
 - **Changed 2026-11-17 (Sprint 33 D6 option 1)**: at R = 200 the rounded problem's pick is greedy's own selection on three of the six instances, so the D4 condition could not pass there. The condition now compares the pick against greedy's selection solved the same way (on the rounded problem, scored on the real one), with a gain of more than 1e-6 on at least one of the six instances at R = 200. The preregistration draft's Experiment 3 states the rule; no stored result computes it yet (`docs/sprints/SPRINT_32_DECISIONS.md`, D4's note)
+- **Pass 1 (2026-11-19)**: the filed rule is computed by F200, after filing (Sprint 33 D12). Its verdict decides whether this card can leave HOLD
 - **HOLD reason, restated 2026-10-03**: needs F102 (preregistration), F94 (controls) and the allocation. **Corrected 2026-10-13 (Pass 1): F94 shipped in Sprint 25 and the allocation arrived 2026-10-09; F102 (a draft, not yet filed) is the hold reason left.** Sized at 3,070 s in the sent hardware plan; after F90 about 445 s of the 1,681 remain (**corrected 2026-10-06: F90 ran and the measured balance fell to 1,022 s**). **2026-10-10: QCi granted the 7,500 s on 2026-10-09, so the allocation no longer blocks this card**; the balance is in `experiments/results/allocation_reads.json`
 - Platform: Dirac-3 integer/qudit solver, local proxy for the relaxation only
 - **Default device is now Dirac-3S (2026-10-16, Sprint 26 Decision 11).** Experiment 3 already names Dirac-3S (draft section 6). The integer cost model and the 3,070 s sizing are Dirac-3 figures; F139's two re-measurement probes run on Dirac-3S and re-price this card. `qpu_cost_model.quote()` (Sprint 26 IMP-5) covers the continuous solver only; integer-solver cost needs those probes
