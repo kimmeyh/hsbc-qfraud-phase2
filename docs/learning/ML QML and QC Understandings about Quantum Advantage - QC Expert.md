@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Quantum Computing Expert Version
 
-**Version 1.3**, 2026-11-10 (Sprint 32, card F178). For readers with
+**Version 1.5**, 2026-11-18 (Sprint 33, card F178). For readers with
 undergraduate-or-above or professional quantum computing experience,
 not necessarily in machine learning. Acronyms and common terms link to
 the [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md);
@@ -10,6 +10,8 @@ The appendix here holds only what neither defines.
 
 ## Change list
 
+- **1.5, 2026-11-18 (Sprint 33)**: no new result. F25's hold in the Bottom line and section 6 gives the testable rule (Sprint 33 D6) and when it is checked: after the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is filed (D12).
+- **1.4, 2026-11-16 (Sprint 33)**: no new result. The Bottom line and section 6 give the team lead's decision on F188 (Sprint 32 D4); section 6 notes the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration)'s state at filing.
 - **1.3, 2026-11-10 (Sprint 32)**: F188, the rounding test, added as a tagged claim in section 3 and a dated result in section 6, which also lists F185 (alerts ranked by cost; detail in the machine learning expert version). The bottom line and section 5's three conditions now cite it, and the rounding test leaves section 7. No Sprint 33 run is preregistered yet, so none is listed.
 - **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F. New: [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference) beside [superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition) and [entanglement](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-entanglement), in outside research and in our circuit; a proposed experiment with all three properties and many non-Clifford gates; the scope of the F110 build cost; and the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
@@ -37,7 +39,7 @@ The appendix here holds only what neither defines.
   under 2e-05. The Sprint 32 rounding test (F188) found that at 200:1
   the rounded problem's answer is worse than greedy on all six
   instances, so a device run on this design could not show a gain.
-  Closing the case is the team lead's decision.
+  The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`).
 - **Dirac-3S is a better solver than Dirac-3 on our one resolvable
   instance**, returning the reference optimum in every sample; accuracy
   did not change, because the optimum was already reachable classically.
@@ -435,11 +437,20 @@ same file before its run. No Sprint 33 run is preregistered yet.
     R = 2). Registered reading: "kept" on 42/free and 43/free, by gains
     the rounding made. Amendment's reading: worse than greedy on all
     six at R = 200. The amendment set no decision rule, so whether
-    F25's [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) case closes is the team lead's decision
-    (`docs/phase2/F188_ROUNDING.md`).
+    F25's [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) case closes was the team lead's decision
+    (`docs/phase2/F188_ROUNDING.md`). The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`).
 - **F185, a cost-weighted [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget)**: classical; see the machine
   learning expert version's section 7.
   - Result, 2026-11-09: reported there; no device was used.
+
+**Sprint 33 (2026-11-16): the preregistration ready to file.** No
+experiment ran. `experiments/phase2/PREREGISTRATION_DRAFT.md` now gives
+each section 6 entry a state at filing (Run, Partly run, To run) and its
+result document; Experiments 3 and 6 are partly run. It is filed without
+the program's brief, on assumptions A1 to A12 in
+`docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; the filing date and venue are
+not set. `experiments/src/test_phase2_prereg_draft.py` keeps it
+consistent through review; the byte lock comes at filing.
 
 ## 7. Experiments not yet planned
 

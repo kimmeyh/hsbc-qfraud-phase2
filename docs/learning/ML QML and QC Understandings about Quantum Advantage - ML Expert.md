@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Machine Learning Expert Version
 
-**Version 1.3**, 2026-11-10 (Sprint 32, card F178). For readers with
+**Version 1.5**, 2026-11-18 (Sprint 33, card F178). For readers with
 undergraduate-or-above or professional machine learning and data-science
 experience. Acronyms and common terms link to the
 [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md),
@@ -10,6 +10,8 @@ covers the [devices](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Ad
 
 ## Change list
 
+- **1.5, 2026-11-18 (Sprint 33)**: no new result. F25's hold in section 7 gives the testable rule (Sprint 33 D6) and when it is checked: after the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is filed (D12).
+- **1.4, 2026-11-16 (Sprint 33)**: no new result. Section 7 notes the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration)'s state at filing and the assumptions it rests on; F188's entry gives the team lead's decision (Sprint 32 D4).
 - **1.3, 2026-11-10 (Sprint 32)**: F185, the cost-weighted budget, added as a tagged claim in section 2 and a dated result in section 7, which also lists F188 (the rounding test; detail in the quantum computing expert version). The cost-weighted idea leaves section 8. No Sprint 33 run is preregistered yet, so none is listed.
 - **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F; "device" means a quantum device, and a customer's phone or computer is a "customer device". New: what the 0.5% budget optimizes and what it does not, card testing, the data a bank could add, the circuit's three quantum properties, the scope of the F110 slope, and the backlog proposals of Sprint 31 D18.
 - **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
@@ -556,6 +558,16 @@ same file before its run. No Sprint 33 run is preregistered yet.
   - Result, 2026-11-09: the rounded problem's answer, scored on the
     real objective, is worse than greedy on all six; see the quantum
     computing expert version's section 3 (`docs/phase2/F188_ROUNDING.md`).
+    The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`).
+
+**Sprint 33 (2026-11-16): the preregistration ready to file.** No
+experiment ran. `experiments/phase2/PREREGISTRATION_DRAFT.md` now gives
+each section 6 entry a state at filing (Run, Partly run, To run) and its
+result document; Experiments 3 and 6 are partly run. It is filed without
+the program's brief, on assumptions A1 to A12 in
+`docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; the filing date and venue are
+not set. `experiments/src/test_phase2_prereg_draft.py` keeps it
+consistent through review; the byte lock comes at filing.
 
 ## 8. Experiments not yet planned
 

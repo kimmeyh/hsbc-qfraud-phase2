@@ -167,6 +167,16 @@
 | 32 | Task H PR 116 review fixes | tooling | 30m | 2m | n/a | measured, active, 2m elapsed; understated: the fixes were written before the timer started (the commit hook then required it) |
 | 32 | Task I retrospective i1 to i4 | tooling | 85m | 21m | n/a | measured, active, 21m elapsed; understated: i1 was written and tested before the timer started |
 | 32 | Task J short review and CI red on 0fdcb67 | tooling | 20m | 15m | 0.75 | measured, active, 15m elapsed; not planned; two review findings and three CI failures, one from 8e0796a |
+| 33 | Task A (F13) PoC plan for a filing without the brief | docs | 75m | 6m | 0.08 | measured, active, 6m elapsed; understated: the timer started after most edits |
+| 33 | Task B (F102) preregistration ready to file | docs | 120m | 12m | 0.10 | measured, active, 12m elapsed; understated: the timer started after most edits |
+| 33 | Task D (F102) the drift guard | tooling | 60m | 14m | 0.23 | measured, active, 14m elapsed; understated: the timer started after most edits |
+| 33 | Task E fresh-eyes review fixes | tooling | 30m | 1m | n/a | measured, active, 1m elapsed; not planned; the timer started after the edits (validation V7) |
+| 33 | Task C (F178) learning documents | docs | 45m | 4m | 0.09 | measured, active, 4m elapsed; understated: the timer started after most edits |
+| 33 | Task F outside adversarial review applied (D5, D6) | docs | 110m | 60m | 0.55 | measured, active, 60m elapsed; not planned; background agent work is not timed (retrospective i5, skipped) |
+| 33 | Task G D9 claim audit applied | docs | 90m | 23m | 0.26 | measured, active, 23m elapsed; not planned; seven review agents ran for several hours, not timed (retrospective i5, skipped) |
+| 33 | Task H D10-D12 applied; preregistration FINAL | docs | 30m | 12m | 0.40 | measured, active, 12m elapsed; not planned |
+| 33 | Task I PR 122 review fixes | tooling | 30m | 12m | 0.40 | measured, active, 553m elapsed; not planned; the elapsed time holds the filing morning and the reviews' waits |
+| 33 | Task J retrospective i2 and i3 | tooling | 20m | 10m | 0.50 | measured, active, 10m elapsed |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start
