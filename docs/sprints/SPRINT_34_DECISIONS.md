@@ -66,3 +66,173 @@ unblocked and is the other half of "the official filing".
    venue from Q1. Only if Q1 gives a venue.
 3. F200, F201, F202, the F178 update and F199.
 4. F200 and the F178 update.
+
+**Answers (team lead, 2026-11-21, at planning).**
+- Q1: "not known yet".
+- D1: none of options 1-4. The team lead set the scope directly:
+  "Sprint 34 Scope should include the below items": F200, F201, F202,
+  F178, F102, F198, F197 and F157. With it, verbatim: "this is the first
+  sprint after submitting pre-registration for Phase 2. It is possible
+  that we will be asked to update the pre-registration after receiving
+  additional information from the Quantum Insider team. We will want to
+  preserve what has been submitted so far and provide new document with
+  updates if we are asked to submit again."
+
+## Q2. Which text was submitted?
+
+Asked 2026-11-21 at planning (Phase 3), with D2-D4.
+
+**What.** `experiments/phase2/PREREGISTRATION_FINAL.md` changed in three
+commits on 2026-11-18. A lock must hash the bytes that were actually
+sent. This is a fact question.
+- d96ad30 (08:35): the first copy. Filing date and venue "not set".
+- b8e2c0e (08:54): the filing date set to 2026-11-18.
+- c3d3c00 (09:18): section 7's lock wording from the PR #122 review,
+  and two revision-log rows. This is the current file.
+
+**Why it matters.** D3 option 1 locks the text named here. If the sent
+text is an earlier commit, the current file is not what was submitted.
+
+**Options.**
+
+1. c3d3c00, the current file.
+2. b8e2c0e.
+3. d96ad30.
+4. Not known.
+
+## D2. Where does text written after filing go?
+
+Asked 2026-11-21 at planning (Phase 3).
+
+**What.** Four selected cards write preregistration text after filing:
+F200's result note (Experiment 3), F198's amendment before its run,
+F197's new Experiment 5 entry, and the venue when it is known. The filed
+section 7 says amendments are appended below an "## Amendments" heading
+in the filed file. The team lead's note says to preserve what was
+submitted, and to provide a new document with updates if asked to
+submit again.
+
+**Why it matters.** Text written into a filed copy changes the bytes
+that were submitted. Text kept apart from it leaves the submitted text
+whole and gives the next submission its source.
+
+**Kind per option.**
+- Option 1: Prevention. Neither filed copy is ever edited.
+- Option 2: Prevention for the submitted copy only; the working copy
+  changes.
+- Option 3: Workaround. It follows the filed section 7 wording, and
+  changes the submitted copy's bytes.
+
+**Cost per option.** Zero metered seconds in every option.
+- Option 1: about 15 minutes; 2 files (the new file, the drift guard).
+- Option 2: about 20 minutes; 2 files (the draft, the drift guard: its
+  byte-identical term becomes "the draft above the heading equals
+  FINAL").
+- Option 3: about 15 minutes; 3 files (both copies, the drift guard).
+
+**Recommendation: 1.** It does exactly what the note asks: the submitted
+text stays byte for byte, and every later change is in one dated file
+that a new submission is built from. Its first entry records that it
+departs from section 7's "appended below that heading" wording, and why.
+
+**Options.**
+
+1. A new file, `experiments/phase2/PREREGISTRATION_AMENDMENTS.md`. Each
+   entry is dated and names the filed section it changes or adds to.
+   `PREREGISTRATION_DRAFT.md` and `PREREGISTRATION_FINAL.md` are not
+   edited. A new submission, if asked for, is built from the two then.
+2. An "## Amendments" heading appended to `PREREGISTRATION_DRAFT.md`
+   only, with every later change below it. `PREREGISTRATION_FINAL.md`
+   is not edited.
+3. An "## Amendments" heading appended to both copies, with every later
+   change below it in both (the filed section 7 wording).
+
+## D3. Lock the filed text now, before the venue is known?
+
+Asked 2026-11-21 at planning (Phase 3), beside D2. Its option 1 is
+written for each D2 answer.
+
+**What.** F102's lock step: a tag, a hash test
+(`experiments/src/test_phase2_prereg_filed.py`) with a proof that an
+edited copy fails, and the document-of-record hook
+(`.claude/hooks/block_reactive_amendment.py`) extended to the Phase 2
+copies. The filed section 7 says the lock runs after the venue is
+recorded, so the venue line is inside the locked text. The venue is
+not known (Q1).
+
+**Why it matters.** Until the lock, only the drift guard protects the
+text, and it allows edits that add a revision-log row. The hash test
+is the only check that fails on any edit. Locking now leaves the venue
+line reading "not set" in the locked text; the venue is then recorded
+outside it.
+
+**Kind per option.**
+- Option 1: Prevention.
+- Option 2: Workaround (waits for a fact that may come late).
+
+**Cost per option.** Zero metered seconds.
+- Option 1: about 60 minutes; about 5 files (the test, the hook, its
+  test, the drift guard, CHANGELOG) and one tag.
+- Option 2: 0 minutes now; about 60 when the venue is known.
+
+**Recommendation: 1.** The note asks to preserve the submitted text; a
+hash test is what makes that hold. The venue is a fact about the filing,
+not part of the text sent, so recording it outside the hashed text loses
+nothing.
+
+**Options.**
+
+1. Lock now. The tag `phase2-prereg-filed` at the commit Q2 names (if
+   Q2 is 4, at c3d3c00, with the reason in the tag message). The hook
+   blocks edits to both copies. What the hash test covers, by D2 answer:
+   - D2 option 1: both copies, every byte.
+   - D2 option 2: FINAL every byte; the draft's text above its heading.
+   - D2 option 3: both copies' text above the heading.
+   The venue, when known, is a dated entry where D2 puts later text.
+2. Hold the lock until the venue is known. F102 is not worked this
+   sprint; the drift guard stays the only protection.
+
+## D4. Which part of F157 is worked this sprint?
+
+Asked 2026-11-21 at planning (Phase 3).
+
+**What.** F157 is an epic. Its classical and proxy lanes are done on
+ULB, IEEE-CIS and SPECTRA. What remains is the device lanes (CVQBoost
+on Dirac-3S) and QSVM. Its card says to split it into one card per
+dataset at refinement, and every device lane needs per-block approval
+(Criterion H). `experiments/phase2/src/dirac3_emulator.py` runs a real
+`QSVMClassifier` fit against a fitted model of the device, spending
+nothing; its runtime on ULB is not measured.
+
+**Why it matters.** The sprint is already about 5 hours without F157,
+against a 1-2 hour target. A scored lane needs a complete entry before
+its first result (filed commitment 3) and must run after F201.
+
+**Kind per option.**
+- Option 1: planned work (splits the epic into cards that can be
+  selected).
+- Option 2: planned work, plus one result.
+- Option 3: none (de-scoped).
+
+**Cost per option.** Zero metered seconds in every option.
+- Option 1: about 45 minutes; 1 file (the master plan).
+- Option 2: about 150 minutes [no-history]: option 1, a 5-minute
+  emulator spike, an entry, the run and one page. Runtime not sized
+  until the spike. About 5 files.
+- Option 3: 0 minutes.
+
+**Recommendation: 1.** The card asks for the split first, the device
+lanes cannot run without approvals, and option 2's runtime is unsized.
+The split gives each remaining lane a quoted cost (from
+`qpu_cost_model.quote`), so a later sprint can select one.
+
+**Options.**
+
+1. Split only: one card per remaining lane and dataset (Dirac-3S
+   CVQBoost on ULB, IEEE-CIS and SPECTRA; QSVM on the emulator; QSVM on
+   Dirac-3S), each with its estimate, metered-second quote and entry
+   needs. No result this sprint.
+2. Option 1, plus QSVM on ULB on the emulator: a 5-minute spike first,
+   then an entry where D2 puts it, then the run after F201, then
+   `docs/phase2/algorithms/ULB_QSVM_EMULATED.md`.
+3. F157 not worked this sprint.
