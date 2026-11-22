@@ -1,0 +1,145 @@
+{
+ "card": "F200",
+ "sprint": 34,
+ "phase": 2,
+ "evidence_tag": "SIM",
+ "metered_seconds": 0,
+ "dataset": "ieee_cis",
+ "entry": "experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md section 6, Experiment 3, the release rule (Sprint 33 D6)",
+ "computed_after_filing": "2026-11-18",
+ "reading_range": 200.0,
+ "tol": 1e-06,
+ "check": {
+  "pick_is_greedy_on": [
+   "43/mid",
+   "44/free",
+   "44/mid"
+  ],
+  "gain_there": 0.0,
+  "old_comparison_gain_there": {
+   "43/mid": 6.389995821298733e-05,
+   "44/free": 1.641793570827943e-05,
+   "44/mid": 6.194840921569522e-05
+  },
+  "can_fire": true
+ },
+ "rows": [
+  {
+   "seed": 42,
+   "instance": "free",
+   "release": {
+    "R": 200.0,
+    "step": 0.015,
+    "pick": "sa_from_greedy_43",
+    "pick_objective": -0.7027209892405608,
+    "greedy_objective": -0.7027212811772974,
+    "release_gain": 2.919367365628034e-07,
+    "passes": false
+   },
+   "old_comparison_gain": 2.3768548658820166e-05
+  },
+  {
+   "seed": 42,
+   "instance": "mid",
+   "release": {
+    "R": 200.0,
+    "step": 0.015,
+    "pick": "swap_search",
+    "pick_objective": -0.8214609489515505,
+    "greedy_objective": -0.8214559313183976,
+    "release_gain": -5.0176331529705465e-06,
+    "passes": true
+   },
+   "old_comparison_gain": 5.6291636174821136e-05
+  },
+  {
+   "seed": 43,
+   "instance": "free",
+   "release": {
+    "R": 200.0,
+    "step": 0.015,
+    "pick": "scip",
+    "pick_objective": -0.7024452611675356,
+    "greedy_objective": -0.7036631973090275,
+    "release_gain": 0.0012179361414919043,
+    "passes": false
+   },
+   "old_comparison_gain": 0.0012296328260259504
+  },
+  {
+   "seed": 43,
+   "instance": "mid",
+   "release": {
+    "R": 200.0,
+    "step": 0.015,
+    "pick": "greedy",
+    "pick_objective": -0.8217060394950189,
+    "greedy_objective": -0.8217060394950189,
+    "release_gain": 0.0,
+    "passes": false
+   },
+   "old_comparison_gain": 6.389995821298733e-05
+  },
+  {
+   "seed": 44,
+   "instance": "free",
+   "release": {
+    "R": 200.0,
+    "step": 0.015,
+    "pick": "greedy",
+    "pick_objective": -0.7032878252368246,
+    "greedy_objective": -0.7032878252368246,
+    "release_gain": 0.0,
+    "passes": false
+   },
+   "old_comparison_gain": 1.641793570827943e-05
+  },
+  {
+   "seed": 44,
+   "instance": "mid",
+   "release": {
+    "R": 200.0,
+    "step": 0.015,
+    "pick": "greedy",
+    "pick_objective": -0.8214658900580054,
+    "greedy_objective": -0.8214658900580054,
+    "release_gain": 0.0,
+    "passes": false
+   },
+   "old_comparison_gain": 6.194840921569522e-05
+  }
+ ],
+ "verdict": {
+  "n_instances": 6,
+  "passes_on": [
+   "42/mid"
+  ],
+  "rule_met": true,
+  "finding": "met: the device arm (F25) may leave HOLD, after the dated amendment that commitment 2 requires"
+ },
+ "complete": true,
+ "provenance": {
+  "generator": "experiments/phase2/src/f188_rounding.py",
+  "generator_commit": "b79815da5b1167de58f34114641e0a969a337d7c",
+  "generator_clean": true,
+  "seeds": [
+   42,
+   43,
+   44
+  ],
+  "versions": {
+   "python": "3.12.10",
+   "numpy": "1.26.4",
+   "scipy": "1.17.1",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.0",
+   "xgboost": "3.4.1",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "imbalanced-learn": "0.14.2",
+   "eqc-models": "0.22.1",
+   "qci-client": "5.0.3"
+  },
+  "run_id": "95dc8e24dd5c4072874d24e8c5c13716"
+ }
+}
