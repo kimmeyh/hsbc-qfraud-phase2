@@ -8,6 +8,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 THIS = Path(__file__).relative_to(ROOT).as_posix()
 SRC = ROOT / "scripts" / "select_proofs.py"
@@ -120,10 +122,31 @@ def test_a_push_gate_run_refuses_a_dirty_tree(monkeypatch):
     def no_run(*a, **k):
         raise AssertionError("main ran tests on a dirty tree")
     monkeypatch.setattr(sp, "other_changes", lambda: ["docs/x.md"])
+    monkeypatch.setattr(sp, "names_head", lambda base: False)
     monkeypatch.setattr(sp, "changed_files", no_run)
     monkeypatch.setattr(sp.subprocess, "run", no_run)
     assert sp.main(["--tests", "--base", "origin/develop"]) == 2
     assert sp.main(["--tests"]) == 2
+
+
+def test_every_name_for_heads_commit_is_a_task_run():
+    # F202 (Sprint 34): `@` and `HEAD~0` were refused although they name
+    # the same commit as `HEAD`.
+    head = sp.git("rev-parse", "HEAD")[0]
+    for base in ("HEAD", "@", "HEAD~0", head):
+        assert sp.names_head(base), base
+
+
+def test_another_commit_is_not_a_task_run(monkeypatch):
+    def fake(*args):
+        return ["1" * 40] if args[-1] == "HEAD" else ["2" * 40]
+    monkeypatch.setattr(sp, "git", fake)
+    assert not sp.names_head("origin/develop")
+
+
+def test_a_base_git_cannot_resolve_stops_the_run():
+    with pytest.raises(SystemExit, match="rev-parse"):
+        sp.names_head("no-such-ref-f202")
 
 
 def test_a_task_run_on_a_dirty_tree_is_not_refused(monkeypatch):
@@ -193,7 +216,15 @@ def test_the_rules_can_fail():
              "--tests with --run read as a proof run"),
             ("        if dirty:\n", "        if False:\n",
              "test_a_push_gate_run_refuses_a_dirty_tree",
-             "a push-gate run started on a dirty tree")):
+             "a push-gate run started on a dirty tree"),
+            ('            == git("rev-parse", "HEAD"))\n',
+             '            or True)\n',
+             "test_another_commit_is_not_a_task_run",
+             "any base read as HEAD's commit"),
+            ('    return (git("rev-parse", "--verify", "--quiet", base + "^{commit}")\n',
+             '    return (base == "HEAD" and [""]\n',
+             "test_every_name_for_heads_commit_is_a_task_run",
+             "the base compared by spelling, not by commit")):
         assert_can_fail([Mutation(SRC, old, new, expect_occurrences=1)],
                         test(name), label)
 

@@ -11,6 +11,11 @@ A block holds:
     test rows: every row scoring at or above the score of the ceil(0.5% * n)th
     highest row is flagged, so tied rows are flagged together and the count
     never depends on row order (`n_flagged` can exceed `n_budget` by the tie);
+  - from filing on (2026-11-18), the same counts and the recall at the
+    0.1% budget, `at_low_budget_on_test` (the filed preregistration,
+    section 2; Sprint 33 D10; card F201). Each budget's entry also gives
+    its recall, TP / (TP + FN). Blocks recorded before filing are not
+    recomputed; `test_outcome_record_required.py` lists their files;
   - when validation scores are given, the counts at the two Phase 1
     operating points chosen on validation (`metrics.summarize`'s max-F1 and
     alert-budget thresholds), through `metrics.evaluate_at`, not a copy;
@@ -38,6 +43,8 @@ import metrics  # noqa: E402  (Phase 1, read-only)
 
 PRED_DIR = ROOT / "experiments" / "phase2" / "predictions"
 ALERT_BUDGET = 0.005
+LOW_BUDGET = 0.001            # reported beside 0.5% from filing on (F201)
+LOW_BUDGET_KEY = "at_low_budget_on_test"
 REQUIRED_KEYS = ("name", "seed", "n_test", "n_positives",
                  "at_budget_on_test", "test_scores")
 
@@ -64,10 +71,19 @@ def flagged_at_budget(scores, budget: float = ALERT_BUDGET) -> np.ndarray:
     return s >= cut
 
 
+def recall(c: dict) -> float:
+    """TP / (TP + FN); refuses a fold with no positive."""
+    pos = c["tp"] + c["fn"]
+    if pos == 0:
+        raise ValueError("no positive row; recall is undefined")
+    return c["tp"] / pos
+
+
 def at_budget_on_test(y, scores, budget: float = ALERT_BUDGET) -> dict:
     f = flagged_at_budget(scores, budget)
+    c = confusion(y, f)
     return {"budget": budget, "n_budget": int(np.ceil(budget * len(f))),
-            "n_flagged": int(f.sum()), "confusion": confusion(y, f)}
+            "n_flagged": int(f.sum()), "confusion": c, "recall": recall(c)}
 
 
 def save_test_scores(name: str, seed, y_test, p_test,
@@ -128,7 +144,8 @@ def record(name: str, seed, y_test, p_test, *, y_val=None, p_val=None,
         raise ValueError("the test rows hold no positive")
     out = {"name": name, "seed": seed, "n_test": int(len(y)),
            "n_positives": int(y.sum()),
-           "at_budget_on_test": at_budget_on_test(y, p, budget)}
+           "at_budget_on_test": at_budget_on_test(y, p, budget),
+           LOW_BUDGET_KEY: at_budget_on_test(y, p, LOW_BUDGET)}
     if (y_val is None) != (p_val is None):
         raise ValueError("pass both y_val and p_val, or neither")
     if p_val is not None:

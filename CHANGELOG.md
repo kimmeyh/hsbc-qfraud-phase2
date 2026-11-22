@@ -4,6 +4,12 @@ Policy (disposition item 8, adapted from spamfilter-multi ADR-0025): updated in 
 
 ## [Unreleased]
 
+### 2026-11-22
+
+- **feat**: Sprint 34 Task A (F201, #135): the outcome block reports the 0.1% alert budget, as the filed preregistration requires from filing on (section 2; Sprint 33 D10). `outcome_record.record` adds `at_low_budget_on_test`, the confusion counts and recall at 0.1%, and each budget's entry now gives its recall. `test_outcome_record_required.py` fails a result file with a block that lacks them, unless the file is one of the 34 that held blocks at filing (a list that may only shrink, pinned by its SHA-256). One test per term (no entry, another budget, no counts, no recall, a listed file), each proven red, with a proof that the writer's line is what the test checks. No result file is rewritten.
+- **fix**: Sprint 34 Task B (F202, #136): `scripts/select_proofs.py --tests` decides that a run is a task run by resolving `--base` with `git rev-parse` and comparing it with HEAD's commit, not by the string "HEAD". `@`, `HEAD~0` and HEAD's hash are no longer refused on a dirty tree; any other base still is, and a base git cannot resolve stops the run. Tests for each, and two red proofs beside the existing one.
+- **docs**: F203 carded for Sprint 35 (team lead): every question, decision and improvement stored in full, and any unanswered one re-asked in full.
+
 ### 2026-11-18
 
 - **fix**: Sprint 33 Task J (#132), retrospective i3 option a: `scripts/select_proofs.py --tests` refuses at once, naming the paths, when a run that could be recorded for the pre-push hook starts on a tree with changed or untracked files. Before, it ran for minutes and the push was still refused. `--base HEAD` and runs narrowed after `--` still test uncommitted changes during a task. A test and a red proof. Retrospective i2 option a: a CLAUDE.md entry, search with the Grep tool or `git grep`, never `grep -r`. The retrospective records the team lead's answers (i1 track only, i4 and i5 skipped).
