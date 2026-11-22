@@ -155,3 +155,53 @@ every other choice is Experiment 5's, so the two can be read together.
   outcome block per lane and seed (with the 0.1% budget).
 - **Output**: `experiments/phase2/results/exp5b_router.json` (`SIM`) and
   `docs/phase2/EXP5B_ROUTER.md`.
+
+### P2-A4. 2026-11-22: F188 extended to other ridge weights and resolutions (F198)
+
+- **Filed section**: 6, Experiment 3 (F153, F25), and the F188 entry
+- **Kind**: amendment
+- **Decided by**: the team lead selected F198 for Sprint 34 (2026-11-21).
+  The filed Experiment 3 entry requires this: "Any other ridge weight,
+  resolution or dataset (F198) is a new dated amendment written before
+  its run."
+
+Written 2026-11-22 (Sprint 34 Task F, #140), before the run. F188's
+results at F176's ridge weight are known (`docs/phase2/F188_ROUNDING.md`).
+The release rule's result at that weight (F200, Task E) is computed
+separately; this amendment cannot change that verdict.
+
+- **Question**: on F176's six IEEE-CIS instances, does the rounded
+  problem's best support keep or deliver a gain over greedy at other
+  ridge weights and finer resolutions?
+- **Arms and settings**: F176's six instances (seeds 42-44, `free` and
+  `mid`), rebuilt with F176's code, with the ridge weight `lam_mult` at
+  0.1, 1 and 10 times F176's recorded 2.0 (0.2, 2.0 and 20.0), and R = 100,
+  200, 400, 800 and 1,600. The supports are F176's recorded ones; no
+  search is run again, so at another ridge weight they are candidates,
+  not that problem's best supports, and greedy is rebuilt at that weight.
+- **Readings, for each instance, weight and R**: F188's registered
+  reading (the best other support's objective on the rounded problem,
+  minus greedy's: kept when below -1e-6); F188's delivered reading (the
+  rounded problem's pick, scored on the real one, against greedy solved
+  on the real one); and the filed release rule's comparison (the pick
+  against greedy, both solved on the rounded problem and scored on the
+  real one: passes when below -1e-6).
+- **Check, first**: F188's check that "lost" can fire (F176's 20-choose-4
+  cases, kept unrounded and lost at R = 2 on at least one), run again
+  at each ridge weight. A weight where it cannot fire is reported and its
+  readings are labeled as not able to show a loss.
+- **Primary metric and test**: none. This is descriptive and makes no
+  test, as F188 made none.
+- **Multiplicity**: none (no test).
+- **Device**: none. Zero metered seconds. A setting where the release
+  comparison passes does not open the device arm: any device call needs
+  its own dated amendment naming that setting, the instances, the metric
+  and margin, the family, the call count and the seconds cap (filed
+  commitment 2).
+- **Stopping rules**: the rebuilt greedy at weight 1 must match F176's
+  record, or the run stops. A result missing any instance, weight or R
+  is not complete.
+- **What is reported whatever the result**: every reading for every
+  instance, weight and R, and the check per weight.
+- **Output**: `experiments/phase2/results/f198_extended.json` (`SIM`)
+  and `docs/phase2/F198_EXTENDED.md`.
