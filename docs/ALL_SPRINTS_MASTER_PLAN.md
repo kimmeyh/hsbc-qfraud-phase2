@@ -756,7 +756,8 @@ value. Removed from candidates.)
 - Depends on: the authors sending how the substrates are constructed (the construction request in `CHECKLIST-Phase2.md`, still open); F103 spent (corrected 2026-10-19, Pass 1: shipped in Sprint 27)
 - **Pass 1 (2026-11-08)**: carried from Sprint 31 (D4, "delay to next sprint"); whether the construction request was sent is asked again as Sprint 32 D2. **Answered 2026-11-08 (D2 option 3)**: not sent and not sent now; the draft is updated as Sprint 32's last task, after F178. Still blocked
 
-**F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 70**
+**F157. Best achievable result per algorithm per dataset, every metric, one document each (~epic; size at refinement [no-history], proxy and classical first) Priority 70, SPLIT**
+- **Split 2026-11-22 (Sprint 34 Task H, #142, D4 option 1)**: the remainder is carded as F204 (Dirac-3S CVQBoost, ULB), F205 (Dirac-3S CVQBoost, IEEE-CIS), F206 (Dirac-3S CVQBoost, SPECTRA), F207 (QSVM on the emulator, ULB) and F208 (QSVM on Dirac-3S, ULB). The classical and proxy lanes on ULB, IEEE-CIS and SPECTRA, and the dequantized QNN on IEEE-CIS, are done. This card stays as their index until refinement closes it; each part is selected on its own
 - **Pass 2 (2026-11-19)**: priority 50 to 70. What remains (device lanes, QSVM) needs metered approval and the PoC's terms
 - **Pass 2 (2026-11-16)**: priority 30 to 50, under the submission scope. Its classical and proxy parts are the report's reference lanes and are done; what remains (device lanes, QSVM) needs metered approval and the PoC's terms
 - **Pass 3 (2026-11-05, Sprint 31 Tasks F and G)**: the SPECTRA part shipped (four datasets, 32 pages under `docs/phase2/algorithms/`; the RBF SVM scored under the D14 amendment; the proxy fifth or sixth of seven on every dataset) and the QNN part shipped (dequantized, `docs/phase2/F157_QNN_IEEE.md`). Remaining: the device lanes and QSVM, each a card when selected. One open item, not carded: energy_steel seed 42's RBF SVM is constant on validation and ranked on test, stated as not explained on its page; refinement decides whether it gets a card. Priority 30 unchanged. (Pass 1, 2026-11-08: carded as F196)
@@ -936,6 +937,44 @@ value. Removed from candidates.)
 - Sprint 33 Task J lets `--base HEAD` run on a dirty tree, by string. `--base @` and `--base HEAD~0` name the same commit and are refused. A false refusal, not a missed one; the message names `--base HEAD`
 - Acceptance: the base compared by `git rev-parse` with HEAD; a test for `@`; the existing red proof still fires
 - Depends on: nothing
+
+**F204. F157 part: CVQBoost on Dirac-3S, ULB, ten seeds (~90m plus device time; 210-310 metered s) Priority 80**
+- Phase: Phase 2, F157 device lane (split from F157 at Sprint 34 Task H, 2026-11-22)
+- Platform: Dirac-3S
+- The ULB proxy lane's chosen configuration (full, k 17, order 3; 833 learners, `docs/phase2/algorithms/ULB_CVQBOOST_PROXY.md`) fitted on Dirac-3S on seeds 42-51, one fit per seed, 8 samples, relaxation schedule 2; scored beside the proxy and the classical lanes on `docs/phase2/algorithms/ULB_COMPARISON.md`'s protocol
+- Cost: `qpu_cost_model.quote(833, 8)` gives 21-31 s per fit from three measured Dirac-3S calls of degree 2 within 2x of the size, so 210-310 s for ten fits. Re-quote at the time
+- Acceptance: a complete experiment entry in `experiments/phase2/PREREGISTRATION_AMENDMENTS.md` before the first call (filed commitment 3; the instances, primary metric and margin, family, call count and seconds cap); every response stored (`device_store`); outcome blocks with the 0.1% budget (F201); one page under `docs/phase2/algorithms/`
+- Depends on: per-block approval (Criterion H). The F25 HOLD and Experiment 3's release rule (F200) do not govern this lane, which is not Experiment 3
+
+**F205. F157 part: CVQBoost on Dirac-3S, IEEE-CIS, ten seeds (~90m plus device time; 210-310 metered s) Priority 82**
+- Phase: Phase 2, F157 device lane (split from F157 at Sprint 34 Task H)
+- Platform: Dirac-3S
+- The IEEE-CIS proxy lane's chosen pool (17 features, 833 learners, `docs/phase2/algorithms/IEEE_CVQBOOST_PROXY.md`), fitted on Dirac-3S on seeds 42-51 on months 0-3, scored on month 4, as F174
+- Cost: as F204, 21-31 s per fit, 210-310 s for ten fits
+- Acceptance: as F204, on `docs/phase2/algorithms/IEEE_COMPARISON.md`'s protocol
+- Depends on: per-block approval (Criterion H)
+
+**F206. F157 part: CVQBoost on Dirac-3S, SPECTRA, four datasets (~120m plus device time; 840-1,240 metered s) Priority 84**
+- Phase: Phase 2, F157 device lane (split from F157 at Sprint 34 Task H)
+- Platform: Dirac-3S; SPECTRA energy_steel, maintenance_ai4i, oilgas_gasturbine, telecom_churn
+- The F157 SPECTRA part's proxy configuration per dataset, ten seeds each (42-51), on label `target`
+- Cost: 40 fits at 21-31 s each (`qpu_cost_model.quote` for 560 to 833 variables), 840-1,240 s. Overlaps F161 (B4 re-run on Dirac-3S, two of these datasets); refinement decides whether one card replaces the other
+- Acceptance: as F204, per dataset
+- Depends on: per-block approval (Criterion H); the allocation balance at the time
+
+**F207. F157 part: QSVM on the emulator, ULB (~150m [no-history], zero metered) Priority 75**
+- Phase: Phase 2, F157 QSVM lane (split from F157 at Sprint 34 Task H)
+- Platform: `experiments/phase2/src/dirac3_emulator.py` (a fitted model of the device; fitted, not measured, for any size outside its anchors)
+- Phase 1's sign-augmented primal QSVM (`experiments/src/run_hardware_b5.py`, B1's top-13 features, 27 variables) run through `eqc_models`' `QSVMClassifier` against the emulator, ten seeds; a 5-minute spike first, timing one fit, sets the runtime
+- Acceptance: the spike's time recorded before the run is sized; an entry before the first result; outcome blocks with the 0.1% budget; `docs/phase2/algorithms/ULB_QSVM_EMULATED.md`, labeled as emulated, not device evidence
+- Depends on: nothing
+
+**F208. F157 part: QSVM on Dirac-3S, ULB (~60m plus device time; seconds not quoted) Priority 86**
+- Phase: Phase 2, F157 QSVM lane (split from F157 at Sprint 34 Task H)
+- Platform: Dirac-3S
+- B5's QSVM (27 variables) on Dirac-3S, ten seeds. Phase 1's B5 cost 13 s for 12 fits on Dirac-3 (`docs/B4_B5_HARDWARE_RESULT.md`). `qpu_cost_model.quote(27, 8)` has no Dirac-3S anchor within 2x of 27 variables, so the block is bounded by call count (10 calls) and its seconds are stated as unknown
+- Acceptance: as F204
+- Depends on: F207 (whether the lane can score above B5's 0.212 mean AUPRC on the emulator); per-block approval (Criterion H)
 
 **F203. Every question, decision and improvement stored in full, and re-asked in full (~45m [no-history], zero metered) Priority 10, for Sprint 35**
 - Phase: process (added 2026-11-22 by the team lead during Sprint 34, verbatim: "Add to backlog for next sprint: please store all quesitons, decisions and Improvement in full. If you still need an answer to one and it has scrolled off the screen, always re-ask with the full contents every time (it is to hard to scroll back to find them).")
