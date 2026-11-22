@@ -937,6 +937,14 @@ value. Removed from candidates.)
 - Acceptance: the base compared by `git rev-parse` with HEAD; a test for `@`; the existing red proof still fires
 - Depends on: nothing
 
+**F203. Every question, decision and improvement stored in full, and re-asked in full (~45m [no-history], zero metered) Priority 10, for Sprint 35**
+- Phase: process (added 2026-11-22 by the team lead during Sprint 34, verbatim: "Add to backlog for next sprint: please store all quesitons, decisions and Improvement in full. If you still need an answer to one and it has scrolled off the screen, always re-ask with the full contents every time (it is to hard to scroll back to find them).")
+- Platform: N/A (process documents and a check)
+- Today CLAUDE.md requires decisions (D#) to be written in full to `docs/sprints/SPRINT_n_DECISIONS.md` before they are asked. Questions (Q#) are written there in practice, but the rule does not name them; retrospective improvements (i#) are in the retrospective document, and nothing requires the same full form there. The re-ask rule says "pasted from the file unchanged" for decisions only. On 2026-11-19 a context compaction cut off a slate and the team lead had to ask for it again
+- Scope: CLAUDE.md's first "Things Claude Should NOT Do" entry, `SPRINT_EXECUTION_WORKFLOW.md` invariant 11 and `SPRINT_RETROSPECTIVE.md` step 5 name all three kinds (Q, D, i); every one is stored in full before it is shown; any item still unanswered is re-asked with its full contents in every turn that needs its answer, never by reference to earlier text
+- Acceptance: the three documents say so; a test fails a decisions or retrospective file whose Q, D or i entry lacks its required fields (What, Why it matters, Kind, Cost, Recommendation and Options for D and i; What and Options for Q), each field term proven red
+- Depends on: nothing
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)
