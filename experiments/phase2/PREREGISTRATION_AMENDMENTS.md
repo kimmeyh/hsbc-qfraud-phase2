@@ -205,3 +205,22 @@ separately; this amendment cannot change that verdict.
   instance, weight and R, and the check per weight.
 - **Output**: `experiments/phase2/results/f198_extended.json` (`SIM`)
   and `docs/phase2/F198_EXTENDED.md`.
+
+### P2-A5. 2026-11-22: Experiment 5b's saturation check, result
+
+- **Filed section**: 6, Experiment 5b (entry P2-A3)
+- **Kind**: result note
+- **Result file**: `experiments/phase2/results/f197_saturation.json`
+
+The check ran after P2-A3 was committed (4ed0dfb), on the champion's
+stored scores only; no proxy or HGB score was read and no edge was
+computed.
+
+- **The reference fired.** The old measure saturates on C, R, H and S on
+  every seed, as Experiment 5's corrected note 3 says, and not on W.
+- **The new measure has room on every segment.** The champion's AUPRC
+  within each segment is at most 0.7555 (C) on any seed, below the 0.99
+  the minimum edge needs.
+- W still has no feasible matched control (Experiment 5's note 2), so
+  the run will report it as not scored.
+- Experiment 5b's run waits for the team lead's approval of P2-A3.
