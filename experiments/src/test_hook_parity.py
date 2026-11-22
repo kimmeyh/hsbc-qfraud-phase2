@@ -151,6 +151,11 @@ CASES: dict[str, list[tuple[str, int, dict]]] = {
          {"tool_input": {"command": "git tag -d prereg-freeze"}}),
         ("delete the freeze tag remotely", BLOCK,
          {"tool_input": {"command": "git push origin :refs/tags/prereg-freeze"}}),
+        ("move the Phase 2 filing tag", BLOCK,
+         {"tool_input": {"command": "git tag -f phase2-prereg-filed HEAD"}}),
+        ("delete the Phase 2 filing tag remotely", BLOCK,
+         {"tool_input": {"command":
+                         "git push origin --delete phase2-prereg-filed"}}),
         # Growing the repository forward is what a live project looks like.
         ("ordinary push", ALLOW,
          {"tool_input": {"command": "git push origin feature/x"}}),
@@ -178,6 +183,19 @@ CASES: dict[str, list[tuple[str, int, dict]]] = {
         ("Bash is not an edit tool", ALLOW,
          {"tool_name": "Bash", "tool_input": {"command": "cat " + PREREG}}),
         ("no path", ALLOW, {"tool_name": "Edit", "tool_input": {}}),
+        # The Phase 2 preregistration as filed (Sprint 34 Task D, F102).
+        ("editing the Phase 2 text as sent", BLOCK,
+         {"tool_name": "Edit", "tool_input": {"file_path":
+          "experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md"}}),
+        ("writing the Phase 2 FINAL copy", BLOCK,
+         {"tool_name": "Write", "tool_input": {"file_path":
+          "experiments/phase2/PREREGISTRATION_FINAL.md"}}),
+        ("editing the Phase 2 draft copy, windows separators", BLOCK,
+         {"tool_name": "Edit", "tool_input": {"file_path":
+          "experiments\\phase2\\PREREGISTRATION_DRAFT.md"}}),
+        ("the Phase 2 amendments file is where changes go", ALLOW,
+         {"tool_name": "Edit", "tool_input": {"file_path":
+          "experiments/phase2/PREREGISTRATION_AMENDMENTS.md"}}),
     ],
 
     "block_unapproved_submission_edit": [
