@@ -236,3 +236,46 @@ The split gives each remaining lane a quoted cost (from
    then an entry where D2 puts it, then the run after F201, then
    `docs/phase2/algorithms/ULB_QSVM_EMULATED.md`.
 3. F157 not worked this sprint.
+
+## Answers to Q2, D2, D3 and D4 (team lead, 2026-11-22)
+
+Verbatim:
+
+> q2. have not been accepted into phase 2 yet. We may have more time to
+> fill out the pre-registration. Please keep a permanent link and n
+> unchangeable copy for the one I said I sent on 11/18/2026 9:01am EST.
+> Agree - neither as filed copy (phase 1 and phase 2) should ever be
+> changed. Keep track of amendments for what we do later.
+> d2. If it is already clear how this should happen, do it as best
+> possible with the information we have. Otherwise, A document similar
+> to what we did in phase 1 where we locked in what we were going to do
+> in phase 1, then wrote amendments as we went along. We may never have
+> to submit it and do not need to worry about a length. Is that
+> possible? Please propose how for my review. This seems to make the
+> most sense: option 1.
+> d3. 1
+> d4. 1
+> Do all of these: [Tasks A-I as planned]
+
+**How Q2 is applied (inference, stated so it can be checked).** The
+text sent at 9:01am EST on 2026-11-18 is taken to be commit b8e2c0e
+(08:54:50 -0500), the last commit before 9:01; the next, c3d3c00, is
+09:18:27. The reflog shows no other commit between them. Text edited
+but not committed before 9:01 would not be in b8e2c0e; nothing records
+such an edit.
+- At b8e2c0e, `PREREGISTRATION_FINAL.md` and `PREREGISTRATION_DRAFT.md`
+  are byte-identical (SHA-256 3d09845d...).
+- **The current FINAL file is not the text sent.** c3d3c00 added
+  section 7's lock wording from the PR #122 review and two revision-log
+  rows after 9:01.
+- So, and without editing either existing copy: the sent bytes are
+  kept as a third file, `experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md`,
+  restored from b8e2c0e; the tag `phase2-prereg-filed` points at
+  b8e2c0e, which gives the permanent link; the hash test locks all
+  three files as they are now. The amendments file's first entries
+  record which file is the sent text and why FINAL differs.
+
+**Changed since asked (2026-11-22).** D3 option 1 named "both copies";
+Q2's answer adds the third, sent copy to the lock. D2 option 1 is
+applied as the team lead's Phase 1 model asks: the filed text locked,
+amendments written as the work goes, in one dated file.

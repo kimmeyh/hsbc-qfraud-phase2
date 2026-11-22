@@ -1,8 +1,9 @@
 # Sprint 34 Plan: After Filing, the Filed Text Kept and First Tested
 
 **Sprint**: 34 | **Branch**: `feature/20261118_Sprint_34`
-**Planned**: 2026-11-21 | **Status**: DRAFT, awaiting approval and
-the answers to Q2, D2, D3 and D4 (`SPRINT_34_DECISIONS.md`).
+**Planned**: 2026-11-21 | **Status**: APPROVED 2026-11-22 (team lead:
+"Do all of these"; Q2 b8e2c0e as applied, D2 1, D3 1, D4 1). Draft PR #134.
+Issues: A #135, B #136, C #137, D #138, E #139, F #140, G #141, H #142, I #143
 **Scope** (team lead, 2026-11-21): F200, F201, F202, F178, F102, F198,
 F197 and F157.
 **Metered seconds**: 0. No task calls a device or a paid service.
@@ -31,6 +32,15 @@ The filing venue is not known (Q1, team lead).
 
 - **Q1**: the venue is "not known yet".
 - **D1**: none of options 1-4; the scope above was set directly.
+
+## Answers (team lead, 2026-11-22)
+
+- **Q2**: "the one I said I sent on 11/18/2026 9:01am EST". Applied as
+  commit b8e2c0e, the last before 9:01. The current FINAL file (c3d3c00)
+  has section 7 wording added at 9:18, so the sent bytes are kept as a
+  third, locked copy and the tag points at b8e2c0e. Neither existing
+  copy is edited. Details: `SPRINT_34_DECISIONS.md`.
+- **D2**: option 1. **D3**: option 1. **D4**: option 1.
 
 ## Decisions asked with this plan
 
@@ -131,7 +141,7 @@ were read-only, zero metered, not evidence.
 | A | F201 | `outcome_record.record` writes the confusion counts and recall at the 0.1% budget beside the 0.5% ones; `test_outcome_record_required.py` gains the term above, with the filing list; no result file rewritten | 45 | - | - |
 | B | F202 | `select_proofs.py` compares `git rev-parse` of `--base` with HEAD's; a test for `@`; the existing proof kept | 15 | - | - |
 | C | F102 (D2) | `experiments/phase2/PREREGISTRATION_AMENDMENTS.md`: its purpose, the rule (dated entries, each naming the filed section), and a first entry stating the departure from section 7's wording and why (D2); the drift guard checks that each entry has a date and a section | 15 | - | - |
-| D | F102 (D3) | The lock: `test_phase2_prereg_filed.py` (SHA-256 of both copies, a proof per copy); the hook extended to both paths, with a test per path; the tag `phase2-prereg-filed` at the commit Q2 names; the venue line stays "not set" in the locked text | 60 | - | C |
+| D | F102 (D3) | The lock: the sent text restored from b8e2c0e as `PREREGISTRATION_SUBMITTED_2026-11-18.md` (Q2); `test_phase2_prereg_filed.py` (SHA-256 of the three copies, a proof per copy); the hook extended to the three paths, with a test per path; the tag `phase2-prereg-filed` at b8e2c0e; the venue line stays "not set" in the locked text | 60 | - | C |
 | E | F200 | A new option in `f188_rounding.py`: greedy's selection solved on the rounded problem and scored on the real one; the zero-gain check first; `f188_release_rule.json` with provenance; the verdict as a dated entry in the amendments file; F25's HOLD note in the master plan updated | 45 | about 1 minute (F188's six instances; the first is timed, cap 10) | A, D |
 | F | F198 | The amendment first (multipliers 0.1, 1 and 10; R = 100, 200, 400, 800, 1,600), committed before the run; then the run; a short document | 30 | about 5 times F188's run (90 solves against 18); the first instance timed, cap 20 | E |
 | G | F197 | A new Experiment 5 entry in the amendments file, every section 1 field filled, naming the measure; the saturation check on the recorded F121 scores; no run | 60 | under 1 minute (reads stored scores) | C |
