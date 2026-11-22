@@ -87,3 +87,71 @@ not be in b8e2c0e, and nothing records such a change.
   log gained two rows. Nothing in sections 1 to 6 changed. The copies
   are locked as they are; the sent text is the SUBMITTED file.
 - The permanent link is the tag `phase2-prereg-filed` at b8e2c0e.
+
+### P2-A3. 2026-11-22: Experiment 5 re-entry, a segment measure that does not saturate
+
+- **Filed section**: 6, a new entry beside Experiment 5 (F121)
+- **Kind**: new entry
+- **Decided by**: the team lead selected F197 for Sprint 34 (2026-11-21).
+  The saturation check below runs at once; the run waits for the team
+  lead's approval of this entry.
+
+Written 2026-11-22 (Sprint 34 Task G, #141), before any score under its
+measure is computed. Experiment 5's result is known: no segment was
+accepted, recall at the 0.5% budget within the segment saturated on C,
+R, H and S (the champion's alerts were all frauds), and the proxy was
+below the champion on C and H on all ten seeds
+(`docs/phase2/EXP5_ROUTER.md`). This entry changes the measure only;
+every other choice is Experiment 5's, so the two can be read together.
+
+- **ID and card**: Experiment 5b, F197.
+- **Question**: on prespecified fraud segments, out of time, does routing
+  a segment to the CVQBoost proxy give at least 0.01 of average precision
+  (AUPRC) within the segment over the classical champion, beyond what a
+  matched random segment gives?
+- **Hypothesis and prediction**: no transfer, for Experiment 5's reasons
+  (F162, F113, F174), and because the proxy was below the champion on C
+  and H under the first measure. The prediction is that no segment is
+  accepted.
+- **Falsifier**: any segment accepted by the rule below, with the
+  classical reference check passed.
+- **Data and splits**: Experiment 5's. F174's stored month-4 test scores
+  (85,302 rows), seeds 42-51, no new fit; the row-alignment check first,
+  and the run stops if any stored label vector differs.
+- **Arms**: Experiment 5's. Champion F174's LightGBM lane; proxy F174's
+  proxy lane; classical reference F174's HGB lane. Each configuration
+  was chosen per seed on month 3.
+- **Primary metric and test**: the **in-segment edge** of lane L on a row
+  set R is L's AUPRC on R (`sklearn.metrics.average_precision_score`)
+  minus the champion's AUPRC on R. AUPRC ranks every row of R, so it has
+  room above the champion wherever the champion's AUPRC is below 1. The
+  control, its 20 draws and their seeds (`numpy.random.default_rng(1000 x
+  seed + segment index)`), the downsizing, and the router criterion are
+  Experiment 5's: S is **accepted** when the mean in-segment edge over
+  the 10 seeds is at least 0.01 and the 99% t interval (1 - 0.05 / 5) of
+  segment edge minus control edge lies wholly above 0. The exact
+  two-sided Wilcoxon p-value is reported beside it, as secondary
+  (section 2a: 10 seeds reach 2 / 2^10, below 0.05 / 5).
+- **Saturation check, before the run** (`experiments/phase2/src/f197_saturation.py`,
+  champion scores only): a segment has room when the champion's AUPRC on
+  it is at most 0.99 on every seed. A segment without room is reported
+  as saturated under this measure too and is not scored. The check's
+  reference: on the same scores, Experiment 5's measure must saturate on
+  at least one segment; if it does not, the check cannot tell the two
+  measures apart and the result says so.
+- **Multiplicity**: one family, the five ProductCD segments, m = 5,
+  Bonferroni 0.05 / 5. It is not combined with Experiment 5's family.
+- **Device**: none. Zero metered seconds.
+- **Stopping rules**: the alignment check fails, the run stops. The
+  classical reference check runs first: the same criterion with HGB in
+  the proxy's place; if HGB is accepted on any segment, the run stops
+  before any proxy figure is computed and a redesign is written as a
+  decision. A segment that cannot be scored (no feasible control, as W
+  was) or has no room is reported as such.
+- **What is reported whatever the result**: per segment and seed, the
+  rows and positives in S and in the control, any downsizing, each
+  lane's AUPRC within S, both edges, the interval, the Wilcoxon p-value
+  and accepted or not; the saturation check; the alignment check; an
+  outcome block per lane and seed (with the 0.1% budget).
+- **Output**: `experiments/phase2/results/exp5b_router.json` (`SIM`) and
+  `docs/phase2/EXP5B_ROUTER.md`.
