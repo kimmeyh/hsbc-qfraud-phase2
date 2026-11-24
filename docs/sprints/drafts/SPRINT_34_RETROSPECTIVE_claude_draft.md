@@ -77,7 +77,11 @@ edited by hand, and two of its counts are stale.
 **Good.** Commit hooks needed three tries on one commit (task timer,
 then issue reference, then review task). A mislabeled commit (6042cb1)
 had to be amended. The heredoc-escape hook blocked a Python edit twice;
-the Edit tool was the right choice both times.
+the Edit tool was the right choice both times. A passing gate run (on
+8b4533e, 12 minutes) was not recorded because I wrote the draft
+retrospective and the status file while it ran, so the push was refused
+and the gate ran again (19 minutes). The gate checks the tree at its
+end; nothing may be written to the tree while it runs.
 
 ## 10. Risk Management
 
