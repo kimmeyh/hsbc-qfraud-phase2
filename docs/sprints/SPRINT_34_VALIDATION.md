@@ -59,8 +59,24 @@ handover: a pointer to a file is not a handover.
 
 ## V2. Phase 5 checks
 
-Filled in as each completes: CI's full job, the PR reviews and their
-findings.
+- **CI**: green on 5d9ec29, full job included. It was red on 76c740b
+  (three refusals with no in-process test), fixed in ff72495.
+- **Pre-push gate**: four runs failed and were fixed before it passed
+  (two figure-format failures, the complete-check, and one run started
+  on a dirty tree); it passed on 5d9ec29.
+- **Copilot review** (on 76c740b): approval recommended, no open
+  issues.
+- **Independent code review** (an agent given the code, not the
+  conclusions): no serious correctness bug; `release()` matches the
+  filed rule and every quoted figure matches its result. Four findings,
+  all fixed in ff72495: a test for the pick's side of the release
+  comparison; four tag-delete and tag-move shapes the hook missed; two
+  P2-A6 figures from an unrecorded check (withdrawn by P2-A8); and
+  F198's document merging two readings.
+- **Automated security review**: the tag hook's regular expressions can
+  be bypassed; recorded in D7 and in V3.
+- **Plan acceptance**: every task's criteria walked with evidence; the
+  one miss is Task E's runtime estimate and uncoded cap (V3).
 
 ## V3. For the retrospective
 
