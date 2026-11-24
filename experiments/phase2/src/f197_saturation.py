@@ -104,6 +104,21 @@ def require_same_labels(stored: np.ndarray, rebuilt: np.ndarray,
                            "rebuilt month 4")
 
 
+def saturation_doc(segments: dict, blocks: list, n_seeds: int) -> dict:
+    """The result, marked complete only when every scored segment has
+    every seed and there is an outcome block per seed."""
+    if (not segments or n_seeds == 0 or len(blocks) != n_seeds
+            or any(len(v["per_seed"]) != n_seeds for v in segments.values())):
+        raise RuntimeError(f"{len(segments)} segments, {len(blocks)} "
+                           f"outcome blocks for {n_seeds} seeds; not complete")
+    return {"card": "F197", "sprint": 34, "phase": 2, "evidence_tag": "SIM",
+            "metered_seconds": 0, "dataset": "ieee_cis",
+            "entry": "experiments/phase2/PREREGISTRATION_AMENDMENTS.md P2-A3",
+            "lane": e5.CHAMPION, "min_edge": MIN_EDGE,
+            "segments": segments, "summary": summary(segments),
+            "outcomes": blocks, "complete": True}
+
+
 def main(argv: list[str]) -> None:
     if argv:
         raise SystemExit(f"usage: f197_saturation.py; got {argv}")
@@ -137,12 +152,7 @@ def run() -> None:
         ys, s, src = e5.scores(e5.CHAMPION, seed)
         blocks.append(orec.record(f"f197_{e5.CHAMPION}", seed, ys, s,
                                   source=src))
-    doc = {"card": "F197", "sprint": 34, "phase": 2, "evidence_tag": "SIM",
-           "metered_seconds": 0, "dataset": "ieee_cis",
-           "entry": "experiments/phase2/PREREGISTRATION_AMENDMENTS.md P2-A3",
-           "lane": e5.CHAMPION, "min_edge": MIN_EDGE,
-           "segments": segments, "summary": summary(segments),
-           "outcomes": blocks, "complete": True}
+    doc = saturation_doc(segments, blocks, len(e5.SEEDS))
     provenance.write_result(OUT, doc, __file__, list(e5.SEEDS), rid)
     print(doc["summary"]["finding"], flush=True)
     print("complete", flush=True)

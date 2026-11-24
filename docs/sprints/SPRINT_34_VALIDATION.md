@@ -84,6 +84,15 @@ findings.
   `test_f188_rounding.py` and `test_hook_parity.py` are now stale; the
   inventory guard did not notice. It should be regenerated from a full
   local report.
+- **The tag hook is a pattern match**: an automated security review
+  found ways past its regular expressions (global options before
+  `tag`, grouped flags, quoted refspecs, `update-ref --stdin`, `push
+  --mirror`). Proposed: tokenize the command (shlex) before matching;
+  the full answer is D7's server-side ruleset.
+- **A complete-check moved out of its function**: moving `f197`'s label
+  check into `require_same_labels` left `run()` marking its result
+  complete with no refusal before it; `test_complete_checked.py` caught
+  it at the gate. Fixed with a real check, `saturation_doc`.
 - **A check script that could not finish**: the first exact-solver
   check enumerated active sets (exponential in support size) and
   stalled on the 25-learner instances; replaced by a KKT solve on the

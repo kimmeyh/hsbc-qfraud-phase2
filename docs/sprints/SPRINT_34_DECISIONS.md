@@ -424,7 +424,14 @@ Asked 2026-11-23, at Manual Validation (from the PR #134 review).
   the repository (`gh api repos/kimmeyh/hsbc-qfraud-phase2/rulesets`
   returns none), so a push from any other client, or a session without
   the hook, could move or delete either tag. The review also found four
-  command shapes the hook missed; they are now blocked and tested.
+  command shapes the hook missed; they are now blocked and tested. An
+  automated security review then found more ways past the hook's
+  regular expressions: git options before `tag` (`git -C . tag -d`),
+  grouped flags (`-fd`), quoted refspecs, `update-ref --stdin`, and
+  `push --mirror`. A pattern match on a command line cannot close every
+  such path, and the security review itself recommends a server-side
+  ruleset. Tokenizing the hook's input is proposed for the
+  retrospective; it narrows the gap and does not close it.
 - **Why it matters**: the permanent link is the thing you asked to keep
   unchangeable. A local hook protects against this session's mistakes,
   not against every path to the remote.

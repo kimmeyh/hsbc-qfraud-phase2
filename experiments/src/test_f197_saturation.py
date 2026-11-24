@@ -68,6 +68,24 @@ def test_stored_labels_that_differ_stop_the_check():
         fs.require_same_labels(np.array([0, 0, 1]), y, "lightgbm/42")
 
 
+def _segment_with(n):
+    return {"per_seed": [{"old_saturated": True, "new_room": True,
+                          "champion_auprc": 0.5}] * n,
+            "old_saturated_on_every_seed": True,
+            "new_room_on_every_seed": True}
+
+
+def test_a_result_short_of_a_seed_is_refused():
+    import pytest
+    ok = fs.saturation_doc({"C": _segment_with(2)}, [{}, {}], 2)
+    assert ok["complete"] is True
+    for segs, blocks in (({"C": _segment_with(1)}, [{}, {}]),
+                         ({"C": _segment_with(2)}, [{}]),
+                         ({}, [{}, {}])):
+        with pytest.raises(RuntimeError, match="not complete"):
+            fs.saturation_doc(segs, blocks, 2)
+
+
 def test_an_argument_is_refused():
     import pytest
     with pytest.raises(SystemExit, match="usage: f197_saturation.py"):
@@ -85,6 +103,10 @@ def test_each_term_can_fail():
              "    if False:\n        raise SystemExit(f\"usage: f197",
              "test_an_argument_is_refused",
              "an argument is ignored"),
+            ("    if (not segments or n_seeds == 0 or len(blocks) != n_seeds\n",
+             "    if (False\n",
+             "test_a_result_short_of_a_seed_is_refused",
+             "a short result marked complete"),
             ("    return e5.recall_at_budget(y, s, idx) >= most_recall(y, idx)\n",
              "    return True\n",
              "test_a_random_score_does_not_saturate_the_old_measure",
