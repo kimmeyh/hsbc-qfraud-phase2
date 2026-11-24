@@ -279,3 +279,73 @@ such an edit.
 Q2's answer adds the third, sent copy to the lock. D2 option 1 is
 applied as the team lead's Phase 1 model asks: the filed text locked,
 amendments written as the work goes, in one dated file.
+
+## D5. How does "What we learned this sprint" join the learning documents?
+
+Asked 2026-11-23 (team lead's request during Sprint 34 Phase 4, card
+F209).
+
+- **What**: each sprint will state, before Manual Validation, what it
+  taught us about machine learning, quantum machine learning, quantum
+  computing and fraud detection, in `SPRINT_n_SUMMARY.md`. The question
+  is how that joins the three learning documents in `docs/learning/`,
+  which the team lead proposed as a "Sprint N updates" section near the
+  bottom.
+- **Why it matters**: the documents are organized by topic, and every
+  result already goes in under its topic each sprint (F178). Each
+  document also already has a dated "Change list" (at the end in the
+  plain-terms version, near the top in the other two). A second dated
+  log beside it would hold the same sprint's facts twice per document,
+  six times in all, at three reading levels; CLAUDE.md's rule is that a
+  number has one owning file and the rest refer to it.
+- **Options**:
+
+1. One dated section, not two. Each document's "Change list" becomes
+   "Sprint updates", at the end of the document. Each sprint's entry
+   states, at that document's reader level, what was learned (two to
+   five bullets, each linking to its topic section), then what changed
+   in the document, and links to the sprint summary's "What we learned"
+   section for the figures. Kind: Prevention (one log per document; the
+   figures stay in one file). Cost: about 25 minutes once (move two
+   lists to the end, rename the heading in three documents and in
+   `test_learning_docs.py`'s check and in `SPRINT_CHECKLIST.md`), then
+   about 10 minutes per sprint inside F178's update. Zero metered.
+2. A new "Sprint N updates" section near the end of each document,
+   beside the existing change list, which stays as it is. Kind:
+   Workaround (does what was asked; two dated logs per document). Cost:
+   about 10 minutes once, about 15 minutes per sprint. Zero metered.
+3. No new section in the learning documents. The sprint summary holds
+   "What we learned"; each change-list entry gains one link to it.
+   Kind: Workaround (cheapest; a reader of the documents sees no
+   learning summary, only a link). Cost: about 5 minutes per sprint.
+   Zero metered.
+
+- **Recommendation**: option 1. It gives the reader the per-sprint
+  summary the team lead asked for, near the bottom, at their level, and
+  keeps one dated log per document instead of two. Its one-time cost is
+  the heading rename and the guard that checks it.
+
+## Answers to Q3 and D5 (team lead, 2026-11-23)
+
+Verbatim: "Didn't remember the dated "Change List" existed - nothing new
+needed."
+
+- **D5**: no new section and no change to the learning documents. Each
+  document's existing dated change list stays the per-sprint record
+  there. (Closest to option 3, without its added link.)
+- **Q3**: not answered directly. The answer withdraws only the
+  learning-document section, so the original request stands as read:
+  card F209, run this sprint as Task J before Manual Validation, its
+  section in `SPRINT_34_SUMMARY.md`, and a step in
+  `docs/SPRINT_CHECKLIST.md` Phase 5.
+
+## Answers to Q3 and D5 (team lead, 2026-11-23)
+
+Verbatim: "Didn't remember the dated "Change List" existed - nothing new
+needed." Then: "no F209 is not needed as it, essentially, already
+existss".
+
+- **D5**: no new section and no change to the learning documents. Each
+  document's existing dated change list stays the per-sprint record.
+- **Q3**: no card F209 and no Task J. F178's per-sprint update of the
+  learning documents, with its dated change lists, already does this.
