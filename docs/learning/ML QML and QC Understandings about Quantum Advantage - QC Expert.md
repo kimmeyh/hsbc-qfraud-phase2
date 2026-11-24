@@ -110,7 +110,7 @@ card (F...) and sprint beside it point to the full record.
   when both have rounded weights; against greedy solved on the real
   problem the same pick still loses, by 0.000056. Over 90 other ridge
   weights and resolutions (F198) gains of this kind appear in 17
-  settings, in no order with R, never above 2.4e-05. F25 stays on hold
+  settings, in no order with R, never above 0.000024. F25 stays on hold
   until its own amendment and per-block approval (section 3).
 - **Dirac-3S is a better solver than Dirac-3 on our one resolvable
   instance**, returning the reference optimum in every sample; accuracy
@@ -327,7 +327,7 @@ design has room, but the best classical gain below greedy is under
 - [SIM] The same comparison at ridge weights 0.1, 1 and 10 times F176's
   and R from 100 to 1,600 (F198, Sprint 34): it passes in 17 of 90
   settings, at no instance for every R, with passes appearing and
-  disappearing as R grows; the largest gain is 2.4e-05. Three instances
+  disappearing as R grows; the largest gain is 0.000024. Three instances
   never pass. F176's supports were reused, not searched again at each
   weight (`docs/phase2/F198_EXTENDED.md`).
 

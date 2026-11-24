@@ -789,7 +789,7 @@ is a classical step, not the device.
 - [SIM] **Changing the model's settings and the precision showed no
   steady gain.** Over 90 combinations of three model settings and five
   precisions, the same comparison passed in 17, never at every
-  precision for any problem, and never by more than 2.4e-05. Three of
+  precision for any problem, and never by more than 0.000024. Three of
   the six problems never passed (`docs/phase2/F198_EXTENDED.md`).
 
 ### What outside research says
