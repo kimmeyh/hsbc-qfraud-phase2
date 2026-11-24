@@ -15,7 +15,7 @@ the run (f03a99d). Result: `experiments/phase2/results/f198_extended.json`
   any order: 42/free at weight 1 passes at R = 100 and 1,600 and not
   between.
 - **The gains are small.** The largest release-comparison gain is
-  2.4e-05 (weight 1, R = 100, 42/free), about 3 parts in 100,000 of the
+  0.000024 (weight 1, R = 100, 42/free), about 3 parts in 100,000 of the
   objective. Six settings exceed 1e-05; all are on 42/free or 43/free.
 - **Three instances never pass.** 43/mid, 44/free and 44/mid pass at no
   weight and no R.
