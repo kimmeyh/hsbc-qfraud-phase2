@@ -95,6 +95,21 @@ def summary(segments: dict) -> dict:
                 + "; the old measure saturates on " + ", ".join(old))}
 
 
+def require_same_labels(stored: np.ndarray, rebuilt: np.ndarray,
+                        where: str) -> None:
+    """The stopping rule: a stored label vector that differs from the
+    rebuilt month 4 stops the check."""
+    if not np.array_equal(stored, rebuilt):
+        raise RuntimeError(f"{where}: stored labels differ from the "
+                           "rebuilt month 4")
+
+
+def main(argv: list[str]) -> None:
+    if argv:
+        raise SystemExit(f"usage: f197_saturation.py; got {argv}")
+    run()
+
+
 def run() -> None:
     import outcome_record as orec
     import provenance
@@ -108,9 +123,7 @@ def run() -> None:
         per_seed = []
         for seed in e5.SEEDS:
             ys, s, src = e5.scores(e5.CHAMPION, seed)
-            if not np.array_equal(ys, y):
-                raise RuntimeError(f"{e5.CHAMPION}/{seed}: stored labels "
-                                   "differ from the rebuilt month 4")
+            require_same_labels(ys, y, f"{e5.CHAMPION}/{seed}")
             a = segment_auprc(y, s, idx)
             per_seed.append({"seed": seed, "rows": int(len(idx)),
                              "positives": int(y[idx].sum()),
@@ -136,6 +149,4 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    if sys.argv[1:]:
-        raise SystemExit(f"usage: f197_saturation.py; got {sys.argv[1:]}")
-    run()
+    main(sys.argv[1:])

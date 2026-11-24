@@ -60,9 +60,31 @@ def test_the_reference_must_fire():
     assert s["reference_can_fire"] and s["new_measure_has_room_on"] == ["C"]
 
 
+def test_stored_labels_that_differ_stop_the_check():
+    y = np.array([0, 1, 0])
+    fs.require_same_labels(y, y.copy(), "lightgbm/42")
+    import pytest
+    with pytest.raises(RuntimeError, match="stored labels differ"):
+        fs.require_same_labels(np.array([0, 0, 1]), y, "lightgbm/42")
+
+
+def test_an_argument_is_refused():
+    import pytest
+    with pytest.raises(SystemExit, match="usage: f197_saturation.py"):
+        fs.main(["--run"])
+
+
 def test_each_term_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     for old, new, test, label in (
+            ("    if not np.array_equal(stored, rebuilt):\n",
+             "    if False:\n",
+             "test_stored_labels_that_differ_stop_the_check",
+             "differing labels pass"),
+            ("    if argv:\n        raise SystemExit(f\"usage: f197",
+             "    if False:\n        raise SystemExit(f\"usage: f197",
+             "test_an_argument_is_refused",
+             "an argument is ignored"),
             ("    return e5.recall_at_budget(y, s, idx) >= most_recall(y, idx)\n",
              "    return True\n",
              "test_a_random_score_does_not_saturate_the_old_measure",

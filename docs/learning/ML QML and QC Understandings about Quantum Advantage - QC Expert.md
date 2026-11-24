@@ -17,7 +17,7 @@ card (F...) and sprint beside it point to the full record.
   after filing, with no device time. It passes on one instance of six,
   by about 6 parts per million of the objective. It compares two
   rounded solutions: against greedy solved on the real problem, the
-  same pick still loses. An exact re-solve confirmed the figures. A
+  same pick still loses. A
   wider run over three ridge weights and five resolutions found gains
   of the same small size that come and go with the resolution. Section
   3 gives both as tagged claims, the Bottom line and section 6 say the
@@ -317,9 +317,7 @@ design has room, but the best classical gain below greedy is under
   and compared with greedy's selection solved the same way, both scored
   on the real objective. It passes on 42/mid only, by 5.018e-06 against
   the filed 1e-6; on three instances the pick is greedy's selection and
-  the gain is exactly zero. An exact re-solve on each support's free
-  set, with the optimality conditions checked, agreed to within 5e-11.
-  The same pick, against greedy solved on the real problem, loses by
+  the gain is exactly zero. The same pick, against greedy solved on the real problem, loses by
   0.000056, so the pass is a difference between two rounded solutions,
   not a gain over the best classical answer. The gain is about 6 parts
   per million of the objective

@@ -74,6 +74,12 @@ def extended_doc(rows: list[dict], checks: dict, n_instances: int) -> dict:
             "summary": summary(rows), "complete": True}
 
 
+def main(argv: list[str]) -> None:
+    if argv:
+        raise SystemExit(f"usage: f198_extended.py; got {argv}")
+    run()
+
+
 def run() -> None:
     import f160_room_ieee as f160
     import provenance
@@ -124,6 +130,4 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    if sys.argv[1:]:
-        raise SystemExit(f"usage: f198_extended.py; got {sys.argv[1:]}")
-    run()
+    main(sys.argv[1:])

@@ -61,9 +61,18 @@ def test_a_complete_result_is_marked_complete():
         fx.extended_doc([], {}, 0)
 
 
+def test_an_argument_is_refused():
+    with pytest.raises(SystemExit, match="usage: f198_extended.py"):
+        fx.main(["--run"])
+
+
 def test_each_term_can_fail():
     from injection import Mutation, assert_can_fail, run_pytest
     for old, new, test, label in (
+            ("    if argv:\n        raise SystemExit(f\"usage: f198",
+             "    if False:\n        raise SystemExit(f\"usage: f198",
+             "test_an_argument_is_refused",
+             "an argument is ignored"),
             ('    if n_instances == 0 or len(rows) != want or any(\n',
              '    if n_instances == 0 or any(\n',
              "test_a_result_short_of_a_weight_is_refused",

@@ -156,6 +156,26 @@ CASES: dict[str, list[tuple[str, int, dict]]] = {
         ("delete the Phase 2 filing tag remotely", BLOCK,
          {"tool_input": {"command":
                          "git push origin --delete phase2-prereg-filed"}}),
+        # The four shapes the PR #134 review found unblocked, and a forced
+        # refspec.
+        ("delete the Phase 2 tag by a bare refspec", BLOCK,
+         {"tool_input": {"command": "git push origin :phase2-prereg-filed"}}),
+        ("delete the Phase 2 tag with push -d", BLOCK,
+         {"tool_input": {"command": "git push -d origin phase2-prereg-filed"}}),
+        ("delete the Phase 2 tag's ref", BLOCK,
+         {"tool_input": {"command":
+                         "git update-ref -d refs/tags/phase2-prereg-filed"}}),
+        ("move the Phase 2 tag, flag after the name", BLOCK,
+         {"tool_input": {"command": "git tag phase2-prereg-filed -f HEAD"}}),
+        ("force the Phase 2 tag by a + refspec", BLOCK,
+         {"tool_input": {"command":
+                         "git push origin +phase2-prereg-filed"}}),
+        ("pushing the Phase 2 tag as it is is fine", ALLOW,
+         {"tool_input": {"command": "git push origin phase2-prereg-filed"}}),
+        ("the -f inside the tag's name is not a flag", ALLOW,
+         {"tool_input": {"command": "git tag -l phase2-prereg-filed"}}),
+        ("a remote branch delete with -d is fine", ALLOW,
+         {"tool_input": {"command": "git push -d origin old-feature"}}),
         # Growing the repository forward is what a live project looks like.
         ("ordinary push", ALLOW,
          {"tool_input": {"command": "git push origin feature/x"}}),

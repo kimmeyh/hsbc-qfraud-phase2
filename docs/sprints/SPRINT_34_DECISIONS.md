@@ -374,3 +374,73 @@ metered).
 2. No
 
 **Answer (team lead, 2026-11-23)**: "1". Yes, as read.
+
+## D6. When does Experiment 5b run?
+
+Asked 2026-11-23, at Manual Validation (Sprint 34 Task G, F197).
+
+- **What**: Experiment 5b's entry (amendment P2-A3,
+  `experiments/phase2/PREREGISTRATION_AMENDMENTS.md`) was committed
+  before any score under its measure, and its saturation check (P2-A5)
+  shows the new measure, average precision within each ProductCD
+  segment, has room on every segment. The plan said "no run": the run
+  waits for the team lead's approval of the entry. The run needs a new
+  module (the Experiment 5 router with the new measure, its per-term
+  tests and proofs) and then reads stored scores only.
+- **Why it matters**: Experiment 5 found no segment worth routing to
+  the proxy, but its measure was at its maximum for the champion on
+  four of five segments, so it could not have found one there. Until
+  5b runs, "routing does not help" rests on a measure that could not
+  show help. Each option below costs zero metered seconds.
+- **Options**:
+
+1. Approve the entry as written, and build and run Experiment 5b in
+   Sprint 35 as F197's remaining part. Kind: Prevention (the question
+   is answered with a measure that can show a difference). Cost: about
+   75 minutes in Sprint 35 (module, tests and proofs about 60, run
+   under 10, document about 10); zero metered; about 4 files.
+2. Approve the entry as written, and build and run it now, in Sprint
+   34, before the retrospective. Kind: Prevention. Cost: the same
+   about 75 minutes, added to a sprint already past its 1-2 hour
+   target; zero metered; about 4 files.
+3. Do not run it; F197 closes with the saturation check, and Experiment
+   5's null stands with its saturation note. Kind: Workaround (the
+   question stays open). Cost: about 5 minutes (the card closed with
+   a note).
+
+- **Recommendation**: option 1. The entry is committed and its check
+  passed, so nothing is lost by waiting a sprint, and Sprint 34 is
+  already past its time target. Option 2 is the same work sooner, at
+  the cost of a longer sprint.
+
+## D7. Protect the filing tags on GitHub itself?
+
+Asked 2026-11-23, at Manual Validation (from the PR #134 review).
+
+- **What**: the tags `phase2-prereg-filed` (b8e2c0e, the Phase 2
+  preregistration as sent, your permanent link) and `prereg-freeze`
+  (95751b9, cited in Phase 1's filed Appendix B) are guarded only by
+  this repository's local Claude Code hook. GitHub has no ruleset on
+  the repository (`gh api repos/kimmeyh/hsbc-qfraud-phase2/rulesets`
+  returns none), so a push from any other client, or a session without
+  the hook, could move or delete either tag. The review also found four
+  command shapes the hook missed; they are now blocked and tested.
+- **Why it matters**: the permanent link is the thing you asked to keep
+  unchangeable. A local hook protects against this session's mistakes,
+  not against every path to the remote.
+- **Options**:
+
+1. I add a GitHub tag ruleset now with `gh api`: target tags
+   `refs/tags/phase2-prereg-filed` and `refs/tags/prereg-freeze`,
+   rules "restrict deletions" and "restrict updates", enforcement
+   active, no bypass. Then I verify by reading the ruleset back. Kind:
+   Prevention (the remote refuses the change, whatever the client).
+   Cost: about 10 minutes; one repository setting, visible on the
+   public repository; zero metered.
+2. You add the same ruleset yourself in GitHub (Settings, Rules,
+   Rulesets, New tag ruleset). Kind: Prevention. Cost: about 10 minutes
+   of your time.
+3. Keep the local hook only. Kind: Workaround. Cost: none now.
+
+- **Recommendation**: option 1. It closes the gap at the remote, where
+  every client meets it, and it is a setting you can remove later.

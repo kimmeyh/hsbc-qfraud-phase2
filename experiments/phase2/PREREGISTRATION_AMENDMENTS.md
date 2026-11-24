@@ -276,3 +276,18 @@ solve it, and there the pick loses by 0.000056
 rounded weights lose more than the pick's rounded weights; it does not
 show the rounded problem's answer beating the best classical answer.
 Both readings are recorded; the decision on F25 is the team lead's.
+
+### P2-A8. 2026-11-23: Correction to P2-A6, figures from an unrecorded check
+
+- **Filed section**: 6, Experiment 3 (F153, F25), the release rule
+- **Kind**: result note
+- **Result file**: `experiments/phase2/results/f188_release_rule.json`
+
+Corrects P2-A6 (found by the PR #134 review). P2-A6's "Checked
+independently" bullet quotes two figures, agreement "to within 5e-11"
+and a 42/mid gain "the same to four figures", from a scratch re-solve
+that is not part of the record. Every reported number must come from a
+recorded result, so those two figures are withdrawn as evidence. The
+verdict does not rest on them: it rests on the recorded result alone,
+and the check fired before it (P2-A6's first bullet). That an
+unrecorded exact re-solve agreed is a note, not evidence.

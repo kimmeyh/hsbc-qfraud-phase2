@@ -83,9 +83,13 @@ rule's own result (P2-A6).
 ## What it means
 
 A device that resolves each coefficient to 1 part in R would see these
-problems' best supports change with R in no stable direction, and the
-best it could deliver over greedy is a few parts in 100,000 of the
-objective. Gains of that size are near the tolerance and are not shown
+problems' best supports change with R in no stable direction. Two
+readings must be kept apart (P2-A7). Against greedy with its weights
+rounded the same way (the release comparison), the largest gain is a
+few parts in 100,000 of the objective. Against greedy solved on the
+real problem, as a classical computer solves it (the delivered
+reading), the pick gains in only 7 of 90 settings, by at most
+0.000017. Both are among F176's supports only. Gains of that size are near the tolerance and are not shown
 to change any fraud-detection metric; none was computed. This bears on
 whether F25's device arm is worth device seconds, which is a
 refinement question for the team lead.

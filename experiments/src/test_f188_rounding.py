@@ -183,6 +183,22 @@ def test_release_solves_greedy_on_the_rounded_problem():
         r["pick_objective"] - r["greedy_objective"])
 
 
+def test_release_solves_the_pick_on_the_rounded_problem():
+    # The pick's side of the filed comparison (PR #134 review): at R = 4
+    # the pick is {1, 2}, not greedy; its weights solved on the rounded
+    # problem are (0.4, 0.6), and on the real one they differ, so the two
+    # objectives differ by about 0.0018.
+    J = np.array([[1.0, 0.3, 0.1], [0.3, 1.2, 0.2], [0.1, 0.2, 0.9]])
+    C = np.array([-0.31, -0.52, -0.45])
+    r = fr.release(J, C, 4.0, [0, 1], {"other": [1, 2]})
+    assert r["pick"] == "other"
+    Jq, Cq, _ = fr.rounded(J, C, 4.0)
+    want = fr.ec.objective(J, C, fr.ec.solve_on_support(Jq, Cq, [1, 2]))
+    assert r["pick_objective"] == pytest.approx(want, abs=1e-9)
+    real = fr.ec.objective(J, C, fr.ec.solve_on_support(J, C, [1, 2]))
+    assert r["pick_objective"] > real + 1e-3
+
+
 def test_a_pick_that_is_greedys_selection_gains_exactly_zero():
     r = fr.release(J2, C2, 2.0, [0], {"other": [1]})
     assert r["pick"] == "greedy"
@@ -239,6 +255,10 @@ def test_each_release_term_can_fail():
              "    greedy_true = support_objective(J, C, greedy_support)\n",
              "test_release_solves_greedy_on_the_rounded_problem",
              "greedy solved on the unrounded problem (the old reading)"),
+            ("    pick_true = ec.objective(J, C, ec.solve_on_support(Jq, Cq, supports[pick]))\n",
+             "    pick_true = ec.objective(J, C, ec.solve_on_support(J, C, supports[pick]))\n",
+             "test_release_solves_the_pick_on_the_rounded_problem",
+             "the pick solved on the unrounded problem"),
             ('"release_gain": d, "passes": bool(d < -TOL)}',
              '"release_gain": d, "passes": bool(d < 0)}',
              "test_a_gain_inside_the_tolerance_does_not_pass",

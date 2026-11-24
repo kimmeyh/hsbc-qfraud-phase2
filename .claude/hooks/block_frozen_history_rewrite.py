@@ -49,12 +49,19 @@ PATTERNS = [
     ("filter-branch", r"git\s+filter-branch\b"),
     ("filter-repo", r"git\s+filter-repo\b"),
     ("hard reset to a remote ref", r"git\s+reset\s+--hard\s+origin/"),
+    # Flag and tag name in either order (PR #134 review: `git tag <tag> -f
+    # HEAD` passed). The flag must start a word, so the "-f" inside
+    # "prereg-filed" is not read as one.
     ("move or delete the freeze tag",
-     r"git\s+tag\b[^|;&]*(-d|-f|--delete|--force)[^|;&]*"
-     r"(prereg-freeze|phase2-prereg-filed)"),
-    ("delete the freeze tag on the remote",
-     r"git\s+push\b[^|;&]*(--delete|:refs/tags/)[^|;&]*"
-     r"(prereg-freeze|phase2-prereg-filed)"),
+     r"git\s+tag\b(?=[^|;&]*\s(?:-d|-f|--delete|--force)\b)"
+     r"(?=[^|;&]*(?:prereg-freeze|phase2-prereg-filed))"),
+    # `push --delete`, `push -d`, a bare `:<tag>` or `:refs/tags/<tag>`
+    # refspec, and a forced `+<tag>` refspec (PR #134 review).
+    ("delete or force the freeze tag on the remote",
+     r"git\s+push\b(?=[^|;&]*(?:\s--delete\b|\s-d\b|\s:|\s\+))"
+     r"(?=[^|;&]*(?:prereg-freeze|phase2-prereg-filed))"),
+    ("delete or move the freeze tag's ref",
+     r"git\s+update-ref\b[^|;&]*refs/tags/(?:prereg-freeze|phase2-prereg-filed)"),
 ]
 
 COMPILED = [(name, re.compile(p, re.IGNORECASE)) for name, p in PATTERNS]
