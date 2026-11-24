@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Machine Learning Expert Version
 
-**Version 1.5**, 2026-11-18 (Sprint 33, card F178). For readers with
+**Version 1.6**, 2026-11-23 (Sprint 34, card F178). For readers with
 undergraduate-or-above or professional machine learning and data-science
 experience. Acronyms and common terms link to the
 [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md),
@@ -13,6 +13,18 @@ covers the [devices](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Ad
 Each entry says what the work did and what it found or changed; the
 card (F...) and sprint beside it point to the full record.
 
+- **1.6, 2026-11-23**: three pieces of work after filing, none needing
+  device time. Experiment 5 had found no segment worth routing to the
+  [quantum-inspired](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-quantum-inspired) model, but its measure ([recall](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-recall) at the budget within
+  a segment) was already at its maximum for the champion on four of
+  five segments, so no challenger could win. Experiment 5b keeps the
+  design and measures average [precision](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-precision) within each segment instead;
+  a check on the champion's scores alone shows that measure has room
+  on every segment (section 5). Its run waits for approval. Every new
+  scored result now also records recall at a 0.1% [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget). The
+  device arm's release rule passed on one instance by a margin too
+  small to matter for detection, so that arm stays on hold (section 7).
+  (Experiment 5b F197, budget F201, release rule F200; Sprint 34.)
 - **1.5, 2026-11-18**: no new experiment. Section 7 states the release
   rule for the device arm of the learner-selection experiment. On
   F176's six [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) selection instances, with every
@@ -421,6 +433,14 @@ classical pool build is the cost that grows fastest.
 - [SIM] Experiment 5: no ProductCD segment accepted for the proxy or for
   [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb); on C, R, H and S recall at the budget saturates, so the edge is
   0 or below by construction (`docs/phase2/EXP5_ROUTER.md`).
+- [SIM] Experiment 5b's saturation check (F197, Sprint 34): on the
+  champion's stored month-4 scores only, the old measure saturates on
+  C, R, H and S on every seed, and in-segment average precision leaves
+  room for the 0.01 minimum edge on every segment: the champion's
+  highest in-segment value on any seed is 0.7555, below the 0.99 the
+  edge needs. No proxy or [HGB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-hgb) score was read and no edge was computed;
+  the run waits for approval of its entry
+  (`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`).
 
 ## 6. Quantum machine learning
 
@@ -625,6 +645,28 @@ the program's brief, on assumptions A1 to A12 in
 `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; the filing date and venue are
 not set. `experiments/src/test_phase2_prereg_draft.py` keeps it
 consistent through review; the byte lock comes at filing.
+
+**Sprint 34 (2026-11-22 to 2026-11-23): the first work after filing.**
+Zero metered seconds. Each entry is in
+`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`, written before its
+run; the filed text is locked, and the text sent on 2026-11-18 is kept
+as `experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md`.
+
+- **[Outcome blocks](#ml2-outcome-block) at a tighter budget**: every new scored result now
+  also records confusion counts and recall at a 0.1% alert budget,
+  beside the 0.5% budget, as the filed section 2 required before the
+  first scored result after filing.
+- **Experiment 5b, segment routing with average precision** (entry
+  P2-A3): Experiment 5's design with in-segment average precision in
+  place of recall at the budget, which saturated; the same arms,
+  control, router criterion and five-segment Bonferroni family. The
+  prediction is that no segment is accepted.
+  - Saturation check, 2026-11-22: room on every segment (section 5).
+    The run waits for the team lead's approval of the entry.
+- **Experiment 3's release rule and F198**: no model is scored; the
+  rule is met on one instance by a difference of about 6 parts per
+  million between two rounded solutions, and the device arm stays on
+  hold (detail in the quantum computing expert version).
 
 ## 8. Experiments not yet planned
 

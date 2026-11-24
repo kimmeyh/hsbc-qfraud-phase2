@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Quantum Computing Expert Version
 
-**Version 1.5**, 2026-11-18 (Sprint 33, card F178). For readers with
+**Version 1.6**, 2026-11-23 (Sprint 34, card F178). For readers with
 undergraduate-or-above or professional quantum computing experience,
 not necessarily in machine learning. Acronyms and common terms link to
 the [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md);
@@ -13,6 +13,17 @@ The appendix here holds only what neither defines.
 Each entry says what the work did and what it found or changed; the
 card (F...) and sprint beside it point to the full record.
 
+- **1.6, 2026-11-23**: the release rule for the [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) arm was computed
+  after filing, with no device time. It passes on one instance of six,
+  by about 6 parts per million of the objective. It compares two
+  rounded solutions: against greedy solved on the real problem, the
+  same pick still loses. An exact re-solve confirmed the figures. A
+  wider run over three ridge weights and five resolutions found gains
+  of the same small size that come and go with the resolution. Section
+  3 gives both as tagged claims, the Bottom line and section 6 say the
+  arm stays on hold until its own amendment and per-block approval,
+  and section 6 lists Experiment 5b, whose run waits for approval.
+  (Release rule F200, extension F198, Experiment 5b F197; Sprint 34.)
 - **1.5, 2026-11-18**: no new experiment. The Bottom line and section 6
   state the release rule for the [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) arm of the learner-selection
   experiment. Round every coefficient of F176's six selection
@@ -94,6 +105,13 @@ card (F...) and sprint beside it point to the full record.
   the rounded problem's answer is worse than greedy on all six
   instances, so a device run on this design could not show a gain.
   The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`).
+  Computed after filing (Sprint 34, F200), the rule is met on one
+  instance, 42/mid, by 5.018e-06. That compares the pick with greedy
+  when both have rounded weights; against greedy solved on the real
+  problem the same pick still loses, by 0.000056. Over 90 other ridge
+  weights and resolutions (F198) gains of this kind appear in 17
+  settings, in no order with R, never above 2.4e-05. F25 stays on hold
+  until its own amendment and per-block approval (section 3).
 - **Dirac-3S is a better solver than Dirac-3 on our one resolvable
   instance**, returning the reference optimum in every sample; accuracy
   did not change, because the optimum was already reachable classically.
@@ -294,6 +312,24 @@ design has room, but the best classical gain below greedy is under
   weights; on 43/free the pick also changes with R. At R = 400 only
   43/free delivers a gain. 200:1 is QCi's figure, carried to Dirac-3S
   and not measured there (`docs/phase2/F188_ROUNDING.md`).
+- [SIM] Release rule, computed after filing (F200, Sprint 34): at
+  R = 200 the rounded problem's pick is solved on the rounded problem
+  and compared with greedy's selection solved the same way, both scored
+  on the real objective. It passes on 42/mid only, by 5.018e-06 against
+  the filed 1e-6; on three instances the pick is greedy's selection and
+  the gain is exactly zero. An exact re-solve on each support's free
+  set, with the optimality conditions checked, agreed to within 5e-11.
+  The same pick, against greedy solved on the real problem, loses by
+  0.000056, so the pass is a difference between two rounded solutions,
+  not a gain over the best classical answer. The gain is about 6 parts
+  per million of the objective
+  (`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`).
+- [SIM] The same comparison at ridge weights 0.1, 1 and 10 times F176's
+  and R from 100 to 1,600 (F198, Sprint 34): it passes in 17 of 90
+  settings, at no instance for every R, with passes appearing and
+  disappearing as R grows; the largest gain is 2.4e-05. Three instances
+  never pass. F176's supports were reused, not searched again at each
+  weight (`docs/phase2/F198_EXTENDED.md`).
 
 ### What outside research says
 
@@ -505,6 +541,29 @@ the program's brief, on assumptions A1 to A12 in
 `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; the filing date and venue are
 not set. `experiments/src/test_phase2_prereg_draft.py` keeps it
 consistent through review; the byte lock comes at filing.
+
+**Sprint 34 (2026-11-22 to 2026-11-23): the first tests after filing.**
+Zero metered seconds. Each entry is in
+`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`, written before its
+run; the filed text is locked byte for byte, and the text sent on
+2026-11-18 is kept as `experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md`.
+
+- **Experiment 3's release rule (F200)**: the filed rule, as section 3
+  states it.
+  - Result, 2026-11-23: met on 42/mid only, by a difference between two
+    rounded solutions of about 6 parts per million; against greedy
+    solved on the real problem the pick still loses (section 3; entries
+    P2-A6 and P2-A7). F25 stays on hold until its own amendment and
+    per-block approval.
+- **F198, other ridge weights and resolutions** (entry P2-A4).
+  - Result, 2026-11-23: gains of the same size, in no stable pattern
+    (section 3, `docs/phase2/F198_EXTENDED.md`).
+- **Experiment 5b, segment routing with a measure that does not
+  saturate** (entry P2-A3): average precision within each product
+  segment in place of [recall](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-recall) at the budget; detail in the machine
+  learning expert version.
+  - Saturation check, 2026-11-22: the new measure has room on every
+    segment. The run waits for the team lead's approval of the entry.
 
 ## 7. Experiments not yet planned
 

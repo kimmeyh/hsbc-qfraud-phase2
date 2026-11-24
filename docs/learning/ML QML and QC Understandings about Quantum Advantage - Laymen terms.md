@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.6**, 2026-11-18 (Sprint 33, card F178). Written for readers
+**Version 1.7**, 2026-11-23 (Sprint 34, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
 computing, and are expert in none of them.
 
@@ -52,7 +52,11 @@ One narrow quantum role is still open: picking a small set of
 [features](#ml-feature) or models from a summary of the data. Our latest
 test of it found that the [device](#def-device)'s limited resolution would
 erase the small gains an ordinary search found. That role is on hold
-until a problem shows a gain large enough for the device to see.
+until a problem shows a gain large enough for the device to see. The
+test written down for that passed on one of six problems in November
+2026, but by about 6 parts in a million, and only against a rival
+handicapped the same way; against the ordinary computer's best answer
+the device's choice still lost. So the role stays on hold.
 
 How far to trust this: every result in the detailed sections names the
 file it came from, and a test checks that each number appears in that
@@ -772,6 +776,21 @@ is a classical step, not the device.
   problems where classical search had found a gain, the loss was larger
   than the gain. At 1 part in 400, one problem kept a small gain.
   The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
+- [SIM] **The written test for the device experiment passed, but only
+  just, and only in a like-for-like comparison.** Run right after the
+  plan was filed, with no device time, it found one problem of six
+  (42/mid) where the choice the rounded problem prefers beat the simple
+  greedy choice by 5.018e-06, above the 1e-6 bar, when both had their
+  numbers rounded the same way. That is about 6 parts per million. Against
+  the greedy choice worked out on an ordinary computer at full
+  precision, the same choice still lost, by 0.000056. The device
+  experiment (F25) stays on hold until its own written entry and the
+  team lead's approval (`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`).
+- [SIM] **Changing the model's settings and the precision showed no
+  steady gain.** Over 90 combinations of three model settings and five
+  precisions, the same comparison passed in 17, never at every
+  precision for any problem, and never by more than 2.4e-05. Three of
+  the six problems never passed (`docs/phase2/F198_EXTENDED.md`).
 
 ### What outside research says
 
@@ -904,6 +923,26 @@ the program's brief, so each missing fact is a written assumption in
 measures we use, and the filing date and venue, not yet set). A test
 keeps the document consistent while it is reviewed before filing.
 
+**Sprint 34 (2026-11-22 to 2026-11-23): the first work after filing.**
+No device time was used. The filed plan is locked so it cannot change,
+and the exact text sent on 2026-11-18 is kept as its own file. Every
+change or result after filing goes, dated, into
+`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`, each new experiment
+written there before it runs.
+
+- **The written test for the device experiment (F200).**
+  - Result, 2026-11-23: **passed on one problem of six, by about 6
+    parts per million, and only against a rival rounded the same way.**
+    The device experiment stays on hold (section 6).
+- **The same test with other settings and precisions (F198).**
+  - Result, 2026-11-23: **no steady gain** (section 6).
+- **Experiment 5 again, with a better measure (F197).** Experiment 5's
+  measure was already at its top for the best classical model on four
+  of five kinds of purchase, so nothing could beat it there. The new
+  measure ranks all of a segment's purchases, not only the top 0.5%.
+  - Check, 2026-11-22: the new measure has room on every kind of
+    purchase. The experiment itself waits for the team lead's approval.
+
 ## 8. Experiments not yet planned
 
 **In short:** these are ideas, not scheduled work. The first group comes
@@ -998,6 +1037,20 @@ Each entry says what the work did and what it found or changed. The
 card number (F...) and sprint beside it let a reader find the full
 record.
 
+- **1.7, 2026-11-23**: the first work after the Phase 2 plan was filed,
+  with no device time. First, the written test for the device
+  experiment was run. It passed on one of six practice problems, but by
+  about 6 parts per million, and only when the device's choice was
+  compared with a simple choice whose numbers were rounded the same
+  way; against the simple choice worked out at full precision, the
+  device's choice still lost. Running the same test with other model
+  settings and precisions found no steady gain. So the device
+  experiment stays on hold. The Bottom line and sections 6 and 7 say
+  so. Second, Experiment 5, which asked whether some kinds of purchase
+  should go to the quantum-inspired model, is planned again with a
+  measure that can still show a difference; a first check shows it
+  can, and the run waits for the team lead's approval (section 7).
+  (Device test F200, settings F198, Experiment 5b F197; Sprint 34.)
 - **1.6, 2026-11-18**: no new experiment. We wrote down the exact test
   that decides whether the experiment that uses the quantum device to
   pick a small team of models may go ahead. The device reads each number
