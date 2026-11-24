@@ -259,3 +259,20 @@ F200), on the committed generator, zero metered seconds.
   setting, the instances, the metric and margin, the family, the call
   count and the seconds cap) and per-block approval. Nothing here starts
   a device call.
+
+### P2-A7. 2026-11-23: What P2-A6's pass compares, beside F188's delivered reading
+
+- **Filed section**: 6, Experiment 3 (F153, F25), the release rule
+- **Kind**: result note
+- **Result file**: `experiments/phase2/results/f188_release_rule.json`
+
+Adds to P2-A6; corrects nothing in it. The filed rule compares the
+rounded problem's pick with greedy's selection, both with weights
+solved on the rounded problem. On 42/mid at R = 200 that comparison
+passes by 5.018e-06. F188's delivered reading compares the same pick
+with greedy solved on the real problem, as a classical computer would
+solve it, and there the pick loses by 0.000056
+(`docs/phase2/F188_ROUNDING.md`). So the pass shows that greedy's
+rounded weights lose more than the pick's rounded weights; it does not
+show the rounded problem's answer beating the best classical answer.
+Both readings are recorded; the decision on F25 is the team lead's.
