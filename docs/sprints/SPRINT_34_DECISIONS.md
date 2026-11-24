@@ -519,3 +519,18 @@ Asked 2026-11-24, at Manual Validation (from the F25 approval above).
   the end of a sprint already past its target is a scope change
   (Criterion 3), and the amendment needs your review before the device
   is called, which a new sprint plan gives it.
+
+**Answer (team lead, 2026-11-24)**: "d8. 1 - also the test timing run
+is approved and the first run, if there are multiple, is approved".
+F25 is planned in Sprint 35 beside 5b, in the order of option 1.
+
+- **The timing run (the two cost probes)**: approved as quoted in D8,
+  2 calls, about 195 s, extrapolated from Dirac-3 rates. It runs in
+  Sprint 35 after the amendment, the runner and F104's gate, and after
+  the allocation balance is re-read.
+- **The first F25 run**: approved in advance. Its call count and
+  seconds cannot be quoted until the probes measure the integer
+  solver's cost on Dirac-3S. Criterion H asks for both before a block
+  runs, so they will be stated with their provenance after the probes,
+  and the block starts only if they are within the amendment's
+  seconds cap. A later block needs its own approval.
