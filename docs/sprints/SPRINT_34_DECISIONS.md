@@ -349,3 +349,28 @@ existss".
   document's existing dated change list stays the per-sprint record.
 - **Q3**: no card F209 and no Task J. F178's per-sprint update of the
   learning documents, with its dated change lists, already does this.
+
+## Q4. Scope of the change-list rewrite
+
+Asked 2026-11-23. The team lead's feedback on the learning documents'
+change lists (verbatim): "they are not detailed enough. The changes
+should not reference backlog items or sprints by themselves, but what
+the feature was doing (sentence or paragraph), it would still be
+helpful to mention the feature name and/or sprint # in the text from
+reader cross-reference ease. None of these are sufficient".
+
+As read: every change-list entry in the three documents in
+`docs/learning/` (plain terms 1.0 to 1.6; machine learning expert and
+quantum computing expert 1.0 to 1.5) is rewritten so it says, in a
+sentence or a paragraph at that document's reader level, what the work
+did and what it found or changed. A card or sprint number appears only
+beside that text, for cross-reference. Sprint 34's new entry is written
+the same way. The rule goes into `docs/SPRINT_CHECKLIST.md`'s F178
+step so later sprints follow it. All of it is done in Task I this
+sprint (estimate raised from its plan figure by about 45 minutes; zero
+metered).
+
+1. Yes, as read
+2. No
+
+**Answer (team lead, 2026-11-23)**: "1". Yes, as read.

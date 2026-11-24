@@ -10,14 +10,71 @@ covers the [devices](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Ad
 
 ## Change list
 
-- **1.5, 2026-11-18 (Sprint 33)**: no new result. F25's hold in section 7 gives the testable rule (Sprint 33 D6) and when it is checked: after the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is filed (D12).
-- **1.4, 2026-11-16 (Sprint 33)**: no new result. Section 7 notes the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration)'s state at filing and the assumptions it rests on; F188's entry gives the team lead's decision (Sprint 32 D4).
-- **1.3, 2026-11-10 (Sprint 32)**: F185, the cost-weighted budget, added as a tagged claim in section 2 and a dated result in section 7, which also lists F188 (the rounding test; detail in the quantum computing expert version). The cost-weighted idea leaves section 8. No Sprint 33 run is preregistered yet, so none is listed.
-- **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F; "device" means a quantum device, and a customer's phone or computer is a "customer device". New: what the 0.5% budget optimizes and what it does not, card testing, the data a bank could add, the circuit's three quantum properties, the scope of the F110 slope, and the backlog proposals of Sprint 31 D18.
-- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
-- **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
-  through Sprint 30. Sprint 31's runs have placeholders in "Experiments
-  planned".
+Each entry says what the work did and what it found or changed; the
+card (F...) and sprint beside it point to the full record.
+
+- **1.5, 2026-11-18**: no new experiment. Section 7 states the release
+  rule for the device arm of the learner-selection experiment. On
+  F176's six [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) selection instances, with every
+  coefficient rounded to the device's 200:1 resolution, the support the
+  rounded problem ranks best must beat greedy's support by more than
+  1e-6 in the real objective, both sets of weights solved on the
+  rounded problem, on at least one instance. Until then the device arm
+  stays on hold. The rule is computed once, right after the
+  [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is filed, with no device time.
+  (Device arm F25; Sprint 33, decisions D6 and D12.)
+- **1.4, 2026-11-16**: no new experiment. Section 7 records that the
+  Phase 2 [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is ready to file: each
+  experiment has a state at filing (run, partly run, to run) and its
+  result document, and it is filed without the program's brief on
+  stated assumptions. The rounding test's entry gains the team lead's
+  decision that the device arm stays on hold until a test shows room
+  for the device to win. (Sprint 33; decision Sprint 32 D4.)
+- **1.3, 2026-11-10**: two zero-device experiments. First, a
+  cost-weighted [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget): at the 0.5% budget's alert count, ranking
+  by score times amount in place of score alone, on the stored
+  [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) CatBoost and [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) LightGBM scores over ten seeds.
+  On [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) it caught about four times the fraud dollars on every
+  seed; on [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) the interval includes zero; frauds caught fall on
+  both. Hoppner's threshold rule, the second reading, is not a staffing
+  figure on uncalibrated scores. Section 2. (F185.) Second, the rounding
+  test, which scores no model: rounding the six selection instances to
+  200:1 made every rounded problem's best support worse than greedy in
+  the real objective (detail in the quantum computing expert version).
+  The cost-weighted idea leaves section 8. (F188; both Sprint 32.)
+- **1.2, 2026-11-06**: the team lead's review, and the changes it asked
+  for. Each numbered section opens with an "In short" summary; each
+  dataset is named in full once, linked to the plain-terms version's
+  Appendix F; "device" means a quantum device and a customer's phone or
+  computer is a "customer device". New material: what the 0.5% alert
+  budget optimizes ([recall](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-recall) at a fixed review load) and what it does not;
+  the card-testing pattern (a very small payment, then a large one
+  within a day, on one card) and which dataset can show it; the data a
+  bank could add; the [quantum circuit](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-quantum-circuit)'s three properties
+  ([superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition), [entanglement](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-entanglement), [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference)); the scope of the
+  training-cost slope (one pool-build step, measured on one dataset);
+  and the team lead's backlog proposals in section 8. (Sprint 31,
+  decision D18.)
+- **1.1, 2026-11-05**: six results added, all from Sprint 31.
+  (1) A plug-in estimate of the irreducible error on real data: the
+  shuffled-label check failed at learning rate 0.1 and passed at 0.05,
+  giving [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) 0.0254 against an achieved error of 0.0293, with a
+  calibration warning; the [ULB](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ulb) figure is not a usable ceiling (F114).
+  (2) The quantum neural network on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) is dequantized: its
+  additive and gradient-boosted [classical twins](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-classical-twin) are no worse within the
+  0.005 margin (F157). (3) On the four [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-spectra) datasets boosted
+  trees rank first by test [AUPRC](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#acr-auprc) on every one and the
+  [CVQBoost](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-cvqboost) proxy fifth or sixth of seven (F157). (4) Routing a product
+  segment to the proxy is accepted on no segment; recall at the budget
+  saturates on four of five (Experiment 5). (5) [Dirac-3S](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-dirac-3s) accepts a
+  1,350-variable job (6.0 metered seconds; no accuracy read; F155).
+  (6) Relaxation schedule 4 shows no change in solver gap, in a weak
+  test (F95).
+- **1.0, 2026-11-05**: first version, covering Phase 1 (filed
+  2026-09-12) and Phase 2 through Sprint 30. Its finding: tuned
+  [gradient boosting](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-gradient-boosting) is the bar and no quantum or [quantum-inspired](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-quantum-inspired)
+  method cleared it. Sprint 31's runs had placeholders in "Experiments
+  planned". (Sprint 31.)
 
 ## Bottom line
 
