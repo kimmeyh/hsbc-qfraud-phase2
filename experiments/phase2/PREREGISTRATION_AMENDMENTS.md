@@ -224,3 +224,38 @@ computed.
 - W still has no feasible matched control (Experiment 5's note 2), so
   the run will report it as not scored.
 - Experiment 5b's run waits for the team lead's approval of P2-A3.
+
+### P2-A6. 2026-11-23: Experiment 3's release rule, result
+
+- **Filed section**: 6, Experiment 3 (F153, F25), the release rule
+- **Kind**: result note
+- **Result file**: `experiments/phase2/results/f188_release_rule.json`
+
+Computed after filing, as the filed entry requires (Sprint 34 Task E,
+F200), on the committed generator, zero metered seconds.
+
+- **The rule is met, on one instance of six.** On 42/mid the rounded
+  problem's pick (the swap-search support) is below greedy's selection,
+  both solved on the rounded problem at R = 200 and scored on the real
+  objective, by 5.018e-06, more than the filed 1e-6. The other five do
+  not pass: 42/free (+2.9e-07) and 43/free (+1.2e-03) are above
+  greedy; on 43/mid, 44/free and 44/mid the pick is greedy's selection,
+  and the gain is exactly zero there, as the filed text predicted. That
+  check fired before the verdict.
+- **Checked independently.** A scratch re-solve, not part of the
+  record, took each support's free set, solved the KKT system on it
+  exactly and checked the optimality conditions: they held on every
+  support, the objectives agreed with the recorded solver to within
+  5e-11, and the 42/mid gain was the same to four figures. Where two
+  candidate picks tie on the rounded problem, they give the same gain,
+  so the tie order does not change the verdict.
+- **What it does not show.** The gain is about 6 parts per million of
+  the objective (about -0.8215). No fraud-detection metric is computed
+  on it. F198 (P2-A4) shows release-comparison gains of similar size
+  that come and go with the ridge weight and R, so this pass is not
+  shown to be stable outside the filed setting.
+- **What follows.** As filed, the device arm (F25) may leave HOLD only
+  after the dated amendment that filed commitment 2 requires (the
+  setting, the instances, the metric and margin, the family, the call
+  count and the seconds cap) and per-block approval. Nothing here starts
+  a device call.
