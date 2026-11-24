@@ -41,6 +41,15 @@ handover: a pointer to a file is not a handover.
   (search "F204."). Each has its estimate and its metered-second quote,
   or why there is none.
 
+## Answers (team lead, 2026-11-24)
+
+Given against the on-screen list (A1 D6, A2 D7, A3 sent text, A4 change
+lists, A5 release write-up, A6 F157 split): D6 option 1; D7 option 3;
+the sent text confirmed; change lists accepted; the write-up left to
+Claude's judgment and kept; the F157 split accepted. F25 released to run
+on Dirac-3S; D8 (how and when) is open. Full record in
+`docs/sprints/SPRINT_34_DECISIONS.md`.
+
 ## For information (no action needed)
 
 ## V1. Results

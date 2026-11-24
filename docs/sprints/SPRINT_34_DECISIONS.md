@@ -451,3 +451,71 @@ Asked 2026-11-23, at Manual Validation (from the PR #134 review).
 
 - **Recommendation**: option 1. It closes the gap at the remote, where
   every client meets it, and it is a setting you can remove later.
+
+## Answers at Manual Validation (team lead, 2026-11-24)
+
+Given against the on-screen numbering: A1 D6, A2 D7, A3 the sent
+text, A4 the change lists, A5 the release-rule write-up, A6 the F157
+split. Verbatim: "a1. 1 a2. I have not deleted any past commits, so
+everything is restorable from a saved commit in a prior sprint, right.
+In that case 3 a3. yes a4. OK a5. trusting your best judgment a6. OK |
+i give my approval to release and run F25 on Dirac-3S" (one word respelled in US English for the guard)
+
+- **D6**: option 1. Experiment 5b's entry (P2-A3) is approved as
+  written; 5b is built and run in Sprint 35.
+- **D7**: option 3. The local hook only; no GitHub ruleset. On the
+  question asked: the filed commit b8e2c0e is on `develop`, `main` and
+  both sprint branches on GitHub (checked 2026-11-24), and in every
+  clone, so it is restorable. Neither `develop` nor `main` is protected,
+  so a force-push could drop it from GitHub; a clone would still hold
+  it. A moved tag would not lose the text either: the three filed files
+  are hash-locked by the suite.
+- **A3**: the SUBMITTED file is the text sent.
+- **A4**: the rewritten change lists are accepted.
+- **A5**: left to Claude's judgment; the write-up stands as committed
+  (P2-A6, P2-A7, P2-A8).
+- **A6**: the F157 split (F204 to F208) is accepted.
+- **F25**: released from HOLD by the team lead, to run on Dirac-3S.
+  How and when: D8.
+
+## D8. How and when does F25 run?
+
+Asked 2026-11-24, at Manual Validation (from the F25 approval above).
+
+- **What**: the approval releases F25. The card (`ALL_SPRINTS_MASTER_PLAN.md`,
+  F25) and Criterion H still require, before any device call: (a) a
+  dated amendment under the filed commitment 2: the setting,
+  instances, metric and margin, family, call count and seconds cap;
+  (b) F104's resolution gate run on the chosen Hamiltonians; (c) the
+  integer solver's cost on Dirac-3S, which is unknown: the card's first
+  step is two probes (`probe_mid_hi`, `probe_high`), about 195 s at
+  Dirac-3 rates (extrapolated from Dirac-3, not measured on Dirac-3S);
+  (d) an idempotent runner with a ledger; (e) your approval of each
+  block, with its call count and seconds. The card is sized at about
+  4 hours plus device time. Sprint 34 is past its 1-2 hour target.
+- **Why it matters**: the release pass compares two rounded answers.
+  Against greedy solved at full precision, the 42/mid pick loses by
+  0.000056 (P2-A7). A device run can show whether Dirac-3S finds the
+  rounded pick; it shows an answer better than the best classical one
+  only if the device finds a selection F176's search did not. The
+  allocation balance last read was 8,522 s on 2026-10-10
+  (`experiments/results/allocation_reads.json`); later spending is not
+  in that read, so the current balance is unverified until re-read.
+- **Options**:
+
+1. Mark F25 released now, and plan it as a Sprint 35 item with 5b: the
+   amendment (P2-A9, for your review), the runner and its tests, F104's
+   gate, then the first block, the two cost probes, shown for its own
+   approval with call count and seconds. Kind: Prevention (each
+   prerequisite is met in order, and the sprint keeps its size). Cost:
+   about 5 minutes now; about 4 hours in Sprint 35, plus the metered
+   seconds of each block you approve.
+2. Mark F25 released now, and start it in Sprint 34: the amendment and
+   runner now, then the probe block shown for approval. Kind:
+   Prevention. Cost: about 4 hours added to Sprint 34; the same metered
+   seconds.
+
+- **Recommendation**: option 1. Adding a 4-hour hardware experiment at
+  the end of a sprint already past its target is a scope change
+  (Criterion 3), and the amendment needs your review before the device
+  is called, which a new sprint plan gives it.
