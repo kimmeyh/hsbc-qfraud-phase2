@@ -984,6 +984,51 @@ value. Removed from candidates.)
 - Acceptance: the three documents say so; a test fails a decisions or retrospective file whose Q, D or i entry lacks its required fields (What, Why it matters, Kind, Cost, Recommendation and Options for D and i; What and Options for Q), each field term proven red
 - Depends on: nothing
 
+**F210. A refusal check at each task's end: `select_proofs.py --refusals` (~60m [no-history], zero metered) Priority 11, for Sprint 35**
+- Phase: tooling (Sprint 34 retrospective i1, option a, 2026-11-24)
+- Platform: N/A (`scripts/select_proofs.py`, `scripts/refusal_coverage.py`)
+- Today only CI runs branch coverage and `refusal_coverage.py`, so an untested refusal is found after the push. Sprint 34 shipped three (CI on 76c740b, one red round, about 40 minutes). The design rule (`SPRINT_CHECKLIST.md` Phase 4, `SPRINT_PLANNING.md`) prevents most; this card is the orchestrator's check at each task's end
+- Scope: `--refusals` runs the changed modules' own test files under `coverage run --branch`, writes the diff-cover JSON against the task's base, then runs `refusal_coverage.py` on it; the exit code is the refusal check's
+- Test impact: about 20-45 s per task that adds a refusal (one module's tests took 23 s plain and 43 s under branch coverage, 2026-11-24); the suite about +3 s (best guess, the new tests); the gate unchanged
+- Acceptance: a test that a task diff with an untested refusal is refused and one with a tested refusal passes, each proven red; the Phase 4 checklist line names the command
+- Depends on: nothing
+
+**F213. The figure check reads the amendments file (~30m [no-history], zero metered) Priority 11, for Sprint 35**
+- Phase: tooling (Sprint 34 retrospective i4, option a, 2026-11-24)
+- Platform: N/A (`experiments/src/test_phase2_figures_resolve.py`)
+- P2-A6 quoted two figures from an unrecorded scratch check; P2-A8 had to withdraw them (about 20 minutes, Sprint 34 review finding 3)
+- Scope: the test also reads `experiments/phase2/PREREGISTRATION_AMENDMENTS.md`; each entry's figures resolve in the result file the entry names
+- Test impact: about +1 s per suite (best guess: one more document parsed)
+- Acceptance: a figure in an entry that is absent from its named result fails the test, proven red; existing entries pass or are listed as known with a reason
+- Depends on: nothing
+
+**F214. The inventory check compares the test counts (~30m [no-history], zero metered) Priority 13**
+- Phase: tooling (Sprint 34 retrospective i5, option a, 2026-11-24)
+- Platform: N/A (`experiments/src/test_test_inventory.py`)
+- `docs/testing/F180_TEST_INVENTORY.md` says "do not edit by hand" and was edited by hand in Sprint 34; two of its Tests counts are stale and nothing detected it
+- Scope: the test compares each file's Tests count with pytest's collection for that file
+- Test impact: about +15-20 s per suite (best guess: one collection pass)
+- Acceptance: a wrong count fails the test, proven red
+- Depends on: the inventory regenerated (Sprint 35 minor item)
+
+**F215. Every commit for a task needs that task's timer running (~30m [no-history], zero metered) Priority 12**
+- Phase: tooling (Sprint 34 retrospective i6, option b, 2026-11-24)
+- Platform: N/A (`.githooks/commit-msg`, `scripts/check_commit_issue.py`)
+- Today the hook requires a running timer for `feat:` and `fix:` commits only. Sprint 34 timed G at 9 of 60 planned minutes and H at 2 of 45, because their `docs:` commits ran with no timer or under another task's
+- Scope: a commit naming a task issue requires that issue's task timer, whatever its type, `docs:` included
+- Test impact: about +1 s per suite (best guess: a few hook cases)
+- Acceptance: a `docs:` commit naming an issue whose task is not timed is refused, proven red; one with the timer passes
+- Depends on: nothing
+
+**F216. The tag hook reads the command word by word (~60m [no-history], zero metered) Priority 12**
+- Phase: tooling (Sprint 34 retrospective i9, option a, 2026-11-24; D7 option 3)
+- Platform: N/A (`.claude/hooks/block_frozen_history_rewrite.py`)
+- Sprint 34's code review found 4 delete shapes the pattern match missed, and the security review 5 more ways past it: git global options, grouped flags such as `-fd`, quoted refspecs, `update-ref --stdin` and `push --mirror`
+- Scope: split the command with `shlex`, skip git's global options, and check each argument against the filing tags
+- Test impact: about +2 s per suite (best guess: about 15 parity cases)
+- Acceptance: one test per shape above, each refused and proven red; the allowed look-alikes (reading a tag, listing tags) passed
+- Depends on: nothing
+
 ### Paper (Stages 4-6)
 
 ### Finalize (Stages 7-8)

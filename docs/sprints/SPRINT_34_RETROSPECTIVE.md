@@ -266,6 +266,7 @@ The first version (coverage in the pre-push gate) is now option c.
     push. Con: every gate run about doubles.
   - e. Skip this sprint, track. Pro: no work. Con: CI keeps finding
     them.
+- **Decision**: a.
 
 ### i2. Files written during a gate run go where the gate does not look (revised)
 
@@ -311,6 +312,7 @@ test runs without conflict (naming convention...)". The first version
     first proposal), F211, priority 12. Pro: enforced. Con: it blocks
     work instead of allowing it.
   - e. Skip this sprint, track. Pro: no work. Con: lost runs recur.
+- **Decision**: a.
 
 ### i3. A document edit runs every check that reads that document
 
@@ -428,6 +430,7 @@ test runs without conflict (naming convention...)". The first version
 - **Effort:** a: about 10 minutes, 1 file; test impact 0 s.
   - a. Now. **(Recommendation)**
   - e. Skip, track.
+- **Decision**: a.
 
 ## Improvement Decisions
 
@@ -435,10 +438,12 @@ Answered 2026-11-24, verbatim in substance: "i1" and "i2" asked to be
 reworked (questions above); "i3. e", "i4. a", "i5. a", "i6. b",
 "i7. e", "i8. a", "i9. a".
 
+Revised items answered 2026-11-24, verbatim: "i1. a i2. a i10. a".
+
 | # (i1-in) | Title | Alternative taken (a-z) | Effort | Decision (now/backlog/skip) |
 |---|---|---|---|---|
-| i1 | Refusals testable before the gate | open (revised) | | |
-| i2 | Gate-time writes to `wip/` | open (revised) | | |
+| i1 | Refusals testable before the gate | a | 15 min now; 60 min F210 | rules now (`SPRINT_PLANNING.md`, `SPRINT_CHECKLIST.md` Phase 4, `docs/agent_prompts/research.md`); backlog F210, P11, Sprint 35 |
+| i2 | Gate-time writes to `wip/` | a | 15 min | now (`.gitignore`, `SPRINT_CHECKLIST.md` Phases 4 and 7) |
 | i3 | Document edits run their guards | e | 0 | skip, tracked |
 | i4 | Figure check reads amendments | a | 30 min | backlog F213, P11, Sprint 35 |
 | i5 | Inventory counts checked | a | 30 min | backlog F214, P13 |
@@ -446,4 +451,4 @@ reworked (questions above); "i3. e", "i4. a", "i5. a", "i6. b",
 | i7 | Run estimates measured, caps coded | e | 0 | skip, tracked |
 | i8 | Screen list printed from the file | a | 10 min | now |
 | i9 | Tag hook tokenizes | a | 60 min | backlog F216, P12 |
-| i10 | Merged item format | open | | |
+| i10 | Merged item format | a | 10 min | now (`SPRINT_RETROSPECTIVE.md` step 5 and its checklist; `SPRINT_CHECKLIST.md` Phase 7) |
