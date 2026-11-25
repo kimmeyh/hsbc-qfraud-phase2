@@ -61,6 +61,27 @@ def test_the_token_allows_exactly_one_edit_then_is_consumed():
             TOKEN.unlink()
 
 
+def test_the_token_does_not_open_the_phase2_filed_text():
+    """Sprint 34 Task D (F102): the Phase 2 text as filed has no exception,
+    and an edit to it must not spend a token meant for Phase 1."""
+    assert not TOKEN.exists(), "precondition: no token on disk"
+    TOKEN.write_text("test token", encoding="utf-8")
+    try:
+        for f in ("experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md",
+                  "experiments/phase2/PREREGISTRATION_FINAL.md",
+                  "experiments/phase2/PREREGISTRATION_DRAFT.md"):
+            r = subprocess.run(
+                [sys.executable, str(HOOK)],
+                input=json.dumps({"tool_name": "Edit",
+                                  "tool_input": {"file_path": f}}),
+                capture_output=True, text=True, cwd=str(ROOT))
+            assert r.returncode == BLOCK, f
+        assert TOKEN.exists(), "a Phase 2 edit consumed the Phase 1 token"
+    finally:
+        if TOKEN.exists():
+            TOKEN.unlink()
+
+
 def test_no_token_is_committed_to_the_repository():
     """A token in git would disable the guard on every clone."""
     r = subprocess.run(["git", "ls-files", ".claude/.amendment-verified"],

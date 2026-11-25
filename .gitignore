@@ -154,3 +154,9 @@ experiments/results/*.dryrun.json
 .coverage
 .coverage.*
 coverage.xml
+
+# Files written while the pre-push gate runs (Sprint 34 i2). The gate
+# refuses a dirty tree and does not count a run whose tree changed;
+# ignored files are not seen, so drafts and notes go here and are moved
+# into place after the run.
+/wip/

@@ -19,6 +19,17 @@ search is run again.
 
     <venv python> experiments/phase2/src/f188_rounding.py
     <venv python> experiments/phase2/src/f188_rounding.py --delivered
+    <venv python> experiments/phase2/src/f188_rounding.py --release-rule
+
+`--release-rule` (F200, Sprint 34 Task E) computes Experiment 3's
+release rule as filed on 2026-11-18 (Sprint 33 D6), after filing, as the
+filing's first test: at R = 200, the support the rounded problem ranks
+best against greedy's own selection solved the same way (both weights
+solved on the rounded problem, both scored on the unrounded one). It
+passes on an instance when the pick is below greedy by more than TOL,
+and the rule is met when it passes on at least one. Before the verdict,
+every instance whose pick is greedy's selection must show a gain of
+exactly zero. Written to `f188_release_rule.json`.
 
 Zero metered seconds. Writes `experiments/phase2/results/f188_rounding.json`
 through `provenance.write_result`, once, at the end (`resumable=False`).
@@ -45,6 +56,7 @@ import f176_below_greedy as f176  # noqa: E402
 
 OUT = ROOT / "experiments" / "phase2" / "results" / "f188_rounding.json"
 OUT_DELIVERED = OUT.with_name("f188_rounding_delivered.json")
+OUT_RELEASE = OUT.with_name("f188_release_rule.json")
 LONG_RUN = False                       # about 10 minutes, one straight run
 F176_OUT = f176.OUT
 TOL = f176.TOL                         # 1e-6, F176's "below"
@@ -104,6 +116,110 @@ def delivered(J, C, R: float, greedy_support, others: dict) -> dict:
             "pick_unrounded_objective": true_pick,
             "greedy_unrounded_objective": greedy_true,
             "delivered_gain": d, "delivers": bool(d < -TOL)}
+
+
+def release(J, C, R: float, greedy_support, others: dict) -> dict:
+    """Experiment 3's release rule as filed (Sprint 33 D6): the support
+    the problem rounded at R ranks best, against greedy's selection solved
+    the same way. Both weights are solved on the rounded problem and both
+    are scored on the unrounded one, so a pick that is greedy's selection
+    gains exactly zero. It passes when the pick is below greedy by more
+    than TOL."""
+    Jq, Cq, step = rounded(J, C, R)
+    supports = {"greedy": greedy_support, **others}
+    seen = {k: support_objective(Jq, Cq, s) for k, s in supports.items()}
+    pick = min(seen, key=seen.get)
+    pick_true = ec.objective(J, C, ec.solve_on_support(Jq, Cq, supports[pick]))
+    greedy_true = ec.objective(J, C, ec.solve_on_support(Jq, Cq, greedy_support))
+    d = pick_true - greedy_true
+    return {"R": None if math.isinf(R) else R, "step": step, "pick": pick,
+            "pick_objective": pick_true, "greedy_objective": greedy_true,
+            "release_gain": d, "passes": bool(d < -TOL)}
+
+
+def require_zero_where_greedy(rows: list[dict]) -> list[str]:
+    """The check fired before the verdict: where the pick is greedy's
+    selection, the gain is exactly zero. Returns those instances."""
+    at = [r for r in rows if r["release"]["pick"] == "greedy"]
+    bad = [f"{r['seed']}/{r['instance']}" for r in at
+           if r["release"]["release_gain"] != 0.0]
+    if bad:
+        raise RuntimeError("the pick is greedy's selection but the gain is "
+                           f"not zero on {bad}: greedy is not solved the "
+                           "same way as the pick")
+    return [f"{r['seed']}/{r['instance']}" for r in at]
+
+
+def verdict(rows: list[dict]) -> dict:
+    """The rule is met when it passes on at least one instance."""
+    at = [f"{r['seed']}/{r['instance']}" for r in rows
+          if r["release"]["passes"]]
+    return {"n_instances": len(rows), "passes_on": at,
+            "rule_met": bool(at),
+            "finding": ("met: the device arm (F25) may leave HOLD, after the "
+                        "dated amendment that commitment 2 requires"
+                        if at else
+                        "not met on any instance: F25 stays on HOLD")}
+
+
+def release_doc(rows: list[dict], n_expected: int, check: dict) -> dict:
+    """The F200 result, `complete` only with every instance."""
+    if n_expected == 0 or len(rows) != n_expected:
+        raise RuntimeError(f"{len(rows)} rows for {n_expected} F176 "
+                           "instances; not complete")
+    return {"card": "F200", "sprint": 34, "phase": 2, "evidence_tag": "SIM",
+            "metered_seconds": 0, "dataset": "ieee_cis",
+            "entry": "experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md "
+                     "section 6, Experiment 3, the release rule (Sprint 33 D6)",
+            "computed_after_filing": "2026-11-18",
+            "reading_range": READING_R, "tol": TOL,
+            "check": check, "rows": rows, "verdict": verdict(rows),
+            "complete": True}
+
+
+def run_release() -> None:
+    import f160_room_ieee as f160
+    import provenance
+    f176_doc = json.loads(F176_OUT.read_text(encoding="utf-8"))
+    require_complete(f176_doc)
+    old = {(r["seed"], r["instance"]): r for r in json.loads(
+        OUT_DELIVERED.read_text(encoding="utf-8"))["rows"]}
+    rid, _ = provenance.start(OUT_RELEASE, resumable=False)
+    lam = f176_doc["rows"][0]["lam_mult"]
+    t0 = time.perf_counter()
+    inst, _ = f160.ieee_instances(f160.ieee_fold())
+    print(f"instances rebuilt in {round(time.perf_counter() - t0)} s",
+          flush=True)
+    rows = []
+    for rec in f176_doc["rows"]:
+        H, y, m = inst[(rec["seed"], rec["instance"])]
+        J, C = ec.problem(H, y, lam)
+        require_same_greedy(rec, ec.greedy(J, C, m)["objective"])
+        meth = rec["methods"]
+        others = {k: v["support"] for k, v in meth.items()
+                  if k != "greedy" and v.get("support")}
+        r = release(J, C, READING_R, meth["greedy"]["support"], others)
+        prior = old[(rec["seed"], rec["instance"])]["rounded"][
+            str(int(READING_R))]
+        rows.append({"seed": rec["seed"], "instance": rec["instance"],
+                     "release": r,
+                     "old_comparison_gain": prior["delivered_gain"]})
+        print(f"{rec['seed']}/{rec['instance']}: pick {r['pick']}, gain "
+              f"{r['release_gain']:.3e}", flush=True)
+    greedy_at = require_zero_where_greedy(rows)
+    check = {"pick_is_greedy_on": greedy_at,
+             "gain_there": 0.0,
+             "old_comparison_gain_there": {
+                 f"{r['seed']}/{r['instance']}": r["old_comparison_gain"]
+                 for r in rows if r["release"]["pick"] == "greedy"},
+             "can_fire": bool(greedy_at) and any(
+                 r["old_comparison_gain"] != 0.0 for r in rows
+                 if r["release"]["pick"] == "greedy")}
+    doc = release_doc(rows, len(f176_doc["rows"]), check)
+    provenance.write_result(OUT_RELEASE, doc, __file__,
+                            sorted({r["seed"] for r in rows}), rid)
+    print(json.dumps(doc["verdict"]), flush=True)
+    print("complete", flush=True)
 
 
 # ----------------------------------------------------------- the check
@@ -296,8 +412,11 @@ def final_doc(check: dict, rows: list[dict], n_expected: int) -> dict:
 if __name__ == "__main__":
     if sys.argv[1:] == ["--delivered"]:
         run_delivered()
+    elif sys.argv[1:] == ["--release-rule"]:
+        run_release()
     elif sys.argv[1:]:
-        raise SystemExit(f"usage: f188_rounding.py [--delivered]; "
+        raise SystemExit(f"usage: f188_rounding.py [--delivered | "
+                         f"--release-rule]; "
                          f"got {sys.argv[1:]}")
     else:
         run()

@@ -162,6 +162,124 @@ def test_a_short_delivered_result_is_refused():
     assert doc["summary"]["delivers_at_200"] == ["42/free"]
 
 
+# ---------------------------------------- F200: the release rule as filed
+
+def test_release_solves_greedy_on_the_rounded_problem():
+    # The filed rule's difference from the delivered reading: greedy's
+    # weights are solved on the rounded problem, like the pick's, and both
+    # are scored on the unrounded one.
+    # Two learners each, so the weights differ: at R = 3 greedy's {0, 1}
+    # solves to (2/3, 1/3) on the rounded problem and to about (0.497,
+    # 0.503) on the real one.
+    J = np.array([[1.0, 0.3, 0.1], [0.3, 1.2, 0.2], [0.1, 0.2, 0.9]])
+    C = np.array([-0.31, -0.52, -0.45])
+    r = fr.release(J, C, 3.0, [0, 1], {"other": [1, 2]})
+    Jq, Cq, _ = fr.rounded(J, C, 3.0)
+    want = fr.ec.objective(J, C, fr.ec.solve_on_support(Jq, Cq, [0, 1]))
+    assert r["greedy_objective"] == pytest.approx(want, abs=1e-9)
+    old = fr.delivered(J, C, 3.0, [0, 1], {"other": [1, 2]})
+    assert r["greedy_objective"] > old["greedy_unrounded_objective"] + 1e-4
+    assert r["release_gain"] == pytest.approx(
+        r["pick_objective"] - r["greedy_objective"])
+
+
+def test_release_solves_the_pick_on_the_rounded_problem():
+    # The pick's side of the filed comparison (PR #134 review): at R = 4
+    # the pick is {1, 2}, not greedy; its weights solved on the rounded
+    # problem are (0.4, 0.6), and on the real one they differ, so the two
+    # objectives differ by about 0.0018.
+    J = np.array([[1.0, 0.3, 0.1], [0.3, 1.2, 0.2], [0.1, 0.2, 0.9]])
+    C = np.array([-0.31, -0.52, -0.45])
+    r = fr.release(J, C, 4.0, [0, 1], {"other": [1, 2]})
+    assert r["pick"] == "other"
+    Jq, Cq, _ = fr.rounded(J, C, 4.0)
+    want = fr.ec.objective(J, C, fr.ec.solve_on_support(Jq, Cq, [1, 2]))
+    assert r["pick_objective"] == pytest.approx(want, abs=1e-9)
+    real = fr.ec.objective(J, C, fr.ec.solve_on_support(J, C, [1, 2]))
+    assert r["pick_objective"] > real + 1e-3
+
+
+def test_a_pick_that_is_greedys_selection_gains_exactly_zero():
+    r = fr.release(J2, C2, 2.0, [0], {"other": [1]})
+    assert r["pick"] == "greedy"
+    assert r["release_gain"] == 0.0 and not r["passes"]
+
+
+def test_a_clear_gain_passes():
+    r = fr.release(J2, C2, math.inf, [0], {"other": [1]})
+    assert r["pick"] == "other" and r["passes"]
+
+
+def test_a_gain_inside_the_tolerance_does_not_pass():
+    C = np.array([-0.40, -0.40 - 5e-7])
+    r = fr.release(J2, C, math.inf, [0], {"other": [1]})
+    assert r["release_gain"] < 0 and not r["passes"]
+
+
+def _rel(seed, pick, gain, passes=False):
+    return {"seed": seed, "instance": "free",
+            "release": {"pick": pick, "release_gain": gain, "passes": passes}}
+
+
+def test_a_nonzero_gain_where_the_pick_is_greedy_is_refused():
+    with pytest.raises(RuntimeError, match="not zero on"):
+        fr.require_zero_where_greedy([_rel(42, "greedy", 1e-5)])
+    assert fr.require_zero_where_greedy(
+        [_rel(42, "greedy", 0.0), _rel(43, "scip", -1e-3)]) == ["42/free"]
+
+
+def test_the_rule_is_met_on_one_passing_instance():
+    v = fr.verdict([_rel(42, "scip", -1e-3, True), _rel(43, "greedy", 0.0)])
+    assert v["rule_met"] and v["passes_on"] == ["42/free"]
+    assert v["finding"].startswith("met")
+
+
+def test_the_rule_is_not_met_with_no_passing_instance():
+    v = fr.verdict([_rel(42, "scip", 1e-3), _rel(43, "greedy", 0.0)])
+    assert not v["rule_met"] and v["passes_on"] == []
+    assert "stays on HOLD" in v["finding"]
+
+
+def test_a_short_release_result_is_refused():
+    with pytest.raises(RuntimeError, match="not complete"):
+        fr.release_doc([_rel(42, "greedy", 0.0)], 2, {})
+    with pytest.raises(RuntimeError, match="not complete"):
+        fr.release_doc([], 0, {})
+    assert fr.release_doc([_rel(42, "greedy", 0.0)], 1, {})["complete"] is True
+
+
+def test_each_release_term_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    for old, new, test, label in (
+            ("    greedy_true = ec.objective(J, C, ec.solve_on_support(Jq, Cq, greedy_support))\n",
+             "    greedy_true = support_objective(J, C, greedy_support)\n",
+             "test_release_solves_greedy_on_the_rounded_problem",
+             "greedy solved on the unrounded problem (the old reading)"),
+            ("    pick_true = ec.objective(J, C, ec.solve_on_support(Jq, Cq, supports[pick]))\n",
+             "    pick_true = ec.objective(J, C, ec.solve_on_support(J, C, supports[pick]))\n",
+             "test_release_solves_the_pick_on_the_rounded_problem",
+             "the pick solved on the unrounded problem"),
+            ('"release_gain": d, "passes": bool(d < -TOL)}',
+             '"release_gain": d, "passes": bool(d < 0)}',
+             "test_a_gain_inside_the_tolerance_does_not_pass",
+             "a gain inside the tolerance passes"),
+            ('           if r["release"]["release_gain"] != 0.0]\n',
+             "           if False]\n",
+             "test_a_nonzero_gain_where_the_pick_is_greedy_is_refused",
+             "the zero-gain check that cannot fire"),
+            ('            "rule_met": bool(at),\n',
+             '            "rule_met": len(at) == len(rows),\n',
+             "test_the_rule_is_met_on_one_passing_instance",
+             "every instance required, not one"),
+            ("    if n_expected == 0 or len(rows) != n_expected:\n",
+             "    if False:\n",
+             "test_a_short_release_result_is_refused",
+             "a short release result marked complete")):
+        assert_can_fail([Mutation(MODULE, old, new, expect_occurrences=1)],
+                        lambda test=test: run_pytest(f"{THIS}::{test}", ROOT),
+                        label)
+
+
 def test_an_unknown_argument_is_refused():
     import subprocess
     r = subprocess.run([sys.executable, str(MODULE), "--deliverd"],

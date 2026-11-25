@@ -19,6 +19,22 @@ import hooklib  # noqa: E402
 EDIT_TOOLS = {"Edit", "Write", "NotebookEdit"}
 GUARDED_SUFFIX = "experiments/PREREGISTRATION.md"
 APPROVAL_TOKEN = ".claude/.amendment-verified"
+# The Phase 2 preregistration as filed (Sprint 34 Task D, F102, D3 option
+# 1). No token opens these: the team lead, 2026-11-22, "neither as filed
+# copy (phase 1 and phase 2) should ever be changed". Amendments go in
+# experiments/phase2/PREREGISTRATION_AMENDMENTS.md (D2 option 1).
+LOCKED_PHASE2 = (
+    "experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md",
+    "experiments/phase2/PREREGISTRATION_FINAL.md",
+    "experiments/phase2/PREREGISTRATION_DRAFT.md",
+)
+PHASE2_MESSAGE = """[BLOCKED] This is the Phase 2 preregistration as filed on 2026-11-18.
+It is locked and is never edited, with no exception (team lead, 2026-11-22).
+
+Write the change as a dated entry in
+experiments/phase2/PREREGISTRATION_AMENDMENTS.md instead. That file's
+header gives the form. experiments/src/test_phase2_prereg_filed.py also
+fails on any change to the locked files."""
 
 MESSAGE = """[BLOCKED] PREREGISTRATION.md is FROZEN. Amendments only, and only after the
 finding behind them has been independently verified (workflow: VERIFY BEFORE
@@ -53,6 +69,8 @@ def main() -> int:
 
     # normalize() so a Windows-separator path still matches. A check that
     # matches only one separator style silently never fires on the other OS.
+    if hooklib.normalize(path).endswith(LOCKED_PHASE2):
+        return hooklib.block(PHASE2_MESSAGE)
     if not hooklib.normalize(path).endswith(GUARDED_SUFFIX):
         return hooklib.ALLOW
 

@@ -34,6 +34,17 @@ or to another repository.
 - In your final reply, say what you resumed and from which unit, or say
   "started fresh".
 
+## Refusals (code tasks)
+
+A refusal you add (a condition that raises or refuses) lives in a small
+named function (`require_*`, `check_*` or `main(argv)`) that a test
+calls in-process with built data. `run()` and the `__main__` block only
+call it. Each refusal gets its test and a red proof (`assert_can_fail`,
+removing the refusal) in the same commit (`SPRINT_CHECKLIST.md` Phase 4,
+Sprint 34 i1).
+
 ## Report
 
-Write the result to `<scratchpad>/<card>_<task>.md`.
+Write the result to `<scratchpad>/<card>_<task>.md`. For a code task,
+the report lists each new refusal with the function that holds it, its
+test and its red-proof mutation.

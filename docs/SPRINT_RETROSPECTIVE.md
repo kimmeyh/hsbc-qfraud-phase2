@@ -60,11 +60,12 @@ How the 7-step protocol below carries it out:
    - Number the items `i1` to `in`, each followed by a brief title. Never use `IMP-n`, and never reuse a number inside the sprint.
    - Each item has these fields, in this order:
      - **What it is:** the change, the file it changes and the rule it adds.
+     - **Source:** where the item came from: the category and role, the review finding, the commit or the team lead's request (Sprint 34 i10).
      - **What it prevents and/or catches:** prevention is preferred, at the earliest stage that can hold it: the sprint process, the backlog item, the sprint card, development, then testing. Name the stage. Something that only catches says so, and says why prevention is not enough.
      - **Long-term value:** why it is still worth having after this sprint.
      - **Evidence:** the facts that suggest it has long-term value: how many times the problem occurred (and in which sprints), the time it wasted, and the efficiency it gains and how. A count that is not known is written "not measured", never estimated without saying so.
      - **Pros and cons:** of the proposal itself.
-     - **Prevention or control,** **Extends** (the existing prevention it extends, or "new" and why) and **Effort** (minutes, files).
+     - **Prevention or control,** **Extends** (the existing prevention it extends, or "new" and why) and **Effort**: for EACH option, the minutes and files to implement it AND its impact on test time (per task, per suite run, per gate run, as applies), each either measured (say from what) or marked as a best guess with its basis. "Not measured" is not accepted for effort or test impact (team lead, 2026-11-24, Sprint 34 i10, after the spamfilter-multi example).
      - **Options for implementing,** lettered `a` to `z`. Each states what is done, when (now, or the backlog with its card number and priority) and its effort, with one pro and one con. The recommended option is marked `(Recommendation)`. A usual order, where it fits:
        - a. the best option, now or backlog depending on its effort;
        - b. the best option, but backlogged for its time or the number of files it touches;
@@ -78,6 +79,7 @@ How the 7-step protocol below carries it out:
      - [ ] Every item has an `i` number, a title and every field above, in order.
      - [ ] "What it prevents" names the stage, and "Evidence" names counts and times, or says "not measured".
      - [ ] Every option names its timing, effort, card number and priority where it has one, a pro and a con. One option is marked `(Recommendation)`.
+     - [ ] The Effort line gives every option's effort and test-time impact, each measured or marked as a best guess; none says "not measured".
      - [ ] The chat display shows every field. It does not show only titles.
 6. **Team lead disposes each** with the `i1. a` answer form, or "all as recommended". Record the answer verbatim in an "Improvement Decisions" section.
 7. **Apply**: now-items as commits on the sprint branch; backlog-items to ALL_SPRINTS_MASTER_PLAN.md; skips noted. Then the mandatory completion updates (master plan Last Completed Sprint, summary doc scheduling, CHECKLIST reconciliation, **one `docs/VELOCITY_LOG.md` row per task from `sprint_status.json` `task_actuals`** (IMP-7, Sprint 22)). THEN `gh pr ready`.
