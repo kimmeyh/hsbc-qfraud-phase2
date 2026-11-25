@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection: Quantum Computing Expert Version
 
-**Version 1.5**, 2026-11-18 (Sprint 33, card F178). For readers with
+**Version 1.6**, 2026-11-23 (Sprint 34, card F178). For readers with
 undergraduate-or-above or professional quantum computing experience,
 not necessarily in machine learning. Acronyms and common terms link to
 the [plain-terms version](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md);
@@ -10,14 +10,79 @@ The appendix here holds only what neither defines.
 
 ## Change list
 
-- **1.5, 2026-11-18 (Sprint 33)**: no new result. F25's hold in the Bottom line and section 6 gives the testable rule (Sprint 33 D6) and when it is checked: after the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is filed (D12).
-- **1.4, 2026-11-16 (Sprint 33)**: no new result. The Bottom line and section 6 give the team lead's decision on F188 (Sprint 32 D4); section 6 notes the [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration)'s state at filing.
-- **1.3, 2026-11-10 (Sprint 32)**: F188, the rounding test, added as a tagged claim in section 3 and a dated result in section 6, which also lists F185 (alerts ranked by cost; detail in the machine learning expert version). The bottom line and section 5's three conditions now cite it, and the rounding test leaves section 7. No Sprint 33 run is preregistered yet, so none is listed.
-- **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Datasets are named in full once and by short name after, both linked to the plain-terms version's Appendix F. New: [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference) beside [superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition) and [entanglement](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-entanglement), in outside research and in our circuit; a proposed experiment with all three properties and many non-Clifford gates; the scope of the F110 build cost; and the backlog proposals of Sprint 31 D18.
-- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
-- **1.0, 2026-11-05 (Sprint 31)**: first version. Phase 1 and Phase 2
-  through Sprint 30. Sprint 31's [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) and simulator runs have
-  placeholders in "Experiments planned".
+Each entry says what the work did and what it found or changed; the
+card (F...) and sprint beside it point to the full record.
+
+- **1.6, 2026-11-23**: the release rule for the [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) arm was computed
+  after filing, with no device time. It passes on one instance of six,
+  by about 6 parts per million of the objective. It compares two
+  rounded solutions: against greedy solved on the real problem, the
+  same pick still loses. A
+  wider run over three ridge weights and five resolutions found gains
+  of the same small size that come and go with the resolution. Section
+  3 gives both as tagged claims, the Bottom line and section 6 say the
+  arm stays on hold until its own amendment and per-block approval,
+  and section 6 lists Experiment 5b, whose run waits for approval.
+  (Release rule F200, extension F198, Experiment 5b F197; Sprint 34.)
+- **1.5, 2026-11-18**: no new experiment. The Bottom line and section 6
+  state the release rule for the [device](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-device) arm of the learner-selection
+  experiment. Round every coefficient of F176's six selection
+  instances to the device's 200:1 resolution; take the support the
+  rounded problem ranks best; solve its weights and greedy's on the
+  rounded problem; score both on the real objective. The arm may leave
+  hold only if that pick beats greedy by more than 1e-6 on at least one
+  instance. It is computed once, after the
+  [preregistration](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#def-preregistration) is filed, with no device time.
+  (Device arm F25; Sprint 33, decisions D6 and D12.)
+- **1.4, 2026-11-16**: no new experiment. After the rounding test (see
+  1.3), the team lead decided that the device arm stays on hold until a
+  test shows the device has [room](#qc3-room) to win; the Bottom line and section 6
+  say so. Section 6 also records the Phase 2 preregistration as ready
+  to file, each experiment with its state. (Sprint 33; decision Sprint
+  32 D4.)
+- **1.3, 2026-11-10**: the rounding test. Every coefficient of F176's
+  six selection instances was rounded to the nearest multiple of
+  max |coefficient| / R, at R = 100, 200 and 400, to see whether the
+  small gains over greedy found earlier survive the device's stated
+  200:1 resolution. Read on the rounded problem, two instances seem to
+  keep a gain, but one 49 to 73 times larger than the original: an
+  artifact of the rounding. Scored on the real objective, the rounded
+  problem's answer is worse than greedy on all six at R = 100 and 200,
+  mostly through the rounded weights. So F176's gains fail the third of
+  section 5's conditions (the miss must exceed the device's
+  resolution), and section 5 adds a fourth check: score the rounded
+  problem's pick on the real problem. Section 6 also lists the
+  cost-weighted [alert budget](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-alert-budget) (detail in the machine learning expert
+  version). (F188 and F185; Sprint 32.)
+- **1.2, 2026-11-06**: the team lead's review, and the changes it asked
+  for. Each numbered section opens with an "In short" summary; each
+  dataset is named in full once, linked to the plain-terms version's
+  Appendix F. New material: [interference](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-interference) beside [superposition](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-superposition) and [entanglement](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-entanglement), in outside research and in our circuit; a
+  proposed experiment that uses all three and many non-Clifford gates,
+  so that it is hard to simulate classically; the scope of the
+  training-cost slope (one classical pool-build step, measured on one
+  dataset); and the team lead's backlog proposals in section 7.
+  (Sprint 31, decision D18.)
+- **1.1, 2026-11-05**: six results added, all from Sprint 31.
+  (1) [Dirac-3S](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-dirac-3s) accepted a 1,350-variable job in 6.0 metered seconds; the
+  pool failed the resolution screen, so only acceptance was tested
+  (F155). (2) [Relaxation schedule](#qc3-relaxation-schedule) 4 showed no change in the solver gap
+  on the two fits with a schedule-2 twin, in a weak test (F95). (3) The
+  quantum neural network on [IEEE-CIS](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-ieee-cis) is dequantized: [classical twins](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-classical-twin) of
+  what it computes are no worse within the margin (F157). (4) On the
+  four [SPECTRA](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ds-spectra) datasets, built so a quantum method could win, boosted
+  trees ranked first on every one and the [CVQBoost](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qml-cvqboost) proxy fifth or
+  sixth of seven (F157). (5) Routing a product segment to the proxy
+  was accepted on none (Experiment 5). (6) A first estimate of the
+  irreducible error on real data, with a calibration warning (F114;
+  detail in the machine learning expert version).
+- **1.0, 2026-11-05**: first version, covering Phase 1 (filed
+  2026-09-12) and Phase 2 through Sprint 30. Its finding: no quantum
+  resource was tested on hardware (the maker states [Dirac-3](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#qc-dirac-3) uses no
+  entanglement, and we treat both devices as analog optimizers), and
+  the convex training problem left the solver nothing to win.
+  Sprint 31's device and simulator runs had placeholders in
+  "Experiments planned". (Sprint 31.)
 
 ## Bottom line
 
@@ -40,6 +105,13 @@ The appendix here holds only what neither defines.
   the rounded problem's answer is worse than greedy on all six
   instances, so a device run on this design could not show a gain.
   The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`).
+  Computed after filing (Sprint 34, F200), the rule is met on one
+  instance, 42/mid, by 5.018e-06. That compares the pick with greedy
+  when both have rounded weights; against greedy solved on the real
+  problem the same pick still loses, by 0.000056. Over 90 other ridge
+  weights and resolutions (F198) gains of this kind appear in 17
+  settings, in no order with R, never above 0.000024. F25 stays on hold
+  until its own amendment and per-block approval (section 3).
 - **Dirac-3S is a better solver than Dirac-3 on our one resolvable
   instance**, returning the reference optimum in every sample; accuracy
   did not change, because the optimum was already reachable classically.
@@ -240,6 +312,22 @@ design has room, but the best classical gain below greedy is under
   weights; on 43/free the pick also changes with R. At R = 400 only
   43/free delivers a gain. 200:1 is QCi's figure, carried to Dirac-3S
   and not measured there (`docs/phase2/F188_ROUNDING.md`).
+- [SIM] Release rule, computed after filing (F200, Sprint 34): at
+  R = 200 the rounded problem's pick is solved on the rounded problem
+  and compared with greedy's selection solved the same way, both scored
+  on the real objective. It passes on 42/mid only, by 5.018e-06 against
+  the filed 1e-6; on three instances the pick is greedy's selection and
+  the gain is exactly zero. The same pick, against greedy solved on the real problem, loses by
+  0.000056, so the pass is a difference between two rounded solutions,
+  not a gain over the best classical answer. The gain is about 6 parts
+  per million of the objective
+  (`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`).
+- [SIM] The same comparison at ridge weights 0.1, 1 and 10 times F176's
+  and R from 100 to 1,600 (F198, Sprint 34): it passes in 17 of 90
+  settings, at no instance for every R, with passes appearing and
+  disappearing as R grows; the largest gain is 0.000024. Three instances
+  never pass. F176's supports were reused, not searched again at each
+  weight (`docs/phase2/F198_EXTENDED.md`).
 
 ### What outside research says
 
@@ -451,6 +539,29 @@ the program's brief, on assumptions A1 to A12 in
 `docs/phase2/PHASE2_POC_PLAN_DRAFT.md`; the filing date and venue are
 not set. `experiments/src/test_phase2_prereg_draft.py` keeps it
 consistent through review; the byte lock comes at filing.
+
+**Sprint 34 (2026-11-22 to 2026-11-23): the first tests after filing.**
+Zero metered seconds. Each entry is in
+`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`, written before its
+run; the filed text is locked byte for byte, and the text sent on
+2026-11-18 is kept as `experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md`.
+
+- **Experiment 3's release rule (F200)**: the filed rule, as section 3
+  states it.
+  - Result, 2026-11-23: met on 42/mid only, by a difference between two
+    rounded solutions of about 6 parts per million; against greedy
+    solved on the real problem the pick still loses (section 3; entries
+    P2-A6 and P2-A7). F25 stays on hold until its own amendment and
+    per-block approval.
+- **F198, other ridge weights and resolutions** (entry P2-A4).
+  - Result, 2026-11-23: gains of the same size, in no stable pattern
+    (section 3, `docs/phase2/F198_EXTENDED.md`).
+- **Experiment 5b, segment routing with a measure that does not
+  saturate** (entry P2-A3): average precision within each product
+  segment in place of [recall](ML%20QML%20and%20QC%20Understandings%20about%20Quantum%20Advantage%20-%20Laymen%20terms.md#ml-recall) at the budget; detail in the machine
+  learning expert version.
+  - Saturation check, 2026-11-22: the new measure has room on every
+    segment. The run waits for the team lead's approval of the entry.
 
 ## 7. Experiments not yet planned
 

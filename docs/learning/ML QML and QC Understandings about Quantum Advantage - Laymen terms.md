@@ -1,6 +1,6 @@
 # What We Have Learned About Quantum Advantage for Fraud Detection, in Plain Terms
 
-**Version 1.6**, 2026-11-18 (Sprint 33, card F178). Written for readers
+**Version 1.7**, 2026-11-23 (Sprint 34, card F178). Written for readers
 who know some math, science, computing, machine learning and quantum
 computing, and are expert in none of them.
 
@@ -52,7 +52,11 @@ One narrow quantum role is still open: picking a small set of
 [features](#ml-feature) or models from a summary of the data. Our latest
 test of it found that the [device](#def-device)'s limited resolution would
 erase the small gains an ordinary search found. That role is on hold
-until a problem shows a gain large enough for the device to see.
+until a problem shows a gain large enough for the device to see. The
+test written down for that passed on one of six problems in November
+2026, but by about 6 parts in a million, and only against a rival
+handicapped the same way; against the ordinary computer's best answer
+the device's choice still lost. So the role stays on hold.
 
 How far to trust this: every result in the detailed sections names the
 file it came from, and a test checks that each number appears in that
@@ -772,6 +776,21 @@ is a classical step, not the device.
   problems where classical search had found a gain, the loss was larger
   than the gain. At 1 part in 400, one problem kept a small gain.
   The team lead decided (Sprint 32 D4, 2026-11-13; made testable by Sprint 33 D6, 2026-11-17): F25 stays on hold until, on F176's six instances at 200:1, the rounded problem's pick beats greedy's selection solved the same way (on the rounded problem, scored on the real one) by more than 1e-6 on at least one instance. On three of the six the pick is greedy's own selection, so only three can pass. The check needs no device time and runs after the preregistration is filed (Sprint 33 D12) (`docs/sprints/SPRINT_33_DECISIONS.md`). (`docs/phase2/F188_ROUNDING.md`).
+- [SIM] **The written test for the device experiment passed, but only
+  just, and only in a like-for-like comparison.** Run right after the
+  plan was filed, with no device time, it found one problem of six
+  (42/mid) where the choice the rounded problem prefers beat the simple
+  greedy choice by 5.018e-06, above the 1e-6 bar, when both had their
+  numbers rounded the same way. That is about 6 parts per million. Against
+  the greedy choice worked out on an ordinary computer at full
+  precision, the same choice still lost, by 0.000056. The device
+  experiment (F25) stays on hold until its own written entry and the
+  team lead's approval (`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`).
+- [SIM] **Changing the model's settings and the precision showed no
+  steady gain.** Over 90 combinations of three model settings and five
+  precisions, the same comparison passed in 17, never at every
+  precision for any problem, and never by more than 0.000024. Three of
+  the six problems never passed (`docs/phase2/F198_EXTENDED.md`).
 
 ### What outside research says
 
@@ -904,6 +923,26 @@ the program's brief, so each missing fact is a written assumption in
 measures we use, and the filing date and venue, not yet set). A test
 keeps the document consistent while it is reviewed before filing.
 
+**Sprint 34 (2026-11-22 to 2026-11-23): the first work after filing.**
+No device time was used. The filed plan is locked so it cannot change,
+and the exact text sent on 2026-11-18 is kept as its own file. Every
+change or result after filing goes, dated, into
+`experiments/phase2/PREREGISTRATION_AMENDMENTS.md`, each new experiment
+written there before it runs.
+
+- **The written test for the device experiment (F200).**
+  - Result, 2026-11-23: **passed on one problem of six, by about 6
+    parts per million, and only against a rival rounded the same way.**
+    The device experiment stays on hold (section 6).
+- **The same test with other settings and precisions (F198).**
+  - Result, 2026-11-23: **no steady gain** (section 6).
+- **Experiment 5 again, with a better measure (F197).** Experiment 5's
+  measure was already at its top for the best classical model on four
+  of five kinds of purchase, so nothing could beat it there. The new
+  measure ranks all of a segment's purchases, not only the top 0.5%.
+  - Check, 2026-11-22: the new measure has room on every kind of
+    purchase. The experiment itself waits for the team lead's approval.
+
 ## 8. Experiments not yet planned
 
 **In short:** these are ideas, not scheduled work. The first group comes
@@ -994,16 +1033,103 @@ datasets.
 
 ### Change list
 
-- **1.6, 2026-11-18 (Sprint 33)**: no new result. F25's hold in sections 6 and 7 gives the testable rule (Sprint 33 D6) and when it is checked: after the preregistration is filed (D12).
-- **1.5, 2026-11-17 (Sprint 33)**: an outside machine learning expert's review. New at the top: the author and how artificial intelligence tools were used, a multi-paragraph executive summary in place of the bottom-line list, a first look at insurance fraud, and which version to read. Section 1 says why [SPECTRA](#ds-spectra) is used although it is not fraud data. The change list and "How this document was made" move to the end. No result changed.
-- **1.4, 2026-11-16 (Sprint 33)**: no new result. "Experiments planned" notes that the [preregistration](#def-preregistration) is ready to file, without the brief, on written assumptions. The team lead's decision on the rounding test (Sprint 32 D4) replaces "a decision for the team lead" in sections 6 and 7.
-- **1.3, 2026-11-10 (Sprint 32)**: Sprint 32's two results added, each as a tagged claim and as a dated result under "Experiments planned": F185 (alerts chosen by the money at risk, section 2) and F188 (the rounding test, section 6). The two matching ideas leave "Experiments not yet planned". No Sprint 33 run is preregistered yet, so none is listed.
-- **1.2, 2026-11-06 (Sprint 31)**: the team lead's review. Each numbered section opens with an "In short" summary. Each dataset is named in full the first time, with a link to the new Appendix F (Datasets), and by its short name after that; the short name links to the same entry. "[Device](#def-device)" is defined (Appendix A). Section 3's results are rewritten in plain terms, each starting with what it means. The team lead's suggestions are added to "The data needed", with why each would help and what the public data already holds. New: the card-testing pattern, what our tests score inside the [alert budget](#ml-alert-budget), [interference](#qc-interference) beside [superposition](#qc-superposition) and [entanglement](#qc-entanglement), and where the training-cost growth was measured. "Experiments not yet planned" gains the backlog proposals of Sprint 31 D18.
-- **1.1, 2026-11-05 (Sprint 31)**: Sprint 31's results added. Each is a tagged claim under its topic's "What our experiments showed" and a dated result under "Experiments planned": F114, F155, F157 (both parts), Experiment 5 and F95. No Sprint 32 run is preregistered yet, so none is listed.
-- **1.0, 2026-11-05 (Sprint 31)**: first version. It covers Phase 1
-  (filed 2026-09-12) and Phase 2 up to Sprint 30. Sprint 31's own runs
-  have not finished; each has a marked place in "Experiments planned"
-  where its result will go.
+Each entry says what the work did and what it found or changed. The
+card number (F...) and sprint beside it let a reader find the full
+record.
+
+- **1.7, 2026-11-23**: the first work after the Phase 2 plan was filed,
+  with no device time. First, the written test for the device
+  experiment was run. It passed on one of six practice problems, but by
+  about 6 parts per million, and only when the device's choice was
+  compared with a simple choice whose numbers were rounded the same
+  way; against the simple choice worked out at full precision, the
+  device's choice still lost. Running the same test with other model
+  settings and precisions found no steady gain. So the device
+  experiment stays on hold. The Bottom line and sections 6 and 7 say
+  so. Second, Experiment 5, which asked whether some kinds of purchase
+  should go to the quantum-inspired model, is planned again with a
+  measure that can still show a difference; a first check shows it
+  can, and the run waits for the team lead's approval (section 7).
+  (Device test F200, settings F198, Experiment 5b F197; Sprint 34.)
+- **1.6, 2026-11-18**: no new experiment. We wrote down the exact test
+  that decides whether the experiment that uses the quantum device to
+  pick a small team of models may go ahead. The device reads each number
+  in a problem only to about 1 part in 200. So the test rounds each of
+  six practice problems that way, lets the rounded problem choose its
+  best team, and asks whether that team beats the simple one-at-a-time
+  choice by more than one part in a million on at least one problem. If
+  it never does, the device has nothing to win and the experiment stays
+  on hold. We also fixed when the test runs: right after the
+  [preregistration](#def-preregistration) is filed, before any device
+  time is spent. Sections 6 and 7. (Device experiment F25; Sprint 33,
+  team lead decisions D6 and D12.)
+- **1.5, 2026-11-17**: an outside machine learning expert reviewed this
+  document, and it changed in response. The top now says who wrote it
+  and how artificial intelligence tools were used, gives a summary of
+  several paragraphs in place of a short list, takes a first look at
+  insurance fraud, and says which of the three versions to read. Section
+  1 now explains why we use [SPECTRA](#ds-spectra) although it is not
+  fraud data: its datasets were built so that a quantum method could
+  win, so they test whether the quantum methods win on data made for
+  them (they did not). The change list and "How this document was made"
+  moved to the end. No result changed. (Sprint 33.)
+- **1.4, 2026-11-16**: no new experiment. The Phase 2
+  [preregistration](#def-preregistration), our written plan made before
+  the runs, was made ready to file. It is filed without the program's
+  brief, which we had not received, and the plan writes down the
+  assumptions it rests on instead. The team lead's decision on the
+  rounding test (see 1.3) replaced "a decision for the team lead" in
+  sections 6 and 7: the device experiment stays on hold until a test
+  shows the device has room to win. (Sprint 33; decision Sprint 32 D4.)
+- **1.3, 2026-11-10**: two experiments that needed no device time.
+  First, choosing which transactions to check by the money at risk, not
+  by how likely fraud is alone. On [IEEE-CIS](#ds-ieee-cis) this caught
+  about four times the fraud dollars for the same number of checks, on
+  every repeat, but it caught fewer frauds; on [ULB](#ds-ulb) the gain
+  could be zero. Section 2. (F185.) Second, the rounding test. The
+  device reads each number only to about 1 part in 200, so we rounded
+  six small "pick the best team of models" problems that way. In all
+  six, the team that looked best on the rounded problem was worse on
+  the real problem than the simple one-at-a-time choice. The tiny gains
+  found earlier would not survive the device's precision. Section 6.
+  (F188; both Sprint 32.)
+- **1.2, 2026-11-06**: the team lead reviewed the document for
+  readability, and it changed in response. Each numbered section now
+  opens with an "In short" summary. Each dataset is named in full the
+  first time, with a link to the new Appendix F (Datasets). "Device" is
+  defined. Section 3's results are rewritten in plain terms, each
+  starting with what it means. "The data needed" gains the team lead's
+  suggestions of data a bank could add, with why each would help. New
+  material: the card-testing pattern (a very small payment checks that
+  a stolen card works, and a large one follows within a day), what our tests score inside the [alert budget](#ml-alert-budget),
+  [interference](#qc-interference) beside
+  [superposition](#qc-superposition) and
+  [entanglement](#qc-entanglement), and where the growth of training
+  cost was measured. "Experiments not yet planned" gains the team lead's
+  ideas proposed for the backlog. (Sprint 31, decision D18.)
+- **1.1, 2026-11-05**: six results added, all from Sprint 31. (1) We
+  tried to estimate the best accuracy any model could reach on the real
+  fraud data. The method's own safety check failed at first; at a
+  slower learning setting it passed, but both estimates carry a
+  warning and the [ULB](#ds-ulb) one is not usable (F114). (2) On
+  [IEEE-CIS](#ds-ieee-cis), the quantum circuit model was matched or beaten by
+  ordinary classical models built to copy what it computes, so it adds
+  nothing a classical computer cannot do (F157). (3) On the four
+  [SPECTRA](#ds-spectra) datasets, boosted trees were best on every
+  one, and the quantum-inspired model was fifth or sixth of seven
+  (F157). (4) Sending some kinds of purchases to the quantum-inspired
+  model instead of the best classical model helped on none (Experiment
+  5). (5) [Dirac-3S](#qc-dirac-3s) accepted a problem with 1,350
+  variables, in 6 metered seconds (F155). (6) A different device
+  setting changed nothing we could see, in a weak test (F95).
+- **1.0, 2026-11-05**: first version. It gathers what Phase 1 (filed
+  2026-09-12) and Phase 2 up to Sprint 30 found: tuned
+  [gradient boosting](#ml-gradient-boosting) is the bar to beat; no
+  quantum or quantum-inspired method we tested beat it; and the maker of
+  the device we used states that it does not use
+  [entanglement](#qc-entanglement), so we claim no quantum effect from it.
+  Sprint 31's runs had not finished; each had a marked place in
+  "Experiments planned" for its result. (Sprint 31.)
 
 ## Appendix A. Definitions
 

@@ -108,6 +108,15 @@ Nothing in this stage is time-bound. Schedule on value.
         `experiments/src/test_phase2_prereg_draft.py`. Open (Sprint 34):
         the filing venue, the lock step in its section 7, and Experiment
         3's release rule
+      - **Progress 2026-11-24** (Sprint 34): locked. Post-filing text goes
+        in `experiments/phase2/PREREGISTRATION_AMENDMENTS.md` (P2-A1 to
+        P2-A8); the sent text is restored as
+        `experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md`;
+        `experiments/src/test_phase2_prereg_filed.py` hashes the three
+        copies; tag `phase2-prereg-filed` at b8e2c0e. Experiment 3's
+        release rule met on one instance (P2-A6 to P2-A8); F25 released
+        for Sprint 35 (D8). Experiment 5b entered (P2-A3, P2-A5). Open:
+        the filing venue (team lead)
 - [x] **C**: F154 every saved test result's confusion counts, and where
       each model wins. Sprint 28: `docs/phase2/F154_WHERE_MODELS_WIN.md`;
       the standing rule that every result records its outcomes (CLAUDE.md),
@@ -234,6 +243,12 @@ Nothing in this stage is time-bound. Schedule on value.
         (`docs/phase2/F188_ROUNDING.md`). F25 stays on HOLD: before any
         device run, F188's delivered reading must beat greedy at 200:1
         (D4 option 3, 2026-11-13). F198 extends F188
+      - **Progress 2026-11-23** (Sprint 34, F200 and F198): the filed
+        release rule is met on 42/mid only, by about 6 parts per million
+        of the objective (P2-A6 to P2-A8,
+        `experiments/phase2/results/f188_release_rule.json`); F198's
+        extension is `docs/phase2/F198_EXTENDED.md`. F25 released by the
+        team lead 2026-11-24, to run in Sprint 35 (D8 option 1)
 - [ ] **C**: 4. Replication under source protocol -- H1a reproduces Loke et al.
       under their split and comparator, target AUC-PR 0.80, then re-evaluates
       under ours

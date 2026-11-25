@@ -39,11 +39,13 @@ the git directory, for `.githooks/pre-push` (`check_pre_push.py`, Sprint
 tests would not have run on a committed tree), or when the tree changed
 during the run. `--base origin/<branch>` tests only what is not pushed.
 
-A `--tests` run that could be recorded (a `--base` other than `HEAD`,
-nothing after `--`) refuses at once, naming the paths, when a file
+A `--tests` run that could be recorded (a `--base` that is not HEAD's
+commit, nothing after `--`) refuses at once, naming the paths, when a file
 other than `UNTESTED_OK` is changed or untracked: it ran for minutes and
 then could not count (Sprint 33 i3). `--base HEAD` still tests the
-uncommitted changes of a task (`docs/SPRINT_CHECKLIST.md`).
+uncommitted changes of a task (`docs/SPRINT_CHECKLIST.md`), and so does
+any other name for HEAD's commit (`@`, `HEAD~0`, its hash): the base is
+compared by `git rev-parse`, not by its spelling (F202, Sprint 34).
 """
 from __future__ import annotations
 
@@ -89,6 +91,14 @@ def fingerprint(rev: str) -> str:
     lines = [ln for ln in git("ls-tree", "-r", rev)
              if ln.split("\t", 1)[1] not in UNTESTED_OK]
     return hashlib.sha256("\n".join(lines).encode("utf-8")).hexdigest()
+
+
+def names_head(base: str) -> bool:
+    """True when `base` resolves to HEAD's commit: a task run, whatever
+    the spelling (`HEAD`, `@`, `HEAD~0`, a hash). A name git cannot
+    resolve stops the run (`git` raises)."""
+    return (git("rev-parse", "--verify", "--quiet", base + "^{commit}")
+            == git("rev-parse", "HEAD"))
 
 
 def other_changes() -> list[str]:
@@ -233,7 +243,7 @@ def main(argv=None) -> int:
         print("--tests runs ordinary tests; it takes no --run or --sample",
               file=sys.stderr)
         return 2
-    if args.tests and args.base != "HEAD" and not extra:
+    if args.tests and not extra and not names_head(args.base):
         dirty = other_changes()
         if dirty:
             print("--tests would not count for a push: these paths are "

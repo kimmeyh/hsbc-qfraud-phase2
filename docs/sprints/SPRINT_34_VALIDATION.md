@@ -1,0 +1,124 @@
+# Sprint 34 Manual Validation
+
+**Sprint**: 34
+**Branch**: `feature/20261118_Sprint_34` | **PR**: #134 (draft)
+**Scope**: F201 (A), F202 (B), F102 (C and D), F200 (E), F198 (F),
+F197 (G), F157 (H), F178 (I). Issues #135-#143, all closed.
+**Metered seconds**: 0. No device, Braket or other paid service was
+called.
+
+This file is the durable copy. The same items are listed to the screen at
+handover: a pointer to a file is not a handover.
+
+## Actions for the team lead
+
+- **A1. Answer D6: when does Experiment 5b run?** Options: 1. approve
+  the entry and run it in Sprint 35 (about 75 minutes, zero metered;
+  recommended); 2. approve and run it now in Sprint 34 (the same 75
+  minutes, added to this sprint); 3. do not run it. The full entry is
+  D6 in
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\sprints\SPRINT_34_DECISIONS.md`;
+  the experiment's entry is P2-A3 in
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\experiments\phase2\PREREGISTRATION_AMENDMENTS.md`.
+- **A2. Confirm the sent text.** Compare
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\experiments\phase2\PREREGISTRATION_SUBMITTED_2026-11-18.md`
+  with the copy you sent at 9:01am EST on 2026-11-18. It holds commit
+  b8e2c0e's text, chosen from the commit times (P2-A2). If it differs,
+  say how; the locked file is not edited, and a filing-fact entry
+  records the difference.
+- **A3. Judge the rewritten change lists (Q4).** Read the "Change list"
+  at the end of
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\learning\ML QML and QC Understandings about Quantum Advantage - Laymen terms.md`
+  and near the top of the two expert versions in the same folder. Is
+  each entry now detailed enough?
+- **A4. Judge the release-rule write-up.** Read P2-A6 and P2-A7 in
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\experiments\phase2\PREREGISTRATION_AMENDMENTS.md`.
+  Is it fair to say the rule is met, but only by about 6 parts per
+  million and only against greedy with rounded weights? F25 stays HOLD;
+  whether to spend device seconds on it is a refinement question.
+- **A5. Review the F157 split.** Cards F204 to F208 in
+  `D:\Data\Harold\github\hsbc-qfraud-phase2\docs\ALL_SPRINTS_MASTER_PLAN.md`
+  (search "F204."). Each has its estimate and its metered-second quote,
+  or why there is none.
+
+## Answers (team lead, 2026-11-24)
+
+Given against the on-screen list (A1 D6, A2 D7, A3 sent text, A4 change
+lists, A5 release write-up, A6 F157 split): D6 option 1; D7 option 3;
+the sent text confirmed; change lists accepted; the write-up left to
+Claude's judgment and kept; the F157 split accepted. F25 released to run
+on Dirac-3S; D8 (how and when) is open. Full record in
+`docs/sprints/SPRINT_34_DECISIONS.md`.
+
+## For information (no action needed)
+
+## V1. Results
+
+- **Release rule (F200)**: met on 42/mid only, by about 6 parts per
+  million, against greedy with rounded weights; against greedy solved
+  on the real problem the same pick loses (P2-A6, P2-A7, P2-A8 in the
+  amendments file).
+- **F198**: the same comparison passes in some settings, none at every
+  resolution, in no order with R (`docs/phase2/F198_EXTENDED.md`).
+- **Experiment 5b check (F197)**: the new measure has room on every
+  segment; the old one saturated on C, R, H and S (P2-A5).
+- **The filing lock (F102)**: the sent text, FINAL and DRAFT are locked
+  by SHA-256 with a proof per copy, hooks block edits to all three, and
+  the tag `phase2-prereg-filed` on GitHub points at b8e2c0e.
+
+## V2. Phase 5 checks
+
+- **CI**: green on 5d9ec29, full job included. It was red on 76c740b
+  (three refusals with no in-process test), fixed in ff72495.
+- **Pre-push gate**: four runs failed and were fixed before it passed
+  (two figure-format failures, the complete-check, and one run started
+  on a dirty tree); it passed on 5d9ec29.
+- **Copilot review** (on 76c740b): approval recommended, no open
+  issues.
+- **Independent code review** (an agent given the code, not the
+  conclusions): no serious correctness bug; `release()` matches the
+  filed rule and every quoted figure matches its result. Four findings,
+  all fixed in ff72495: a test for the pick's side of the release
+  comparison; four tag-delete and tag-move shapes the hook missed; two
+  P2-A6 figures from an unrecorded check (withdrawn by P2-A8); and
+  F198's document merging two readings.
+- **Automated security review**: the tag hook's regular expressions can
+  be bypassed; recorded in D7 and in V3.
+- **Plan acceptance**: every task's criteria walked with evidence; the
+  one miss is Task E's runtime estimate and uncoded cap (V3).
+
+## V3. For the retrospective
+
+- **Runtime estimate missed (Task E)**: planned "about 1 minute, first
+  instance timed, cap 10"; the run took about 11 minutes, nearly all of
+  it rebuilding the IEEE-CIS instances, and no cap was coded. Task F's
+  cap (20 minutes) was not coded either; its run took 15.
+- **A guard fixed one place and broke another**: rewriting a figure in
+  `F198_EXTENDED.md` for one figure guard broke the learning-document
+  claims that cite it, caught by the next gate run (a third 17-minute
+  run). Run every guard that reads an edited file.
+- **Three refusals shipped without a test (a Phase 4 miss)**: CI's
+  refusal-coverage check went red on 76c740b. `f197_saturation.py`'s
+  stored-label check and the argument checks of `f197_saturation.py` and
+  `f198_extended.py` had no in-process test; the local gate does not run
+  the coverage step, so only CI caught it. Fixed in Phase 5 with a test
+  and proof each.
+- **A generated file edited by hand**: `docs/testing/F180_TEST_INVENTORY.md`
+  says "Generated by `scripts/test_inventory.py`; do not edit by hand",
+  and this sprint edited its counts by hand. Its counts for
+  `test_f188_rounding.py` and `test_hook_parity.py` are now stale; the
+  inventory guard did not notice. It should be regenerated from a full
+  local report.
+- **The tag hook is a pattern match**: an automated security review
+  found ways past its regular expressions (global options before
+  `tag`, grouped flags, quoted refspecs, `update-ref --stdin`, `push
+  --mirror`). Proposed: tokenize the command (shlex) before matching;
+  the full answer is D7's server-side ruleset.
+- **A complete-check moved out of its function**: moving `f197`'s label
+  check into `require_same_labels` left `run()` marking its result
+  complete with no refusal before it; `test_complete_checked.py` caught
+  it at the gate. Fixed with a real check, `saturation_doc`.
+- **A check script that could not finish**: the first exact-solver
+  check enumerated active sets (exponential in support size) and
+  stalled on the 25-learner instances; replaced by a KKT solve on the
+  solver's free set with the optimality conditions checked.

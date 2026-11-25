@@ -151,6 +151,31 @@ CASES: dict[str, list[tuple[str, int, dict]]] = {
          {"tool_input": {"command": "git tag -d prereg-freeze"}}),
         ("delete the freeze tag remotely", BLOCK,
          {"tool_input": {"command": "git push origin :refs/tags/prereg-freeze"}}),
+        ("move the Phase 2 filing tag", BLOCK,
+         {"tool_input": {"command": "git tag -f phase2-prereg-filed HEAD"}}),
+        ("delete the Phase 2 filing tag remotely", BLOCK,
+         {"tool_input": {"command":
+                         "git push origin --delete phase2-prereg-filed"}}),
+        # The four shapes the PR #134 review found unblocked, and a forced
+        # refspec.
+        ("delete the Phase 2 tag by a bare refspec", BLOCK,
+         {"tool_input": {"command": "git push origin :phase2-prereg-filed"}}),
+        ("delete the Phase 2 tag with push -d", BLOCK,
+         {"tool_input": {"command": "git push -d origin phase2-prereg-filed"}}),
+        ("delete the Phase 2 tag's ref", BLOCK,
+         {"tool_input": {"command":
+                         "git update-ref -d refs/tags/phase2-prereg-filed"}}),
+        ("move the Phase 2 tag, flag after the name", BLOCK,
+         {"tool_input": {"command": "git tag phase2-prereg-filed -f HEAD"}}),
+        ("force the Phase 2 tag by a + refspec", BLOCK,
+         {"tool_input": {"command":
+                         "git push origin +phase2-prereg-filed"}}),
+        ("pushing the Phase 2 tag as it is is fine", ALLOW,
+         {"tool_input": {"command": "git push origin phase2-prereg-filed"}}),
+        ("the -f inside the tag's name is not a flag", ALLOW,
+         {"tool_input": {"command": "git tag -l phase2-prereg-filed"}}),
+        ("a remote branch delete with -d is fine", ALLOW,
+         {"tool_input": {"command": "git push -d origin old-feature"}}),
         # Growing the repository forward is what a live project looks like.
         ("ordinary push", ALLOW,
          {"tool_input": {"command": "git push origin feature/x"}}),
@@ -178,6 +203,19 @@ CASES: dict[str, list[tuple[str, int, dict]]] = {
         ("Bash is not an edit tool", ALLOW,
          {"tool_name": "Bash", "tool_input": {"command": "cat " + PREREG}}),
         ("no path", ALLOW, {"tool_name": "Edit", "tool_input": {}}),
+        # The Phase 2 preregistration as filed (Sprint 34 Task D, F102).
+        ("editing the Phase 2 text as sent", BLOCK,
+         {"tool_name": "Edit", "tool_input": {"file_path":
+          "experiments/phase2/PREREGISTRATION_SUBMITTED_2026-11-18.md"}}),
+        ("writing the Phase 2 FINAL copy", BLOCK,
+         {"tool_name": "Write", "tool_input": {"file_path":
+          "experiments/phase2/PREREGISTRATION_FINAL.md"}}),
+        ("editing the Phase 2 draft copy, windows separators", BLOCK,
+         {"tool_name": "Edit", "tool_input": {"file_path":
+          "experiments\\phase2\\PREREGISTRATION_DRAFT.md"}}),
+        ("the Phase 2 amendments file is where changes go", ALLOW,
+         {"tool_name": "Edit", "tool_input": {"file_path":
+          "experiments/phase2/PREREGISTRATION_AMENDMENTS.md"}}),
     ],
 
     "block_unapproved_submission_edit": [

@@ -267,6 +267,17 @@ literal, a keyword and an import (PR #116 review); Sprint 31 i3, the
 refusal gate missed two refusal forms; Sprint 28 IMP-2, a docstring was
 read as a call.
 
+**And name each refusal in the card, with its test (Sprint 34 i1).** A
+card that adds a refusal names it in its acceptance criteria, as
+"refusal: what is refused -> test name". The refusal is built in a small
+named function (`require_*`, `check_*` or `main(argv)`) that the test
+calls in-process with built data; `run()` and the `__main__` block only
+call it (`SPRINT_CHECKLIST.md` Phase 4). Sprint 34 shipped three
+refusals in code that only real data reaches, one label check inside
+`run()` and two argument checks in `__main__`; CI's refusal-coverage
+step found them, at the cost of a red CI round (about 40 minutes). The
+same class reached review 37 times in Sprints 28-30.
+
 ### A verification sprint GENERATES work; budget for it (Sprint 13 improvement 2)
 
 A sprint whose tasks are "check that X is true" produces a second body of work

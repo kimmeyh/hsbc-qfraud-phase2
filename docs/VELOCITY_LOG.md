@@ -177,6 +177,16 @@
 | 33 | Task H D10-D12 applied; preregistration FINAL | docs | 30m | 12m | 0.40 | measured, active, 12m elapsed; not planned |
 | 33 | Task I PR 122 review fixes | tooling | 30m | 12m | 0.40 | measured, active, 553m elapsed; not planned; the elapsed time holds the filing morning and the reviews' waits |
 | 33 | Task J retrospective i2 and i3 | tooling | 20m | 10m | 0.50 | measured, active, 10m elapsed |
+| 34 | Task A (F201) 0.1% budget in the outcome block | tooling | 45m | 48m | 1.07 | measured, active, 48m elapsed |
+| 34 | Task B (F202) `--base` compared by commit | tooling | 15m | 30m | 2.00 | measured, active, 30m elapsed |
+| 34 | Task C (F102, D2) the amendments file | docs | 15m | 28m | 1.87 | measured, active, 28m elapsed |
+| 34 | Task D (F102, D3) the lock | tooling | 60m | 17m | 0.28 | measured, active, 17m elapsed |
+| 34 | Task E (F200) Experiment 3's release rule | analysis | 45m | 84m | 1.87 | measured, active, 1639m elapsed; the run took about 11 minutes against a 1-minute plan, mostly rebuilding the instances (retrospective i7, skipped) |
+| 34 | Task F (F198) F188 extended | analysis | 30m | 78m | 2.60 | measured, active, 1632m elapsed; no time cap coded (retrospective i7, skipped) |
+| 34 | Task G (F197) Experiment 5b entry and saturation check | analysis | 60m | 9m | 0.15 | measured, active, 9m elapsed; understated: work ran with no timer or under another task's (retrospective i6, F215) |
+| 34 | Task H (F157, D4) the split into cards | docs | 45m | 2m | 0.04 | measured, active, 2m elapsed; understated: work ran with no timer or under another task's (retrospective i6, F215) |
+| 34 | Task I (F178) learning documents | docs | 105m | 29m | 0.28 | measured, active, 29m elapsed |
+| 34 | Task P5 Phase 5 fixes (gate, CI refusal coverage, PR 134 review) | tooling | 45m | 38m | 0.84 | measured, active, 38m elapsed; not planned as a task |
 
 **Measured and judged rows (F136, Sprint 24).** From Sprint 24 on, every
 task's actual is computed from a recorded start

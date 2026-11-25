@@ -623,3 +623,181 @@ def test_the_verified_floor_can_fail():
     _proof([("            if p.exists():\n", "            if False:\n")],
            "test_recorded_per_row_files_match_their_hashes",
            "zero per-row files verified")
+
+
+# ------------------------------------------------- the 0.1% budget (F201)
+# Sprint 34 Task A (#135). The filed preregistration (section 2; Sprint 33
+# D10): from filing on, 2026-11-18, recall at the 0.1% alert budget is
+# reported beside the 0.5% figure for every scored result; results recorded
+# before filing are not recomputed. `outcome_record.record` writes it as
+# `at_low_budget_on_test`. Every result file that held a block at filing is
+# listed below by name (none changed after 2026-11-09). The list may only
+# shrink; a new result file is never added to it.
+ORIGINAL_SCORED_BEFORE_FILING_2026_11_18 = frozenset((
+    "exp5_router.json", "f103_tier1.json", "f103_tier1_pilot.json",
+    "f106_dequant.json", "f106_dequant_pilot.json", "f107_shots.json",
+    "f108_ceiling.json", "f108_ceiling_pilot.json", "f109_ladder.json",
+    "f109_ladder_pilot.json", "f111_loke_protocol.json",
+    "f112_intervals.json", "f113_oracle_gap.json", "f114_real_ceiling.json",
+    "f114_real_ceiling_lr05.json", "f130_ulb_hgb_check.json",
+    "f142_readout.json", "f144_proxy_twin.json", "f151_hgb_cause.json",
+    "f152_exp2.json", "f152_exp2_pilot.json", "f153_exp3_design.json",
+    "f154_confusion.json", "f157_qnn_ieee.json", "f157_qnn_ieee_pilot.json",
+    "f157_spectra_algorithms.json", "f157_spectra_algorithms_rbf.json",
+    "f158_fraud_types.json", "f162_in_pocket.json",
+    "f166_ulb_algorithms.json", "f169_plugin_bins.json",
+    "f169_plugin_bins_lr05.json", "f174_ieee_algorithms.json",
+    "f185_cost_budget.json",
+))
+ORIGINAL_SCORED_BEFORE_FILING_SHA256 = (
+    "53af82d697840649e195be40d31d717eaff05bbcc9d8e8adca6ebf1f5e6d74b6")
+SCORED_BEFORE_FILING_EXEMPT = ORIGINAL_SCORED_BEFORE_FILING_2026_11_18
+
+
+def low_budget_problem(block) -> str | None:
+    """Why a block lacks the 0.1% figures, or None when it has them."""
+    low = block.get(orec.LOW_BUDGET_KEY)
+    if not isinstance(low, dict):
+        return f"no {orec.LOW_BUDGET_KEY}"
+    if low.get("budget") != orec.LOW_BUDGET:
+        return f"{orec.LOW_BUDGET_KEY} at budget {low.get('budget')}"
+    if "confusion" not in low:
+        return f"{orec.LOW_BUDGET_KEY} has no confusion counts"
+    if "recall" not in low:
+        return f"{orec.LOW_BUDGET_KEY} has no recall"
+    return None
+
+
+def low_budget_violations(results_dir: Path = RESULTS,
+                          exempt: frozenset = SCORED_BEFORE_FILING_EXEMPT
+                          ) -> list[str]:
+    bad = []
+    for f in sorted(results_dir.rglob("*.json")):
+        rel = f.relative_to(results_dir).as_posix()
+        if rel in exempt:  # scored before filing
+            continue
+        for b in _blocks(json.loads(f.read_text(encoding="utf-8"))):
+            why = low_budget_problem(b)
+            if why:
+                bad.append(f"{rel} ({b['name']} seed {b['seed']}: {why})")
+    return bad
+
+
+def test_every_scored_result_after_filing_reports_the_low_budget():
+    bad = low_budget_violations()
+    assert not bad, (
+        "These Phase 2 result files, written after filing (2026-11-18), "
+        "hold an outcome block without the 0.1% budget's counts and recall "
+        "(filed section 2; build blocks with outcome_record.record): "
+        + ", ".join(bad))
+
+
+def test_the_scored_before_filing_list_only_shrinks():
+    bad = fl.check(SCORED_BEFORE_FILING_EXEMPT,
+                   ORIGINAL_SCORED_BEFORE_FILING_2026_11_18,
+                   ORIGINAL_SCORED_BEFORE_FILING_SHA256)
+    assert not bad, bad
+    assert len(ORIGINAL_SCORED_BEFORE_FILING_2026_11_18) == 34
+    for name in sorted(SCORED_BEFORE_FILING_EXEMPT):
+        assert (RESULTS / name).exists(), f"{name} is listed but does not exist"
+
+
+def test_a_new_block_records_the_low_budget_and_recall(tmp_path):
+    y = np.zeros(2000, dtype=int)
+    y[:40] = 1
+    p = np.linspace(0, 1, 2000)[::-1].copy()   # the first rows score highest
+    blk = orec.record("demo", 5, y, p, pred_dir=tmp_path)
+    low = blk[orec.LOW_BUDGET_KEY]
+    assert low["budget"] == 0.001 and low["n_budget"] == 2
+    assert low["confusion"] == {"tn": 1960, "fp": 0, "fn": 38, "tp": 2}
+    assert low["recall"] == pytest.approx(2 / 40)
+    assert blk["at_budget_on_test"]["recall"] == pytest.approx(10 / 40)
+    assert low_budget_problem(blk) is None
+
+
+def test_recall_with_no_positive_is_refused():
+    with pytest.raises(ValueError, match="no positive"):
+        orec.recall({"tn": 5, "fp": 0, "fn": 0, "tp": 0})
+
+
+def _low_doc(tmp_path, drop=None, **change):
+    blk = _block(tmp_path, 42)
+    low = blk[orec.LOW_BUDGET_KEY]
+    low.update(change)
+    if drop:
+        low.pop(drop)
+    return {"rows": [{"seed": 42, "test_auprc": 0.8, "outcome": blk}]}
+
+
+def test_a_block_without_the_low_budget_is_caught(tmp_path):
+    doc = _low_doc(tmp_path)
+    del doc["rows"][0]["outcome"][orec.LOW_BUDGET_KEY]
+    _write(tmp_path, "new.json", doc)
+    assert low_budget_violations(tmp_path, frozenset()) == [
+        f"new.json (demo seed 42: no {orec.LOW_BUDGET_KEY})"]
+
+
+def test_a_low_budget_at_another_budget_is_caught(tmp_path):
+    _write(tmp_path, "new.json", _low_doc(tmp_path, budget=0.005))
+    assert low_budget_violations(tmp_path, frozenset()) == [
+        f"new.json (demo seed 42: {orec.LOW_BUDGET_KEY} at budget 0.005)"]
+
+
+def test_a_low_budget_without_counts_is_caught(tmp_path):
+    _write(tmp_path, "new.json", _low_doc(tmp_path, drop="confusion"))
+    assert low_budget_violations(tmp_path, frozenset()) == [
+        f"new.json (demo seed 42: {orec.LOW_BUDGET_KEY} has no confusion counts)"]
+
+
+def test_a_low_budget_without_recall_is_caught(tmp_path):
+    _write(tmp_path, "new.json", _low_doc(tmp_path, drop="recall"))
+    assert low_budget_violations(tmp_path, frozenset()) == [
+        f"new.json (demo seed 42: {orec.LOW_BUDGET_KEY} has no recall)"]
+
+
+def test_a_complete_new_block_and_a_listed_file_pass(tmp_path):
+    _write(tmp_path, "new.json", _low_doc(tmp_path))
+    old = _low_doc(tmp_path)
+    del old["rows"][0]["outcome"][orec.LOW_BUDGET_KEY]
+    _write(tmp_path, "old.json", old)
+    assert low_budget_violations(tmp_path, frozenset({"old.json"})) == []
+
+
+def test_each_low_budget_term_can_fail():
+    for old, new, node, label in (
+            ("    if not isinstance(low, dict):\n", "    if False:\n",
+             "test_a_block_without_the_low_budget_is_caught",
+             "a block with no 0.1% entry"),
+            ('    if low.get("budget") != orec.LOW_BUDGET:\n', "    if False:\n",
+             "test_a_low_budget_at_another_budget_is_caught",
+             "a 0.1% entry at another budget"),
+            ('    if "confusion" not in low:\n', "    if False:\n",
+             "test_a_low_budget_without_counts_is_caught",
+             "a 0.1% entry with no counts"),
+            ('    if "recall" not in low:\n', "    if False:\n",
+             "test_a_low_budget_without_recall_is_caught",
+             "a 0.1% entry with no recall"),
+            ("        if rel in exempt:  # scored before filing\n",
+             "        if False:\n",
+             "test_a_complete_new_block_and_a_listed_file_pass",
+             "a file scored before filing read as new")):
+        _proof([(old, new)], node, label)
+
+
+def test_the_writer_records_the_low_budget_can_fail():
+    from injection import Mutation, assert_can_fail, run_pytest
+    src = ROOT / "experiments" / "phase2" / "src" / "outcome_record.py"
+    assert_can_fail([Mutation(
+        src, "           LOW_BUDGET_KEY: at_budget_on_test(y, p, LOW_BUDGET)}\n",
+        "           }\n", expect_occurrences=1)],
+        lambda: run_pytest(
+            f"{THIS}::test_a_new_block_records_the_low_budget_and_recall", ROOT),
+        "the writer leaves out the 0.1% budget")
+
+
+def test_a_new_name_in_the_scored_before_filing_list_is_caught():
+    _proof([('    "f185_cost_budget.json",\n))\nORIGINAL_SCORED_BEFORE_FILING_SHA256',
+             '    "f185_cost_budget.json", "f200_new.json",\n))\n'
+             'ORIGINAL_SCORED_BEFORE_FILING_SHA256')],
+           "test_the_scored_before_filing_list_only_shrinks",
+           "a name added to the scored-before-filing list")

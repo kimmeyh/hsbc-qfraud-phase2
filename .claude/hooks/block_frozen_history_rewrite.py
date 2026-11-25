@@ -18,7 +18,9 @@ review window, and there is no way to correct a submitted PDF.
 
 BLOCKS: force-pushes, history-rewriting commands (filter-branch, filter-repo,
 hard reset against a remote ref), and any attempt to move, delete or re-point
-`prereg-freeze`.
+`prereg-freeze` or `phase2-prereg-filed` (b8e2c0e, the Phase 2
+preregistration as sent on 2026-11-18; Sprint 34 Task D, F102, the team
+lead's permanent link to it).
 
 DOES NOT BLOCK: ordinary commits, merges, new tags, branch deletes, and local
 rebases. Growing the repository forward is what a live project looks like.
@@ -47,10 +49,19 @@ PATTERNS = [
     ("filter-branch", r"git\s+filter-branch\b"),
     ("filter-repo", r"git\s+filter-repo\b"),
     ("hard reset to a remote ref", r"git\s+reset\s+--hard\s+origin/"),
+    # Flag and tag name in either order (PR #134 review: `git tag <tag> -f
+    # HEAD` passed). The flag must start a word, so the "-f" inside
+    # "prereg-filed" is not read as one.
     ("move or delete the freeze tag",
-     r"git\s+tag\b[^|;&]*(-d|-f|--delete|--force)[^|;&]*prereg-freeze"),
-    ("delete the freeze tag on the remote",
-     r"git\s+push\b[^|;&]*(--delete|:refs/tags/)[^|;&]*prereg-freeze"),
+     r"git\s+tag\b(?=[^|;&]*\s(?:-d|-f|--delete|--force)\b)"
+     r"(?=[^|;&]*(?:prereg-freeze|phase2-prereg-filed))"),
+    # `push --delete`, `push -d`, a bare `:<tag>` or `:refs/tags/<tag>`
+    # refspec, and a forced `+<tag>` refspec (PR #134 review).
+    ("delete or force the freeze tag on the remote",
+     r"git\s+push\b(?=[^|;&]*(?:\s--delete\b|\s-d\b|\s:|\s\+))"
+     r"(?=[^|;&]*(?:prereg-freeze|phase2-prereg-filed))"),
+    ("delete or move the freeze tag's ref",
+     r"git\s+update-ref\b[^|;&]*refs/tags/(?:prereg-freeze|phase2-prereg-filed)"),
 ]
 
 COMPILED = [(name, re.compile(p, re.IGNORECASE)) for name, p in PATTERNS]
