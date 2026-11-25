@@ -50,7 +50,27 @@ Adapted 2026-08-30 from spamfilter-multi's ALL_SPRINTS_MASTER_PLAN.md structure.
 
 ## Last Completed Sprint
 
-**Sprint 33: The Phase 2 Preregistration, Ready to File** (Nov 16 - Nov
+**Sprint 34: After Filing, the Filed Text Kept and First Tested** (Nov
+22 - Nov 24, 2026; PR #134). Delivered **F201** (the 0.1% alert budget
+in the outcome block), **F202** (`--base` compared by commit), **F102**
+(the dated amendments file, entries P2-A1 to P2-A8; the sent text
+restored as `PREREGISTRATION_SUBMITTED_2026-11-18.md`, a hash test of
+the three copies, the hook on their paths and the tag
+`phase2-prereg-filed` at b8e2c0e), **F200** (Experiment 3's release
+rule met on 42/mid only, P2-A6 to P2-A8), **F198** (F188 extended,
+`docs/phase2/F198_EXTENDED.md`), **F197** (Experiment 5b's entry and
+saturation check, P2-A3 and P2-A5), the **F157** split into F204-F208,
+and **the F178 update** (learning documents 1.7, 1.6 and 1.6).
+Manual Validation: F25 released (D8 option 1: amendment, F104's gate,
+the two probes and the first run approved for Sprint 35); Experiment 5b
+approved for Sprint 35 (D6 option 1); the tag hook only (D7 option 3).
+Retrospective: i1, i2, i8 and i10 done; F210, F213-F216 carded; i3 and
+i7 skipped and tracked. Zero metered seconds. Records:
+`SPRINT_34_PLAN.md`, `SPRINT_34_VALIDATION.md`,
+`SPRINT_34_DECISIONS.md`, `SPRINT_34_RETROSPECTIVE.md`; the summary is
+written at Sprint 35 refinement.
+
+### Sprint 33: The Phase 2 Preregistration, Ready to File (Nov 16 - Nov
 18, 2026; PR #122). Delivered **F13 and F102** (the PoC plan restated
 for a filing without the brief; the preregistration ready to file, with
 a drift guard of eleven terms) and **the F178 update** (learning
