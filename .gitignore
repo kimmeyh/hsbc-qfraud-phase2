@@ -159,4 +159,4 @@ coverage.xml
 # refuses a dirty tree and does not count a run whose tree changed;
 # ignored files are not seen, so drafts and notes go here and are moved
 # into place after the run.
-wip/
+/wip/
